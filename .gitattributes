@@ -2,5 +2,6 @@
 # and leave all files detected as binary untouched.
 * text=auto
 
+*.ts eol=lf
 # * text eol=lf
 
