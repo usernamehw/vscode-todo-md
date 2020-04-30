@@ -1,0 +1,406 @@
+{
+	"name": "todo-md",
+	"displayName": "Todo Markdown",
+	"description": "Todo ... something something based on todo.txt format.",
+	"version": "0.0.1",
+	"publisher": "usernamehw",
+	"license": "MIT",
+	"icon": "img/icon.png",
+	"engines": {
+		"vscode": "^1.44.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/usernamehw/vscode-todo-md"
+	},
+	"galleryBanner": {
+		"theme": "dark",
+		"color": "#333333"
+	},
+	"bugs": {
+		"url": "https://github.com/usernamehw/vscode-todo-md/issues"
+	},
+	"keywords": [
+		"todotxt",
+		"todo",
+		"todos",
+		"task",
+		"tasks",
+		"gtd",
+		"markdown",
+		"plaintext"
+	],
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./dist/extension",
+	"preview": true,
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Todo Markdown",
+			"properties": {
+				"todomd.defaultFile": {
+					"type": "string",
+					"markdownDescription": "Absolute path to file that Tree Views or commands use when no editor is open that matches `activatePattern`",
+					"default": ""
+				},
+				"todomd.defaultArchiveFile": {
+					"type": "string",
+					"markdownDescription": "Absolute path to file that all archived tasks will be moved to",
+					"default": ""
+				},
+				"todomd.autoArchiveTasks": {
+					"type": "boolean",
+					"markdownDescription": "When enabled - will move completed tasks automatically (when `toggleDone` command runs).",
+					"default": false
+				},
+				"todomd.savedViews": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"title": {
+								"type": "string"
+							},
+							"filter": {
+								"type": "string"
+							}
+						}
+					},
+					"markdownDescription": "Files that Tree View use when no file is open that matches `activatePattern`",
+					"default": []
+				},
+				"todomd.activatePattern": {
+					"type": "string",
+					"markdownDescription": "Choose files that extension will operate on. By default activated on 2 files (todo.md & todo.archive.md). This format is called `Glob`. Examples:\n\nActivate on any (.txt) file - `**/*.txt`.\n\nActivate only on single file (todo.txt) - `**/todo.txt`\n\nActivate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`",
+					"default": "**/{todo,todo.archive}.md"
+				},
+				"todomd.doneSymbol": {
+					"type": "string",
+					"default": "x "
+				},
+				"todomd.sortTagsView": {
+					"type": "string",
+					"enum": [
+						"alphabetic",
+						"frequency"
+					],
+					"default": "frequency"
+				},
+				"todomd.projectBorderRadius": {
+					"type": "string",
+					"default": "5px"
+				},
+				"todomd.tags": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Tags added to autocomplete.",
+					"default": []
+				},
+				"todomd.projects": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Projects added to autocomplete.",
+					"default": []
+				},
+				"todomd.contexts": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Contexts added to autocomplete.",
+					"default": []
+				},
+				"todomd.addCompletionDate": {
+					"type": "boolean",
+					"markdownDescription": "When completing a task add completion date to it: `{cm:2020-04-30}`",
+					"default": false
+				}
+			}
+		},
+		"commands": [
+			{
+				"command": "todomd.toggleDone",
+				"title": "Toggle Done (Completion)",
+				"category": "Todo MD",
+				"icon": {
+					"light": "img/checkLight.svg",
+					"dark": "img/checkDark.svg"
+				}
+			},
+			{
+				"command": "todomd.addTask",
+				"title": "Add Task",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.archiveCompletedTasks",
+				"title": "Archive completed Tasks",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.openDefaultArvhiveFile",
+				"title": "Open default archive file",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.completeTask",
+				"title": "Complete task",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.getNextTask",
+				"title": "Get next task",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.applyFilter",
+				"title": "Apply Filter",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.clearGlobalState",
+				"title": "Clear global state",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.resetAllRepeatingTasks",
+				"title": "Reset all repeating tasks",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.insertTodayDate",
+				"title": "Insert today date (ISO)",
+				"category": "Todo MD"
+			}
+		],
+		"keybindings":[
+			{
+				"command": "todomd.toggleDone",
+				"key": "Alt+D",
+				"when": "editorTextFocus"
+			}
+		],
+		"colors": [
+			{
+				"id": "todomd.priority1",
+				"defaults": {
+					"light": "#eb847e",
+					"dark": "#eb847e",
+					"highContrast": "#eb847e"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.priority2",
+				"defaults": {
+					"light": "#ffb648",
+					"dark": "#e9b972",
+					"highContrast": "#e9b972"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.priority3",
+				"defaults": {
+					"light": "#d4c12b",
+					"dark": "#e9db73",
+					"highContrast": "#e9db73"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.priority4",
+				"defaults": {
+					"light": "#bad62e",
+					"dark": "#d4e67f",
+					"highContrast": "#d4e67f"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.priority5",
+				"defaults": {
+					"light": "#55d65b",
+					"dark": "#87e28c",
+					"highContrast": "#87e28c"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.tagForeground",
+				"defaults": {
+					"light": "#029cdf",
+					"dark": "#1abaff",
+					"highContrast": "#1abaff"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.contextForeground",
+				"defaults": {
+					"light": "#7284eb",
+					"dark": "#7284eb",
+					"highContrast": "#7284eb"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.specialTagForeground",
+				"defaults": {
+					"light": "#5c1bd4",
+					"dark": "#5c1bd4",
+					"highContrast": "#5c1bd4"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.tagBackground",
+				"defaults": {
+					"light": "#fff0",
+					"dark": "#fff0",
+					"highContrast": "#fff0"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.tagDelimiterForeground",
+				"defaults": {
+					"light": "#b4b4b4",
+					"dark": "#b4b4b4",
+					"highContrast": "#b4b4b4"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.projectForeground",
+				"defaults": {
+					"light": "#36cc9a",
+					"dark": "#36cc9a",
+					"highContrast": "#36cc9a"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.projectBackground",
+				"defaults": {
+					"light": "#fff0",
+					"dark": "#fff0",
+					"highContrast": "#fff0"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.notDueForeground",
+				"defaults": {
+					"light": "#afafaf",
+					"dark": "#afafaf",
+					"highContrast": "#afafaf"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.dueForeground",
+				"defaults": {
+					"light": "#690",
+					"dark": "#690",
+					"highContrast": "#690"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.overdueForeground",
+				"defaults": {
+					"light": "#d44343",
+					"dark": "#d44343",
+					"highContrast": "#d44343"
+				},
+				"description": "Not empty"
+			}
+		],
+		"menus": {
+			"view/item/context": [
+				{
+					"command": "todomd.toggleDone",
+					"when": "view == todomd.due"
+				},
+				{
+					"command": "todomd.toggleDone",
+					"when": "view == todomd.due",
+					"group": "inline"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "todomd",
+					"icon": "./img/sharp.svg",
+					"title": "Todo Markdown"
+				}
+			]
+		},
+		"views": {
+			"todomd": [
+				{
+					"id": "todomd.due",
+					"name": "Due"
+				},
+				{
+					"id": "todomd.tags",
+					"name": "Tags"
+				},
+				{
+					"id": "todomd.tasks",
+					"name": "Tasks"
+				},
+				{
+					"id": "todomd.projects",
+					"name": "Projects"
+				},
+				{
+					"id": "todomd.contexts",
+					"name": "Contexts"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "webpack --mode production --colors",
+		"compile": "webpack --mode development",
+		"watch": "webpack --mode development --watch --display=minimal",
+		"watchTest": "tsc -watch -p ./",
+		"test": "node ./dist/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/chai": "^4.2.11",
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^7.0.2",
+		"@types/node": "^12.12.37",
+		"@types/vscode": "^1.44.0",
+		"@typescript-eslint/eslint-plugin": "^2.30.0",
+		"@typescript-eslint/parser": "^2.30.0",
+		"chai": "^4.2.0",
+		"eslint": "^6.8.0",
+		"eslint-plugin-no-autofix": "^1.0.1",
+		"friendly-errors-webpack-plugin": "^1.7.0",
+		"glob": "^7.1.6",
+		"mocha": "^7.1.2",
+		"source-map-support": "^0.5.19",
+		"ts-loader": "^7.0.1",
+		"ts-node": "^8.9.1",
+		"typescript": "^3.8.3",
+		"vscode-test": "^1.3.0",
+		"webpack": "^4.43.0",
+		"webpack-cli": "^3.3.11",
+		"webpack-strip-block": "^0.2.0"
+	}
+}

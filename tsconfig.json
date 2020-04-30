@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "ES2016",
+		"outDir": "out",
+		"suppressImplicitAnyIndexErrors": true,
+		"lib": [
+			"es6",
+			"es7"
+		],
+		"sourceMap": true,
+		"rootDir": "src",
+		"strict": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"types": [ "node", "mocha", "chai"],
+	},
+	"exclude": [
+		"node_modules",
+		".vscode-test"
+	]
+}

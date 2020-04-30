@@ -1,0 +1,20 @@
+import * as vscode from 'vscode';
+
+export async function openInUntitled(content: string, language?: string): Promise<void> {
+	const document = await vscode.workspace.openTextDocument({
+		language,
+		content,
+	});
+	vscode.window.showTextDocument(document);
+}
+
+export async function openFileInEditor(path: string) {
+	const document = await vscode.workspace.openTextDocument(path);
+	vscode.window.showTextDocument(document);
+}
+
+export function insertSnippet(snippet: string): void {
+	vscode.commands.executeCommand('editor.action.insertSnippet', {
+		snippet,
+	});
+}
