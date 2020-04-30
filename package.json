@@ -182,7 +182,7 @@
 				"category": "Todo MD"
 			}
 		],
-		"keybindings":[
+		"keybindings": [
 			{
 				"command": "todomd.toggleDone",
 				"key": "Alt+D",

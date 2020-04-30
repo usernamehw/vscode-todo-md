@@ -3,7 +3,7 @@ Based on [todo.txt](https://github.com/todotxt/todo.txt) format.
 ## ❗ Extension does not conform to the `todo.txt` spec.
 ## ❗ Extension is in Alpha phase
 
-![demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/img/demo.png)
+![demo](img/demo.png)
 
 By default works for files with names `todo.md` & `todo.archive.md` (But can be changed with `activatePattern` setting).
 
