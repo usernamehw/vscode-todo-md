@@ -4,11 +4,7 @@ import { state, config, subscriptions, GlobalVars } from './extension';
 export function updateCompletions(): void {
 	if (GlobalVars.tagAutocompleteDisposable) {
 		GlobalVars.tagAutocompleteDisposable.dispose();
-	}
-	if (GlobalVars.projectAutocompleteDisposable) {
 		GlobalVars.projectAutocompleteDisposable.dispose();
-	}
-	if (GlobalVars.contextAutocompleteDisposable) {
 		GlobalVars.contextAutocompleteDisposable.dispose();
 	}
 
