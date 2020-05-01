@@ -66,12 +66,13 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined {
 				break;
 			}
 			case '#': {
-				tags = word.split('#').filter(t => t.length);
+				const tempTags = word.split('#').filter(t => t.length);
 				let temp = index;
-				for (const tag of tags) {
+				for (const tag of tempTags) {
 					tagsDelimiterRanges.push(new Range(ln, temp, ln, temp + 1));
 					tagsRange.push(new Range(ln, temp + 1, ln, temp + 1 + tag.length));
 					temp += tag.length + 1;
+					tags.push(tag);
 				}
 				break;
 			}
