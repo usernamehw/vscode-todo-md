@@ -38,7 +38,6 @@ export enum SortTags {
 }
 export interface IConfig {
 	sortTagsView: SortTags;
-	projectBorderRadius: string;
 	addCompletionDate: boolean;
 
 	doneSymbol: string;
@@ -52,8 +51,4 @@ export interface IConfig {
 	defaultFile: string;
 	defaultArchiveFile: string;
 	autoArchiveTasks: boolean;
-	savedViews: {
-		title: string;
-		filter: string;
-	}[];
 }

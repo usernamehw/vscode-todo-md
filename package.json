@@ -58,22 +58,6 @@
 					"markdownDescription": "When enabled - will move completed tasks automatically (when `toggleDone` command runs).",
 					"default": false
 				},
-				"todomd.savedViews": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"properties": {
-							"title": {
-								"type": "string"
-							},
-							"filter": {
-								"type": "string"
-							}
-						}
-					},
-					"markdownDescription": "Files that Tree View use when no file is open that matches `activatePattern`",
-					"default": []
-				},
 				"todomd.activatePattern": {
 					"type": "string",
 					"markdownDescription": "Choose files that extension will operate on. By default activated on 2 files (todo.md & todo.archive.md). This format is called `Glob`. Examples:\n\nActivate on any (.txt) file - `**/*.txt`.\n\nActivate only on single file (todo.txt) - `**/todo.txt`\n\nActivate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`",
@@ -90,10 +74,6 @@
 						"frequency"
 					],
 					"default": "frequency"
-				},
-				"todomd.projectBorderRadius": {
-					"type": "string",
-					"default": "5px"
 				},
 				"todomd.tags": {
 					"type": "array",
