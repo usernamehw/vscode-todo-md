@@ -90,7 +90,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		showCollapseAll: true,
 	});
 
-	updateAllViews();
+	updateAllTreeViews();
 
 	function getDueTasks(): Task[] {
 		return state.tasks.filter(task => task.isDue && !task.done);
@@ -262,9 +262,12 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 			updateDecorationsStyle();
 			return;
 		}
-
 		updateState(editor.document);
-
+		updateEditorDecorations(editor);
+		updateStatusBarEntry();
+		updateAllTreeViews();
+	}
+	function updateEditorDecorations(editor: TextEditor) {
 		const completedDecorationOptions: Range[] = [];
 		const tagsDecorationOptions: Range[] = [];
 		const priority1DecorationOptions: Range[] = [];
@@ -336,11 +339,8 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		editor.setDecorations(notDueDecorationType, notDueDecorationOptions);
 		editor.setDecorations(dueDecorationType, dueDecorationOptions);
 		editor.setDecorations(overdueDecorationType, overdueDecorationOptions);
-
-		updateStatusBarEntry();
-		updateAllViews();
 	}
-	function updateAllViews(): void {
+	function updateAllTreeViews(): void {
 		const dueTasks = getDueTasks();
 		dueProvider.refresh(dueTasks);
 		dueView.title = `due (${dueTasks.length})`;
