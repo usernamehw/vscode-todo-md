@@ -27,7 +27,7 @@ describe('Parsing text', () => {
 		expect(task.isDue).to.equal(DueState.notDue);
 		expect(task.tags).to.have.lengthOf(0);
 		expect(task.ln).to.equal(1);
-		expect(task.priority).to.be.an('undefined');
+		expect(task.priority).to.equal('Z');
 		expect(task.contexts).to.have.lengthOf(0);
 		expect(task.contextRanges).to.have.lengthOf(0);
 		expect(task.projects).to.have.lengthOf(0);
