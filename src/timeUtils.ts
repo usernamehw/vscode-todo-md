@@ -14,7 +14,6 @@ export function getTodayDateInISOFormat(): string {
 /**
  * Get date time ISO 8601
  * Example: `2020-04-30T09:11:17`
- * TODO: maybe the time should be shifted?
  */
 export function getNowDateTimeInISOFormat(): string {
 	let now = new Date();
