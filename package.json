@@ -310,9 +310,9 @@
 			{
 				"id": "todomd.dueForeground",
 				"defaults": {
-					"light": "#690",
-					"dark": "#690",
-					"highContrast": "#690"
+					"light": "#5faedb",
+					"dark": "#5faedb",
+					"highContrast": "#5faedb"
 				},
 				"description": "Not empty"
 			},
