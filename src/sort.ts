@@ -10,14 +10,13 @@ export const enum SortProperty {
 
 export function sortTasks(tasks: Task[], property: SortProperty, direction = SortDirection.DESC): Task[] {
 	const tasksCopy = tasks.slice();
+	let sortedTasks: Task[] = [];
 
 	if (property === SortProperty.priority) {
-		if (direction === SortDirection.DESC) {
-			return tasksCopy.sort((a, b) => (a.priority || 'Z') > (b.priority || 'Z') ? 1 : -1);
-		} else {
-			return tasksCopy.sort((a, b) => (a.priority || 'Z') < (b.priority || 'Z') ? 1 : -1);
-		}
+		sortedTasks = tasksCopy.sort((a, b) => (a.priority || 'Z') > (b.priority || 'Z') ? 1 : -1);
 	}
-
-	throw new Error('Unknown sort property');
+	if (direction === SortDirection.ASC) {
+		return sortedTasks.reverse();
+	}
+	return sortedTasks;
 }
