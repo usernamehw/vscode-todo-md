@@ -35,7 +35,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined {
 	const text: string[] = [];
 	let priority = 'Z';
 	let priorityRange: Range | undefined;
-	let tags: string[] = [];
+	const tags: string[] = [];
 	const tagsDelimiterRanges: Range[] = [];
 	const tagsRange: Range[] = [];
 	let due;
@@ -45,7 +45,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined {
 	for (const word of words) {
 		switch (word[0]) {
 			case '{': {
-				if (word.slice(-1) !== '}') {
+				if (word[word.length - 1] !== '}') {
 					text.push(word);
 					break;
 				}
