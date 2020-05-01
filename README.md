@@ -84,4 +84,5 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 
 ## Please upvote the following upstream vscode issues:
 
+- [#83911 Support WebViews in extension contributed custom views](https://github.com/microsoft/vscode/issues/83911)
 - [#32813 \[theming\] Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
