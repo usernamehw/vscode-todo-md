@@ -1,4 +1,4 @@
-## 0.0.2 `01 May 2020`
+## 0.0.2 / 0.0.3 `01 May 2020`
 
 - ✨ Uncomplete task should remove completion date
 - ✨ Sort selected tasks by priority
