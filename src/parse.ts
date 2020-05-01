@@ -112,6 +112,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined {
 		projects,
 		projectRanges,
 		done,
+		// @ts-ignore priority is undefined, but that's okay
 		priority,
 		priorityRange,
 		specialTagRanges,
@@ -233,7 +234,7 @@ export class Task {
 	projects: string[];
 	/** Due string. Example: `2020-03-27-e30d` */
 	due?: string;
-	priority?: string;
+	priority: string;
 	contexts: string[];
 	contextRanges: Range[];
 	priorityRange?: Range;
@@ -251,7 +252,7 @@ export class Task {
 		this.isDue = init.isDue;
 		this.isRecurring = init.isRecurring;
 		this.projects = init.projects;
-		this.priority = init.priority;
+		this.priority = init.priority || 'Z';
 		this.due = init.due;
 		this.contexts = init.contexts;
 		this.specialTagRanges = init.specialTagRanges;

@@ -13,7 +13,7 @@ export function sortTasks(tasks: Task[], property: SortProperty, direction = Sor
 	let sortedTasks: Task[] = [];
 
 	if (property === SortProperty.priority) {
-		sortedTasks = tasksCopy.sort((a, b) => (a.priority || 'Z') > (b.priority || 'Z') ? 1 : -1);
+		sortedTasks = tasksCopy.sort((a, b) => a.priority > b.priority ? 1 : -1);
 	}
 	if (direction === SortDirection.ASC) {
 		return sortedTasks.reverse();
