@@ -162,7 +162,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 
 			if (newDayArrived && !fileWasReset) {
 				// vscode.window.showInformationMessage('SHOULD RESET ALL IN FILE');
-				uncheckAllRepeatingTasks(editor!);
+				uncheckAllRecurringTasks(editor!);
 				fileWasReset = true;
 			}
 		} else {
@@ -195,7 +195,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 			globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
 		}
 	}
-	function uncheckAllRepeatingTasks(editor: TextEditor): void {
+	function uncheckAllRecurringTasks(editor: TextEditor): void {
 		editor.edit(builder => {
 			for (const line of state.tasks) {
 				if (line.isRecurring && line.done) {
@@ -218,7 +218,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		return document;
 	}
 	commands.registerTextEditorCommand('todomd.resetAllRepeatingTasks', editor => {
-		uncheckAllRepeatingTasks(editor);
+		uncheckAllRecurringTasks(editor);
 	});
 	function onChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
 		const activeTextEditor = window.activeTextEditor;
