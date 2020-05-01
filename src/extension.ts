@@ -30,7 +30,7 @@ let newDayArrived = false;
 let theRightFileOpened = false;
 export const subscriptions: vscode.Disposable[] = [];
 
-let statusBarEntry: vscode.StatusBarItem;
+const statusBarEntry = window.createStatusBarItem(1, -20000);
 
 export class GlobalVars {
 	public static tagAutocompleteDisposable: vscode.Disposable;
@@ -40,8 +40,6 @@ export class GlobalVars {
 
 export function activate(extensionContext: vscode.ExtensionContext): void {
 	const globalState = extensionContext.globalState;
-
-	statusBarEntry = window.createStatusBarItem(1, -20000);
 
 	let changeTextDocumentDisposable: vscode.Disposable;
 
