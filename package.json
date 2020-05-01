@@ -103,6 +103,11 @@
 					"type": "boolean",
 					"markdownDescription": "When completing a task add completion date to it: `{cm:2020-04-30}`",
 					"default": false
+				},
+				"todomd.useLocalDateTime": {
+					"type": "boolean",
+					"markdownDescription": "Calculate offset from UTC to use local date/time.",
+					"default": true
 				}
 			}
 		},

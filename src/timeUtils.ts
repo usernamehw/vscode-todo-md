@@ -1,9 +1,15 @@
+import { config } from './extension';
+
 /**
  * Get date part (without time) ISO 8601
  * Example: `2020-04-21`
  */
 export function getTodayDateInISOFormat(): string {
-	return new Date().toISOString().slice(0, 10);
+	let now = new Date();
+	if (config.useLocalDateTime) {
+		now = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+	}
+	return now.toISOString().slice(0, 10);
 }
 /**
  * Get date time ISO 8601
@@ -11,5 +17,9 @@ export function getTodayDateInISOFormat(): string {
  * TODO: maybe the time should be shifted?
  */
 export function getNowDateTimeInISOFormat(): string {
-	return new Date().toISOString().slice(0, 19);
+	let now = new Date();
+	if (config.useLocalDateTime) {
+		now = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+	}
+	return now.toISOString().slice(0, 19);
 }
