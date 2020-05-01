@@ -12,6 +12,7 @@ import { updateCompletions } from './completionProviders';
 import { ProjectProvider } from './treeViewProviders/projectProvider';
 import { insertSnippet, openFileInEditor } from './vscodeUtils';
 import { ContextProvider } from './treeViewProviders/contextProvider';
+import { sortTasks, SortProperty } from './sort';
 
 export const state: State = {
 	tasks: [],
@@ -413,12 +414,9 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 			tasks = dueTasks;
 		}
 
-		const sortedTasks = tasks.sort(sortByPriority);
+		const sortedTasks = sortTasks(tasks, SortProperty.priority);
 		vscode.window.showInformationMessage(sortedTasks[0].title);
 	});
-	function sortByPriority(a: Task, b: Task): number {
-		return (a.priority || 'Z') > (b.priority || 'Z') ? 1 : -1;
-	}
 	commands.registerCommand(`${EXTENSION_NAME}.addTask`, async () => {
 		if (theRightFileOpened) {
 			return;
