@@ -177,7 +177,8 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 	}
 	function updateStatusBarEntry() {
 		if (statusBarEntry) {
-			statusBarEntry.text = `( ${state.tasks.length} )`;
+			const completedTasks = state.tasks.filter(t => t.done);
+			statusBarEntry.text = `( ${completedTasks.length} / ${state.tasks.length} )`;
 		}
 	}
 	function checkIfNewDayArrived(): void {
