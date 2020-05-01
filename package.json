@@ -7,7 +7,7 @@
 	"license": "MIT",
 	"icon": "img/icon.png",
 	"engines": {
-		"vscode": "^1.44.0"
+		"vscode": "^1.42.0"
 	},
 	"repository": {
 		"type": "git",
@@ -352,7 +352,7 @@
 		"@types/glob": "^7.1.1",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^12.12.37",
-		"@types/vscode": "^1.44.0",
+		"@types/vscode": "^1.42.0",
 		"@typescript-eslint/eslint-plugin": "^2.30.0",
 		"@typescript-eslint/parser": "^2.30.0",
 		"chai": "^4.2.0",
