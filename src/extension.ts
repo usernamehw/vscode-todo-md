@@ -110,19 +110,19 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 			},
 		});
 		priority1DecorationType = window.createTextEditorDecorationType({
-			color: new vscode.ThemeColor('todomd.priority1'),
+			color: new vscode.ThemeColor('todomd.priority1Foreground'),
 		});
 		priority2DecorationType = window.createTextEditorDecorationType({
-			color: new vscode.ThemeColor('todomd.priority2'),
+			color: new vscode.ThemeColor('todomd.priority2Foreground'),
 		});
 		priority3DecorationType = window.createTextEditorDecorationType({
-			color: new vscode.ThemeColor('todomd.priority3'),
+			color: new vscode.ThemeColor('todomd.priority3Foreground'),
 		});
 		priority4DecorationType = window.createTextEditorDecorationType({
-			color: new vscode.ThemeColor('todomd.priority4'),
+			color: new vscode.ThemeColor('todomd.priority4Foreground'),
 		});
 		priority5DecorationType = window.createTextEditorDecorationType({
-			color: new vscode.ThemeColor('todomd.priority5'),
+			color: new vscode.ThemeColor('todomd.priority5Foreground'),
 		});
 		tagsDecorationType = window.createTextEditorDecorationType({
 			color: new vscode.ThemeColor('todomd.tagForeground'),
