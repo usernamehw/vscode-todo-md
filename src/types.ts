@@ -51,4 +51,5 @@ export interface IConfig {
 	defaultFile: string;
 	defaultArchiveFile: string;
 	autoArchiveTasks: boolean;
+	useLocalDateTime: boolean;
 }
