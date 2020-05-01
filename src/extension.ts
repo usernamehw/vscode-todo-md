@@ -222,7 +222,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 	});
 	function onChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
 		const activeTextEditor = window.activeTextEditor;
-		if (activeTextEditor) {
+		if (activeTextEditor && theRightFileOpened) {
 			updateEverything(activeTextEditor);
 		}
 	}
