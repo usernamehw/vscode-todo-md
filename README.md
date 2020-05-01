@@ -71,3 +71,17 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 | --- | --- |--- |
 |activatePattern|`"**/{todo,todo.archive}.md"`|Choose files that extension will operate on. By default activated on 2 files (`todo.md` & `todo.archive.md`). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
 |addCompletionDate|**false**|When completing a task add completion date to it: `{cm:2020-04-30}`|
+
+# Colors
+
+- `todomd.tagForeground`
+- `todomd.contextForeground`
+- `todomd.projectForeground`
+- `todomd.notDueForeground`
+- `todomd.dueForeground`
+- `todomd.overdueForeground`
+- `todomd.tagDelimiterForeground`
+
+## Please upvote the following upstream vscode issues:
+
+- [#32813 \[theming\] Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)

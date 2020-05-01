@@ -191,7 +191,7 @@
 		],
 		"colors": [
 			{
-				"id": "todomd.priority1",
+				"id": "todomd.priority1Foreground",
 				"defaults": {
 					"light": "#eb847e",
 					"dark": "#eb847e",
@@ -200,7 +200,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority2",
+				"id": "todomd.priority2Foreground",
 				"defaults": {
 					"light": "#ffb648",
 					"dark": "#e9b972",
@@ -209,7 +209,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority3",
+				"id": "todomd.priority3Foreground",
 				"defaults": {
 					"light": "#d4c12b",
 					"dark": "#e9db73",
@@ -218,7 +218,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority4",
+				"id": "todomd.priority4Foreground",
 				"defaults": {
 					"light": "#bad62e",
 					"dark": "#d4e67f",
@@ -227,7 +227,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority5",
+				"id": "todomd.priority5Foreground",
 				"defaults": {
 					"light": "#55d65b",
 					"dark": "#87e28c",
@@ -263,15 +263,6 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.tagBackground",
-				"defaults": {
-					"light": "#fff0",
-					"dark": "#fff0",
-					"highContrast": "#fff0"
-				},
-				"description": "Not empty"
-			},
-			{
 				"id": "todomd.tagDelimiterForeground",
 				"defaults": {
 					"light": "#b4b4b4",
@@ -286,15 +277,6 @@
 					"light": "#36cc9a",
 					"dark": "#36cc9a",
 					"highContrast": "#36cc9a"
-				},
-				"description": "Not empty"
-			},
-			{
-				"id": "todomd.projectBackground",
-				"defaults": {
-					"light": "#fff0",
-					"dark": "#fff0",
-					"highContrast": "#fff0"
 				},
 				"description": "Not empty"
 			},

@@ -125,21 +125,15 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		});
 		tagsDecorationType = window.createTextEditorDecorationType({
 			color: new vscode.ThemeColor('todomd.tagForeground'),
-			backgroundColor: new vscode.ThemeColor('todomd.tagBackground'),
-			rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
 		});
 		specialTagDecorationType = window.createTextEditorDecorationType({
 			color: new vscode.ThemeColor('todomd.specialTagForeground'),
 		});
 		tagsDelimiterDecorationType = window.createTextEditorDecorationType({
 			color: new vscode.ThemeColor('todomd.tagDelimiterForeground'),
-			rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
 		});
 		projectDecorationType = window.createTextEditorDecorationType({
 			color: new vscode.ThemeColor('todomd.projectForeground'),
-			backgroundColor: new vscode.ThemeColor('todomd.projectBackground'),
-			border: '1px solid rgba(0, 0, 0, 0.1)',
-			borderRadius: config.projectBorderRadius,
 		});
 		contextDecorationType = window.createTextEditorDecorationType({
 			color: new vscode.ThemeColor('todomd.contextForeground'),
