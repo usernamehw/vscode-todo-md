@@ -5,11 +5,12 @@ import { Task } from './parse';
  * Filter must support OR
  * Filter must support > <
  */
-// @ts-ignore
+
 export function filterItems(tasks: Task[], filter: string): Task[] {
 	if (filter.length === 0) {
 		return tasks;
 	}
+	return tasks;
 }
 
 function parseFilter(filter: string) {

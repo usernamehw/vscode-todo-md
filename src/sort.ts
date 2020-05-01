@@ -8,7 +8,6 @@ export const enum SortProperty {
 	priority,
 }
 
-// @ts-ignore
 export function sortTasks(tasks: Task[], property: SortProperty, direction = SortDirection.DESC): Task[] {
 	const tasksCopy = tasks.slice();
 
@@ -19,4 +18,6 @@ export function sortTasks(tasks: Task[], property: SortProperty, direction = Sor
 			return tasksCopy.sort((a, b) => (a.priority || 'Z') < (b.priority || 'Z') ? 1 : -1);
 		}
 	}
+
+	throw new Error('Unknown sort property');
 }
