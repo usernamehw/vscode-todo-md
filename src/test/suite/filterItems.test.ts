@@ -8,13 +8,13 @@ import { Task } from '../../parse';
 let items: Task[] = [];
 
 // ──────────────────────────────────────────────────────────────────────
-describe('...', () => {
-	it('...', () => {
-		const filtered = filterItems(items, '');
-		expect(filtered).to.have.length(0);
-	});
-});
+// describe('...', () => {
+// 	it('...', () => {
+// 		const filtered = filterItems(items, '');
+// 		expect(filtered).to.have.length(0);
+// 	});
+// });
 
 function assignFilterItems() {
-	
+
 }

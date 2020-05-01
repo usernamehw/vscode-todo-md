@@ -47,4 +47,39 @@ describe('Projects', () => {
 		const task = parseLine(lineAt(3))!;
 		expect(task.projects).to.have.all.members(['One', 'Two', 'Three']);
 	});
+	it('3 multiple projects have correct Ranges', () => {
+		const task = parseLine(lineAt(3))!;
+		const projectRanges = [new Range(3, 2, 3, 6), new Range(3, 12, 3, 16), new Range(3, 17, 3, 23)];
+		for (let i = 0; i < task.projectRanges.length; i++) {
+			const range = task.projectRanges[i];
+			expect(range.isEqual(projectRanges[i]));
+		}
+	});
+});
+
+describe('Contexts', () => {
+	it('4 multiple contexts @Context', () => {
+		const task = parseLine(lineAt(4))!;
+		expect(task.contexts).to.have.all.members(['One', 'Two', 'Three']);
+	});
+	it('4 multiple contexts have correct Ranges', () => {
+		const task = parseLine(lineAt(4))!;
+		const contextRanges = [new Range(4, 2, 4, 6), new Range(4, 12, 4, 16), new Range(4, 17, 4, 23)];
+		for (let i = 0; i < task.contextRanges.length; i++) {
+			const range = task.contextRanges[i];
+			expect(range.isEqual(contextRanges[i]));
+		}
+	});
+});
+describe('Tags', () => {
+	it('5 multiple tags #tag1#tag2', () => {
+		const task = parseLine(lineAt(5))!;
+		expect(task.tags).to.have.all.members(['one', 'two', 'three', 'four']);
+	});
+});
+describe('Priority', () => {
+	it('6 single priority', () => {
+		const task = parseLine(lineAt(6))!;
+		expect(task.priority).to.equal('C');
+	});
 });
