@@ -142,6 +142,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.sortByPriority",
+				"title": "Sort by priority",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.archiveCompletedTasks",
 				"title": "Archive completed Tasks",
 				"category": "Todo MD"

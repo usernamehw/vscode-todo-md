@@ -1,4 +1,4 @@
-import { commands, window, workspace, Position, Range, TextEditor, TextDocument } from 'vscode';
+import { commands, window, workspace, Position, Range, TextEditor, TextDocument, TextLine } from 'vscode';
 import * as vscode from 'vscode';
 
 import { TagProvider } from './treeViewProviders/tagProvider';
@@ -411,6 +411,30 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		}
 		workspace.applyEdit(edit);
 	});
+	commands.registerTextEditorCommand(`${EXTENSION_NAME}.sortByPriority`, (editor, edit) => {
+		const selection = editor.selection;
+		if (selection.isEmpty) {
+			vscode.window.showInformationMessage('Select tasks to sort');
+			return;
+		}
+		const lineStart = selection.start.line;
+		const lineEnd = selection.end.line;
+		const tasks: any[] = [];
+		for (let i = lineStart; i <= lineEnd; i++) {
+			const task: any = getTaskAtLine(i);
+			if (task) {
+				task.line = editor.document.lineAt(i).text;
+				tasks.push(task);
+			}
+		}
+		const sortedTasks: any[] = sortTasks(tasks, SortProperty.priority);
+		const result = sortedTasks.map(t => t.line).join('\n');
+		edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
+	});
+	function getFullRangeFromLines(document: TextDocument, lineStart: number, lineEnd: number): Range {
+		const lineAtTheEnd = document.lineAt(lineEnd);
+		return new Range(lineStart, 0, lineEnd, lineAtTheEnd.range.end.character);
+	}
 	commands.registerCommand(`${EXTENSION_NAME}.getNextTask`, () => {
 		// if (theRightFileOpened) {
 		// 	return;
