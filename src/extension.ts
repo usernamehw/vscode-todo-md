@@ -363,24 +363,37 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 	// ──── Commands ────────────────────────────────────────────────────────
 	// ──────────────────────────────────────────────────────────────────────
 	commands.registerTextEditorCommand(`${EXTENSION_NAME}.toggleDone`, async (editor, edit, treeItem?: DueTreeItem) => {
-		if (treeItem) {
-			toggleTaskAtLine(treeItem.parsedLine.ln, editor.document);
-		} else {
-			const activeLineNumber = editor.selection.active.line;
-			const isToggled = await toggleTaskAtLine(activeLineNumber, editor.document);
-			if (config.autoArchiveTasks && isToggled) {
-				const task = getTaskAtLine(activeLineNumber);
-				if (!task?.done || task.isRecurring) {
-					return;
-				}
-				const line = editor.document.lineAt(activeLineNumber);
-				appendTaskToFile(line.text, config.defaultArchiveFile);
-				const workspaceEdit = new vscode.WorkspaceEdit();
-				workspaceEdit.delete(editor.document.uri, line.rangeIncludingLineBreak);
-				workspace.applyEdit(workspaceEdit);
+		const ln = treeItem ? treeItem.parsedLine.ln : editor.selection.active.line;
+		const isToggled = await toggleTaskAtLine(ln, editor.document);
+
+		const task = getTaskAtLine(ln);
+		if (!task) {
+			return;
+		}
+		if (!task.done && config.addCompletionDate) {
+			await removeCompletionDate(editor, ln);
+		}
+		if (config.autoArchiveTasks && isToggled) {
+			if (!task?.done || task.isRecurring) {
+				return;
 			}
+			const line = editor.document.lineAt(ln);
+			appendTaskToFile(line.text, config.defaultArchiveFile);
+			const workspaceEdit = new vscode.WorkspaceEdit();
+			workspaceEdit.delete(editor.document.uri, line.rangeIncludingLineBreak);
+			workspace.applyEdit(workspaceEdit);
 		}
 	});
+	async function removeCompletionDate(editor: TextEditor, ln: number) {
+		const line = editor.document.lineAt(ln);
+		const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}}\s?/;// {cm:2020-05-01}
+		const match = completionDateRegex.exec(line.text);
+		if (match) {
+			await editor.edit(builder => {
+				builder.delete(new vscode.Range(ln, match.index, ln, match.index + match[0].length));
+			});
+		}
+	}
 	commands.registerTextEditorCommand(`${EXTENSION_NAME}.archiveCompletedTasks`, editor => {
 		if (!config.defaultArchiveFile) {
 			vscode.window.showWarningMessage('No default archive file specified');
@@ -472,7 +485,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 				edit.insert(document.uri, new vscode.Position(ln, line.range.end.character), ` {cm:${getTodayDateInISOFormat()}}`);
 			}
 		}
-		return workspace.applyEdit(edit);
+		return await workspace.applyEdit(edit);
 	}
 	commands.registerCommand(`${EXTENSION_NAME}.clearGlobalState`, () => {
 		// @ts-ignore No API
