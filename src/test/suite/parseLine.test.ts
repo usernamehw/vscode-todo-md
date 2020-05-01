@@ -1,4 +1,4 @@
-import { suite, test, beforeEach, afterEach, before, describe, it } from 'mocha';
+import { describe, it } from 'mocha';
 import vscode, { Range, Position, Selection } from 'vscode';
 import { expect } from 'chai';
 
@@ -10,10 +10,7 @@ const editor = vscode.window.activeTextEditor!;
 function lineAt(n: number) {
 	return editor.document.lineAt(n);
 }
-
-// beforeEach(done => setTimeout(done, 100));
-// afterEach(done => setTimeout(done, 500));
-
+// ──────────────────────────────────────────────────────────────────────
 describe('Comment', () => {
 	it('0 Should not produce a task', () => {
 		const task = parseLine(lineAt(0));
