@@ -258,6 +258,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 
 	function updateEverything(editor?: vscode.TextEditor): void {
 		if (!editor) {
+			// When called from updateConfig
 			updateDecorationsStyle();
 			return;
 		}
