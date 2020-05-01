@@ -59,7 +59,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 	let overdueDecorationType: vscode.TextEditorDecorationType;
 
 	checkIfNewDayArrived();
-	updateDecorations();
+	updateDecorationsStyle();
 
 	const tagProvider = new TagProvider([]);
 	const tagsView = vscode.window.createTreeView(`${EXTENSION_NAME}.tags`, {
@@ -99,7 +99,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		return state.tasks.filter(task => task);
 	}
 
-	function updateDecorations(): void {
+	function updateDecorationsStyle(): void {
 		completedTaskDecorationType = window.createTextEditorDecorationType({
 			isWholeLine: true,
 			textDecoration: 'line-through rgba(255, 255, 255, 0.35)',
@@ -258,7 +258,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 
 	function updateEverything(editor?: vscode.TextEditor): void {
 		if (!editor) {
-			updateDecorations();
+			updateDecorationsStyle();
 			return;
 		}
 
