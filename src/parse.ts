@@ -19,7 +19,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined {
 	/** Offset of current word (Used to calculate ranges for decorations) */
 	let index = textLine.firstNonWhitespaceCharacterIndex;
 
-	const done = line.startsWith(config.doneSymbol);
+	let done = line.startsWith(config.doneSymbol);
 	line = line.replace(config.doneSymbol, '');
 	if (done) {
 		index += config.doneSymbol.length;
@@ -59,6 +59,8 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined {
 				} else if (specialTag === 'cr') {
 					specialTagRanges.push(range);
 				} else if (specialTag === 'cm') {
+					// Presence of completion date indicates that the task is done
+					done = true;
 					specialTagRanges.push(range);
 				} else {
 					text.push(word);
