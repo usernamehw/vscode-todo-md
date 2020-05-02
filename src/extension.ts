@@ -225,7 +225,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		state.commentLines = result.commentLines;
 		return document;
 	}
-	commands.registerTextEditorCommand('todomd.resetAllRepeatingTasks', editor => {
+	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
 		uncheckAllRecurringTasks(editor);
 	});
 	function onChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {

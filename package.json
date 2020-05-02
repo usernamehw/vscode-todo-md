@@ -162,8 +162,8 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.resetAllRepeatingTasks",
-				"title": "Reset all repeating tasks",
+				"command": "todomd.resetAllRecurringTasks",
+				"title": "Reset all Recurring tasks",
 				"category": "Todo MD"
 			},
 			{
