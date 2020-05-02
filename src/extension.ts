@@ -261,8 +261,6 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 
 	function updateEverything(editor?: vscode.TextEditor): void {
 		if (!editor) {
-			// When called from updateConfig
-			updateDecorationsStyle();
 			return;
 		}
 		updateState(editor.document);
@@ -568,6 +566,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		config = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
 
 		disposeEverything();
+		updateDecorationsStyle();
 		updateEverything();
 	}
 
