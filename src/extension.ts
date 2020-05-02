@@ -13,6 +13,7 @@ import { insertSnippet, openFileInEditor } from './vscodeUtils';
 import { ContextProvider } from './treeViewProviders/contextProvider';
 import { sortTasks, SortProperty } from './sort';
 import { getDateInISOFormat } from './timeUtils';
+import { filterItems } from './filter';
 
 export const state: State = {
 	tasks: [],
@@ -24,6 +25,8 @@ export const state: State = {
 
 export const EXTENSION_NAME = 'todomd';
 const LAST_VISIT_STORAGE_KEY = 'LAST_VISIT_STORAGE_KEY';
+
+const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
 export let config = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
 let fileWasReset = false;
@@ -470,10 +473,22 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		}
 		toggleTaskAtLine(task.ln, document);
 	});
-	commands.registerTextEditorCommand(`${EXTENSION_NAME}.applyFilter`, editor => {
-		vscode.window.showInformationMessage('Not there yet.');
+	commands.registerTextEditorCommand(`${EXTENSION_NAME}.filter`, async editor => {
+		const filterStr = await vscode.window.showInputBox({
+			prompt: 'Examples: #Tag, @Context, +Project',
+		});
+		if (!filterStr) {
+			return;
+		}
+		const filteredTasks = filterItems(state.tasks, filterStr);
+		vscode.commands.executeCommand('setContext', FILTER_ACTIVE_CONTEXT_KEY, true);
+		taskProvider.refresh(filteredTasks);
 	});
-	commands.registerTextEditorCommand(`${EXTENSION_NAME}.insertTodayDate`, editor => {
+	commands.registerCommand(`${EXTENSION_NAME}.clearFilter`, async editor => {
+		taskProvider.refresh(state.tasks);
+		vscode.commands.executeCommand('setContext', FILTER_ACTIVE_CONTEXT_KEY, false);
+	});
+	commands.registerCommand(`${EXTENSION_NAME}.insertTodayDate`, editor => {
 		insertSnippet(getDateInISOFormat(new Date()));
 	});
 	async function toggleTaskAtLine(ln: number, document: TextDocument): Promise<void> {

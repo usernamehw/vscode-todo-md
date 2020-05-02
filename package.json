@@ -152,9 +152,22 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.applyFilter",
-				"title": "Apply Filter",
-				"category": "Todo MD"
+				"command": "todomd.filter",
+				"title": "Filter",
+				"category": "Todo MD",
+				"icon": {
+					"light": "img/filterLight.svg",
+					"dark": "img/filterDark.svg"
+				}
+			},
+			{
+				"command": "todomd.clearFilter",
+				"title": "Clear Filter",
+				"category": "Todo MD",
+				"icon": {
+					"light": "img/clearAllLight.svg",
+					"dark": "img/clearAllDark.svg"
+				}
 			},
 			{
 				"command": "todomd.clearGlobalState",
@@ -308,6 +321,18 @@
 			}
 		],
 		"menus": {
+			"view/title": [
+				{
+					"command": "todomd.filter",
+					"when": "view == todomd.tasks && !todomd:filterActive",
+					"group": "navigation"
+				},
+				{
+					"command": "todomd.clearFilter",
+					"when": "view == todomd.tasks && todomd:filterActive",
+					"group": "navigation"
+				}
+			],
 			"view/item/context": [
 				{
 					"command": "todomd.toggleDone",
