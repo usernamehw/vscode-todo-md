@@ -83,3 +83,13 @@ describe('Priority', () => {
 		expect(task.priority).to.equal('C');
 	});
 });
+describe('Completed state', () => {
+	it('7 With symbol', () => {
+		const task = parseLine(lineAt(7))!;
+		expect(task.done).to.equal(true);
+	});
+	it('8 With completion date', () => {
+		const task = parseLine(lineAt(8))!;
+		expect(task.done).to.equal(true);
+	});
+});
