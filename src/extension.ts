@@ -19,6 +19,7 @@ export const state: State = {
 	tagsForProvider: [],
 	projectsForProvider: [],
 	contextsForProvider: [],
+	commentLines: [],
 };
 
 export const EXTENSION_NAME = 'todomd';
@@ -45,6 +46,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 	let changeTextDocumentDisposable: vscode.Disposable;
 
 	let completedTaskDecorationType: vscode.TextEditorDecorationType;
+	let commentDecorationType: vscode.TextEditorDecorationType;
 	let priority1DecorationType: vscode.TextEditorDecorationType;
 	let priority2DecorationType: vscode.TextEditorDecorationType;
 	let priority3DecorationType: vscode.TextEditorDecorationType;
@@ -107,6 +109,10 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 			light: {
 				textDecoration: 'line-through rgba(0, 0, 0, 0.25)',
 			},
+		});
+		commentDecorationType = window.createTextEditorDecorationType({
+			color: new vscode.ThemeColor('todomd.commentForeground'),
+			isWholeLine: true,
 		});
 		priority1DecorationType = window.createTextEditorDecorationType({
 			color: new vscode.ThemeColor('todomd.priority1Foreground'),
@@ -216,6 +222,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		state.tagsForProvider = result.sortedTags;
 		state.projectsForProvider = result.projects;
 		state.contextsForProvider = result.contexts;
+		state.commentLines = result.commentLines;
 		return document;
 	}
 	commands.registerTextEditorCommand('todomd.resetAllRepeatingTasks', editor => {
@@ -340,6 +347,9 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		editor.setDecorations(notDueDecorationType, notDueDecorationOptions);
 		editor.setDecorations(dueDecorationType, dueDecorationOptions);
 		editor.setDecorations(overdueDecorationType, overdueDecorationOptions);
+
+
+		editor.setDecorations(commentDecorationType, state.commentLines);
 	}
 	function updateAllTreeViews(): void {
 		const dueTasks = getDueTasks();

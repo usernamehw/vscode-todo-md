@@ -181,6 +181,15 @@
 		],
 		"colors": [
 			{
+				"id": "todomd.commentForeground",
+				"defaults": {
+					"light": "#b4b4b4",
+					"dark": "#b4b4b4",
+					"highContrast": "#b4b4b4"
+				},
+				"description": "Not empty"
+			},
+			{
 				"id": "todomd.priority1Foreground",
 				"defaults": {
 					"light": "#eb847e",

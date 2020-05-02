@@ -24,6 +24,7 @@ export interface State {
 	projectsForProvider: ProjectForProvider[];
 	contextsForProvider: ContextForProvider[];
 	lastVisit?: Date;
+	commentLines: vscode.Range[];
 }
 
 export const enum DueState {

@@ -4,16 +4,16 @@ import { Items, TagForProvider, SortTags, ProjectForProvider, DueState, ContextF
 import { config } from './extension';
 import { parseDue } from './utils';
 
-export function parseLine(textLine: vscode.TextLine): Task | undefined {
+export function parseLine(textLine: vscode.TextLine): Task | undefined | number {
 	let line = textLine.text.trim();
 	const ln = textLine.lineNumber;
 	if (!line.length) {
-		// Empty lines are ok and allowed to use to read file easier
+		// Empty lines are ok and allowed to use to read the file easier
 		return undefined;
 	}
 	if (line[0] === '#' && line[1] === ' ') {
 		// Comment. Also, in markdown file a header and can be used for Go To Symbol
-		return undefined;
+		return ln;
 	}
 
 	/** Offset of current word (Used to calculate ranges for decorations) */
@@ -133,12 +133,18 @@ interface ParsedStuff {
 	sortedTags: TagForProvider[];
 	projects: ProjectForProvider[];
 	contexts: ContextForProvider[];
+	commentLines: Range[];
 }
 export function parseDocument(document: vscode.TextDocument): ParsedStuff {
 	const tasks = [];
+	const commentLines = [];
 	for (let i = 0; i < document.lineCount; i++) {
 		const parsedLine = parseLine(document.lineAt(i));
-		if (!parsedLine) {
+		if (parsedLine === undefined) {
+			continue;
+		}
+		if (typeof parsedLine === 'number') {
+			commentLines.push(new Range(parsedLine, 0, parsedLine, 0));
 			continue;
 		}
 		tasks.push(parsedLine);
@@ -222,6 +228,7 @@ export function parseDocument(document: vscode.TextDocument): ParsedStuff {
 		sortedTags,
 		projects,
 		contexts,
+		commentLines,
 	};
 }
 
