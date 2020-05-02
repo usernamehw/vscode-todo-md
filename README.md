@@ -27,6 +27,14 @@ Nested projects are ok `+Project\nested` but at the same time they do not get tr
 #tag1#tag2
 ```
 
+## Priority
+
+Priority is a single UPPERCASE letter surrounded by round brackets. It can be A-Z. Only the first 5 A-E have unique colors though.
+
+```
+(A)
+```
+
 ## Special tag:value pairs
 
 ```
@@ -70,6 +78,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 | --- | --- |--- |
 |activatePattern|`"**/{todo,todo.archive}.md"`|Choose files that extension will operate on. By default activated on 2 files (`todo.md` & `todo.archive.md`). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
 |addCompletionDate|**false**|When completing a task add completion date to it: `{cm:2020-04-30}`|
+|useLocalDateTime|**true**|Calculate offset from UTC to use local date/time.|
 |todomd.projects|[]|Projects added to autocomplete.|
 |todomd.contexts|[]|Contexts added to autocomplete.|
 |todomd.tags|[]|Tags added to autocomplete.|
@@ -83,6 +92,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `todomd.dueForeground`
 - `todomd.overdueForeground`
 - `todomd.tagDelimiterForeground`
+- `todomd.commentForeground`
 
 ## Please upvote the following upstream vscode issues:
 
