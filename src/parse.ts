@@ -33,7 +33,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined | number 
 	const projectRanges: Range[] = [];
 	const specialTagRanges: Range[] = [];
 	const text: string[] = [];
-	let priority = 'Z';
+	let priority = '';
 	let priorityRange: Range | undefined;
 	const tags: string[] = [];
 	const tagsDelimiterRanges: Range[] = [];
@@ -232,6 +232,26 @@ export function parseDocument(document: vscode.TextDocument): ParsedStuff {
 	};
 }
 
+export interface TaskInit {
+	title: string;
+	ln: number;
+
+	done?: boolean;
+	isRecurring?: boolean;
+	tags?: string[];
+	isDue?: DueState;
+	projects?: string[];
+	priority?: string;
+	due?: string;
+	contexts?: string[];
+	priorityRange?: Range;
+	specialTagRanges?: Range[];
+	contextRanges?: Range[];
+	projectRanges?: Range[];
+	dueRange?: Range;
+	tagsDelimiterRanges?: Range[];
+	tagsRange?: Range[];
+}
 export class Task {
 	title: string;
 	done: boolean;
@@ -253,20 +273,20 @@ export class Task {
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
 
-	constructor(init: Task) {
+	constructor(init: TaskInit) {
 		this.title = init.title;
-		this.done = init.done;
 		this.ln = init.ln;
-		this.tags = init.tags;
-		this.isDue = init.isDue;
-		this.isRecurring = init.isRecurring;
-		this.projects = init.projects;
-		this.priority = init.priority;
+		this.done = init.done || false;
+		this.tags = init.tags || [];
+		this.isDue = init.isDue || DueState.notDue;
+		this.isRecurring = init.isRecurring || false;
+		this.projects = init.projects || [];
+		this.priority = init.priority || 'Z';
 		this.due = init.due;
-		this.contexts = init.contexts;
-		this.specialTagRanges = init.specialTagRanges;
-		this.contextRanges = init.contextRanges;
-		this.projectRanges = init.projectRanges;
+		this.contexts = init.contexts || [];
+		this.specialTagRanges = init.specialTagRanges || [];
+		this.contextRanges = init.contextRanges || [];
+		this.projectRanges = init.projectRanges || [];
 		this.priorityRange = init.priorityRange;
 		this.dueRange = init.dueRange;
 		this.tagsDelimiterRanges = init.tagsDelimiterRanges;
