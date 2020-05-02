@@ -1,4 +1,4 @@
-## ❗ Extension does not conform to the `todo.txt` spec.
+## ❗ Extension does not conform to the [todo.txt](https://github.com/todotxt/todo.txt) spec.
 ## ❗ Extension is in Alpha phase
 
 ![demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/img/demo.png)
@@ -47,6 +47,7 @@ tag | description
 - ❌ h (hide)
 - ❌ f/star (favorite/starred)
 - ❌ url/link
+- ❌ count (count Finish a task and re-enter it with a decreased count, so that you can easily keep track of items.)
 - ❌ e (effort)
 - ❌ note
 - ❌ cr - (creation date) -->
