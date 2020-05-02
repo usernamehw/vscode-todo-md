@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 
 import { DueState } from './types';
-import { config } from './extension';
 
 export const ONE_MINUTE_IN_MS = 60000;
 export const ONE_HOUR_IN_MS = 3600000;

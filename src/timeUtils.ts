@@ -1,24 +1,12 @@
 import { config } from './extension';
 
 /**
- * Get date part (without time) ISO 8601
- * Example: `2020-04-21`
+ * Get date or datetime ISO 8601
+ * Example: `2020-04-21` or `2020-04-30T09:11:17`
  */
-export function getTodayDateInISOFormat(): string {
-	let now = new Date();
+export function getDateInISOFormat(date: Date, includeTime = false): string {
 	if (config.useLocalDateTime) {
-		now = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+		date = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 	}
-	return now.toISOString().slice(0, 10);
-}
-/**
- * Get date time ISO 8601
- * Example: `2020-04-30T09:11:17`
- */
-export function getNowDateTimeInISOFormat(): string {
-	let now = new Date();
-	if (config.useLocalDateTime) {
-		now = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-	}
-	return now.toISOString().slice(0, 19);
+	return date.toISOString().slice(0, includeTime ? 19 : 10);
 }

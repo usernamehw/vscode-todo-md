@@ -1,22 +1,21 @@
 import * as vscode from 'vscode';
 import { state, config, subscriptions, GlobalVars } from './extension';
+import { getDateInISOFormat } from './timeUtils';
+import { shiftDays } from './utils';
 
 export function updateCompletions(): void {
 	if (GlobalVars.tagAutocompleteDisposable) {
 		GlobalVars.tagAutocompleteDisposable.dispose();
 		GlobalVars.projectAutocompleteDisposable.dispose();
 		GlobalVars.contextAutocompleteDisposable.dispose();
+		GlobalVars.generalAutocompleteDisposable.dispose();
 	}
 
 	GlobalVars.tagAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-				const linePrefix = document.lineAt(position).text.substr(0, position.character).trim();
-				if (linePrefix === '#') {
-				// It's a markdown header, don't autocomplete as a tag
-					return [];
-				}
+				// const linePrefix = document.lineAt(position).text.substr(0, position.character).trim();
 				const tagCompletions = [];
 				for (const tag of getAllTags()) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
@@ -34,7 +33,7 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-				const linePrefix = document.lineAt(position).text.substr(0, position.character);
+				// const linePrefix = document.lineAt(position).text.substr(0, position.character);// TODO: only include pattern with space=>plus
 				const tagCompletions = [];
 				for (const tag of getAllProjects()) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
@@ -52,7 +51,7 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-				const linePrefix = document.lineAt(position).text.substr(0, position.character);
+				// const linePrefix = document.lineAt(position).text.substr(0, position.character);// TODO: only include pattern with space=>at
 				const contextCompletions = [];
 				for (const context of getAllContexts()) {
 					const contextCompletion = new vscode.CompletionItem(context, vscode.CompletionItemKind.Field);
@@ -65,6 +64,24 @@ export function updateCompletions(): void {
 			},
 		},
 		'@'
+	);
+	GlobalVars.generalAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+		{ scheme: 'file' },
+		{
+			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+				// const linePrefix = document.lineAt(position).text.substr(0, position.character);
+				const general = [];
+				const today = new vscode.CompletionItem('TODAY', vscode.CompletionItemKind.Constant);
+				today.insertText = getDateInISOFormat(new Date());
+				const tomorrow = new vscode.CompletionItem('TOMORROW', vscode.CompletionItemKind.Constant);
+				tomorrow.insertText = getDateInISOFormat(shiftDays(new Date(), 1));
+				const yesterday = new vscode.CompletionItem('YESTERDAY', vscode.CompletionItemKind.Constant);
+				yesterday.insertText = getDateInISOFormat(shiftDays(new Date(), -1));
+				general.push(today, tomorrow, yesterday);
+				return general;
+			},
+		},
+		''
 	);
 }
 

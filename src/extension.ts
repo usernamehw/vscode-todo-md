@@ -6,13 +6,13 @@ import { TaskProvider } from './treeViewProviders/taskProvider';
 import { IConfig, State, DueState } from './types';
 import { isTheSameDay, appendTaskToFile } from './utils';
 import { DueProvider, DueTreeItem } from './treeViewProviders/dueProvider';
-import { getTodayDateInISOFormat } from './timeUtils';
 import { parseDocument, Task } from './parse';
 import { updateCompletions } from './completionProviders';
 import { ProjectProvider } from './treeViewProviders/projectProvider';
 import { insertSnippet, openFileInEditor } from './vscodeUtils';
 import { ContextProvider } from './treeViewProviders/contextProvider';
 import { sortTasks, SortProperty } from './sort';
+import { getDateInISOFormat } from './timeUtils';
 
 export const state: State = {
 	tasks: [],
@@ -36,6 +36,7 @@ export class GlobalVars {
 	public static tagAutocompleteDisposable: vscode.Disposable;
 	public static projectAutocompleteDisposable: vscode.Disposable;
 	public static contextAutocompleteDisposable: vscode.Disposable;
+	public static generalAutocompleteDisposable: vscode.Disposable;
 }
 
 export function activate(extensionContext: vscode.ExtensionContext): void {
@@ -246,13 +247,14 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		updateStatusBarEntry();
 	}
 	function exitTheRightFile() {
+		if (changeTextDocumentDisposable) {
+			changeTextDocumentDisposable.dispose();
+		}
 		if (GlobalVars.contextAutocompleteDisposable) {
 			GlobalVars.contextAutocompleteDisposable.dispose();
 			GlobalVars.tagAutocompleteDisposable.dispose();
 			GlobalVars.projectAutocompleteDisposable.dispose();
-		}
-		if (changeTextDocumentDisposable) {
-			changeTextDocumentDisposable.dispose();
+			GlobalVars.generalAutocompleteDisposable.dispose();
 		}
 		hideStatusBarEntry();
 	}
@@ -492,7 +494,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 		vscode.window.showInformationMessage('Not there yet.');
 	});
 	commands.registerTextEditorCommand(`${EXTENSION_NAME}.insertTodayDate`, editor => {
-		insertSnippet(getTodayDateInISOFormat());
+		insertSnippet(getDateInISOFormat(new Date()));
 	});
 	async function toggleTaskAtLine(ln: number, document: TextDocument): Promise<undefined | boolean> {
 		const firstNonWhitespaceCharacterIndex = document.lineAt(ln).firstNonWhitespaceCharacterIndex;
@@ -507,7 +509,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 			edit.insert(document.uri, new vscode.Position(ln, firstNonWhitespaceCharacterIndex), config.doneSymbol);
 			if (config.addCompletionDate) {
 				const line = document.lineAt(ln);
-				edit.insert(document.uri, new vscode.Position(ln, line.range.end.character), ` {cm:${getTodayDateInISOFormat()}}`);
+				edit.insert(document.uri, new vscode.Position(ln, line.range.end.character), ` {cm:${getDateInISOFormat(new Date())}}`);
 			}
 		}
 		return await workspace.applyEdit(edit);
