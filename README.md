@@ -93,6 +93,11 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `todomd.overdueForeground`
 - `todomd.tagDelimiterForeground`
 - `todomd.commentForeground`
+- `priority1Foreground`
+- `priority2Foreground`
+- `priority3Foreground`
+- `priority4Foreground`
+- `priority5Foreground`
 
 ## Please upvote the following upstream vscode issues:
 
