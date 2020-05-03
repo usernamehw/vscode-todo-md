@@ -4,7 +4,6 @@ import type { TagForProvider } from '../types';
 
 export class TagTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-	iconPath = vscode.ThemeIcon.Folder;
 
 	constructor(
 		readonly label: string,

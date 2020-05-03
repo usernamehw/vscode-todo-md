@@ -4,7 +4,6 @@ import type { ContextForProvider } from '../types';
 
 export class ContextTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-	iconPath = vscode.ThemeIcon.Folder;
 
 	constructor(
 		readonly label: string,

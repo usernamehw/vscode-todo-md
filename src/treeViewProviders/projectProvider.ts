@@ -4,7 +4,6 @@ import type { ProjectForProvider } from '../types';
 
 export class ProjectTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-	iconPath = vscode.ThemeIcon.Folder;
 
 	constructor(
 		readonly label: string,
