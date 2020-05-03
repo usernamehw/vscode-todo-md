@@ -7,3 +7,4 @@
 6 (C) text
 x 7 Completed task
 8 Completed task with completion date {cm:2020-05-02}
+9 No project No context No special 5+5 email@something.mail {somestuff:value} notag#some

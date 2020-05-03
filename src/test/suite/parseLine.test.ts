@@ -99,3 +99,22 @@ describe('Completed state', () => {
 		expect(task.done).to.equal(true);
 	});
 });
+describe('Should not produce extra tags/contexts/...', () => {
+	it('9 No extra tags', () => {
+		const task = getLineAt(9)!;
+		expect(task.tags).to.have.lengthOf(0);
+	});
+	it('9 No extra contexts', () => {
+		const task = getLineAt(9)!;
+		expect(task.contexts).to.have.lengthOf(0);
+	});
+	it('9 No extra projects', () => {
+		const task = getLineAt(9)!;
+		expect(task.projects).to.have.lengthOf(0);
+	});
+	it('9 No extra special tags', () => {
+		const task = getLineAt(9)!;
+		expect(task.specialTagRanges).to.have.lengthOf(0);
+	});
+});
+
