@@ -1,5 +1,8 @@
 import { window, workspace } from 'vscode';
 import * as vscode from 'vscode';
+// import dayjs from 'dayjs';
+// import relativeTime from 'dayjs/plugin/relativeTime';
+// dayjs.extend(relativeTime);
 
 import { IConfig, State } from './types';
 import { parseDocument } from './parse';
@@ -82,6 +85,25 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 
 	extensionContext.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));
 }
+
+// vscode.languages.registerHoverProvider({ scheme: 'file' }, {
+// 	provideHover(document, position, token) {
+// 		const dateRegexp = /\d{4}-\d{2}-\d{2}/;
+// 		const range = document.getWordRangeAtPosition(position, dateRegexp);
+// 		if (!range) {
+// 			return undefined;
+// 		}
+// 		const word = document.getText(range);
+// 		const diff = dayjs().to(dayjs(word));
+// 		if (word) {
+// 			return new vscode.Hover({
+// 				language: 'Hello language',
+// 				value: String(diff),
+// 			});
+// 		}
+// 		return undefined;
+// 	},
+// });
 
 export async function updateState(document?: vscode.TextDocument) {
 	if (!document) {

@@ -1,12 +1,12 @@
 import { window, workspace } from 'vscode';
 import * as vscode from 'vscode';
 import { G, globalState, LAST_VISIT_STORAGE_KEY, config, updateState, state } from './extension';
-import { isTheSameDay } from './utils';
 import { updateCompletions } from './completionProviders';
 import { showStatusBarEntry, updateStatusBarEntry, hideStatusBarEntry } from './statusBar';
 import { updateEditorDecorations } from './decorations';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { uncheckAllRecurringTasks } from './commands';
+import { isTheSameDay } from './timeUtils';
 
 window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 

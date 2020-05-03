@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { state, config, G } from './extension';
-import { getDateInISOFormat } from './timeUtils';
-import { shiftDays } from './utils';
+import { getDateInISOFormat, shiftDays } from './timeUtils';
 
 export function updateCompletions(): void {
 	if (G.tagAutocompleteDisposable) {

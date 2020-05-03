@@ -408,5 +408,8 @@
 		"webpack": "^4.43.0",
 		"webpack-cli": "^3.3.11",
 		"webpack-strip-block": "^0.2.0"
+	},
+	"dependencies": {
+		"dayjs": "^1.8.26"
 	}
 }
