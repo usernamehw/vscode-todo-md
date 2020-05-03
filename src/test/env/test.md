@@ -2,7 +2,7 @@
 1 just text task
 2 single project +Project
 3 +One text +Two +Three
-4 @One text @Two @Three
+	4 @One multiple contexts, their ranges and indentation @Two @Three
 5 #one#two text #three#four
 6 (C) text
 x 7 Completed task
