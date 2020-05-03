@@ -183,7 +183,7 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 			// TODO: check if the prefix exists
 			workspaceEdit.delete(document.uri, new vscode.Range(ln, firstNonWhitespaceCharacterIndex, ln, firstNonWhitespaceCharacterIndex + config.doneSymbol.length));
 		} else {
-			const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}}\s?/;// {cm:2020-05-01}
+			const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2})?}\s?/;
 			const match = completionDateRegex.exec(line.text);
 			if (match) {
 				workspaceEdit.delete(document.uri, new Range(ln, match.index, ln, match.index + match[0].length));
@@ -191,7 +191,7 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 		}
 	} else {
 		if (config.addCompletionDate) {
-			workspaceEdit.insert(document.uri, new vscode.Position(ln, line.range.end.character), ` {cm:${getDateInISOFormat(new Date())}}`);
+			workspaceEdit.insert(document.uri, new vscode.Position(ln, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), config.completionDateIncludeTime)}}`);
 		} else {
 			workspaceEdit.insert(document.uri, new vscode.Position(ln, firstNonWhitespaceCharacterIndex), config.doneSymbol);
 		}

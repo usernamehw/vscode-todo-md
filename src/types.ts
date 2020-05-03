@@ -43,6 +43,7 @@ export enum SortTags {
 export interface IConfig {
 	sortTagsView: SortTags;
 	addCompletionDate: boolean;
+	completionDateIncludeTime: boolean;
 
 	doneSymbol: string;
 	/**
