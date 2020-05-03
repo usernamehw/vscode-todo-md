@@ -18,3 +18,9 @@ export function insertSnippet(snippet: string): void {
 		snippet,
 	});
 }
+
+export function getFullRangeFromLines(document: vscode.TextDocument, lineStart: number, lineEnd: number): vscode.Range {
+	const lineAtTheEnd = document.lineAt(lineEnd);
+	return new vscode.Range(lineStart, 0, lineEnd, lineAtTheEnd.range.end.character);
+}
+

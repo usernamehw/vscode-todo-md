@@ -6,11 +6,11 @@ import { parseDue } from './utils';
 
 export function parseLine(textLine: vscode.TextLine): Task | undefined | number {
 	let line = textLine.text.trim();
-	const ln = textLine.lineNumber;
 	if (!line.length) {
 		// Empty lines are ok and allowed to use to read the file easier
 		return undefined;
 	}
+	const ln = textLine.lineNumber;
 	if (line[0] === '#' && line[1] === ' ') {
 		// Comment. Also, in markdown file a header and can be used for Go To Symbol
 		return ln;
@@ -42,6 +42,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined | number 
 	let dueRange: Range | undefined;
 	let isDue = DueState.notDue;
 	let isRecurring = false;
+
 	for (const word of words) {
 		switch (word[0]) {
 			case '{': {

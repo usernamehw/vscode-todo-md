@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
-import { state, config, subscriptions, GlobalVars } from './extension';
+import { state, config, G } from './extension';
 import { getDateInISOFormat } from './timeUtils';
 import { shiftDays } from './utils';
 
 export function updateCompletions(): void {
-	if (GlobalVars.tagAutocompleteDisposable) {
-		GlobalVars.tagAutocompleteDisposable.dispose();
-		GlobalVars.projectAutocompleteDisposable.dispose();
-		GlobalVars.contextAutocompleteDisposable.dispose();
-		GlobalVars.generalAutocompleteDisposable.dispose();
+	if (G.tagAutocompleteDisposable) {
+		G.tagAutocompleteDisposable.dispose();
+		G.projectAutocompleteDisposable.dispose();
+		G.contextAutocompleteDisposable.dispose();
+		G.generalAutocompleteDisposable.dispose();
 	}
 
-	GlobalVars.tagAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	G.tagAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
@@ -29,7 +29,7 @@ export function updateCompletions(): void {
 		},
 		'#'
 	);
-	GlobalVars.projectAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	G.projectAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
@@ -47,7 +47,7 @@ export function updateCompletions(): void {
 		},
 		'+'
 	);
-	GlobalVars.contextAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	G.contextAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
@@ -65,7 +65,7 @@ export function updateCompletions(): void {
 		},
 		'@'
 	);
-	GlobalVars.generalAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	G.generalAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
