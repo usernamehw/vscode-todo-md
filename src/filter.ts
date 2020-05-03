@@ -29,6 +29,13 @@ export function filterItems(tasks: Task[], filterStr: string): Task[] {
 				} else {
 					results.push(false);
 				}
+			} else if (filter.filterType === FilterType.done) {
+				// $done
+				if (task.done) {
+					results.push(true);
+				} else {
+					results.push(false);
+				}
 			}
 		}
 		return results.every(r => r === true);
@@ -39,6 +46,7 @@ const enum FilterType {
 	tagEqual,
 	contextEqual,
 	projectEqual,
+	done,
 }
 interface Filter {
 	value: string;
@@ -65,6 +73,13 @@ function parseFilter(filter: string) {
 				value,
 				filterType: FilterType.projectEqual,
 			});
+		} else if (word[0] === '$') {
+			if (value === 'done') {
+				filters.push({
+					value,
+					filterType: FilterType.done,
+				});
+			}
 		}
 	}
 	return filters;
