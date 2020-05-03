@@ -14,7 +14,23 @@ import { Task } from './parse';
 export function registerCommands() {
 	commands.registerTextEditorCommand(`${EXTENSION_NAME}.toggleDone`, (editor, edit, treeItem?: DueTreeItem) => {
 		const ln = treeItem ? treeItem.parsedLine.ln : editor.selection.active.line;
-		toggleTaskAtLine(ln, editor.document);
+		const task = getTaskAtLine(ln);
+		if (!task) {
+			return;
+		}
+		const workspaceEdit = new vscode.WorkspaceEdit();
+		if (task.count) {
+			const charIndexWithOffset = task.count.range.start.character + 'count:'.length + 1;
+			const neededRange = new vscode.Range(ln, charIndexWithOffset, ln, charIndexWithOffset + String(task.count.current).length);
+			let newValue = 0;
+			if (task.count.current !== task.count.needed) {
+				newValue = task.count.current + 1;
+			}
+			workspaceEdit.replace(editor.document.uri, neededRange, String(newValue));
+			vscode.workspace.applyEdit(workspaceEdit);
+		} else {
+			toggleTaskAtLine(ln, editor.document);
+		}
 	});
 	commands.registerTextEditorCommand(`${EXTENSION_NAME}.archiveCompletedTasks`, editor => {
 		if (!config.defaultArchiveFile) {

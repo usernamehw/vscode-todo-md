@@ -43,10 +43,11 @@ Priority is a single UPPERCASE letter surrounded by round brackets. It can be A-
 
 List of special tags:
 
-tag | description
---- | ---
-`due` | Due date
-`cm` | Completion date
+|tag | description | example|
+--- | --- | --- |
+|`due` | Due date| |
+|`cm` | Completion date| |
+|`count` | Instead of completing the task increases count by 1. When the number matches the goal - the task is considered completed| `{count:0/3}`|
 
 <!-- - ❌ id (UUID)
 - ❌ id/p (dependent task / blocked task?)

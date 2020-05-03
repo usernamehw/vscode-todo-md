@@ -42,6 +42,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined | number 
 	let dueRange: Range | undefined;
 	let isDue = DueState.notDue;
 	let isRecurring = false;
+	let count;
 
 	for (const word of words) {
 		switch (word[0]) {
@@ -63,6 +64,25 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined | number 
 					// Presence of completion date indicates that the task is done
 					done = true;
 					specialTagRanges.push(range);
+				} else if (specialTag === 'count') {
+					if (value === undefined) {
+						break;
+					}
+					const [current, needed] = value.split('/');
+					const currentValue = parseInt(current, 10);
+					const neededValue = parseInt(needed, 10);
+					if (!Number.isFinite(currentValue) || !Number.isFinite(neededValue)) {
+						break;
+					}
+					specialTagRanges.push(range);
+					if (currentValue === neededValue) {
+						done = true;
+					}
+					count = {
+						range,
+						current: currentValue,
+						needed: neededValue,
+					};
 				} else {
 					text.push(word);
 				}
@@ -127,6 +147,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined | number 
 		contextRanges,
 		title: text.join(' '),
 		ln,
+		count,
 	});
 }
 interface ParsedStuff {
@@ -233,6 +254,12 @@ export function parseDocument(document: vscode.TextDocument): ParsedStuff {
 	};
 }
 
+interface Count {
+	range: Range;
+	needed: number;
+	current: number;
+}
+
 export interface TaskInit {
 	title: string;
 	ln: number;
@@ -252,6 +279,7 @@ export interface TaskInit {
 	dueRange?: Range;
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
+	count?: Count;
 }
 export class Task {
 	title: string;
@@ -266,6 +294,7 @@ export class Task {
 	due?: string;
 	priority: string;
 	contexts: string[];
+	count?: Count;
 	contextRanges: Range[];
 	priorityRange?: Range;
 	specialTagRanges: Range[];
@@ -283,6 +312,7 @@ export class Task {
 		this.isRecurring = init.isRecurring || false;
 		this.projects = init.projects || [];
 		this.priority = init.priority || 'Z';
+		this.count = init.count;
 		this.due = init.due;
 		this.contexts = init.contexts || [];
 		this.specialTagRanges = init.specialTagRanges || [];
