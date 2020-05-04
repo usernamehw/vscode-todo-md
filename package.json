@@ -184,6 +184,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.getRandomTask",
+				"title": "Get random task",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.filter",
 				"title": "Filter",
 				"category": "Todo MD",

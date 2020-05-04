@@ -129,3 +129,7 @@ export function appendTaskToFile(text: string, filePath: string): void {
 		if (err) throw err;
 	});
 }
+
+export function getRandomInt(min: number, max: number): number {
+	return min + Math.floor(Math.random() * (max - min + 1));
+}

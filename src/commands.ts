@@ -2,7 +2,7 @@ import { commands, window, workspace, Position, Range, TextEditor, TextDocument,
 import * as vscode from 'vscode';
 import { EXTENSION_NAME, state, updateState, G, globalState } from './extension';
 import { config } from './extension';
-import { appendTaskToFile } from './utils';
+import { appendTaskToFile, getRandomInt } from './utils';
 import { sortTasks, SortProperty } from './sort';
 import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext } from './vscodeUtils';
 import { filterItems } from './filter';
@@ -93,10 +93,7 @@ export function registerCommands() {
 		const result = sortedTasks.map(t => t.line).join('\n');
 		edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 	});
-	commands.registerCommand(`${EXTENSION_NAME}.getNextTask`, () => {
-	// if (theRightFileOpened) {
-	// 	return;
-	// }
+	commands.registerCommand(`todomd.getNextTask`, () => {
 		const document = updateState();
 		let tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
@@ -110,6 +107,23 @@ export function registerCommands() {
 
 		const sortedTasks = sortTasks(tasks, SortProperty.priority);
 		vscode.window.showInformationMessage(sortedTasks[0].title);
+	});
+	commands.registerCommand(`todomd.getRandomTask`, () => {
+		const document = updateState();
+		let tasks = state.tasks.filter(t => !t.done);
+		if (!tasks.length) {
+			vscode.window.showInformationMessage('No tasks');
+			return;
+		}
+		const dueTasks = tasks.filter(t => t.isDue);
+		let resultTask;
+		if (dueTasks.length) {
+			resultTask = dueTasks[getRandomInt(0, dueTasks.length - 1)];
+		} else {
+			tasks = tasks.filter(t => !t.due);
+			resultTask = tasks[getRandomInt(0, tasks.length - 1)];
+		}
+		vscode.window.showInformationMessage(resultTask.title);
 	});
 	commands.registerCommand(`${EXTENSION_NAME}.addTask`, async () => {
 		if (state.theRightFileOpened) {
