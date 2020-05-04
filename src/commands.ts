@@ -18,6 +18,7 @@ export function registerCommands() {
 		if (!task) {
 			return;
 		}
+		const line = editor.document.lineAt(ln);
 		const workspaceEdit = new vscode.WorkspaceEdit();
 		if (task.count) {
 			const charIndexWithOffset = task.count.range.start.character + 'count:'.length + 1;
@@ -25,6 +26,11 @@ export function registerCommands() {
 			let newValue = 0;
 			if (task.count.current !== task.count.needed) {
 				newValue = task.count.current + 1;
+				if (newValue === task.count.needed) {
+					insertCompletionDate(workspaceEdit, editor.document.uri, ln, line);
+				}
+			} else {
+				removeCompletionDate(workspaceEdit, editor.document.uri, ln, line);
 			}
 			workspaceEdit.replace(editor.document.uri, neededRange, String(newValue));
 			vscode.workspace.applyEdit(workspaceEdit);
@@ -183,20 +189,17 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 			// TODO: check if the prefix exists
 			workspaceEdit.delete(document.uri, new vscode.Range(ln, firstNonWhitespaceCharacterIndex, ln, firstNonWhitespaceCharacterIndex + config.doneSymbol.length));
 		} else {
-			const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2})?}\s?/;
-			const match = completionDateRegex.exec(line.text);
-			if (match) {
-				workspaceEdit.delete(document.uri, new Range(ln, match.index, ln, match.index + match[0].length));
-			}
+			removeCompletionDate(workspaceEdit, document.uri, ln, line);
 		}
 	} else {
 		if (config.addCompletionDate) {
-			workspaceEdit.insert(document.uri, new vscode.Position(ln, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), config.completionDateIncludeTime)}}`);
+			insertCompletionDate(workspaceEdit, document.uri, ln, line);
 		} else {
 			workspaceEdit.insert(document.uri, new vscode.Position(ln, firstNonWhitespaceCharacterIndex), config.doneSymbol);
 		}
 	}
 	await workspace.applyEdit(workspaceEdit);
+
 	const secondWorkspaceEdit = new vscode.WorkspaceEdit();
 	if (config.autoArchiveTasks) {
 		if (!task.done || task.isRecurring) {
@@ -206,6 +209,16 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 		}
 	}
 	workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
+}
+function insertCompletionDate(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, ln: number, line: TextLine) {
+	wEdit.insert(uri, new vscode.Position(ln, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), config.completionDateIncludeTime)}}`);
+}
+function removeCompletionDate(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, ln: number, line: TextLine) {
+	const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2})?}\s?/;
+	const match = completionDateRegex.exec(line.text);
+	if (match) {
+		wEdit.delete(uri, new Range(ln, match.index, ln, match.index + match[0].length));
+	}
 }
 export function getTaskAtLine(lineNumber: number): Task | undefined {
 	for (const line of state.tasks) {
