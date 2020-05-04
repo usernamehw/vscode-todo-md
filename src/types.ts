@@ -25,9 +25,11 @@ export interface State {
 	contextsForProvider: ContextForProvider[];
 	lastVisit?: Date;
 	commentLines: vscode.Range[];
+
 	theRightFileOpened: boolean;
 	fileWasReset: boolean;
 	newDayArrived: boolean;
+	taskTreeViewFilterValue: string;
 }
 
 export const enum DueState {

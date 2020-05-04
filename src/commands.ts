@@ -1,6 +1,6 @@
 import { commands, window, workspace, Position, Range, TextEditor, TextDocument, TextLine } from 'vscode';
 import * as vscode from 'vscode';
-import { EXTENSION_NAME, state, FILTER_ACTIVE_CONTEXT_KEY, updateState, G, globalState } from './extension';
+import { EXTENSION_NAME, state, updateState, G, globalState } from './extension';
 import { DueTreeItem } from './treeViewProviders/dueProvider';
 import { config } from './extension';
 import { appendTaskToFile } from './utils';
@@ -10,6 +10,8 @@ import { filterItems } from './filter';
 import { getDateInISOFormat } from './timeUtils';
 import { taskProvider } from './treeViewProviders/treeViews';
 import { Task } from './parse';
+
+const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
 export function registerCommands() {
 	commands.registerTextEditorCommand(`${EXTENSION_NAME}.toggleDone`, (editor, edit, treeItem?: DueTreeItem) => {
@@ -136,11 +138,13 @@ export function registerCommands() {
 		}
 		const filteredTasks = filterItems(state.tasks, filterStr);
 		vscode.commands.executeCommand('setContext', FILTER_ACTIVE_CONTEXT_KEY, true);
+		state.taskTreeViewFilterValue = filterStr;
 		taskProvider.refresh(filteredTasks);
 	});
 	commands.registerCommand(`${EXTENSION_NAME}.clearFilter`, editor => {
-		taskProvider.refresh(state.tasks);
 		vscode.commands.executeCommand('setContext', FILTER_ACTIVE_CONTEXT_KEY, false);
+		state.taskTreeViewFilterValue = '';
+		taskProvider.refresh(state.tasks);
 	});
 	commands.registerCommand(`${EXTENSION_NAME}.insertTodayDate`, editor => {
 		insertSnippet(getDateInISOFormat(new Date()));

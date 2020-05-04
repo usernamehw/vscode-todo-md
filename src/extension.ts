@@ -21,11 +21,11 @@ export const state: State = {
 	theRightFileOpened: false,
 	fileWasReset: false,
 	newDayArrived: false,
+	taskTreeViewFilterValue: '',
 };
 
 export const EXTENSION_NAME = 'todomd';
 export const LAST_VISIT_STORAGE_KEY = 'LAST_VISIT_STORAGE_KEY';
-export const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
 export let config = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
 export const subscriptions: vscode.Disposable[] = [];

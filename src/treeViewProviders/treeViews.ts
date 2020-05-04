@@ -6,6 +6,7 @@ import { DueProvider } from './dueProvider';
 import { ProjectProvider } from './projectProvider';
 import { ContextProvider } from './contextProvider';
 import { Task } from '../parse';
+import { filterItems } from '../filter';
 
 export const tagProvider = new TagProvider([]);
 export const taskProvider = new TaskProvider([]);
@@ -52,7 +53,12 @@ export function updateAllTreeViews(): void {
 	tagProvider.refresh(state.tagsForProvider);
 	tagsView.title = `tags (${state.tagsForProvider.length})`;
 
-	const tasksForProvider = getTasksForTreeProvider();
+	let tasksForProvider;
+	if (state.taskTreeViewFilterValue) {
+		tasksForProvider = filterItems(state.tasks, state.taskTreeViewFilterValue);
+	} else {
+		tasksForProvider = getTasksForTreeProvider();
+	}
 	taskProvider.refresh(tasksForProvider);
 	tasksView.title = `tasks (${tasksForProvider.length})`;
 
