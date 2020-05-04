@@ -20,22 +20,8 @@ export function registerCommands() {
 		if (!task) {
 			return;
 		}
-		const line = editor.document.lineAt(ln);
-		const workspaceEdit = new vscode.WorkspaceEdit();
 		if (task.count) {
-			const charIndexWithOffset = task.count.range.start.character + 'count:'.length + 1;
-			const neededRange = new vscode.Range(ln, charIndexWithOffset, ln, charIndexWithOffset + String(task.count.current).length);
-			let newValue = 0;
-			if (task.count.current !== task.count.needed) {
-				newValue = task.count.current + 1;
-				if (newValue === task.count.needed) {
-					insertCompletionDate(workspaceEdit, editor.document.uri, line);
-				}
-			} else {
-				removeCompletionDate(workspaceEdit, editor.document.uri, line);
-			}
-			workspaceEdit.replace(editor.document.uri, neededRange, String(newValue));
-			vscode.workspace.applyEdit(workspaceEdit);
+			incrementCountForTask(editor.document, ln, task);
 		} else {
 			toggleTaskAtLine(ln, editor.document);
 		}
@@ -159,7 +145,11 @@ export function registerCommands() {
 		if (!task) {
 			return;
 		}
-		toggleTaskAtLine(task.ln, document);
+		if (task.count) {
+			incrementCountForTask(document, task.ln, task);
+		} else {
+			toggleTaskAtLine(task.ln, document);
+		}
 	});
 	commands.registerTextEditorCommand(`${EXTENSION_NAME}.filter`, async editor => {
 		const filterStr = await vscode.window.showInputBox({
@@ -217,6 +207,27 @@ export function resetAllRecurringTasks(editor: TextEditor): void {
 			removeCompletionDate(wEdit, editor.document.uri, line);
 		}
 	}
+	vscode.workspace.applyEdit(wEdit);
+}
+function incrementCountForTask(document: vscode.TextDocument, ln: number, task: Task) {
+	const line = document.lineAt(ln);
+	const wEdit = new vscode.WorkspaceEdit();
+	const count = task.count;
+	if (!count) {
+		return;
+	}
+	const charIndexWithOffset = count.range.start.character + 'count:'.length + 1;
+	const neededRange = new vscode.Range(ln, charIndexWithOffset, ln, charIndexWithOffset + String(count.current).length);
+	let newValue = 0;
+	if (count.current !== count.needed) {
+		newValue = count.current + 1;
+		if (newValue === count.needed) {
+			insertCompletionDate(wEdit, document.uri, line);
+		}
+	} else {
+		removeCompletionDate(wEdit, document.uri, line);
+	}
+	wEdit.replace(document.uri, neededRange, String(newValue));
 	vscode.workspace.applyEdit(wEdit);
 }
 export async function toggleTaskAtLine(ln: number, document: TextDocument): Promise<void> {
