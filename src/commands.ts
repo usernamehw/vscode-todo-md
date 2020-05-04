@@ -1,7 +1,6 @@
 import { commands, window, workspace, Position, Range, TextEditor, TextDocument, TextLine } from 'vscode';
 import * as vscode from 'vscode';
 import { EXTENSION_NAME, state, updateState, G, globalState } from './extension';
-import { DueTreeItem } from './treeViewProviders/dueProvider';
 import { config } from './extension';
 import { appendTaskToFile } from './utils';
 import { sortTasks, SortProperty } from './sort';
@@ -10,12 +9,13 @@ import { filterItems } from './filter';
 import { getDateInISOFormat } from './timeUtils';
 import { taskProvider } from './treeViewProviders/treeViews';
 import { Task } from './parse';
+import { TaskTreeItem } from './treeViewProviders/taskProvider';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
 export function registerCommands() {
-	commands.registerTextEditorCommand(`${EXTENSION_NAME}.toggleDone`, (editor, edit, treeItem?: DueTreeItem) => {
-		const ln = treeItem ? treeItem.parsedLine.ln : editor.selection.active.line;
+	commands.registerTextEditorCommand(`${EXTENSION_NAME}.toggleDone`, (editor, edit, treeItem?: TaskTreeItem) => {
+		const ln = treeItem ? treeItem.task.ln : editor.selection.active.line;
 		const task = getTaskAtLine(ln);
 		if (!task) {
 			return;
