@@ -42,20 +42,36 @@ export function registerCommands() {
 	});
 	commands.registerTextEditorCommand(`${EXTENSION_NAME}.archiveCompletedTasks`, editor => {
 		if (!config.defaultArchiveFile) {
-			vscode.window.showWarningMessage('No default archive file specified');
+			noArchiveFileMessage();
 			return;
 		}
 		const completedTasks = state.tasks.filter(t => t.done && !t.isRecurring);
 		if (!completedTasks.length) {
 			return;
 		}
-		const edit = new vscode.WorkspaceEdit();
+		const wEdit = new vscode.WorkspaceEdit();
 		for (const task of completedTasks) {
 			const line = editor.document.lineAt(task.ln);
-			appendTaskToFile(line.text, config.defaultArchiveFile);
-			edit.delete(editor.document.uri, line.rangeIncludingLineBreak);
+			archiveTask(wEdit, editor.document.uri, line);
 		}
-		workspace.applyEdit(edit);
+		workspace.applyEdit(wEdit);
+	});
+	commands.registerTextEditorCommand(`todomd.archiveSelectedCompletedTasks`, editor => {
+		if (!config.defaultArchiveFile) {
+			noArchiveFileMessage();
+			return;
+		}
+		const selection = editor.selection;
+		const wEdit = new vscode.WorkspaceEdit();
+		for (let i = selection.start.line; i <= selection.end.line; i++) {
+			const task = getTaskAtLine(i);
+			if (!task || !task.done) {
+				continue;
+			}
+			const line = editor.document.lineAt(i);
+			archiveTask(wEdit, editor.document.uri, line);
+		}
+		workspace.applyEdit(wEdit);
 	});
 	commands.registerTextEditorCommand(`${EXTENSION_NAME}.sortByPriority`, (editor, edit) => {
 		const selection = editor.selection;
@@ -167,6 +183,13 @@ export function registerCommands() {
 	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
 		uncheckAllRecurringTasks(editor);
 	});
+}
+function archiveTask(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine) {
+	appendTaskToFile(line.text, config.defaultArchiveFile);
+	wEdit.delete(uri, line.rangeIncludingLineBreak);
+}
+function noArchiveFileMessage() {
+	vscode.window.showWarningMessage('No default archive file specified');
 }
 
 export function uncheckAllRecurringTasks(editor: TextEditor): void {

@@ -163,6 +163,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.archiveSelectedCompletedTasks",
+				"title": "Archive selected completed Tasks",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.openDefaultArvhiveFile",
 				"title": "Open default archive file",
 				"category": "Todo MD"
