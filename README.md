@@ -84,6 +84,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.projects|[]|Projects added to autocomplete.|
 |todomd.contexts|[]|Contexts added to autocomplete.|
 |todomd.tags|[]|Tags added to autocomplete.|
+|treeViews|[...]|Tree Views that have predefined filters|
 
 # Colors
 
