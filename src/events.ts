@@ -5,7 +5,7 @@ import { updateCompletions } from './completionProviders';
 import { showStatusBarEntry, updateStatusBarEntry, hideStatusBarEntry } from './statusBar';
 import { updateEditorDecorations } from './decorations';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
-import { uncheckAllRecurringTasks } from './commands';
+import { resetAllRecurringTasks } from './commands';
 import { isTheSameDay } from './timeUtils';
 
 window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
@@ -20,7 +20,7 @@ export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined):
 
 		if (state.newDayArrived && !state.fileWasReset) {
 			// vscode.window.showInformationMessage('SHOULD RESET ALL IN FILE');
-			uncheckAllRecurringTasks(editor!);
+			resetAllRecurringTasks(editor!);
 			state.fileWasReset = true;
 		}
 	} else {
