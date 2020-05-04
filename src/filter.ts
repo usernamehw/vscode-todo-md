@@ -1,4 +1,5 @@
 import { Task } from './parse';
+import { DueState } from './types';
 
 export function filterItems(tasks: Task[], filterStr: string): Task[] {
 	if (filterStr.length === 0) {
@@ -36,6 +37,13 @@ export function filterItems(tasks: Task[], filterStr: string): Task[] {
 				} else {
 					results.push(false);
 				}
+			} else if (filter.filterType === FilterType.due) {
+				// $due
+				if (task.isDue === DueState.due || task.isDue === DueState.overdue) {
+					results.push(true);
+				} else {
+					results.push(false);
+				}
 			}
 		}
 		return results.every(r => r === true);
@@ -46,6 +54,7 @@ const enum FilterType {
 	tagEqual,
 	contextEqual,
 	projectEqual,
+	due,
 	done,
 }
 interface Filter {
@@ -78,6 +87,11 @@ function parseFilter(filter: string) {
 				filters.push({
 					value,
 					filterType: FilterType.done,
+				});
+			} else if (value === 'due') {
+				filters.push({
+					value,
+					filterType: FilterType.due,
 				});
 			}
 		}
