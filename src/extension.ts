@@ -48,6 +48,8 @@ export class G {
 	static priority3DecorationType: vscode.TextEditorDecorationType;
 	static priority4DecorationType: vscode.TextEditorDecorationType;
 	static priority5DecorationType: vscode.TextEditorDecorationType;
+	static priority6DecorationType: vscode.TextEditorDecorationType;
+	static priority7DecorationType: vscode.TextEditorDecorationType;
 	static tagsDecorationType: vscode.TextEditorDecorationType;
 	static specialTagDecorationType: vscode.TextEditorDecorationType;
 	static tagsDelimiterDecorationType: vscode.TextEditorDecorationType;
@@ -127,6 +129,8 @@ function disposeEverything(): void {
 		G.priority3DecorationType.dispose();
 		G.priority4DecorationType.dispose();
 		G.priority5DecorationType.dispose();
+		G.priority6DecorationType.dispose();
+		G.priority7DecorationType.dispose();
 		G.tagsDecorationType.dispose();
 		G.specialTagDecorationType.dispose();
 		G.tagsDelimiterDecorationType.dispose();

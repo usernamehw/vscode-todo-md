@@ -253,6 +253,24 @@
 				"description": "Not empty"
 			},
 			{
+				"id": "todomd.priority6Foreground",
+				"defaults": {
+					"light": "#55d65b",
+					"dark": "#87e28c",
+					"highContrast": "#87e28c"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.priority7Foreground",
+				"defaults": {
+					"light": "#55d65b",
+					"dark": "#87e28c",
+					"highContrast": "#87e28c"
+				},
+				"description": "Not empty"
+			},
+			{
 				"id": "todomd.tagForeground",
 				"defaults": {
 					"light": "#029cdf",

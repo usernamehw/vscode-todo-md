@@ -29,7 +29,7 @@ Nested projects are ok `+Project\nested` but at the same time they do not get tr
 
 ## Priority
 
-Priority is a single UPPERCASE letter surrounded by round brackets. It can be A-Z. Only the first 5 A-E have unique colors though.
+Priority is a single UPPERCASE letter surrounded by round brackets. It can be (A-Z). Only the first 7 (A-G) have unique colors though.
 
 ```
 (A)
@@ -100,6 +100,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `priority3Foreground`
 - `priority4Foreground`
 - `priority5Foreground`
+- `priority6Foreground`
+- `priority7Foreground`
 
 ## Please upvote the following upstream vscode issues:
 

@@ -31,6 +31,12 @@ export function updateDecorationsStyle(): void {
 	G.priority5DecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priority5Foreground'),
 	});
+	G.priority6DecorationType = window.createTextEditorDecorationType({
+		color: new vscode.ThemeColor('todomd.priority6Foreground'),
+	});
+	G.priority7DecorationType = window.createTextEditorDecorationType({
+		color: new vscode.ThemeColor('todomd.priority7Foreground'),
+	});
 	G.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.tagForeground'),
 	});
@@ -65,6 +71,8 @@ export function updateEditorDecorations(editor: TextEditor) {
 	const priority3DecorationOptions: Range[] = [];
 	const priority4DecorationOptions: Range[] = [];
 	const priority5DecorationOptions: Range[] = [];
+	const priority6DecorationOptions: Range[] = [];
+	const priority7DecorationOptions: Range[] = [];
 	const tagsDelimiterDecorationOptions: Range[] = [];
 	const specialtagDecorationOptions: Range[] = [];
 	const projectDecorationOptions: Range[] = [];
@@ -83,16 +91,34 @@ export function updateEditorDecorations(editor: TextEditor) {
 			tagsDelimiterDecorationOptions.push(...line.tagsDelimiterRanges);
 		}
 		if (line.priorityRange) {
-			if (line.priority === 'A') {
-				priority1DecorationOptions.push(line.priorityRange);
-			} else if (line.priority === 'B') {
-				priority2DecorationOptions.push(line.priorityRange);
-			} else if (line.priority === 'C') {
-				priority3DecorationOptions.push(line.priorityRange);
-			} else if (line.priority === 'D') {
-				priority4DecorationOptions.push(line.priorityRange);
-			} else {
-				priority5DecorationOptions.push(line.priorityRange);
+			switch (line.priority) {
+				case 'A': {
+					priority1DecorationOptions.push(line.priorityRange);
+					break;
+				}
+				case 'B': {
+					priority2DecorationOptions.push(line.priorityRange);
+					break;
+				}
+				case 'C': {
+					priority3DecorationOptions.push(line.priorityRange);
+					break;
+				}
+				case 'D': {
+					priority4DecorationOptions.push(line.priorityRange);
+					break;
+				}
+				case 'E': {
+					priority5DecorationOptions.push(line.priorityRange);
+					break;
+				}
+				case 'F': {
+					priority6DecorationOptions.push(line.priorityRange);
+					break;
+				}
+				default: {
+					priority7DecorationOptions.push(line.priorityRange);
+				}
 			}
 		}
 		if (line.specialTagRanges.length) {
@@ -123,6 +149,8 @@ export function updateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(G.priority3DecorationType, priority3DecorationOptions);
 	editor.setDecorations(G.priority4DecorationType, priority4DecorationOptions);
 	editor.setDecorations(G.priority5DecorationType, priority5DecorationOptions);
+	editor.setDecorations(G.priority6DecorationType, priority6DecorationOptions);
+	editor.setDecorations(G.priority7DecorationType, priority7DecorationOptions);
 	editor.setDecorations(G.tagsDelimiterDecorationType, tagsDelimiterDecorationOptions);
 	editor.setDecorations(G.projectDecorationType, projectDecorationOptions);
 	editor.setDecorations(G.contextDecorationType, contextDecorationOptions);
