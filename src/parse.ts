@@ -58,6 +58,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined | number 
 					const result = parseDue(value);
 					isDue = result.isDue;
 					isRecurring = result.isRecurring;
+					due = value;
 				} else if (specialTag === 'cr') {
 					specialTagRanges.push(range);
 				} else if (specialTag === 'cm') {
