@@ -59,4 +59,9 @@ export interface IConfig {
 	defaultArchiveFile: string;
 	autoArchiveTasks: boolean;
 	useLocalDateTime: boolean;
+
+	treeViews: {
+		title: string;
+		filter: string;
+	}[];
 }

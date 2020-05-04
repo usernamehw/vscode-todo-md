@@ -1,29 +1,35 @@
 import * as vscode from 'vscode';
 import { TagProvider } from './tagProvider';
-import { EXTENSION_NAME, state } from '../extension';
+import { EXTENSION_NAME, state, config } from '../extension';
 import { TaskProvider } from './taskProvider';
 import { ProjectProvider } from './projectProvider';
 import { ContextProvider } from './contextProvider';
-import { Task } from '../parse';
 import { filterItems } from '../filter';
+import { setContext } from '../vscodeUtils';
+
+const GENERIC_1_CONTEXT_KEY = 'todomd:generic1FilterExists';
+const GENERIC_2_CONTEXT_KEY = 'todomd:generic2FilterExists';
+const GENERIC_3_CONTEXT_KEY = 'todomd:generic3FilterExists';
 
 export const tagProvider = new TagProvider([]);
-export const taskProvider = new TaskProvider([]);
 export const projectProvider = new ProjectProvider([]);
 export const contextProvider = new ContextProvider([]);
+export const taskProvider = new TaskProvider([]);
+const generic1Provider = new TaskProvider([]);
+const generic2Provider = new TaskProvider([]);
+const generic3Provider = new TaskProvider([]);
 let tagsView: any;
-let tasksView: any;
 let projectView: any;
 let contextView: any;
+let tasksView: any;
+let generic1View: any;
+let generic2View: any;
+let generic3View: any;
 
 export function createTreeViews() {
 	tagsView = vscode.window.createTreeView(`${EXTENSION_NAME}.tags`, {
 		treeDataProvider: tagProvider,
 		showCollapseAll: true,
-	});
-
-	tasksView = vscode.window.createTreeView(`${EXTENSION_NAME}.tasks`, {
-		treeDataProvider: taskProvider,
 	});
 
 	projectView = vscode.window.createTreeView(`${EXTENSION_NAME}.projects`, {
@@ -35,6 +41,52 @@ export function createTreeViews() {
 		treeDataProvider: contextProvider,
 		showCollapseAll: true,
 	});
+
+	tasksView = vscode.window.createTreeView(`${EXTENSION_NAME}.tasks`, {
+		treeDataProvider: taskProvider,
+	});
+
+	if (config.treeViews.length) {
+		const generic1 = config.treeViews[0];
+		if (generic1) {
+			if (typeof generic1.filter !== 'string' || typeof generic1.title !== 'string') {
+				vscode.window.showWarningMessage('Tree View must have filter and title and they must be strings.');
+			} else {
+				generic1View = vscode.window.createTreeView('todomd.generic1', {
+					treeDataProvider: generic1Provider,
+				});
+				setContext(GENERIC_1_CONTEXT_KEY, true);
+			}
+		}
+
+		const generic2 = config.treeViews[1];
+		if (generic2) {
+			if (typeof generic2.filter !== 'string' || typeof generic2.title !== 'string') {
+				vscode.window.showWarningMessage('Tree View must have filter and title and they must be strings.');
+			} else {
+				generic2View = vscode.window.createTreeView('todomd.generic2', {
+					treeDataProvider: generic2Provider,
+				});
+				setContext(GENERIC_2_CONTEXT_KEY, true);
+			}
+		}
+
+		const generic3 = config.treeViews[2];
+		if (generic3) {
+			if (typeof generic3.filter !== 'string' || typeof generic3.title !== 'string') {
+				vscode.window.showWarningMessage('Tree View must have filter and title and they must be strings.');
+			} else {
+				generic3View = vscode.window.createTreeView('todomd.generic3', {
+					treeDataProvider: generic3Provider,
+				});
+				setContext(GENERIC_3_CONTEXT_KEY, true);
+			}
+		}
+	} else {
+		setContext(GENERIC_1_CONTEXT_KEY, false);
+		setContext(GENERIC_2_CONTEXT_KEY, false);
+		setContext(GENERIC_3_CONTEXT_KEY, false);
+	}
 }
 
 export function updateAllTreeViews(): void {
@@ -55,5 +107,27 @@ export function updateAllTreeViews(): void {
 
 	contextProvider.refresh(state.contextsForProvider);
 	contextView.title = `contexts (${state.contextsForProvider.length})`;
+
+	if (generic1View) {
+		const filteredTasks = filterItems(state.tasks, config.treeViews[0].filter);
+		generic1Provider.refresh(filteredTasks);
+		setTimeout(() => {
+			generic1View.title = `${config.treeViews[0].title} (${filteredTasks.length})`;
+		}, 0);
+	}
+	if (generic2View) {
+		const filteredTasks = filterItems(state.tasks, config.treeViews[1].filter);
+		generic2Provider.refresh(filteredTasks);
+		setTimeout(() => {
+			generic2View.title = `${config.treeViews[1].title} (${filteredTasks.length})`;
+		}, 0);
+	}
+	if (generic3View) {
+		const filteredTasks = filterItems(state.tasks, config.treeViews[2].filter);
+		generic3Provider.refresh(filteredTasks);
+		setTimeout(() => {
+			generic3View.title = `${config.treeViews[2].title} (${filteredTasks.length})`;
+		}, 0);
+	}
 }
 

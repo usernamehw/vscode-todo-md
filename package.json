@@ -113,6 +113,27 @@
 					"type": "boolean",
 					"markdownDescription": "Calculate offset from UTC to use local date/time.",
 					"default": true
+				},
+				"todomd.treeViews": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": ["filter", "title"],
+						"properties": {
+							"title": {
+								"type": "string"
+							},
+							"filter": {
+								"type": "string"
+							}
+						}
+					},
+					"maxLength": 3,
+					"markdownDescription": "Add more tree views with predefined filters.",
+					"default": [{
+						"title": "due",
+						"filter": "$due"
+					}]
 				}
 			}
 		},
@@ -394,6 +415,21 @@
 				{
 					"id": "todomd.contexts",
 					"name": "Contexts"
+				},
+				{
+					"id": "todomd.generic1",
+					"name": "Generic1",
+					"when": "todomd:generic1FilterExists"
+				},
+				{
+					"id": "todomd.generic2",
+					"name": "Generic2",
+					"when": "todomd:generic2FilterExists"
+				},
+				{
+					"id": "todomd.generic3",
+					"name": "Generic3",
+					"when": "todomd:generic3FilterExists"
 				}
 			]
 		}

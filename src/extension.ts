@@ -65,10 +65,10 @@ export let globalState: vscode.Memento;
 export function activate(extensionContext: vscode.ExtensionContext): void {
 	globalState = extensionContext.globalState;
 	registerCommands();
-	checkIfNewDayArrived();
-	updateDecorationsStyle();
 	createTreeViews();
 	updateAllTreeViews();
+	checkIfNewDayArrived();
+	updateDecorationsStyle();
 
 	onChangeActiveTextEditor(window.activeTextEditor);
 

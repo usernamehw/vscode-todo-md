@@ -24,3 +24,6 @@ export function getFullRangeFromLines(document: vscode.TextDocument, lineStart: 
 	return new vscode.Range(lineStart, 0, lineEnd, lineAtTheEnd.range.end.character);
 }
 
+export function setContext(context: string, value: any) {
+	vscode.commands.executeCommand('setContext', context, value);
+}
