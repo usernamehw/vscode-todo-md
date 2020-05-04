@@ -380,10 +380,6 @@
 		"views": {
 			"todomd": [
 				{
-					"id": "todomd.due",
-					"name": "Due"
-				},
-				{
 					"id": "todomd.tags",
 					"name": "Tags"
 				},
