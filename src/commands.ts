@@ -93,8 +93,8 @@ export function registerCommands() {
 		const result = sortedTasks.map(t => t.line).join('\n');
 		edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 	});
-	commands.registerCommand(`todomd.getNextTask`, () => {
-		const document = updateState();
+	commands.registerCommand(`todomd.getNextTask`, async () => {
+		const document = await updateState();
 		let tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
@@ -103,6 +103,8 @@ export function registerCommands() {
 		const dueTasks = tasks.filter(t => t.isDue);
 		if (dueTasks.length) {
 			tasks = dueTasks;
+		} else {
+			tasks = tasks.filter(t => !t.due);
 		}
 
 		const sortedTasks = sortTasks(tasks, SortProperty.priority);
