@@ -175,7 +175,7 @@
 			},
 			{
 				"command": "todomd.completeTask",
-				"title": "Complete task",
+				"title": "Complete a Task",
 				"category": "Todo MD"
 			},
 			{
