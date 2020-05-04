@@ -1,3 +1,9 @@
+## 0.0.5 `04 May 2020`
+
+- ✨ Add `count` special tag:value pair
+- ✨ Add an option to include time to completion date
+- Start working on filter feature
+
 ## 0.0.4 `02 May 2020`
 
 - 💥 When `addCompletionDate` enabled - done symbol `x ` is not inserted
