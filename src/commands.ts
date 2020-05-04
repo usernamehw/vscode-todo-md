@@ -4,7 +4,7 @@ import { EXTENSION_NAME, state, updateState, G, globalState } from './extension'
 import { config } from './extension';
 import { appendTaskToFile } from './utils';
 import { sortTasks, SortProperty } from './sort';
-import { getFullRangeFromLines, openFileInEditor, insertSnippet } from './vscodeUtils';
+import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext } from './vscodeUtils';
 import { filterItems } from './filter';
 import { getDateInISOFormat } from './timeUtils';
 import { taskProvider } from './treeViewProviders/treeViews';
@@ -137,12 +137,12 @@ export function registerCommands() {
 			return;
 		}
 		const filteredTasks = filterItems(state.tasks, filterStr);
-		vscode.commands.executeCommand('setContext', FILTER_ACTIVE_CONTEXT_KEY, true);
+		setContext(FILTER_ACTIVE_CONTEXT_KEY, true);
 		state.taskTreeViewFilterValue = filterStr;
 		taskProvider.refresh(filteredTasks);
 	});
 	commands.registerCommand(`${EXTENSION_NAME}.clearFilter`, editor => {
-		vscode.commands.executeCommand('setContext', FILTER_ACTIVE_CONTEXT_KEY, false);
+		setContext(FILTER_ACTIVE_CONTEXT_KEY, false);
 		state.taskTreeViewFilterValue = '';
 		taskProvider.refresh(state.tasks);
 	});
