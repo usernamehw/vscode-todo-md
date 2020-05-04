@@ -44,6 +44,13 @@ export function filterItems(tasks: Task[], filterStr: string): Task[] {
 				} else {
 					results.push(false);
 				}
+			} else if (filter.filterType === FilterType.overdue) {
+				// $overdue
+				if (task.isDue === DueState.overdue) {
+					results.push(true);
+				} else {
+					results.push(false);
+				}
 			}
 		}
 		return results.every(r => r === true);
@@ -55,6 +62,7 @@ const enum FilterType {
 	contextEqual,
 	projectEqual,
 	due,
+	overdue,
 	done,
 }
 interface Filter {
@@ -92,6 +100,11 @@ function parseFilter(filter: string) {
 				filters.push({
 					value,
 					filterType: FilterType.due,
+				});
+			} else if (value === 'overdue') {
+				filters.push({
+					value,
+					filterType: FilterType.overdue,
 				});
 			}
 		}
