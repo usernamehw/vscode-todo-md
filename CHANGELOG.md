@@ -1,3 +1,8 @@
+## 0.0.6 `05 May 2020`
+
+- ✨ Add archive selected completed tasks command
+- ✨ Get random task command
+
 ## 0.0.5 `04 May 2020`
 
 - ✨ Add `count` special tag:value pair
