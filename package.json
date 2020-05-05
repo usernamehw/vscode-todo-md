@@ -2,7 +2,7 @@
 	"name": "todo-md",
 	"displayName": "Todo Markdown",
 	"description": "Todo ... something something based on todo.txt format.",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"publisher": "usernamehw",
 	"license": "MIT",
 	"icon": "img/icon.png",
@@ -119,7 +119,10 @@
 					"type": "array",
 					"items": {
 						"type": "object",
-						"required": ["filter", "title"],
+						"required": [
+							"filter",
+							"title"
+						],
 						"properties": {
 							"title": {
 								"type": "string"
@@ -131,10 +134,12 @@
 					},
 					"maxLength": 3,
 					"markdownDescription": "Add more tree views with predefined filters.",
-					"default": [{
-						"title": "due",
-						"filter": "$due -$done"
-					}]
+					"default": [
+						{
+							"title": "due",
+							"filter": "$due -$done"
+						}
+					]
 				}
 			}
 		},
