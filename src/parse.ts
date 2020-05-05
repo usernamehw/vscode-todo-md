@@ -39,6 +39,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 	const tagsDelimiterRanges: Range[] = [];
 	const tagsRange: Range[] = [];
 	let due;
+	let t;
 	let dueRange: Range | undefined;
 	let isDue = DueState.notDue;
 	let isRecurring = false;
@@ -84,13 +85,16 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 						current: currentValue,
 						needed: neededValue,
 					};
+				} else if (specialTag === 't') {
+					t = value;
+					specialTagRanges.push(range);
 				} else {
 					text.push(word);
 				}
 				break;
 			}
 			case '#': {
-				const tempTags = word.split('#').filter(t => t.length);
+				const tempTags = word.split('#').filter(tag => tag.length);
 				let temp = index;
 				for (const tag of tempTags) {
 					tagsDelimiterRanges.push(new Range(ln, temp, ln, temp + 1));
@@ -141,6 +145,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		priorityRange,
 		specialTagRanges,
 		due,
+		t,
 		dueRange,
 		isRecurring,
 		isDue,
@@ -272,6 +277,7 @@ export interface TaskInit {
 	projects?: string[];
 	priority?: string;
 	due?: string;
+	t?: string;
 	contexts?: string[];
 	priorityRange?: Range;
 	specialTagRanges?: Range[];
@@ -296,6 +302,8 @@ export class TheTask {
 	projects: string[];
 	/** Due string. Example: `2020-03-27-e30d` */
 	due?: string;
+	/** threshold */
+	t?: string;
 	priority: string;
 	contexts: string[];
 	count?: Count;
@@ -318,6 +326,7 @@ export class TheTask {
 		this.priority = init.priority || 'Z';
 		this.count = init.count;
 		this.due = init.due;
+		this.t = init.t;
 		this.contexts = init.contexts || [];
 		this.specialTagRanges = init.specialTagRanges || [];
 		this.contextRanges = init.contextRanges || [];

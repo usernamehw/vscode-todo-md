@@ -102,21 +102,21 @@ export function updateAllTreeViews(): void {
 	contextView.title = `contexts (${state.contextsForProvider.length})`;
 
 	if (generic1View) {
-		const filteredTasks = filterItems(state.tasks, config.treeViews[0].filter);
+		const filteredTasks = filterItems(getTasksForTreeView(), config.treeViews[0].filter);
 		generic1Provider.refresh(filteredTasks);
 		setTimeout(() => {
 			generic1View.title = `${config.treeViews[0].title} (${filteredTasks.length})`;
 		}, 0);
 	}
 	if (generic2View) {
-		const filteredTasks = filterItems(state.tasks, config.treeViews[1].filter);
+		const filteredTasks = filterItems(getTasksForTreeView(), config.treeViews[1].filter);
 		generic2Provider.refresh(filteredTasks);
 		setTimeout(() => {
 			generic2View.title = `${config.treeViews[1].title} (${filteredTasks.length})`;
 		}, 0);
 	}
 	if (generic3View) {
-		const filteredTasks = filterItems(state.tasks, config.treeViews[2].filter);
+		const filteredTasks = filterItems(getTasksForTreeView(), config.treeViews[2].filter);
 		generic3Provider.refresh(filteredTasks);
 		setTimeout(() => {
 			generic3View.title = `${config.treeViews[2].title} (${filteredTasks.length})`;
@@ -127,10 +127,19 @@ export function updateAllTreeViews(): void {
 export function updateTasksTreeView() {
 	let tasksForProvider;
 	if (state.taskTreeViewFilterValue) {
-		tasksForProvider = filterItems(state.tasks, state.taskTreeViewFilterValue);
+		tasksForProvider = filterItems(getTasksForTreeView(), state.taskTreeViewFilterValue);
 	} else {
-		tasksForProvider = state.tasks;
+		tasksForProvider = getTasksForTreeView();
 	}
 	taskProvider.refresh(tasksForProvider);
 	tasksView.title = `tasks (${tasksForProvider.length})`;
+}
+
+function getTasksForTreeView() {
+	return state.tasks.filter(task => {
+		if (!task.t) {
+			return true;
+		}
+		return new Date(task.t).getTime() < Date.now();
+	});
 }
