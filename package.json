@@ -133,7 +133,7 @@
 					"markdownDescription": "Add more tree views with predefined filters.",
 					"default": [{
 						"title": "due",
-						"filter": "$due"
+						"filter": "$due -$done"
 					}]
 				}
 			}
