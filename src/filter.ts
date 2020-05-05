@@ -52,6 +52,13 @@ export function filterItems(tasks: Task[], filterStr: string): Task[] {
 				} else {
 					filterResult = false;
 				}
+			} else if (filter.filterType === FilterType.recurring) {
+				// $recurring
+				if (task.isRecurring === true) {
+					filterResult = true;
+				} else {
+					filterResult = false;
+				}
 			}
 			if (filter.isNegation) {
 				filterResult = !filterResult;
@@ -68,6 +75,7 @@ const enum FilterType {
 	projectEqual,
 	due,
 	overdue,
+	recurring,
 	done,
 }
 interface Filter {
@@ -76,13 +84,19 @@ interface Filter {
 	isNegation?: boolean;
 }
 
-function parseFilter(filter: string) {
-	const words = filter.split(' ');
+function parseFilter(filterStr: string) {
+	const words = filterStr.split(' ');
 	const filters: Filter[] = [];
 	for (const word of words) {
+		const filter: Filter = {
+			isNegation: false,
+			value: '',
+			filterType: FilterType.tagEqual, // TODO: default to text
+		};
 		let isNegation;
 		let value;
 		let firstChar;
+		let filterType;
 		if (word[0] === '-') {
 			isNegation = true;
 			value = word.slice(2);
@@ -93,52 +107,34 @@ function parseFilter(filter: string) {
 		}
 		switch (firstChar) {
 			case '#': {
-				filters.push({
-					value,
-					filterType: FilterType.tagEqual,
-					isNegation,
-				});
-				break;
+				filterType = FilterType.tagEqual; break;
 			}
 			case '@': {
-				filters.push({
-					value,
-					filterType: FilterType.contextEqual,
-					isNegation,
-				});
-				break;
+				filterType = FilterType.contextEqual; break;
 			}
 			case '+': {
-				filters.push({
-					value,
-					filterType: FilterType.projectEqual,
-					isNegation,
-				});
-				break;
+				filterType = FilterType.projectEqual; break;
 			}
 			case '$': {
 				if (value === 'done') {
-					filters.push({
-						value,
-						filterType: FilterType.done,
-						isNegation,
-					});
+					filterType = FilterType.done;
 				} else if (value === 'due') {
-					filters.push({
-						value,
-						filterType: FilterType.due,
-						isNegation,
-					});
+					filterType = FilterType.due;
 				} else if (value === 'overdue') {
-					filters.push({
-						value,
-						filterType: FilterType.overdue,
-						isNegation,
-					});
+					filterType = FilterType.overdue;
+				} else if (value === 'recurring') {
+					filterType = FilterType.recurring;
 				}
 				break;
 			}
+			default: {
+				filterType = FilterType.tagEqual;
+			}
 		}
+		filter.isNegation = isNegation;
+		// @ts-ignore
+		filter.filterType = filterType;
+		filters.push(filter);
 	}
 	return filters;
 }
