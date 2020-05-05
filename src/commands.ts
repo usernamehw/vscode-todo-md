@@ -198,7 +198,7 @@ function noArchiveFileMessage() {
 	vscode.window.showWarningMessage('No default archive file specified');
 }
 
-export function resetAllRecurringTasks(editor: TextEditor): void {
+export async function resetAllRecurringTasks(editor: TextEditor): Promise<void> {
 	const wEdit = new vscode.WorkspaceEdit();
 	for (const task of state.tasks) {
 		if (task.isRecurring && task.done) {
@@ -207,7 +207,8 @@ export function resetAllRecurringTasks(editor: TextEditor): void {
 			removeCompletionDate(wEdit, editor.document.uri, line);
 		}
 	}
-	vscode.workspace.applyEdit(wEdit);
+	await workspace.applyEdit(wEdit);
+	editor.document.save();
 }
 function incrementCountForTask(document: vscode.TextDocument, ln: number, task: Task) {
 	const line = document.lineAt(ln);
@@ -254,6 +255,7 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 		}
 	}
 	await workspace.applyEdit(workspaceEdit);
+	document.save();
 
 	const secondWorkspaceEdit = new vscode.WorkspaceEdit();
 	if (config.autoArchiveTasks) {
@@ -263,7 +265,8 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 			secondWorkspaceEdit.delete(document.uri, possiblyChangedLine.rangeIncludingLineBreak);
 		}
 	}
-	workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
+	await workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
+	document.save();
 }
 function insertCompletionDate(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: TextLine) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), config.completionDateIncludeTime)}}`);
