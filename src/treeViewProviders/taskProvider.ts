@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { EXTENSION_NAME } from '../extension';
-import { Task } from '../parse';
+import { TheTask } from '../parse';
 
 export class TaskTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.None;
@@ -8,7 +8,7 @@ export class TaskTreeItem extends vscode.TreeItem {
 
 	constructor(
 		readonly label: string,
-		readonly task: Task,
+		readonly task: TheTask,
 		readonly command: vscode.Command
 	) {
 		super(label);
@@ -28,10 +28,10 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 	readonly onDidChangeTreeData: vscode.Event<TaskTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
-		private tasks: Task[]
+		private tasks: TheTask[]
 	) { }
 
-	refresh(newTasks: Task[]): void {
+	refresh(newTasks: TheTask[]): void {
 		this.tasks = newTasks;
 		this._onDidChangeTreeData.fire();
 	}

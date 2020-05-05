@@ -3,13 +3,13 @@ import vscode, { Range, Position, Selection } from 'vscode';
 import { expect } from 'chai';
 
 import { filterItems } from '../../filter';
-import { Task, TaskInit } from '../../parse';
+import { TheTask, TaskInit } from '../../parse';
 import { DueState } from '../../types';
 
 type Init = Partial<TaskInit>;
 function newTask(task: Init) {
 	// @ts-ignore
-	return new Task(task);
+	return new TheTask(task);
 }
 
 const justTextTask = newTask({

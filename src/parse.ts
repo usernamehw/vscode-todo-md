@@ -4,7 +4,7 @@ import { Items, TagForProvider, SortTags, ProjectForProvider, DueState, ContextF
 import { config } from './extension';
 import { parseDue } from './utils';
 
-export function parseLine(textLine: vscode.TextLine): Task | undefined | number {
+export function parseLine(textLine: vscode.TextLine): TheTask | undefined | number {
 	let line = textLine.text.trim();
 	if (!line.length) {
 		// Empty lines are ok and allowed to use to read the file easier
@@ -130,7 +130,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined | number 
 		index += word.length + 1;// 1 is space sign
 	}
 
-	return new Task({
+	return new TheTask({
 		tags,
 		tagsDelimiterRanges,
 		tagsRange,
@@ -152,7 +152,7 @@ export function parseLine(textLine: vscode.TextLine): Task | undefined | number 
 	});
 }
 interface ParsedStuff {
-	tasks: Task[];
+	tasks: TheTask[];
 	sortedTags: TagForProvider[];
 	projects: ProjectForProvider[];
 	contexts: ContextForProvider[];
@@ -282,7 +282,10 @@ export interface TaskInit {
 	tagsRange?: Range[];
 	count?: Count;
 }
-export class Task {
+/**
+ * Task name conflicts with vscode Task (auto import struggle)
+ */
+export class TheTask {
 	title: string;
 	done: boolean;
 	/** Line number. */

@@ -1,4 +1,4 @@
-import { Task } from './parse';
+import { TheTask } from './parse';
 
 const enum SortDirection {
 	DESC,
@@ -8,9 +8,9 @@ export const enum SortProperty {
 	priority,
 }
 
-export function sortTasks(tasks: Task[], property: SortProperty, direction = SortDirection.DESC): Task[] {
+export function sortTasks(tasks: TheTask[], property: SortProperty, direction = SortDirection.DESC): TheTask[] {
 	const tasksCopy = tasks.slice();
-	let sortedTasks: Task[] = [];
+	let sortedTasks: TheTask[] = [];
 
 	if (property === SortProperty.priority) {
 		sortedTasks = tasksCopy.sort((a, b) => a.priority > b.priority ? 1 : -1);

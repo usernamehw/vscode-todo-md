@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Task } from './parse';
+import { TheTask } from './parse';
 // combine the three into 1 interface ?
 export interface TagForProvider {
 	tag: string;
@@ -19,7 +19,7 @@ export interface Items {
 }
 
 export interface State {
-	tasks: Task[];
+	tasks: TheTask[];
 	tagsForProvider: TagForProvider[];
 	projectsForProvider: ProjectForProvider[];
 	contextsForProvider: ContextForProvider[];

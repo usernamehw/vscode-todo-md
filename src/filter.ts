@@ -1,7 +1,7 @@
-import { Task } from './parse';
+import { TheTask } from './parse';
 import { DueState } from './types';
 
-export function filterItems(tasks: Task[], filterStr: string): Task[] {
+export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 	if (filterStr.length === 0) {
 		return tasks;
 	}

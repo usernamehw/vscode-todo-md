@@ -2,12 +2,12 @@ import { describe, it } from 'mocha';
 import vscode, { Range, Position, Selection } from 'vscode';
 import { expect } from 'chai';
 
-import { parseLine, Task } from '../../parse';
+import { parseLine, TheTask } from '../../parse';
 import { DueState } from '../../types';
 
 const editor = vscode.window.activeTextEditor!;
 
-function getLineAt(n: number): Task | undefined {
+function getLineAt(n: number): TheTask | undefined {
 	const textLine = editor.document.lineAt(n);
 	const task = parseLine(textLine);
 	if (task === undefined || typeof task === 'number') {
