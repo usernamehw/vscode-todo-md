@@ -396,11 +396,11 @@
 			"view/item/context": [
 				{
 					"command": "todomd.toggleDone",
-					"when": "view == todomd.due"
+					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/"
 				},
 				{
 					"command": "todomd.toggleDone",
-					"when": "view == todomd.due",
+					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/",
 					"group": "inline"
 				}
 			]
