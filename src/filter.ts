@@ -32,11 +32,16 @@ export function filterItems(tasks: Task[], filterStr: string): Task[] {
 				}
 			} else if (filter.filterType === FilterType.done) {
 				// $done
+				let filterResult;
 				if (task.done) {
-					results.push(true);
+					filterResult = true;
 				} else {
-					results.push(false);
+					filterResult = false;
 				}
+				if (filter.isNegation) {
+					filterResult = !filterResult;
+				}
+				results.push(filterResult);
 			} else if (filter.filterType === FilterType.due) {
 				// $due
 				if (task.isDue === DueState.due || task.isDue === DueState.overdue) {
@@ -68,44 +73,70 @@ const enum FilterType {
 interface Filter {
 	value: string;
 	filterType: FilterType;
+	isNegation?: boolean;
 }
 
 function parseFilter(filter: string) {
 	const words = filter.split(' ');
 	const filters: Filter[] = [];
 	for (const word of words) {
-		const value = word.slice(1);
-		if (word[0] === '#') {
-			filters.push({
-				value,
-				filterType: FilterType.tagEqual,
-			});
-		} else if (word[0] === '@') {
-			filters.push({
-				value,
-				filterType: FilterType.contextEqual,
-			});
-		} else if (word[0] === '+') {
-			filters.push({
-				value,
-				filterType: FilterType.projectEqual,
-			});
-		} else if (word[0] === '$') {
-			if (value === 'done') {
+		let isNegation;
+		let value;
+		let firstChar;
+		if (word[0] === '-') {
+			isNegation = true;
+			value = word.slice(2);
+			firstChar = word[1];
+		} else {
+			value = word.slice(1);
+			firstChar = word[0];
+		}
+		switch (firstChar) {
+			case '#': {
 				filters.push({
 					value,
-					filterType: FilterType.done,
+					filterType: FilterType.tagEqual,
+					isNegation,
 				});
-			} else if (value === 'due') {
+				break;
+			}
+			case '@': {
 				filters.push({
 					value,
-					filterType: FilterType.due,
+					filterType: FilterType.contextEqual,
+					isNegation,
 				});
-			} else if (value === 'overdue') {
+				break;
+			}
+			case '+': {
 				filters.push({
 					value,
-					filterType: FilterType.overdue,
+					filterType: FilterType.projectEqual,
+					isNegation,
 				});
+				break;
+			}
+			case '$': {
+				if (value === 'done') {
+					filters.push({
+						value,
+						filterType: FilterType.done,
+						isNegation,
+					});
+				} else if (value === 'due') {
+					filters.push({
+						value,
+						filterType: FilterType.due,
+						isNegation,
+					});
+				} else if (value === 'overdue') {
+					filters.push({
+						value,
+						filterType: FilterType.overdue,
+						isNegation,
+					});
+				}
+				break;
 			}
 		}
 	}
