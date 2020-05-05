@@ -39,6 +39,21 @@ const multipleProjectTask = newTask({
 	title: 'multiple projects',
 	projects: ['one', 'two', 'three'],
 });
+const doneTask = newTask({
+	done: true,
+});
+const notDoneTask = newTask({
+	done: false,
+});
+const dueTask = newTask({
+	isDue: DueState.due,
+});
+const notDueTask = newTask({
+	isDue: DueState.notDue,
+});
+const overdueTask = newTask({
+	isDue: DueState.overdue,
+});
 // ──────────────────────────────────────────────────────────────────────
 describe('Filter tags', () => {
 	it('One tag', () => {
@@ -80,6 +95,34 @@ describe('Filter projects', () => {
 		const filtered = filterItems(items, '+one +two');
 		expect(filtered).to.have.length(1);
 		expect(filtered).to.have.same.members([multipleProjectTask]);
+	});
+});
+describe('Filter $done', () => {
+	it('$done', () => {
+		const items = [doneTask, notDoneTask];
+		const filtered = filterItems(items, '$done');
+		expect(filtered).to.have.length(1);
+		expect(filtered).to.have.same.members([doneTask]);
+	});
+	it('-$done', () => {
+		const items = [doneTask, notDoneTask];
+		const filtered = filterItems(items, '-$done');
+		expect(filtered).to.have.length(1);
+		expect(filtered).to.have.same.members([notDoneTask]);
+	});
+});
+describe('Filter $due', () => {
+	it('$due', () => {
+		const items = [dueTask, notDueTask, overdueTask];
+		const filtered = filterItems(items, '$due');
+		expect(filtered).to.have.length(2);
+		expect(filtered).to.have.same.members([dueTask, overdueTask]);
+	});
+	it('$overdue', () => {
+		const items = [dueTask, notDueTask, overdueTask];
+		const filtered = filterItems(items, '$overdue');
+		expect(filtered).to.have.length(1);
+		expect(filtered).to.have.same.members([overdueTask]);
 	});
 });
 
