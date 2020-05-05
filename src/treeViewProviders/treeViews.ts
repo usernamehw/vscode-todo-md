@@ -93,14 +93,7 @@ export function updateAllTreeViews(): void {
 	tagProvider.refresh(state.tagsForProvider);
 	tagsView.title = `tags (${state.tagsForProvider.length})`;
 
-	let tasksForProvider;
-	if (state.taskTreeViewFilterValue) {
-		tasksForProvider = filterItems(state.tasks, state.taskTreeViewFilterValue);
-	} else {
-		tasksForProvider = state.tasks;
-	}
-	taskProvider.refresh(tasksForProvider);
-	tasksView.title = `tasks (${tasksForProvider.length})`;
+	updateTasksTreeView();
 
 	projectProvider.refresh(state.projectsForProvider);
 	projectView.title = `projects (${state.projectsForProvider.length})`;
@@ -131,3 +124,13 @@ export function updateAllTreeViews(): void {
 	}
 }
 
+export function updateTasksTreeView() {
+	let tasksForProvider;
+	if (state.taskTreeViewFilterValue) {
+		tasksForProvider = filterItems(state.tasks, state.taskTreeViewFilterValue);
+	} else {
+		tasksForProvider = state.tasks;
+	}
+	taskProvider.refresh(tasksForProvider);
+	tasksView.title = `tasks (${tasksForProvider.length})`;
+}

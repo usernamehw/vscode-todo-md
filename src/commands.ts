@@ -6,9 +6,8 @@ import { config } from './extension';
 import { appendTaskToFile, getRandomInt } from './utils';
 import { sortTasks, SortProperty } from './sort';
 import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext } from './vscodeUtils';
-import { filterItems } from './filter';
 import { getDateInISOFormat } from './timeUtils';
-import { taskProvider } from './treeViewProviders/treeViews';
+import { updateTasksTreeView } from './treeViewProviders/treeViews';
 import { Task } from './parse';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 
@@ -159,15 +158,14 @@ export function registerCommands() {
 		if (!filterStr) {
 			return;
 		}
-		const filteredTasks = filterItems(state.tasks, filterStr);
 		setContext(FILTER_ACTIVE_CONTEXT_KEY, true);
 		state.taskTreeViewFilterValue = filterStr;
-		taskProvider.refresh(filteredTasks);
+		updateTasksTreeView();
 	});
 	commands.registerCommand(`todomd.clearFilter`, editor => {
 		setContext(FILTER_ACTIVE_CONTEXT_KEY, false);
 		state.taskTreeViewFilterValue = '';
-		taskProvider.refresh(state.tasks);
+		updateTasksTreeView();
 	});
 	commands.registerCommand(`todomd.insertTodayDate`, editor => {
 		insertSnippet(getDateInISOFormat(new Date()));
