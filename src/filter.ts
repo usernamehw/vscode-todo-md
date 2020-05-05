@@ -131,6 +131,7 @@ function parseFilter(filterStr: string) {
 				filterType = FilterType.tagEqual;
 			}
 		}
+		filter.value = value;
 		filter.isNegation = isNegation;
 		// @ts-ignore
 		filter.filterType = filterType;
