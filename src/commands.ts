@@ -1,6 +1,7 @@
-import { commands, window, workspace, Position, Range, TextEditor, TextDocument, TextLine } from 'vscode';
+import { commands, window, workspace, Range, TextEditor, TextDocument, TextLine } from 'vscode';
 import * as vscode from 'vscode';
-import { EXTENSION_NAME, state, updateState, G, globalState } from './extension';
+
+import { state, updateState, globalState } from './extension';
 import { config } from './extension';
 import { appendTaskToFile, getRandomInt } from './utils';
 import { sortTasks, SortProperty } from './sort';
@@ -14,7 +15,7 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
 export function registerCommands() {
-	commands.registerTextEditorCommand(`${EXTENSION_NAME}.toggleDone`, (editor, edit, treeItem?: TaskTreeItem) => {
+	commands.registerTextEditorCommand(`todomd.toggleDone`, (editor, edit, treeItem?: TaskTreeItem) => {
 		const ln = treeItem ? treeItem.task.ln : editor.selection.active.line;
 		const task = getTaskAtLine(ln);
 		if (!task) {
@@ -26,7 +27,7 @@ export function registerCommands() {
 			toggleTaskAtLine(ln, editor.document);
 		}
 	});
-	commands.registerTextEditorCommand(`${EXTENSION_NAME}.archiveCompletedTasks`, editor => {
+	commands.registerTextEditorCommand(`todomd.archiveCompletedTasks`, editor => {
 		if (!config.defaultArchiveFile) {
 			noArchiveFileMessage();
 			return;
@@ -59,7 +60,7 @@ export function registerCommands() {
 		}
 		workspace.applyEdit(wEdit);
 	});
-	commands.registerTextEditorCommand(`${EXTENSION_NAME}.sortByPriority`, (editor, edit) => {
+	commands.registerTextEditorCommand(`todomd.sortByPriority`, (editor, edit) => {
 		const selection = editor.selection;
 		if (selection.isEmpty) {
 			vscode.window.showInformationMessage('Select tasks to sort');
@@ -113,7 +114,7 @@ export function registerCommands() {
 		}
 		vscode.window.showInformationMessage(resultTask.title);
 	});
-	commands.registerCommand(`${EXTENSION_NAME}.addTask`, async () => {
+	commands.registerCommand(`todomd.addTask`, async () => {
 		if (state.theRightFileOpened) {
 			return;
 		}
@@ -125,10 +126,10 @@ export function registerCommands() {
 			appendTaskToFile(text, config.defaultFile);
 		}
 	});
-	commands.registerCommand(`${EXTENSION_NAME}.openDefaultArvhiveFile`, () => {
+	commands.registerCommand(`todomd.openDefaultArvhiveFile`, () => {
 		openFileInEditor(config.defaultArchiveFile);
 	});
-	commands.registerCommand(`${EXTENSION_NAME}.completeTask`, async () => {
+	commands.registerCommand(`todomd.completeTask`, async () => {
 		const document = await updateState();
 		const array = [];
 		for (const task of state.tasks) {
@@ -151,7 +152,7 @@ export function registerCommands() {
 			toggleTaskAtLine(task.ln, document);
 		}
 	});
-	commands.registerTextEditorCommand(`${EXTENSION_NAME}.filter`, async editor => {
+	commands.registerTextEditorCommand(`todomd.filter`, async editor => {
 		const filterStr = await vscode.window.showInputBox({
 			prompt: 'Examples: #Tag, @Context, +Project',
 		});
@@ -163,20 +164,20 @@ export function registerCommands() {
 		state.taskTreeViewFilterValue = filterStr;
 		taskProvider.refresh(filteredTasks);
 	});
-	commands.registerCommand(`${EXTENSION_NAME}.clearFilter`, editor => {
+	commands.registerCommand(`todomd.clearFilter`, editor => {
 		setContext(FILTER_ACTIVE_CONTEXT_KEY, false);
 		state.taskTreeViewFilterValue = '';
 		taskProvider.refresh(state.tasks);
 	});
-	commands.registerCommand(`${EXTENSION_NAME}.insertTodayDate`, editor => {
+	commands.registerCommand(`todomd.insertTodayDate`, editor => {
 		insertSnippet(getDateInISOFormat(new Date()));
 	});
-	commands.registerCommand(`${EXTENSION_NAME}.clearGlobalState`, () => {
+	commands.registerCommand(`todomd.clearGlobalState`, () => {
 	// @ts-ignore No API
 		globalState._value = {};
 		globalState.update('hack', 'toClear');// TODO: is this required to clear state?
 	});
-	commands.registerCommand(`${EXTENSION_NAME}.goToLine`, (lineNumber: number) => {
+	commands.registerCommand(`todomd.goToLine`, (lineNumber: number) => {
 		const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
 		const { activeTextEditor } = window;
 		if (!activeTextEditor) {
