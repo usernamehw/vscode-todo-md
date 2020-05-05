@@ -137,6 +137,9 @@ export function updateTasksTreeView() {
 
 function getTasksForTreeView() {
 	return state.tasks.filter(task => {
+		if (task.isHidden) {
+			return false;
+		}
 		if (!task.t) {
 			return true;
 		}

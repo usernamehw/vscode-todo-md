@@ -45,18 +45,17 @@ List of special tags:
 
 |tag | description | example|
 --- | --- | --- |
-|`due` | Due date| |
-|`cm` | Completion date| |
-|`count` | Instead of completing the task increases count by 1. When the number matches the goal - the task is considered completed| `{count:0/3}`|
+|`due`|Due date| |
+|`cm`|Completion date| |
+|`t`|(threshold) Task is not visible in Tree Views until the specified date|`{t:2020-05-15}`|
+|`h`|(hidden) Task is not visible in Tree Views|`{h}`|
+|`count`|Instead of completing the task increases count by 1. When the number matches the goal - the task is considered completed|`{count:0/3}`|
 
 <!-- - ❌ id (UUID)
 - ❌ id/p (dependent task / blocked task?)
-- ❌ t (threshold)
 - ❌ rec (Recurrence)
-- ❌ h (hide)
 - ❌ f/star (favorite/starred)
 - ❌ url/link
-- ❌ count (count Finish a task and re-enter it with a decreased count, so that you can easily keep track of items.)
 - ❌ e (effort)
 - ❌ note
 - ❌ cr - (creation date) -->

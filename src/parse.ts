@@ -40,6 +40,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 	const tagsRange: Range[] = [];
 	let due;
 	let t;
+	let isHidden;
 	let dueRange: Range | undefined;
 	let isDue = DueState.notDue;
 	let isRecurring = false;
@@ -87,6 +88,9 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 					};
 				} else if (specialTag === 't') {
 					t = value;
+					specialTagRanges.push(range);
+				} else if (specialTag === 'h') {
+					isHidden = true;
 					specialTagRanges.push(range);
 				} else {
 					text.push(word);
@@ -146,6 +150,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		specialTagRanges,
 		due,
 		t,
+		isHidden,
 		dueRange,
 		isRecurring,
 		isDue,
@@ -278,6 +283,7 @@ export interface TaskInit {
 	priority?: string;
 	due?: string;
 	t?: string;
+	isHidden?: boolean;
 	contexts?: string[];
 	priorityRange?: Range;
 	specialTagRanges?: Range[];
@@ -304,6 +310,7 @@ export class TheTask {
 	due?: string;
 	/** threshold */
 	t?: string;
+	isHidden?: boolean;
 	priority: string;
 	contexts: string[];
 	count?: Count;
@@ -327,6 +334,7 @@ export class TheTask {
 		this.count = init.count;
 		this.due = init.due;
 		this.t = init.t;
+		this.isHidden = init.isHidden;
 		this.contexts = init.contexts || [];
 		this.specialTagRanges = init.specialTagRanges || [];
 		this.contextRanges = init.contextRanges || [];
