@@ -90,6 +90,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 
 # Colors
 
+Can be configured in `settings.json` (**`workbench.colorCustomizations`** section)
+
 - `todomd.tagForeground`
 - `todomd.contextForeground`
 - `todomd.projectForeground`
