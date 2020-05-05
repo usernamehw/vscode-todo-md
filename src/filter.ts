@@ -9,54 +9,54 @@ export function filterItems(tasks: Task[], filterStr: string): Task[] {
 	const filteredTasks = tasks.filter(task => {
 		const results = [];
 		for (const filter of filters) {
+			let filterResult;
 			if (filter.filterType === FilterType.tagEqual) {
 				// #Tag
 				if (task.tags.includes(filter.value)) {
-					results.push(true);
+					filterResult = true;
 				} else {
-					results.push(false);
+					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.contextEqual) {
 				// @Context
 				if (task.contexts.includes(filter.value)) {
-					results.push(true);
+					filterResult = true;
 				} else {
-					results.push(false);
+					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.projectEqual) {
 				// +Project
 				if (task.projects.includes(filter.value)) {
-					results.push(true);
+					filterResult = true;
 				} else {
-					results.push(false);
+					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.done) {
 				// $done
-				let filterResult;
 				if (task.done) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-				if (filter.isNegation) {
-					filterResult = !filterResult;
-				}
-				results.push(filterResult);
 			} else if (filter.filterType === FilterType.due) {
 				// $due
 				if (task.isDue === DueState.due || task.isDue === DueState.overdue) {
-					results.push(true);
+					filterResult = true;
 				} else {
-					results.push(false);
+					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.overdue) {
 				// $overdue
 				if (task.isDue === DueState.overdue) {
-					results.push(true);
+					filterResult = true;
 				} else {
-					results.push(false);
+					filterResult = false;
 				}
 			}
+			if (filter.isNegation) {
+				filterResult = !filterResult;
+			}
+			results.push(filterResult);
 		}
 		return results.every(r => r === true);
 	});
