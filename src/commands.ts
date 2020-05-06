@@ -20,7 +20,7 @@ export function registerCommands() {
 		if (!task) {
 			return;
 		}
-		if (task.count) {
+		if (task.specialTags.count) {
 			incrementCountForTask(editor.document, ln, task);
 		} else {
 			toggleTaskAtLine(ln, editor.document);
@@ -145,7 +145,7 @@ export function registerCommands() {
 		if (!task) {
 			return;
 		}
-		if (task.count) {
+		if (task.specialTags.count) {
 			incrementCountForTask(document, task.ln, task);
 		} else {
 			toggleTaskAtLine(task.ln, document);
@@ -214,7 +214,7 @@ export async function resetAllRecurringTasks(editor: TextEditor): Promise<void> 
 function incrementCountForTask(document: vscode.TextDocument, ln: number, task: TheTask) {
 	const line = document.lineAt(ln);
 	const wEdit = new vscode.WorkspaceEdit();
-	const count = task.count;
+	const count = task.specialTags.count;
 	if (!count) {
 		return;
 	}

@@ -39,13 +39,11 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 	const tags: string[] = [];
 	const tagsDelimiterRanges: Range[] = [];
 	const tagsRange: Range[] = [];
+	const specialTags: SpecialTags = {};
 	let due;
-	let t;
-	let isHidden;
 	let dueRange: Range | undefined;
 	let isDue = DueState.notDue;
 	let isRecurring = false;
-	let count;
 
 	for (const word of words) {
 		switch (word[0]) {
@@ -82,16 +80,16 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 					if (currentValue === neededValue) {
 						done = true;
 					}
-					count = {
+					specialTags.count = {
 						range,
 						current: currentValue,
 						needed: neededValue,
 					};
 				} else if (specialTag === 't') {
-					t = value;
+					specialTags.threshold = value;
 					specialTagRanges.push(range);
 				} else if (specialTag === 'h') {
-					isHidden = true;
+					specialTags.isHidden = true;
 					specialTagRanges.push(range);
 				} else {
 					text.push(word);
@@ -151,8 +149,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		priorityRange,
 		specialTagRanges,
 		due,
-		t,
-		isHidden,
+		specialTags,
 		dueRange,
 		isRecurring,
 		isDue,
@@ -160,7 +157,6 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		contextRanges,
 		title: text.join(' '),
 		ln,
-		count,
 	});
 }
 interface ParsedStuff {
@@ -272,6 +268,11 @@ interface Count {
 	needed: number;
 	current: number;
 }
+interface SpecialTags {
+	threshold?: string;
+	isHidden?: boolean;
+	count?: Count;
+}
 
 export interface TaskInit {
 	title: string;
@@ -285,8 +286,7 @@ export interface TaskInit {
 	projects?: string[];
 	priority?: string;
 	due?: string;
-	t?: string;
-	isHidden?: boolean;
+	specialTags: SpecialTags;
 	contexts?: string[];
 	priorityRange?: Range;
 	specialTagRanges?: Range[];
@@ -295,7 +295,6 @@ export interface TaskInit {
 	dueRange?: Range;
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
-	count?: Count;
 }
 /**
  * Task name conflicts with vscode Task (auto import struggle)
@@ -313,11 +312,9 @@ export class TheTask {
 	/** Due string. Example: `2020-03-27-e30d` */
 	due?: string;
 	/** threshold */
-	t?: string;
-	isHidden?: boolean;
+	specialTags: SpecialTags;
 	priority: string;
 	contexts: string[];
-	count?: Count;
 	contextRanges: Range[];
 	priorityRange?: Range;
 	specialTagRanges: Range[];
@@ -336,10 +333,8 @@ export class TheTask {
 		this.isRecurring = init.isRecurring || false;
 		this.projects = init.projects || [];
 		this.priority = init.priority || 'Z';
-		this.count = init.count;
 		this.due = init.due;
-		this.t = init.t;
-		this.isHidden = init.isHidden;
+		this.specialTags = init.specialTags;
 		this.contexts = init.contexts || [];
 		this.specialTagRanges = init.specialTagRanges || [];
 		this.contextRanges = init.contextRanges || [];

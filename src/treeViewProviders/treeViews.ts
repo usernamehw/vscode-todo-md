@@ -137,12 +137,12 @@ export function updateTasksTreeView() {
 
 function getTasksForTreeView() {
 	return state.tasks.filter(task => {
-		if (task.isHidden) {
+		if (task.specialTags.isHidden) {
 			return false;
 		}
-		if (!task.t) {
+		if (!task.specialTags.threshold) {
 			return true;
 		}
-		return new Date(task.t).getTime() < Date.now();
+		return new Date(task.specialTags.threshold).getTime() < Date.now();
 	});
 }
