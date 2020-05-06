@@ -99,13 +99,13 @@ Can be configured in `settings.json` (**`workbench.colorCustomizations`** sectio
 - `todomd.overdueForeground`
 - `todomd.tagDelimiterForeground`
 - `todomd.commentForeground`
-- `priority1Foreground`
-- `priority2Foreground`
-- `priority3Foreground`
-- `priority4Foreground`
-- `priority5Foreground`
-- `priority6Foreground`
-- `priority7Foreground`
+- `priorityAForeground`
+- `priorityBForeground`
+- `priorityCForeground`
+- `priorityDForeground`
+- `priorityEForeground`
+- `priorityFForeground`
+- `priorityGForeground`
 
 ## Please upvote the following upstream vscode issues:
 

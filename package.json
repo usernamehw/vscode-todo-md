@@ -245,7 +245,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority1Foreground",
+				"id": "todomd.priorityAForeground",
 				"defaults": {
 					"light": "#eb847e",
 					"dark": "#eb847e",
@@ -254,7 +254,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority2Foreground",
+				"id": "todomd.priorityBForeground",
 				"defaults": {
 					"light": "#ffb648",
 					"dark": "#e9b972",
@@ -263,7 +263,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority3Foreground",
+				"id": "todomd.priorityCForeground",
 				"defaults": {
 					"light": "#d4c12b",
 					"dark": "#e9db73",
@@ -272,7 +272,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority4Foreground",
+				"id": "todomd.priorityDForeground",
 				"defaults": {
 					"light": "#bad62e",
 					"dark": "#d4e67f",
@@ -281,7 +281,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority5Foreground",
+				"id": "todomd.priorityEForeground",
 				"defaults": {
 					"light": "#55d65b",
 					"dark": "#87e28c",
@@ -290,7 +290,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority6Foreground",
+				"id": "todomd.priorityFForeground",
 				"defaults": {
 					"light": "#55d65b",
 					"dark": "#87e28c",
@@ -299,7 +299,7 @@
 				"description": "Not empty"
 			},
 			{
-				"id": "todomd.priority7Foreground",
+				"id": "todomd.priorityGForeground",
 				"defaults": {
 					"light": "#55d65b",
 					"dark": "#87e28c",

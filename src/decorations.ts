@@ -17,25 +17,25 @@ export function updateDecorationsStyle(): void {
 		isWholeLine: true,
 	});
 	G.priority1DecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priority1Foreground'),
+		color: new vscode.ThemeColor('todomd.priorityAForeground'),
 	});
 	G.priority2DecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priority2Foreground'),
+		color: new vscode.ThemeColor('todomd.priorityBForeground'),
 	});
 	G.priority3DecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priority3Foreground'),
+		color: new vscode.ThemeColor('todomd.priorityCForeground'),
 	});
 	G.priority4DecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priority4Foreground'),
+		color: new vscode.ThemeColor('todomd.priorityDForeground'),
 	});
 	G.priority5DecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priority5Foreground'),
+		color: new vscode.ThemeColor('todomd.priorityEForeground'),
 	});
 	G.priority6DecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priority6Foreground'),
+		color: new vscode.ThemeColor('todomd.priorityFForeground'),
 	});
 	G.priority7DecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priority7Foreground'),
+		color: new vscode.ThemeColor('todomd.priorityGForeground'),
 	});
 	G.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.tagForeground'),
