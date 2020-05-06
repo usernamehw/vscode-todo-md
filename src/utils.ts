@@ -67,19 +67,19 @@ function isDueToday(due: string): DueState {
 	}
 
 	const day = new Date().getDay();
-	if (due === 'eSun' && day === 0) {
+	if (due === 'Sun' && day === 0) {
 		return DueState.due;
-	} else if (due === 'eMon' && day === 1) {
+	} else if (due === 'Mon' && day === 1) {
 		return DueState.due;
-	} else if (due === 'eTue' && day === 2) {
+	} else if (due === 'Tue' && day === 2) {
 		return DueState.due;
-	} else if (due === 'eWed' && day === 3) {
+	} else if (due === 'Wed' && day === 3) {
 		return DueState.due;
-	} else if (due === 'eThu' && day === 4) {
+	} else if (due === 'Thu' && day === 4) {
 		return DueState.due;
-	} else if (due === 'eFri' && day === 5) {
+	} else if (due === 'Fri' && day === 5) {
 		return DueState.due;
-	} else if (due === 'eSat' && day === 6) {
+	} else if (due === 'Sat' && day === 6) {
 		return DueState.due;
 	}
 	return DueState.notDue;
