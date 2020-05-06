@@ -20,8 +20,8 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 	let index = textLine.firstNonWhitespaceCharacterIndex;
 
 	let done = line.startsWith(config.doneSymbol);
-	line = line.replace(config.doneSymbol, '');
 	if (done) {
+		line = line.replace(config.doneSymbol, '');
 		index += config.doneSymbol.length;
 	}
 
