@@ -34,9 +34,6 @@ export function updateDecorationsStyle(): void {
 	G.priority6DecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityFForeground'),
 	});
-	G.priority7DecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priorityGForeground'),
-	});
 	G.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.tagForeground'),
 	});
@@ -72,7 +69,6 @@ export function updateEditorDecorations(editor: TextEditor) {
 	const priority4DecorationOptions: Range[] = [];
 	const priority5DecorationOptions: Range[] = [];
 	const priority6DecorationOptions: Range[] = [];
-	const priority7DecorationOptions: Range[] = [];
 	const tagsDelimiterDecorationOptions: Range[] = [];
 	const specialtagDecorationOptions: Range[] = [];
 	const projectDecorationOptions: Range[] = [];
@@ -112,12 +108,8 @@ export function updateEditorDecorations(editor: TextEditor) {
 					priority5DecorationOptions.push(line.priorityRange);
 					break;
 				}
-				case 'F': {
-					priority6DecorationOptions.push(line.priorityRange);
-					break;
-				}
 				default: {
-					priority7DecorationOptions.push(line.priorityRange);
+					priority6DecorationOptions.push(line.priorityRange);
 				}
 			}
 		}
@@ -150,7 +142,6 @@ export function updateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(G.priority4DecorationType, priority4DecorationOptions);
 	editor.setDecorations(G.priority5DecorationType, priority5DecorationOptions);
 	editor.setDecorations(G.priority6DecorationType, priority6DecorationOptions);
-	editor.setDecorations(G.priority7DecorationType, priority7DecorationOptions);
 	editor.setDecorations(G.tagsDelimiterDecorationType, tagsDelimiterDecorationOptions);
 	editor.setDecorations(G.projectDecorationType, projectDecorationOptions);
 	editor.setDecorations(G.contextDecorationType, contextDecorationOptions);

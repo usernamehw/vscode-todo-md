@@ -29,7 +29,7 @@ Nested projects are ok `+Project\nested` but at the same time they do not get tr
 
 ## Priority
 
-Priority is a single UPPERCASE letter surrounded by round brackets. It can be (A-Z). Only the first 7 (A-G) have unique colors though.
+Priority is a single UPPERCASE letter surrounded by round brackets. It can be (A-Z). Only the first 6 (A-F) have unique colors though.
 
 ```
 (A)
@@ -105,7 +105,6 @@ Can be configured in `settings.json` (**`workbench.colorCustomizations`** sectio
 - `priorityDForeground`
 - `priorityEForeground`
 - `priorityFForeground`
-- `priorityGForeground`
 
 ## Please upvote the following upstream vscode issues:
 
