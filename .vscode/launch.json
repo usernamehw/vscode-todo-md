@@ -20,7 +20,7 @@
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"${workspaceRoot}/src/test/env/test.md",
-				// "--disable-extensions",
+				"--disable-extensions",
 				"--extensionDevelopmentPath=${workspaceFolder}",
 				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index",
 			],
