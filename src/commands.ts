@@ -217,7 +217,7 @@ export async function resetAllRecurringTasks(editor: TextEditor): Promise<void> 
 	await workspace.applyEdit(wEdit);
 	editor.document.save();
 }
-function incrementCountForTask(document: vscode.TextDocument, ln: number, task: TheTask) {
+async function incrementCountForTask(document: vscode.TextDocument, ln: number, task: TheTask) {
 	const line = document.lineAt(ln);
 	const wEdit = new vscode.WorkspaceEdit();
 	const count = task.specialTags.count;
@@ -236,7 +236,8 @@ function incrementCountForTask(document: vscode.TextDocument, ln: number, task: 
 		removeCompletionDate(wEdit, document.uri, line);
 	}
 	wEdit.replace(document.uri, neededRange, String(newValue));
-	vscode.workspace.applyEdit(wEdit);
+	await vscode.workspace.applyEdit(wEdit);
+	document.save();
 }
 export async function toggleTaskAtLine(ln: number, document: TextDocument): Promise<void> {
 	const firstNonWhitespaceCharacterIndex = document.lineAt(ln).firstNonWhitespaceCharacterIndex;
