@@ -27,6 +27,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 
 	const words = line.split(' ');
 
+	const raw = textLine.text;
 	const contexts = [];
 	const contextRanges: Range[] = [];
 	const projects = [];
@@ -140,6 +141,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 
 	return new TheTask({
 		tags,
+		raw,
 		tagsDelimiterRanges,
 		tagsRange,
 		projects,
@@ -274,6 +276,7 @@ interface Count {
 export interface TaskInit {
 	title: string;
 	ln: number;
+	raw: string;
 
 	done?: boolean;
 	isRecurring?: boolean;
@@ -300,6 +303,7 @@ export interface TaskInit {
 export class TheTask {
 	title: string;
 	done: boolean;
+	raw: string;
 	/** Line number. */
 	ln: number;
 	isDue: DueState;
@@ -325,6 +329,7 @@ export class TheTask {
 	constructor(init: TaskInit) {
 		this.title = init.title;
 		this.ln = init.ln;
+		this.raw = init.raw;
 		this.done = init.done || false;
 		this.tags = init.tags || [];
 		this.isDue = init.isDue || DueState.notDue;
