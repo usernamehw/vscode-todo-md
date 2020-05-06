@@ -116,5 +116,9 @@ describe('Should not produce extra tags/contexts/...', () => {
 		const task = getLineAt(9)!;
 		expect(task.specialTagRanges).to.have.lengthOf(0);
 	});
+	it('9 No extra done symbol', () => {
+		const task = getLineAt(9)!;
+		expect(task.done).to.equal(false);
+	});
 });
 
