@@ -328,9 +328,9 @@
 			{
 				"id": "todomd.specialTagForeground",
 				"defaults": {
-					"light": "#5c1bd4",
-					"dark": "#5c1bd4",
-					"highContrast": "#5c1bd4"
+					"light": "#cf2596",
+					"dark": "#cf2596",
+					"highContrast": "#cf2596"
 				},
 				"description": "Not empty"
 			},
