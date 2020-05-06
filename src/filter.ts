@@ -31,6 +31,13 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 				} else {
 					filterResult = false;
 				}
+			} else if (filter.filterType === FilterType.priorityEqual) {
+				// $A - $Z
+				if (task.priority === filter.value) {
+					filterResult = true;
+				} else {
+					filterResult = false;
+				}
 			} else if (filter.filterType === FilterType.done) {
 				// $done
 				if (task.done) {
@@ -73,6 +80,7 @@ const enum FilterType {
 	tagEqual,
 	contextEqual,
 	projectEqual,
+	priorityEqual,
 	due,
 	overdue,
 	recurring,
@@ -124,6 +132,8 @@ function parseFilter(filterStr: string) {
 					filterType = FilterType.overdue;
 				} else if (value === 'recurring') {
 					filterType = FilterType.recurring;
+				} else if (/^[A-Z]$/.test(value)) {
+					filterType = FilterType.priorityEqual;
 				}
 				break;
 			}
