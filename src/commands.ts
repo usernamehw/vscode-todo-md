@@ -188,6 +188,12 @@ export function registerCommands() {
 	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
 		resetAllRecurringTasks(editor);
 	});
+	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
+		const link = treeItem.task.specialTags.link;
+		if (link) {
+			vscode.env.openExternal(vscode.Uri.parse(link));
+		}
+	});
 }
 function archiveTask(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, shouldDelete = true) {
 	appendTaskToFile(line.text, config.defaultArchiveFile);

@@ -4,7 +4,7 @@ import { TheTask } from '../parse';
 
 export class TaskTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.None;
-	readonly contextValue = 'task';
+	contextValue = 'task';
 
 	constructor(
 		readonly label: string,
@@ -12,6 +12,9 @@ export class TaskTreeItem extends vscode.TreeItem {
 		readonly command: vscode.Command
 	) {
 		super(label);
+		if (task.specialTags.link) {
+			this.contextValue = 'link';
+		}
 	}
 
 	get tooltip(): string | undefined {

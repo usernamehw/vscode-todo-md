@@ -88,6 +88,9 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 				} else if (specialTag === 't') {
 					specialTags.threshold = value;
 					specialTagRanges.push(range);
+				} else if (specialTag === 'link') {
+					specialTags.link = word.slice(6, -1);
+					specialTagRanges.push(range);
 				} else if (specialTag === 'h') {
 					specialTags.isHidden = true;
 					specialTagRanges.push(range);
@@ -272,6 +275,7 @@ interface SpecialTags {
 	threshold?: string;
 	isHidden?: boolean;
 	count?: Count;
+	link?: string;
 }
 
 export interface TaskInit {

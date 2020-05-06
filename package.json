@@ -225,6 +225,11 @@
 				"command": "todomd.insertTodayDate",
 				"title": "Insert today date (ISO)",
 				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.followLink",
+				"title": "Follow link",
+				"category": "Todo MD"
 			}
 		],
 		"keybindings": [
@@ -393,6 +398,16 @@
 					"command": "todomd.toggleDone",
 					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/",
 					"group": "inline"
+				},
+				{
+					"command": "todomd.followLink",
+					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/ && viewItem == link"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "todomd.followLink",
+					"when": "never"
 				}
 			]
 		},
