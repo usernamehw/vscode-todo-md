@@ -103,7 +103,7 @@
 				"todomd.addCompletionDate": {
 					"type": "boolean",
 					"markdownDescription": "When completing a task add completion date to it: `{cm:2020-04-30}`",
-					"default": false
+					"default": true
 				},
 				"todomd.completionDateIncludeTime": {
 					"type": "boolean",
