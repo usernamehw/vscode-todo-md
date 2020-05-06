@@ -1,3 +1,9 @@
+## 0.0.7 `06 May 2020`
+
+- ✨ Add `t` (threshold) special tag
+- ✨ Add `h` (hidden) special tag
+- 💥 Change priority colors and names and delete the 7th one
+
 ## 0.0.6 `05 May 2020`
 
 - ✨ Add archive selected completed tasks command
