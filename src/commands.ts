@@ -14,16 +14,29 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
 export function registerCommands() {
-	commands.registerTextEditorCommand(`todomd.toggleDone`, (editor, edit, treeItem?: TaskTreeItem) => {
-		const ln = treeItem ? treeItem.task.ln : editor.selection.active.line;
+	commands.registerCommand(`todomd.toggleDone`, async (treeItem?: TaskTreeItem) => {
+		const editor = window.activeTextEditor;
+		let document;
+		let ln;
+		if (treeItem) {
+			ln = treeItem.task.ln;
+			document = await updateState();
+		} else {
+			if (!editor) {
+				return;
+			}
+			ln = editor.selection.active.line;
+			document = editor.document;
+		}
+
 		const task = getTaskAtLine(ln);
 		if (!task) {
 			return;
 		}
 		if (task.specialTags.count) {
-			incrementCountForTask(editor.document, ln, task);
+			incrementCountForTask(document, ln, task);
 		} else {
-			toggleTaskAtLine(ln, editor.document);
+			toggleTaskAtLine(ln, document);
 		}
 	});
 	commands.registerTextEditorCommand(`todomd.archiveCompletedTasks`, editor => {
