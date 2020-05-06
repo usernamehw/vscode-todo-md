@@ -93,6 +93,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |addCompletionDate|**true**|When completing a task add completion date to it: `{cm:2020-04-30}`|
 |completionDateIncludeTime|**false**|When `addCompletionDate` setting enabled, includes time time: `{cm:2020-04-30T09:11:17}`|
 |useLocalDateTime|**true**|Calculate offset from UTC to use local date/time.|
+|defaultPriority|**"Z"**|Used in sorting for tasks without priority.|
 |todomd.projects|[]|Projects added to autocomplete.|
 |todomd.contexts|[]|Contexts added to autocomplete.|
 |todomd.tags|[]|Tags added to autocomplete.|

@@ -336,7 +336,7 @@ export class TheTask {
 		this.isDue = init.isDue || DueState.notDue;
 		this.isRecurring = init.isRecurring || false;
 		this.projects = init.projects || [];
-		this.priority = init.priority || 'Z';
+		this.priority = init.priority || config.defaultPriority;
 		this.due = init.due;
 		this.specialTags = init.specialTags;
 		this.contexts = init.contexts || [];

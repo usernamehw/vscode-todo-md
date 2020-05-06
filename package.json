@@ -115,6 +115,11 @@
 					"markdownDescription": "Calculate offset from UTC to use local date/time.",
 					"default": true
 				},
+				"todomd.defaultPriority": {
+					"type": "string",
+					"markdownDescription": "Used in sorting for tasks without priority.",
+					"default": "Z"
+				},
 				"todomd.treeViews": {
 					"type": "array",
 					"items": {

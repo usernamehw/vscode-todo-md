@@ -43,6 +43,7 @@ export enum SortTags {
 	frequency = 'frequency',
 }
 export interface IConfig {
+	defaultPriority: string;
 	sortTagsView: SortTags;
 	addCompletionDate: boolean;
 	completionDateIncludeTime: boolean;
