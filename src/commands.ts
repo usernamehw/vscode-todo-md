@@ -31,14 +31,14 @@ export function registerCommands() {
 			noArchiveFileMessage();
 			return;
 		}
-		const completedTasks = state.tasks.filter(t => t.done && !t.isRecurring);
+		const completedTasks = state.tasks.filter(t => t.done);
 		if (!completedTasks.length) {
 			return;
 		}
 		const wEdit = new vscode.WorkspaceEdit();
 		for (const task of completedTasks) {
 			const line = editor.document.lineAt(task.ln);
-			archiveTask(wEdit, editor.document.uri, line);
+			archiveTask(wEdit, editor.document.uri, line, !task.isRecurring);
 		}
 		workspace.applyEdit(wEdit);
 	});
@@ -55,7 +55,7 @@ export function registerCommands() {
 				continue;
 			}
 			const line = editor.document.lineAt(i);
-			archiveTask(wEdit, editor.document.uri, line);
+			archiveTask(wEdit, editor.document.uri, line, !task.isRecurring);
 		}
 		workspace.applyEdit(wEdit);
 	});
@@ -189,9 +189,11 @@ export function registerCommands() {
 		resetAllRecurringTasks(editor);
 	});
 }
-function archiveTask(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine) {
+function archiveTask(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, shouldDelete = true) {
 	appendTaskToFile(line.text, config.defaultArchiveFile);
-	wEdit.delete(uri, line.rangeIncludingLineBreak);
+	if (shouldDelete) {
+		wEdit.delete(uri, line.rangeIncludingLineBreak);
+	}
 }
 function noArchiveFileMessage() {
 	vscode.window.showWarningMessage('No default archive file specified');
