@@ -1,5 +1,4 @@
 import { describe, it } from 'mocha';
-import vscode, { Range, Position, Selection } from 'vscode';
 import { expect } from 'chai';
 
 import { filterItems } from '../../filter';
@@ -53,6 +52,18 @@ const notDueTask = newTask({
 });
 const overdueTask = newTask({
 	isDue: DueState.overdue,
+});
+const priorityATask = newTask({
+	priority: 'A',
+});
+const priorityCTask = newTask({
+	priority: 'C',
+});
+const priorityETask = newTask({
+	priority: 'E',
+});
+const priorityZTask = newTask({
+	priority: 'Z',
 });
 // ──────────────────────────────────────────────────────────────────────
 describe('Filter tags', () => {
@@ -123,6 +134,14 @@ describe('Filter $due', () => {
 		const filtered = filterItems(items, '$overdue');
 		expect(filtered).to.have.length(1);
 		expect(filtered).to.have.same.members([overdueTask]);
+	});
+});
+describe('Filter $C priority', () => {
+	it('$C', () => {
+		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
+		const filtered = filterItems(items, '$C');
+		expect(filtered).to.have.length(1);
+		expect(filtered).to.have.same.members([priorityCTask]);
 	});
 });
 
