@@ -247,54 +247,54 @@
 			{
 				"id": "todomd.priorityAForeground",
 				"defaults": {
-					"light": "#eb847e",
-					"dark": "#eb847e",
-					"highContrast": "#eb847e"
+					"light": "#ec4f47",
+					"dark": "#ec4f47",
+					"highContrast": "#ec4f47"
 				},
 				"description": "Not empty"
 			},
 			{
 				"id": "todomd.priorityBForeground",
 				"defaults": {
-					"light": "#ffb648",
-					"dark": "#e9b972",
-					"highContrast": "#e9b972"
+					"light": "#fd9f9a",
+					"dark": "#fd9f9a",
+					"highContrast": "#fd9f9a"
 				},
 				"description": "Not empty"
 			},
 			{
 				"id": "todomd.priorityCForeground",
 				"defaults": {
-					"light": "#d4c12b",
-					"dark": "#e9db73",
-					"highContrast": "#e9db73"
+					"light": "#ffb648",
+					"dark": "#ffb039",
+					"highContrast": "#ffb648"
 				},
 				"description": "Not empty"
 			},
 			{
 				"id": "todomd.priorityDForeground",
 				"defaults": {
-					"light": "#bad62e",
-					"dark": "#d4e67f",
-					"highContrast": "#d4e67f"
+					"light": "#f1d900",
+					"dark": "#e2cb00",
+					"highContrast": "#f1d900"
 				},
 				"description": "Not empty"
 			},
 			{
 				"id": "todomd.priorityEForeground",
 				"defaults": {
-					"light": "#55d65b",
-					"dark": "#87e28c",
-					"highContrast": "#87e28c"
+					"light": "#ace000",
+					"dark": "#97c500",
+					"highContrast": "#ace000"
 				},
 				"description": "Not empty"
 			},
 			{
 				"id": "todomd.priorityFForeground",
 				"defaults": {
-					"light": "#55d65b",
-					"dark": "#87e28c",
-					"highContrast": "#87e28c"
+					"light": "#00cfad",
+					"dark": "#00cfad",
+					"highContrast": "#00cfad"
 				},
 				"description": "Not empty"
 			},
