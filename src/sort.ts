@@ -7,7 +7,9 @@ const enum SortDirection {
 export const enum SortProperty {
 	priority,
 }
-
+/**
+ * Does not modify the original array
+ */
 export function sortTasks(tasks: TheTask[], property: SortProperty, direction = SortDirection.DESC): TheTask[] {
 	const tasksCopy = tasks.slice();
 	let sortedTasks: TheTask[] = [];

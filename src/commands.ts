@@ -98,7 +98,7 @@ export function registerCommands() {
 		const result = sortedTasks.map(t => t.line).join('\n');
 		edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 	});
-	commands.registerCommand(`todomd.getNextTask`, async () => {
+	commands.registerCommand('todomd.getNextTask', async () => {
 		const document = await updateState();
 		let tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
@@ -114,6 +114,23 @@ export function registerCommands() {
 
 		const sortedTasks = sortTasks(tasks, SortProperty.priority);
 		vscode.window.showInformationMessage(sortedTasks[0].title);
+	});
+	commands.registerCommand('todomd.getNext10', async () => {
+		const document = await updateState();
+		let tasks = state.tasks.filter(t => !t.done);
+		if (!tasks.length) {
+			vscode.window.showInformationMessage('No tasks');
+			return;
+		}
+		const dueTasks = tasks.filter(t => t.isDue);
+		const notDueTasks = tasks.filter(t => !t.isDue && !t.due);
+		const sortedDueTasks = sortTasks(dueTasks, SortProperty.priority);
+		const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
+		tasks = [...sortedDueTasks, ...sortedNotDueTasks].slice(0, 10);
+
+		vscode.window.showInformationMessage(tasks.map(task => task.title).join('\n'), {
+			modal: true,
+		});
 	});
 	commands.registerCommand(`todomd.getRandomTask`, () => {
 		const document = updateState();

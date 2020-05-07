@@ -123,6 +123,12 @@ Can be configured in `settings.json` (**`workbench.colorCustomizations`** sectio
 - `priorityEForeground`
 - `priorityFForeground`
 
+## Recommended settings
+
+```js
+"workbench.dialogs.customEnabled": true,
+```
+
 ## Please upvote the following upstream vscode issues:
 
 - [#83911 Support WebViews in extension contributed custom views](https://github.com/microsoft/vscode/issues/83911)

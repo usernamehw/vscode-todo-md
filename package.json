@@ -210,6 +210,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.getNext10",
+				"title": "Get next 10 tasks",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.getRandomTask",
 				"title": "Get random task",
 				"category": "Todo MD"
