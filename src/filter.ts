@@ -66,6 +66,27 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 				} else {
 					filterResult = false;
 				}
+			} else if (filter.filterType === FilterType.noTag) {
+				// $noTag
+				if (task.tags.length === 0) {
+					filterResult = true;
+				} else {
+					filterResult = false;
+				}
+			} else if (filter.filterType === FilterType.noProject) {
+				// $noProject
+				if (task.projects.length === 0) {
+					filterResult = true;
+				} else {
+					filterResult = false;
+				}
+			} else if (filter.filterType === FilterType.noContext) {
+				// $noContext
+				if (task.contexts.length === 0) {
+					filterResult = true;
+				} else {
+					filterResult = false;
+				}
 			}
 			if (filter.isNegation) {
 				filterResult = !filterResult;
@@ -85,6 +106,9 @@ const enum FilterType {
 	overdue,
 	recurring,
 	done,
+	noTag,
+	noProject,
+	noContext,
 }
 interface Filter {
 	value: string;
@@ -132,6 +156,12 @@ function parseFilter(filterStr: string) {
 					filterType = FilterType.overdue;
 				} else if (value === 'recurring') {
 					filterType = FilterType.recurring;
+				} else if (value === 'noProject') {
+					filterType = FilterType.noProject;
+				} else if (value === 'noContext') {
+					filterType = FilterType.noContext;
+				} else if (value === 'noTag') {
+					filterType = FilterType.noTag;
 				} else if (/^[A-Z]$/.test(value)) {
 					filterType = FilterType.priorityEqual;
 				}
