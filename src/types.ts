@@ -56,6 +56,10 @@ export interface IConfig {
 	tags: string[];
 	projects: string[];
 	contexts: string[];
+	savedFilters: {
+		title: string;
+		filter: string;
+	}[];
 	defaultFile: string;
 	defaultArchiveFile: string;
 	autoArchiveTasks: boolean;

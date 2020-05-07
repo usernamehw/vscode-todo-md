@@ -13,6 +13,12 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
+class QPItem implements vscode.QuickPickItem {
+	constructor(public label: string) {
+		this.label = label;
+	}
+}
+
 export function registerCommands() {
 	commands.registerCommand(`todomd.toggleDone`, async (treeItem?: TaskTreeItem) => {
 		const editor = window.activeTextEditor;
@@ -164,16 +170,34 @@ export function registerCommands() {
 			toggleTaskAtLine(task.ln, document);
 		}
 	});
-	commands.registerTextEditorCommand(`todomd.filter`, async editor => {
-		const filterStr = await vscode.window.showInputBox({
-			prompt: 'Examples: #Tag, @Context, +Project',
+	commands.registerTextEditorCommand(`todomd.filter`, editor => {
+		const qp = window.createQuickPick();
+		qp.items = config.savedFilters.map(filter => new QPItem(filter.title));
+		let value: string | undefined;
+		let selected: string | undefined;
+		qp.onDidChangeValue(e => {
+			value = e;
 		});
-		if (!filterStr) {
-			return;
-		}
-		setContext(FILTER_ACTIVE_CONTEXT_KEY, true);
-		state.taskTreeViewFilterValue = filterStr;
-		updateTasksTreeView();
+		qp.onDidChangeSelection(e => {
+			selected = e[0].label;
+		});
+		qp.show();
+		qp.onDidAccept(() => {
+			let filterStr;
+			if (selected) {
+				filterStr = config.savedFilters.find(filter => filter.title === selected)?.filter;
+			} else {
+				filterStr = value;
+			}
+			qp.hide();
+			qp.dispose();
+			if (!filterStr || !filterStr.length) {
+				return;
+			}
+			setContext(FILTER_ACTIVE_CONTEXT_KEY, true);
+			state.taskTreeViewFilterValue = filterStr;
+			updateTasksTreeView();
+		});
 	});
 	commands.registerCommand(`todomd.clearFilter`, editor => {
 		setContext(FILTER_ACTIVE_CONTEXT_KEY, false);

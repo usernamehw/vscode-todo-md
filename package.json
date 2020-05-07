@@ -120,6 +120,22 @@
 					"markdownDescription": "Used in sorting for tasks without priority.",
 					"default": "Z"
 				},
+				"todomd.savedFilters": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"title": {
+								"type": "string"
+							},
+							"filter": {
+								"type": "string"
+							}
+						}
+					},
+					"markdownDescription": "Filters that you can choose from when applying a filter.",
+					"default": []
+				},
 				"todomd.treeViews": {
 					"type": "array",
 					"items": {
