@@ -1,3 +1,10 @@
+## 0.0.8 `07 May 2020`
+
+- 💥 Set addCompletionDate to **true**
+- ✨ Add `link` special tag
+- ✨ Add `defaultPriority` config
+- ✨ Add `savedFilters` config
+
 ## 0.0.7 `06 May 2020`
 
 - ✨ Add `t` (threshold) special tag
