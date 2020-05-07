@@ -208,7 +208,7 @@ export function registerCommands() {
 		}
 	});
 }
-function archiveTask(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, shouldDelete = true) {
+function archiveTask(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, shouldDelete: boolean) {
 	appendTaskToFile(line.text, config.defaultArchiveFile);
 	if (shouldDelete) {
 		wEdit.delete(uri, line.rangeIncludingLineBreak);
@@ -278,16 +278,12 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 	await workspace.applyEdit(workspaceEdit);
 	document.save();
 
-	const secondWorkspaceEdit = new vscode.WorkspaceEdit();
 	if (config.autoArchiveTasks) {
-		if (!task.done || task.isRecurring) {
-			const possiblyChangedLine = document.lineAt(ln);
-			appendTaskToFile(possiblyChangedLine.text, config.defaultArchiveFile);
-			secondWorkspaceEdit.delete(document.uri, possiblyChangedLine.rangeIncludingLineBreak);
-		}
+		const secondWorkspaceEdit = new vscode.WorkspaceEdit();
+		archiveTask(secondWorkspaceEdit, document.uri, line, !task.isRecurring);
+		await workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
+		document.save();
 	}
-	await workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
-	document.save();
 }
 function insertCompletionDate(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: TextLine) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), config.completionDateIncludeTime)}}`);
