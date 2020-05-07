@@ -133,7 +133,7 @@
 							}
 						}
 					},
-					"markdownDescription": "Filters that you can choose from when applying a filter.",
+					"markdownDescription": "Filters that you can pick when applying a filter.",
 					"default": []
 				},
 				"todomd.treeViews": {
