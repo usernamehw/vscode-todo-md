@@ -1,12 +1,11 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"target": "ES2015",
+		"target": "ES2019",
 		"outDir": "out",
 		"suppressImplicitAnyIndexErrors": true,
 		"lib": [
-			"es6",
-			"es7"
+			"ES2019"
 		],
 		"sourceMap": true,
 		"rootDir": "src",
