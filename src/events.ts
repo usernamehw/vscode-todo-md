@@ -7,24 +7,16 @@ import { updateEditorDecorations } from './decorations';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { resetAllRecurringTasks } from './commands';
 import { isTheSameDay } from './timeUtils';
+import { setContext } from './vscodeUtils';
+
+export const THE_RIGHT_FILE = 'todomd:isActive';
 
 window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 
 export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): void {
 	if (isTheRightFileFormat(editor)) {
-		state.theRightFileOpened = true;
-		updateEverything(editor);
-
-		enterTheRightFile();
-		checkIfNewDayArrived();
-
-		if (state.newDayArrived && !state.fileWasReset) {
-			// vscode.window.showInformationMessage('SHOULD RESET ALL IN FILE');
-			resetAllRecurringTasks(editor!);
-			state.fileWasReset = true;
-		}
+		enterTheRightFile(editor!);
 	} else {
-		state.theRightFileOpened = false;
 		exitTheRightFile();
 	}
 }
@@ -63,13 +55,23 @@ export function isTheRightFileFormat(editor?: vscode.TextEditor): boolean {
 	};
 	return vscode.languages.match(documentFilter, editor.document) !== 0;
 }
-export function enterTheRightFile() {
+export function enterTheRightFile(editor: vscode.TextEditor) {
+	state.theRightFileOpened = true;
+	updateEverything(editor);
 	G.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
 	showStatusBarEntry();
 	updateStatusBarEntry();
+	checkIfNewDayArrived();
+	if (state.newDayArrived && !state.fileWasReset) {
+		// vscode.window.showInformationMessage('SHOULD RESET ALL IN FILE');
+		resetAllRecurringTasks(editor);
+		state.fileWasReset = true;
+	}
+	setContext(THE_RIGHT_FILE, true);
 }
 export function exitTheRightFile() {
+	state.theRightFileOpened = false;
 	if (G.changeTextDocumentDisposable) {
 		G.changeTextDocumentDisposable.dispose();
 	}
@@ -80,6 +82,7 @@ export function exitTheRightFile() {
 		G.generalAutocompleteDisposable.dispose();
 	}
 	hideStatusBarEntry();
+	setContext(THE_RIGHT_FILE, false);
 }
 
 export function updateEverything(editor?: vscode.TextEditor): void {

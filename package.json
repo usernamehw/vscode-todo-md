@@ -191,7 +191,7 @@
 			},
 			{
 				"command": "todomd.archiveSelectedCompletedTasks",
-				"title": "Archive selected completed Tasks",
+				"title": "🗃 Archive selected completed Tasks",
 				"category": "Todo MD"
 			},
 			{
@@ -428,6 +428,12 @@
 				{
 					"command": "todomd.followLink",
 					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/ && viewItem == link"
+				}
+			],
+			"editor/context": [
+				{
+					"command": "todomd.archiveSelectedCompletedTasks",
+					"when": "todomd:isActive"
 				}
 			],
 			"commandPalette": [
