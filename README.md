@@ -86,6 +86,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 
 - `todomd.toggleDone` <kbd>Alt</kbd>+<kbd>D</kbd> - Toggle Done (Completion)
 - `todomd.getNextTask` - Get due task from main file. If none are due - get one with the highest priority.
+- `todomd.getNext10` - Get next 10 tasks. Due tasks are on top.
 - `todomd.getRandomTask` - Get random due task if exists. If none are due, get random task out of non-due tasks. (Taken from main file).
 - `todomd.sortByPriority` - Sort selected lines by priority
 
