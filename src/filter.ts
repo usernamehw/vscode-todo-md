@@ -1,6 +1,26 @@
 import { TheTask } from './parse';
 import { DueState } from './types';
 
+const enum FilterType {
+	titleEqual,
+	tagEqual,
+	contextEqual,
+	projectEqual,
+	priorityEqual,
+	due,
+	overdue,
+	recurring,
+	done,
+	noTag,
+	noProject,
+	noContext,
+}
+interface Filter {
+	value: string;
+	filterType: FilterType;
+	isNegation?: boolean;
+}
+
 export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 	if (filterStr.length === 0) {
 		return tasks;
@@ -10,7 +30,14 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 		const results = [];
 		for (const filter of filters) {
 			let filterResult;
-			if (filter.filterType === FilterType.tagEqual) {
+			if (filter.filterType === FilterType.titleEqual) {
+				// Title
+				if (task.title.toLocaleLowerCase().includes(filter.value.toLocaleLowerCase())) {
+					filterResult = true;
+				} else {
+					filterResult = false;
+				}
+			} else if (filter.filterType === FilterType.tagEqual) {
 				// #Tag
 				if (task.tags.includes(filter.value)) {
 					filterResult = true;
@@ -97,29 +124,24 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 	});
 	return filteredTasks;
 }
-const enum FilterType {
-	tagEqual,
-	contextEqual,
-	projectEqual,
-	priorityEqual,
-	due,
-	overdue,
-	recurring,
-	done,
-	noTag,
-	noProject,
-	noContext,
-}
-interface Filter {
-	value: string;
-	filterType: FilterType;
-	isNegation?: boolean;
-}
 
 function parseFilter(filterStr: string) {
-	const words = filterStr.split(' ');
 	const filters: Filter[] = [];
+	const titleRegex = /"(.+?)"/;
+	const titleMatch = titleRegex.exec(filterStr);
+	if (titleMatch) {
+		filters.push({
+			filterType: FilterType.titleEqual,
+			value: titleMatch[1],
+			isNegation: false, // TODO: do
+		});
+		filterStr = filterStr.replace(titleRegex, '');
+	}
+	const words = filterStr.split(' ');
 	for (const word of words) {
+		if (!word.length) {
+			continue;
+		}
 		const filter: Filter = {
 			isNegation: false,
 			value: '',
