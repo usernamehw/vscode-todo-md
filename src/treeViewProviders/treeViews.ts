@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TagProvider } from './tagProvider';
-import { EXTENSION_NAME, state, config } from '../extension';
+import { EXTENSION_NAME, state, config, updateState } from '../extension';
 import { TaskProvider } from './taskProvider';
 import { ProjectProvider } from './projectProvider';
 import { ContextProvider } from './contextProvider';
@@ -18,13 +18,13 @@ export const taskProvider = new TaskProvider([]);
 const generic1Provider = new TaskProvider([]);
 const generic2Provider = new TaskProvider([]);
 const generic3Provider = new TaskProvider([]);
-let tagsView: any;
-let projectView: any;
-let contextView: any;
-let tasksView: any;
-let generic1View: any;
-let generic2View: any;
-let generic3View: any;
+let tagsView: vscode.TreeView<any>;
+let projectView: vscode.TreeView<any>;
+let contextView: vscode.TreeView<any>;
+let tasksView: vscode.TreeView<any>;
+let generic1View: vscode.TreeView<any>;
+let generic2View: vscode.TreeView<any>;
+let generic3View: vscode.TreeView<any>;
 
 export function createTreeViews() {
 	tagsView = vscode.window.createTreeView(`${EXTENSION_NAME}.tags`, {
@@ -44,6 +44,12 @@ export function createTreeViews() {
 
 	tasksView = vscode.window.createTreeView(`${EXTENSION_NAME}.tasks`, {
 		treeDataProvider: taskProvider,
+	});
+	tasksView.onDidChangeVisibility(async e => {
+		if (e.visible === true && !state.theRightFileOpened) {
+			await updateState();
+			updateTasksTreeView();
+		}
 	});
 
 	if (config.treeViews.length) {
