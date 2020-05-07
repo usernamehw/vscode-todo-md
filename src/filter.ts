@@ -2,7 +2,7 @@ import { TheTask } from './parse';
 import { DueState } from './types';
 
 const enum FilterType {
-	titleEqual,
+	rawEqual,
 	tagEqual,
 	contextEqual,
 	projectEqual,
@@ -30,9 +30,9 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 		const results = [];
 		for (const filter of filters) {
 			let filterResult;
-			if (filter.filterType === FilterType.titleEqual) {
+			if (filter.filterType === FilterType.rawEqual) {
 				// Title
-				if (task.title.toLocaleLowerCase().includes(filter.value.toLocaleLowerCase())) {
+				if (task.raw.toLowerCase().includes(filter.value.toLowerCase())) {
 					filterResult = true;
 				} else {
 					filterResult = false;
@@ -127,15 +127,15 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 
 function parseFilter(filterStr: string) {
 	const filters: Filter[] = [];
-	const titleRegex = /"(.+?)"/;
-	const titleMatch = titleRegex.exec(filterStr);
-	if (titleMatch) {
+	const rawRegex = /"(.+?)"/;
+	const rawMatch = rawRegex.exec(filterStr);
+	if (rawMatch) {
 		filters.push({
-			filterType: FilterType.titleEqual,
-			value: titleMatch[1],
+			filterType: FilterType.rawEqual,
+			value: rawMatch[1],
 			isNegation: false, // TODO: do
 		});
-		filterStr = filterStr.replace(titleRegex, '');
+		filterStr = filterStr.replace(rawRegex, '');
 	}
 	const words = filterStr.split(' ');
 	for (const word of words) {

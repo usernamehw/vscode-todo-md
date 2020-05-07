@@ -80,6 +80,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `$noTag` - Task with no tags
 - `$noProject` - Task with no projects
 - `$noContext` - Task with no contexts
+- `"TEXT_TO_SEARCH"` - Search in raw task string
 
 # Commands
 
