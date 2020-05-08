@@ -1,3 +1,10 @@
+## 0.0.9 `08 May 2020`
+
+- ✨ Get next 10 tasks command
+- ✨ Show filter value in Tree View title
+- ✨ Populate Tree Views from the main file
+- ✨ Add context menu item to archive selected completed
+
 ## 0.0.8 `07 May 2020`
 
 - 💥 Set addCompletionDate to **true**
@@ -7,9 +14,9 @@
 
 ## 0.0.7 `06 May 2020`
 
+- 💥 Change priority colors and names and delete the 7th one
 - ✨ Add `t` (threshold) special tag
 - ✨ Add `h` (hidden) special tag
-- 💥 Change priority colors and names and delete the 7th one
 
 ## 0.0.6 `05 May 2020`
 
