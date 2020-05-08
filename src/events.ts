@@ -70,7 +70,7 @@ export function enterTheRightFile(editor: vscode.TextEditor) {
 	}
 	setContext(THE_RIGHT_FILE, true);
 }
-export function exitTheRightFile() {
+export async function exitTheRightFile() {
 	state.theRightFileOpened = false;
 	if (G.changeTextDocumentDisposable) {
 		G.changeTextDocumentDisposable.dispose();
@@ -83,6 +83,8 @@ export function exitTheRightFile() {
 	}
 	hideStatusBarEntry();
 	setContext(THE_RIGHT_FILE, false);
+	await updateState();
+	updateAllTreeViews();
 }
 
 export function updateEverything(editor?: vscode.TextEditor): void {

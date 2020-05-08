@@ -45,12 +45,6 @@ export function createTreeViews() {
 	tasksView = vscode.window.createTreeView(`${EXTENSION_NAME}.tasks`, {
 		treeDataProvider: taskProvider,
 	});
-	tasksView.onDidChangeVisibility(async e => {
-		if (e.visible === true && !state.theRightFileOpened) {
-			await updateState();
-			updateTasksTreeView();
-		}
-	});
 
 	if (config.treeViews.length) {
 		const generic1 = config.treeViews[0];
