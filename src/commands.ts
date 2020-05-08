@@ -1,4 +1,4 @@
-import { commands, window, workspace, Range, TextEditor, TextDocument, TextLine } from 'vscode';
+import { commands, window, workspace, Range, TextEditor, TextDocument, TextLine, WorkspaceEdit, Uri } from 'vscode';
 import * as vscode from 'vscode';
 
 import { state, updateState, globalState } from './extension';
@@ -54,7 +54,7 @@ export function registerCommands() {
 		if (!completedTasks.length) {
 			return;
 		}
-		const wEdit = new vscode.WorkspaceEdit();
+		const wEdit = new WorkspaceEdit();
 		for (const task of completedTasks) {
 			const line = editor.document.lineAt(task.ln);
 			archiveTask(wEdit, editor.document.uri, line, !task.isRecurring);
@@ -67,7 +67,7 @@ export function registerCommands() {
 			return;
 		}
 		const selection = editor.selection;
-		const wEdit = new vscode.WorkspaceEdit();
+		const wEdit = new WorkspaceEdit();
 		for (let i = selection.start.line; i <= selection.end.line; i++) {
 			const task = getTaskAtLine(i);
 			if (!task || !task.done) {
@@ -245,11 +245,11 @@ export function registerCommands() {
 	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
 		const link = treeItem.task.specialTags.link;
 		if (link) {
-			vscode.env.openExternal(vscode.Uri.parse(link));
+			vscode.env.openExternal(Uri.parse(link));
 		}
 	});
 }
-function archiveTask(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, shouldDelete: boolean) {
+function archiveTask(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine, shouldDelete: boolean) {
 	appendTaskToFile(line.text, config.defaultArchiveFile);
 	if (shouldDelete) {
 		wEdit.delete(uri, line.rangeIncludingLineBreak);
@@ -260,7 +260,7 @@ function noArchiveFileMessage() {
 }
 
 export async function resetAllRecurringTasks(editor: TextEditor): Promise<void> {
-	const wEdit = new vscode.WorkspaceEdit();
+	const wEdit = new WorkspaceEdit();
 	for (const task of state.tasks) {
 		if (task.isRecurring && task.done) {
 			const line = editor.document.lineAt(task.ln);
@@ -268,7 +268,7 @@ export async function resetAllRecurringTasks(editor: TextEditor): Promise<void> 
 			removeCompletionDate(wEdit, editor.document.uri, line);
 			const count = task.specialTags.count;
 			if (count) {
-				resetCount(wEdit, editor.document.uri, count);
+				setCountCurrentValue(wEdit, editor.document.uri, count, '0');
 			}
 		}
 	}
@@ -277,23 +277,22 @@ export async function resetAllRecurringTasks(editor: TextEditor): Promise<void> 
 }
 async function incrementCountForTask(document: vscode.TextDocument, ln: number, task: TheTask) {
 	const line = document.lineAt(ln);
-	const wEdit = new vscode.WorkspaceEdit();
+	const wEdit = new WorkspaceEdit();
 	const count = task.specialTags.count;
 	if (!count) {
 		return;
 	}
-	const charIndexWithOffset = count.range.start.character + 'count:'.length + 1;
-	const neededRange = new vscode.Range(ln, charIndexWithOffset, ln, charIndexWithOffset + String(count.current).length);
 	let newValue = 0;
 	if (count.current !== count.needed) {
 		newValue = count.current + 1;
 		if (newValue === count.needed) {
 			insertCompletionDate(wEdit, document.uri, line);
 		}
+		setCountCurrentValue(wEdit, document.uri, count, String(newValue));
 	} else {
+		setCountCurrentValue(wEdit, document.uri, count, '0');
 		removeCompletionDate(wEdit, document.uri, line);
 	}
-	wEdit.replace(document.uri, neededRange, String(newValue));
 	await vscode.workspace.applyEdit(wEdit);
 	document.save();
 }
@@ -304,7 +303,7 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 		return;
 	}
 	const line = document.lineAt(ln);
-	const workspaceEdit = new vscode.WorkspaceEdit();
+	const workspaceEdit = new WorkspaceEdit();
 	if (task.done) {
 		if (!config.addCompletionDate) {
 			if (line.text.trim().startsWith(config.doneSymbol)) {
@@ -324,29 +323,31 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 	document.save();
 
 	if (config.autoArchiveTasks) {
-		const secondWorkspaceEdit = new vscode.WorkspaceEdit();
+		const secondWorkspaceEdit = new WorkspaceEdit();
 		archiveTask(secondWorkspaceEdit, document.uri, line, !task.isRecurring);
 		await workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
 		document.save();
 	}
 }
-function insertCompletionDate(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: TextLine) {
+function insertCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), config.completionDateIncludeTime)}}`);
 }
-function removeDoneSymbol(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine) {
+function removeDoneSymbol(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine) {
 	if (line.text.trim().startsWith(config.doneSymbol)) {
 		wEdit.delete(uri, new Range(line.lineNumber, line.firstNonWhitespaceCharacterIndex, line.lineNumber, line.firstNonWhitespaceCharacterIndex + config.doneSymbol.length));
 	}
 }
-function removeCompletionDate(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line: TextLine) {
+function removeCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
 	const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2})?}\s?/;
 	const match = completionDateRegex.exec(line.text);
 	if (match) {
 		wEdit.delete(uri, new Range(line.lineNumber, match.index, line.lineNumber, match.index + match[0].length));
 	}
 }
-function resetCount(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, count: Count) {
-	wEdit.replace(uri, count.range, `{count:0/${count.needed}}`);
+function setCountCurrentValue(wEdit: WorkspaceEdit, uri: Uri, count: Count, value: string) {
+	const charIndexWithOffset = count.range.start.character + 'count:'.length + 1;
+	const currentRange = new vscode.Range(count.range.start.line, charIndexWithOffset, count.range.start.line, charIndexWithOffset + String(count.current).length);
+	wEdit.replace(uri, currentRange, String(value));
 }
 export function getTaskAtLine(lineNumber: number): TheTask | undefined {
 	for (const line of state.tasks) {
