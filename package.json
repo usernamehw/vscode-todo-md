@@ -218,7 +218,7 @@
 			},
 			{
 				"command": "todomd.getNextTask",
-				"title": "Get next task",
+				"title": "Get 1 next task",
 				"category": "Todo MD"
 			},
 			{
