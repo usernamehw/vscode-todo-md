@@ -68,6 +68,13 @@
 					"type": "string",
 					"default": "x "
 				},
+				"todomd.getNextNumberOfTasks": {
+					"type": "number",
+					"default": 5,
+					"minimum": 1,
+					"maximum": 15,
+					"markdownDescription": "Number of tasks returned by `getFewNextTasks` command."
+				},
 				"todomd.sortTagsView": {
 					"type": "string",
 					"enum": [
@@ -215,8 +222,8 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.getNext10",
-				"title": "Get next 10 tasks",
+				"command": "todomd.getFewNextTasks",
+				"title": "Get a few next tasks.",
 				"category": "Todo MD"
 			},
 			{

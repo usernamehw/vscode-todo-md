@@ -69,4 +69,5 @@ export interface IConfig {
 		title: string;
 		filter: string;
 	}[];
+	getNextNumberOfTasks: number;
 }
