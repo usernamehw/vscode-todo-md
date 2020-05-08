@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Uri } from 'vscode';
 
 export async function openInUntitled(content: string, language?: string): Promise<void> {
 	const document = await vscode.workspace.openTextDocument({
@@ -26,4 +27,8 @@ export function getFullRangeFromLines(document: vscode.TextDocument, lineStart: 
 
 export function setContext(context: string, value: any) {
 	vscode.commands.executeCommand('setContext', context, value);
+}
+
+export function followLink(link: string) {
+	vscode.env.openExternal(Uri.parse(link));
 }

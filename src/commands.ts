@@ -5,7 +5,7 @@ import { state, updateState, globalState } from './extension';
 import { config } from './extension';
 import { appendTaskToFile, getRandomInt, prominentNumber } from './utils';
 import { sortTasks, SortProperty } from './sort';
-import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext } from './vscodeUtils';
+import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext, followLink } from './vscodeUtils';
 import { getDateInISOFormat } from './timeUtils';
 import { updateTasksTreeView, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { TheTask, Count } from './parse';
@@ -133,7 +133,16 @@ export function registerCommands() {
 		}
 
 		const sortedTasks = sortTasks(tasks, SortProperty.priority);
-		vscode.window.showInformationMessage(sortedTasks[0].title);
+		const task = sortedTasks[0];
+		if (task.specialTags.link) {
+			const buttonName = 'Follow link';
+			const shouldFollow = await vscode.window.showInformationMessage(task.title, buttonName);
+			if (shouldFollow === buttonName) {
+				followLink(task.specialTags.link);
+			}
+		} else {
+			vscode.window.showInformationMessage(task.title);
+		}
 	});
 	commands.registerCommand('todomd.getFewNextTasks', async () => {
 		const document = await updateState();
@@ -265,7 +274,7 @@ export function registerCommands() {
 	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
 		const link = treeItem.task.specialTags.link;
 		if (link) {
-			vscode.env.openExternal(Uri.parse(link));
+			followLink(link);
 		}
 	});
 }
