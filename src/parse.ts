@@ -266,7 +266,7 @@ export function parseDocument(document: vscode.TextDocument): ParsedStuff {
 	};
 }
 
-interface Count {
+export interface Count {
 	range: Range;
 	needed: number;
 	current: number;

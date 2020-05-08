@@ -8,7 +8,7 @@ import { sortTasks, SortProperty } from './sort';
 import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext } from './vscodeUtils';
 import { getDateInISOFormat } from './timeUtils';
 import { updateTasksTreeView } from './treeViewProviders/treeViews';
-import { TheTask } from './parse';
+import { TheTask, Count } from './parse';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
@@ -266,6 +266,10 @@ export async function resetAllRecurringTasks(editor: TextEditor): Promise<void> 
 			const line = editor.document.lineAt(task.ln);
 			removeDoneSymbol(wEdit, editor.document.uri, line);
 			removeCompletionDate(wEdit, editor.document.uri, line);
+			const count = task.specialTags.count;
+			if (count) {
+				resetCount(wEdit, editor.document.uri, count);
+			}
 		}
 	}
 	await workspace.applyEdit(wEdit);
@@ -340,6 +344,9 @@ function removeCompletionDate(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, line
 	if (match) {
 		wEdit.delete(uri, new Range(line.lineNumber, match.index, line.lineNumber, match.index + match[0].length));
 	}
+}
+function resetCount(wEdit: vscode.WorkspaceEdit, uri: vscode.Uri, count: Count) {
+	wEdit.replace(uri, count.range, `{count:0/${count.needed}}`);
 }
 export function getTaskAtLine(lineNumber: number): TheTask | undefined {
 	for (const line of state.tasks) {
