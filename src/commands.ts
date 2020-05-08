@@ -7,7 +7,7 @@ import { appendTaskToFile, getRandomInt } from './utils';
 import { sortTasks, SortProperty } from './sort';
 import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext } from './vscodeUtils';
 import { getDateInISOFormat } from './timeUtils';
-import { updateTasksTreeView } from './treeViewProviders/treeViews';
+import { updateTasksTreeView, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { TheTask, Count } from './parse';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 
@@ -27,6 +27,7 @@ export function registerCommands() {
 		if (treeItem) {
 			ln = treeItem.task.ln;
 			document = await updateState();
+			updateAllTreeViews();
 		} else {
 			if (!editor) {
 				return;
