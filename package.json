@@ -200,6 +200,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.createSimilarTask",
+				"title": "Create similar task (same tags, projects, contexts).",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.completeTask",
 				"title": "Complete a Task",
 				"category": "Todo MD"

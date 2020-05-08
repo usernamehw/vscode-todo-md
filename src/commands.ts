@@ -99,6 +99,25 @@ export function registerCommands() {
 		const result = sortedTasks.map(t => t.line).join('\n');
 		edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 	});
+	commands.registerTextEditorCommand('todomd.createSimilarTask', async editor => {
+		const selection = editor.selection;
+		const task = getTaskAtLine(selection.start.line);
+		if (!task) {
+			return;
+		}
+		const line = editor.document.lineAt(task.ln);
+		const wEdit = new WorkspaceEdit();
+		const tagsAsString = task.tags.map(tag => ` #${tag}`).join('');
+		const projectsAsString = task.projects.map(project => `+${project}`).join(' ');
+		const contextsAsString = task.contexts.map(context => `@${context}`).join(' ');
+		let newTaskAsString = tagsAsString;
+		newTaskAsString += projectsAsString ? ` ${projectsAsString}` : '';
+		newTaskAsString += contextsAsString ? ` ${contextsAsString}` : '';
+		wEdit.insert(editor.document.uri, new vscode.Position(line.rangeIncludingLineBreak.end.line, line.rangeIncludingLineBreak.end.character), `${newTaskAsString}\n`);
+		await workspace.applyEdit(wEdit);
+		await editor.document.save();
+		editor.selection = new vscode.Selection(line.lineNumber + 1, 0, line.lineNumber + 1, 0);
+	});
 	commands.registerCommand('todomd.getNextTask', async () => {
 		const document = await updateState();
 		let tasks = state.tasks.filter(t => !t.done);
