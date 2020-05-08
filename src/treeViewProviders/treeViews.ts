@@ -138,7 +138,7 @@ export function updateTasksTreeView() {
 		tasksForProvider = getTasksForTreeView();
 	}
 	taskProvider.refresh(tasksForProvider);
-	tasksView.title = `tasks (${tasksForProvider.length})`;
+	tasksView.title = `tasks (${tasksForProvider.length}) ${state.taskTreeViewFilterValue}`;
 }
 
 function getTasksForTreeView() {
