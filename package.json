@@ -122,6 +122,11 @@
 					"markdownDescription": "When completing a task add date and time: `{cm:2020-04-30T09:11:17}`",
 					"default": false
 				},
+				"todomd.creationDateIncludeTime": {
+					"type": "boolean",
+					"markdownDescription": "When creating a task add date and time: `{cr:2020-04-30T09:11:17}`",
+					"default": false
+				},
 				"todomd.useLocalDateTime": {
 					"type": "boolean",
 					"markdownDescription": "Calculate offset from UTC to use local date/time.",

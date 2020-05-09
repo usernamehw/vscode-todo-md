@@ -100,7 +100,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 | --- | --- |--- |
 |activatePattern|`"**/{todo,todo.archive}.md"`|Choose files that extension will operate on. By default activated on 2 files (`todo.md` & `todo.archive.md`). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
 |addCompletionDate|**true**|When completing a task add completion date to it: `{cm:2020-04-30}`|
-|completionDateIncludeTime|**false**|When `addCompletionDate` setting enabled, includes time time: `{cm:2020-04-30T09:11:17}`|
+|completionDateIncludeTime|**false**|When `addCompletionDate` setting enabled, includes date and time: `{cm:2020-04-30T09:11:17}`|
+|creationDateIncludeTime|**false**|When `addCreationDate` setting enabled, includes date and time: `{cr:2020-04-30T09:11:17}`|
 |useLocalDateTime|**true**|Calculate offset from UTC to use local date/time.|
 |defaultPriority|**"Z"**|Used in sorting for tasks without priority.|
 |getNextNumberOfTasks|**5**|Number of tasks returned by `getFewNextTasks` command.|

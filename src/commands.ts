@@ -180,7 +180,7 @@ export function registerCommands() {
 		vscode.window.showInformationMessage(resultTask.title);
 	});
 	commands.registerCommand('todomd.addTask', async () => {
-		const creationDate = config.addCreationDate ? `{cr:${getDateInISOFormat(new Date())}} ` : '';
+		const creationDate = config.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), config.creationDateIncludeTime)}} ` : '';
 		if (state.theRightFileOpened) {
 			const editor = window.activeTextEditor!;
 			const text = await window.showInputBox();

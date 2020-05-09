@@ -46,6 +46,7 @@ export interface IConfig {
 	addCreationDate: boolean;
 	addCompletionDate: boolean;
 	completionDateIncludeTime: boolean;
+	creationDateIncludeTime: boolean;
 	defaultPriority: string;
 	autoArchiveTasks: boolean;
 	useLocalDateTime: boolean;
