@@ -201,7 +201,7 @@ export function registerCommands() {
 			if (!text) {
 				return;
 			}
-			appendTaskToFile(creationDate + text, config.defaultFile);
+			await appendTaskToFile(creationDate + text, config.defaultFile);
 		}
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', () => {

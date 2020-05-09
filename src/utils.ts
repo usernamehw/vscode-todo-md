@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import { promises as fs } from 'fs';
 
 import { DueState } from './types';
 import { calcDiffInDays, shortenToDate, isTheSameDay, shiftDays } from './timeUtils';
@@ -129,10 +129,8 @@ export function isDueWithDate(dueDate: string, dueDateStart: number | Date | und
 	return DueState.notDue;
 }
 
-export function appendTaskToFile(text: string, filePath: string): void {
-	fs.appendFile(filePath, `${text}\n`, err => {
-		if (err) throw err;
-	});
+export async function appendTaskToFile(text: string, filePath: string) {
+	await fs.appendFile(filePath, `${text}\n`);
 }
 
 export function getRandomInt(min: number, max: number): number {

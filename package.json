@@ -189,7 +189,11 @@
 			{
 				"command": "todomd.addTask",
 				"title": "Add a Task",
-				"category": "Todo MD"
+				"category": "Todo MD",
+				"icon": {
+					"light": "img/addLight.svg",
+					"dark": "img/addDark.svg"
+				}
 			},
 			{
 				"command": "todomd.sortByPriority",
@@ -429,6 +433,11 @@
 				{
 					"command": "todomd.clearFilter",
 					"when": "view == todomd.tasks && todomd:filterActive",
+					"group": "navigation"
+				},
+				{
+					"command": "todomd.addTask",
+					"when": "view == todomd.tasks",
 					"group": "navigation"
 				}
 			],
