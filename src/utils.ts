@@ -10,7 +10,12 @@ interface DueReturn {
 const dueWithDateRegexp = /(\d\d\d\d)-(\d\d)-(\d\d)(-(\w+))?/;
 const everyNDayRegexp = /e(\d+)d/;
 
-export function parseDue(due: string): DueReturn {
+export function parseDue(due: string): DueReturn[] {
+	const dueDates = due.split(',').filter(d => d.length);
+	return dueDates.map(dueDate => parseDueDate(dueDate));
+}
+
+function parseDueDate(due: string): DueReturn {
 	if (due === 'today') {
 		return {
 			isRecurring: false,

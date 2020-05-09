@@ -60,6 +60,9 @@ List of special tags:
 - ❌ cr - (creation date)
 -->
 
+<!-- Due dates:
+Mon, Tue, Wed, Thu, Fri, Sat, Sun -->
+
 ## Comments
 
 Comment is not considered a task. It starts with a sharp sign `#` followed by a space.

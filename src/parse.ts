@@ -52,13 +52,15 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 					text.push(word);
 					break;
 				}
-				const [specialTag, value] = word.slice(1, -1).split(':');
+				const [specialTag, value] = word.slice(1, -1).split(':');// Cannot read property 'split' of undefined. nvm for now.
 				const range = new Range(ln, index, ln, index + word.length);
 				if (specialTag === 'due') {
 					dueRange = range;
 					const result = parseDue(value);
-					isDue = result.isDue;
-					isRecurring = result.isRecurring;
+					isRecurring = result.some(r => r.isRecurring);
+					const hasOverdue = result.some(r => r.isDue === DueState.overdue);
+					const hasDue = result.some(r => r.isDue === DueState.due);
+					isDue = hasOverdue ? DueState.overdue : hasDue ? DueState.due : DueState.notDue;
 					due = value;
 				} else if (specialTag === 'cr') {
 					specialTagRanges.push(range);
