@@ -57,7 +57,7 @@ function parseDueDate(due: string): DueReturn {
 	return {
 		isDue,
 		isRecurring,
-		isRange: false, // TODO: here
+		isRange: false,
 	};
 }
 
