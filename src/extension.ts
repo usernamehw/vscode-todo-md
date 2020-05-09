@@ -1,8 +1,12 @@
 import { window, workspace } from 'vscode';
 import * as vscode from 'vscode';
-// import dayjs from 'dayjs';
-// import relativeTime from 'dayjs/plugin/relativeTime';
-// dayjs.extend(relativeTime);
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import isBetween from 'dayjs/plugin/isBetween';
+dayjs.extend(isBetween);
+dayjs.extend(relativeTime);
+
+
 
 import { IConfig, State } from './types';
 import { parseDocument } from './parse';

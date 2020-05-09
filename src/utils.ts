@@ -1,10 +1,12 @@
 import { promises as fs } from 'fs';
+import dayjs from 'dayjs';
 
 import { DueState } from './types';
 import { calcDiffInDays, shortenToDate, isTheSameDay, shiftDays } from './timeUtils';
 
 interface DueReturn {
 	isRecurring: boolean;
+	isRange: boolean;
 	isDue: DueState;
 }
 const dueWithDateRegexp = /(\d\d\d\d)-(\d\d)-(\d\d)(-(\w+))?/;
@@ -19,8 +21,13 @@ function parseDueDate(due: string): DueReturn {
 	if (due === 'today') {
 		return {
 			isRecurring: false,
+			isRange: false,
 			isDue: DueState.due,
 		};
+	}
+	const tryAsRange = due.split('..');
+	if (tryAsRange.length > 1) {
+		return isDueBetween(tryAsRange[0], tryAsRange[1]);
 	}
 	let isRecurring = false;
 	let isDue = DueState.notDue;
@@ -50,6 +57,7 @@ function parseDueDate(due: string): DueReturn {
 	return {
 		isDue,
 		isRecurring,
+		isRange: false, // TODO: here
 	};
 }
 
@@ -64,6 +72,23 @@ function isDueExactDate(date: Date): DueState {
 	} else {
 		return DueState.overdue;
 	}
+}
+
+function isDueBetween(d1: string, d2: string): DueReturn {
+	const now = dayjs();
+	const date1 = dayjs(d1);
+	const date2 = dayjs(d2);
+	let isDue;
+	if (date1.isBefore(now, 'day') && date2.isBefore(now, 'day')) {
+		isDue = DueState.overdue;
+	} else {
+		isDue = dayjs().isBetween(d1, dayjs(d2), 'day', '[]') ? DueState.due : DueState.notDue;
+	}
+	return {
+		isRecurring: false,
+		isRange: true,
+		isDue,
+	};
 }
 
 function isDueToday(due: string): DueState {
@@ -95,34 +120,15 @@ export function isDueWithDate(dueDate: string, dueDateStart: number | Date | und
 	if (dueDateStart === undefined) {
 		throw new Error('dueDate was specified, but dueDateStart is missing');
 	}
-	if (/(^every|^each|^e)/.test(dueDate)) { // repeating
-		const match = /(?!every|each|e)\s?(\d+)?\s?(d|days?|weeks?|m|months?)/.exec(dueDate);
-		if (match) {
-			const interval = match[1] ? +match[1] : 1;
-			const unit = match[2];
-			if (/^(d|days?)$/.test(unit)) {
-				const diffInDays = calcDiffInDays(shortenToDate(dueDateStart), shortenToDate(targetTimestamp));
+	const match = /(?!every|each|e)\s?(\d+)?\s?(d|days?)/.exec(dueDate);
+	if (match) {
+		const interval = match[1] ? +match[1] : 1;
+		const unit = match[2];
+		if (/^(d|days?)$/.test(unit)) {
+			const diffInDays = calcDiffInDays(shortenToDate(dueDateStart), shortenToDate(targetTimestamp));
 
-				if (diffInDays % interval === 0) return DueState.due;
-			} else if (/^(m|months?)$/.test(unit)) {
-			}
-		}
-	} else {
-		if (dueDate === 'today') {
-			return targetTimestamp > dueDateStart ? DueState.due : DueState.notDue;
-			// return isTheSameDay(dueDateStart, targetTimestamp);
-		} else if (dueDate === 'tomorrow') {
-			return isTheSameDay(shiftDays(dueDateStart, 1), targetTimestamp) ? DueState.due : DueState.notDue;
-		} else if (/^in\s?(\d+)\s?(d|days?|w|weeks?)$/i.test(dueDate)) {
-			const match = /in\s?(\d+)\s?(d|days?|w|weeks?)/i.exec(dueDate);
-			const interval: number = match ? +match[1] : 1;
-			// @ts-ignore
-			const unit = match[2];
-			if (/^(d|days?)$/.test(unit)) {
-				return isTheSameDay(shiftDays(dueDateStart, interval), targetTimestamp) ? DueState.due : DueState.notDue;
-			} else if (/^(w|weeks?)$/.test(unit)) {
-				return isTheSameDay(shiftDays(dueDateStart, interval * 7), targetTimestamp) ? DueState.due : DueState.notDue;
-			}
+			if (diffInDays % interval === 0) return DueState.due;
+		} else if (/^(m|months?)$/.test(unit)) {
 		}
 	}
 
