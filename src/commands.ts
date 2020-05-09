@@ -1,5 +1,6 @@
 import { commands, window, workspace, Range, TextEditor, TextDocument, TextLine, WorkspaceEdit, Uri } from 'vscode';
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 
 import { state, updateState, globalState } from './extension';
 import { config } from './extension';
@@ -179,15 +180,27 @@ export function registerCommands() {
 		vscode.window.showInformationMessage(resultTask.title);
 	});
 	commands.registerCommand('todomd.addTask', async () => {
+		const creationDate = config.addCreationDate ? `{cr:${getDateInISOFormat(new Date())}} ` : '';
 		if (state.theRightFileOpened) {
-			return;
-		}
-		if (config.defaultFile) {
+			const editor = window.activeTextEditor!;
 			const text = await window.showInputBox();
 			if (!text) {
 				return;
 			}
-			const creationDate = config.addCreationDate ? `{cr:${getDateInISOFormat(new Date())}} ` : '';
+			const line = editor.document.lineAt(editor.selection.active.line);
+			const wEdit = new WorkspaceEdit();
+			wEdit.insert(editor.document.uri, line.rangeIncludingLineBreak.start, creationDate + text);
+			workspace.applyEdit(wEdit);
+			editor.document.save();
+		} else {
+			const isOk = await checkDefaultFileAndNotify();
+			if (!isOk) {
+				return;
+			}
+			const text = await window.showInputBox();
+			if (!text) {
+				return;
+			}
 			appendTaskToFile(creationDate + text, config.defaultFile);
 		}
 	});
@@ -358,6 +371,30 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 		await workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
 		document.save();
 	}
+}
+async function checkDefaultFileAndNotify(): Promise<boolean> {
+	const specify = 'Specify';
+	if (!config.defaultFile) {
+		const shouldSpecify = await window.showWarningMessage('Default file is not specified.', specify);
+		if (shouldSpecify === specify) {
+			specifyDefaultFile();
+		}
+		return false;
+	} else {
+		const exists = fs.existsSync(config.defaultFile);
+		if (!exists) {
+			const shouldSpecify = await window.showErrorMessage('Specified default file does not exist.', specify);
+			if (shouldSpecify === specify) {
+				specifyDefaultFile();
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
+}
+function specifyDefaultFile() {
+	vscode.commands.executeCommand('workbench.action.openSettings', 'todomd.defaultFile');
 }
 function insertCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), config.completionDateIncludeTime)}}`);
