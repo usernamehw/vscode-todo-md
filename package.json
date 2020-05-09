@@ -188,7 +188,7 @@
 			},
 			{
 				"command": "todomd.addTask",
-				"title": "Add Task",
+				"title": "Add a Task",
 				"category": "Todo MD"
 			},
 			{
