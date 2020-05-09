@@ -112,6 +112,11 @@
 					"markdownDescription": "When completing a task add completion date to it: `{cm:2020-04-30}`",
 					"default": true
 				},
+				"todomd.addCreationDate": {
+					"type": "boolean",
+					"markdownDescription": "When creating a task add creation date to it: `{cr:2020-04-30}`",
+					"default": false
+				},
 				"todomd.completionDateIncludeTime": {
 					"type": "boolean",
 					"markdownDescription": "When completing a task add date and time: `{cm:2020-04-30T09:11:17}`",

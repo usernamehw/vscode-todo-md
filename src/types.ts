@@ -43,27 +43,32 @@ export enum SortTags {
 	frequency = 'frequency',
 }
 export interface IConfig {
-	defaultPriority: string;
-	sortTagsView: SortTags;
+	addCreationDate: boolean;
 	addCompletionDate: boolean;
 	completionDateIncludeTime: boolean;
+	defaultPriority: string;
+	autoArchiveTasks: boolean;
+	useLocalDateTime: boolean;
+
+	sortTagsView: SortTags;
 
 	doneSymbol: string;
 	/**
 	 * Choose files that extension will operate on. By default any markdown file (`.md`).
 	 */
 	activatePattern: string;
+
 	tags: string[];
 	projects: string[];
 	contexts: string[];
+
 	savedFilters: {
 		title: string;
 		filter: string;
 	}[];
+
 	defaultFile: string;
 	defaultArchiveFile: string;
-	autoArchiveTasks: boolean;
-	useLocalDateTime: boolean;
 
 	treeViews: {
 		title: string;

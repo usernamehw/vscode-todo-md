@@ -47,6 +47,7 @@ List of special tags:
 --- | --- | --- |
 |`due`|Due date|`{due:2020-05-15}`|
 |`cm`|Completion date|`{cm:2020-05-15}`|
+|`cr`|Creation date||
 |`t`|(threshold) Task is not visible in Tree Views until the specified date|`{t:2020-05-15}`|
 |`h`|(hidden) Task is not visible in Tree Views|`{h}`|
 |`count`|Instead of completing the task increases count by 1. When the number matches the goal - the task is considered completed|`{count:0/3}`|
@@ -57,7 +58,6 @@ List of special tags:
 - ❌ id/p (dependent task / blocked task?)
 - ❌ f/star (favorite/starred)
 - ❌ note
-- ❌ cr - (creation date)
 -->
 
 <!-- Due dates:

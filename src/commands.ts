@@ -187,7 +187,8 @@ export function registerCommands() {
 			if (!text) {
 				return;
 			}
-			appendTaskToFile(text, config.defaultFile);
+			const creationDate = config.addCreationDate ? `{cr:${getDateInISOFormat(new Date())}} ` : '';
+			appendTaskToFile(creationDate + text, config.defaultFile);
 		}
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', () => {
