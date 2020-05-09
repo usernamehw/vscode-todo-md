@@ -20,7 +20,7 @@ class QPItem implements vscode.QuickPickItem {
 }
 
 export function registerCommands() {
-	commands.registerCommand(`todomd.toggleDone`, async (treeItem?: TaskTreeItem) => {
+	commands.registerCommand('todomd.toggleDone', async (treeItem?: TaskTreeItem) => {
 		const editor = window.activeTextEditor;
 		let document;
 		let ln;
@@ -46,7 +46,7 @@ export function registerCommands() {
 			toggleTaskAtLine(ln, document);
 		}
 	});
-	commands.registerTextEditorCommand(`todomd.archiveCompletedTasks`, editor => {
+	commands.registerTextEditorCommand('todomd.archiveCompletedTasks', editor => {
 		if (!config.defaultArchiveFile) {
 			noArchiveFileMessage();
 			return;
@@ -62,7 +62,7 @@ export function registerCommands() {
 		}
 		workspace.applyEdit(wEdit);
 	});
-	commands.registerTextEditorCommand(`todomd.archiveSelectedCompletedTasks`, editor => {
+	commands.registerTextEditorCommand('todomd.archiveSelectedCompletedTasks', editor => {
 		if (!config.defaultArchiveFile) {
 			noArchiveFileMessage();
 			return;
@@ -79,7 +79,7 @@ export function registerCommands() {
 		}
 		workspace.applyEdit(wEdit);
 	});
-	commands.registerTextEditorCommand(`todomd.sortByPriority`, (editor, edit) => {
+	commands.registerTextEditorCommand('todomd.sortByPriority', (editor, edit) => {
 		const selection = editor.selection;
 		if (selection.isEmpty) {
 			vscode.window.showInformationMessage('Select tasks to sort');
@@ -161,7 +161,7 @@ export function registerCommands() {
 			modal: true,
 		});
 	});
-	commands.registerCommand(`todomd.getRandomTask`, () => {
+	commands.registerCommand('todomd.getRandomTask', () => {
 		const document = updateState();
 		let tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
@@ -178,7 +178,7 @@ export function registerCommands() {
 		}
 		vscode.window.showInformationMessage(resultTask.title);
 	});
-	commands.registerCommand(`todomd.addTask`, async () => {
+	commands.registerCommand('todomd.addTask', async () => {
 		if (state.theRightFileOpened) {
 			return;
 		}
@@ -190,10 +190,10 @@ export function registerCommands() {
 			appendTaskToFile(text, config.defaultFile);
 		}
 	});
-	commands.registerCommand(`todomd.openDefaultArvhiveFile`, () => {
+	commands.registerCommand('todomd.openDefaultArvhiveFile', () => {
 		openFileInEditor(config.defaultArchiveFile);
 	});
-	commands.registerCommand(`todomd.completeTask`, async () => {
+	commands.registerCommand('todomd.completeTask', async () => {
 		const document = await updateState();
 		const array = [];
 		for (const task of state.tasks) {
@@ -216,7 +216,7 @@ export function registerCommands() {
 			toggleTaskAtLine(task.ln, document);
 		}
 	});
-	commands.registerTextEditorCommand(`todomd.filter`, editor => {
+	commands.registerTextEditorCommand('todomd.filter', editor => {
 		const qp = window.createQuickPick();
 		qp.items = config.savedFilters.map(filter => new QPItem(filter.title));
 		let value: string | undefined;
@@ -245,20 +245,20 @@ export function registerCommands() {
 			updateTasksTreeView();
 		});
 	});
-	commands.registerCommand(`todomd.clearFilter`, editor => {
+	commands.registerCommand('todomd.clearFilter', editor => {
 		setContext(FILTER_ACTIVE_CONTEXT_KEY, false);
 		state.taskTreeViewFilterValue = '';
 		updateTasksTreeView();
 	});
-	commands.registerCommand(`todomd.insertTodayDate`, editor => {
+	commands.registerCommand('todomd.insertTodayDate', editor => {
 		insertSnippet(getDateInISOFormat(new Date()));
 	});
-	commands.registerCommand(`todomd.clearGlobalState`, () => {
+	commands.registerCommand('todomd.clearGlobalState', () => {
 	// @ts-ignore No API
 		globalState._value = {};
 		globalState.update('hack', 'toClear');// TODO: is this required to clear state?
 	});
-	commands.registerCommand(`todomd.goToLine`, (lineNumber: number) => {
+	commands.registerCommand('todomd.goToLine', (lineNumber: number) => {
 		const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
 		const { activeTextEditor } = window;
 		if (!activeTextEditor) {
