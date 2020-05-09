@@ -204,7 +204,11 @@ export function registerCommands() {
 			await appendTaskToFile(creationDate + text, config.defaultFile);
 		}
 	});
-	commands.registerCommand('todomd.openDefaultArvhiveFile', () => {
+	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
+		const isOk = await checkArchiveFileAndNotify();
+		if (!isOk) {
+			return;
+		}
 		openFileInEditor(config.defaultArchiveFile);
 	});
 	commands.registerCommand('todomd.completeTask', async () => {
@@ -393,8 +397,32 @@ async function checkDefaultFileAndNotify(): Promise<boolean> {
 		}
 	}
 }
+async function checkArchiveFileAndNotify(): Promise<boolean> {
+	const specify = 'Specify';
+	if (!config.defaultArchiveFile) {
+		const shouldSpecify = await window.showWarningMessage('Default archive file is not specified.', specify);
+		if (shouldSpecify === specify) {
+			specifyDefaultArchiveFile();
+		}
+		return false;
+	} else {
+		const exists = fs.existsSync(config.defaultArchiveFile);
+		if (!exists) {
+			const shouldSpecify = await window.showErrorMessage('Specified default archive file does not exist.', specify);
+			if (shouldSpecify === specify) {
+				specifyDefaultArchiveFile();
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
+}
 function specifyDefaultFile() {
 	vscode.commands.executeCommand('workbench.action.openSettings', 'todomd.defaultFile');
+}
+function specifyDefaultArchiveFile() {
+	vscode.commands.executeCommand('workbench.action.openSettings', 'todomd.defaultArchiveFile');
 }
 function insertCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), config.completionDateIncludeTime)}}`);
