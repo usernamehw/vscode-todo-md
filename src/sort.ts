@@ -15,7 +15,13 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 	let sortedTasks: TheTask[] = [];
 
 	if (property === SortProperty.priority) {
-		sortedTasks = tasksCopy.sort((a, b) => a.priority > b.priority ? 1 : -1);
+		sortedTasks = tasksCopy.sort((a, b) => {
+			if (a.priority === b.priority) {
+				return 0;
+			} else {
+				return a.priority > b.priority ? 1 : -1;
+			}
+		});
 	}
 	if (direction === SortDirection.ASC) {
 		return sortedTasks.reverse();
