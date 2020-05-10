@@ -102,6 +102,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `todomd.getRandomTask` - Get random due task if exists. If none are due, get random task out of non-due tasks. (Taken from main file).
 - `todomd.sortByPriority` - Sort selected lines by priority
 - `todomd.createSimilarTask` - Create similar task (same tags, projects, contexts).
+- `todomd.setDueDate` - Helper command to set due date relative to now. Possible values: `+0` (today), `-1` (yesterday), `+1` (tomorrow) etc. (NOTE: plus and minus signs are important)
 
 # Settings
 

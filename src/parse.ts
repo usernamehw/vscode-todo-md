@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { Range } from 'vscode';
 import { Items, TagForProvider, SortTags, ProjectForProvider, DueState, ContextForProvider } from './types';
 import { config } from './extension';
-import { parseDue } from './utils';
+import { parseDue } from './timeUtils';
 
 export function parseLine(textLine: vscode.TextLine): TheTask | undefined | number {
 	let line = textLine.text.trim();

@@ -206,6 +206,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.setDueDate",
+				"title": "Set due date",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.archiveCompletedTasks",
 				"title": "Archive completed Tasks",
 				"category": "Todo MD"
@@ -471,6 +476,10 @@
 				{
 					"command": "todomd.followLink",
 					"when": "never"
+				},
+				{
+					"command": "todomd.setDueDate",
+					"when": "todomd:isActive"
 				}
 			]
 		},

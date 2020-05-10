@@ -1,13 +1,14 @@
 import { commands, window, workspace, Range, TextEditor, TextDocument, TextLine, WorkspaceEdit, Uri } from 'vscode';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import dayjs from 'dayjs';
 
 import { state, updateState, globalState } from './extension';
 import { config } from './extension';
 import { appendTaskToFile, getRandomInt, prominentNumber } from './utils';
 import { sortTasks, SortProperty } from './sort';
 import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext, followLink } from './vscodeUtils';
-import { getDateInISOFormat } from './timeUtils';
+import { getDateInISOFormat, DATE_FORMAT } from './timeUtils';
 import { updateTasksTreeView, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { TheTask, Count } from './parse';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
@@ -202,6 +203,33 @@ export function registerCommands() {
 				return;
 			}
 			await appendTaskToFile(creationDate + text, config.defaultFile);
+		}
+	});
+	commands.registerTextEditorCommand('todomd.setDueDate', async editor => {
+		const text = await window.showInputBox();
+		if (!text) {
+			return;
+		}
+		const line = editor.selection.active.line;
+		const task = getTaskAtLine(line);
+		const dayShiftMatch = /(\+|-)\d+?$/.exec(text);
+		if (dayShiftMatch) {
+			let dueDateToInsert = '';
+			const match = dayShiftMatch[0];
+			if (match[0] === '+') {
+				dueDateToInsert = dayjs().add(Number(match.slice(1)), 'day').format(DATE_FORMAT);
+			} else if (match[0] === '-') {
+				dueDateToInsert = dayjs().subtract(Number(match.slice(1)), 'day').format(DATE_FORMAT);
+			}
+			const dueDate = `{due:${dueDateToInsert}}`;
+			const wEdit = new WorkspaceEdit();
+			if (task?.dueRange) {
+				wEdit.replace(editor.document.uri, task.dueRange, dueDate);
+			} else {
+				wEdit.insert(editor.document.uri, editor.selection.active, ` ${dueDate}`);
+			}
+			workspace.applyEdit(wEdit);
+			editor.document.save();
 		}
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
