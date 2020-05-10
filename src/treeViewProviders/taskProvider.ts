@@ -48,7 +48,7 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 			return undefined;
 		} else {
 			return this.tasks.map(task => new TaskTreeItem(
-				task.title,
+				task.title + (task.specialTags.count ? ` ${task.specialTags.count.current}/${task.specialTags.count.needed}` : ''),
 				task,
 				{
 					command: `${EXTENSION_NAME}.goToLine`,
