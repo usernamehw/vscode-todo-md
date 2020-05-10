@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 
 import { state, updateState, globalState } from './extension';
 import { config } from './extension';
-import { appendTaskToFile, getRandomInt, prominentNumber } from './utils';
+import { appendTaskToFile, getRandomInt, fancyNumber } from './utils';
 import { sortTasks, SortProperty } from './sort';
 import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext, followLink } from './vscodeUtils';
 import { getDateInISOFormat, DATE_FORMAT } from './timeUtils';
@@ -159,7 +159,7 @@ export function registerCommands() {
 		const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
 		tasks = [...sortedDueTasks, ...sortedNotDueTasks].slice(0, config.getNextNumberOfTasks);
 
-		vscode.window.showInformationMessage(tasks.map((task, i) => `${prominentNumber(i + 1)} ${task.title}`).join('\n'), {
+		vscode.window.showInformationMessage(tasks.map((task, i) => `${fancyNumber(i + 1)} ${task.title}`).join('\n'), {
 			modal: true,
 		});
 	});
