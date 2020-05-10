@@ -52,7 +52,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 					text.push(word);
 					break;
 				}
-				const [specialTag, value] = word.slice(1, -1).split(':');// Cannot read property 'split' of undefined. nvm for now.
+				const [specialTag, value = ''] = word.slice(1, -1).split(':');
 				const range = new Range(ln, index, ln, index + word.length);
 				if (specialTag === 'due') {
 					dueRange = range;
