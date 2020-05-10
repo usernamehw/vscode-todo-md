@@ -15,10 +15,16 @@ const enum FilterType {
 	noProject,
 	noContext,
 }
+const enum FilterMoreLess {
+	none,
+	more,
+	less,
+}
 interface Filter {
 	value: string;
 	filterType: FilterType;
 	isNegation?: boolean;
+	filterMoreLess?: FilterMoreLess;
 }
 
 export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
@@ -59,11 +65,21 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.priorityEqual) {
-				// $A - $Z
-				if (task.priority === filter.value) {
-					filterResult = true;
+				// $A - $Z priority
+				if (filter.filterMoreLess) {
+					// >$A <$A
+					if (filter.filterMoreLess === FilterMoreLess.more) {
+						filterResult = filter.value >= task.priority;
+					} else {
+						filterResult = filter.value <= task.priority;
+					}
 				} else {
-					filterResult = false;
+					// Simple equal
+					if (task.priority === filter.value) {
+						filterResult = true;
+					} else {
+						filterResult = false;
+					}
 				}
 			} else if (filter.filterType === FilterType.done) {
 				// $done
@@ -150,53 +166,56 @@ function parseFilter(filterStr: string) {
 		let isNegation;
 		let value;
 		let firstChar;
-		let filterType;
 		if (word[0] === '-') {
 			isNegation = true;
 			value = word.slice(2);
 			firstChar = word[1];
 		} else {
-			value = word.slice(1);
-			firstChar = word[0];
+			if (word[0] === '>' || word[0] === '<') {
+				firstChar = word[1];
+				value = word.slice(2);
+				filter.filterMoreLess = word[0] === '>' ? FilterMoreLess.more : FilterMoreLess.less;
+			} else {
+				value = word.slice(1);
+				firstChar = word[0];
+			}
 		}
 		switch (firstChar) {
 			case '#': {
-				filterType = FilterType.tagEqual; break;
+				filter.filterType = FilterType.tagEqual; break;
 			}
 			case '@': {
-				filterType = FilterType.contextEqual; break;
+				filter.filterType = FilterType.contextEqual; break;
 			}
 			case '+': {
-				filterType = FilterType.projectEqual; break;
+				filter.filterType = FilterType.projectEqual; break;
 			}
 			case '$': {
 				if (value === 'done') {
-					filterType = FilterType.done;
+					filter.filterType = FilterType.done;
 				} else if (value === 'due') {
-					filterType = FilterType.due;
+					filter.filterType = FilterType.due;
 				} else if (value === 'overdue') {
-					filterType = FilterType.overdue;
+					filter.filterType = FilterType.overdue;
 				} else if (value === 'recurring') {
-					filterType = FilterType.recurring;
+					filter.filterType = FilterType.recurring;
 				} else if (value === 'noProject') {
-					filterType = FilterType.noProject;
+					filter.filterType = FilterType.noProject;
 				} else if (value === 'noContext') {
-					filterType = FilterType.noContext;
+					filter.filterType = FilterType.noContext;
 				} else if (value === 'noTag') {
-					filterType = FilterType.noTag;
+					filter.filterType = FilterType.noTag;
 				} else if (/^[A-Z]$/.test(value)) {
-					filterType = FilterType.priorityEqual;
+					filter.filterType = FilterType.priorityEqual;
 				}
 				break;
 			}
 			default: {
-				filterType = FilterType.tagEqual;
+				filter.filterType = FilterType.tagEqual;
 			}
 		}
 		filter.value = value;
 		filter.isNegation = isNegation;
-		// @ts-ignore
-		filter.filterType = filterType;
 		filters.push(filter);
 	}
 	return filters;
