@@ -13,7 +13,7 @@ By default works for files with names `todo.md` & `todo.archive.md` (But can be 
 +Project
 ```
 
-Nested projects are ok `+Project\nested` but at the same time they do not get treated differently in any way (At least not yet).
+Nested projects are ok `+Project\nested` but at the same time they do not get treated differently in any way.
 
 ## Context
 
