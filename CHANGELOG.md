@@ -1,3 +1,10 @@
+## 0.0.10 `10 May 2020`
+
+- ✨ Create similar task
+- ✨ Add creation date
+- ✨ Due date as range
+- ✨ Configure number of tasks for get a few next tasks command
+
 ## 0.0.9 `08 May 2020`
 
 - ✨ Get next 10 tasks command
