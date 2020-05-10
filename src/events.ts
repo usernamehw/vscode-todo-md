@@ -17,7 +17,9 @@ export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined):
 	if (isTheRightFileFormat(editor)) {
 		enterTheRightFile(editor!);
 	} else {
-		exitTheRightFile();
+		if (state.theRightFileOpened) {
+			exitTheRightFile();
+		}
 	}
 }
 
