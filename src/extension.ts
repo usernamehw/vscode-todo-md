@@ -81,6 +81,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 
 	function updateConfig(): void {
 		config = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
+		// TODO: validation function for the entire config
 
 		disposeEverything();
 		updateDecorationsStyle();
