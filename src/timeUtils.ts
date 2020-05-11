@@ -22,20 +22,6 @@ export function getDateInISOFormat(date: Date | Dayjs = new Date(), includeTime 
 	return dayjs(date).format(format);
 }
 
-export function calcDiffInDays(d1: number | Date, d2: number | Date): number {
-	return Math.trunc((+d2 - +d1) / ONE_DAY_IN_MS);
-}
-export function calcDiffInDays2(d1: number | Date, d2: number | Date): number {
-	return (+d2 - +d1) / ONE_DAY_IN_MS;
-}
-
-/**
- * Remove time from date and return new Date object
- */
-export function shortenToDate(date: string | number | Date): Date {
-	return new Date(new Date(date).setHours(0, 0, 0, 0));
-}
-
 interface DueReturn {
 	isRecurring: boolean;
 	isRange: boolean;
@@ -94,16 +80,11 @@ function parseDueDate(due: string): DueReturn {
 }
 
 function isDueExactDate(date: Date): DueState {
-	const now = new Date();
-	if (now.getTime() < date.getTime()) {
+	if (dayjs().isBefore(date)) {
 		return DueState.notDue;
 	}
-	const diffInDays = calcDiffInDays(shortenToDate(now), shortenToDate(date));
-	if (diffInDays === 0) {
-		return DueState.due;
-	} else {
-		return DueState.overdue;
-	}
+	const diffInDays = dayjs(date).diff(dayjs(), 'day');
+	return diffInDays === 0 ? DueState.due : DueState.overdue;
 }
 
 function isDueBetween(d1: string, d2: string): DueReturn {
@@ -157,7 +138,7 @@ export function isDueWithDate(dueDate: string, dueDateStart: number | Date | und
 		const interval = match[1] ? +match[1] : 1;
 		const unit = match[2];
 		if (/^(d|days?)$/.test(unit)) {
-			const diffInDays = calcDiffInDays(shortenToDate(dueDateStart), shortenToDate(targetTimestamp));
+			const diffInDays = dayjs(targetTimestamp).diff(dueDateStart, 'day');// Should this call due exact date?
 
 			if (diffInDays % interval === 0) return DueState.due;
 		}

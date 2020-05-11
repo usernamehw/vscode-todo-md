@@ -7,7 +7,6 @@ dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
 
 
-
 import { IConfig, State } from './types';
 import { parseDocument } from './parse';
 import { updateDecorationsStyle } from './decorations';
