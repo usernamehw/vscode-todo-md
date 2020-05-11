@@ -27,8 +27,7 @@ interface DueReturn {
 	isRange: boolean;
 	isDue: DueState;
 }
-const dueWithDateRegexp = /(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?/;
-const everyNDayRegexp = /e(\d+)d/;
+const dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?$/;
 
 export function parseDue(due: string): DueReturn[] {
 	const dueDates = due.split(',').filter(d => d.length);
@@ -55,17 +54,14 @@ function parseDueDate(due: string): DueReturn {
 		const month = Number(match[2]) - 1;
 		const date = Number(match[3]);
 		const dateObject = new Date(year, month, date);
-		const dueAlgorithm = match[5];
-		if (!dueAlgorithm) {
+		const dueRecurringPart = match[5];
+
+		if (!dueRecurringPart) {
 			isDue = isDueExactDate(dateObject);
 			isRecurring = false;
 		} else {
 			isRecurring = true;
-			const everyNDay = everyNDayRegexp.exec(dueAlgorithm);
-			if (everyNDay) {
-				const interval = +everyNDay[1];
-				isDue = isDueWithDate(dueAlgorithm, new Date(year, month, date));
-			}
+			isDue = isDueWithDate(dueRecurringPart, dateObject);
 		}
 	} else {
 		// Due date without starting date
