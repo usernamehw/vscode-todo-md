@@ -252,7 +252,7 @@ export function registerCommands() {
 		if (!result) {
 			return;
 		}
-		const task = state.tasks.find(t => t.title === result);
+		const task = state.tasks.find(t => formatTask(t) === result);
 		if (!task) {
 			return;
 		}
