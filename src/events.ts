@@ -6,8 +6,8 @@ import { showStatusBarEntry, updateStatusBarEntry, hideStatusBarEntry } from './
 import { updateEditorDecorations } from './decorations';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { resetAllRecurringTasks } from './commands';
-import { isTheSameDay } from './timeUtils';
 import { setContext } from './vscodeUtils';
+import dayjs from 'dayjs';
 
 export const THE_RIGHT_FILE = 'todomd:isActive';
 
@@ -25,7 +25,7 @@ export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined):
 
 export function checkIfNewDayArrived(): void {
 	const lastVisit = globalState.get<string | undefined>(LAST_VISIT_STORAGE_KEY);
-	if (lastVisit && !isTheSameDay(new Date(lastVisit), new Date())) {
+	if (lastVisit && !dayjs().isSame(lastVisit, 'day')) {
 		// window.showInformationMessage('new day');
 		globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
 		state.newDayArrived = true;

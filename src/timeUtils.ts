@@ -43,12 +43,6 @@ export function shiftDays(date: Date | number, numberOfDays: number): Date {
 	return new Date(+date + ONE_DAY_IN_MS * numberOfDays);
 }
 /**
- * Check if the date **year/month/day** is the same (ignoring time)
- */
-export function isTheSameDay(d1: number | Date, d2: number | Date): boolean {
-	return new Date(d1).toDateString() === new Date(d2).toDateString();
-}
-/**
  * Remove time from date and return new Date object
  */
 export function shortenToDate(date: string | number | Date): Date {
