@@ -143,7 +143,7 @@ export function registerCommands() {
 				followLink(task.specialTags.link);
 			}
 		} else {
-			vscode.window.showInformationMessage(task.title);
+			vscode.window.showInformationMessage(formatTask(task));
 		}
 	});
 	commands.registerCommand('todomd.getFewNextTasks', async () => {
@@ -159,7 +159,7 @@ export function registerCommands() {
 		const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
 		tasks = [...sortedDueTasks, ...sortedNotDueTasks].slice(0, config.getNextNumberOfTasks);
 
-		vscode.window.showInformationMessage(tasks.map((task, i) => `${fancyNumber(i + 1)} ${task.title}`).join('\n'), {
+		vscode.window.showInformationMessage(tasks.map((task, i) => `${fancyNumber(i + 1)} ${formatTask(task)}`).join('\n'), {
 			modal: true,
 		});
 	});
@@ -487,4 +487,8 @@ export function getTaskAtLine(lineNumber: number): TheTask | undefined {
 		}
 	}
 	return undefined;
+}
+
+export function formatTask(task: TheTask): string {
+	return task.title + (task.specialTags.count ? ` ${task.specialTags.count.current}/${task.specialTags.count.needed}` : '');
 }

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { EXTENSION_NAME } from '../extension';
 import { TheTask } from '../parse';
+import { formatTask } from '../commands';
 
 export class TaskTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.None;
@@ -48,7 +49,7 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 			return undefined;
 		} else {
 			return this.tasks.map(task => new TaskTreeItem(
-				task.title + (task.specialTags.count ? ` ${task.specialTags.count.current}/${task.specialTags.count.needed}` : ''),
+				formatTask(task),
 				task,
 				{
 					command: `${EXTENSION_NAME}.goToLine`,
