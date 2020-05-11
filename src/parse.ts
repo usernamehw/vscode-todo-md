@@ -312,9 +312,8 @@ export class TheTask {
 	isRecurring: boolean;
 	tags: string[];
 	projects: string[];
-	/** Due string. Example: `2020-03-27-e30d` */
+	/** Due string. Example: `2020-03-27|e30d` */
 	due?: string;
-	/** threshold */
 	specialTags: SpecialTags;
 	priority: string;
 	contexts: string[];
