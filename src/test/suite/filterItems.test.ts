@@ -140,8 +140,17 @@ describe('Filter $C priority', () => {
 	it('$C', () => {
 		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
 		const filtered = filterItems(items, '$C');
-		expect(filtered).to.have.length(1);
 		expect(filtered).to.have.same.members([priorityCTask]);
+	});
+	it('>$C Priority C or higher', () => {
+		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
+		const filtered = filterItems(items, '>$C');
+		expect(filtered).to.have.same.members([priorityCTask, priorityATask]);
+	});
+	it('<$C Priority C or lower', () => {
+		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
+		const filtered = filterItems(items, '<$C');
+		expect(filtered).to.have.same.members([priorityCTask, priorityETask, priorityZTask]);
 	});
 });
 
