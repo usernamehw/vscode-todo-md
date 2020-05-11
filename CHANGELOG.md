@@ -1,3 +1,9 @@
+## 0.0.11 `11 May 2020`
+
+- 💥 Remove the setting and always use local time
+- ✨ Set relative due date command
+- ✨ Filter for priority more or less `>$C`
+
 ## 0.0.10 `10 May 2020`
 
 - ✨ Create similar task
