@@ -279,11 +279,6 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.insertTodayDate",
-				"title": "Insert today date (ISO)",
-				"category": "Todo MD"
-			},
-			{
 				"command": "todomd.followLink",
 				"title": "Follow link",
 				"category": "Todo MD"

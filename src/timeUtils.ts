@@ -9,16 +9,20 @@ export const ONE_DAY_IN_MS = 86400000;
 export const ONE_WEEK_IN_MS = 604800000;
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
+export const TIME_FORMAT = 'HH:mm:ss';
+export const DATE_TIME_FORMAT = `${DATE_FORMAT}T${TIME_FORMAT}`;
 
 /**
  * Get date or datetime ISO 8601
  * Example: `2020-04-21` or `2020-04-30T09:11:17`
  */
 export function getDateInISOFormat(date = new Date(), includeTime = false): string {
+	const format = includeTime ? DATE_TIME_FORMAT : DATE_FORMAT;
 	if (config.useLocalDateTime) {
-		date = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+		return dayjs(date).format(format);
+	} else {
+		return dayjs(date).utc().format(format);
 	}
-	return date.toISOString().slice(0, includeTime ? 19 : 10);
 }
 
 export function calcDiffInDays(d1: number | Date, d2: number | Date): number {

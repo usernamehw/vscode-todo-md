@@ -296,9 +296,6 @@ export function registerCommands() {
 		state.taskTreeViewFilterValue = '';
 		updateTasksTreeView();
 	});
-	commands.registerCommand('todomd.insertTodayDate', editor => {
-		insertSnippet(getDateInISOFormat(new Date()));
-	});
 	commands.registerCommand('todomd.clearGlobalState', () => {
 	// @ts-ignore No API
 		globalState._value = {};
