@@ -302,9 +302,6 @@ export interface TaskInit {
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
 }
-/**
- * Task name conflicts with vscode Task (auto import struggle)
- */
 export class TheTask {
 	title: string;
 	done: boolean;
@@ -328,7 +325,9 @@ export class TheTask {
 	dueRange?: Range;
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
-
+	/**
+	 * name `TheTask` because of conflict with vscode `Task`
+	 */
 	constructor(init: TaskInit) {
 		this.title = init.title;
 		this.ln = init.ln;
