@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import dayjs from 'dayjs';
 
-import { state, updateState, globalState, getDocumentForDefaultFile } from './extension';
+import { state, updateState, globalState, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY } from './extension';
 import { config } from './extension';
 import { appendTaskToFile, getRandomInt, fancyNumber } from './utils';
 import { sortTasks, SortProperty } from './sort';
@@ -342,21 +342,27 @@ function noArchiveFileMessage() {
 	vscode.window.showWarningMessage('No default archive file specified');
 }
 
-export async function resetAllRecurringTasks(editor: TextEditor): Promise<void> {
-	const wEdit = new WorkspaceEdit();
-	for (const task of state.tasks) {
-		if (task.isRecurring && task.done) {
-			const line = editor.document.lineAt(task.ln);
-			removeDoneSymbol(wEdit, editor.document.uri, line);
-			removeCompletionDate(wEdit, editor.document.uri, line);
-			const count = task.specialTags.count;
-			if (count) {
-				setCountCurrentValue(wEdit, editor.document.uri, count, '0');
-			}
-		}
-	}
-	await workspace.applyEdit(wEdit);
-	editor.document.save();
+export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void> {
+	// const wEdit = new WorkspaceEdit();
+	// let document;
+	// if (editor) {
+	// 	document = editor.document;
+	// } else {
+	// 	document = await getDocumentForDefaultFile();
+	// }
+	// for (const task of state.tasks) {
+	// 	if (task.isRecurring && task.done) {
+	// 		const line = document.lineAt(task.ln);
+	// 		removeDoneSymbol(wEdit, document.uri, line);
+	// 		removeCompletionDate(wEdit, document.uri, line);
+	// 		const count = task.specialTags.count;
+	// 		if (count) {
+	// 			setCountCurrentValue(wEdit, document.uri, count, '0');
+	// 		}
+	// 	}
+	// }
+	// await workspace.applyEdit(wEdit);
+	// document.save();
 }
 async function incrementCountForTask(document: vscode.TextDocument, ln: number, task: TheTask) {
 	const line = document.lineAt(ln);

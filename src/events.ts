@@ -23,19 +23,21 @@ export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined):
 	}
 }
 
-export function checkIfNewDayArrived(): void {
+export function checkIfNewDayArrived(): boolean {
 	const lastVisit = globalState.get<string | undefined>(LAST_VISIT_STORAGE_KEY);
 	if (lastVisit && !dayjs().isSame(lastVisit, 'day')) {
 		// window.showInformationMessage('new day');
 		globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
 		state.newDayArrived = true;
 		state.fileWasReset = false;
+		return true;
 	}
 	// first visit ever?
 	if (!lastVisit) {
 		// window.showInformationMessage('first ever visit');
 		globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
 	}
+	return false;
 }
 
 export function onChangeTextDocument(): void {

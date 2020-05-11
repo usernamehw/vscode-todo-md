@@ -10,7 +10,7 @@ dayjs.extend(relativeTime);
 import { IConfig, State } from './types';
 import { parseDocument } from './parse';
 import { updateDecorationsStyle } from './decorations';
-import { registerCommands } from './commands';
+import { registerCommands, resetAllRecurringTasks } from './commands';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
 import { createTreeViews } from './treeViewProviders/treeViews';
@@ -66,7 +66,6 @@ export let globalState: vscode.Memento;
 export function activate(extensionContext: vscode.ExtensionContext): void {
 	globalState = extensionContext.globalState;
 	updateDecorationsStyle();
-	// checkIfNewDayArrived();
 	registerCommands();
 	createTreeViews();
 	onChangeActiveTextEditor(window.activeTextEditor);
