@@ -27,7 +27,7 @@ interface DueReturn {
 	isRange: boolean;
 	isDue: DueState;
 }
-const dueWithDateRegexp = /(\d\d\d\d)-(\d\d)-(\d\d)(-(\w+))?/;
+const dueWithDateRegexp = /(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?/;
 const everyNDayRegexp = /e(\d+)d/;
 
 export function parseDue(due: string): DueReturn[] {
