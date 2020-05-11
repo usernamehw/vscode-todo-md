@@ -132,7 +132,12 @@ describe('Count', () => {
 describe('Threshold', () => {
 	it('11 Threshold', () => {
 		const task = getLineAt(11)!;
-		expect(task.specialTags.threshold).to.not.be.an('undefined');
 		expect(task.specialTags.threshold).to.equal('2020-05-02');
+	});
+});
+describe('Hidden', () => {
+	it('12 Hidden', () => {
+		const task = getLineAt(12)!;
+		expect(task.specialTags.isHidden === true).to.be.ok;
 	});
 });

@@ -10,3 +10,4 @@ x 7 Completed task
 9 No project No context No special no done x 5+5 email@something.mail {somestuff:value} notag#some
 10 Count {count:1/2} text
 11 Threshold {t:2020-05-02}
+12 Hidden {h}

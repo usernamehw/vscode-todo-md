@@ -171,7 +171,7 @@
 		"no-sequences": 1,
 		"no-throw-literal": 1,
 		"no-unmodified-loop-condition": 1,
-		"no-unused-expressions": 1,
+		"no-unused-expressions": 0,
 		"no-unused-labels": 1,
 		"no-useless-call": 1,
 		"no-useless-concat": 1,
