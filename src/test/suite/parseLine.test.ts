@@ -121,4 +121,11 @@ describe('Should not produce extra tags/contexts/...', () => {
 		expect(task.done).to.equal(false);
 	});
 });
-
+describe('Count', () => {
+	it('10 Count', () => {
+		const task = getLineAt(10)!;
+		expect(task.specialTags.count).to.not.be.an('undefined');
+		expect(task.specialTags.count?.current).to.equal(1);
+		expect(task.specialTags.count?.needed).to.equal(2);
+	});
+});
