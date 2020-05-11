@@ -147,7 +147,7 @@ export function registerCommands() {
 		}
 	});
 	commands.registerCommand('todomd.getFewNextTasks', async () => {
-		const document = await updateState();
+		await updateState();
 		let tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
