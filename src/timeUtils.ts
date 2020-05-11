@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { DueState } from './types';
 import { config } from './extension';
@@ -16,7 +16,7 @@ export const DATE_TIME_FORMAT = `${DATE_FORMAT}T${TIME_FORMAT}`;
  * Get date or datetime ISO 8601
  * Example: `2020-04-21` or `2020-04-30T09:11:17`
  */
-export function getDateInISOFormat(date = new Date(), includeTime = false): string {
+export function getDateInISOFormat(date: Date | Dayjs = new Date(), includeTime = false): string {
 	const format = includeTime ? DATE_TIME_FORMAT : DATE_FORMAT;
 	if (config.useLocalDateTime) {
 		return dayjs(date).format(format);
@@ -32,16 +32,6 @@ export function calcDiffInDays2(d1: number | Date, d2: number | Date): number {
 	return (+d2 - +d1) / ONE_DAY_IN_MS;
 }
 
-/**
- * Shift date by the amount of days (positive or negative)
- * ```
- * shiftDays(new Date(), -4)// 4 days ago
- * shiftDays(new Date(), 10)// 10 days in the future
- * ```
- */
-export function shiftDays(date: Date | number, numberOfDays: number): Date {
-	return new Date(+date + ONE_DAY_IN_MS * numberOfDays);
-}
 /**
  * Remove time from date and return new Date object
  */

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { state, config, G } from './extension';
-import { getDateInISOFormat, shiftDays } from './timeUtils';
+import { getDateInISOFormat } from './timeUtils';
+import dayjs from 'dayjs';
 
 export function updateCompletions(): void {
 	if (G.tagAutocompleteDisposable) {
@@ -73,9 +74,9 @@ export function updateCompletions(): void {
 				const today = new vscode.CompletionItem('TODAY', vscode.CompletionItemKind.Constant);
 				today.insertText = getDateInISOFormat(new Date());
 				const tomorrow = new vscode.CompletionItem('TOMORROW', vscode.CompletionItemKind.Constant);
-				tomorrow.insertText = getDateInISOFormat(shiftDays(new Date(), 1));
+				tomorrow.insertText = getDateInISOFormat(dayjs().add(1, 'day'));
 				const yesterday = new vscode.CompletionItem('YESTERDAY', vscode.CompletionItemKind.Constant);
-				yesterday.insertText = getDateInISOFormat(shiftDays(new Date(), -1));
+				yesterday.insertText = getDateInISOFormat(dayjs().subtract(1, 'day'));
 				general.push(today, tomorrow, yesterday);
 				return general;
 			},
