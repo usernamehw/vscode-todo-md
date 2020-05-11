@@ -179,7 +179,7 @@
 		"commands": [
 			{
 				"command": "todomd.toggleDone",
-				"title": "Toggle Done (Completion)",
+				"title": "Toggle completion",
 				"category": "Todo MD",
 				"icon": {
 					"light": "img/checkLight.svg",
