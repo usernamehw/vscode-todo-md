@@ -417,8 +417,8 @@
 				"id": "todomd.overdueForeground",
 				"defaults": {
 					"light": "#d44343",
-					"dark": "#d44343",
-					"highContrast": "#d44343"
+					"dark": "#f64f4f",
+					"highContrast": "#f64f4f"
 				},
 				"description": "Not empty"
 			}
