@@ -152,7 +152,7 @@ export function isDueWithDate(dueDate: string, dueDateStart: number | Date | und
 	if (dueDateStart === undefined) {
 		throw new Error('dueDate was specified, but dueDateStart is missing');
 	}
-	const match = /(?!every|each|e)\s?(\d+)?\s?(d|days?)/.exec(dueDate);
+	const match = /(?!every|e)\s?(\d+)?\s?(d|days?)/.exec(dueDate);
 	if (match) {
 		const interval = match[1] ? +match[1] : 1;
 		const unit = match[2];
@@ -160,7 +160,6 @@ export function isDueWithDate(dueDate: string, dueDateStart: number | Date | und
 			const diffInDays = calcDiffInDays(shortenToDate(dueDateStart), shortenToDate(targetTimestamp));
 
 			if (diffInDays % interval === 0) return DueState.due;
-		} else if (/^(m|months?)$/.test(unit)) {
 		}
 	}
 
