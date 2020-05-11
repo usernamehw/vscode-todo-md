@@ -246,7 +246,7 @@ export function registerCommands() {
 			if (task.done) {
 				continue;
 			}
-			array.push(task.title);
+			array.push(formatTask(task));
 		}
 		const result = await window.showQuickPick(array);
 		if (!result) {
