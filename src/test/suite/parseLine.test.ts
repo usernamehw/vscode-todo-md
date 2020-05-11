@@ -121,23 +121,23 @@ describe('Should not produce extra tags/contexts/...', () => {
 		expect(task.done).to.equal(false);
 	});
 });
-describe('Count', () => {
+describe('Special tags {}', () => {
 	it('10 Count', () => {
 		const task = getLineAt(10)!;
 		expect(task.specialTags.count).to.not.be.an('undefined');
 		expect(task.specialTags.count?.current).to.equal(1);
 		expect(task.specialTags.count?.needed).to.equal(2);
 	});
-});
-describe('Threshold', () => {
 	it('11 Threshold', () => {
 		const task = getLineAt(11)!;
 		expect(task.specialTags.threshold).to.equal('2020-05-02');
 	});
-});
-describe('Hidden', () => {
 	it('12 Hidden', () => {
 		const task = getLineAt(12)!;
 		expect(task.specialTags.isHidden === true).to.be.ok;
+	});
+	it('13 Link', () => {
+		const task = getLineAt(13)!;
+		expect(task.specialTags.link === 'https://www.google.com').to.be.ok;
 	});
 });
