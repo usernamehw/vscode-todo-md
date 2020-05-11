@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import dayjs from 'dayjs';
 
-import { state, updateState, globalState } from './extension';
+import { state, updateState, globalState, getDocumentForDefaultFile } from './extension';
 import { config } from './extension';
 import { appendTaskToFile, getRandomInt, fancyNumber } from './utils';
 import { sortTasks, SortProperty } from './sort';
@@ -304,15 +304,26 @@ export function registerCommands() {
 		globalState._value = {};
 		globalState.update('hack', 'toClear');// TODO: is this required to clear state?
 	});
-	commands.registerCommand('todomd.goToLine', (lineNumber: number) => {
+	commands.registerCommand('todomd.goToLine', async (lineNumber: number) => {
 		const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
-		const { activeTextEditor } = window;
-		if (!activeTextEditor) {
-			return;
+		let editor;
+		if (!state.theRightFileOpened) {
+			const isOk = await checkDefaultFileAndNotify();
+			if (!isOk) {
+				return;
+			}
+			const document = await getDocumentForDefaultFile();
+			editor = await window.showTextDocument(document);
+		} else {
+			const { activeTextEditor } = window;
+			if (!activeTextEditor) {
+				return;
+			}
+			vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
+			editor = activeTextEditor;
 		}
-		vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
-		activeTextEditor.selection = new vscode.Selection(range.start, range.end);
-		activeTextEditor.revealRange(range, vscode.TextEditorRevealType.Default);
+		editor.selection = new vscode.Selection(range.start, range.end);
+		editor.revealRange(range, vscode.TextEditorRevealType.Default);
 	});
 	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
 		resetAllRecurringTasks(editor);
@@ -415,7 +426,7 @@ async function checkDefaultFileAndNotify(): Promise<boolean> {
 	} else {
 		const exists = fs.existsSync(config.defaultFile);
 		if (!exists) {
-			const shouldSpecify = await window.showErrorMessage('Specified default file does not exist.', specify);
+			const shouldSpecify = await window.showErrorMessage('Default file does not exist.', specify);
 			if (shouldSpecify === specify) {
 				specifyDefaultFile();
 			}

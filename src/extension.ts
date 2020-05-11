@@ -112,7 +112,7 @@ export function activate(extensionContext: vscode.ExtensionContext): void {
 
 export async function updateState(document?: vscode.TextDocument) {
 	if (!document) {
-		document = await workspace.openTextDocument(vscode.Uri.file(config.defaultFile));
+		document = await getDocumentForDefaultFile();
 	}
 	const result = parseDocument(document);
 	state.tasks = result.tasks;
@@ -152,6 +152,10 @@ function disposeEverything(): void {
 			disposable.dispose();
 		}
 	}
+}
+
+export async function getDocumentForDefaultFile() {
+	return await workspace.openTextDocument(vscode.Uri.file(config.defaultFile));
 }
 
 export function deactivate(): void {
