@@ -2,7 +2,7 @@
 	"name": "todo-md",
 	"displayName": "Todo Markdown",
 	"description": "Todo ... something something based on todo.txt format.",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"publisher": "usernamehw",
 	"license": "MIT",
 	"icon": "img/icon.png",
