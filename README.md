@@ -66,12 +66,6 @@ tag | description | example
 {due:2020-05-08..2020-05-12}
 ```
 
-<!-- ### Multiple due dates `,`
-
-```
-{due:Sun,Mon}
-``` -->
-
 ## Comments
 
 Comment is not considered a task. It starts with a sharp sign `#` followed by a space.
@@ -86,6 +80,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `+project` - project
 - `@context` - context
 - `$A` - Priority
+- `>$C` - Priority range (here it matches `$A`, `$B`, `$C`)
 - `$done` - Completed task
 - `$due` - Due or Overdue task
 - `$overdue` - Overdue task
