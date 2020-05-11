@@ -15,14 +15,11 @@ export const DATE_TIME_FORMAT = `${DATE_FORMAT}T${TIME_FORMAT}`;
 /**
  * Get date or datetime ISO 8601
  * Example: `2020-04-21` or `2020-04-30T09:11:17`
+ * Uses local time
  */
 export function getDateInISOFormat(date: Date | Dayjs = new Date(), includeTime = false): string {
 	const format = includeTime ? DATE_TIME_FORMAT : DATE_FORMAT;
-	if (config.useLocalDateTime) {
-		return dayjs(date).format(format);
-	} else {
-		return dayjs(date).utc().format(format);
-	}
+	return dayjs(date).format(format);
 }
 
 export function calcDiffInDays(d1: number | Date, d2: number | Date): number {

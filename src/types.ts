@@ -49,7 +49,6 @@ export interface IConfig {
 	creationDateIncludeTime: boolean;
 	defaultPriority: string;
 	autoArchiveTasks: boolean;
-	useLocalDateTime: boolean;
 
 	sortTagsView: SortTags;
 
