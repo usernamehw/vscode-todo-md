@@ -34,7 +34,6 @@ export const EXTENSION_NAME = 'todomd';
 export const LAST_VISIT_STORAGE_KEY = 'LAST_VISIT_STORAGE_KEY';
 
 export let config = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
-export const subscriptions: vscode.Disposable[] = [];
 export const statusBarEntry = window.createStatusBarItem(1, -20000);
 /**
  * Global variables
@@ -125,8 +124,8 @@ export async function updateState(document?: vscode.TextDocument) {
 	return document;
 }
 function disposeEverything(): void {
-	// if one set - all set
 	if (G.completedTaskDecorationType) {
+		// if one set - all set
 		G.completedTaskDecorationType.dispose();
 		G.commentDecorationType.dispose();
 		G.priority1DecorationType.dispose();
@@ -144,15 +143,8 @@ function disposeEverything(): void {
 		G.dueDecorationType.dispose();
 		G.overdueDecorationType.dispose();
 	}
-	// ================================================================================
 	if (G.changeTextDocumentDisposable) {
 		G.changeTextDocumentDisposable.dispose();
-	}
-
-	for (const disposable of subscriptions) {
-		if (disposable) {
-			disposable.dispose();
-		}
 	}
 }
 
