@@ -3,7 +3,7 @@
 (B) Task with tags #important#new
 (C) Task with context  @home
 (D) Task with due date {due:2020-04-30}
-x (E) Completed task
+(E) Completed task {cm:2020-05-12}
 # comment
 
 
