@@ -346,7 +346,6 @@ function noArchiveFileMessage() {
 }
 
 export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void> {
-	vscode.window.showInformationMessage('❤❤❤');
 	const wEdit = new WorkspaceEdit();
 	let document;
 	if (editor && state.theRightFileOpened) {
