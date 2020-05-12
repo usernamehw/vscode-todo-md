@@ -9,8 +9,8 @@ import { appendTaskToFile, getRandomInt, fancyNumber } from './utils';
 import { sortTasks, SortProperty } from './sort';
 import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext, followLink } from './vscodeUtils';
 import { getDateInISOFormat, DATE_FORMAT } from './timeUtils';
-import { updateTasksTreeView, updateAllTreeViews } from './treeViewProviders/treeViews';
-import { TheTask, Count } from './parse';
+import { updateTasksTreeView, updateAllTreeViews, updateArchivedTasksTreeView } from './treeViewProviders/treeViews';
+import { TheTask, Count, parseDocument } from './parse';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { DueState } from './types';
 
@@ -505,4 +505,14 @@ export function getTaskAtLine(lineNumber: number): TheTask | undefined {
 
 export function formatTask(task: TheTask): string {
 	return task.title + (task.specialTags.count ? ` ${task.specialTags.count.current}/${task.specialTags.count.needed}` : '');
+}
+
+export async function updateArchivedTasks() {
+	if (!config.defaultArchiveFile) {
+		return;
+	}
+	const document = await workspace.openTextDocument(vscode.Uri.file(config.defaultArchiveFile));
+	const parsedArchiveTasks = parseDocument(document);
+	state.archivedTasks = parsedArchiveTasks.tasks;
+	updateArchivedTasksTreeView();
 }

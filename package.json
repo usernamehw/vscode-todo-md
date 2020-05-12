@@ -506,6 +506,10 @@
 					"name": "Contexts"
 				},
 				{
+					"id": "todomd.archived",
+					"name": "Archived"
+				},
+				{
 					"id": "todomd.generic1",
 					"name": "Generic1",
 					"when": "todomd:generic1FilterExists"

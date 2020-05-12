@@ -20,6 +20,7 @@ export interface Items {
 
 export interface State {
 	tasks: TheTask[];
+	archivedTasks: TheTask[];
 	tagsForProvider: TagForProvider[];
 	projectsForProvider: ProjectForProvider[];
 	contextsForProvider: ContextForProvider[];

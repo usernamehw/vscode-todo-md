@@ -10,7 +10,7 @@ dayjs.extend(relativeTime);
 import { IConfig, State } from './types';
 import { parseDocument } from './parse';
 import { updateDecorationsStyle } from './decorations';
-import { registerCommands, resetAllRecurringTasks } from './commands';
+import { registerCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
 import { createTreeViews } from './treeViewProviders/treeViews';
@@ -20,6 +20,7 @@ export const state: State = {
 	tagsForProvider: [],
 	projectsForProvider: [],
 	contextsForProvider: [],
+	archivedTasks: [],
 	commentLines: [],
 	theRightFileOpened: false,
 	fileWasReset: false,
@@ -71,6 +72,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	onChangeActiveTextEditor(window.activeTextEditor);
 	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 	updateAllTreeViews();
+	updateArchivedTasks();
 
 	const isNewDay = checkIfNewDayArrived();
 	if (isNewDay && !state.theRightFileOpened) {

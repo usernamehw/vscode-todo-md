@@ -15,6 +15,7 @@ export const tagProvider = new TagProvider([]);
 export const projectProvider = new ProjectProvider([]);
 export const contextProvider = new ContextProvider([]);
 export const taskProvider = new TaskProvider([]);
+export const archivedProvider = new TaskProvider([]);
 const generic1Provider = new TaskProvider([]);
 const generic2Provider = new TaskProvider([]);
 const generic3Provider = new TaskProvider([]);
@@ -22,6 +23,7 @@ let tagsView: vscode.TreeView<any>;
 let projectView: vscode.TreeView<any>;
 let contextView: vscode.TreeView<any>;
 let tasksView: vscode.TreeView<any>;
+let archivedView: vscode.TreeView<any>;
 let generic1View: vscode.TreeView<any>;
 let generic2View: vscode.TreeView<any>;
 let generic3View: vscode.TreeView<any>;
@@ -44,6 +46,10 @@ export function createTreeViews() {
 
 	tasksView = vscode.window.createTreeView(`${EXTENSION_NAME}.tasks`, {
 		treeDataProvider: taskProvider,
+	});
+
+	archivedView = vscode.window.createTreeView(`${EXTENSION_NAME}.archived`, {
+		treeDataProvider: archivedProvider,
 	});
 
 	if (config.treeViews.length) {
@@ -133,6 +139,12 @@ export function updateTasksTreeView() {
 	}
 	taskProvider.refresh(tasksForProvider);
 	tasksView.title = `tasks (${tasksForProvider.length}) ${state.taskTreeViewFilterValue}`;
+}
+
+export function updateArchivedTasksTreeView() {
+	const archivedTasks = state.archivedTasks;
+	archivedProvider.refresh(archivedTasks);
+	archivedView.title = `archived (${archivedTasks.length})`;
 }
 
 function getTasksForTreeView() {
