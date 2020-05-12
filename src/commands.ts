@@ -354,9 +354,7 @@ export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void>
 	} else {
 		document = await getDocumentForDefaultFile();
 	}
-	console.log('state.tasks', state.tasks);
 	for (const task of state.tasks) {
-		console.log('💚', task);
 		if (task.isRecurring && task.done) {
 			const line = document.lineAt(task.ln);
 			removeDoneSymbol(wEdit, document.uri, line);
