@@ -331,6 +331,9 @@ export function registerCommands() {
 			followLink(link);
 		}
 	});
+	commands.registerCommand('todomd.setLastVisitYesterday', () => {
+		globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(1, 'day').toDate());
+	});
 }
 function archiveTask(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine, shouldDelete: boolean) {
 	appendTaskToFile(line.text, config.defaultArchiveFile);
@@ -343,26 +346,29 @@ function noArchiveFileMessage() {
 }
 
 export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void> {
-	// const wEdit = new WorkspaceEdit();
-	// let document;
-	// if (editor) {
-	// 	document = editor.document;
-	// } else {
-	// 	document = await getDocumentForDefaultFile();
-	// }
-	// for (const task of state.tasks) {
-	// 	if (task.isRecurring && task.done) {
-	// 		const line = document.lineAt(task.ln);
-	// 		removeDoneSymbol(wEdit, document.uri, line);
-	// 		removeCompletionDate(wEdit, document.uri, line);
-	// 		const count = task.specialTags.count;
-	// 		if (count) {
-	// 			setCountCurrentValue(wEdit, document.uri, count, '0');
-	// 		}
-	// 	}
-	// }
-	// await workspace.applyEdit(wEdit);
-	// document.save();
+	vscode.window.showInformationMessage('❤❤❤');
+	const wEdit = new WorkspaceEdit();
+	let document;
+	if (editor && state.theRightFileOpened) {
+		document = editor.document;
+	} else {
+		document = await getDocumentForDefaultFile();
+	}
+	console.log('state.tasks', state.tasks);
+	for (const task of state.tasks) {
+		console.log('💚', task);
+		if (task.isRecurring && task.done) {
+			const line = document.lineAt(task.ln);
+			removeDoneSymbol(wEdit, document.uri, line);
+			removeCompletionDate(wEdit, document.uri, line);
+			const count = task.specialTags.count;
+			if (count) {
+				setCountCurrentValue(wEdit, document.uri, count, '0');
+			}
+		}
+	}
+	await workspace.applyEdit(wEdit);
+	document.save();
 }
 async function incrementCountForTask(document: vscode.TextDocument, ln: number, task: TheTask) {
 	const line = document.lineAt(ln);

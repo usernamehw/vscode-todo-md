@@ -63,13 +63,20 @@ export class G {
 
 export let globalState: vscode.Memento;
 
-export function activate(extensionContext: vscode.ExtensionContext): void {
+export async function activate(extensionContext: vscode.ExtensionContext) {
 	globalState = extensionContext.globalState;
 	updateDecorationsStyle();
 	registerCommands();
 	createTreeViews();
 	onChangeActiveTextEditor(window.activeTextEditor);
+	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 	updateAllTreeViews();
+
+	const isNewDay = checkIfNewDayArrived();
+	if (isNewDay && !state.theRightFileOpened) {
+		await updateState();
+		resetAllRecurringTasks();
+	}
 
 	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
 		if (!e.affectsConfiguration(EXTENSION_NAME)) return;

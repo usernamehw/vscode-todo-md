@@ -277,6 +277,11 @@
 				"command": "todomd.followLink",
 				"title": "Follow link",
 				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.setLastVisitYesterday",
+				"title": "DEV: Set last visit yesterday",
+				"category": "Todo MD"
 			}
 		],
 		"keybindings": [

@@ -11,8 +11,6 @@ import dayjs from 'dayjs';
 
 export const THE_RIGHT_FILE = 'todomd:isActive';
 
-window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
-
 export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): void {
 	if (isTheRightFileFormat(editor)) {
 		enterTheRightFile(editor!);
@@ -91,11 +89,11 @@ export async function exitTheRightFile() {
 	updateAllTreeViews();
 }
 
-export function updateEverything(editor?: vscode.TextEditor): void {
+export async function updateEverything(editor?: vscode.TextEditor) {
 	if (!editor) {
 		return;
 	}
-	updateState(editor.document);
+	await updateState(editor.document);
 	updateEditorDecorations(editor);
 	updateStatusBarEntry();
 	updateAllTreeViews();
