@@ -1,3 +1,7 @@
+## 0.0.12 `12 May 2020`
+
+- 🐛 Fix complete a task doesn't work
+
 ## 0.0.11 `11 May 2020`
 
 - 💥 Remove the setting and always use local time
