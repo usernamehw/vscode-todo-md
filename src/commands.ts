@@ -345,6 +345,7 @@ function archiveTask(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine, shou
 	if (shouldDelete) {
 		wEdit.delete(uri, line.rangeIncludingLineBreak);
 	}
+	updateArchivedTasks();
 }
 function noArchiveFileMessage() {
 	vscode.window.showWarningMessage('No default archive file specified');
