@@ -29,7 +29,6 @@ export function registerCommands() {
 		if (treeItem) {
 			ln = treeItem.task.ln;
 			document = await updateState();
-			updateAllTreeViews();
 		} else {
 			if (!editor) {
 				return;
@@ -43,10 +42,13 @@ export function registerCommands() {
 			return;
 		}
 		if (task.specialTags.count) {
-			incrementCountForTask(document, ln, task);
+			await incrementCountForTask(document, ln, task);
 		} else {
-			toggleTaskAtLine(ln, document);
+			await toggleTaskAtLine(ln, document);
 		}
+
+		await updateState();
+		updateAllTreeViews();
 	});
 	commands.registerTextEditorCommand('todomd.archiveCompletedTasks', editor => {
 		if (!config.defaultArchiveFile) {
