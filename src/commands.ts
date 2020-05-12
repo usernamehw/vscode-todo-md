@@ -12,6 +12,7 @@ import { getDateInISOFormat, DATE_FORMAT } from './timeUtils';
 import { updateTasksTreeView, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { TheTask, Count } from './parse';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
+import { DueState } from './types';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
@@ -155,11 +156,13 @@ export function registerCommands() {
 			vscode.window.showInformationMessage('No tasks');
 			return;
 		}
-		const dueTasks = tasks.filter(t => t.isDue);
+		const overdueTasks = tasks.filter(t => t.isDue === DueState.overdue);
+		const dueTasks = tasks.filter(t => t.isDue === DueState.due);
 		const notDueTasks = tasks.filter(t => !t.isDue && !t.due);
+		const sortedOverdueTasks = sortTasks(overdueTasks, SortProperty.priority);
 		const sortedDueTasks = sortTasks(dueTasks, SortProperty.priority);
 		const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
-		tasks = [...sortedDueTasks, ...sortedNotDueTasks].slice(0, config.getNextNumberOfTasks);
+		tasks = [...sortedOverdueTasks, ...sortedDueTasks, ...sortedNotDueTasks].slice(0, config.getNextNumberOfTasks);
 
 		vscode.window.showInformationMessage(tasks.map((task, i) => `${fancyNumber(i + 1)} ${formatTask(task)}`).join('\n'), {
 			modal: true,
