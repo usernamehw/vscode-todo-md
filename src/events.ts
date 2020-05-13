@@ -1,6 +1,6 @@
 import { window, workspace } from 'vscode';
 import * as vscode from 'vscode';
-import { G, globalState, LAST_VISIT_STORAGE_KEY, config, updateState, state } from './extension';
+import { G, LAST_VISIT_STORAGE_KEY, config, updateState, state } from './extension';
 import { updateCompletions } from './completionProviders';
 import { showStatusBarEntry, updateStatusBarEntry, hideStatusBarEntry } from './statusBar';
 import { updateEditorDecorations } from './decorations';
@@ -22,10 +22,10 @@ export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined):
 }
 
 export function checkIfNewDayArrived(): boolean {
-	const lastVisit = globalState.get<string | undefined>(LAST_VISIT_STORAGE_KEY);
+	const lastVisit = state.extensionContext.globalState.get<string | undefined>(LAST_VISIT_STORAGE_KEY);
 	if (lastVisit && !dayjs().isSame(lastVisit, 'day')) {
 		// window.showInformationMessage('new day');
-		globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
+		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
 		state.newDayArrived = true;
 		state.fileWasReset = false;
 		return true;
@@ -33,7 +33,7 @@ export function checkIfNewDayArrived(): boolean {
 	// first visit ever?
 	if (!lastVisit) {
 		// window.showInformationMessage('first ever visit');
-		globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
+		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
 	}
 	return false;
 }
