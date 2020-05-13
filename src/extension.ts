@@ -3,8 +3,11 @@ import * as vscode from 'vscode';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import isBetween from 'dayjs/plugin/isBetween';
+import isoWeek from 'dayjs/plugin/isoWeek';
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
+dayjs.extend(isoWeek);
+dayjs.Ls.en.weekStart = 1;
 
 
 import { IConfig, State, TagForProvider, ProjectForProvider, ContextForProvider, Items, SortTags } from './types';

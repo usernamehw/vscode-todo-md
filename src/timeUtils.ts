@@ -24,21 +24,28 @@ export function getDateInISOFormat(date: Date | Dayjs = new Date(), includeTime 
 
 interface DueReturn {
 	isRecurring: boolean;
-	isRange: boolean;
 	isDue: DueState;
 }
 const dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?$/;
 
-export function parseDue(due: string): DueReturn[] {
+export function parseDue(due: string, targetDate = new Date()): DueReturn {
 	const dueDates = due.split(',').filter(d => d.length);
-	return dueDates.map(dueDate => parseDueDate(dueDate));
+	const result = dueDates.map(dueDate => parseDueDate(dueDate, targetDate));
+
+	const isRecurring = result.some(r => r.isRecurring);
+	const hasOverdue = result.some(r => r.isDue === DueState.overdue);
+	const hasDue = result.some(r => r.isDue === DueState.due);
+	const isDue = hasOverdue ? DueState.overdue : hasDue ? DueState.due : DueState.notDue;
+	return {
+		isDue,
+		isRecurring,
+	};
 }
 
-function parseDueDate(due: string): DueReturn {
+function parseDueDate(due: string, targetDate: Date): DueReturn {
 	if (due === 'today') {
 		return {
 			isRecurring: false,
-			isRange: false,
 			isDue: DueState.due,
 		};
 	}
@@ -57,29 +64,27 @@ function parseDueDate(due: string): DueReturn {
 		const dueRecurringPart = match[5];
 
 		if (!dueRecurringPart) {
-			isDue = isDueExactDate(dateObject);
+			isDue = isDueExactDate(dateObject, targetDate);
 			isRecurring = false;
 		} else {
 			isRecurring = true;
-			isDue = isDueWithDate(dueRecurringPart, dateObject);
+			isDue = isDueWithDate(dueRecurringPart, dateObject, targetDate);
 		}
 	} else {
 		// Due date without starting date
 		isRecurring = true;
-		isDue = isDueToday(due);
+		isDue = isDueToday(due, targetDate);
 	}
 	return {
 		isDue,
 		isRecurring,
-		isRange: false,
 	};
 }
-
-function isDueExactDate(date: Date): DueState {
-	if (dayjs().isBefore(date)) {
+function isDueExactDate(date: Date, targetDate: Date): DueState {
+	if (dayjs(targetDate).isBefore(date)) {
 		return DueState.notDue;
 	}
-	const diffInDays = dayjs(date).diff(dayjs(), 'day');
+	const diffInDays = dayjs(date).diff(dayjs(targetDate), 'day');
 	return diffInDays === 0 ? DueState.due : DueState.overdue;
 }
 
@@ -95,46 +100,44 @@ function isDueBetween(d1: string, d2: string): DueReturn {
 	}
 	return {
 		isRecurring: false,
-		isRange: true,
 		isDue,
 	};
 }
 
-function isDueToday(due: string): DueState {
-	if (due === 'ed') {
+function isDueToday(dueString: string, targetDate: Date): DueState {
+	if (dueString === 'ed') {
 		return DueState.due;
 	}
 
-	const day = new Date().getDay();
-	if (due === 'Sun' && day === 0) {
+	const day = targetDate.getDay();
+	if (dueString === 'Sun' && day === 0) {
 		return DueState.due;
-	} else if (due === 'Mon' && day === 1) {
+	} else if (dueString === 'Mon' && day === 1) {
 		return DueState.due;
-	} else if (due === 'Tue' && day === 2) {
+	} else if (dueString === 'Tue' && day === 2) {
 		return DueState.due;
-	} else if (due === 'Wed' && day === 3) {
+	} else if (dueString === 'Wed' && day === 3) {
 		return DueState.due;
-	} else if (due === 'Thu' && day === 4) {
+	} else if (dueString === 'Thu' && day === 4) {
 		return DueState.due;
-	} else if (due === 'Fri' && day === 5) {
+	} else if (dueString === 'Fri' && day === 5) {
 		return DueState.due;
-	} else if (due === 'Sat' && day === 6) {
+	} else if (dueString === 'Sat' && day === 6) {
 		return DueState.due;
 	}
 	return DueState.notDue;
 }
 
-export function isDueWithDate(dueDate: string, dueDateStart: number | Date | undefined, date: number | Date = new Date()): DueState {
-	const targetTimestamp: number = +date;
+export function isDueWithDate(dueString: string, dueDateStart: number | Date | undefined, targetDate = new Date()): DueState {
 	if (dueDateStart === undefined) {
 		throw new Error('dueDate was specified, but dueDateStart is missing');
 	}
-	const match = /(?!every|e)\s?(\d+)?\s?(d|days?)/.exec(dueDate);
+	const match = /(?!every|e)\s?(\d+)?\s?(d|days?)/.exec(dueString);
 	if (match) {
 		const interval = match[1] ? +match[1] : 1;
 		const unit = match[2];
 		if (/^(d|days?)$/.test(unit)) {
-			const diffInDays = dayjs(targetTimestamp).diff(dueDateStart, 'day');// Should this call due exact date?
+			const diffInDays = dayjs(targetDate).diff(dueDateStart, 'day');
 
 			if (diffInDays % interval === 0) return DueState.due;
 		}

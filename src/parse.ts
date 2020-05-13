@@ -57,10 +57,8 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 				if (specialTag === 'due') {
 					dueRange = range;
 					const result = parseDue(value);
-					isRecurring = result.some(r => r.isRecurring);
-					const hasOverdue = result.some(r => r.isDue === DueState.overdue);
-					const hasDue = result.some(r => r.isDue === DueState.due);
-					isDue = hasOverdue ? DueState.overdue : hasDue ? DueState.due : DueState.notDue;
+					isRecurring = result.isRecurring;
+					isDue = result.isDue;
 					due = value;
 				} else if (specialTag === 'cr') {
 					specialTagRanges.push(range);

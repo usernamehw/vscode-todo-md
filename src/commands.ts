@@ -8,7 +8,7 @@ import { config } from './extension';
 import { appendTaskToFile, getRandomInt, fancyNumber } from './utils';
 import { sortTasks, SortProperty } from './sort';
 import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext, followLink } from './vscodeUtils';
-import { getDateInISOFormat, DATE_FORMAT } from './timeUtils';
+import { getDateInISOFormat, DATE_FORMAT, parseDue } from './timeUtils';
 import { updateTasksTreeView, updateAllTreeViews, updateArchivedTasksTreeView } from './treeViewProviders/treeViews';
 import { TheTask, Count, parseDocument } from './parse';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
@@ -339,6 +339,48 @@ export function registerCommands() {
 	commands.registerCommand('todomd.setLastVisitYesterday', () => {
 		globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(1, 'day').toDate());
 	});
+	commands.registerCommand('todomd.agenda', () => {
+		const panel = vscode.window.createWebviewPanel(
+			'agenda',
+			'Agenda',
+			vscode.ViewColumn.Beside, // Editor column to show the new webview panel in.
+			{
+				enableScripts: true,
+			}
+		);
+		panel.webview.html = getWebviewContent(state.tasks);
+	});
+}
+function getWebviewContent(tasks: TheTask[]) {
+	const weekStart = dayjs().startOf('isoWeek');
+	const week = [];
+	const tasksWithDue = tasks.filter(t => t.due);
+	for (let i = 0; i < 7; i++) {
+		const localDate = new Date(weekStart.add(i, 'day').format(DATE_FORMAT).slice(0, 10));
+		const dueOnDate = tasksWithDue.filter(t => parseDue(t.due!, localDate).isDue);
+		week.push({
+			date: localDate,
+			dueOnDate,
+		});
+	}
+	let tasksAsHtml = '';
+	for (const day of week) {
+		tasksAsHtml += `${day.date}<br>`;
+		for (const dueTask of day.dueOnDate) {
+			tasksAsHtml += `${dueTask.title}<br>`;
+		}
+	}
+	return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Coding</title>
+</head>
+<body>
+    ${tasksAsHtml}
+</body>
+</html>`;
 }
 function archiveTask(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine, shouldDelete: boolean) {
 	appendTaskToFile(line.text, config.defaultArchiveFile);
