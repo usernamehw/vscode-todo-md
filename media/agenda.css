@@ -1,3 +1,7 @@
 .day {
 	border-bottom: 1px solid #808080;
 }
+
+.day.today {
+	background-color: rgba(0, 0, 0, 0.2);
+}

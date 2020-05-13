@@ -32,7 +32,8 @@ function getWebviewContent(webview: vscode.Webview, tasks: TheTask[]) {
 	}
 	let tasksAsHtml = '';
 	for (const day of week) {
-		tasksAsHtml += '<div class="day">';
+		const isToday = dayjs(day.date).isSame(dayjs(), 'day') ? ' today' : '';
+		tasksAsHtml += `<div class="day${isToday}">`;
 		tasksAsHtml += `${dayjs(day.date).format('dddd')}<br>`;
 		for (const dueTask of day.dueOnDate) {
 			tasksAsHtml += `${dueTask.title}<br>`;
@@ -40,7 +41,7 @@ function getWebviewContent(webview: vscode.Webview, tasks: TheTask[]) {
 		tasksAsHtml += '</div>';
 	}
 	const scriptPathOnDisk = vscode.Uri.file(
-		path.join(state.extensionContext!.extensionPath, 'media', 'agenda.css')
+		path.join(state.extensionContext.extensionPath, 'media', 'agenda.css')
 	);
 
 	// And the uri we use to load this script in the webview
