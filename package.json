@@ -212,6 +212,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.calendar",
+				"title": "Calendar",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.archiveCompletedTasks",
 				"title": "Archive completed Tasks",
 				"category": "Todo MD"

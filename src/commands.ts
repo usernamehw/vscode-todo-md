@@ -14,6 +14,7 @@ import { TheTask, Count, parseDocument } from './parse';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { DueState } from './types';
 import { createAgendaWebview } from './webview/agenda';
+import { createCalendarWebview } from './webview/calendar';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
@@ -342,6 +343,9 @@ export function registerCommands() {
 	});
 	commands.registerCommand('todomd.agenda', () => {
 		createAgendaWebview();
+	});
+	commands.registerCommand('todomd.calendar', () => {
+		createCalendarWebview();
 	});
 }
 

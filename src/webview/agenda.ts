@@ -15,10 +15,13 @@ export function createAgendaWebview() {
 			enableScripts: true,
 		}
 	);
-	panel.webview.html = getWebviewContent(panel.webview, state.tasks);
+	const cssFilePath = vscode.Uri.file(
+		path.join(state.extensionContext.extensionPath, 'media', 'agenda.css')
+	);
+	panel.webview.html = getWebviewContent(panel.webview, cssFilePath, state.tasks);
 }
 
-function getWebviewContent(webview: vscode.Webview, tasks: TheTask[]) {
+function getWebviewContent(webview: vscode.Webview, cssFilePath: vscode.Uri, tasks: TheTask[]) {
 	const weekStart = dayjs().startOf('isoWeek');
 	const week = [];
 	const tasksWithDue = tasks.filter(t => t.due);
@@ -40,12 +43,9 @@ function getWebviewContent(webview: vscode.Webview, tasks: TheTask[]) {
 		}
 		tasksAsHtml += '</div>';
 	}
-	const scriptPathOnDisk = vscode.Uri.file(
-		path.join(state.extensionContext.extensionPath, 'media', 'agenda.css')
-	);
 
 	// And the uri we use to load this script in the webview
-	const cssUri = webview.asWebviewUri(scriptPathOnDisk);
+	const cssUri = webview.asWebviewUri(cssFilePath);
 	return `<!DOCTYPE html>
 <html lang="en">
 <head>
