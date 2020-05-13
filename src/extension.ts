@@ -69,6 +69,7 @@ export let globalState: vscode.Memento;
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
 	globalState = extensionContext.globalState;
+	state.extensionContext = extensionContext;
 	updateDecorationsStyle();
 	registerCommands();
 	createTreeViews();

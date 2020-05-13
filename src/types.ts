@@ -31,6 +31,7 @@ export interface State {
 	fileWasReset: boolean;
 	newDayArrived: boolean;
 	taskTreeViewFilterValue: string;
+	extensionContext?: vscode.ExtensionContext;
 }
 
 export const enum DueState {
