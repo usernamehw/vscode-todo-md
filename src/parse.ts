@@ -166,9 +166,6 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 }
 interface ParsedStuff {
 	tasks: TheTask[];
-	sortedTags: TagForProvider[];
-	projects: ProjectForProvider[];
-	contexts: ContextForProvider[];
 	commentLines: Range[];
 }
 // TODO: this function must only parse document and not group tags/projects/contexts
@@ -187,84 +184,8 @@ export function parseDocument(document: vscode.TextDocument): ParsedStuff {
 		tasks.push(parsedLine);
 	}
 
-	const tagMap: {
-		[tag: string]: Items[];
-	} = {};
-	const projectMap: {
-		[key: string]: Items[];
-	} = {};
-	const contextMap: {
-		[key: string]: Items[];
-	} = {};
-	for (const task of tasks) {
-		// Tags grouping
-		for (const tag of task.tags) {
-			if (!tagMap[tag]) {
-				tagMap[tag] = [];
-			}
-			tagMap[tag].push({
-				lineNumber: task.ln,
-				title: task.title,
-			});
-		}
-		// Projects grouping
-		if (task.projects.length) {
-			for (const project of task.projects) {
-				if (!projectMap[project]) {
-					projectMap[project] = [];
-				}
-				projectMap[project].push({
-					lineNumber: task.ln,
-					title: task.title,
-				});
-			}
-		}
-		// Contexts grouping
-		if (task.contexts.length) {
-			for (const context of task.contexts) {
-				if (!contextMap[context]) {
-					contextMap[context] = [];
-				}
-				contextMap[context].push({
-					lineNumber: task.ln,
-					title: task.title,
-				});
-			}
-		}
-	}
-	const tags = [];
-	for (const key in tagMap) {
-		tags.push({
-			tag: key,
-			items: tagMap[key],
-		});
-	}
-	let sortedTags: TagForProvider[];
-	if (config.sortTagsView === SortTags.alphabetic) {
-		sortedTags = tags.sort((a, b) => a.tag.localeCompare(b.tag));
-	} else {
-		sortedTags = tags.sort((a, b) => b.items.length - a.items.length);
-	}
-
-	const projects = [];
-	for (const key in projectMap) {
-		projects.push({
-			project: key,
-			items: projectMap[key],
-		});
-	}
-	const contexts = [];
-	for (const key in contextMap) {
-		contexts.push({
-			context: key,
-			items: contextMap[key],
-		});
-	}
 	return {
 		tasks,
-		sortedTags,
-		projects,
-		contexts,
 		commentLines,
 	};
 }

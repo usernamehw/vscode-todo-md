@@ -7,8 +7,8 @@ dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
 
 
-import { IConfig, State } from './types';
-import { parseDocument } from './parse';
+import { IConfig, State, TagForProvider, ProjectForProvider, ContextForProvider, Items, SortTags } from './types';
+import { parseDocument, TheTask } from './parse';
 import { updateDecorationsStyle } from './decorations';
 import { registerCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
@@ -122,10 +122,11 @@ export async function updateState(document?: vscode.TextDocument) {
 	}
 	const result = parseDocument(document);
 	state.tasks = result.tasks;
-	state.tagsForProvider = result.sortedTags;
-	state.projectsForProvider = result.projects;
-	state.contextsForProvider = result.contexts;
 	state.commentLines = result.commentLines;
+	const forProvider = groupAndSortForProvider(state.tasks);
+	state.tagsForProvider = forProvider.sortedTags;
+	state.projectsForProvider = forProvider.projects;
+	state.contextsForProvider = forProvider.contexts;
 	return document;
 }
 function disposeEverything(): void {
@@ -151,6 +152,92 @@ function disposeEverything(): void {
 	if (G.changeTextDocumentDisposable) {
 		G.changeTextDocumentDisposable.dispose();
 	}
+}
+
+interface ForProvider {
+	sortedTags: TagForProvider[];
+	projects: ProjectForProvider[];
+	contexts: ContextForProvider[];
+}
+export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
+	const tagMap: {
+		[tag: string]: Items[];
+	} = {};
+	const projectMap: {
+		[key: string]: Items[];
+	} = {};
+	const contextMap: {
+		[key: string]: Items[];
+	} = {};
+	for (const task of tasks) {
+		// Tags grouping
+		for (const tag of task.tags) {
+			if (!tagMap[tag]) {
+				tagMap[tag] = [];
+			}
+			tagMap[tag].push({
+				lineNumber: task.ln,
+				title: task.title,
+			});
+		}
+		// Projects grouping
+		if (task.projects.length) {
+			for (const project of task.projects) {
+				if (!projectMap[project]) {
+					projectMap[project] = [];
+				}
+				projectMap[project].push({
+					lineNumber: task.ln,
+					title: task.title,
+				});
+			}
+		}
+		// Contexts grouping
+		if (task.contexts.length) {
+			for (const context of task.contexts) {
+				if (!contextMap[context]) {
+					contextMap[context] = [];
+				}
+				contextMap[context].push({
+					lineNumber: task.ln,
+					title: task.title,
+				});
+			}
+		}
+	}
+	const tags = [];
+	for (const key in tagMap) {
+		tags.push({
+			tag: key,
+			items: tagMap[key],
+		});
+	}
+	let sortedTags: TagForProvider[];
+	if (config.sortTagsView === SortTags.alphabetic) {
+		sortedTags = tags.sort((a, b) => a.tag.localeCompare(b.tag));
+	} else {
+		sortedTags = tags.sort((a, b) => b.items.length - a.items.length);
+	}
+
+	const projects = [];
+	for (const key in projectMap) {
+		projects.push({
+			project: key,
+			items: projectMap[key],
+		});
+	}
+	const contexts = [];
+	for (const key in contextMap) {
+		contexts.push({
+			context: key,
+			items: contextMap[key],
+		});
+	}
+	return {
+		contexts,
+		projects,
+		sortedTags,
+	};
 }
 
 export async function getDocumentForDefaultFile() {
