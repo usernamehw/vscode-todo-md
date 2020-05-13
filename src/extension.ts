@@ -18,6 +18,7 @@ import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
 import { createTreeViews } from './treeViewProviders/treeViews';
 
+// @ts-ignore
 export const state: State = {
 	tasks: [],
 	tagsForProvider: [],
@@ -65,10 +66,7 @@ export class G {
 	static overdueDecorationType: vscode.TextEditorDecorationType;
 }
 
-export let globalState: vscode.Memento;
-
 export async function activate(extensionContext: vscode.ExtensionContext) {
-	globalState = extensionContext.globalState;
 	state.extensionContext = extensionContext;
 	updateDecorationsStyle();
 	registerCommands();

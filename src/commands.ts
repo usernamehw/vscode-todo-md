@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import dayjs from 'dayjs';
 
-import { state, updateState, globalState, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY } from './extension';
+import { state, updateState, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY } from './extension';
 import { config } from './extension';
 import { appendTaskToFile, getRandomInt, fancyNumber } from './utils';
 import { sortTasks, SortProperty } from './sort';
@@ -304,8 +304,8 @@ export function registerCommands() {
 	});
 	commands.registerCommand('todomd.clearGlobalState', () => {
 	// @ts-ignore No API
-		globalState._value = {};
-		globalState.update('hack', 'toClear');// TODO: is this required to clear state?
+		state.extensionContext.globalState._value = {};
+		state.extensionContext.globalState.update('hack', 'toClear');// TODO: is this required to clear state?
 	});
 	commands.registerCommand('todomd.goToLine', async (lineNumber: number) => {
 		const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
@@ -338,7 +338,7 @@ export function registerCommands() {
 		}
 	});
 	commands.registerCommand('todomd.setLastVisitYesterday', () => {
-		globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(1, 'day').toDate());
+		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(1, 'day').toDate());
 	});
 	commands.registerCommand('todomd.agenda', () => {
 		createAgendaWebview();
