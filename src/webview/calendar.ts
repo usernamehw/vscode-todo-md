@@ -36,7 +36,7 @@ function getHeaderHtml() {
 	return str;
 }
 function getCell(text: string, dateStr: string) {
-	return `<td data-id="${dateStr}">${text}</td>`;
+	return `<td class="date" data-id="${dateStr}">${text}</td>`;
 }
 function getWebviewContent(webview: vscode.Webview, cssUri: vscode.Uri, jsUri: vscode.Uri) {
 	let htmlAsText = `<table>${getHeaderHtml()}`;
@@ -78,6 +78,10 @@ function getWebviewContent(webview: vscode.Webview, cssUri: vscode.Uri, jsUri: v
 </body>
 </html>`;
 }
+
+// setTimeout(() => {
+// 	createCalendarWebview();
+// }, 200);
 
 function getNonce() {
 	let text = '';
