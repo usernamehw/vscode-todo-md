@@ -125,7 +125,7 @@
 		"spaced-comment": [1, "always", { "exceptions": ["/"] }],
 		"no-sparse-arrays": 1,
 		"no-unexpected-multiline": 1,
-		"no-unreachable": 1,
+		"no-unreachable": 0,
 		"use-isnan": 1,
 		"valid-typeof": [1, { "requireStringLiterals": true }],
 		"array-callback-return": 1,
