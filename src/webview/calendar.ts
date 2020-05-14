@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 import { state } from '../extension';
 import { TheTask } from '../parse';
-import { DATE_FORMAT, parseDue, dayjsUtcToLocal } from '../timeUtils';
+import { DATE_FORMAT, parseDue } from '../timeUtils';
 
 export function createCalendarWebview() {
 	const panel = vscode.window.createWebviewPanel(
