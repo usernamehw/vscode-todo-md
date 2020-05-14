@@ -52,7 +52,7 @@ function getWebviewContent(webview: vscode.Webview, cssFilePath: vscode.Uri, tas
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="${cssUri}">
-    <title>Cat Coding</title>
+    <title>Agenda</title>
 </head>
 <body>
     ${tasksAsHtml}

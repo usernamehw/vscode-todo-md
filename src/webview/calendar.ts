@@ -70,7 +70,7 @@ function getWebviewContent(webview: vscode.Webview, cssUri: vscode.Uri, jsUri: v
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="${webviewUri}">
-    <title>Cat Coding</title>
+    <title>Calendar</title>
 </head>
 <body>
 	${htmlAsText}
