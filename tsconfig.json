@@ -5,7 +5,8 @@
 		"outDir": "out",
 		"suppressImplicitAnyIndexErrors": true,
 		"lib": [
-			"ES2019"
+			"ES2019",
+			"DOM"
 		],
 		"sourceMap": true,
 		"rootDir": "src",
