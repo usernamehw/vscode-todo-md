@@ -89,7 +89,6 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 
 	function updateConfig(): void {
 		config = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
-		// TODO: validation function for the entire config
 
 		disposeEverything();
 		updateDecorationsStyle();
