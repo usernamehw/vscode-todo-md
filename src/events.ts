@@ -83,6 +83,9 @@ export async function exitTheRightFile() {
 		G.projectAutocompleteDisposable.dispose();
 		G.generalAutocompleteDisposable.dispose();
 	}
+	if (G.hoverDisposable) {
+		G.hoverDisposable.dispose();
+	}
 	hideStatusBarEntry();
 	setContext(THE_RIGHT_FILE, false);
 	await updateState();

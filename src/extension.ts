@@ -17,6 +17,7 @@ import { registerCommands, resetAllRecurringTasks, updateArchivedTasks } from '.
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
 import { createTreeViews } from './treeViewProviders/treeViews';
+import { updateHover } from './hover';
 
 // @ts-ignore
 export const state: State = {
@@ -47,6 +48,7 @@ export class G {
 	static generalAutocompleteDisposable: vscode.Disposable;
 
 	static changeTextDocumentDisposable: vscode.Disposable;
+	static hoverDisposable: vscode.Disposable;
 
 	static completedTaskDecorationType: vscode.TextEditorDecorationType;
 	static commentDecorationType: vscode.TextEditorDecorationType;
@@ -74,6 +76,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	onChangeActiveTextEditor(window.activeTextEditor);
 	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 	updateAllTreeViews();
+	updateHover();
 	updateArchivedTasks();
 
 	const isNewDay = checkIfNewDayArrived();
@@ -97,25 +100,6 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 
 	extensionContext.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));
 }
-
-// vscode.languages.registerHoverProvider({ scheme: 'file' }, {
-// 	provideHover(document, position, token) {
-// 		const dateRegexp = /\d{4}-\d{2}-\d{2}/;
-// 		const range = document.getWordRangeAtPosition(position, dateRegexp);
-// 		if (!range) {
-// 			return undefined;
-// 		}
-// 		const word = document.getText(range);
-// 		const diff = dayjs().to(dayjs(word));
-// 		if (word) {
-// 			return new vscode.Hover({
-// 				language: 'Hello language',
-// 				value: String(diff),
-// 			});
-// 		}
-// 		return undefined;
-// 	},
-// });
 
 export async function updateState(document?: vscode.TextDocument) {
 	if (!document) {

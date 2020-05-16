@@ -207,6 +207,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.setDate",
+				"title": "Set date",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.agenda",
 				"title": "Agenda",
 				"category": "Todo MD"
@@ -548,6 +553,7 @@
 	"devDependencies": {
 		"@types/chai": "^4.2.11",
 		"@types/glob": "^7.1.1",
+		"@types/markdown-table": "^2.0.0",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^12.12.39",
 		"@types/vscode": "^1.42.0",
@@ -568,6 +574,7 @@
 		"webpack-strip-block": "^0.2.0"
 	},
 	"dependencies": {
-		"dayjs": "^1.8.26"
+		"dayjs": "^1.8.26",
+		"markdown-table": "^2.0.0"
 	}
 }

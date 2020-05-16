@@ -345,7 +345,9 @@ export function registerCommands() {
 		createAgendaWebview();
 	});
 	commands.registerCommand('todomd.calendar', () => {
-		createCalendarWebview();
+		// createCalendarWebview();
+	});
+	commands.registerCommand('todomd.setDate', (date: string, position: vscode.Position) => {
 	});
 }
 
