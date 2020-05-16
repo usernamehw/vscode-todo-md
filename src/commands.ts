@@ -8,7 +8,7 @@ import { config } from './extension';
 import { appendTaskToFile, getRandomInt, fancyNumber } from './utils';
 import { sortTasks, SortProperty } from './sort';
 import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext, followLink } from './vscodeUtils';
-import { getDateInISOFormat, DATE_FORMAT, parseDue } from './timeUtils';
+import { getDateInISOFormat, DATE_FORMAT } from './timeUtils';
 import { updateTasksTreeView, updateAllTreeViews, updateArchivedTasksTreeView } from './treeViewProviders/treeViews';
 import { TheTask, Count, parseDocument } from './parse';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
@@ -65,7 +65,7 @@ export function registerCommands() {
 		const wEdit = new WorkspaceEdit();
 		for (const task of completedTasks) {
 			const line = editor.document.lineAt(task.ln);
-			archiveTask(wEdit, editor.document.uri, line, !task.isRecurring);
+			archiveTask(wEdit, editor.document.uri, line, !task.due?.isRecurring);
 		}
 		workspace.applyEdit(wEdit);
 	});
@@ -82,7 +82,7 @@ export function registerCommands() {
 				continue;
 			}
 			const line = editor.document.lineAt(i);
-			archiveTask(wEdit, editor.document.uri, line, !task.isRecurring);
+			archiveTask(wEdit, editor.document.uri, line, !task.due?.isRecurring);
 		}
 		workspace.applyEdit(wEdit);
 	});
@@ -132,7 +132,7 @@ export function registerCommands() {
 			vscode.window.showInformationMessage('No tasks');
 			return;
 		}
-		const dueTasks = tasks.filter(t => t.isDue);
+		const dueTasks = tasks.filter(t => t.due?.isDue);
 		if (dueTasks.length) {
 			tasks = dueTasks;
 		} else {
@@ -158,9 +158,9 @@ export function registerCommands() {
 			vscode.window.showInformationMessage('No tasks');
 			return;
 		}
-		const overdueTasks = tasks.filter(t => t.isDue === DueState.overdue);
-		const dueTasks = tasks.filter(t => t.isDue === DueState.due);
-		const notDueTasks = tasks.filter(t => !t.isDue && !t.due);
+		const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.overdue);
+		const dueTasks = tasks.filter(t => t.due?.isDue === DueState.due);
+		const notDueTasks = tasks.filter(t => !t.due?.isDue && !t.due);
 		const sortedOverdueTasks = sortTasks(overdueTasks, SortProperty.priority);
 		const sortedDueTasks = sortTasks(dueTasks, SortProperty.priority);
 		const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
@@ -177,7 +177,7 @@ export function registerCommands() {
 			vscode.window.showInformationMessage('No tasks');
 			return;
 		}
-		const dueTasks = tasks.filter(t => t.isDue);
+		const dueTasks = tasks.filter(t => t.due?.isDue);
 		let resultTask;
 		if (dueTasks.length) {
 			resultTask = dueTasks[getRandomInt(0, dueTasks.length - 1)];
@@ -230,8 +230,8 @@ export function registerCommands() {
 			}
 			const dueDate = `{due:${dueDateToInsert}}`;
 			const wEdit = new WorkspaceEdit();
-			if (task?.dueRange) {
-				wEdit.replace(editor.document.uri, task.dueRange, dueDate);
+			if (task?.due?.range) {
+				wEdit.replace(editor.document.uri, task.due.range, dueDate);
 			} else {
 				wEdit.insert(editor.document.uri, editor.selection.active, ` ${dueDate}`);
 			}
@@ -371,7 +371,7 @@ export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void>
 		document = await getDocumentForDefaultFile();
 	}
 	for (const task of state.tasks) {
-		if (task.isRecurring && task.done) {
+		if (task.due?.isRecurring && task.done) {
 			const line = document.lineAt(task.ln);
 			removeDoneSymbol(wEdit, document.uri, line);
 			removeCompletionDate(wEdit, document.uri, line);
@@ -433,7 +433,7 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 
 	if (config.autoArchiveTasks) {
 		const secondWorkspaceEdit = new WorkspaceEdit();
-		archiveTask(secondWorkspaceEdit, document.uri, line, !task.isRecurring);
+		archiveTask(secondWorkspaceEdit, document.uri, line, !task.due?.isRecurring);
 		await workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
 		document.save();
 	}

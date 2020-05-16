@@ -29,8 +29,6 @@ describe('Parsing text', () => {
 		const task = getLineAt(1)!;
 		expect(task.title).to.equal('1 just text task');
 		expect(task.done).to.equal(false);
-		expect(task.isRecurring).to.equal(false);
-		expect(task.isDue).to.equal(DueState.notDue);
 		expect(task.tags).to.have.lengthOf(0);
 		expect(task.ln).to.equal(1);
 		expect(task.priority).to.equal('Z');
@@ -40,7 +38,6 @@ describe('Parsing text', () => {
 		expect(task.projectRanges).to.have.lengthOf(0);
 		expect(task.priorityRange).to.be.an('undefined');
 		expect(task.due).to.be.an('undefined');
-		expect(task.dueRange).to.be.an('undefined');
 	});
 });
 

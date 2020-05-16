@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { Range } from 'vscode';
-import { Items, TagForProvider, SortTags, ProjectForProvider, DueState, ContextForProvider } from './types';
+import { DueState } from './types';
 import { config } from './extension';
-import { parseDue } from './timeUtils';
+import dayjs from 'dayjs';
 
 export function parseLine(textLine: vscode.TextLine): TheTask | undefined | number {
 	let line = textLine.text.trim();
@@ -27,7 +27,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 
 	const words = line.split(' ');
 
-	const raw = textLine.text;
+	const rawText = textLine.text;
 	const contexts = [];
 	const contextRanges: Range[] = [];
 	const projects = [];
@@ -40,10 +40,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 	const tagsDelimiterRanges: Range[] = [];
 	const tagsRange: Range[] = [];
 	const specialTags: SpecialTags = {};
-	let due;
-	let dueRange: Range | undefined;
-	let isDue = DueState.notDue;
-	let isRecurring = false;
+	let due: DueDate | undefined;
 
 	for (const word of words) {
 		switch (word[0]) {
@@ -55,11 +52,9 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 				const [specialTag, value = ''] = word.slice(1, -1).split(':');
 				const range = new Range(ln, index, ln, index + word.length);
 				if (specialTag === 'due') {
-					dueRange = range;
-					const result = parseDue(value);
-					isRecurring = result.isRecurring;
-					isDue = result.isDue;
-					due = value;
+					if (value.length) {
+						due = new DueDate(value, range);
+					}
 				} else if (specialTag === 'cr') {
 					specialTagRanges.push(range);
 				} else if (specialTag === 'cm') {
@@ -142,7 +137,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 
 	return new TheTask({
 		tags,
-		raw,
+		rawText,
 		tagsDelimiterRanges,
 		tagsRange,
 		projects,
@@ -153,9 +148,6 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		specialTagRanges,
 		due,
 		specialTags,
-		dueRange,
-		isRecurring,
-		isDue,
 		contexts,
 		contextRanges,
 		title: text.join(' '),
@@ -203,37 +195,32 @@ interface SpecialTags {
 export interface TaskInit {
 	title: string;
 	ln: number;
-	raw: string;
+	rawText: string;
 
 	done?: boolean;
-	isRecurring?: boolean;
 	tags?: string[];
-	isDue?: DueState;
 	projects?: string[];
 	priority?: string;
-	due?: string;
+	due?: DueDate;
 	specialTags: SpecialTags;
 	contexts?: string[];
 	priorityRange?: Range;
 	specialTagRanges?: Range[];
 	contextRanges?: Range[];
 	projectRanges?: Range[];
-	dueRange?: Range;
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
 }
 export class TheTask {
 	title: string;
 	done: boolean;
-	raw: string;
+	rawText: string;
 	/** Line number. */
 	ln: number;
-	isDue: DueState;
-	isRecurring: boolean;
 	tags: string[];
 	projects: string[];
 	/** Due string. Example: `2020-03-27|e30d` */
-	due?: string;
+	due?: DueDate;
 	specialTags: SpecialTags;
 	priority: string;
 	contexts: string[];
@@ -241,7 +228,6 @@ export class TheTask {
 	priorityRange?: Range;
 	specialTagRanges: Range[];
 	projectRanges: Range[];
-	dueRange?: Range;
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
 	/**
@@ -250,11 +236,9 @@ export class TheTask {
 	constructor(init: TaskInit) {
 		this.title = init.title;
 		this.ln = init.ln;
-		this.raw = init.raw;
+		this.rawText = init.rawText;
 		this.done = init.done || false;
 		this.tags = init.tags || [];
-		this.isDue = init.isDue || DueState.notDue;
-		this.isRecurring = init.isRecurring || false;
 		this.projects = init.projects || [];
 		this.priority = init.priority || config.defaultPriority;
 		this.due = init.due;
@@ -264,8 +248,150 @@ export class TheTask {
 		this.contextRanges = init.contextRanges || [];
 		this.projectRanges = init.projectRanges || [];
 		this.priorityRange = init.priorityRange;
-		this.dueRange = init.dueRange;
 		this.tagsDelimiterRanges = init.tagsDelimiterRanges;
 		this.tagsRange = init.tagsRange;
 	}
+}
+
+export class DueDate {
+	private readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?$/;
+	/** Unmodified value of due date */
+	raw: string;
+	range: Range;
+	isRecurring = false;
+	isDue = DueState.notDue;
+
+	constructor(dueString: string, range: Range) {
+		this.raw = dueString;
+		this.range = range;
+
+		const result = this.parseDue(dueString);
+		this.isRecurring = result.isRecurring;
+		this.isDue = result.isDue;
+	}
+
+	parseDueOnDate(targetDate: Date) {
+		
+	}
+
+	parseDue(due: string, targetDate = new Date()): DueReturn {
+		const dueDates = due.split(',').filter(d => d.length);
+		const result = dueDates.map(dueDate => this.parseDueDate(dueDate, targetDate));
+
+		const isRecurring = result.some(r => r.isRecurring);
+		const hasOverdue = result.some(r => r.isDue === DueState.overdue);
+		const hasDue = result.some(r => r.isDue === DueState.due);
+		const isDue = hasOverdue ? DueState.overdue : hasDue ? DueState.due : DueState.notDue;
+		return {
+			isDue,
+			isRecurring,
+		};
+	}
+	parseDueDate(due: string, targetDate: Date): DueReturn {
+		if (due === 'today') {
+			return {
+				isRecurring: false,
+				isDue: DueState.due,
+			};
+		}
+		const tryAsRange = due.split('..');
+		if (tryAsRange.length > 1) {
+			return this.isDueBetween(tryAsRange[0], tryAsRange[1]);
+		}
+		let isRecurring = false;
+		let isDue = DueState.notDue;
+		const match = this.dueWithDateRegexp.exec(due);
+		if (match) {
+			const year = Number(match[1]);
+			const month = Number(match[2]) - 1;
+			const date = Number(match[3]);
+			const dateObject = new Date(year, month, date);
+			const dueRecurringPart = match[5];
+
+			if (!dueRecurringPart) {
+				isDue = this.isDueExactDate(dateObject, targetDate);
+				isRecurring = false;
+			} else {
+				isRecurring = true;
+				isDue = this.isDueWithDate(dueRecurringPart, dateObject, targetDate);
+			}
+		} else {
+		// Due date without starting date
+			isRecurring = true;
+			isDue = this.isDueToday(due, targetDate);
+		}
+		return {
+			isDue,
+			isRecurring,
+		};
+	}
+	isDueExactDate(date: Date, targetDate: Date): DueState {
+		if (dayjs(targetDate).isBefore(date)) {
+			return DueState.notDue;
+		}
+		const diffInDays = dayjs(date).diff(dayjs(targetDate), 'day');
+		return diffInDays === 0 ? DueState.due : DueState.overdue;
+	}
+	isDueBetween(d1: string, d2: string): DueReturn {
+		const now = dayjs();
+		const date1 = dayjs(d1);
+		const date2 = dayjs(d2);
+		let isDue;
+		if (date1.isBefore(now, 'day') && date2.isBefore(now, 'day')) {
+			isDue = DueState.overdue;
+		} else {
+			isDue = dayjs().isBetween(d1, dayjs(d2), 'day', '[]') ? DueState.due : DueState.notDue;
+		}
+		return {
+			isRecurring: false,
+			isDue,
+		};
+	}
+
+	isDueToday(dueString: string, targetDate: Date): DueState {
+		if (dueString === 'ed') {
+			return DueState.due;
+		}
+
+		const day = targetDate.getDay();
+		if (dueString === 'Sun' && day === 0) {
+			return DueState.due;
+		} else if (dueString === 'Mon' && day === 1) {
+			return DueState.due;
+		} else if (dueString === 'Tue' && day === 2) {
+			return DueState.due;
+		} else if (dueString === 'Wed' && day === 3) {
+			return DueState.due;
+		} else if (dueString === 'Thu' && day === 4) {
+			return DueState.due;
+		} else if (dueString === 'Fri' && day === 5) {
+			return DueState.due;
+		} else if (dueString === 'Sat' && day === 6) {
+			return DueState.due;
+		}
+		return DueState.notDue;
+	}
+	 isDueWithDate(dueString: string, dueDateStart: number | Date | undefined, targetDate = new Date()): DueState {
+		if (dueDateStart === undefined) {
+			throw new Error('dueDate was specified, but dueDateStart is missing');
+		}
+		const match = /(?!every|e)\s?(\d+)?\s?(d|days?)/.exec(dueString);
+		if (match) {
+			const interval = match[1] ? +match[1] : 1;
+			const unit = match[2];
+			if (/^(d|days?)$/.test(unit)) {
+				const diffInDays = dayjs(targetDate).diff(dueDateStart, 'day');
+
+				if (diffInDays % interval === 0) return DueState.due;
+			}
+		}
+
+		return DueState.notDue;
+	}
+}
+
+interface DueReturn {
+	isRecurring: boolean;
+	isDue: DueState;
+	// isRange: boolean;
 }

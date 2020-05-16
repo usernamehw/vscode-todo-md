@@ -90,21 +90,21 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 				}
 			} else if (filter.filterType === FilterType.due) {
 				// $due
-				if (task.isDue === DueState.due || task.isDue === DueState.overdue) {
+				if (task.due?.isDue === DueState.due || task.due?.isDue === DueState.overdue) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.overdue) {
 				// $overdue
-				if (task.isDue === DueState.overdue) {
+				if (task.due?.isDue === DueState.overdue) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.recurring) {
 				// $recurring
-				if (task.isRecurring === true) {
+				if (task.due?.isRecurring === true) {
 					filterResult = true;
 				} else {
 					filterResult = false;

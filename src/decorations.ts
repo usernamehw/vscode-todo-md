@@ -122,13 +122,14 @@ export function updateEditorDecorations(editor: TextEditor) {
 		if (line.projectRanges && line.projectRanges.length) {
 			projectDecorationOptions.push(...line.projectRanges);
 		}
-		if (line.dueRange) {
-			if (line.isDue === DueState.due) {
-				dueDecorationOptions.push(line.dueRange);
-			} else if (line.isDue === DueState.notDue) {
-				notDueDecorationOptions.push(line.dueRange);
-			} else if (line.isDue === DueState.overdue) {
-				overdueDecorationOptions.push(line.dueRange);
+		if (line.due) {
+			const due = line.due;
+			if (due.isDue === DueState.due) {
+				dueDecorationOptions.push(due.range);
+			} else if (due.isDue === DueState.notDue) {
+				notDueDecorationOptions.push(due.range);
+			} else if (due.isDue === DueState.overdue) {
+				overdueDecorationOptions.push(due.range);
 			}
 		}
 	}
