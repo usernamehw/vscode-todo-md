@@ -8,6 +8,7 @@ import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { resetAllRecurringTasks } from './commands';
 import { setContext } from './vscodeUtils';
 import dayjs from 'dayjs';
+import { updateHover } from './hover';
 
 export const THE_RIGHT_FILE = 'todomd:isActive';
 
@@ -64,6 +65,7 @@ export function enterTheRightFile(editor: vscode.TextEditor) {
 	updateCompletions();
 	showStatusBarEntry();
 	updateStatusBarEntry();
+	updateHover();
 	checkIfNewDayArrived();
 	if (state.newDayArrived && !state.fileWasReset) {
 		// vscode.window.showInformationMessage('SHOULD RESET ALL IN FILE');
