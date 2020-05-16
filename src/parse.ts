@@ -166,7 +166,7 @@ interface ParsedStuff {
 	tasks: TheTask[];
 	commentLines: Range[];
 }
-// TODO: this function must only parse document and not group tags/projects/contexts
+
 export function parseDocument(document: vscode.TextDocument): ParsedStuff {
 	const tasks = [];
 	const commentLines = [];
