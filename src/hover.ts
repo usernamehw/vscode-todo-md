@@ -41,7 +41,8 @@ export function updateHover() {
 			const mdTable = chunk(mdTableAsArray, 7);
 
 			const diff = dayjs().to(dayjs(word));
-			const md = new vscode.MarkdownString(`${diff}\n\n${table(mdTable, { align: ['r', 'r', 'r', 'r', 'r', 'r', 'r'] })}`);
+			const calendar = `\n\n${table(mdTable, { align: ['r', 'r', 'r', 'r', 'r', 'r', 'r'] })}`;
+			const md = new vscode.MarkdownString(`${diff}`);
 			md.isTrusted = true;
 			return new vscode.Hover(md);
 		},
