@@ -1,3 +1,8 @@
+## 0.0.13 `18 May 2020`
+
+- ✨ Show closest due date as decoration
+- ✨ Add archived tasks Tree View
+
 ## 0.0.12 `12 May 2020`
 
 - 🐛 Fix complete a task doesn't work
