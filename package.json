@@ -491,6 +491,30 @@
 				{
 					"command": "todomd.setDueDate",
 					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.setDate",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.toggleDone",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.sortByPriority",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.archiveCompletedTasks",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.archiveSelectedCompletedTasks",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.createSimilarTask",
+					"when": "todomd:isActive"
 				}
 			]
 		},
