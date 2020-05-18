@@ -66,6 +66,7 @@ export class G {
 	static notDueDecorationType: vscode.TextEditorDecorationType;
 	static dueDecorationType: vscode.TextEditorDecorationType;
 	static overdueDecorationType: vscode.TextEditorDecorationType;
+	static closestDueDateDecorationType: vscode.TextEditorDecorationType;
 }
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
@@ -133,6 +134,7 @@ function disposeEverything(): void {
 		G.notDueDecorationType.dispose();
 		G.dueDecorationType.dispose();
 		G.overdueDecorationType.dispose();
+		G.closestDueDateDecorationType.dispose();
 	}
 	if (G.changeTextDocumentDisposable) {
 		G.changeTextDocumentDisposable.dispose();

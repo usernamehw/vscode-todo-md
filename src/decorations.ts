@@ -58,97 +58,115 @@ export function updateDecorationsStyle(): void {
 	G.overdueDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.overdueForeground'),
 	});
+	G.closestDueDateDecorationType = window.createTextEditorDecorationType({
+		isWholeLine: true,
+		after: {
+			color: '#888888aa',
+			textDecoration: ';margin-left:1ch',
+			backgroundColor: '#00000005',
+		},
+	});
 }
 
 export function updateEditorDecorations(editor: TextEditor) {
-	const completedDecorationOptions: Range[] = [];
-	const tagsDecorationOptions: Range[] = [];
-	const priority1DecorationOptions: Range[] = [];
-	const priority2DecorationOptions: Range[] = [];
-	const priority3DecorationOptions: Range[] = [];
-	const priority4DecorationOptions: Range[] = [];
-	const priority5DecorationOptions: Range[] = [];
-	const priority6DecorationOptions: Range[] = [];
-	const tagsDelimiterDecorationOptions: Range[] = [];
-	const specialtagDecorationOptions: Range[] = [];
-	const projectDecorationOptions: Range[] = [];
-	const contextDecorationOptions: Range[] = [];
-	const notDueDecorationOptions: Range[] = [];
-	const dueDecorationOptions: Range[] = [];
-	const overdueDecorationOptions: Range[] = [];
+	const completedDecorationRanges: Range[] = [];
+	const tagsDecorationRanges: Range[] = [];
+	const priority1DecorationRanges: Range[] = [];
+	const priority2DecorationRanges: Range[] = [];
+	const priority3DecorationRanges: Range[] = [];
+	const priority4DecorationRanges: Range[] = [];
+	const priority5DecorationRanges: Range[] = [];
+	const priority6DecorationRanges: Range[] = [];
+	const tagsDelimiterDecorationRanges: Range[] = [];
+	const specialtagDecorationRanges: Range[] = [];
+	const projectDecorationRanges: Range[] = [];
+	const contextDecorationRanges: Range[] = [];
+	const notDueDecorationRanges: Range[] = [];
+	const dueDecorationRanges: Range[] = [];
+	const overdueDecorationRanges: Range[] = [];
+	const closestDueDateDecorationOptions: vscode.DecorationOptions[] = [];
 
 	for (const line of state.tasks) {
 		if (line.done) {
-			completedDecorationOptions.push(new vscode.Range(line.ln, 0, line.ln, 0));
+			completedDecorationRanges.push(new vscode.Range(line.ln, 0, line.ln, 0));
 		}
 		if (line.tagsRange) {
-			tagsDecorationOptions.push(...line.tagsRange);
+			tagsDecorationRanges.push(...line.tagsRange);
 			// @ts-ignore
-			tagsDelimiterDecorationOptions.push(...line.tagsDelimiterRanges);
+			tagsDelimiterDecorationRanges.push(...line.tagsDelimiterRanges);
 		}
 		if (line.priorityRange) {
 			switch (line.priority) {
 				case 'A': {
-					priority1DecorationOptions.push(line.priorityRange);
+					priority1DecorationRanges.push(line.priorityRange);
 					break;
 				}
 				case 'B': {
-					priority2DecorationOptions.push(line.priorityRange);
+					priority2DecorationRanges.push(line.priorityRange);
 					break;
 				}
 				case 'C': {
-					priority3DecorationOptions.push(line.priorityRange);
+					priority3DecorationRanges.push(line.priorityRange);
 					break;
 				}
 				case 'D': {
-					priority4DecorationOptions.push(line.priorityRange);
+					priority4DecorationRanges.push(line.priorityRange);
 					break;
 				}
 				case 'E': {
-					priority5DecorationOptions.push(line.priorityRange);
+					priority5DecorationRanges.push(line.priorityRange);
 					break;
 				}
 				default: {
-					priority6DecorationOptions.push(line.priorityRange);
+					priority6DecorationRanges.push(line.priorityRange);
 				}
 			}
 		}
 		if (line.specialTagRanges.length) {
-			specialtagDecorationOptions.push(...line.specialTagRanges);
+			specialtagDecorationRanges.push(...line.specialTagRanges);
 		}
 		if (line.contextRanges && line.contextRanges.length) {
-			contextDecorationOptions.push(...line.contextRanges);
+			contextDecorationRanges.push(...line.contextRanges);
 		}
 		if (line.projectRanges && line.projectRanges.length) {
-			projectDecorationOptions.push(...line.projectRanges);
+			projectDecorationRanges.push(...line.projectRanges);
 		}
 		if (line.due) {
 			const due = line.due;
 			if (due.isDue === DueState.due) {
-				dueDecorationOptions.push(due.range);
+				dueDecorationRanges.push(due.range);
 			} else if (due.isDue === DueState.notDue) {
-				notDueDecorationOptions.push(due.range);
+				notDueDecorationRanges.push(due.range);
 			} else if (due.isDue === DueState.overdue) {
-				overdueDecorationOptions.push(due.range);
+				overdueDecorationRanges.push(due.range);
 			}
+			closestDueDateDecorationOptions.push({
+				range: due.range,
+				renderOptions: {
+					after: {
+						contentText: due.closestDueDateInTheFuture,
+					},
+				},
+			});
 		}
 	}
 
-	editor.setDecorations(G.completedTaskDecorationType, completedDecorationOptions);
-	editor.setDecorations(G.tagsDecorationType, tagsDecorationOptions);
-	editor.setDecorations(G.specialTagDecorationType, specialtagDecorationOptions);
-	editor.setDecorations(G.priority1DecorationType, priority1DecorationOptions);
-	editor.setDecorations(G.priority2DecorationType, priority2DecorationOptions);
-	editor.setDecorations(G.priority3DecorationType, priority3DecorationOptions);
-	editor.setDecorations(G.priority4DecorationType, priority4DecorationOptions);
-	editor.setDecorations(G.priority5DecorationType, priority5DecorationOptions);
-	editor.setDecorations(G.priority6DecorationType, priority6DecorationOptions);
-	editor.setDecorations(G.tagsDelimiterDecorationType, tagsDelimiterDecorationOptions);
-	editor.setDecorations(G.projectDecorationType, projectDecorationOptions);
-	editor.setDecorations(G.contextDecorationType, contextDecorationOptions);
-	editor.setDecorations(G.notDueDecorationType, notDueDecorationOptions);
-	editor.setDecorations(G.dueDecorationType, dueDecorationOptions);
-	editor.setDecorations(G.overdueDecorationType, overdueDecorationOptions);
+	editor.setDecorations(G.completedTaskDecorationType, completedDecorationRanges);
+	editor.setDecorations(G.tagsDecorationType, tagsDecorationRanges);
+	editor.setDecorations(G.specialTagDecorationType, specialtagDecorationRanges);
+	editor.setDecorations(G.priority1DecorationType, priority1DecorationRanges);
+	editor.setDecorations(G.priority2DecorationType, priority2DecorationRanges);
+	editor.setDecorations(G.priority3DecorationType, priority3DecorationRanges);
+	editor.setDecorations(G.priority4DecorationType, priority4DecorationRanges);
+	editor.setDecorations(G.priority5DecorationType, priority5DecorationRanges);
+	editor.setDecorations(G.priority6DecorationType, priority6DecorationRanges);
+	editor.setDecorations(G.tagsDelimiterDecorationType, tagsDelimiterDecorationRanges);
+	editor.setDecorations(G.projectDecorationType, projectDecorationRanges);
+	editor.setDecorations(G.contextDecorationType, contextDecorationRanges);
+	editor.setDecorations(G.notDueDecorationType, notDueDecorationRanges);
+	editor.setDecorations(G.dueDecorationType, dueDecorationRanges);
+	editor.setDecorations(G.overdueDecorationType, overdueDecorationRanges);
+	editor.setDecorations(G.closestDueDateDecorationType, closestDueDateDecorationOptions);
 
 	editor.setDecorations(G.commentDecorationType, state.commentLines);
 }

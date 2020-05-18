@@ -260,6 +260,7 @@ export class DueDate {
 	range: Range;
 	isRecurring = false;
 	isDue = DueState.notDue;
+	closestDueDateInTheFuture: string | undefined;
 
 	constructor(dueString: string, range: Range) {
 		this.raw = dueString;
@@ -268,12 +269,19 @@ export class DueDate {
 		const result = this.parseDue(dueString);
 		this.isRecurring = result.isRecurring;
 		this.isDue = result.isDue;
+		this.closestDueDateInTheFuture = this.calcClosestDueDateInTheFuture();
 	}
 
-	parseDueOnDate(targetDate: Date) {
-		
+	calcClosestDueDateInTheFuture() {
+		for (let i = 1; i < 100; i++) {
+			const date = dayjs().add(i, 'day');
+			const { isDue } = this.parseDue(this.raw, date.toDate());
+			if (isDue) {
+				return dayjs().to(date);
+			}
+		}
+		return 'More than 100 days';
 	}
-
 	parseDue(due: string, targetDate = new Date()): DueReturn {
 		const dueDates = due.split(',').filter(d => d.length);
 		const result = dueDates.map(dueDate => this.parseDueDate(dueDate, targetDate));
@@ -287,7 +295,7 @@ export class DueDate {
 			isRecurring,
 		};
 	}
-	parseDueDate(due: string, targetDate: Date): DueReturn {
+	private parseDueDate(due: string, targetDate: Date): DueReturn {
 		if (due === 'today') {
 			return {
 				isRecurring: false,
@@ -325,14 +333,14 @@ export class DueDate {
 			isRecurring,
 		};
 	}
-	isDueExactDate(date: Date, targetDate: Date): DueState {
+	private isDueExactDate(date: Date, targetDate: Date): DueState {
 		if (dayjs(targetDate).isBefore(date)) {
 			return DueState.notDue;
 		}
 		const diffInDays = dayjs(date).diff(dayjs(targetDate), 'day');
 		return diffInDays === 0 ? DueState.due : DueState.overdue;
 	}
-	isDueBetween(d1: string, d2: string): DueReturn {
+	private isDueBetween(d1: string, d2: string): DueReturn {
 		const now = dayjs();
 		const date1 = dayjs(d1);
 		const date2 = dayjs(d2);
@@ -348,7 +356,7 @@ export class DueDate {
 		};
 	}
 
-	isDueToday(dueString: string, targetDate: Date): DueState {
+	private isDueToday(dueString: string, targetDate: Date): DueState {
 		if (dueString === 'ed') {
 			return DueState.due;
 		}
@@ -371,7 +379,7 @@ export class DueDate {
 		}
 		return DueState.notDue;
 	}
-	 isDueWithDate(dueString: string, dueDateStart: number | Date | undefined, targetDate = new Date()): DueState {
+	private isDueWithDate(dueString: string, dueDateStart: number | Date | undefined, targetDate = new Date()): DueState {
 		if (dueDateStart === undefined) {
 			throw new Error('dueDate was specified, but dueDateStart is missing');
 		}
