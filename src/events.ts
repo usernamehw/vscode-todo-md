@@ -1,6 +1,6 @@
 import { window, workspace } from 'vscode';
 import * as vscode from 'vscode';
-import { G, LAST_VISIT_STORAGE_KEY, config, updateState, state } from './extension';
+import { Global, LAST_VISIT_STORAGE_KEY, config, updateState, state } from './extension';
 import { updateCompletions } from './completionProviders';
 import { showStatusBarEntry, updateStatusBarEntry, hideStatusBarEntry } from './statusBar';
 import { updateEditorDecorations } from './decorations';
@@ -61,7 +61,7 @@ export function isTheRightFileFormat(editor?: vscode.TextEditor): boolean {
 export function enterTheRightFile(editor: vscode.TextEditor) {
 	state.theRightFileOpened = true;
 	updateEverything(editor);
-	G.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
+	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
 	showStatusBarEntry();
 	updateStatusBarEntry();
@@ -76,17 +76,17 @@ export function enterTheRightFile(editor: vscode.TextEditor) {
 }
 export async function exitTheRightFile() {
 	state.theRightFileOpened = false;
-	if (G.changeTextDocumentDisposable) {
-		G.changeTextDocumentDisposable.dispose();
+	if (Global.changeTextDocumentDisposable) {
+		Global.changeTextDocumentDisposable.dispose();
 	}
-	if (G.contextAutocompleteDisposable) {
-		G.contextAutocompleteDisposable.dispose();
-		G.tagAutocompleteDisposable.dispose();
-		G.projectAutocompleteDisposable.dispose();
-		G.generalAutocompleteDisposable.dispose();
+	if (Global.contextAutocompleteDisposable) {
+		Global.contextAutocompleteDisposable.dispose();
+		Global.tagAutocompleteDisposable.dispose();
+		Global.projectAutocompleteDisposable.dispose();
+		Global.generalAutocompleteDisposable.dispose();
 	}
-	if (G.hoverDisposable) {
-		G.hoverDisposable.dispose();
+	if (Global.hoverDisposable) {
+		Global.hoverDisposable.dispose();
 	}
 	hideStatusBarEntry();
 	setContext(THE_RIGHT_FILE, false);

@@ -1,64 +1,64 @@
 import { window, TextEditor, Range } from 'vscode';
 import * as vscode from 'vscode';
 
-import { G, state } from './extension';
+import { Global, state } from './extension';
 import { DueState } from './types';
 
 export function updateDecorationsStyle(): void {
-	G.completedTaskDecorationType = window.createTextEditorDecorationType({
+	Global.completedTaskDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
 		textDecoration: 'line-through rgba(255, 255, 255, 0.35)',
 		light: {
 			textDecoration: 'line-through rgba(0, 0, 0, 0.25)',
 		},
 	});
-	G.commentDecorationType = window.createTextEditorDecorationType({
+	Global.commentDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.commentForeground'),
 		isWholeLine: true,
 	});
-	G.priority1DecorationType = window.createTextEditorDecorationType({
+	Global.priority1DecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityAForeground'),
 	});
-	G.priority2DecorationType = window.createTextEditorDecorationType({
+	Global.priority2DecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityBForeground'),
 	});
-	G.priority3DecorationType = window.createTextEditorDecorationType({
+	Global.priority3DecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityCForeground'),
 	});
-	G.priority4DecorationType = window.createTextEditorDecorationType({
+	Global.priority4DecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityDForeground'),
 	});
-	G.priority5DecorationType = window.createTextEditorDecorationType({
+	Global.priority5DecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityEForeground'),
 	});
-	G.priority6DecorationType = window.createTextEditorDecorationType({
+	Global.priority6DecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityFForeground'),
 	});
-	G.tagsDecorationType = window.createTextEditorDecorationType({
+	Global.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.tagForeground'),
 	});
-	G.specialTagDecorationType = window.createTextEditorDecorationType({
+	Global.specialTagDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.specialTagForeground'),
 	});
-	G.tagsDelimiterDecorationType = window.createTextEditorDecorationType({
+	Global.tagsDelimiterDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.tagDelimiterForeground'),
 	});
-	G.projectDecorationType = window.createTextEditorDecorationType({
+	Global.projectDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.projectForeground'),
 	});
-	G.contextDecorationType = window.createTextEditorDecorationType({
+	Global.contextDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.contextForeground'),
 	});
-	G.notDueDecorationType = window.createTextEditorDecorationType({
+	Global.notDueDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.notDueForeground'),
 	});
-	G.dueDecorationType = window.createTextEditorDecorationType({
+	Global.dueDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.dueForeground'),
 	});
-	G.overdueDecorationType = window.createTextEditorDecorationType({
+	Global.overdueDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.overdueForeground'),
 	});
-	G.closestDueDateDecorationType = window.createTextEditorDecorationType({
+	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
 		after: {
 			color: '#888888aa',
@@ -151,22 +151,22 @@ export function updateEditorDecorations(editor: TextEditor) {
 		}
 	}
 
-	editor.setDecorations(G.completedTaskDecorationType, completedDecorationRanges);
-	editor.setDecorations(G.tagsDecorationType, tagsDecorationRanges);
-	editor.setDecorations(G.specialTagDecorationType, specialtagDecorationRanges);
-	editor.setDecorations(G.priority1DecorationType, priority1DecorationRanges);
-	editor.setDecorations(G.priority2DecorationType, priority2DecorationRanges);
-	editor.setDecorations(G.priority3DecorationType, priority3DecorationRanges);
-	editor.setDecorations(G.priority4DecorationType, priority4DecorationRanges);
-	editor.setDecorations(G.priority5DecorationType, priority5DecorationRanges);
-	editor.setDecorations(G.priority6DecorationType, priority6DecorationRanges);
-	editor.setDecorations(G.tagsDelimiterDecorationType, tagsDelimiterDecorationRanges);
-	editor.setDecorations(G.projectDecorationType, projectDecorationRanges);
-	editor.setDecorations(G.contextDecorationType, contextDecorationRanges);
-	editor.setDecorations(G.notDueDecorationType, notDueDecorationRanges);
-	editor.setDecorations(G.dueDecorationType, dueDecorationRanges);
-	editor.setDecorations(G.overdueDecorationType, overdueDecorationRanges);
-	editor.setDecorations(G.closestDueDateDecorationType, closestDueDateDecorationOptions);
+	editor.setDecorations(Global.completedTaskDecorationType, completedDecorationRanges);
+	editor.setDecorations(Global.tagsDecorationType, tagsDecorationRanges);
+	editor.setDecorations(Global.specialTagDecorationType, specialtagDecorationRanges);
+	editor.setDecorations(Global.priority1DecorationType, priority1DecorationRanges);
+	editor.setDecorations(Global.priority2DecorationType, priority2DecorationRanges);
+	editor.setDecorations(Global.priority3DecorationType, priority3DecorationRanges);
+	editor.setDecorations(Global.priority4DecorationType, priority4DecorationRanges);
+	editor.setDecorations(Global.priority5DecorationType, priority5DecorationRanges);
+	editor.setDecorations(Global.priority6DecorationType, priority6DecorationRanges);
+	editor.setDecorations(Global.tagsDelimiterDecorationType, tagsDelimiterDecorationRanges);
+	editor.setDecorations(Global.projectDecorationType, projectDecorationRanges);
+	editor.setDecorations(Global.contextDecorationType, contextDecorationRanges);
+	editor.setDecorations(Global.notDueDecorationType, notDueDecorationRanges);
+	editor.setDecorations(Global.dueDecorationType, dueDecorationRanges);
+	editor.setDecorations(Global.overdueDecorationType, overdueDecorationRanges);
+	editor.setDecorations(Global.closestDueDateDecorationType, closestDueDateDecorationOptions);
 
-	editor.setDecorations(G.commentDecorationType, state.commentLines);
+	editor.setDecorations(Global.commentDecorationType, state.commentLines);
 }

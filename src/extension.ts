@@ -41,7 +41,7 @@ export const statusBarEntry = window.createStatusBarItem(1, -20000);
 /**
  * Global variables
  */
-export class G {
+export class Global {
 	static tagAutocompleteDisposable: vscode.Disposable;
 	static projectAutocompleteDisposable: vscode.Disposable;
 	static contextAutocompleteDisposable: vscode.Disposable;
@@ -116,28 +116,28 @@ export async function updateState(document?: vscode.TextDocument) {
 	return document;
 }
 function disposeEverything(): void {
-	if (G.completedTaskDecorationType) {
+	if (Global.completedTaskDecorationType) {
 		// if one set - all set
-		G.completedTaskDecorationType.dispose();
-		G.commentDecorationType.dispose();
-		G.priority1DecorationType.dispose();
-		G.priority2DecorationType.dispose();
-		G.priority3DecorationType.dispose();
-		G.priority4DecorationType.dispose();
-		G.priority5DecorationType.dispose();
-		G.priority6DecorationType.dispose();
-		G.tagsDecorationType.dispose();
-		G.specialTagDecorationType.dispose();
-		G.tagsDelimiterDecorationType.dispose();
-		G.projectDecorationType.dispose();
-		G.contextDecorationType.dispose();
-		G.notDueDecorationType.dispose();
-		G.dueDecorationType.dispose();
-		G.overdueDecorationType.dispose();
-		G.closestDueDateDecorationType.dispose();
+		Global.completedTaskDecorationType.dispose();
+		Global.commentDecorationType.dispose();
+		Global.priority1DecorationType.dispose();
+		Global.priority2DecorationType.dispose();
+		Global.priority3DecorationType.dispose();
+		Global.priority4DecorationType.dispose();
+		Global.priority5DecorationType.dispose();
+		Global.priority6DecorationType.dispose();
+		Global.tagsDecorationType.dispose();
+		Global.specialTagDecorationType.dispose();
+		Global.tagsDelimiterDecorationType.dispose();
+		Global.projectDecorationType.dispose();
+		Global.contextDecorationType.dispose();
+		Global.notDueDecorationType.dispose();
+		Global.dueDecorationType.dispose();
+		Global.overdueDecorationType.dispose();
+		Global.closestDueDateDecorationType.dispose();
 	}
-	if (G.changeTextDocumentDisposable) {
-		G.changeTextDocumentDisposable.dispose();
+	if (Global.changeTextDocumentDisposable) {
+		Global.changeTextDocumentDisposable.dispose();
 	}
 }
 

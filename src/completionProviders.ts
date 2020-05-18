@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
-import { state, config, G } from './extension';
+import { state, config, Global } from './extension';
 import { getDateInISOFormat } from './timeUtils';
 import dayjs from 'dayjs';
 
 export function updateCompletions(): void {
-	if (G.tagAutocompleteDisposable) {
-		G.tagAutocompleteDisposable.dispose();
-		G.projectAutocompleteDisposable.dispose();
-		G.contextAutocompleteDisposable.dispose();
-		G.generalAutocompleteDisposable.dispose();
+	if (Global.tagAutocompleteDisposable) {
+		Global.tagAutocompleteDisposable.dispose();
+		Global.projectAutocompleteDisposable.dispose();
+		Global.contextAutocompleteDisposable.dispose();
+		Global.generalAutocompleteDisposable.dispose();
 	}
 
-	G.tagAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.tagAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
@@ -29,7 +29,7 @@ export function updateCompletions(): void {
 		},
 		'#'
 	);
-	G.projectAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.projectAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
@@ -47,7 +47,7 @@ export function updateCompletions(): void {
 		},
 		'+'
 	);
-	G.contextAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.contextAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
@@ -65,7 +65,7 @@ export function updateCompletions(): void {
 		},
 		'@'
 	);
-	G.generalAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.generalAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {

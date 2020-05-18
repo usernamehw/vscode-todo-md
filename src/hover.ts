@@ -2,14 +2,14 @@ import * as vscode from 'vscode';
 import dayjs from 'dayjs';
 import table from 'markdown-table';
 
-import { G } from './extension';
+import { Global } from './extension';
 import { DATE_FORMAT } from './timeUtils';
 
 export function updateHover() {
-	if (G.hoverDisposable) {
-		G.hoverDisposable.dispose();
+	if (Global.hoverDisposable) {
+		Global.hoverDisposable.dispose();
 	}
-	G.hoverDisposable =	vscode.languages.registerHoverProvider({ scheme: 'file' }, {
+	Global.hoverDisposable =	vscode.languages.registerHoverProvider({ scheme: 'file' }, {
 		provideHover(document, position, token) {
 			const dateRegexp = /\d{4}-\d{2}-\d{2}/;
 			const range = document.getWordRangeAtPosition(position, dateRegexp);
