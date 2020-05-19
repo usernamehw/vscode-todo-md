@@ -144,7 +144,9 @@ export function updateTasksTreeView() {
 export function updateArchivedTasksTreeView() {
 	const archivedTasks = state.archivedTasks;
 	archivedProvider.refresh(archivedTasks);
-	archivedView.title = `archived (${archivedTasks.length})`;
+	setTimeout(() => {
+		archivedView.title = `archived (${archivedTasks.length})`;
+	}, 0);
 }
 
 function getTasksForTreeView() {
