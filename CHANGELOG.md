@@ -1,3 +1,7 @@
+## 0.0.14 `27 Jun 2020`
+
+- Republish extension to marketplace
+
 ## 0.0.13 `18 May 2020`
 
 - ✨ Show closest due date as decoration
