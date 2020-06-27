@@ -1,5 +1,6 @@
 ## ❗ Extension does not conform to the [todo.txt](https://github.com/todotxt/todo.txt) spec.
 ## ❗ Extension is in Alpha phase
+## ❗ No new features are planned in the near future 3-6 months
 
 ![demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/img/demo.png)
 
