@@ -76,15 +76,17 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	createTreeViews();
 	onChangeActiveTextEditor(window.activeTextEditor);
 	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
-	updateAllTreeViews();
 	updateHover();
-	updateArchivedTasks();
 
+	await updateState();
 	const isNewDay = checkIfNewDayArrived();
 	if (isNewDay && !state.theRightFileOpened) {
-		await updateState();
 		resetAllRecurringTasks();
 	}
+	updateAllTreeViews();
+	updateArchivedTasks();
+
+
 
 	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
 		if (!e.affectsConfiguration(EXTENSION_NAME)) return;
