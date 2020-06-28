@@ -1,3 +1,8 @@
+## 0.0.15 `28 Jun 2020`
+
+- ✨ Update Tree Views on startup
+- 📚 Document recurring due dates
+
 ## 0.0.14 `27 Jun 2020`
 
 - Republish extension to marketplace

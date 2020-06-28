@@ -66,11 +66,24 @@ tag | description | example
 {due:2020-05-08..2020-05-12}
 ```
 
+### Recurring due date
+
+Recurring due dates should not be archived and their completion state should be reset every day.
+
+```bash
+# Recurring due date that is due every monday:
+{due:monday}
+# Short form:
+{due:mon}
+# Recurring date that is due every 2nd day (starting date required)
+{due:2020-06-28|e2d}
+```
+
 ## Comments
 
 Comment is not considered a task. It starts with a sharp sign `#` followed by a space.
 
-```
+```bash
 # comment
 ```
 
