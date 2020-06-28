@@ -269,7 +269,9 @@ export class DueDate {
 		const result = this.parseDue(dueString);
 		this.isRecurring = result.isRecurring;
 		this.isDue = result.isDue;
-		this.closestDueDateInTheFuture = this.calcClosestDueDateInTheFuture();
+		if (result.isDue === DueState.notDue) {
+			this.closestDueDateInTheFuture = this.calcClosestDueDateInTheFuture();
+		}
 	}
 
 	calcClosestDueDateInTheFuture() {

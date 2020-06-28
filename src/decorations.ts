@@ -61,8 +61,8 @@ export function updateDecorationsStyle(): void {
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
 		after: {
-			color: '#888888aa',
-			textDecoration: ';margin-left:1ch',
+			color: '#88888899',
+			margin: '2ch',
 			backgroundColor: '#00000005',
 		},
 	});
@@ -140,14 +140,16 @@ export function updateEditorDecorations(editor: TextEditor) {
 			} else if (due.isDue === DueState.overdue) {
 				overdueDecorationRanges.push(due.range);
 			}
-			closestDueDateDecorationOptions.push({
-				range: due.range,
-				renderOptions: {
-					after: {
-						contentText: due.closestDueDateInTheFuture,
+			if (due.closestDueDateInTheFuture) {
+				closestDueDateDecorationOptions.push({
+					range: due.range,
+					renderOptions: {
+						after: {
+							contentText: due.closestDueDateInTheFuture,
+						},
 					},
-				},
-			});
+				});
+			}
 		}
 	}
 
