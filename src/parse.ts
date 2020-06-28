@@ -359,25 +359,54 @@ export class DueDate {
 	}
 
 	private isDueToday(dueString: string, targetDate: Date): DueState {
-		if (dueString === 'ed') {
+		const value = dueString.toLowerCase();
+		if (value === 'ed') {
 			return DueState.due;
 		}
 
-		const day = targetDate.getDay();
-		if (dueString === 'Sun' && day === 0) {
-			return DueState.due;
-		} else if (dueString === 'Mon' && day === 1) {
-			return DueState.due;
-		} else if (dueString === 'Tue' && day === 2) {
-			return DueState.due;
-		} else if (dueString === 'Wed' && day === 3) {
-			return DueState.due;
-		} else if (dueString === 'Thu' && day === 4) {
-			return DueState.due;
-		} else if (dueString === 'Fri' && day === 5) {
-			return DueState.due;
-		} else if (dueString === 'Sat' && day === 6) {
-			return DueState.due;
+		switch (targetDate.getDay()) {
+			case 0: {
+				if (value === 'sun' || value === 'sunday') {
+					return DueState.due;
+				}
+				break;
+			}
+			case 1: {
+				if (value === 'mon' || value === 'monday') {
+					return DueState.due;
+				}
+				break;
+			}
+			case 2: {
+				if (value === 'tue' || value === 'tuesday') {
+					return DueState.due;
+				}
+				break;
+			}
+			case 3: {
+				if (value === 'wed' || value === 'wednesday') {
+					return DueState.due;
+				}
+				break;
+			}
+			case 4: {
+				if (value === 'thu' || value === 'thursday') {
+					return DueState.due;
+				}
+				break;
+			}
+			case 5: {
+				if (value === 'fri' || value === 'friday') {
+					return DueState.due;
+				}
+				break;
+			}
+			case 6: {
+				if (value === 'sat' || value === 'saturday') {
+					return DueState.due;
+				}
+				break;
+			}
 		}
 		return DueState.notDue;
 	}
