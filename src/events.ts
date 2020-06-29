@@ -67,12 +67,12 @@ export function enterTheRightFile(editor: vscode.TextEditor) {
 	updateStatusBarEntry();
 	updateHover();
 	checkIfNewDayArrived();
+	setContext(THE_RIGHT_FILE, true);
 	if (state.newDayArrived && !state.fileWasReset) {
 		// vscode.window.showInformationMessage('SHOULD RESET ALL IN FILE');
 		resetAllRecurringTasks(editor);
 		state.fileWasReset = true;
 	}
-	setContext(THE_RIGHT_FILE, true);
 }
 export async function exitTheRightFile() {
 	state.theRightFileOpened = false;

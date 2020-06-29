@@ -74,8 +74,6 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	updateDecorationsStyle();
 	registerCommands();
 	createTreeViews();
-	onChangeActiveTextEditor(window.activeTextEditor);
-	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 	updateHover();
 
 	await updateState();
@@ -86,8 +84,8 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	updateAllTreeViews();
 	updateArchivedTasks();
 
-
-
+	onChangeActiveTextEditor(window.activeTextEditor);
+	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
 		if (!e.affectsConfiguration(EXTENSION_NAME)) return;
 		updateConfig();
