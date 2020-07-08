@@ -37,7 +37,7 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 
 	refresh(newTasks: TheTask[]): void {
 		this.tasks = newTasks;
-		this._onDidChangeTreeData.fire();
+		this._onDidChangeTreeData.fire(undefined);
 	}
 
 	getTreeItem(element: TaskTreeItem): vscode.TreeItem {

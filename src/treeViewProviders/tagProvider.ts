@@ -53,7 +53,7 @@ export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | LineTr
 
 	refresh(newTags: TagForProvider[]): void {
 		this.tags = newTags;
-		this._onDidChangeTreeData.fire();
+		this._onDidChangeTreeData.fire(undefined);
 	}
 
 	getTreeItem(element: TagTreeItem | LineTreeItem): vscode.TreeItem {

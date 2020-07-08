@@ -54,7 +54,7 @@ export class ContextProvider implements vscode.TreeDataProvider<ContextTreeItem 
 
 	refresh(newContexts: ContextForProvider[]): void {
 		this.contexts = newContexts;
-		this._onDidChangeTreeData.fire();
+		this._onDidChangeTreeData.fire(undefined);
 	}
 
 	getTreeItem(element: ContextTreeItem | LineTreeItem): vscode.TreeItem {

@@ -54,7 +54,7 @@ export class ProjectProvider implements vscode.TreeDataProvider<ProjectTreeItem 
 
 	refresh(newProjects: ProjectForProvider[]): void {
 		this.projects = newProjects;
-		this._onDidChangeTreeData.fire();
+		this._onDidChangeTreeData.fire(undefined);
 	}
 
 	getTreeItem(element: ProjectTreeItem | LineTreeItem): vscode.TreeItem {
