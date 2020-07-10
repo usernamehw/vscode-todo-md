@@ -264,10 +264,12 @@ export function registerCommands() {
 			return;
 		}
 		if (task.specialTags.count) {
-			incrementCountForTask(document, task.ln, task);
+			await incrementCountForTask(document, task.ln, task);
 		} else {
-			toggleTaskAtLine(task.ln, document);
+			await toggleTaskAtLine(task.ln, document);
 		}
+		await updateState();
+		updateAllTreeViews();
 	});
 	commands.registerTextEditorCommand('todomd.filter', editor => {
 		const qp = window.createQuickPick();
