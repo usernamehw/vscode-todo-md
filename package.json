@@ -522,7 +522,7 @@
 			"activitybar": [
 				{
 					"id": "todomd",
-					"icon": "./img/sharp.svg",
+					"icon": "./img/checklist.svg",
 					"title": "Todo Markdown"
 				}
 			]
