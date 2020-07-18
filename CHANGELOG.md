@@ -1,3 +1,8 @@
+## 0.0.16 `18 Jul 2020`
+
+- ✨ Use different Activity Bar icon
+- ✨ Use new event `onStartupFinished` to not take time from editor startup
+
 ## 0.0.15 `28 Jun 2020`
 
 - ✨ Update Tree Views on startup
