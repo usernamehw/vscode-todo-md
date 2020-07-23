@@ -1,15 +1,13 @@
-import * as vscode from 'vscode';
 import dayjs from 'dayjs';
 import table from 'markdown-table';
-
+import * as vscode from 'vscode';
 import { Global } from './extension';
-import { DATE_FORMAT } from './timeUtils';
 
 export function updateHover() {
 	if (Global.hoverDisposable) {
 		Global.hoverDisposable.dispose();
 	}
-	Global.hoverDisposable =	vscode.languages.registerHoverProvider({ scheme: 'file' }, {
+	Global.hoverDisposable = vscode.languages.registerHoverProvider({ scheme: 'file' }, {
 		provideHover(document, position, token) {
 			const dateRegexp = /\d{4}-\d{2}-\d{2}/;
 			const range = document.getWordRangeAtPosition(position, dateRegexp);
@@ -54,13 +52,11 @@ function prepareCommand(date: string, position: vscode.Position) {
 	);
 }
 
-
 function chunk(arr: any[], len: number) {
-	let chunks = [],
-		i = 0,
-		n = arr.length;
+	const chunks = [];
+	const n = arr.length;
 
-	while (i < n) {
+	for (let i = 0; i < n;) {
 		chunks.push(arr.slice(i, i += len));
 	}
 
