@@ -34,7 +34,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 	const projectRanges: Range[] = [];
 	const specialTagRanges: Range[] = [];
 	const text: string[] = [];
-	let priority = '';
+	let priority: string | undefined;
 	let priorityRange: Range | undefined;
 	const tags: string[] = [];
 	const tagsDelimiterRanges: Range[] = [];
@@ -221,7 +221,7 @@ export class TheTask {
 		this.done = init.done ?? false;
 		this.tags = init.tags ?? [];
 		this.projects = init.projects ?? [];
-		this.priority = init.priority || extensionConfig.defaultPriority;
+		this.priority = init.priority ?? extensionConfig.defaultPriority;
 		this.due = init.due;
 		this.specialTags = init.specialTags;
 		this.contexts = init.contexts ?? [];
