@@ -221,7 +221,7 @@ export class TheTask {
 		this.done = init.done ?? false;
 		this.tags = init.tags ?? [];
 		this.projects = init.projects ?? [];
-		this.priority = init.priority ?? extensionConfig.defaultPriority;
+		this.priority = init.priority || extensionConfig.defaultPriority;
 		this.due = init.due;
 		this.specialTags = init.specialTags;
 		this.contexts = init.contexts ?? [];
