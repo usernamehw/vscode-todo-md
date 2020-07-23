@@ -1,20 +1,17 @@
-import { commands, window, workspace, Range, TextEditor, TextDocument, TextLine, WorkspaceEdit, Uri } from 'vscode';
-import * as vscode from 'vscode';
-import * as fs from 'fs';
 import dayjs from 'dayjs';
-
-import { state, updateState, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY } from './extension';
-import { config } from './extension';
-import { appendTaskToFile, getRandomInt, fancyNumber } from './utils';
-import { sortTasks, SortProperty } from './sort';
-import { getFullRangeFromLines, openFileInEditor, insertSnippet, setContext, followLink } from './vscodeUtils';
-import { getDateInISOFormat, DATE_FORMAT } from './timeUtils';
-import { updateTasksTreeView, updateAllTreeViews, updateArchivedTasksTreeView } from './treeViewProviders/treeViews';
-import { TheTask, Count, parseDocument } from './parse';
+import * as fs from 'fs';
+import * as vscode from 'vscode';
+import { commands, Range, TextDocument, TextEditor, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { extensionConfig, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
+import { Count, parseDocument, TheTask } from './parse';
+import { SortProperty, sortTasks } from './sort';
+import { DATE_FORMAT, getDateInISOFormat } from './timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
+import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { DueState } from './types';
+import { appendTaskToFile, fancyNumber, getRandomInt } from './utils';
+import { followLink, getFullRangeFromLines, openFileInEditor, setContext } from './vscodeUtils';
 import { createAgendaWebview } from './webview/agenda';
-import { createCalendarWebview } from './webview/calendar';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
@@ -54,7 +51,7 @@ export function registerCommands() {
 		updateAllTreeViews();
 	});
 	commands.registerTextEditorCommand('todomd.archiveCompletedTasks', editor => {
-		if (!config.defaultArchiveFile) {
+		if (!extensionConfig.defaultArchiveFile) {
 			noArchiveFileMessage();
 			return;
 		}
@@ -70,7 +67,7 @@ export function registerCommands() {
 		workspace.applyEdit(wEdit);
 	});
 	commands.registerTextEditorCommand('todomd.archiveSelectedCompletedTasks', editor => {
-		if (!config.defaultArchiveFile) {
+		if (!extensionConfig.defaultArchiveFile) {
 			noArchiveFileMessage();
 			return;
 		}
@@ -164,7 +161,7 @@ export function registerCommands() {
 		const sortedOverdueTasks = sortTasks(overdueTasks, SortProperty.priority);
 		const sortedDueTasks = sortTasks(dueTasks, SortProperty.priority);
 		const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
-		tasks = [...sortedOverdueTasks, ...sortedDueTasks, ...sortedNotDueTasks].slice(0, config.getNextNumberOfTasks);
+		tasks = [...sortedOverdueTasks, ...sortedDueTasks, ...sortedNotDueTasks].slice(0, extensionConfig.getNextNumberOfTasks);
 
 		vscode.window.showInformationMessage(tasks.map((task, i) => `${fancyNumber(i + 1)} ${formatTask(task)}`).join('\n'), {
 			modal: true,
@@ -188,7 +185,7 @@ export function registerCommands() {
 		vscode.window.showInformationMessage(resultTask.title);
 	});
 	commands.registerCommand('todomd.addTask', async () => {
-		const creationDate = config.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), config.creationDateIncludeTime)}} ` : '';
+		const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
 		if (state.theRightFileOpened) {
 			const editor = window.activeTextEditor!;
 			const text = await window.showInputBox();
@@ -209,7 +206,7 @@ export function registerCommands() {
 			if (!text) {
 				return;
 			}
-			await appendTaskToFile(creationDate + text, config.defaultFile);
+			await appendTaskToFile(creationDate + text, extensionConfig.defaultFile);
 		}
 	});
 	commands.registerTextEditorCommand('todomd.setDueDate', async editor => {
@@ -244,7 +241,7 @@ export function registerCommands() {
 		if (!isOk) {
 			return;
 		}
-		openFileInEditor(config.defaultArchiveFile);
+		openFileInEditor(extensionConfig.defaultArchiveFile);
 	});
 	commands.registerCommand('todomd.completeTask', async () => {
 		const document = await updateState();
@@ -273,7 +270,7 @@ export function registerCommands() {
 	});
 	commands.registerTextEditorCommand('todomd.filter', editor => {
 		const qp = window.createQuickPick();
-		qp.items = config.savedFilters.map(filter => new QPItem(filter.title));
+		qp.items = extensionConfig.savedFilters.map(filter => new QPItem(filter.title));
 		let value: string | undefined;
 		let selected: string | undefined;
 		qp.onDidChangeValue(e => {
@@ -286,7 +283,7 @@ export function registerCommands() {
 		qp.onDidAccept(() => {
 			let filterStr;
 			if (selected) {
-				filterStr = config.savedFilters.find(filter => filter.title === selected)?.filter;
+				filterStr = extensionConfig.savedFilters.find(filter => filter.title === selected)?.filter;
 			} else {
 				filterStr = value;
 			}
@@ -354,7 +351,7 @@ export function registerCommands() {
 }
 
 function archiveTask(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine, shouldDelete: boolean) {
-	appendTaskToFile(line.text, config.defaultArchiveFile);
+	appendTaskToFile(line.text, extensionConfig.defaultArchiveFile);
 	if (shouldDelete) {
 		wEdit.delete(uri, line.rangeIncludingLineBreak);
 	}
@@ -416,24 +413,24 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 	const line = document.lineAt(ln);
 	const workspaceEdit = new WorkspaceEdit();
 	if (task.done) {
-		if (!config.addCompletionDate) {
-			if (line.text.trim().startsWith(config.doneSymbol)) {
-				workspaceEdit.delete(document.uri, new vscode.Range(ln, firstNonWhitespaceCharacterIndex, ln, firstNonWhitespaceCharacterIndex + config.doneSymbol.length));
+		if (!extensionConfig.addCompletionDate) {
+			if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
+				workspaceEdit.delete(document.uri, new vscode.Range(ln, firstNonWhitespaceCharacterIndex, ln, firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
 			}
 		} else {
 			removeCompletionDate(workspaceEdit, document.uri, line);
 		}
 	} else {
-		if (config.addCompletionDate) {
+		if (extensionConfig.addCompletionDate) {
 			insertCompletionDate(workspaceEdit, document.uri, line);
 		} else {
-			workspaceEdit.insert(document.uri, new vscode.Position(ln, firstNonWhitespaceCharacterIndex), config.doneSymbol);
+			workspaceEdit.insert(document.uri, new vscode.Position(ln, firstNonWhitespaceCharacterIndex), extensionConfig.doneSymbol);
 		}
 	}
 	await workspace.applyEdit(workspaceEdit);
 	document.save();
 
-	if (config.autoArchiveTasks) {
+	if (extensionConfig.autoArchiveTasks) {
 		const secondWorkspaceEdit = new WorkspaceEdit();
 		archiveTask(secondWorkspaceEdit, document.uri, line, !task.due?.isRecurring);
 		await workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
@@ -442,14 +439,14 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 }
 async function checkDefaultFileAndNotify(): Promise<boolean> {
 	const specify = 'Specify';
-	if (!config.defaultFile) {
+	if (!extensionConfig.defaultFile) {
 		const shouldSpecify = await window.showWarningMessage('Default file is not specified.', specify);
 		if (shouldSpecify === specify) {
 			specifyDefaultFile();
 		}
 		return false;
 	} else {
-		const exists = fs.existsSync(config.defaultFile);
+		const exists = fs.existsSync(extensionConfig.defaultFile);
 		if (!exists) {
 			const shouldSpecify = await window.showErrorMessage('Default file does not exist.', specify);
 			if (shouldSpecify === specify) {
@@ -463,14 +460,14 @@ async function checkDefaultFileAndNotify(): Promise<boolean> {
 }
 async function checkArchiveFileAndNotify(): Promise<boolean> {
 	const specify = 'Specify';
-	if (!config.defaultArchiveFile) {
+	if (!extensionConfig.defaultArchiveFile) {
 		const shouldSpecify = await window.showWarningMessage('Default archive file is not specified.', specify);
 		if (shouldSpecify === specify) {
 			specifyDefaultArchiveFile();
 		}
 		return false;
 	} else {
-		const exists = fs.existsSync(config.defaultArchiveFile);
+		const exists = fs.existsSync(extensionConfig.defaultArchiveFile);
 		if (!exists) {
 			const shouldSpecify = await window.showErrorMessage('Specified default archive file does not exist.', specify);
 			if (shouldSpecify === specify) {
@@ -489,11 +486,11 @@ function specifyDefaultArchiveFile() {
 	vscode.commands.executeCommand('workbench.action.openSettings', 'todomd.defaultArchiveFile');
 }
 function insertCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
-	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), config.completionDateIncludeTime)}}`);
+	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), extensionConfig.completionDateIncludeTime)}}`);
 }
 function removeDoneSymbol(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine) {
-	if (line.text.trim().startsWith(config.doneSymbol)) {
-		wEdit.delete(uri, new Range(line.lineNumber, line.firstNonWhitespaceCharacterIndex, line.lineNumber, line.firstNonWhitespaceCharacterIndex + config.doneSymbol.length));
+	if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
+		wEdit.delete(uri, new Range(line.lineNumber, line.firstNonWhitespaceCharacterIndex, line.lineNumber, line.firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
 	}
 }
 function removeCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
@@ -522,10 +519,10 @@ export function formatTask(task: TheTask): string {
 }
 
 export async function updateArchivedTasks() {
-	if (!config.defaultArchiveFile) {
+	if (!extensionConfig.defaultArchiveFile) {
 		return;
 	}
-	const document = await workspace.openTextDocument(vscode.Uri.file(config.defaultArchiveFile));
+	const document = await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultArchiveFile));
 	const parsedArchiveTasks = parseDocument(document);
 	state.archivedTasks = parsedArchiveTasks.tasks;
 	updateArchivedTasksTreeView();

@@ -1,5 +1,5 @@
-import { statusBarEntry, state } from './extension';
-
+import { state, statusBarEntry } from './extension';
+// TODO: make a class
 export function showStatusBarEntry() {
 	statusBarEntry.show();
 }

@@ -1,8 +1,8 @@
+import dayjs from 'dayjs';
 import * as vscode from 'vscode';
 import { Range } from 'vscode';
+import { extensionConfig } from './extension';
 import { DueState } from './types';
-import { config } from './extension';
-import dayjs from 'dayjs';
 
 export function parseLine(textLine: vscode.TextLine): TheTask | undefined | number {
 	let line = textLine.text.trim();
@@ -19,10 +19,10 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 	/** Offset of current word (Used to calculate ranges for decorations) */
 	let index = textLine.firstNonWhitespaceCharacterIndex;
 
-	let done = line.startsWith(config.doneSymbol);
+	let done = line.startsWith(extensionConfig.doneSymbol);
 	if (done) {
-		line = line.replace(config.doneSymbol, '');
-		index += config.doneSymbol.length;
+		line = line.replace(extensionConfig.doneSymbol, '');
+		index += extensionConfig.doneSymbol.length;
 	}
 
 	const words = line.split(' ');
@@ -240,7 +240,7 @@ export class TheTask {
 		this.done = init.done || false;
 		this.tags = init.tags || [];
 		this.projects = init.projects || [];
-		this.priority = init.priority || config.defaultPriority;
+		this.priority = init.priority || extensionConfig.defaultPriority;
 		this.due = init.due;
 		this.specialTags = init.specialTags;
 		this.contexts = init.contexts || [];

@@ -1,25 +1,22 @@
-import { window, workspace } from 'vscode';
-import * as vscode from 'vscode';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import * as vscode from 'vscode';
+import { window, workspace } from 'vscode';
+import { registerCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
+import { updateDecorationsStyle } from './decorations';
+import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
+import { updateHover } from './hover';
+import { parseDocument, TheTask } from './parse';
+import { createTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
+import { ContextForProvider, IConfig, Items, ProjectForProvider, SortTags, State, TagForProvider } from './types';
+
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
 dayjs.extend(isoWeek);
 dayjs.Ls.en.weekStart = 1;
 
-
-import { IConfig, State, TagForProvider, ProjectForProvider, ContextForProvider, Items, SortTags } from './types';
-import { parseDocument, TheTask } from './parse';
-import { updateDecorationsStyle } from './decorations';
-import { registerCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
-import { updateAllTreeViews } from './treeViewProviders/treeViews';
-import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
-import { createTreeViews } from './treeViewProviders/treeViews';
-import { updateHover } from './hover';
-
-// @ts-ignore
 export const state: State = {
 	tasks: [],
 	tagsForProvider: [],
@@ -31,12 +28,14 @@ export const state: State = {
 	fileWasReset: false,
 	newDayArrived: false,
 	taskTreeViewFilterValue: '',
+	// @ts-ignore
+	extensionContext: undefined,
 };
 
 export const EXTENSION_NAME = 'todomd';
 export const LAST_VISIT_STORAGE_KEY = 'LAST_VISIT_STORAGE_KEY';
 
-export let config = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
+export let extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
 export const statusBarEntry = window.createStatusBarItem(1, -20000);
 /**
  * Global variables
@@ -92,7 +91,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	}
 
 	function updateConfig(): void {
-		config = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
+		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
 
 		disposeEverything();
 		updateDecorationsStyle();
@@ -200,7 +199,7 @@ export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
 		});
 	}
 	let sortedTags: TagForProvider[];
-	if (config.sortTagsView === SortTags.alphabetic) {
+	if (extensionConfig.sortTagsView === SortTags.alphabetic) {
 		sortedTags = tags.sort((a, b) => a.tag.localeCompare(b.tag));
 	} else {
 		sortedTags = tags.sort((a, b) => b.items.length - a.items.length);
@@ -228,7 +227,7 @@ export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
 }
 
 export async function getDocumentForDefaultFile() {
-	return await workspace.openTextDocument(vscode.Uri.file(config.defaultFile));
+	return await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultFile));
 }
 
 export function deactivate(): void {

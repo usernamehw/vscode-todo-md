@@ -1,8 +1,8 @@
-import { window, TextEditor, Range } from 'vscode';
 import * as vscode from 'vscode';
-
+import { Range, TextEditor, window } from 'vscode';
 import { Global, state } from './extension';
 import { DueState } from './types';
+
 
 export function updateDecorationsStyle(): void {
 	Global.completedTaskDecorationType = window.createTextEditorDecorationType({

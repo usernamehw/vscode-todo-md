@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
-import { state, config, Global } from './extension';
-import { getDateInISOFormat } from './timeUtils';
 import dayjs from 'dayjs';
+import * as vscode from 'vscode';
+import { extensionConfig, Global, state } from './extension';
+import { getDateInISOFormat } from './timeUtils';
 
 export function updateCompletions(): void {
 	if (Global.tagAutocompleteDisposable) {
@@ -93,7 +93,7 @@ function getAllTags(): Set<string> {
 			set.add(tag);
 		}
 	}
-	for (const tag of config.tags) {
+	for (const tag of extensionConfig.tags) {
 		set.add(tag);
 	}
 	return set;
@@ -107,7 +107,7 @@ function getAllProjects(): Set<string> {
 			}
 		}
 	}
-	for (const project of config.projects) {
+	for (const project of extensionConfig.projects) {
 		set.add(project);
 	}
 	return set;
@@ -121,7 +121,7 @@ function getAllContexts(): Set<string> {
 			}
 		}
 	}
-	for (const context of config.contexts) {
+	for (const context of extensionConfig.contexts) {
 		set.add(context);
 	}
 	return set;

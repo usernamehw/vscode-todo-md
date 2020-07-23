@@ -1,14 +1,14 @@
-import { window, workspace } from 'vscode';
-import * as vscode from 'vscode';
-import { Global, LAST_VISIT_STORAGE_KEY, config, updateState, state } from './extension';
-import { updateCompletions } from './completionProviders';
-import { showStatusBarEntry, updateStatusBarEntry, hideStatusBarEntry } from './statusBar';
-import { updateEditorDecorations } from './decorations';
-import { updateAllTreeViews } from './treeViewProviders/treeViews';
-import { resetAllRecurringTasks } from './commands';
-import { setContext } from './vscodeUtils';
 import dayjs from 'dayjs';
+import * as vscode from 'vscode';
+import { window, workspace } from 'vscode';
+import { resetAllRecurringTasks } from './commands';
+import { updateCompletions } from './completionProviders';
+import { updateEditorDecorations } from './decorations';
+import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
 import { updateHover } from './hover';
+import { hideStatusBarEntry, showStatusBarEntry, updateStatusBarEntry } from './statusBar';
+import { updateAllTreeViews } from './treeViewProviders/treeViews';
+import { setContext } from './vscodeUtils';
 
 export const THE_RIGHT_FILE = 'todomd:isActive';
 
@@ -54,7 +54,7 @@ export function isTheRightFileFormat(editor?: vscode.TextEditor): boolean {
 		}
 	}
 	const documentFilter: vscode.DocumentFilter = {
-		pattern: config.activatePattern,
+		pattern: extensionConfig.activatePattern,
 	};
 	return vscode.languages.match(documentFilter, editor.document) !== 0;
 }

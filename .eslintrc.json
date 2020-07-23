@@ -27,6 +27,7 @@
 		}],
 		"@typescript-eslint/await-thenable": 0,
 		"@typescript-eslint/ban-ts-ignore": 0,
+		"@typescript-eslint/explicit-module-boundary-types": 0,
 		"@typescript-eslint/ban-types": 1,
 		"@typescript-eslint/consistent-type-definitions": [1, "interface"],
 		"@typescript-eslint/explicit-function-return-type": 0,// TODO: enable sometimes? maybe?
