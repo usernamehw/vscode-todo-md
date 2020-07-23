@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import * as vscode from 'vscode';
 import { Range } from 'vscode';
 import { extensionConfig } from './extension';
-import { DueState } from './types';
+import { DueState, OptionalExceptFor } from './types';
 
 export function parseLine(textLine: vscode.TextLine): TheTask | undefined | number {
 	let line = textLine.text.trim();
@@ -192,34 +192,15 @@ interface SpecialTags {
 	link?: string;
 }
 
-export interface TaskInit {
-	title: string;
-	ln: number;
-	rawText: string;
+export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'ln' | 'rawText' | 'specialTags'>;
 
-	done?: boolean;
-	tags?: string[];
-	projects?: string[];
-	priority?: string;
-	due?: DueDate;
-	specialTags: SpecialTags;
-	contexts?: string[];
-	priorityRange?: Range;
-	specialTagRanges?: Range[];
-	contextRanges?: Range[];
-	projectRanges?: Range[];
-	tagsDelimiterRanges?: Range[];
-	tagsRange?: Range[];
-}
 export class TheTask {
 	title: string;
 	done: boolean;
 	rawText: string;
-	/** Line number. */
 	ln: number;
 	tags: string[];
 	projects: string[];
-	/** Due string. Example: `2020-03-27|e30d` */
 	due?: DueDate;
 	specialTags: SpecialTags;
 	priority: string;
