@@ -54,7 +54,7 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 				{
 					command: `${EXTENSION_NAME}.goToLine`,
 					title: 'Go To Line',
-					arguments: [task.ln],
+					arguments: [task.lineNumber],
 				}));
 		}
 	}

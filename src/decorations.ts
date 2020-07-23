@@ -88,7 +88,7 @@ export function updateEditorDecorations(editor: TextEditor) {
 
 	for (const line of state.tasks) {
 		if (line.done) {
-			completedDecorationRanges.push(new vscode.Range(line.ln, 0, line.ln, 0));
+			completedDecorationRanges.push(new vscode.Range(line.lineNumber, 0, line.lineNumber, 0));
 		}
 		if (line.tagsRange) {
 			tagsDecorationRanges.push(...line.tagsRange);

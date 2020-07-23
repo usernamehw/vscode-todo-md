@@ -10,10 +10,10 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		// Empty lines are ok and allowed to use to read the file easier
 		return undefined;
 	}
-	const ln = textLine.lineNumber;
+	const lineNumber = textLine.lineNumber;
 	if (line[0] === '#' && line[1] === ' ') {
 		// Comment. Also, in markdown file a header and can be used for Go To Symbol
-		return ln;
+		return lineNumber;
 	}
 
 	/** Offset of current word (Used to calculate ranges for decorations) */
@@ -50,7 +50,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 					break;
 				}
 				const [specialTag, value = ''] = word.slice(1, -1).split(':');
-				const range = new Range(ln, index, ln, index + word.length);
+				const range = new Range(lineNumber, index, lineNumber, index + word.length);
 				if (specialTag === 'due') {
 					if (value.length) {
 						due = new DueDate(value, range);
@@ -98,8 +98,8 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 				const tempTags = word.split('#').filter(tag => tag.length);
 				let temp = index;
 				for (const tag of tempTags) {
-					tagsDelimiterRanges.push(new Range(ln, temp, ln, temp + 1));
-					tagsRange.push(new Range(ln, temp + 1, ln, temp + 1 + tag.length));
+					tagsDelimiterRanges.push(new Range(lineNumber, temp, lineNumber, temp + 1));
+					tagsRange.push(new Range(lineNumber, temp + 1, lineNumber, temp + 1 + tag.length));
 					temp += tag.length + 1;
 					tags.push(tag);
 				}
@@ -107,13 +107,13 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 			}
 			case '@': {
 				contexts.push(word.slice(1));
-				contextRanges.push(new Range(ln, index, ln, index + word.length));
+				contextRanges.push(new Range(lineNumber, index, lineNumber, index + word.length));
 				break;
 			}
 			case '+': {
 				if (word.length !== 1) {
 					projects.push(word.slice(1));
-					projectRanges.push(new Range(ln, index, ln, index + word.length));
+					projectRanges.push(new Range(lineNumber, index, lineNumber, index + word.length));
 				} else {
 					text.push(word);
 				}
@@ -122,7 +122,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 			case '(': {
 				if (/^\([A-Z]\)$/.test(word)) {
 					priority = word[1];
-					priorityRange = new Range(ln, index, ln, index + word.length);
+					priorityRange = new Range(lineNumber, index, lineNumber, index + word.length);
 				} else {
 					text.push(word);
 				}
@@ -151,7 +151,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		contexts,
 		contextRanges,
 		title: text.join(' '),
-		ln,
+		lineNumber,
 	});
 }
 interface ParsedStuff {
@@ -192,13 +192,13 @@ interface SpecialTags {
 	link?: string;
 }
 
-export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'ln' | 'rawText' | 'specialTags'>;
+export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags'>;
 
 export class TheTask {
 	title: string;
 	done: boolean;
 	rawText: string;
-	ln: number;
+	lineNumber: number;
 	tags: string[];
 	projects: string[];
 	due?: DueDate;
@@ -216,7 +216,7 @@ export class TheTask {
 	 */
 	constructor(init: TaskInit) {
 		this.title = init.title;
-		this.ln = init.ln;
+		this.lineNumber = init.lineNumber;
 		this.rawText = init.rawText;
 		this.done = init.done ?? false;
 		this.tags = init.tags ?? [];

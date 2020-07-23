@@ -162,7 +162,7 @@ export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
 				tagMap[tag] = [];
 			}
 			tagMap[tag].push({
-				lineNumber: task.ln,
+				lineNumber: task.lineNumber,
 				title: task.title,
 			});
 		}
@@ -173,7 +173,7 @@ export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
 					projectMap[project] = [];
 				}
 				projectMap[project].push({
-					lineNumber: task.ln,
+					lineNumber: task.lineNumber,
 					title: task.title,
 				});
 			}
@@ -185,7 +185,7 @@ export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
 					contextMap[context] = [];
 				}
 				contextMap[context].push({
-					lineNumber: task.ln,
+					lineNumber: task.lineNumber,
 					title: task.title,
 				});
 			}

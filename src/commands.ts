@@ -25,26 +25,26 @@ export function registerCommands() {
 	commands.registerCommand('todomd.toggleDone', async (treeItem?: TaskTreeItem) => {
 		const editor = window.activeTextEditor;
 		let document;
-		let ln;
+		let lineNumber;
 		if (treeItem) {
-			ln = treeItem.task.ln;
+			lineNumber = treeItem.task.lineNumber;
 			document = await updateState();
 		} else {
 			if (!editor) {
 				return;
 			}
-			ln = editor.selection.active.line;
+			lineNumber = editor.selection.active.line;
 			document = editor.document;
 		}
 
-		const task = getTaskAtLine(ln);
+		const task = getTaskAtLine(lineNumber);
 		if (!task) {
 			return;
 		}
 		if (task.specialTags.count) {
-			await incrementCountForTask(document, ln, task);
+			await incrementCountForTask(document, lineNumber, task);
 		} else {
-			await toggleTaskAtLine(ln, document);
+			await toggleTaskAtLine(lineNumber, document);
 		}
 
 		await updateState();
@@ -61,7 +61,7 @@ export function registerCommands() {
 		}
 		const wEdit = new WorkspaceEdit();
 		for (const task of completedTasks) {
-			const line = editor.document.lineAt(task.ln);
+			const line = editor.document.lineAt(task.lineNumber);
 			archiveTask(wEdit, editor.document.uri, line, !task.due?.isRecurring);
 		}
 		workspace.applyEdit(wEdit);
@@ -109,7 +109,7 @@ export function registerCommands() {
 		if (!task) {
 			return;
 		}
-		const line = editor.document.lineAt(task.ln);
+		const line = editor.document.lineAt(task.lineNumber);
 		const wEdit = new WorkspaceEdit();
 		const tagsAsString = task.tags.map(tag => ` #${tag}`).join('');
 		const projectsAsString = task.projects.map(project => `+${project}`).join(' ');
@@ -261,9 +261,9 @@ export function registerCommands() {
 			return;
 		}
 		if (task.specialTags.count) {
-			await incrementCountForTask(document, task.ln, task);
+			await incrementCountForTask(document, task.lineNumber, task);
 		} else {
-			await toggleTaskAtLine(task.ln, document);
+			await toggleTaskAtLine(task.lineNumber, document);
 		}
 		await updateState();
 		updateAllTreeViews();
@@ -371,7 +371,7 @@ export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void>
 	}
 	for (const task of state.tasks) {
 		if (task.due?.isRecurring && task.done) {
-			const line = document.lineAt(task.ln);
+			const line = document.lineAt(task.lineNumber);
 			removeDoneSymbol(wEdit, document.uri, line);
 			removeCompletionDate(wEdit, document.uri, line);
 			const count = task.specialTags.count;
@@ -383,8 +383,8 @@ export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void>
 	await workspace.applyEdit(wEdit);
 	document.save();
 }
-async function incrementCountForTask(document: vscode.TextDocument, ln: number, task: TheTask) {
-	const line = document.lineAt(ln);
+async function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
+	const line = document.lineAt(lineNumber);
 	const wEdit = new WorkspaceEdit();
 	const count = task.specialTags.count;
 	if (!count) {
@@ -404,18 +404,18 @@ async function incrementCountForTask(document: vscode.TextDocument, ln: number, 
 	await vscode.workspace.applyEdit(wEdit);
 	document.save();
 }
-export async function toggleTaskAtLine(ln: number, document: TextDocument): Promise<void> {
-	const firstNonWhitespaceCharacterIndex = document.lineAt(ln).firstNonWhitespaceCharacterIndex;
-	const task = getTaskAtLine(ln);
+export async function toggleTaskAtLine(lineNumber: number, document: TextDocument): Promise<void> {
+	const firstNonWhitespaceCharacterIndex = document.lineAt(lineNumber).firstNonWhitespaceCharacterIndex;
+	const task = getTaskAtLine(lineNumber);
 	if (!task) {
 		return;
 	}
-	const line = document.lineAt(ln);
+	const line = document.lineAt(lineNumber);
 	const workspaceEdit = new WorkspaceEdit();
 	if (task.done) {
 		if (!extensionConfig.addCompletionDate) {
 			if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
-				workspaceEdit.delete(document.uri, new vscode.Range(ln, firstNonWhitespaceCharacterIndex, ln, firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
+				workspaceEdit.delete(document.uri, new vscode.Range(lineNumber, firstNonWhitespaceCharacterIndex, lineNumber, firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
 			}
 		} else {
 			removeCompletionDate(workspaceEdit, document.uri, line);
@@ -424,7 +424,7 @@ export async function toggleTaskAtLine(ln: number, document: TextDocument): Prom
 		if (extensionConfig.addCompletionDate) {
 			insertCompletionDate(workspaceEdit, document.uri, line);
 		} else {
-			workspaceEdit.insert(document.uri, new vscode.Position(ln, firstNonWhitespaceCharacterIndex), extensionConfig.doneSymbol);
+			workspaceEdit.insert(document.uri, new vscode.Position(lineNumber, firstNonWhitespaceCharacterIndex), extensionConfig.doneSymbol);
 		}
 	}
 	await workspace.applyEdit(workspaceEdit);
@@ -507,7 +507,7 @@ function setCountCurrentValue(wEdit: WorkspaceEdit, uri: Uri, count: Count, valu
 }
 export function getTaskAtLine(lineNumber: number): TheTask | undefined {
 	for (const line of state.tasks) {
-		if (line.ln === lineNumber) {
+		if (line.lineNumber === lineNumber) {
 			return line;
 		}
 	}
