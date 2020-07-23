@@ -79,6 +79,13 @@ Recurring due dates should not be archived and their completion state should be 
 {due:2020-06-28|e2d}
 ```
 
+### Multiple recurring due dates `,`
+
+```bash
+# Is due every Sunday and Monday
+{due:mon,sun}
+```
+
 ## Comments
 
 Comment is not considered a task. It starts with a sharp sign `#` followed by a space.
