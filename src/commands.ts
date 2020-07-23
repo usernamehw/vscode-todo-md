@@ -15,7 +15,7 @@ import { createAgendaWebview } from './webview/agenda';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
-class QPItem implements vscode.QuickPickItem {
+class QuickPickItem implements vscode.QuickPickItem {
 	constructor(public label: string) {
 		this.label = label;
 	}
@@ -270,7 +270,7 @@ export function registerCommands() {
 	});
 	commands.registerTextEditorCommand('todomd.filter', editor => {
 		const qp = window.createQuickPick();
-		qp.items = extensionConfig.savedFilters.map(filter => new QPItem(filter.title));
+		qp.items = extensionConfig.savedFilters.map(filter => new QuickPickItem(filter.title));
 		let value: string | undefined;
 		let selected: string | undefined;
 		qp.onDidChangeValue(e => {
