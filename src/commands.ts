@@ -515,6 +515,10 @@ export async function updateArchivedTasks() {
 	state.archivedTasks = parsedArchiveTasks.tasks;
 	updateArchivedTasksTreeView();
 }
+/**
+ * vscode WorkspaceEdit allowes changing files that are not even opened.
+ * document.save() is needed to prevent opening those files after applying the edit.
+ */
 export async function applyEdit(wEdit: WorkspaceEdit, document: vscode.TextDocument) {
 	await workspace.applyEdit(wEdit);
 	return await document.save();
