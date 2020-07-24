@@ -8,7 +8,7 @@ import { updateDecorationStyle } from './decorations';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
 import { parseDocument, TheTask } from './parse';
 import { StatusBar } from './statusBar';
-import { createTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
+import { createAllTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { IConfig, ItemForProvider, Items, SortTags, State } from './types';
 
 dayjs.extend(isBetween);
@@ -71,7 +71,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 
 	updateDecorationStyle();
 	registerAllCommands();
-	createTreeViews();
+	createAllTreeViews();
 
 	await updateState();
 

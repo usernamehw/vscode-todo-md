@@ -1,11 +1,11 @@
-import * as vscode from 'vscode';
-import { TagProvider } from './tagProvider';
-import { EXTENSION_NAME, state, extensionConfig, updateState } from '../extension';
-import { TaskProvider } from './taskProvider';
-import { ProjectProvider } from './projectProvider';
-import { ContextProvider } from './contextProvider';
+import vscode from 'vscode';
+import { extensionConfig, EXTENSION_NAME, state } from '../extension';
 import { filterItems } from '../filter';
 import { setContext } from '../vscodeUtils';
+import { ContextProvider } from './contextProvider';
+import { ProjectProvider } from './projectProvider';
+import { TagProvider } from './tagProvider';
+import { TaskProvider } from './taskProvider';
 
 const VIEW_GENERIC_1_CONTEXT_KEY = 'todomd:generic1FilterExists';
 const VIEW_GENERIC_2_CONTEXT_KEY = 'todomd:generic2FilterExists';
@@ -16,9 +16,11 @@ export const projectProvider = new ProjectProvider([]);
 export const contextProvider = new ContextProvider([]);
 export const taskProvider = new TaskProvider([]);
 export const archivedProvider = new TaskProvider([]);
+
 const generic1Provider = new TaskProvider([]);
 const generic2Provider = new TaskProvider([]);
 const generic3Provider = new TaskProvider([]);
+
 let tagsView: vscode.TreeView<any>;
 let projectView: vscode.TreeView<any>;
 let contextView: vscode.TreeView<any>;
@@ -28,7 +30,7 @@ let generic1View: vscode.TreeView<any>;
 let generic2View: vscode.TreeView<any>;
 let generic3View: vscode.TreeView<any>;
 
-export function createTreeViews() {
+export function createAllTreeViews() {
 	tagsView = vscode.window.createTreeView(`${EXTENSION_NAME}.tags`, {
 		treeDataProvider: tagProvider,
 		showCollapseAll: true,
