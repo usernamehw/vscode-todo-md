@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { EXTENSION_NAME } from '../extension';
-import type { ContextForProvider } from '../types';
+import { ItemForProvider } from '../types';
 
 export class ContextTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
@@ -49,10 +49,10 @@ export class ContextProvider implements vscode.TreeDataProvider<ContextTreeItem 
 	readonly onDidChangeTreeData: vscode.Event<ContextTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
-		private contexts: ContextForProvider[]
+		private contexts: ItemForProvider[]
 	) { }
 
-	refresh(newContexts: ContextForProvider[]): void {
+	refresh(newContexts: ItemForProvider[]): void {
 		this.contexts = newContexts;
 		this._onDidChangeTreeData.fire(undefined);
 	}
@@ -65,7 +65,7 @@ export class ContextProvider implements vscode.TreeDataProvider<ContextTreeItem 
 		if (element) {
 			return element.items;
 		} else {
-			return this.contexts.map(context => new ContextTreeItem(`${context.context} [${context.items.length}]`, context.items.map(item => new LineTreeItem(
+			return this.contexts.map(context => new ContextTreeItem(`${context.title} [${context.items.length}]`, context.items.map(item => new LineTreeItem(
 				item.title,
 				{
 					command: `${EXTENSION_NAME}.goToLine`,

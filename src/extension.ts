@@ -10,7 +10,7 @@ import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from
 import { updateHover } from './hover';
 import { parseDocument, TheTask } from './parse';
 import { createTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
-import { ContextForProvider, IConfig, Items, ProjectForProvider, SortTags, State, TagForProvider } from './types';
+import { IConfig, Items, SortTags, State, ItemForProvider } from './types';
 import { StatusBar } from './statusBar';
 
 dayjs.extend(isBetween);
@@ -142,9 +142,9 @@ function disposeEverything(): void {
 }
 
 interface ForProvider {
-	sortedTags: TagForProvider[];
-	projects: ProjectForProvider[];
-	contexts: ContextForProvider[];
+	sortedTags: ItemForProvider[];
+	projects: ItemForProvider[];
+	contexts: ItemForProvider[];
 }
 export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
 	const tagMap: {
@@ -192,31 +192,31 @@ export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
 			}
 		}
 	}
-	const tags = [];
+	const tags: ItemForProvider[] = [];
 	for (const key in tagMap) {
 		tags.push({
-			tag: key,
+			title: key,
 			items: tagMap[key],
 		});
 	}
-	let sortedTags: TagForProvider[];
+	let sortedTags: ItemForProvider[];
 	if (extensionConfig.sortTagsView === SortTags.alphabetic) {
-		sortedTags = tags.sort((a, b) => a.tag.localeCompare(b.tag));
+		sortedTags = tags.sort((a, b) => a.title.localeCompare(b.title));
 	} else {
 		sortedTags = tags.sort((a, b) => b.items.length - a.items.length);
 	}
 
-	const projects = [];
+	const projects: ItemForProvider[] = [];
 	for (const key in projectMap) {
 		projects.push({
-			project: key,
+			title: key,
 			items: projectMap[key],
 		});
 	}
-	const contexts = [];
+	const contexts: ItemForProvider[] = [];
 	for (const key in contextMap) {
 		contexts.push({
-			context: key,
+			title: key,
 			items: contextMap[key],
 		});
 	}

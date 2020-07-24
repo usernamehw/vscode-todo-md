@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { EXTENSION_NAME } from '../extension';
-import type { ProjectForProvider } from '../types';
+import { ItemForProvider } from '../types';
 
 export class ProjectTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
@@ -49,10 +49,10 @@ export class ProjectProvider implements vscode.TreeDataProvider<ProjectTreeItem 
 	readonly onDidChangeTreeData: vscode.Event<ProjectTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
-		private projects: ProjectForProvider[]
+		private projects: ItemForProvider[]
 	) { }
 
-	refresh(newProjects: ProjectForProvider[]): void {
+	refresh(newProjects: ItemForProvider[]): void {
 		this.projects = newProjects;
 		this._onDidChangeTreeData.fire(undefined);
 	}
@@ -65,7 +65,7 @@ export class ProjectProvider implements vscode.TreeDataProvider<ProjectTreeItem 
 		if (element) {
 			return element.items;
 		} else {
-			return this.projects.map(project => new ProjectTreeItem(`${project.project} [${project.items.length}]`, project.items.map(item => new LineTreeItem(
+			return this.projects.map(project => new ProjectTreeItem(`${project.title} [${project.items.length}]`, project.items.map(item => new LineTreeItem(
 				item.title,
 				{
 					command: `${EXTENSION_NAME}.goToLine`,

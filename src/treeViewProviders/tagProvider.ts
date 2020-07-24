@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { EXTENSION_NAME } from '../extension';
-import type { TagForProvider } from '../types';
+import { ItemForProvider } from '../types';
 
 export class TagTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
@@ -48,10 +48,10 @@ export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | LineTr
 	readonly onDidChangeTreeData: vscode.Event<TagTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
-		private tags: TagForProvider[]
+		private tags: ItemForProvider[]
 	) { }
 
-	refresh(newTags: TagForProvider[]): void {
+	refresh(newTags: ItemForProvider[]): void {
 		this.tags = newTags;
 		this._onDidChangeTreeData.fire(undefined);
 	}
@@ -64,7 +64,7 @@ export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | LineTr
 		if (element) {
 			return element.items;
 		} else {
-			return this.tags.map(tag => new TagTreeItem(`${tag.tag} [${tag.items.length}]`, tag.items.map(item => new LineTreeItem(
+			return this.tags.map(tag => new TagTreeItem(`${tag.title} [${tag.items.length}]`, tag.items.map(item => new LineTreeItem(
 				item.title,
 				{
 					command: `${EXTENSION_NAME}.goToLine`,

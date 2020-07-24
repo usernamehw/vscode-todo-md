@@ -1,18 +1,11 @@
 import * as vscode from 'vscode';
 import { TheTask } from './parse';
-// combine the three into 1 interface ?
-export interface TagForProvider {
-	tag: string;
+
+export interface ItemForProvider {
+	title: string;
 	items: Items[];
 }
-export interface ProjectForProvider {
-	project: string;
-	items: Items[];
-}
-export interface ContextForProvider {
-	context: string;
-	items: Items[];
-}
+
 export interface Items {
 	lineNumber: number;
 	title: string;
@@ -21,9 +14,9 @@ export interface Items {
 export interface State {
 	tasks: TheTask[];
 	archivedTasks: TheTask[];
-	tagsForProvider: TagForProvider[];
-	projectsForProvider: ProjectForProvider[];
-	contextsForProvider: ContextForProvider[];
+	tagsForProvider: ItemForProvider[];
+	projectsForProvider: ItemForProvider[];
+	contextsForProvider: ItemForProvider[];
 	lastVisit?: Date;
 	commentLines: vscode.Range[];
 
@@ -55,9 +48,6 @@ export interface IConfig {
 	sortTagsView: SortTags;
 
 	doneSymbol: string;
-	/**
-	 * Choose files that extension will operate on. By default any markdown file (`.md`).
-	 */
 	activatePattern: string;
 
 	tags: string[];
@@ -79,4 +69,4 @@ export interface IConfig {
 	getNextNumberOfTasks: number;
 }
 
-export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Pick<T, TRequired>
+export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Pick<T, TRequired>;
