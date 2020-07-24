@@ -1,9 +1,12 @@
 import dayjs from 'dayjs';
-import * as vscode from 'vscode';
-import { Range } from 'vscode';
+import vscode, { Range } from 'vscode';
 import { extensionConfig } from './extension';
 import { DueState, OptionalExceptFor } from './types';
-
+/**
+ * Returns undefined for empty string
+ * Returns line number for comment line
+ * Returns parsed line `TheTask` otherwise
+ */
 export function parseLine(textLine: vscode.TextLine): TheTask | undefined | number {
 	let line = textLine.text.trim();
 	if (!line.length) {
@@ -154,20 +157,23 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		lineNumber,
 	});
 }
-interface ParsedStuff {
+
+interface ParsedDocument {
 	tasks: TheTask[];
 	commentLines: Range[];
 }
 
-export function parseDocument(document: vscode.TextDocument): ParsedStuff {
+export function parseDocument(document: vscode.TextDocument): ParsedDocument {
 	const tasks = [];
 	const commentLines = [];
 	for (let i = 0; i < document.lineCount; i++) {
 		const parsedLine = parseLine(document.lineAt(i));
 		if (parsedLine === undefined) {
+			// empty line - skip it
 			continue;
 		}
 		if (typeof parsedLine === 'number') {
+			// comment line
 			commentLines.push(new Range(parsedLine, 0, parsedLine, 0));
 			continue;
 		}
@@ -179,12 +185,19 @@ export function parseDocument(document: vscode.TextDocument): ParsedStuff {
 		commentLines,
 	};
 }
-
+/**
+ * Modifier for task completion.
+ * Instead of completing the task increases count by 1.
+ * When the number matches the goal - the task is considered completed.
+ */
 export interface Count {
 	range: Range;
 	needed: number;
 	current: number;
 }
+/**
+ * Grouped special tags.
+ */
 interface SpecialTags {
 	threshold?: string;
 	isHidden?: boolean;
@@ -194,7 +207,7 @@ interface SpecialTags {
 
 export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags'>;
 /**
- * name `TheTask` because of conflict with vscode `Task`
+ * `The` prefix because of auto import conflict with vscode `Task`
  */
 export class TheTask {
 	title: string;
