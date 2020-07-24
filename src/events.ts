@@ -5,7 +5,6 @@ import { resetAllRecurringTasks } from './commands';
 import { updateCompletions } from './completionProviders';
 import { updateEditorDecorations } from './decorations';
 import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from './extension';
-import { updateHover } from './hover';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { setContext } from './vscodeUtils';
 
@@ -64,7 +63,6 @@ export function enterTheRightFile(editor: vscode.TextEditor) {
 	updateCompletions();
 	statusBar.updateText(state.tasks);
 	statusBar.show();
-	updateHover();
 	checkIfNewDayArrived();
 	setContext(THE_RIGHT_FILE, true);
 	if (state.newDayArrived && !state.fileWasReset) {
@@ -83,9 +81,6 @@ export async function exitTheRightFile() {
 		Global.tagAutocompleteDisposable.dispose();
 		Global.projectAutocompleteDisposable.dispose();
 		Global.generalAutocompleteDisposable.dispose();
-	}
-	if (Global.hoverDisposable) {
-		Global.hoverDisposable.dispose();
 	}
 	statusBar.hide();
 	setContext(THE_RIGHT_FILE, false);

@@ -7,7 +7,6 @@ import { window, workspace } from 'vscode';
 import { registerCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
 import { updateDecorationsStyle } from './decorations';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
-import { updateHover } from './hover';
 import { parseDocument, TheTask } from './parse';
 import { createTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { IConfig, Items, SortTags, State, ItemForProvider } from './types';
@@ -48,7 +47,6 @@ export class Global {
 	static generalAutocompleteDisposable: vscode.Disposable;
 
 	static changeTextDocumentDisposable: vscode.Disposable;
-	static hoverDisposable: vscode.Disposable;
 
 	static completedTaskDecorationType: vscode.TextEditorDecorationType;
 	static commentDecorationType: vscode.TextEditorDecorationType;
@@ -74,7 +72,6 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	updateDecorationsStyle();
 	registerCommands();
 	createTreeViews();
-	updateHover();
 
 	await updateState();
 	const isNewDay = checkIfNewDayArrived();
