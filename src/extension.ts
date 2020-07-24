@@ -2,15 +2,14 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import * as vscode from 'vscode';
-import { window, workspace } from 'vscode';
+import vscode, { window, workspace } from 'vscode';
 import { registerCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
 import { updateDecorationsStyle } from './decorations';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
 import { parseDocument, TheTask } from './parse';
-import { createTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
-import { IConfig, Items, SortTags, State, ItemForProvider } from './types';
 import { StatusBar } from './statusBar';
+import { createTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
+import { IConfig, ItemForProvider, Items, SortTags, State } from './types';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -19,9 +18,9 @@ dayjs.Ls.en.weekStart = 1;
 
 export const state: State = {
 	tasks: [],
-	tagsForProvider: [],
-	projectsForProvider: [],
-	contextsForProvider: [],
+	tagsForTreeView: [],
+	projectsForTreeView: [],
+	contextsForTreeView: [],
 	archivedTasks: [],
 	commentLines: [],
 	theRightFileOpened: false,
@@ -74,15 +73,18 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	createTreeViews();
 
 	await updateState();
+
 	const isNewDay = checkIfNewDayArrived();
 	if (isNewDay && !state.theRightFileOpened) {
 		resetAllRecurringTasks();
 	}
+
 	updateAllTreeViews();
 	updateArchivedTasks();
 
 	onChangeActiveTextEditor(window.activeTextEditor);
 	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
+
 	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
 		if (!e.affectsConfiguration(EXTENSION_NAME)) return;
 		updateConfig();
@@ -103,18 +105,21 @@ export async function updateState(document?: vscode.TextDocument) {
 	if (!document) {
 		document = await getDocumentForDefaultFile();
 	}
-	const result = parseDocument(document);
-	state.tasks = result.tasks;
-	state.commentLines = result.commentLines;
-	const forProvider = groupAndSortForProvider(state.tasks);
-	state.tagsForProvider = forProvider.sortedTags;
-	state.projectsForProvider = forProvider.projects;
-	state.contextsForProvider = forProvider.contexts;
+	const parsedDocument = parseDocument(document);
+
+	state.tasks = parsedDocument.tasks;
+	state.commentLines = parsedDocument.commentLines;
+
+	const treeItems = groupAndSortTreeItems(state.tasks);
+	state.tagsForTreeView = treeItems.sortedTags;
+	state.projectsForTreeView = treeItems.projects;
+	state.contextsForTreeView = treeItems.contexts;
+
 	return document;
 }
 function disposeEverything(): void {
 	if (Global.completedTaskDecorationType) {
-		// if one set - all set
+		// if one set - that means that all decorations are set
 		Global.completedTaskDecorationType.dispose();
 		Global.commentDecorationType.dispose();
 		Global.priority1DecorationType.dispose();
@@ -138,7 +143,7 @@ function disposeEverything(): void {
 	}
 }
 
-interface ForProvider {
+interface TreeItems {
 	sortedTags: ItemForProvider[];
 	projects: ItemForProvider[];
 	contexts: ItemForProvider[];
@@ -146,7 +151,7 @@ interface ForProvider {
 interface TempItemsMap {
 	[title: string]: Items[];
 }
-export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
+export function groupAndSortTreeItems(tasks: TheTask[]): TreeItems {
 	const tagMap: TempItemsMap = {};
 	const projectMap: TempItemsMap = {};
 	const contextMap: TempItemsMap = {};

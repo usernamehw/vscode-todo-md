@@ -14,9 +14,9 @@ export interface Items {// TODO: rename
 export interface State {
 	tasks: TheTask[];
 	archivedTasks: TheTask[];
-	tagsForProvider: ItemForProvider[];
-	projectsForProvider: ItemForProvider[];
-	contextsForProvider: ItemForProvider[];
+	tagsForTreeView: ItemForProvider[];
+	projectsForTreeView: ItemForProvider[];
+	contextsForTreeView: ItemForProvider[];
 	lastVisit?: Date;
 	commentLines: vscode.Range[];
 

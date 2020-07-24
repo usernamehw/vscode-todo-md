@@ -96,16 +96,16 @@ export function createTreeViews() {
 }
 
 export function updateAllTreeViews(): void {
-	tagProvider.refresh(state.tagsForProvider);
-	tagsView.title = `tags (${state.tagsForProvider.length})`;
+	tagProvider.refresh(state.tagsForTreeView);
+	tagsView.title = `tags (${state.tagsForTreeView.length})`;
 
 	updateTasksTreeView();
 
-	projectProvider.refresh(state.projectsForProvider);
-	projectView.title = `projects (${state.projectsForProvider.length})`;
+	projectProvider.refresh(state.projectsForTreeView);
+	projectView.title = `projects (${state.projectsForTreeView.length})`;
 
-	contextProvider.refresh(state.contextsForProvider);
-	contextView.title = `contexts (${state.contextsForProvider.length})`;
+	contextProvider.refresh(state.contextsForTreeView);
+	contextView.title = `contexts (${state.contextsForTreeView.length})`;
 
 	if (generic1View) {
 		const filteredTasks = filterItems(getTasksForTreeView(), extensionConfig.treeViews[0].filter);
