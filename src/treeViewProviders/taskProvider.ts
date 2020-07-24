@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
+import vscode from 'vscode';
+import { formatTask } from '../commands';
 import { EXTENSION_NAME } from '../extension';
 import { TheTask } from '../parse';
-import { formatTask } from '../commands';
 
 export class TaskTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.None;
@@ -19,7 +19,7 @@ export class TaskTreeItem extends vscode.TreeItem {
 	}
 
 	get tooltip(): string | undefined {
-		return `TITLE: ${this.task.title}\nDONE: ${this.task.done}\nPRIORITY: ${this.task.priority}`;
+		return `TITLE: ${this.task.title}\nDONE: ${this.task.done}\nPRIORITY: ${this.task.priority}`;// TODO: make nice markdown hover
 	}
 
 	get description() {

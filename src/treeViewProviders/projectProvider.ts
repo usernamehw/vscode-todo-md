@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import vscode from 'vscode';
 import { EXTENSION_NAME } from '../extension';
 import { ItemForProvider } from '../types';
 
