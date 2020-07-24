@@ -4,7 +4,7 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import vscode, { window, workspace } from 'vscode';
 import { registerCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
-import { updateDecorationsStyle } from './decorations';
+import { updateDecorationStyle } from './decorations';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
 import { parseDocument, TheTask } from './parse';
 import { StatusBar } from './statusBar';
@@ -49,12 +49,12 @@ export class Global {
 
 	static completedTaskDecorationType: vscode.TextEditorDecorationType;
 	static commentDecorationType: vscode.TextEditorDecorationType;
-	static priority1DecorationType: vscode.TextEditorDecorationType;
-	static priority2DecorationType: vscode.TextEditorDecorationType;
-	static priority3DecorationType: vscode.TextEditorDecorationType;
-	static priority4DecorationType: vscode.TextEditorDecorationType;
-	static priority5DecorationType: vscode.TextEditorDecorationType;
-	static priority6DecorationType: vscode.TextEditorDecorationType;
+	static priorityADecorationType: vscode.TextEditorDecorationType;
+	static priorityBDecorationType: vscode.TextEditorDecorationType;
+	static priorityCDecorationType: vscode.TextEditorDecorationType;
+	static priorityDDecorationType: vscode.TextEditorDecorationType;
+	static priorityEDecorationType: vscode.TextEditorDecorationType;
+	static priorityFDecorationType: vscode.TextEditorDecorationType;
 	static tagsDecorationType: vscode.TextEditorDecorationType;
 	static specialTagDecorationType: vscode.TextEditorDecorationType;
 	static tagsDelimiterDecorationType: vscode.TextEditorDecorationType;
@@ -68,7 +68,7 @@ export class Global {
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
 	state.extensionContext = extensionContext;
-	updateDecorationsStyle();
+	updateDecorationStyle();
 	registerCommands();
 	createTreeViews();
 
@@ -94,7 +94,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
 
 		disposeEverything();
-		updateDecorationsStyle();
+		updateDecorationStyle();
 		updateEverything();
 	}
 
@@ -122,12 +122,12 @@ function disposeEverything(): void {
 		// if one set - that means that all decorations are set
 		Global.completedTaskDecorationType.dispose();
 		Global.commentDecorationType.dispose();
-		Global.priority1DecorationType.dispose();
-		Global.priority2DecorationType.dispose();
-		Global.priority3DecorationType.dispose();
-		Global.priority4DecorationType.dispose();
-		Global.priority5DecorationType.dispose();
-		Global.priority6DecorationType.dispose();
+		Global.priorityADecorationType.dispose();
+		Global.priorityBDecorationType.dispose();
+		Global.priorityCDecorationType.dispose();
+		Global.priorityDDecorationType.dispose();
+		Global.priorityEDecorationType.dispose();
+		Global.priorityFDecorationType.dispose();
 		Global.tagsDecorationType.dispose();
 		Global.specialTagDecorationType.dispose();
 		Global.tagsDelimiterDecorationType.dispose();
