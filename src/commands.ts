@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
-import * as vscode from 'vscode';
-import { commands, Range, TextDocument, TextEditor, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import vscode, { commands, Range, TextDocument, TextEditor, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { extensionConfig, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
 import { Count, parseDocument, TheTask } from './parse';
 import { SortProperty, sortTasks } from './sort';
@@ -10,7 +9,7 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { DueState } from './types';
 import { appendTaskToFile, fancyNumber, getRandomInt } from './utils';
-import { followLink, getFullRangeFromLines, openFileInEditor, setContext } from './vscodeUtils';
+import { followLink, getFullRangeFromLines, openFileInEditor, setContext, openSettingGuiAt } from './vscodeUtils';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
@@ -20,11 +19,11 @@ class QuickPickItem implements vscode.QuickPickItem {
 	}
 }
 
-export function registerCommands() {
+export function registerAllCommands() {
 	commands.registerCommand('todomd.toggleDone', async (treeItem?: TaskTreeItem) => {
 		const editor = window.activeTextEditor;
-		let document;
-		let lineNumber;
+		let document: vscode.TextDocument;
+		let lineNumber: number;
 		if (treeItem) {
 			lineNumber = treeItem.task.lineNumber;
 			document = await updateState();
@@ -43,7 +42,7 @@ export function registerCommands() {
 		if (task.specialTags.count) {
 			await incrementCountForTask(document, lineNumber, task);
 		} else {
-			await toggleTaskAtLine(lineNumber, document);
+			await toggleTaskCompletionAtLine(lineNumber, document);
 		}
 
 		await updateState();
@@ -72,6 +71,7 @@ export function registerCommands() {
 		}
 		const selection = editor.selection;
 		const wEdit = new WorkspaceEdit();
+
 		for (let i = selection.start.line; i <= selection.end.line; i++) {
 			const task = getTaskAtLine(i);
 			if (!task || !task.done) {
@@ -90,19 +90,19 @@ export function registerCommands() {
 		}
 		const lineStart = selection.start.line;
 		const lineEnd = selection.end.line;
-		const tasks: any[] = [];
+		const tasks: TheTask[] = [];
 		for (let i = lineStart; i <= lineEnd; i++) {
-			const task: any = getTaskAtLine(i);
+			const task = getTaskAtLine(i);
 			if (task) {
-				task.line = editor.document.lineAt(i).text;
 				tasks.push(task);
 			}
 		}
-		const sortedTasks: any[] = sortTasks(tasks, SortProperty.priority);
-		const result = sortedTasks.map(t => t.line).join('\n');
+		const sortedTasks = sortTasks(tasks, SortProperty.priority);
+		const result = sortedTasks.map(t => t.rawText).join('\n');
 		edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 	});
 	commands.registerTextEditorCommand('todomd.createSimilarTask', async editor => {
+		// Create a task with all the tags, projects and contexts of another task
 		const selection = editor.selection;
 		const task = getTaskAtLine(selection.start.line);
 		if (!task) {
@@ -110,6 +110,7 @@ export function registerCommands() {
 		}
 		const line = editor.document.lineAt(task.lineNumber);
 		const wEdit = new WorkspaceEdit();
+
 		const tagsAsString = task.tags.map(tag => ` #${tag}`).join('');
 		const projectsAsString = task.projects.map(project => `+${project}`).join(' ');
 		const contextsAsString = task.contexts.map(context => `@${context}`).join(' ');
@@ -123,7 +124,7 @@ export function registerCommands() {
 		editor.selection = new vscode.Selection(line.lineNumber + 1, 0, line.lineNumber + 1, 0);
 	});
 	commands.registerCommand('todomd.getNextTask', async () => {
-		const document = await updateState();
+		await updateState();
 		let tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
@@ -140,7 +141,7 @@ export function registerCommands() {
 		const task = sortedTasks[0];
 		if (task.specialTags.link) {
 			const buttonName = 'Follow link';
-			const shouldFollow = await vscode.window.showInformationMessage(task.title, buttonName);
+			const shouldFollow = await vscode.window.showInformationMessage(formatTask(task), buttonName);
 			if (shouldFollow === buttonName) {
 				followLink(task.specialTags.link);
 			}
@@ -167,8 +168,8 @@ export function registerCommands() {
 			modal: true,
 		});
 	});
-	commands.registerCommand('todomd.getRandomTask', () => {
-		const document = updateState();
+	commands.registerCommand('todomd.getRandomTask', async () => {
+		await updateState();
 		let tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
@@ -182,7 +183,7 @@ export function registerCommands() {
 			tasks = tasks.filter(t => !t.due);
 			resultTask = tasks[getRandomInt(0, tasks.length - 1)];
 		}
-		vscode.window.showInformationMessage(resultTask.title);
+		vscode.window.showInformationMessage(formatTask(resultTask));
 	});
 	commands.registerCommand('todomd.addTask', async () => {
 		const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
@@ -197,8 +198,8 @@ export function registerCommands() {
 			wEdit.insert(editor.document.uri, line.rangeIncludingLineBreak.start, creationDate + text);
 			applyEdit(wEdit, editor.document);
 		} else {
-			const isOk = await checkDefaultFileAndNotify();
-			if (!isOk) {
+			const isDefaultFileSpecified = await checkDefaultFileAndNotify();
+			if (!isDefaultFileSpecified) {
 				return;
 			}
 			const text = await window.showInputBox();
@@ -235,58 +236,53 @@ export function registerCommands() {
 		}
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
-		const isOk = await checkArchiveFileAndNotify();
-		if (!isOk) {
+		const isDefaultFileSpecified = await checkArchiveFileAndNotify();
+		if (!isDefaultFileSpecified) {
 			return;
 		}
 		openFileInEditor(extensionConfig.defaultArchiveFile);
 	});
 	commands.registerCommand('todomd.completeTask', async () => {
+		// Show Quick Pick to complete a task
 		const document = await updateState();
-		const array = [];
-		for (const task of state.tasks) {
-			if (task.done) {
-				continue;
-			}
-			array.push(formatTask(task));
-		}
-		const result = await window.showQuickPick(array);
-		if (!result) {
+		const notCompletedTasks = state.tasks.filter(task => !task.done).map(task => formatTask(task));
+		const pickedTask = await window.showQuickPick(notCompletedTasks);
+		if (!pickedTask) {
 			return;
 		}
-		const task = state.tasks.find(t => formatTask(t) === result);
+		const task = state.tasks.find(t => formatTask(t) === pickedTask);
 		if (!task) {
 			return;
 		}
 		if (task.specialTags.count) {
 			await incrementCountForTask(document, task.lineNumber, task);
 		} else {
-			await toggleTaskAtLine(task.lineNumber, document);
+			await toggleTaskCompletionAtLine(task.lineNumber, document);
 		}
 		await updateState();
 		updateAllTreeViews();
 	});
 	commands.registerTextEditorCommand('todomd.filter', editor => {
-		const qp = window.createQuickPick();
-		qp.items = extensionConfig.savedFilters.map(filter => new QuickPickItem(filter.title));
+		const quickPick = window.createQuickPick();
+		quickPick.items = extensionConfig.savedFilters.map(filter => new QuickPickItem(filter.title));
 		let value: string | undefined;
 		let selected: string | undefined;
-		qp.onDidChangeValue(e => {
+		quickPick.onDidChangeValue(e => {
 			value = e;
 		});
-		qp.onDidChangeSelection(e => {
+		quickPick.onDidChangeSelection(e => {
 			selected = e[0].label;
 		});
-		qp.show();
-		qp.onDidAccept(() => {
+		quickPick.show();
+		quickPick.onDidAccept(() => {
 			let filterStr;
 			if (selected) {
 				filterStr = extensionConfig.savedFilters.find(filter => filter.title === selected)?.filter;
 			} else {
 				filterStr = value;
 			}
-			qp.hide();
-			qp.dispose();
+			quickPick.hide();
+			quickPick.dispose();
 			if (!filterStr || !filterStr.length) {
 				return;
 			}
@@ -309,8 +305,8 @@ export function registerCommands() {
 		const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
 		let editor;
 		if (!state.theRightFileOpened) {
-			const isOk = await checkDefaultFileAndNotify();
-			if (!isOk) {
+			const isDefaultFileSpecified = await checkDefaultFileAndNotify();
+			if (!isDefaultFileSpecified) {
 				return;
 			}
 			const document = await getDocumentForDefaultFile();
@@ -320,7 +316,7 @@ export function registerCommands() {
 			if (!activeTextEditor) {
 				return;
 			}
-			vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
+			await vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
 			editor = activeTextEditor;
 		}
 		editor.selection = new vscode.Selection(range.start, range.end);
@@ -338,8 +334,6 @@ export function registerCommands() {
 	commands.registerCommand('todomd.setLastVisitYesterday', () => {
 		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(1, 'day').toDate());
 	});
-	commands.registerCommand('todomd.setDate', (date: string, position: vscode.Position) => {
-	});
 }
 
 function archiveTask(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine, shouldDelete: boolean) {
@@ -355,7 +349,7 @@ function noArchiveFileMessage() {
 
 export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void> {
 	const wEdit = new WorkspaceEdit();
-	let document;
+	let document: vscode.TextDocument;
 	if (editor && state.theRightFileOpened) {
 		document = editor.document;
 	} else {
@@ -374,12 +368,12 @@ export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void>
 	}
 	applyEdit(wEdit, document);
 }
-function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
+async function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
 	const line = document.lineAt(lineNumber);
 	const wEdit = new WorkspaceEdit();
 	const count = task.specialTags.count;
 	if (!count) {
-		return;
+		return Promise.resolve(undefined);
 	}
 	let newValue = 0;
 	if (count.current !== count.needed) {
@@ -392,10 +386,10 @@ function incrementCountForTask(document: vscode.TextDocument, lineNumber: number
 		setCountCurrentValue(wEdit, document.uri, count, '0');
 		removeCompletionDate(wEdit, document.uri, line);
 	}
-	applyEdit(wEdit, document);
+	return applyEdit(wEdit, document);
 }
-export async function toggleTaskAtLine(lineNumber: number, document: TextDocument): Promise<void> {
-	const firstNonWhitespaceCharacterIndex = document.lineAt(lineNumber).firstNonWhitespaceCharacterIndex;
+export async function toggleTaskCompletionAtLine(lineNumber: number, document: TextDocument): Promise<void> {
+	const { firstNonWhitespaceCharacterIndex } = document.lineAt(lineNumber);
 	const task = getTaskAtLine(lineNumber);
 	if (!task) {
 		return;
@@ -468,10 +462,10 @@ async function checkArchiveFileAndNotify(): Promise<boolean> {
 	}
 }
 function specifyDefaultFile() {
-	vscode.commands.executeCommand('workbench.action.openSettings', 'todomd.defaultFile');
+	openSettingGuiAt('todomd.defaultFile');
 }
 function specifyDefaultArchiveFile() {
-	vscode.commands.executeCommand('workbench.action.openSettings', 'todomd.defaultArchiveFile');
+	openSettingGuiAt('todomd.defaultArchiveFile');
 }
 function insertCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), extensionConfig.completionDateIncludeTime)}}`);
@@ -501,11 +495,15 @@ export function getTaskAtLine(lineNumber: number): TheTask | undefined {
 	}
 	return undefined;
 }
-
+/**
+ * TODO: move to TheTask class
+ */
 export function formatTask(task: TheTask): string {
 	return task.title + (task.specialTags.count ? ` ${task.specialTags.count.current}/${task.specialTags.count.needed}` : '');
 }
-
+/**
+ * Updates state for archived tasks
+ */
 export async function updateArchivedTasks() {
 	if (!extensionConfig.defaultArchiveFile) {
 		return;

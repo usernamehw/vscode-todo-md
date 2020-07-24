@@ -37,3 +37,6 @@ export function setContext(context: string, value: any) {
 export function followLink(link: string) {
 	vscode.env.openExternal(Uri.parse(link));
 }
+export function openSettingGuiAt(settingName: string) {
+	vscode.commands.executeCommand('workbench.action.openSettings', settingName);
+}

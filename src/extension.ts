@@ -3,7 +3,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import vscode, { window, workspace } from 'vscode';
-import { registerCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
+import { registerAllCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
 import { updateDecorationStyle } from './decorations';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
 import { parseDocument, TheTask } from './parse';
@@ -69,7 +69,7 @@ export class Global {
 export async function activate(extensionContext: vscode.ExtensionContext) {
 	state.extensionContext = extensionContext;
 	updateDecorationStyle();
-	registerCommands();
+	registerAllCommands();
 	createTreeViews();
 
 	await updateState();
