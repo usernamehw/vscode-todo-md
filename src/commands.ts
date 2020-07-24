@@ -11,7 +11,6 @@ import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } 
 import { DueState } from './types';
 import { appendTaskToFile, fancyNumber, getRandomInt } from './utils';
 import { followLink, getFullRangeFromLines, openFileInEditor, setContext } from './vscodeUtils';
-import { createAgendaWebview } from './webview/agenda';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
@@ -339,12 +338,6 @@ export function registerCommands() {
 	});
 	commands.registerCommand('todomd.setLastVisitYesterday', () => {
 		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(1, 'day').toDate());
-	});
-	commands.registerCommand('todomd.agenda', () => {
-		createAgendaWebview();
-	});
-	commands.registerCommand('todomd.calendar', () => {
-		// createCalendarWebview();
 	});
 	commands.registerCommand('todomd.setDate', (date: string, position: vscode.Position) => {
 	});
