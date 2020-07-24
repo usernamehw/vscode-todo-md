@@ -63,7 +63,7 @@ export function registerCommands() {
 			const line = editor.document.lineAt(task.lineNumber);
 			archiveTask(wEdit, editor.document.uri, line, !task.due?.isRecurring);
 		}
-		workspace.applyEdit(wEdit);
+		applyEdit(wEdit, editor.document);
 	});
 	commands.registerTextEditorCommand('todomd.archiveSelectedCompletedTasks', editor => {
 		if (!extensionConfig.defaultArchiveFile) {
@@ -80,7 +80,7 @@ export function registerCommands() {
 			const line = editor.document.lineAt(i);
 			archiveTask(wEdit, editor.document.uri, line, !task.due?.isRecurring);
 		}
-		workspace.applyEdit(wEdit);
+		applyEdit(wEdit, editor.document);
 	});
 	commands.registerTextEditorCommand('todomd.sortByPriority', (editor, edit) => {
 		const selection = editor.selection;
@@ -117,8 +117,9 @@ export function registerCommands() {
 		newTaskAsString += projectsAsString ? ` ${projectsAsString}` : '';
 		newTaskAsString += contextsAsString ? ` ${contextsAsString}` : '';
 		wEdit.insert(editor.document.uri, new vscode.Position(line.rangeIncludingLineBreak.end.line, line.rangeIncludingLineBreak.end.character), `${newTaskAsString}\n`);
-		await workspace.applyEdit(wEdit);
-		await editor.document.save();
+
+		await applyEdit(wEdit, editor.document);
+
 		editor.selection = new vscode.Selection(line.lineNumber + 1, 0, line.lineNumber + 1, 0);
 	});
 	commands.registerCommand('todomd.getNextTask', async () => {
@@ -194,8 +195,7 @@ export function registerCommands() {
 			const line = editor.document.lineAt(editor.selection.active.line);
 			const wEdit = new WorkspaceEdit();
 			wEdit.insert(editor.document.uri, line.rangeIncludingLineBreak.start, creationDate + text);
-			workspace.applyEdit(wEdit);
-			editor.document.save();
+			applyEdit(wEdit, editor.document);
 		} else {
 			const isOk = await checkDefaultFileAndNotify();
 			if (!isOk) {
@@ -231,8 +231,7 @@ export function registerCommands() {
 			} else {
 				wEdit.insert(editor.document.uri, editor.selection.active, ` ${dueDate}`);
 			}
-			workspace.applyEdit(wEdit);
-			editor.document.save();
+			applyEdit(wEdit, editor.document);
 		}
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
@@ -373,10 +372,9 @@ export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void>
 			}
 		}
 	}
-	await workspace.applyEdit(wEdit);
-	document.save();
+	applyEdit(wEdit, document);
 }
-async function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
+function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
 	const line = document.lineAt(lineNumber);
 	const wEdit = new WorkspaceEdit();
 	const count = task.specialTags.count;
@@ -394,8 +392,7 @@ async function incrementCountForTask(document: vscode.TextDocument, lineNumber: 
 		setCountCurrentValue(wEdit, document.uri, count, '0');
 		removeCompletionDate(wEdit, document.uri, line);
 	}
-	await vscode.workspace.applyEdit(wEdit);
-	document.save();
+	applyEdit(wEdit, document);
 }
 export async function toggleTaskAtLine(lineNumber: number, document: TextDocument): Promise<void> {
 	const firstNonWhitespaceCharacterIndex = document.lineAt(lineNumber).firstNonWhitespaceCharacterIndex;
@@ -404,30 +401,28 @@ export async function toggleTaskAtLine(lineNumber: number, document: TextDocumen
 		return;
 	}
 	const line = document.lineAt(lineNumber);
-	const workspaceEdit = new WorkspaceEdit();
+	const wEdit = new WorkspaceEdit();
 	if (task.done) {
 		if (!extensionConfig.addCompletionDate) {
 			if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
-				workspaceEdit.delete(document.uri, new vscode.Range(lineNumber, firstNonWhitespaceCharacterIndex, lineNumber, firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
+				wEdit.delete(document.uri, new vscode.Range(lineNumber, firstNonWhitespaceCharacterIndex, lineNumber, firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
 			}
 		} else {
-			removeCompletionDate(workspaceEdit, document.uri, line);
+			removeCompletionDate(wEdit, document.uri, line);
 		}
 	} else {
 		if (extensionConfig.addCompletionDate) {
-			insertCompletionDate(workspaceEdit, document.uri, line);
+			insertCompletionDate(wEdit, document.uri, line);
 		} else {
-			workspaceEdit.insert(document.uri, new vscode.Position(lineNumber, firstNonWhitespaceCharacterIndex), extensionConfig.doneSymbol);
+			wEdit.insert(document.uri, new vscode.Position(lineNumber, firstNonWhitespaceCharacterIndex), extensionConfig.doneSymbol);
 		}
 	}
-	await workspace.applyEdit(workspaceEdit);
-	document.save();
+	await applyEdit(wEdit, document);
 
 	if (extensionConfig.autoArchiveTasks) {
 		const secondWorkspaceEdit = new WorkspaceEdit();
 		archiveTask(secondWorkspaceEdit, document.uri, line, !task.due?.isRecurring);
-		await workspace.applyEdit(secondWorkspaceEdit);// Not possible to apply conflicting ranges with just one edit
-		document.save();
+		await applyEdit(secondWorkspaceEdit, document);// Not possible to apply conflicting ranges with just one edit
 	}
 }
 async function checkDefaultFileAndNotify(): Promise<boolean> {
@@ -519,4 +514,8 @@ export async function updateArchivedTasks() {
 	const parsedArchiveTasks = parseDocument(document);
 	state.archivedTasks = parsedArchiveTasks.tasks;
 	updateArchivedTasksTreeView();
+}
+export async function applyEdit(wEdit: WorkspaceEdit, document: vscode.TextDocument) {
+	await workspace.applyEdit(wEdit);
+	return await document.save();
 }
