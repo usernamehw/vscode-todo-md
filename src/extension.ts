@@ -146,16 +146,13 @@ interface ForProvider {
 	projects: ItemForProvider[];
 	contexts: ItemForProvider[];
 }
+interface TempItemsMap {
+	[title: string]: Items[];
+}
 export function groupAndSortForProvider(tasks: TheTask[]): ForProvider {
-	const tagMap: {
-		[tag: string]: Items[];
-	} = {};
-	const projectMap: {
-		[key: string]: Items[];
-	} = {};
-	const contextMap: {
-		[key: string]: Items[];
-	} = {};
+	const tagMap: TempItemsMap = {};
+	const projectMap: TempItemsMap = {};
+	const contextMap: TempItemsMap = {};
 	for (const task of tasks) {
 		// Tags grouping
 		for (const tag of task.tags) {
