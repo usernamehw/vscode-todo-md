@@ -26,6 +26,7 @@ export function getFullRangeFromLines(document: vscode.TextDocument, lineStart: 
 }
 /**
  * Set vscode context.
+ * TODO: type first argument to be enum or a string union
  */
 export function setContext(context: string, value: any) {
 	vscode.commands.executeCommand('setContext', context, value);

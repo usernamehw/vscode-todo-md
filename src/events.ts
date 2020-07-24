@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
-import * as vscode from 'vscode';
-import { window, workspace } from 'vscode';
+import vscode, { window, workspace } from 'vscode';
 import { resetAllRecurringTasks } from './commands';
 import { updateCompletions } from './completionProviders';
 import { updateEditorDecorations } from './decorations';
@@ -8,7 +7,7 @@ import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, upda
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { setContext } from './vscodeUtils';
 
-export const THE_RIGHT_FILE = 'todomd:isActive';
+export const THE_RIGHT_FILE_CONTEXT_KEY = 'todomd:isActive';
 
 export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): void {
 	if (isTheRightFileFormat(editor)) {
@@ -23,15 +22,13 @@ export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined):
 export function checkIfNewDayArrived(): boolean {
 	const lastVisit = state.extensionContext.globalState.get<string | undefined>(LAST_VISIT_STORAGE_KEY);
 	if (lastVisit && !dayjs().isSame(lastVisit, 'day')) {
-		// window.showInformationMessage('new day');
 		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
 		state.newDayArrived = true;
 		state.fileWasReset = false;
 		return true;
 	}
-	// first visit ever?
+	// first visit ever
 	if (!lastVisit) {
-		// window.showInformationMessage('first ever visit');
 		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
 	}
 	return false;
@@ -43,7 +40,9 @@ export function onChangeTextDocument(): void {
 		updateEverything(activeTextEditor);
 	}
 }
-
+/**
+ * Match Uri of editor against a glob specified by user.
+ */
 export function isTheRightFileFormat(editor?: vscode.TextEditor): boolean {
 	if (editor === undefined) {
 		editor = window.activeTextEditor;
@@ -56,21 +55,32 @@ export function isTheRightFileFormat(editor?: vscode.TextEditor): boolean {
 	};
 	return vscode.languages.match(documentFilter, editor.document) !== 0;
 }
+/**
+ * There's a number of features that extension provides.
+ * They are only activated when user opens file named `todo.md` (by default)
+ * Only then - completions, status bar text and other features are enabled.
+ */
 export function enterTheRightFile(editor: vscode.TextEditor) {
 	state.theRightFileOpened = true;
+
 	updateEverything(editor);
+
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
 	statusBar.updateText(state.tasks);
 	statusBar.show();
 	checkIfNewDayArrived();
-	setContext(THE_RIGHT_FILE, true);
+	setContext(THE_RIGHT_FILE_CONTEXT_KEY, true);
+
 	if (state.newDayArrived && !state.fileWasReset) {
-		// vscode.window.showInformationMessage('SHOULD RESET ALL IN FILE');
 		resetAllRecurringTasks(editor);
 		state.fileWasReset = true;
 	}
 }
+/**
+ * When `todo.md` document is closed - all the features except for the Tree Views
+ * will be disabled.
+ */
 export async function exitTheRightFile() {
 	state.theRightFileOpened = false;
 	if (Global.changeTextDocumentDisposable) {
@@ -83,7 +93,7 @@ export async function exitTheRightFile() {
 		Global.generalAutocompleteDisposable.dispose();
 	}
 	statusBar.hide();
-	setContext(THE_RIGHT_FILE, false);
+	setContext(THE_RIGHT_FILE_CONTEXT_KEY, false);
 	await updateState();
 	updateAllTreeViews();
 }

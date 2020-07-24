@@ -303,7 +303,7 @@ export function registerCommands() {
 	commands.registerCommand('todomd.clearGlobalState', () => {
 	// @ts-ignore No API
 		state.extensionContext.globalState._value = {};
-		state.extensionContext.globalState.update('hack', 'toClear');// TODO: is this required to clear state?
+		state.extensionContext.globalState.update('hack', 'toClear');// Is this required to clear state?
 	});
 	commands.registerCommand('todomd.goToLine', async (lineNumber: number) => {
 		const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
