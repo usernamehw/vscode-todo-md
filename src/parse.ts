@@ -193,7 +193,9 @@ interface SpecialTags {
 }
 
 export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags'>;
-
+/**
+ * name `TheTask` because of conflict with vscode `Task`
+ */
 export class TheTask {
 	title: string;
 	done: boolean;
@@ -211,9 +213,7 @@ export class TheTask {
 	projectRanges: Range[];
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
-	/**
-	 * name `TheTask` because of conflict with vscode `Task`
-	 */
+
 	constructor(init: TaskInit) {
 		this.title = init.title;
 		this.lineNumber = init.lineNumber;
