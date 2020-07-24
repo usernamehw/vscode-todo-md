@@ -6,7 +6,7 @@ export interface ItemForProvider {
 	items: Items[];
 }
 
-export interface Items {
+export interface Items {// TODO: rename
 	lineNumber: number;
 	title: string;
 }
