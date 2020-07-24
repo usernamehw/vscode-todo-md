@@ -68,6 +68,7 @@ export class Global {
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
 	state.extensionContext = extensionContext;
+
 	updateDecorationStyle();
 	registerAllCommands();
 	createTreeViews();
