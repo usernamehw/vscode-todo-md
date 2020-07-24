@@ -1,14 +1,26 @@
-import { state, statusBarEntry } from './extension';
-// TODO: make a class
-export function showStatusBarEntry() {
-	statusBarEntry.show();
-}
-export function hideStatusBarEntry() {
-	statusBarEntry.hide();
-}
-export function updateStatusBarEntry() {
-	if (statusBarEntry) {
-		const completedTasks = state.tasks.filter(t => t.done);
-		statusBarEntry.text = `( ${completedTasks.length} / ${state.tasks.length} )`;
+import { StatusBarItem, window } from 'vscode';
+import { TheTask } from './parse';
+
+export class StatusBar {
+	private readonly statusBarItem: StatusBarItem;
+
+	constructor() {
+		this.statusBarItem = window.createStatusBarItem(1, -20000);
+	}
+
+	show() {
+		this.statusBarItem.show();
+	}
+	hide() {
+		this.statusBarItem.hide();
+	}
+	/**
+	 * Show counter for tasks ( completed / all )
+	 * Example: ( 1 / 10 )
+	 * TODO: show percentage?
+	 */
+	updateText(tasks: TheTask[]) {
+		const completedTasks = tasks.filter(t => t.done);
+		this.statusBarItem.text = `( ${completedTasks.length} / ${tasks.length} )`;
 	}
 }

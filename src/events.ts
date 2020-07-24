@@ -4,9 +4,8 @@ import { window, workspace } from 'vscode';
 import { resetAllRecurringTasks } from './commands';
 import { updateCompletions } from './completionProviders';
 import { updateEditorDecorations } from './decorations';
-import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
+import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from './extension';
 import { updateHover } from './hover';
-import { hideStatusBarEntry, showStatusBarEntry, updateStatusBarEntry } from './statusBar';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { setContext } from './vscodeUtils';
 
@@ -63,8 +62,8 @@ export function enterTheRightFile(editor: vscode.TextEditor) {
 	updateEverything(editor);
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
-	showStatusBarEntry();
-	updateStatusBarEntry();
+	statusBar.updateText(state.tasks);
+	statusBar.show();
 	updateHover();
 	checkIfNewDayArrived();
 	setContext(THE_RIGHT_FILE, true);
@@ -88,7 +87,7 @@ export async function exitTheRightFile() {
 	if (Global.hoverDisposable) {
 		Global.hoverDisposable.dispose();
 	}
-	hideStatusBarEntry();
+	statusBar.hide();
 	setContext(THE_RIGHT_FILE, false);
 	await updateState();
 	updateAllTreeViews();
@@ -100,6 +99,6 @@ export async function updateEverything(editor?: vscode.TextEditor) {
 	}
 	await updateState(editor.document);
 	updateEditorDecorations(editor);
-	updateStatusBarEntry();
+	statusBar.updateText(state.tasks);
 	updateAllTreeViews();
 }

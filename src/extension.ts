@@ -11,6 +11,7 @@ import { updateHover } from './hover';
 import { parseDocument, TheTask } from './parse';
 import { createTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { ContextForProvider, IConfig, Items, ProjectForProvider, SortTags, State, TagForProvider } from './types';
+import { StatusBar } from './statusBar';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -36,7 +37,7 @@ export const EXTENSION_NAME = 'todomd';
 export const LAST_VISIT_STORAGE_KEY = 'LAST_VISIT_STORAGE_KEY';
 
 export let extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
-export const statusBarEntry = window.createStatusBarItem(1, -20000);
+export const statusBar = new StatusBar();
 /**
  * Global variables
  */
