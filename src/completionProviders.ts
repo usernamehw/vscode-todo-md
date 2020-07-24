@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import * as vscode from 'vscode';
+import vscode from 'vscode';
 import { extensionConfig, Global, state } from './extension';
 import { getDateInISOFormat } from './timeUtils';
 
@@ -15,12 +15,10 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-				// const linePrefix = document.lineAt(position).text.substr(0, position.character).trim();
 				const tagCompletions = [];
 				for (const tag of getAllTags()) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
 					tagCompletion.commitCharacters = ['#'];
-					// tagCompletion.documentation = new vscode.MarkdownString(`\`${tag}\` tag`);
 					tagCompletions.push(tagCompletion);
 				}
 
@@ -33,12 +31,10 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-				// const linePrefix = document.lineAt(position).text.substr(0, position.character);// TODO: only include pattern with space=>plus
 				const tagCompletions = [];
 				for (const tag of getAllProjects()) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
 					tagCompletion.commitCharacters = ['+'];
-					// tagCompletion.documentation = new vscode.MarkdownString(`\`${tag}\` tag`);
 					tagCompletions.push(tagCompletion);
 				}
 
@@ -51,12 +47,10 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-				// const linePrefix = document.lineAt(position).text.substr(0, position.character);// TODO: only include pattern with space=>at
 				const contextCompletions = [];
 				for (const context of getAllContexts()) {
 					const contextCompletion = new vscode.CompletionItem(context, vscode.CompletionItemKind.Field);
 					contextCompletion.commitCharacters = ['@'];
-					// tagCompletion.documentation = new vscode.MarkdownString(`\`${tag}\` tag`);
 					contextCompletions.push(contextCompletion);
 				}
 
@@ -69,7 +63,6 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-				// const linePrefix = document.lineAt(position).text.substr(0, position.character);
 				const general = [];
 				const today = new vscode.CompletionItem('TODAY', vscode.CompletionItemKind.Constant);
 				today.insertText = getDateInISOFormat(new Date());
@@ -84,7 +77,6 @@ export function updateCompletions(): void {
 		''
 	);
 }
-
 
 function getAllTags(): Set<string> {
 	const set: Set<string> = new Set();
