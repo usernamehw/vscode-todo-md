@@ -1,3 +1,8 @@
+## 0.0.17 `25 Jul 2020`
+
+- 🔨 Refactor a bit
+- ✨ Advanced decoration tweaking [#4](https://github.com/usernamehw/vscode-todo-md/issues/4)
+
 ## 0.0.16 `18 Jul 2020`
 
 - ✨ Use different Activity Bar icon
