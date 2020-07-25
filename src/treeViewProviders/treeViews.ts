@@ -1,4 +1,4 @@
-import vscode from 'vscode';
+import vscode, { TreeView } from 'vscode';
 import { extensionConfig, EXTENSION_NAME, state } from '../extension';
 import { filterItems } from '../filter';
 import { setContext } from '../vscodeUtils';
@@ -99,36 +99,30 @@ export function createAllTreeViews() {
 
 export function updateAllTreeViews(): void {
 	tagProvider.refresh(state.tagsForTreeView);
-	tagsView.title = `tags (${state.tagsForTreeView.length})`;
+	setViewTitle(tagsView, 'tags', state.tagsForTreeView.length);
 
 	updateTasksTreeView();
 
 	projectProvider.refresh(state.projectsForTreeView);
-	projectView.title = `projects (${state.projectsForTreeView.length})`;
+	setViewTitle(projectView, 'projects', state.projectsForTreeView.length);
 
 	contextProvider.refresh(state.contextsForTreeView);
-	contextView.title = `contexts (${state.contextsForTreeView.length})`;
+	setViewTitle(contextView, 'contexts', state.contextsForTreeView.length);
 
 	if (generic1View) {
 		const filteredTasks = filterItems(getTasksForTreeView(), extensionConfig.treeViews[0].filter);
 		generic1Provider.refresh(filteredTasks);
-		setTimeout(() => {
-			generic1View.title = `${extensionConfig.treeViews[0].title} (${filteredTasks.length})`;
-		}, 0);
+		setViewTitle(generic1View, extensionConfig.treeViews[0].title, filteredTasks.length);
 	}
 	if (generic2View) {
 		const filteredTasks = filterItems(getTasksForTreeView(), extensionConfig.treeViews[1].filter);
 		generic2Provider.refresh(filteredTasks);
-		setTimeout(() => {
-			generic2View.title = `${extensionConfig.treeViews[1].title} (${filteredTasks.length})`;
-		}, 0);
+		setViewTitle(generic2View, extensionConfig.treeViews[1].title, filteredTasks.length);
 	}
 	if (generic3View) {
 		const filteredTasks = filterItems(getTasksForTreeView(), extensionConfig.treeViews[2].filter);
 		generic3Provider.refresh(filteredTasks);
-		setTimeout(() => {
-			generic3View.title = `${extensionConfig.treeViews[2].title} (${filteredTasks.length})`;
-		}, 0);
+		setViewTitle(generic3View, extensionConfig.treeViews[2].title, filteredTasks.length);
 	}
 }
 
@@ -140,15 +134,13 @@ export function updateTasksTreeView() {
 		tasksForProvider = getTasksForTreeView();
 	}
 	taskProvider.refresh(tasksForProvider);
-	tasksView.title = `tasks (${tasksForProvider.length}) ${state.taskTreeViewFilterValue}`;
+	setViewTitle(tasksView, 'tasks', tasksForProvider.length, state.taskTreeViewFilterValue);
 }
 
 export function updateArchivedTasksTreeView() {
 	const archivedTasks = state.archivedTasks;
 	archivedProvider.refresh(archivedTasks);
-	setTimeout(() => {
-		archivedView.title = `archived (${archivedTasks.length})`;
-	}, 0);
+	setViewTitle(archivedView, 'archived', archivedTasks.length);
 }
 
 function getTasksForTreeView() {
@@ -161,4 +153,8 @@ function getTasksForTreeView() {
 		}
 		return new Date(task.specialTags.threshold).getTime() < Date.now();
 	});
+}
+
+function setViewTitle(view: TreeView<any>, title: string, counter: number, filterValue = '') {
+	view.title = `${title} (${counter}) ${filterValue}`;
 }
