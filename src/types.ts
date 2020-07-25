@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import vscode, { DecorationRenderOptions } from 'vscode';
 import { TheTask } from './parse';
 
 export interface ItemForProvider {
@@ -37,6 +37,10 @@ export enum SortTags {
 	alphabetic = 'alphabetic',
 	frequency = 'frequency',
 }
+const enum AdvancedDecorations {
+	project = 'project',
+	context = 'context',
+}
 export interface IConfig {
 	addCreationDate: boolean;
 	addCompletionDate: boolean;
@@ -53,6 +57,10 @@ export interface IConfig {
 	tags: string[];
 	projects: string[];
 	contexts: string[];
+
+	decorations: {
+		[key in AdvancedDecorations]: DecorationRenderOptions;
+	};
 
 	savedFilters: {
 		title: string;

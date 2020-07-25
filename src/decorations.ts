@@ -1,5 +1,5 @@
 import vscode, { Range, TextEditor, window } from 'vscode';
-import { Global, state } from './extension';
+import { extensionConfig, Global, state } from './extension';
 import { DueState } from './types';
 
 export function updateDecorationStyle(): void {
@@ -43,9 +43,11 @@ export function updateDecorationStyle(): void {
 	});
 	Global.projectDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.projectForeground'),
+		...extensionConfig.decorations.project,
 	});
 	Global.contextDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.contextForeground'),
+		...extensionConfig.decorations.context,
 	});
 	Global.notDueDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.notDueForeground'),
