@@ -176,10 +176,11 @@
 					"description": "Advanced decoration tweaking.",
 					"default": {
 						"project": {},
-						"context": {}
+						"context": {},
+						"comment": {}
 					},
 					"patternProperties": {
-						"^(project|context)$": {
+						"^(project|context|comment)$": {
 							"type": "object",
 							"properties": {
 								"isWholeLine": {

@@ -40,6 +40,7 @@ export enum SortTags {
 const enum AdvancedDecorations {
 	project = 'project',
 	context = 'context',
+	comment = 'comment',
 }
 export interface IConfig {
 	addCreationDate: boolean;

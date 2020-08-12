@@ -13,6 +13,7 @@ export function updateDecorationStyle(): void {
 	Global.commentDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.commentForeground'),
 		isWholeLine: true,
+		...extensionConfig.decorations.comment,
 	});
 	Global.priorityADecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityAForeground'),

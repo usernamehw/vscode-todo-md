@@ -63,9 +63,10 @@ function generateSchema() {
 		default: {
 			project: {},
 			context: {},
+			comment: {},
 		},
 		patternProperties: {
-			'^(project|context)$': {
+			'^(project|context|comment)$': {
 				type: 'object',
 				properties: {
 					...decoration.properties,
