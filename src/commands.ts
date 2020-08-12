@@ -9,13 +9,17 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { DueState } from './types';
 import { appendTaskToFile, fancyNumber, getRandomInt } from './utils';
-import { followLink, getFullRangeFromLines, openFileInEditor, setContext, openSettingGuiAt } from './vscodeUtils';
+import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
 
 const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
 class QuickPickItem implements vscode.QuickPickItem {
-	constructor(public label: string) {
+	label: string;
+	description?: string;
+
+	constructor(label: string, description?: string) {
 		this.label = label;
+		this.description = description;
 	}
 }
 
@@ -210,30 +214,54 @@ export function registerAllCommands() {
 		}
 	});
 	commands.registerTextEditorCommand('todomd.setDueDate', async editor => {
-		const text = await window.showInputBox();
-		if (!text) {
-			return;
-		}
 		const line = editor.selection.active.line;
 		const task = getTaskAtLine(line);
-		const dayShiftMatch = /(\+|-)\d+?$/.exec(text);
-		if (dayShiftMatch) {
-			let dueDateToInsert = '';
-			const match = dayShiftMatch[0];
-			if (match[0] === '+') {
-				dueDateToInsert = dayjs().add(Number(match.slice(1)), 'day').format(DATE_FORMAT);
-			} else if (match[0] === '-') {
-				dueDateToInsert = dayjs().subtract(Number(match.slice(1)), 'day').format(DATE_FORMAT);
-			}
-			const dueDate = `{due:${dueDateToInsert}}`;
-			const wEdit = new WorkspaceEdit();
-			if (task?.due?.range) {
-				wEdit.replace(editor.document.uri, task.due.range, dueDate);
+		const inputBox = window.createInputBox();
+		let value: string | undefined;
+		inputBox.show();
+
+		inputBox.onDidChangeValue((e: string) => {
+			value = e;
+			const dayShiftMatch = /(\+|-)\d+?$/.exec(value);
+			if (dayShiftMatch) {
+				let dueDateToInsert = '';
+				const match = dayShiftMatch[0];
+				if (match[0] === '+') {
+					dueDateToInsert = dayjs().add(Number(match.slice(1)), 'day').toString();
+				} else if (match[0] === '-') {
+					dueDateToInsert = dayjs().subtract(Number(match.slice(1)), 'day').toString();
+				}
+				inputBox.prompt = `${dueDateToInsert}        `;
 			} else {
-				wEdit.insert(editor.document.uri, editor.selection.active, ` ${dueDate}`);
+				inputBox.prompt = '❌        ';
 			}
-			applyEdit(wEdit, editor.document);
-		}
+		});
+
+		inputBox.onDidAccept(() => {
+			if (!value) {
+				return;
+			}
+			const dayShiftMatch = /(\+|-)\d+?$/.exec(value);
+			if (dayShiftMatch) {
+				let dueDateToInsert = '';
+				const match = dayShiftMatch[0];
+				if (match[0] === '+') {
+					dueDateToInsert = dayjs().add(Number(match.slice(1)), 'day').format(DATE_FORMAT);
+				} else if (match[0] === '-') {
+					dueDateToInsert = dayjs().subtract(Number(match.slice(1)), 'day').format(DATE_FORMAT);
+				}
+				const dueDate = `{due:${dueDateToInsert}}`;
+				const wEdit = new WorkspaceEdit();
+				if (task?.due?.range) {
+					wEdit.replace(editor.document.uri, task.due.range, dueDate);
+				} else {
+					wEdit.insert(editor.document.uri, editor.selection.active, ` ${dueDate}`);
+				}
+				applyEdit(wEdit, editor.document);
+			}
+			inputBox.hide();
+			inputBox.dispose();
+		});
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
 		const isDefaultFileSpecified = await checkArchiveFileAndNotify();
