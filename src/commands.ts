@@ -222,6 +222,7 @@ export function registerAllCommands() {
 
 		inputBox.onDidChangeValue((e: string) => {
 			value = e;
+			// TODO: refactor: remove duplicate code
 			const dayShiftMatch = /(\+|-)\d+?$/.exec(value);
 			if (dayShiftMatch) {
 				let dueDateToInsert = '';
