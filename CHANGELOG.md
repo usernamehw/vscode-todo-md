@@ -1,3 +1,8 @@
+## 0.0.18 `12 Aug 2020`
+
+- ✨ Allow advanced decorations for comments
+- ✨ Show prompt with date when setting due date via input box
+
 ## 0.0.17 `25 Jul 2020`
 
 - 🔨 Refactor a bit
