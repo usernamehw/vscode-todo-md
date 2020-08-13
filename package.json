@@ -993,6 +993,15 @@
 					"highContrast": "#f64f4f"
 				},
 				"description": "Not empty"
+			},
+			{
+				"id": "todomd.invalidDueDateForeground",
+				"defaults": {
+					"light": "#f7a103",
+					"dark": "#f7a103",
+					"highContrast": "#f7a103"
+				},
+				"description": "Not empty"
 			}
 		],
 		"menus": {

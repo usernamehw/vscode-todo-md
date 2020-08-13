@@ -3,6 +3,7 @@ import { DueState } from './types';
 
 export class DueDate {
 	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?$/;
+	private static readonly dueRecurringRegexp = /^ed|sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday$/i;
 	/** Unmodified value of due date */
 	raw: string;
 	isRecurring = false;
@@ -35,9 +36,12 @@ export class DueDate {
 		const result = dueDates.map(dueDate => DueDate.parseDueDate(dueDate, targetDate));
 
 		const isRecurring = result.some(r => r.isRecurring);
+		const hasInvalid = result.some(r => r.isDue === DueState.invalid);
 		const hasOverdue = result.some(r => r.isDue === DueState.overdue);
 		const hasDue = result.some(r => r.isDue === DueState.due);
-		const isDue = hasOverdue ? DueState.overdue : hasDue ? DueState.due : DueState.notDue;
+		const isDue = hasInvalid ? DueState.invalid :
+			hasOverdue ? DueState.overdue :
+				hasDue ? DueState.due : DueState.notDue;
 		return {
 			isDue,
 			isRecurring,
@@ -56,13 +60,13 @@ export class DueDate {
 		}
 		let isRecurring = false;
 		let isDue = DueState.notDue;
-		const match = DueDate.dueWithDateRegexp.exec(due);
-		if (match) {
-			const year = Number(match[1]);
-			const month = Number(match[2]) - 1;
-			const date = Number(match[3]);
+		const dueWithDateMatch = DueDate.dueWithDateRegexp.exec(due);
+		if (dueWithDateMatch) {
+			const year = Number(dueWithDateMatch[1]);
+			const month = Number(dueWithDateMatch[2]) - 1;
+			const date = Number(dueWithDateMatch[3]);
 			const dateObject = new Date(year, month, date);
-			const dueRecurringPart = match[5];
+			const dueRecurringPart = dueWithDateMatch[5];
 
 			if (!dueRecurringPart) {
 				isDue = DueDate.isDueExactDate(dateObject, targetDate);
@@ -72,9 +76,13 @@ export class DueDate {
 				isDue = DueDate.isDueWithDate(dueRecurringPart, dateObject, targetDate);
 			}
 		} else {
-		// Due date without starting date
-			isRecurring = true;
-			isDue = DueDate.isDueToday(due, targetDate);
+			// Due date without starting date
+			if (DueDate.dueRecurringRegexp.test(due)) {
+				isRecurring = true;
+				isDue = DueDate.isDueToday(due, targetDate);
+			} else {
+				isDue = DueState.invalid;
+			}
 		}
 		return {
 			isDue,

@@ -31,6 +31,7 @@ export const enum DueState {
 	notDue,
 	due,
 	overdue,
+	invalid,
 }
 
 export enum SortTags {

@@ -63,6 +63,7 @@ export class Global {
 	static notDueDecorationType: vscode.TextEditorDecorationType;
 	static dueDecorationType: vscode.TextEditorDecorationType;
 	static overdueDecorationType: vscode.TextEditorDecorationType;
+	static invalidDueDateDecorationType: vscode.TextEditorDecorationType;
 	static closestDueDateDecorationType: vscode.TextEditorDecorationType;
 }
 
@@ -137,6 +138,7 @@ function disposeEverything(): void {
 		Global.notDueDecorationType.dispose();
 		Global.dueDecorationType.dispose();
 		Global.overdueDecorationType.dispose();
+		Global.invalidDueDateDecorationType.dispose();
 		Global.closestDueDateDecorationType.dispose();
 	}
 	if (Global.changeTextDocumentDisposable) {

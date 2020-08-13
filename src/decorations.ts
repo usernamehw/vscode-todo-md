@@ -59,6 +59,9 @@ export function updateDecorationStyle(): void {
 	Global.overdueDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.overdueForeground'),
 	});
+	Global.invalidDueDateDecorationType = window.createTextEditorDecorationType({
+		color: new vscode.ThemeColor('todomd.invalidDueDateForeground'),
+	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
 		after: {
@@ -85,6 +88,7 @@ export function updateEditorDecorations(editor: TextEditor) {
 	const notDueDecorationRanges: Range[] = [];
 	const dueDecorationRanges: Range[] = [];
 	const overdueDecorationRanges: Range[] = [];
+	const invalidDueDateDecorationRanges: Range[] = [];
 	const closestDueDateDecorationOptions: vscode.DecorationOptions[] = [];
 
 	for (const line of state.tasks) {
@@ -124,6 +128,8 @@ export function updateEditorDecorations(editor: TextEditor) {
 				notDueDecorationRanges.push(dueRange);
 			} else if (due.isDue === DueState.overdue) {
 				overdueDecorationRanges.push(dueRange);
+			} else if (due.isDue === DueState.invalid) {
+				invalidDueDateDecorationRanges.push(dueRange);
 			}
 			if (due.closestDueDateInTheFuture) {
 				closestDueDateDecorationOptions.push({
@@ -153,6 +159,7 @@ export function updateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(Global.notDueDecorationType, notDueDecorationRanges);
 	editor.setDecorations(Global.dueDecorationType, dueDecorationRanges);
 	editor.setDecorations(Global.overdueDecorationType, overdueDecorationRanges);
+	editor.setDecorations(Global.invalidDueDateDecorationType, invalidDueDateDecorationRanges);
 	editor.setDecorations(Global.closestDueDateDecorationType, closestDueDateDecorationOptions);
 	editor.setDecorations(Global.commentDecorationType, state.commentLines);
 }
