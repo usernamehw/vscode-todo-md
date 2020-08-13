@@ -3,7 +3,7 @@ import vscode from 'vscode';
 import { DueState } from './types';
 
 export class DueDate {
-	private readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?$/;
+	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?$/;
 	/** Unmodified value of due date */
 	raw: string;
 	range: vscode.Range;
@@ -59,7 +59,7 @@ export class DueDate {
 		}
 		let isRecurring = false;
 		let isDue = DueState.notDue;
-		const match = this.dueWithDateRegexp.exec(due);
+		const match = DueDate.dueWithDateRegexp.exec(due);
 		if (match) {
 			const year = Number(match[1]);
 			const month = Number(match[2]) - 1;
