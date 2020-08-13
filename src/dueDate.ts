@@ -6,16 +6,16 @@ export class DueDate {
 	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?$/;
 	/** Unmodified value of due date */
 	raw: string;
-	range: vscode.Range;
+	range: vscode.Range;// TODO: move out of this class ???
 	isRecurring = false;
 	isDue = DueState.notDue;
 	closestDueDateInTheFuture: string | undefined;
 
-	constructor(dueString: string, range: vscode.Range) {
+	constructor(dueString: string, range: vscode.Range, targetDate?: Date) {
 		this.raw = dueString;
 		this.range = range;
 
-		const result = this.parseDue(dueString);
+		const result = DueDate.parseDue(dueString, targetDate);
 		this.isRecurring = result.isRecurring;
 		this.isDue = result.isDue;
 		if (result.isDue === DueState.notDue) {
@@ -26,16 +26,16 @@ export class DueDate {
 	calcClosestDueDateInTheFuture() {
 		for (let i = 1; i < 100; i++) {
 			const date = dayjs().add(i, 'day');
-			const { isDue } = this.parseDue(this.raw, date.toDate());
+			const { isDue } = DueDate.parseDue(this.raw, date.toDate());
 			if (isDue) {
 				return dayjs().to(date);
 			}
 		}
 		return 'More than 100 days';
 	}
-	parseDue(due: string, targetDate = new Date()): DueReturn {
+	static parseDue(due: string, targetDate = new Date()): DueReturn {
 		const dueDates = due.split(',').filter(d => d.length);
-		const result = dueDates.map(dueDate => this.parseDueDate(dueDate, targetDate));
+		const result = dueDates.map(dueDate => DueDate.parseDueDate(dueDate, targetDate));
 
 		const isRecurring = result.some(r => r.isRecurring);
 		const hasOverdue = result.some(r => r.isDue === DueState.overdue);
@@ -46,7 +46,7 @@ export class DueDate {
 			isRecurring,
 		};
 	}
-	private parseDueDate(due: string, targetDate: Date): DueReturn {
+	private static parseDueDate(due: string, targetDate: Date): DueReturn {
 		if (due === 'today') {
 			return {
 				isRecurring: false,
@@ -55,7 +55,7 @@ export class DueDate {
 		}
 		const tryAsRange = due.split('..');
 		if (tryAsRange.length > 1) {
-			return this.isDueBetween(tryAsRange[0], tryAsRange[1]);
+			return DueDate.isDueBetween(tryAsRange[0], tryAsRange[1]);
 		}
 		let isRecurring = false;
 		let isDue = DueState.notDue;
@@ -68,30 +68,30 @@ export class DueDate {
 			const dueRecurringPart = match[5];
 
 			if (!dueRecurringPart) {
-				isDue = this.isDueExactDate(dateObject, targetDate);
+				isDue = DueDate.isDueExactDate(dateObject, targetDate);
 				isRecurring = false;
 			} else {
 				isRecurring = true;
-				isDue = this.isDueWithDate(dueRecurringPart, dateObject, targetDate);
+				isDue = DueDate.isDueWithDate(dueRecurringPart, dateObject, targetDate);
 			}
 		} else {
 		// Due date without starting date
 			isRecurring = true;
-			isDue = this.isDueToday(due, targetDate);
+			isDue = DueDate.isDueToday(due, targetDate);
 		}
 		return {
 			isDue,
 			isRecurring,
 		};
 	}
-	private isDueExactDate(date: Date, targetDate: Date): DueState {
+	private static isDueExactDate(date: Date, targetDate: Date): DueState {
 		if (dayjs(targetDate).isBefore(date)) {
 			return DueState.notDue;
 		}
 		const diffInDays = dayjs(date).diff(dayjs(targetDate), 'day');
 		return diffInDays === 0 ? DueState.due : DueState.overdue;
 	}
-	private isDueBetween(d1: string, d2: string): DueReturn {
+	private static isDueBetween(d1: string, d2: string): DueReturn {
 		const now = dayjs();
 		const date1 = dayjs(d1);
 		const date2 = dayjs(d2);
@@ -107,7 +107,7 @@ export class DueDate {
 		};
 	}
 
-	private isDueToday(dueString: string, targetDate: Date): DueState {
+	private static isDueToday(dueString: string, targetDate: Date): DueState {
 		const value = dueString.toLowerCase();
 		if (value === 'ed') {
 			return DueState.due;
@@ -159,7 +159,7 @@ export class DueDate {
 		}
 		return DueState.notDue;
 	}
-	private isDueWithDate(dueString: string, dueDateStart: number | Date | undefined, targetDate = new Date()): DueState {
+	private static isDueWithDate(dueString: string, dueDateStart: number | Date | undefined, targetDate = new Date()): DueState {
 		if (dueDateStart === undefined) {
 			throw new Error('dueDate was specified, but dueDateStart is missing');
 		}
