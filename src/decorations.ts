@@ -117,16 +117,17 @@ export function updateEditorDecorations(editor: TextEditor) {
 		}
 		if (line.due) {
 			const due = line.due;
+			const dueRange = line.dueRange!;// if due exists - dueRange exists too
 			if (due.isDue === DueState.due) {
-				dueDecorationRanges.push(due.range);
+				dueDecorationRanges.push(dueRange);
 			} else if (due.isDue === DueState.notDue) {
-				notDueDecorationRanges.push(due.range);
+				notDueDecorationRanges.push(dueRange);
 			} else if (due.isDue === DueState.overdue) {
-				overdueDecorationRanges.push(due.range);
+				overdueDecorationRanges.push(dueRange);
 			}
 			if (due.closestDueDateInTheFuture) {
 				closestDueDateDecorationOptions.push({
-					range: due.range,
+					range: dueRange,
 					renderOptions: {
 						after: {
 							contentText: due.closestDueDateInTheFuture,

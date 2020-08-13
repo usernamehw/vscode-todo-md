@@ -1,19 +1,16 @@
 import dayjs from 'dayjs';
-import vscode from 'vscode';
 import { DueState } from './types';
 
 export class DueDate {
 	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?$/;
 	/** Unmodified value of due date */
 	raw: string;
-	range: vscode.Range;// TODO: move out of this class ???
 	isRecurring = false;
 	isDue = DueState.notDue;
 	closestDueDateInTheFuture: string | undefined;
 
-	constructor(dueString: string, range: vscode.Range, targetDate?: Date) {
+	constructor(dueString: string, targetDate?: Date) {
 		this.raw = dueString;
-		this.range = range;
 
 		const result = DueDate.parseDue(dueString, targetDate);
 		this.isRecurring = result.isRecurring;

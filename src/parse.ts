@@ -44,6 +44,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 	const tagsRange: Range[] = [];
 	const specialTags: SpecialTags = {};
 	let due: DueDate | undefined;
+	let dueRange: Range | undefined;
 
 	for (const word of words) {
 		switch (word[0]) {
@@ -56,7 +57,8 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 				const range = new Range(lineNumber, index, lineNumber, index + word.length);
 				if (specialTag === 'due') {
 					if (value.length) {
-						due = new DueDate(value, range);
+						due = new DueDate(value);
+						dueRange = range;
 					}
 				} else if (specialTag === 'cr') {
 					specialTagRanges.push(range);
@@ -150,6 +152,7 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		priorityRange,
 		specialTagRanges,
 		due,
+		dueRange,
 		specialTags,
 		contexts,
 		contextRanges,
@@ -226,6 +229,7 @@ export class TheTask {
 	projectRanges: Range[];
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
+	dueRange?: Range;
 
 	constructor(init: TaskInit) {
 		this.title = init.title;
@@ -236,6 +240,7 @@ export class TheTask {
 		this.projects = init.projects ?? [];
 		this.priority = init.priority ?? extensionConfig.defaultPriority;
 		this.due = init.due;
+		this.dueRange = init.dueRange;
 		this.specialTags = init.specialTags;
 		this.contexts = init.contexts ?? [];
 		this.specialTagRanges = init.specialTagRanges ?? [];

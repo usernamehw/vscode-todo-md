@@ -253,8 +253,8 @@ export function registerAllCommands() {
 				}
 				const dueDate = `{due:${dueDateToInsert}}`;
 				const wEdit = new WorkspaceEdit();
-				if (task?.due?.range) {
-					wEdit.replace(editor.document.uri, task.due.range, dueDate);
+				if (task?.dueRange) {
+					wEdit.replace(editor.document.uri, task.dueRange, dueDate);
 				} else {
 					wEdit.insert(editor.document.uri, editor.selection.active, ` ${dueDate}`);
 				}
