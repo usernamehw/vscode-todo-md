@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { DueState } from './types';
 
 export class DueDate {
-	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(\w+))?$/;
+	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|e\d+d)?$/;
 	private static readonly dueRecurringRegexp = /^ed|sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday$/i;
 	/** Unmodified value of due date */
 	raw: string;
@@ -168,14 +168,15 @@ export class DueDate {
 		if (dueDateStart === undefined) {
 			throw new Error('dueDate was specified, but dueDateStart is missing');
 		}
-		const match = /(?!every|e)\s?(\d+)?\s?(d|days?)/.exec(dueString);
+		const match = /(?!e)(\d+)(d)/.exec(dueString);// TODO: remove ?!
 		if (match) {
 			const interval = match[1] ? +match[1] : 1;
 			const unit = match[2];
-			if (/^(d|days?)$/.test(unit)) {
+			if (unit === 'd') {
 				const diffInDays = dayjs(targetDate).diff(dueDateStart, 'day');
-
-				if (diffInDays % interval === 0) return DueState.due;
+				if (diffInDays % interval === 0) {
+					return DueState.due;
+				}
 			}
 		}
 
