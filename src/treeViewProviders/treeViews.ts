@@ -6,10 +6,7 @@ import { ContextProvider } from './contextProvider';
 import { ProjectProvider } from './projectProvider';
 import { TagProvider } from './tagProvider';
 import { TaskProvider } from './taskProvider';
-
-const VIEW_GENERIC_1_CONTEXT_KEY = 'todomd:generic1FilterExists';
-const VIEW_GENERIC_2_CONTEXT_KEY = 'todomd:generic2FilterExists';
-const VIEW_GENERIC_3_CONTEXT_KEY = 'todomd:generic3FilterExists';
+import { VscodeContext } from '../types';
 
 export const tagProvider = new TagProvider([]);
 export const projectProvider = new ProjectProvider([]);
@@ -63,7 +60,7 @@ export function createAllTreeViews() {
 				generic1View = vscode.window.createTreeView('todomd.generic1', {
 					treeDataProvider: generic1Provider,
 				});
-				setContext(VIEW_GENERIC_1_CONTEXT_KEY, true);
+				setContext(VscodeContext.generic1FilterExists, true);
 			}
 		}
 
@@ -75,7 +72,7 @@ export function createAllTreeViews() {
 				generic2View = vscode.window.createTreeView('todomd.generic2', {
 					treeDataProvider: generic2Provider,
 				});
-				setContext(VIEW_GENERIC_2_CONTEXT_KEY, true);
+				setContext(VscodeContext.generic2FilterExists, true);
 			}
 		}
 
@@ -87,13 +84,13 @@ export function createAllTreeViews() {
 				generic3View = vscode.window.createTreeView('todomd.generic3', {
 					treeDataProvider: generic3Provider,
 				});
-				setContext(VIEW_GENERIC_3_CONTEXT_KEY, true);
+				setContext(VscodeContext.generic3FilterExists, true);
 			}
 		}
 	} else {
-		setContext(VIEW_GENERIC_1_CONTEXT_KEY, false);
-		setContext(VIEW_GENERIC_2_CONTEXT_KEY, false);
-		setContext(VIEW_GENERIC_3_CONTEXT_KEY, false);
+		setContext(VscodeContext.generic1FilterExists, false);
+		setContext(VscodeContext.generic2FilterExists, false);
+		setContext(VscodeContext.generic3FilterExists, false);
 	}
 }
 

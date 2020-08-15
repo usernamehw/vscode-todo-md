@@ -1,4 +1,5 @@
 import vscode, { Uri } from 'vscode';
+import { VscodeContext } from './types';
 
 /**
  * Create new untitled file with provided content and language;
@@ -26,9 +27,8 @@ export function getFullRangeFromLines(document: vscode.TextDocument, lineStart: 
 }
 /**
  * Set vscode context.
- * TODO: type first argument to be enum or a string union
  */
-export function setContext(context: string, value: any) {
+export function setContext(context: VscodeContext, value: any) {
 	vscode.commands.executeCommand('setContext', context, value);
 }
 /**

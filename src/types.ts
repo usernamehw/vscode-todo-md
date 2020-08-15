@@ -79,4 +79,12 @@ export interface IConfig {
 	getNextNumberOfTasks: number;
 }
 
+export const enum VscodeContext {
+	isActive = 'todomd:isActive',
+	filterActive = 'todomd:filterActive',
+	generic1FilterExists = 'todomd:generic1FilterExists',
+	generic2FilterExists = 'todomd:generic2FilterExists',
+	generic3FilterExists = 'todomd:generic3FilterExists',
+}
+
 export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Pick<T, TRequired>;

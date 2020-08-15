@@ -7,11 +7,9 @@ import { SortProperty, sortTasks } from './sort';
 import { DATE_FORMAT, getDateInISOFormat } from './timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
-import { DueState } from './types';
+import { DueState, VscodeContext } from './types';
 import { appendTaskToFile, fancyNumber, getRandomInt } from './utils';
 import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
-
-const FILTER_ACTIVE_CONTEXT_KEY = 'todomd:filterActive';
 
 class QuickPickItem implements vscode.QuickPickItem {
 	label: string;
@@ -315,13 +313,13 @@ export function registerAllCommands() {
 			if (!filterStr || !filterStr.length) {
 				return;
 			}
-			setContext(FILTER_ACTIVE_CONTEXT_KEY, true);
+			setContext(VscodeContext.filterActive, true);
 			state.taskTreeViewFilterValue = filterStr;
 			updateTasksTreeView();
 		});
 	});
 	commands.registerCommand('todomd.clearFilter', editor => {
-		setContext(FILTER_ACTIVE_CONTEXT_KEY, false);
+		setContext(VscodeContext.filterActive, false);
 		state.taskTreeViewFilterValue = '';
 		updateTasksTreeView();
 	});

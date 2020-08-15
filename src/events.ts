@@ -6,8 +6,7 @@ import { updateEditorDecorations } from './decorations';
 import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from './extension';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { setContext } from './vscodeUtils';
-
-export const THE_RIGHT_FILE_CONTEXT_KEY = 'todomd:isActive';
+import { VscodeContext } from './types';
 
 export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): void {
 	if (isTheRightFileFormat(editor)) {
@@ -70,7 +69,7 @@ export function enterTheRightFile(editor: vscode.TextEditor) {
 	statusBar.updateText(state.tasks);
 	statusBar.show();
 	checkIfNewDayArrived();
-	setContext(THE_RIGHT_FILE_CONTEXT_KEY, true);
+	setContext(VscodeContext.isActive, true);
 
 	if (state.newDayArrived && !state.fileWasReset) {
 		resetAllRecurringTasks(editor);
@@ -93,7 +92,7 @@ export async function exitTheRightFile() {
 		Global.generalAutocompleteDisposable.dispose();
 	}
 	statusBar.hide();
-	setContext(THE_RIGHT_FILE_CONTEXT_KEY, false);
+	setContext(VscodeContext.isActive, false);
 	await updateState();
 	updateAllTreeViews();
 }
