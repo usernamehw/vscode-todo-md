@@ -2,24 +2,54 @@ import vscode, { Range } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionConfig } from './extension';
 import { OptionalExceptFor } from './types';
-/**
- * Returns undefined for empty string
- * Returns line number for comment line
- * Returns parsed line `TheTask` otherwise
- */
-export function parseLine(textLine: vscode.TextLine): TheTask | undefined | number {
+
+interface ParseLineReturn {
+	lineType: string;
+	value?: unknown;
+}
+interface TaskReturn extends ParseLineReturn {
+	lineType: 'task';
+	value: TheTask;
+}
+interface SpecialCommentReturn extends ParseLineReturn {
+	lineType: 'specialComment';
+	value: string[];
+}
+interface CommentReturn extends ParseLineReturn {
+	lineType: 'comment';
+}
+interface EmptyLineReturn extends ParseLineReturn {
+	lineType: 'empty';
+}
+
+export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommentReturn | CommentReturn | EmptyLineReturn {
 	let line = textLine.text.trim();
 	if (!line.length) {
-		// Empty lines are ok and allowed to use to read the file easier
-		return undefined;
-	}
-	const lineNumber = textLine.lineNumber;
-	if (line[0] === '#' && line[1] === ' ') {
-		// Comment. Also, in markdown file a header and can be used for Go To Symbol
-		return lineNumber;
+		return {
+			lineType: 'empty',
+		};
 	}
 
-	/** Offset of current word (Used to calculate ranges for decorations) */
+	const lineNumber = textLine.lineNumber;
+	if (line.startsWith('# ')) {
+		return {
+			lineType: 'comment',
+		};
+	} else if (line.startsWith('## ')) {
+		const tags = [];
+		const tempLine = line.slice(3).trim().split(' ');
+		for (const word of tempLine) {
+			if (word.startsWith('#')) {
+				tags.push(...word.split('#').filter(tag => tag.length));
+			}
+		}
+		return {
+			lineType: 'specialComment',
+			value: tags,
+		};
+	}
+
+	/** Offset of the current word (Used to calculate ranges for decorations) */
 	let index = textLine.firstNonWhitespaceCharacterIndex;
 
 	let done = line.startsWith(extensionConfig.doneSymbol);
@@ -140,25 +170,28 @@ export function parseLine(textLine: vscode.TextLine): TheTask | undefined | numb
 		index += word.length + 1;// 1 is space sign
 	}
 
-	return new TheTask({
-		tags,
-		rawText,
-		tagsDelimiterRanges,
-		tagsRange,
-		projects,
-		projectRanges,
-		done,
-		priority,
-		priorityRange,
-		specialTagRanges,
-		due,
-		dueRange,
-		specialTags,
-		contexts,
-		contextRanges,
-		title: text.join(' '),
-		lineNumber,
-	});
+	return {
+		lineType: 'task',
+		value: new TheTask({
+			tags,
+			rawText,
+			tagsDelimiterRanges,
+			tagsRange,
+			projects,
+			projectRanges,
+			done,
+			priority,
+			priorityRange,
+			specialTagRanges,
+			due,
+			dueRange,
+			specialTags,
+			contexts,
+			contextRanges,
+			title: text.join(' '),
+			lineNumber,
+		}),
+	};
 }
 
 interface ParsedDocument {
@@ -169,18 +202,29 @@ interface ParsedDocument {
 export function parseDocument(document: vscode.TextDocument): ParsedDocument {
 	const tasks = [];
 	const commentLines = [];
+	let additionalTags: string[] = [];
+
 	for (let i = 0; i < document.lineCount; i++) {
 		const parsedLine = parseLine(document.lineAt(i));
-		if (parsedLine === undefined) {
-			// empty line - skip it
-			continue;
+		switch (parsedLine.lineType) {
+			case 'empty': continue;
+			case 'comment': {
+				commentLines.push(new Range(i, 0, i, 0));
+				additionalTags = [];
+				continue;
+			}
+			case 'specialComment': {
+				commentLines.push(new Range(i, 0, i, 0));
+				additionalTags = parsedLine.value;
+				continue;
+			}
+			default: {
+				if (additionalTags.length !== 0) {
+					parsedLine.value.tags.push(...additionalTags);
+				}
+				tasks.push(parsedLine.value);
+			}
 		}
-		if (typeof parsedLine === 'number') {
-			// comment line
-			commentLines.push(new Range(parsedLine, 0, parsedLine, 0));
-			continue;
-		}
-		tasks.push(parsedLine);
 	}
 
 	return {

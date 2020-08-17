@@ -1,26 +1,26 @@
-import { describe, it } from 'mocha';
-import vscode, { Range, Position, Selection } from 'vscode';
 import { expect } from 'chai';
-
+import { describe, it } from 'mocha';
+import vscode, { Range } from 'vscode';
 import { parseLine, TheTask } from '../../parse';
-import { DueState } from '../../types';
 
 const editor = vscode.window.activeTextEditor!;
-
+/**
+ * Helper function to get the task excluding empty lines and comments
+ */
 function getLineAt(n: number): TheTask | undefined {
 	const textLine = editor.document.lineAt(n);
 	const task = parseLine(textLine);
-	if (task === undefined || typeof task === 'number') {
+	if (task.lineType === 'empty' || task.lineType === 'comment' || task.lineType === 'specialComment') {
 		return undefined;
 	}
-	return task;
+	return task.value;
 }
 // ──────────────────────────────────────────────────────────────────────
 describe('Comment', () => {
 	it('0 Should not produce a task', () => {
 		const line = editor.document.lineAt(0);
 		const task = parseLine(line);
-		expect(task).to.equal(0);
+		expect(task?.lineType === 'comment', 'Line type is comment').to.be.ok;
 	});
 });
 
