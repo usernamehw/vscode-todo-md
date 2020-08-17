@@ -1,3 +1,8 @@
+## 0.0.19 `17 Aug 2020`
+
+- ✨ Add invalid due date state (highlighted in orange)
+- ✨ Create special comment that adds tags to all tasks after it [#5](https://github.com/usernamehw/vscode-todo-md/issues/5)
+
 ## 0.0.18 `12 Aug 2020`
 
 - ✨ Allow advanced decorations for comments
