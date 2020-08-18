@@ -10,10 +10,10 @@ import { VscodeContext } from './types';
 
 export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): void {
 	if (isTheRightFileFormat(editor)) {
-		enterTheRightFile(editor!);
+		activateExtensionFeatures(editor!);
 	} else {
 		if (state.theRightFileOpened) {
-			exitTheRightFile();
+			deactivateExtensionFeatures();
 		}
 	}
 }
@@ -59,7 +59,7 @@ export function isTheRightFileFormat(editor?: vscode.TextEditor): boolean {
  * They are only activated when user opens file named `todo.md` (by default)
  * Only then - completions, status bar text and other features are enabled.
  */
-export function enterTheRightFile(editor: vscode.TextEditor) {
+export function activateExtensionFeatures(editor: vscode.TextEditor) {
 	state.theRightFileOpened = true;
 
 	updateEverything(editor);
@@ -80,7 +80,7 @@ export function enterTheRightFile(editor: vscode.TextEditor) {
  * When `todo.md` document is closed - all the features except for the Tree Views
  * will be disabled.
  */
-export async function exitTheRightFile() {
+export async function deactivateExtensionFeatures() {
 	state.theRightFileOpened = false;
 	if (Global.changeTextDocumentDisposable) {
 		Global.changeTextDocumentDisposable.dispose();
