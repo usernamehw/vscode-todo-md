@@ -87,8 +87,6 @@ function renderTask(task: TheTask): HTMLElement {
 			case 'E': taskListItem.classList.add('pri5'); break;
 			case 'F': taskListItem.classList.add('pri6'); break;
 		}
-		if (task.priority === 'A') {
-		}
 	}
 	const checkbox = document.createElement('input');
 	checkbox.classList.add('checkbox');
