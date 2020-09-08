@@ -251,7 +251,7 @@ interface SpecialTags {
 	count?: Count;
 	link?: string;
 }
-
+// TODO: move TheTask to its own file
 export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags'>;
 /**
  * `The` prefix because of auto import conflict with vscode `Task`
