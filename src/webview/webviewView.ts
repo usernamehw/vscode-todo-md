@@ -1,6 +1,6 @@
 import vscode, { window } from 'vscode';
 import { toggleTaskCompletionAtLine } from '../commands';
-import { getDocumentForDefaultFile, Global } from '../extension';
+import { extensionConfig, getDocumentForDefaultFile, Global } from '../extension';
 import { TheTask } from '../parse';
 import { IExtensionConfig, WebviewMessage } from '../types';
 import { getNonce } from './utils';
@@ -50,6 +50,8 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				this.updateTasks(this._tasks);
 			}
 		});
+
+		this.updateWebviewConfig(extensionConfig.webview);
 	}
 
 	updateTasks(tasks: TheTask[]) {
