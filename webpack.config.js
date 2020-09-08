@@ -31,9 +31,7 @@ module.exports = (env, options) => {
 				exclude: /node_modules/,
 				use: [{
 					loader: 'ts-loader',
-				},
-					'webpack-strip-block',
-				],
+				}],
 			}],
 		},
 		plugins: [
