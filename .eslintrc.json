@@ -102,7 +102,7 @@
 			"objects": "always-multiline",
 			"imports": "always-multiline",
 			"exports": "never",
-			"functions": "never"
+			"functions": "always-multiline"
 		}],
 		"no-alert": 0,
 		"curly": 0,

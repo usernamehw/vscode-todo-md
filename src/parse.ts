@@ -265,7 +265,7 @@ export class TheTask {
 	projects: string[];
 	due?: DueDate;
 	specialTags: SpecialTags;
-	priority: string;
+	priority: string;// TODO: alphabet type union
 	contexts: string[];
 	contextRanges: Range[];
 	priorityRange?: Range;

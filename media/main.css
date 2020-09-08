@@ -1,0 +1,132 @@
+* {
+	box-sizing: border-box;
+}
+
+html {
+	overflow-y: hidden;
+}
+
+body {
+	/* background: transparent; */
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: 0;
+	/* padding-top: 1px; */
+	position: relative;
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	/* Iframe looks blurry================== */
+	-webkit-text-stroke: 0px !important;
+	-webkit-font-smoothing: antialiased !important;
+	backface-visibility: hidden;
+	transform: translateZ(0);
+}
+
+a {
+	text-decoration: none;
+}
+
+input[type="text"] {
+	color: var(--vscode-input-foreground);
+	background-color: var(--vscode-input-background);
+	outline: none !important;
+	border: 1px solid var(--vscode-input-border);
+	height: 24px;
+	font-size: 13px;
+	padding: 3px;
+	padding-left: 4px;
+}
+
+button {
+	color: var(--vscode-button-foreground);
+	background: var(--vscode-button-background);
+	border: none;
+	margin: 0 auto;
+}
+
+.filter-input-container {
+	background-color: var(--vscode-sideBar-background);
+	position: fixed;
+	z-index: 999;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	left: 0;
+	top: 0;
+	right: 0;
+}
+
+.filter-input {
+	margin-left: 12px;
+	margin-right: 12px;
+	display: block;
+	width: calc(100% - 24px);
+}
+
+.filter-input:focus {
+	outline: none !important;
+	border-color: var(--vscode-focusBorder) !important;
+}
+
+.list {
+	padding-top: calc(6px + 6px + 24px);
+	/* padding-top: 6px; */
+	line-height: 1.5;
+	overflow-y: auto;
+	/* TODO: calc actual filter height */
+	height: calc(100vh);
+	/*  - 6px - 6px - 24px */
+}
+
+.list-item {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji';
+	/* TODO: pack Segoe UI? */
+	border-bottom: 1px solid rgba(206, 206, 206, 0.424);
+	border-left: 3px solid transparent;
+	padding-left: 6px;
+	padding-right: 6px;
+	word-wrap: break-word;
+}
+
+.list-item:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* TODO: colors should not be constant */
+
+.list-item.pri1 {
+	border-left-color: #ec4f47;
+}
+
+.list-item.pri2 {
+	border-left-color: #fd9f9a;
+}
+
+.list-item.pri3 {
+	border-left-color: #ffb648;
+}
+
+.list-item.pri4 {
+	border-left-color: #f1d900;
+}
+
+.list-item.pri5 {
+	border-left-color: #ace000;
+}
+
+.list-item.pri6 {
+	border-left-color: #00cfad;
+}
+
+.tag {
+	background-color: rgba(0, 132, 255, 0.151);
+	margin-left: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-radius: 3px;
+	white-space: nowrap;
+	/* cursor: pointer; */
+}
+
+.tag:hover {
+	background-color: rgba(0, 132, 255, 0.308)
+}

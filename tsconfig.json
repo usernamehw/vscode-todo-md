@@ -13,11 +13,16 @@
 		"strict": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
-		"types": [ "node", "mocha", "chai"],
+		"types": [
+			"node",
+			"mocha",
+			"chai"
+		]
 	},
 	"exclude": [
 		"node_modules",
 		".vscode-test",
-		"scripts"
+		"scripts",
+		"media"
 	]
 }

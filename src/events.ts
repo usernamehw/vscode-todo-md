@@ -5,8 +5,9 @@ import { updateCompletions } from './completionProviders';
 import { updateEditorDecorations } from './decorations';
 import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from './extension';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
-import { setContext } from './vscodeUtils';
 import { VscodeContext } from './types';
+import { setContext } from './vscodeUtils';
+import { updateWebviewView } from './webview/webviewView';
 
 export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): void {
 	if (isTheRightFileFormat(editor)) {
@@ -105,4 +106,5 @@ export async function updateEverything(editor?: vscode.TextEditor) {
 	updateEditorDecorations(editor);
 	statusBar.updateText(state.tasks);
 	updateAllTreeViews();
+	updateWebviewView(state.tasks);
 }

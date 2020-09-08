@@ -43,7 +43,7 @@ const enum AdvancedDecorations {
 	context = 'context',
 	comment = 'comment',
 }
-export interface IConfig {
+export interface IExtensionConfig {
 	addCreationDate: boolean;
 	addCompletionDate: boolean;
 	completionDateIncludeTime: boolean;
@@ -77,6 +77,10 @@ export interface IConfig {
 		filter: string;
 	}[];
 	getNextNumberOfTasks: number;
+
+	webview: {
+		showCompleted: boolean;
+	};
 }
 
 export const enum VscodeContext {
@@ -88,3 +92,27 @@ export const enum VscodeContext {
 }
 
 export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Pick<T, TRequired>;
+
+interface WebviewMessageBase {
+	type: string;
+	value: unknown;
+}
+// From extension to webview
+interface WebviewMessageUpdateTasks extends WebviewMessageBase {
+	type: 'updateTasks';
+	value: TheTask[];
+}
+interface WebviewMessageUpdateConfig extends WebviewMessageBase {
+	type: 'updateConfig';
+	value: IExtensionConfig['webview'];
+}
+// From webview to extension
+interface WebviewMessageToggleDone extends WebviewMessageBase {
+	type: 'toggleDone';
+	value: number;
+}
+interface WebviewMessageShowNotification extends WebviewMessageBase {
+	type: 'showNotification';
+	value: string;
+}
+export type WebviewMessage = WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification;

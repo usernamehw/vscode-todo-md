@@ -9,7 +9,8 @@ import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from
 import { parseDocument, TheTask } from './parse';
 import { StatusBar } from './statusBar';
 import { createAllTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
-import { IConfig, ItemForProvider, Items, SortTags, State } from './types';
+import { IExtensionConfig, ItemForProvider, Items, SortTags, State } from './types';
+import { TasksWebviewViewProvider, updateWebviewView } from './webview/webviewView';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -34,12 +35,14 @@ export const state: State = {
 export const EXTENSION_NAME = 'todomd';
 export const LAST_VISIT_STORAGE_KEY = 'LAST_VISIT_STORAGE_KEY';
 
-export let extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
+export let extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IExtensionConfig;
 export const statusBar = new StatusBar();
 /**
  * Global variables
  */
 export class Global {
+	static webviewProvider: TasksWebviewViewProvider;
+
 	static tagAutocompleteDisposable: vscode.Disposable;
 	static projectAutocompleteDisposable: vscode.Disposable;
 	static contextAutocompleteDisposable: vscode.Disposable;
@@ -84,6 +87,15 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	updateAllTreeViews();
 	updateArchivedTasks();
 
+	Global.webviewProvider = new TasksWebviewViewProvider(state.extensionContext.extensionUri);
+	state.extensionContext.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, Global.webviewProvider),
+	);
+
+	setTimeout(() => {
+		updateWebviewView(state.tasks);
+	}, 2000);
+
 	onChangeActiveTextEditor(window.activeTextEditor);
 	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 
@@ -93,7 +105,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	}
 
 	function updateConfig(): void {
-		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IConfig;
+		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IExtensionConfig;
 
 		disposeEverything();
 		updateDecorationStyle();

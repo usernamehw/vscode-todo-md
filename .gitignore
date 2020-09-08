@@ -5,3 +5,6 @@ node_modules
 *.vsix
 *.todo
 *.vs
+
+media/main.js
+src/**/*.js

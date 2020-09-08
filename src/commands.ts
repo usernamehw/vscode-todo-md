@@ -361,6 +361,20 @@ export function registerAllCommands() {
 	commands.registerCommand('todomd.setLastVisitYesterday', () => {
 		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(1, 'day').toDate());
 	});
+	commands.registerCommand('todomd.webviewToggleFilter', (treeItem: TaskTreeItem) => {
+		// Toggle filter
+	});
+	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
+		openSettingGuiAt('todomd.webview');
+	});
+	commands.registerCommand('todomd.openDefaultFile', async (treeItem: TaskTreeItem) => {
+		// TODO: should open active file and only if none opened - then open the default
+		const isDefaultFileSpecified = await checkDefaultFileAndNotify();
+		if (!isDefaultFileSpecified) {
+			return;
+		}
+		openFileInEditor(extensionConfig.defaultFile);
+	});
 }
 
 function archiveTask(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine, shouldDelete: boolean) {

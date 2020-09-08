@@ -6,6 +6,7 @@
 	"publisher": "usernamehw",
 	"license": "MIT",
 	"icon": "img/icon.png",
+	"enableProposedApi": true,
 	"engines": {
 		"vscode": "^1.48.0"
 	},
@@ -32,7 +33,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onStartupFinished"
+		"*"
 	],
 	"main": "./dist/extension",
 	"preview": true,
@@ -41,6 +42,11 @@
 			"type": "object",
 			"title": "Todo Markdown",
 			"properties": {
+				"todomd.webview.showCompleted": {
+					"type": "boolean",
+					"markdownDescription": "TODO: write description.",
+					"default": true
+				},
 				"todomd.defaultFile": {
 					"type": "string",
 					"markdownDescription": "Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`",
@@ -730,6 +736,24 @@
 		},
 		"commands": [
 			{
+				"command": "todomd.webviewToggleFilter",
+				"title": "Toggle filter visibility",
+				"category": "Todo MD",
+				"icon": "$(filter)"
+			},
+			{
+				"command": "todomd.showWebviewSettings",
+				"title": "Show Webview Settings",
+				"category": "Todo MD",
+				"icon": "$(settings-gear)"
+			},
+			{
+				"command": "todomd.openDefaultFile",
+				"title": "Open default file",
+				"category": "Todo MD",
+				"icon": "$(go-to-file)"
+			},
+			{
 				"command": "todomd.toggleDone",
 				"title": "Toggle completion",
 				"category": "Todo MD",
@@ -1020,6 +1044,21 @@
 					"command": "todomd.addTask",
 					"when": "view == todomd.tasks",
 					"group": "navigation"
+				},
+				{
+					"command": "todomd.webviewToggleFilter",
+					"when": "view == todomd.webviewTasks",
+					"group": "navigation@0"
+				},
+				{
+					"command": "todomd.openDefaultFile",
+					"when": "view == todomd.webviewTasks",
+					"group": "navigation@1"
+				},
+				{
+					"command": "todomd.showWebviewSettings",
+					"when": "view == todomd.webviewTasks",
+					"group": "navigation@2"
 				}
 			],
 			"view/item/context": [
@@ -1083,7 +1122,7 @@
 				{
 					"id": "todomd",
 					"icon": "./img/checklist.svg",
-					"title": "Todo Markdown"
+					"title": "TodoMD"
 				}
 			]
 		},
@@ -1123,6 +1162,12 @@
 					"id": "todomd.generic3",
 					"name": "Generic3",
 					"when": "todomd:generic3FilterExists"
+				},
+				{
+					"type": "webview",
+					"id": "todomd.webviewTasks",
+					"name": "Webview",
+					"icon": "img/checkDark.svg"
 				}
 			]
 		}
@@ -1131,6 +1176,7 @@
 		"vscode:prepublish": "webpack --mode production --colors",
 		"compile": "webpack --mode development",
 		"watch": "webpack --mode development --watch --display=minimal",
+		"watchWebview": "tsc media/main.ts -w --target ES5 --module ES2015 --moduleResolution node",
 		"watchTest": "tsc -watch -p ./",
 		"test": "node ./dist/test/runTest.js",
 		"generateDecorationSchema": "tsc scripts\\generateDecorationSchema.ts && node scripts\\generateDecorationSchema.js"
