@@ -67,7 +67,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 	const projectRanges: Range[] = [];
 	const specialTagRanges: Range[] = [];
 	const text: string[] = [];
-	let priority: string | undefined;
+	let priority: Priority | undefined;
 	let priorityRange: Range | undefined;
 	const tags: string[] = [];
 	const tagsDelimiterRanges: Range[] = [];
@@ -156,7 +156,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 			}
 			case '(': {
 				if (/^\([A-Z]\)$/.test(word)) {
-					priority = word[1];
+					priority = word[1] as Priority;
 					priorityRange = new Range(lineNumber, index, lineNumber, index + word.length);
 				} else {
 					text.push(word);
@@ -251,6 +251,7 @@ interface SpecialTags {
 	count?: Count;
 	link?: string;
 }
+export type Priority = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z';
 // TODO: move TheTask to its own file
 export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags'>;
 /**
@@ -265,7 +266,7 @@ export class TheTask {
 	projects: string[];
 	due?: DueDate;
 	specialTags: SpecialTags;
-	priority: string;// TODO: alphabet type union
+	priority: Priority;
 	contexts: string[];
 	contextRanges: Range[];
 	priorityRange?: Range;

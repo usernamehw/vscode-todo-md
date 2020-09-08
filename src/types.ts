@@ -1,5 +1,5 @@
 import vscode, { DecorationRenderOptions } from 'vscode';
-import { TheTask } from './parse';
+import { Priority, TheTask } from './parse';
 
 export interface ItemForProvider {
 	title: string;
@@ -48,7 +48,7 @@ export interface IExtensionConfig {
 	addCompletionDate: boolean;
 	completionDateIncludeTime: boolean;
 	creationDateIncludeTime: boolean;
-	defaultPriority: string;
+	defaultPriority: Priority;
 	autoArchiveTasks: boolean;
 
 	sortTagsView: SortTags;
