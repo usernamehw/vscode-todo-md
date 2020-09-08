@@ -7,15 +7,15 @@ export class TagTreeItem extends vscode.TreeItem {
 
 	constructor(
 		readonly label: string,
-		readonly items: LineTreeItem[]
+		readonly items: LineTreeItem[],
 	) {
 		super(label);
 	}
-
+	// @ts-ignore
 	get tooltip(): undefined {
 		return undefined;
 	}
-
+	// @ts-ignore
 	get description(): undefined {
 		return undefined;
 	}
@@ -27,15 +27,15 @@ export class LineTreeItem extends vscode.TreeItem {
 
 	constructor(
 		readonly label: string,
-		readonly command: vscode.Command
+		readonly command: vscode.Command,
 	) {
 		super(label);
 	}
-
+	// @ts-ignore
 	get tooltip(): undefined {
 		return undefined;
 	}
-
+	// @ts-ignore
 	get description(): undefined {
 		return undefined;
 	}
@@ -48,7 +48,7 @@ export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | LineTr
 	readonly onDidChangeTreeData: vscode.Event<TagTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
-		private tags: ItemForProvider[]
+		private tags: ItemForProvider[],
 	) { }
 
 	refresh(newTags: ItemForProvider[]): void {
@@ -70,7 +70,7 @@ export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | LineTr
 					command: `${EXTENSION_NAME}.goToLine`,
 					title: 'Go To Line',
 					arguments: [item.lineNumber],
-				}
+				},
 			))));
 		}
 	}

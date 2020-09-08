@@ -7,15 +7,15 @@ export class ProjectTreeItem extends vscode.TreeItem {
 
 	constructor(
 		readonly label: string,
-		readonly items: LineTreeItem[]
+		readonly items: LineTreeItem[],
 	) {
 		super(label);
 	}
-
+	// @ts-ignore
 	get tooltip(): string | undefined {
 		return undefined;
 	}
-
+	// @ts-ignore
 	get description(): undefined {
 		return undefined;
 	}
@@ -28,15 +28,15 @@ class LineTreeItem extends vscode.TreeItem {
 
 	constructor(
 		readonly label: string,
-		readonly command: vscode.Command
+		readonly command: vscode.Command,
 	) {
 		super(label);
 	}
-
+	// @ts-ignore
 	get tooltip(): undefined {
 		return undefined;
 	}
-
+	// @ts-ignore
 	get description(): undefined {
 		return undefined;
 	}
@@ -49,7 +49,7 @@ export class ProjectProvider implements vscode.TreeDataProvider<ProjectTreeItem 
 	readonly onDidChangeTreeData: vscode.Event<ProjectTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
-		private projects: ItemForProvider[]
+		private projects: ItemForProvider[],
 	) { }
 
 	refresh(newProjects: ItemForProvider[]): void {
@@ -71,7 +71,7 @@ export class ProjectProvider implements vscode.TreeDataProvider<ProjectTreeItem 
 					command: `${EXTENSION_NAME}.goToLine`,
 					title: 'Go To Line',
 					arguments: [item.lineNumber],
-				}
+				},
 			))));
 		}
 	}

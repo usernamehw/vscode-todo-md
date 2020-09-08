@@ -10,18 +10,18 @@ export class TaskTreeItem extends vscode.TreeItem {
 	constructor(
 		readonly label: string,
 		readonly task: TheTask,
-		readonly command: vscode.Command
+		readonly command: vscode.Command,
 	) {
 		super(label);
 		if (task.specialTags.link) {
 			this.contextValue = 'link';
 		}
 	}
-
+	// @ts-ignore
 	get tooltip(): string | undefined {
 		return `TITLE: ${this.task.title}\nDONE: ${this.task.done}\nPRIORITY: ${this.task.priority}`;// TODO: make nice markdown hover
 	}
-
+	// @ts-ignore
 	get description() {
 		return undefined;
 	}
@@ -32,7 +32,7 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 	readonly onDidChangeTreeData: vscode.Event<TaskTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
-		private tasks: TheTask[]
+		private tasks: TheTask[],
 	) { }
 
 	refresh(newTasks: TheTask[]): void {

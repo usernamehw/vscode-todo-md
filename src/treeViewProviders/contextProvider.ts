@@ -7,15 +7,15 @@ export class ContextTreeItem extends vscode.TreeItem {
 
 	constructor(
 		readonly label: string,
-		readonly items: LineTreeItem[]
+		readonly items: LineTreeItem[],
 	) {
 		super(label);
 	}
-
+	// @ts-ignore
 	get tooltip(): string | undefined {
 		return undefined;
 	}
-
+	// @ts-ignore
 	get description(): undefined {
 		return undefined;
 	}
@@ -28,15 +28,15 @@ class LineTreeItem extends vscode.TreeItem {
 
 	constructor(
 		readonly label: string,
-		readonly command: vscode.Command
+		readonly command: vscode.Command,
 	) {
 		super(label);
 	}
-
+	// @ts-ignore
 	get tooltip(): undefined {
 		return undefined;
 	}
-
+	// @ts-ignore
 	get description(): undefined {
 		return undefined;
 	}
@@ -49,7 +49,7 @@ export class ContextProvider implements vscode.TreeDataProvider<ContextTreeItem 
 	readonly onDidChangeTreeData: vscode.Event<ContextTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
-		private contexts: ItemForProvider[]
+		private contexts: ItemForProvider[],
 	) { }
 
 	refresh(newContexts: ItemForProvider[]): void {
@@ -71,7 +71,7 @@ export class ContextProvider implements vscode.TreeDataProvider<ContextTreeItem 
 					command: `${EXTENSION_NAME}.goToLine`,
 					title: 'Go To Line',
 					arguments: [item.lineNumber],
-				}
+				},
 			))));
 		}
 	}
