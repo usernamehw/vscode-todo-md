@@ -1,4 +1,4 @@
-import vscode from 'vscode';
+import vscode, { MarkdownString } from 'vscode';
 import { formatTask } from '../commands';
 import { EXTENSION_NAME } from '../extension';
 import { TheTask } from '../parse';
@@ -18,8 +18,8 @@ export class TaskTreeItem extends vscode.TreeItem {
 		}
 	}
 	// @ts-ignore
-	get tooltip(): string | undefined {
-		return `TITLE: ${this.task.title}\nDONE: ${this.task.done}\nPRIORITY: ${this.task.priority}`;// TODO: make nice markdown hover
+	get tooltip() {
+		return new MarkdownString(`${this.task.title}\n\n${this.task.done}`);
 	}
 	// @ts-ignore
 	get description() {
@@ -41,6 +41,7 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 	}
 
 	getTreeItem(element: TaskTreeItem): vscode.TreeItem {
+		// @ts-ignore
 		return element;
 	}
 
