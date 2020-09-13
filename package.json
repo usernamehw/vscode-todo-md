@@ -8,7 +8,7 @@
 	"icon": "img/icon.png",
 	"enableProposedApi": true,
 	"engines": {
-		"vscode": "^1.48.0"
+		"vscode": "^1.49.0"
 	},
 	"repository": {
 		"type": "git",
@@ -1189,7 +1189,7 @@
 		"@types/markdown-table": "^2.0.0",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^12.12.56",
-		"@types/vscode": "^1.48.0",
+		"@types/vscode": "^1.49.0",
 		"@typescript-eslint/eslint-plugin": "^4.1.0",
 		"@typescript-eslint/parser": "^4.1.0",
 		"chai": "^4.2.0",
