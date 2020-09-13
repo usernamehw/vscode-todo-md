@@ -97,6 +97,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					<input type="text" class="filter-input" id="filterInput">
 				</div>
 				<div class="list"></div>
+				<script nonce="${nonce}">var exports = {};</script>
 				<script defer nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
