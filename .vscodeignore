@@ -19,6 +19,7 @@ package-lock.json
 node_modules
 webpack.config.js
 test.md
+proposed-api.md
 img/demo.png
 img/calendar_pic.png
 scripts
