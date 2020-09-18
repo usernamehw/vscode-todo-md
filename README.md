@@ -164,5 +164,4 @@ Can be configured in `settings.json` (**`workbench.colorCustomizations`** sectio
 ## Please upvote the following upstream vscode issues:
 
 - [#32813 \[theming\] Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
-- [#46585 Allow new WebView to be placed in its own sidebar activity](https://github.com/microsoft/vscode/issues/46585)
 - [#54285 Contributed webview context menu actions](https://github.com/microsoft/vscode/issues/54285)
