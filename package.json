@@ -44,7 +44,7 @@
 			"properties": {
 				"todomd.webview.showCompleted": {
 					"type": "boolean",
-					"markdownDescription": "TODO: write description.",
+					"markdownDescription": "Controls whether completed tasks are shown or not in the webview.",
 					"default": true
 				},
 				"todomd.defaultFile": {
