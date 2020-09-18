@@ -69,4 +69,8 @@ export class TheTask {
 		this.tagsDelimiterRanges = init.tagsDelimiterRanges;
 		this.tagsRange = init.tagsRange;
 	}
+
+	static formatTask(task: TheTask): string {
+		return task.title + (task.specialTags.count ? ` ${task.specialTags.count.current}/${task.specialTags.count.needed}` : '');
+	}
 }

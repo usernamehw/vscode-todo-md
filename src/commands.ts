@@ -162,12 +162,12 @@ export function registerAllCommands() {
 
 		if (task.links.length) {
 			const buttonName = 'Follow link';
-			const shouldFollow = await vscode.window.showInformationMessage(formatTask(task), buttonName);
+			const shouldFollow = await vscode.window.showInformationMessage(TheTask.formatTask(task), buttonName);
 			if (shouldFollow === buttonName) {
 				followLink(task.links[0].value);
 			}
 		} else {
-			vscode.window.showInformationMessage(formatTask(task));
+			vscode.window.showInformationMessage(TheTask.formatTask(task));
 		}
 	});
 	commands.registerCommand('todomd.getFewNextTasks', async () => {
@@ -180,7 +180,7 @@ export function registerAllCommands() {
 		const sortedTasks = defaultSortTasks(tasks)
 			.slice(0, extensionConfig.getNextNumberOfTasks);
 
-		vscode.window.showInformationMessage(sortedTasks.map((task, i) => `${fancyNumber(i + 1)} ${formatTask(task)}`).join('\n'), {
+		vscode.window.showInformationMessage(sortedTasks.map((task, i) => `${fancyNumber(i + 1)} ${TheTask.formatTask(task)}`).join('\n'), {
 			modal: true,
 		});
 	});
@@ -199,7 +199,7 @@ export function registerAllCommands() {
 			tasks = tasks.filter(t => !t.due);
 			resultTask = tasks[getRandomInt(0, tasks.length - 1)];
 		}
-		vscode.window.showInformationMessage(formatTask(resultTask));
+		vscode.window.showInformationMessage(TheTask.formatTask(resultTask));
 	});
 	commands.registerCommand('todomd.addTask', async () => {
 		const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
@@ -286,12 +286,12 @@ export function registerAllCommands() {
 	commands.registerCommand('todomd.completeTask', async () => {
 		// Show Quick Pick to complete a task
 		const document = await updateState();
-		const notCompletedTasks = state.tasks.filter(task => !task.done).map(task => formatTask(task));
+		const notCompletedTasks = state.tasks.filter(task => !task.done).map(task => TheTask.formatTask(task));
 		const pickedTask = await window.showQuickPick(notCompletedTasks);
 		if (!pickedTask) {
 			return;
 		}
-		const task = state.tasks.find(t => formatTask(t) === pickedTask);
+		const task = state.tasks.find(t => TheTask.formatTask(t) === pickedTask);
 		if (!task) {
 			return;
 		}
@@ -549,12 +549,6 @@ export function getTaskAtLine(lineNumber: number): TheTask | undefined {
 		}
 	}
 	return undefined;
-}
-/**
- * TODO: move to TheTask class
- */
-export function formatTask(task: TheTask): string {
-	return task.title + (task.specialTags.count ? ` ${task.specialTags.count.current}/${task.specialTags.count.needed}` : '');
 }
 /**
  * Updates state for archived tasks

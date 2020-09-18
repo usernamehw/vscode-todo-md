@@ -1,4 +1,3 @@
-import { formatTask } from 'src/commands';
 import { EXTENSION_NAME } from 'src/extension';
 import { TheTask } from 'src/TheTask';
 import vscode, { MarkdownString } from 'vscode';
@@ -50,7 +49,7 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 			return undefined;
 		} else {
 			return this.tasks.map(task => new TaskTreeItem(
-				formatTask(task),
+				TheTask.formatTask(task),
 				task,
 				{
 					command: `${EXTENSION_NAME}.goToLine`,
