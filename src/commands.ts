@@ -63,6 +63,18 @@ export function registerAllCommands() {
 		await updateState();
 		updateAllTreeViews();
 	});
+	commands.registerCommand('todomd.deleteTask', async (treeItem?: TaskTreeItem) => {
+		if (!treeItem) {
+			return;
+		}
+		const lineNumber = treeItem.task.lineNumber;
+		const document = await updateState();
+
+		deleteTask(document, lineNumber);
+
+		await updateState();
+		updateAllTreeViews();
+	});
 	commands.registerTextEditorCommand('todomd.archiveCompletedTasks', editor => {
 		if (!extensionConfig.defaultArchiveFile) {
 			noArchiveFileMessage();
@@ -582,5 +594,11 @@ function hideTask(document: vscode.TextDocument, lineNumber: number) {
 	const wEdit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
 	wEdit.insert(document.uri, new vscode.Position(lineNumber, line.range.end.character), ' {h}');
+	applyEdit(wEdit, document);
+}
+
+function deleteTask(document: vscode.TextDocument, lineNumber: number) {
+	const wEdit = new WorkspaceEdit();
+	wEdit.delete(document.uri, document.lineAt(lineNumber).rangeIncludingLineBreak);
 	applyEdit(wEdit, document);
 }

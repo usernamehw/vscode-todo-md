@@ -768,6 +768,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.deleteTask",
+				"title": "❌ Delete the Task",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.addTask",
 				"title": "Add a Task",
 				"category": "Todo MD",
@@ -1076,6 +1081,10 @@
 					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/"
 				},
 				{
+					"command": "todomd.deleteTask",
+					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/"
+				},
+				{
 					"command": "todomd.followLink",
 					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/ && viewItem == link"
 				},
@@ -1098,6 +1107,10 @@
 				},
 				{
 					"command": "todomd.hideTask",
+					"when": "never"
+				},
+				{
+					"command": "todomd.deleteTask",
 					"when": "never"
 				},
 				{
