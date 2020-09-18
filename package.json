@@ -763,6 +763,11 @@
 				}
 			},
 			{
+				"command": "todomd.hideTask",
+				"title": "Hide the Task",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.addTask",
 				"title": "Add a Task",
 				"category": "Todo MD",
@@ -1067,13 +1072,17 @@
 					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/"
 				},
 				{
-					"command": "todomd.toggleDone",
-					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/",
-					"group": "inline"
+					"command": "todomd.hideTask",
+					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/"
 				},
 				{
 					"command": "todomd.followLink",
 					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/ && viewItem == link"
+				},
+				{
+					"command": "todomd.toggleDone",
+					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/",
+					"group": "inline"
 				}
 			],
 			"editor/context": [
@@ -1085,6 +1094,10 @@
 			"commandPalette": [
 				{
 					"command": "todomd.followLink",
+					"when": "never"
+				},
+				{
+					"command": "todomd.hideTask",
 					"when": "never"
 				},
 				{

@@ -51,6 +51,18 @@ export function registerAllCommands() {
 		await updateState();
 		updateAllTreeViews();
 	});
+	commands.registerCommand('todomd.hideTask', async (treeItem?: TaskTreeItem) => {
+		if (!treeItem) {
+			return;
+		}
+		const lineNumber = treeItem.task.lineNumber;
+		const document = await updateState();
+
+		hideTask(document, lineNumber);
+
+		await updateState();
+		updateAllTreeViews();
+	});
 	commands.registerTextEditorCommand('todomd.archiveCompletedTasks', editor => {
 		if (!extensionConfig.defaultArchiveFile) {
 			noArchiveFileMessage();
@@ -557,10 +569,18 @@ export async function updateArchivedTasks() {
 	updateArchivedTasksTreeView();
 }
 /**
- * vscode WorkspaceEdit allowes changing files that are not even opened.
- * document.save() is needed to prevent opening those files after applying the edit.
+ * vscode `WorkspaceEdit` allowes changing files that are not even opened.
+ *
+ * `document.save()` is needed to prevent opening those files after applying the edit.
  */
 export async function applyEdit(wEdit: WorkspaceEdit, document: vscode.TextDocument) {
 	await workspace.applyEdit(wEdit);
 	return await document.save();
+}
+
+function hideTask(document: vscode.TextDocument, lineNumber: number) {
+	const wEdit = new WorkspaceEdit();
+	const line = document.lineAt(lineNumber);
+	wEdit.insert(document.uri, new vscode.Position(lineNumber, line.range.end.character), ' {h}');
+	applyEdit(wEdit, document);
 }
