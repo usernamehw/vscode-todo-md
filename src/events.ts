@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
+import { resetAllRecurringTasks } from 'src/commands';
+import { updateCompletions } from 'src/completionProviders';
+import { updateEditorDecorations } from 'src/decorations';
+import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from 'src/extension';
+import { updateAllTreeViews } from 'src/treeViewProviders/treeViews';
+import { VscodeContext } from 'src/types';
+import { setContext } from 'src/vscodeUtils';
+import { updateWebviewView } from 'src/webview/webviewView';
 import vscode, { window, workspace } from 'vscode';
-import { resetAllRecurringTasks } from './commands';
-import { updateCompletions } from './completionProviders';
-import { updateEditorDecorations } from './decorations';
-import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from './extension';
-import { updateAllTreeViews } from './treeViewProviders/treeViews';
-import { VscodeContext } from './types';
-import { setContext } from './vscodeUtils';
-import { updateWebviewView } from './webview/webviewView';
 
 export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): void {
 	if (isTheRightFileFormat(editor)) {

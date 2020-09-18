@@ -1,7 +1,7 @@
+import { formatTask } from 'src/commands';
+import { EXTENSION_NAME } from 'src/extension';
+import { TheTask } from 'src/TheTask';
 import vscode, { MarkdownString } from 'vscode';
-import { formatTask } from '../commands';
-import { EXTENSION_NAME } from '../extension';
-import { TheTask } from '../TheTask';
 
 export class TaskTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.None;

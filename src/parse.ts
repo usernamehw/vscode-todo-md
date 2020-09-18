@@ -1,7 +1,7 @@
+import { DueDate } from 'src/dueDate';
+import { extensionConfig } from 'src/extension';
+import { Priority, SpecialTags, TheTask } from 'src/TheTask';
 import vscode, { Range } from 'vscode';
-import { DueDate } from './dueDate';
-import { extensionConfig } from './extension';
-import { Priority, SpecialTags, TheTask } from './TheTask';
 
 interface ParseLineReturn {
 	lineType: string;

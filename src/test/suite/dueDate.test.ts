@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import dayjs from 'dayjs';
 import _ from 'lodash';
 import { describe, it } from 'mocha';
-import { DueDate } from '../../dueDate';
-import { DueState } from '../../types';
+import { DueDate } from 'src/dueDate';
+import { DueState } from 'src/types';
 
 function addDays(date: Date, n: number) {
 	return dayjs(date).add(n, 'day').toDate();

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
+import { extensionConfig, Global, state } from 'src/extension';
+import { getDateInISOFormat } from 'src/timeUtils';
 import vscode from 'vscode';
-import { extensionConfig, Global, state } from './extension';
-import { getDateInISOFormat } from './timeUtils';
 
 export function updateCompletions(): void {
 	if (Global.tagAutocompleteDisposable) {
@@ -25,7 +25,7 @@ export function updateCompletions(): void {
 				return tagCompletions;
 			},
 		},
-		'#'
+		'#',
 	);
 	Global.projectAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
@@ -41,7 +41,7 @@ export function updateCompletions(): void {
 				return tagCompletions;
 			},
 		},
-		'+'
+		'+',
 	);
 	Global.contextAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
@@ -57,7 +57,7 @@ export function updateCompletions(): void {
 				return contextCompletions;
 			},
 		},
-		'@'
+		'@',
 	);
 	Global.generalAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
@@ -74,7 +74,7 @@ export function updateCompletions(): void {
 				return general;
 			},
 		},
-		''
+		'',
 	);
 }
 

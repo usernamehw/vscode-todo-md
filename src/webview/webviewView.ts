@@ -1,9 +1,9 @@
+import { toggleTaskCompletionAtLine } from 'src/commands';
+import { extensionConfig, getDocumentForDefaultFile, Global } from 'src/extension';
+import { TheTask } from 'src/TheTask';
+import { IExtensionConfig, WebviewMessage } from 'src/types';
+import { getNonce } from 'src/webview/utils';
 import vscode, { window } from 'vscode';
-import { toggleTaskCompletionAtLine } from '../commands';
-import { extensionConfig, getDocumentForDefaultFile, Global } from '../extension';
-import { TheTask } from '../TheTask';
-import { IExtensionConfig, WebviewMessage } from '../types';
-import { getNonce } from './utils';
 
 export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'todomd.webviewTasks';

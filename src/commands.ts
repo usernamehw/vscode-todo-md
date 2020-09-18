@@ -1,16 +1,16 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
+import { extensionConfig, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY, state, updateState } from 'src/extension';
+import { parseDocument } from 'src/parse';
+import { SortProperty, sortTasks } from 'src/sort';
+import { Count, TheTask } from 'src/TheTask';
+import { DATE_FORMAT, getDateInISOFormat } from 'src/timeUtils';
+import { TaskTreeItem } from 'src/treeViewProviders/taskProvider';
+import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from 'src/treeViewProviders/treeViews';
+import { DueState, VscodeContext } from 'src/types';
+import { appendTaskToFile, fancyNumber, getRandomInt } from 'src/utils';
+import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from 'src/vscodeUtils';
 import vscode, { commands, Range, TextDocument, TextEditor, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { extensionConfig, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
-import { parseDocument } from './parse';
-import { SortProperty, sortTasks } from './sort';
-import { Count, TheTask } from './TheTask';
-import { DATE_FORMAT, getDateInISOFormat } from './timeUtils';
-import { TaskTreeItem } from './treeViewProviders/taskProvider';
-import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
-import { DueState, VscodeContext } from './types';
-import { appendTaskToFile, fancyNumber, getRandomInt } from './utils';
-import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
 
 class QuickPickItem implements vscode.QuickPickItem {
 	label: string;

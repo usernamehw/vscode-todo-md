@@ -1,5 +1,5 @@
+import { TheTask } from 'src/TheTask';
 import { StatusBarItem, window } from 'vscode';
-import { TheTask } from './TheTask';
 
 export class StatusBar {
 	private readonly statusBarItem: StatusBarItem;

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
+import { parseLine } from 'src/parse';
+import { TheTask } from 'src/TheTask';
 import vscode, { Range } from 'vscode';
-import { parseLine } from '../../parse';
-import { TheTask } from '../../TheTask';
 
 const editor = vscode.window.activeTextEditor!;
 /**

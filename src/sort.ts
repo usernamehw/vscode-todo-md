@@ -1,4 +1,4 @@
-import { TheTask } from './TheTask';
+import { TheTask } from 'src/TheTask';
 
 const enum SortDirection {
 	DESC,
