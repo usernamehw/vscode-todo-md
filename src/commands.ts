@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import * as fs from 'fs';
 import { extensionConfig, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY, state, updateState } from 'src/extension';
 import { parseDocument } from 'src/parse';
-import { SortProperty, sortTasks } from 'src/sort';
+import { defaultSortTasks, SortProperty, sortTasks } from 'src/sort';
 import { Count, TheTask } from 'src/TheTask';
 import { DATE_FORMAT, getDateInISOFormat } from 'src/timeUtils';
 import { TaskTreeItem } from 'src/treeViewProviders/taskProvider';
@@ -152,19 +152,12 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.getNextTask', async () => {
 		await updateState();
-		let tasks = state.tasks.filter(t => !t.done);
+		const tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
 			return;
 		}
-		const dueTasks = tasks.filter(t => t.due?.isDue);// TODO: must prepend overdue tasks
-		if (dueTasks.length) {
-			tasks = dueTasks;
-		} else {
-			tasks = tasks.filter(t => !t.due);
-		}
-
-		const sortedTasks = sortTasks(tasks, SortProperty.priority);
+		const sortedTasks = defaultSortTasks(tasks);
 		const task = sortedTasks[0];
 
 		if (task.links.length) {
@@ -179,20 +172,15 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.getFewNextTasks', async () => {
 		await updateState();
-		let tasks = state.tasks.filter(t => !t.done);
+		const tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
 			return;
 		}
-		const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.overdue);
-		const dueTasks = tasks.filter(t => t.due?.isDue === DueState.due);
-		const notDueTasks = tasks.filter(t => !t.due?.isDue && !t.due);
-		const sortedOverdueTasks = sortTasks(overdueTasks, SortProperty.priority);
-		const sortedDueTasks = sortTasks(dueTasks, SortProperty.priority);
-		const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
-		tasks = [...sortedOverdueTasks, ...sortedDueTasks, ...sortedNotDueTasks].slice(0, extensionConfig.getNextNumberOfTasks);
+		const sortedTasks = defaultSortTasks(tasks)
+			.slice(0, extensionConfig.getNextNumberOfTasks);
 
-		vscode.window.showInformationMessage(tasks.map((task, i) => `${fancyNumber(i + 1)} ${formatTask(task)}`).join('\n'), {
+		vscode.window.showInformationMessage(sortedTasks.map((task, i) => `${fancyNumber(i + 1)} ${formatTask(task)}`).join('\n'), {
 			modal: true,
 		});
 	});

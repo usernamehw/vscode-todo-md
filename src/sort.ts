@@ -1,4 +1,5 @@
 import { TheTask } from 'src/TheTask';
+import { DueState } from 'src/types';
 
 const enum SortDirection {
 	DESC,
@@ -27,4 +28,19 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 		return sortedTasks.reverse();
 	}
 	return sortedTasks;
+}
+
+/**
+ * Sort tasks by groups in this order order: Overdue => Due => Not due;
+ *
+ * With secondary sort by priority.
+ */
+export function defaultSortTasks(tasks: TheTask[]) {
+	const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.overdue);
+	const dueTasks = tasks.filter(t => t.due?.isDue === DueState.due);
+	const notDueTasks = tasks.filter(t => !t.due?.isDue && !t.due);
+	const sortedOverdueTasks = sortTasks(overdueTasks, SortProperty.priority);
+	const sortedDueTasks = sortTasks(dueTasks, SortProperty.priority);
+	const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
+	return [...sortedOverdueTasks, ...sortedDueTasks, ...sortedNotDueTasks];
 }
