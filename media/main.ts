@@ -2,7 +2,7 @@
 // TODO: reuse sorting functions from the extension
 // TODO: toggle done should be used from the extension
 
-import type { TheTask } from '../src/parse';
+import type { TheTask } from '../src/TheTask';
 import type { IExtensionConfig, WebviewMessage } from '../src/types';
 
 interface VscodeWebviewApi {
@@ -96,13 +96,21 @@ function renderTask(task: TheTask): HTMLElement {
 	}
 	taskListItem.appendChild(checkbox);
 	const title = document.createElement('span');
-	title.textContent = task.title;
+	let titleText = task.title;
+	const linkElements = [];
+	if (task.links.length) {
+		for (const link of task.links) {
+			const linkEl = document.createElement('a');
+			linkEl.href = link.value;
+			linkEl.text = ` ${link.value} `;
+			linkElements.push(linkEl);
+			titleText = titleText.slice(0, link.characterRange[0]) + titleText.slice(link.characterRange[1]);// TODO: fails to parse when special things are present such as priority (A) resulting in wrong substring
+		}
+	}
+	title.textContent = titleText;
 	taskListItem.appendChild(title);
-	if (task.specialTags.link) {
-		const link = document.createElement('a');
-		link.href = task.specialTags.link;
-		link.text = ` ${task.specialTags.link}`;
-		taskListItem.appendChild(link);
+	for (const linkEl of linkElements) {
+		taskListItem.appendChild(linkEl);
 	}
 	if (task.tags.length) {
 		for (const tag of task.tags) {

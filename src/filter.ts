@@ -1,4 +1,4 @@
-import { TheTask } from './parse';
+import { TheTask } from './TheTask';
 import { DueState } from './types';
 
 const enum FilterType {

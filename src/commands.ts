@@ -2,8 +2,9 @@ import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextDocument, TextEditor, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { extensionConfig, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
-import { Count, parseDocument, TheTask } from './parse';
+import { parseDocument } from './parse';
 import { SortProperty, sortTasks } from './sort';
+import { Count, TheTask } from './TheTask';
 import { DATE_FORMAT, getDateInISOFormat } from './timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
@@ -132,7 +133,7 @@ export function registerAllCommands() {
 			vscode.window.showInformationMessage('No tasks');
 			return;
 		}
-		const dueTasks = tasks.filter(t => t.due?.isDue);
+		const dueTasks = tasks.filter(t => t.due?.isDue);// TODO: must prepend overdue tasks
 		if (dueTasks.length) {
 			tasks = dueTasks;
 		} else {
@@ -141,11 +142,12 @@ export function registerAllCommands() {
 
 		const sortedTasks = sortTasks(tasks, SortProperty.priority);
 		const task = sortedTasks[0];
-		if (task.specialTags.link) {
+
+		if (task.links.length) {
 			const buttonName = 'Follow link';
 			const shouldFollow = await vscode.window.showInformationMessage(formatTask(task), buttonName);
 			if (shouldFollow === buttonName) {
-				followLink(task.specialTags.link);
+				followLink(task.links[0].value);
 			}
 		} else {
 			vscode.window.showInformationMessage(formatTask(task));
@@ -353,7 +355,7 @@ export function registerAllCommands() {
 		resetAllRecurringTasks(editor);
 	});
 	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
-		const link = treeItem.task.specialTags.link;
+		const link = treeItem.task.links[0]?.value;
 		if (link) {
 			followLink(link);
 		}
@@ -550,7 +552,7 @@ export async function updateArchivedTasks() {
 		return;
 	}
 	const document = await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultArchiveFile));
-	const parsedArchiveTasks = parseDocument(document);
+	const parsedArchiveTasks = await parseDocument(document);
 	state.archivedTasks = parsedArchiveTasks.tasks;
 	updateArchivedTasksTreeView();
 }

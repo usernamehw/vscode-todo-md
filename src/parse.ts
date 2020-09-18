@@ -1,7 +1,7 @@
 import vscode, { Range } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionConfig } from './extension';
-import { OptionalExceptFor } from './types';
+import { Priority, SpecialTags, TheTask } from './TheTask';
 
 interface ParseLineReturn {
 	lineType: string;
@@ -118,9 +118,6 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 				} else if (specialTag === 't') {
 					specialTags.threshold = value;
 					specialTagRanges.push(range);
-				} else if (specialTag === 'link') {
-					specialTags.link = word.slice(6, -1);
-					specialTagRanges.push(range);
 				} else if (specialTag === 'h') {
 					specialTags.isHidden = true;
 					specialTagRanges.push(range);
@@ -199,10 +196,12 @@ interface ParsedDocument {
 	commentLines: Range[];
 }
 
-export function parseDocument(document: vscode.TextDocument): ParsedDocument {
-	const tasks = [];
-	const commentLines = [];
+export async function parseDocument(document: vscode.TextDocument): Promise<ParsedDocument> {
+	const tasks: TheTask[] = [];
+	const commentLines: Range[] = [];
 	let additionalTags: string[] = [];
+
+	const links = await vscode.commands.executeCommand<vscode.DocumentLink[]>('vscode.executeLinkProvider', document.uri) ?? [];
 
 	for (let i = 0; i < document.lineCount; i++) {
 		const parsedLine = parseLine(document.lineAt(i));
@@ -222,6 +221,14 @@ export function parseDocument(document: vscode.TextDocument): ParsedDocument {
 				if (additionalTags.length !== 0) {
 					parsedLine.value.tags.push(...additionalTags);
 				}
+				const linksOnThisLine = links.filter(link => link.range.start.line === i && link.target !== undefined);
+				if (linksOnThisLine.length !== 0) {
+					parsedLine.value.links = linksOnThisLine.map(link => ({
+						characterRange: [link.range.start.character, link.range.end.character],
+						value: link.target!.toString(),
+						scheme: link.target!.scheme,
+					}));
+				}
 				tasks.push(parsedLine.value);
 			}
 		}
@@ -232,68 +239,3 @@ export function parseDocument(document: vscode.TextDocument): ParsedDocument {
 		commentLines,
 	};
 }
-/**
- * Modifier for task completion.
- * Instead of completing the task increases count by 1.
- * When the number matches the goal - the task is considered completed.
- */
-export interface Count {
-	range: Range;
-	needed: number;
-	current: number;
-}
-/**
- * Grouped special tags.
- */
-interface SpecialTags {
-	threshold?: string;
-	isHidden?: boolean;
-	count?: Count;
-	link?: string;
-}
-export type Priority = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z';
-// TODO: move TheTask to its own file
-export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags'>;
-/**
- * `The` prefix because of auto import conflict with vscode `Task`
- */
-export class TheTask {
-	title: string;
-	done: boolean;
-	rawText: string;
-	lineNumber: number;
-	tags: string[];
-	projects: string[];
-	due?: DueDate;
-	specialTags: SpecialTags;
-	priority: Priority;
-	contexts: string[];
-	contextRanges: Range[];
-	priorityRange?: Range;
-	specialTagRanges: Range[];
-	projectRanges: Range[];
-	tagsDelimiterRanges?: Range[];
-	tagsRange?: Range[];
-	dueRange?: Range;
-
-	constructor(init: TaskInit) {
-		this.title = init.title;
-		this.lineNumber = init.lineNumber;
-		this.rawText = init.rawText;
-		this.done = init.done ?? false;
-		this.tags = init.tags ?? [];
-		this.projects = init.projects ?? [];
-		this.priority = init.priority ?? extensionConfig.defaultPriority;
-		this.due = init.due;
-		this.dueRange = init.dueRange;
-		this.specialTags = init.specialTags;
-		this.contexts = init.contexts ?? [];
-		this.specialTagRanges = init.specialTagRanges ?? [];
-		this.contextRanges = init.contextRanges ?? [];
-		this.projectRanges = init.projectRanges ?? [];
-		this.priorityRange = init.priorityRange;
-		this.tagsDelimiterRanges = init.tagsDelimiterRanges;
-		this.tagsRange = init.tagsRange;
-	}
-}
-

@@ -1,8 +1,7 @@
-import { describe, it } from 'mocha';
 import { expect } from 'chai';
-
+import { describe, it } from 'mocha';
 import { filterItems } from '../../filter';
-import { TheTask, TaskInit } from '../../parse';
+import { TaskInit, TheTask } from '../../TheTask';
 import { DueState } from '../../types';
 
 type Init = Partial<TaskInit>;

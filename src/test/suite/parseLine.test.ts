@@ -1,7 +1,8 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import vscode, { Range } from 'vscode';
-import { parseLine, TheTask } from '../../parse';
+import { parseLine } from '../../parse';
+import { TheTask } from '../../TheTask';
 
 const editor = vscode.window.activeTextEditor!;
 /**
@@ -133,8 +134,8 @@ describe('Special tags {}', () => {
 		const task = getLineAt(12)!;
 		expect(task.specialTags.isHidden === true).to.be.ok;
 	});
-	it('13 Link', () => {
+	it('13 Link', () => { // TODO: test for multiple links in one line
 		const task = getLineAt(13)!;
-		expect(task.specialTags.link === 'https://www.google.com').to.be.ok;
+		expect(task.links[0].value === 'https://www.google.com').to.be.ok;
 	});
 });

@@ -6,8 +6,9 @@ import vscode, { window, workspace } from 'vscode';
 import { registerAllCommands, resetAllRecurringTasks, updateArchivedTasks } from './commands';
 import { updateDecorationStyle } from './decorations';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
-import { parseDocument, TheTask } from './parse';
+import { parseDocument } from './parse';
 import { StatusBar } from './statusBar';
+import { TheTask } from './TheTask';
 import { createAllTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { IExtensionConfig, ItemForProvider, Items, SortTags, State } from './types';
 import { TasksWebviewViewProvider, updateWebviewView } from './webview/webviewView';
@@ -119,7 +120,7 @@ export async function updateState(document?: vscode.TextDocument) {
 	if (!document) {
 		document = await getDocumentForDefaultFile();
 	}
-	const parsedDocument = parseDocument(document);
+	const parsedDocument = await parseDocument(document);
 
 	state.tasks = parsedDocument.tasks;
 	state.commentLines = parsedDocument.commentLines;

@@ -1,7 +1,7 @@
 import vscode, { window } from 'vscode';
 import { toggleTaskCompletionAtLine } from '../commands';
 import { extensionConfig, getDocumentForDefaultFile, Global } from '../extension';
-import { TheTask } from '../parse';
+import { TheTask } from '../TheTask';
 import { IExtensionConfig, WebviewMessage } from '../types';
 import { getNonce } from './utils';
 

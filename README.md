@@ -1,4 +1,4 @@
-## ❗ You need to enable proposed api to use this extension [How to enable proposed api](https://github.com/usernamehw/vscode-todo-md/blob/master/proposed-api.md)
+## ❗ Starting from extension version `1.0.0` You need to enable proposed api to use this extension [How to enable proposed api](https://github.com/usernamehw/vscode-todo-md/blob/master/proposed-api.md)
 ## ❗ Extension does not conform to the [todo.txt](https://github.com/todotxt/todo.txt) spec.
 ## ❗ Extension is in Alpha phase
 
@@ -52,7 +52,6 @@ tag | description | example
 `t`|(threshold) Task is not visible in Tree Views until the specified date|`{t:2020-05-15}`
 `h`|(hidden) Task is not visible in Tree Views|`{h}`
 `count`|Instead of completing the task increases count by 1. When the number matches the goal - the task is considered completed|`{count:0/3}`
-`link`|Adds context menu in Tree View to follow link|`{link:https://www.google.com}`
 
 <!--
 - ❌ id (UUID)

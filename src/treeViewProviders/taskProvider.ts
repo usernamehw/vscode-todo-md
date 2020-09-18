@@ -1,7 +1,7 @@
 import vscode, { MarkdownString } from 'vscode';
 import { formatTask } from '../commands';
 import { EXTENSION_NAME } from '../extension';
-import { TheTask } from '../parse';
+import { TheTask } from '../TheTask';
 
 export class TaskTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.None;
@@ -13,7 +13,7 @@ export class TaskTreeItem extends vscode.TreeItem {
 		readonly command: vscode.Command,
 	) {
 		super(label);
-		if (task.specialTags.link) {
+		if (task.links.length) {
 			this.contextValue = 'link';
 		}
 	}

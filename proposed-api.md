@@ -1,4 +1,10 @@
-# How to enable proposed api
+# How to enable proposed api in Stable
+
+Launch vscode with `--enable-proposed-api usernamehw.todo-md` command line flag.
+
+# If using Insiders version
+
+Using Insiders version it's possible to add extension to args.
 
 Execute from Command Palette **Preferences: Configure Runtime Arguments** `workbench.action.configureRuntimeArguments`
 
