@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
+import { deleteTask, hideTask } from 'src/documentActions';
 import { extensionConfig, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY, state, updateState } from 'src/extension';
 import { parseDocument } from 'src/parse';
 import { defaultSortTasks, SortProperty, sortTasks } from 'src/sort';
@@ -7,7 +8,7 @@ import { Count, TheTask } from 'src/TheTask';
 import { DATE_FORMAT, getDateInISOFormat } from 'src/timeUtils';
 import { TaskTreeItem } from 'src/treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from 'src/treeViewProviders/treeViews';
-import { DueState, VscodeContext } from 'src/types';
+import { VscodeContext } from 'src/types';
 import { appendTaskToFile, fancyNumber, getRandomInt } from 'src/utils';
 import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from 'src/vscodeUtils';
 import vscode, { commands, Range, TextDocument, TextEditor, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
@@ -572,15 +573,3 @@ export async function applyEdit(wEdit: WorkspaceEdit, document: vscode.TextDocum
 	return await document.save();
 }
 
-function hideTask(document: vscode.TextDocument, lineNumber: number) {
-	const wEdit = new WorkspaceEdit();
-	const line = document.lineAt(lineNumber);
-	wEdit.insert(document.uri, new vscode.Position(lineNumber, line.range.end.character), ' {h}');
-	applyEdit(wEdit, document);
-}
-
-function deleteTask(document: vscode.TextDocument, lineNumber: number) {
-	const wEdit = new WorkspaceEdit();
-	wEdit.delete(document.uri, document.lineAt(lineNumber).rangeIncludingLineBreak);
-	applyEdit(wEdit, document);
-}
