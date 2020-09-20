@@ -5,13 +5,24 @@
 const webpack = require('webpack');
 const path = require('path');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const tsLoader = {
+	test: /\.ts$/,
+	exclude: /node_modules/,
+	use: [{
+		loader: 'ts-loader',
+		options: {
+			configFile: "media/tsconfig.json",
+			transpileOnly: true,
+		}
+	}],
+};
 
 module.exports = (env, options) => {
 	/** @type {import('webpack').Configuration}*/
 	const config = {
 		target: 'node',
 
-		entry: './media/main.ts',
+		entry: './media/webview.ts',
 		output: {
 			path: path.resolve(__dirname),
 			filename: 'webview.js',
@@ -22,26 +33,14 @@ module.exports = (env, options) => {
 		externals: {
 			vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
 		},
-		resolve: { // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
+		resolve: {
 			extensions: ['.ts', '.js'],
 			alias: {
 				src: path.resolve('./src'),
 			},
 		},
 		module: {
-			rules: [
-				{
-					test: /\.ts$/,
-					exclude: /node_modules/,
-					use: [{
-						loader: 'ts-loader',
-						options: {
-							configFile: "media/tsconfig.json",
-							transpileOnly: true,
-						}
-					}],
-				},
-			],
+			rules: [tsLoader],
 		},
 		plugins: [
 			new FriendlyErrorsWebpackPlugin(),
@@ -52,17 +51,7 @@ module.exports = (env, options) => {
 		// Prod
 	} else {
 		// Dev
-		config.module.rules[0] = {
-			test: /\.ts$/,
-			exclude: /node_modules/,
-			use: [{
-				loader: 'ts-loader',
-				options: {
-					configFile: "media/tsconfig.json",
-					transpileOnly: true,
-				}
-			}],
-		};
+		config.module.rules[0] = tsLoader;
 	}
 
 	return config;

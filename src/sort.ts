@@ -31,7 +31,7 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 }
 
 /**
- * Sort tasks by groups in this order order: Overdue => Due => Not due;
+ * Sort tasks by groups in this order: Overdue => Due => Not due;
  *
  * With secondary sort by priority.
  */

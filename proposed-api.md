@@ -18,3 +18,5 @@ In newly opened json file add this extension's id to the list:
 	],
 }
 ```
+
+TODO: use icons for vscode versions (blue for Stable, Green for Insiders)
