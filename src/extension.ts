@@ -97,7 +97,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 
 	setTimeout(() => {
 		updateWebviewView(state.tasks);
-	}, 2000);
+	}, 1000);
 
 	onChangeActiveTextEditor(window.activeTextEditor);
 	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);

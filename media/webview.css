@@ -81,7 +81,6 @@ button {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji';
 	/* TODO: pack Segoe UI? */
 	border-bottom: 1px solid rgba(206, 206, 206, 0.424);
-	border-left: 3px solid transparent;
 	padding-left: 6px;
 	padding-right: 6px;
 	word-wrap: break-word;
@@ -94,27 +93,27 @@ button {
 /* TODO: colors should not be constant */
 
 .list-item.pri1 {
-	border-left-color: #ec4f47;
+	box-shadow: inset 3px 0 0 0 #ec4f47;
 }
 
 .list-item.pri2 {
-	border-left-color: #fd9f9a;
+	box-shadow: inset 3px 0 0 0 #fd9f9a;
 }
 
 .list-item.pri3 {
-	border-left-color: #ffb648;
+	box-shadow: inset 3px 0 0 0 #ffb648;
 }
 
 .list-item.pri4 {
-	border-left-color: #f1d900;
+	box-shadow: inset 3px 0 0 0 #f1d900;
 }
 
 .list-item.pri5 {
-	border-left-color: #ace000;
+	box-shadow: inset 3px 0 0 0 #ace000;
 }
 
 .list-item.pri6 {
-	border-left-color: #00cfad;
+	box-shadow: inset 3px 0 0 0 #00cfad;
 }
 
 .tag {
