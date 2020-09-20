@@ -2,8 +2,11 @@
 	box-sizing: border-box;
 }
 
+/* TODO: polish for dark theme */
+
 html {
 	overflow-y: hidden;
+	--border-light: rgba(206, 206, 206, 0.424);
 }
 
 body {
@@ -80,7 +83,7 @@ button {
 .list-item {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji';
 	/* TODO: pack Segoe UI? */
-	border-bottom: 1px solid rgba(206, 206, 206, 0.424);
+	border-bottom: 1px solid var(--border-light);
 	padding-left: 6px;
 	padding-right: 6px;
 	word-wrap: break-word;
@@ -124,6 +127,14 @@ button {
 	border-radius: 3px;
 	white-space: nowrap;
 	/* cursor: pointer; */
+}
+
+.count {
+	margin-left: 1ch;
+	padding-left: 0.5ch;
+	padding-right: 0.5ch;
+	background-color: rgba(0, 0, 0, 0.1);
+	border-radius: 3px;
 }
 
 .tag:hover {

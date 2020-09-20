@@ -112,6 +112,12 @@ function renderTask(task: TheTask): HTMLElement {
 			taskListItem.appendChild(tagElement);
 		}
 	}
+	if (task.specialTags.count) {
+		const countEl = document.createElement('span');
+		countEl.classList.add('count');
+		countEl.textContent = `${task.specialTags.count.current} / ${task.specialTags.count.needed}`;
+		taskListItem.appendChild(countEl);
+	}
 	return taskListItem;
 }
 // Handle messages sent from the extension to the webview
