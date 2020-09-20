@@ -79,7 +79,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.js'));
 		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
 		const nonce = getNonce();// Use a nonce to only allow a specific script to be run.
 
@@ -98,7 +98,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				</div>
 				<div class="list"></div>
 				<script nonce="${nonce}">var exports = {};</script>
-				<script defer nonce="${nonce}" src="${scriptUri}"></script>
+				<script defer type="module" nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
 	}

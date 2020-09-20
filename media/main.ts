@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-// TODO: reuse sorting functions from the extension
 // TODO: toggle done should be used from the extension
 
+import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';
 import type { IExtensionConfig, WebviewMessage } from '../src/types';
 
@@ -50,7 +50,7 @@ function showNotification(text: string) {
 }
 function updateTasks() {
 	const list = document.querySelector('.list') as HTMLElement;
-	const elements = [];
+	list.textContent = '';
 
 	let filteredTasks = state.tasks;
 	if (filterInputEl.value !== '') {
@@ -60,17 +60,9 @@ function updateTasks() {
 	if (!state.config.showCompleted) {
 		filteredTasks = filteredTasks.filter(task => !task.done);
 	}
-	const dueTasks = filteredTasks.filter(task => task.due?.isDue === 1 || task.due?.isDue === 2);
-	const notDueTasks = filteredTasks.filter(task => task.due?.isDue !== 1 && task.due?.isDue !== 2);
-	for (const task of dueTasks) {
-		elements.push(renderTask(task));
-	}
-	for (const task of notDueTasks) {
-		elements.push(renderTask(task));
-	}
-	list.textContent = '';
-	for (const element of elements) {
-		list.appendChild(element);
+	const sortedTasks = defaultSortTasks(filteredTasks);
+	for (const task of sortedTasks) {
+		list.appendChild(renderTask(task));
 	}
 }
 

@@ -7,4 +7,6 @@ node_modules
 *.vs
 
 media/main.js
+media/webview.js
+media/webview.js.map
 src/**/*.js

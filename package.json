@@ -1202,8 +1202,8 @@
 		"vscode:prepublish": "npm run webview & webpack --mode production --colors",
 		"compile": "webpack --mode development",
 		"watch": "webpack --mode development --watch --display=minimal",
-		"watchWebview": "tsc -w media/main.ts --target ES5 --module CommonJS --moduleResolution node --skipLibCheck true --esModuleInterop true --allowSyntheticDefaultImports true",
-		"webview": "tsc media/main.ts --target ES5 --module CommonJS --moduleResolution node --skipLibCheck true --esModuleInterop true --allowSyntheticDefaultImports true",
+		"watchWebview": "webpack --watch --mode development --config media/webpack.config.js",
+		"webview": "webpack --mode production --config media/webpack.config.js",
 		"watchTest": "tsc -watch -p ./",
 		"test": "node ./dist/test/runTest.js",
 		"generateDecorationSchema": "tsc scripts\\generateDecorationSchema.ts && node scripts\\generateDecorationSchema.js"
