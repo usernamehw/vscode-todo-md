@@ -30,7 +30,7 @@ export function registerAllCommands() {
 		let lineNumber: number;
 		if (treeItem) {
 			lineNumber = treeItem.task.lineNumber;
-			document = await updateState();
+			document = getActiveDocument();
 		} else {
 			if (!editor) {
 				return;
@@ -57,7 +57,7 @@ export function registerAllCommands() {
 			return;
 		}
 		const lineNumber = treeItem.task.lineNumber;
-		const document = await updateState();
+		const document = getActiveDocument();
 
 		hideTask(document, lineNumber);
 
@@ -69,9 +69,9 @@ export function registerAllCommands() {
 			return;
 		}
 		const lineNumber = treeItem.task.lineNumber;
-		const document = await updateState();
+		const document = getActiveDocument();
 
-		deleteTask(document, lineNumber);
+		deleteTask(document, lineNumber);// TODO: get document in the function itself?
 
 		await updateState();
 		updateAllTreeViews();
@@ -286,7 +286,7 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.completeTask', async () => {
 		// Show Quick Pick to complete a task
-		const document = await updateState();
+		const document = getActiveDocument();
 		const notCompletedTasks = state.tasks.filter(task => !task.done).map(task => TheTask.formatTask(task));
 		const pickedTask = await window.showQuickPick(notCompletedTasks);
 		if (!pickedTask) {
