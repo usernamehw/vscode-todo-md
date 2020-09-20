@@ -25,6 +25,7 @@ export interface State {
 	newDayArrived: boolean;
 	taskTreeViewFilterValue: string;
 	extensionContext: vscode.ExtensionContext;
+	activeDocument: vscode.TextDocument | undefined;
 }
 
 export const enum DueState {

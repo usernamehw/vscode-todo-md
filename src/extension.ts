@@ -4,6 +4,7 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { registerAllCommands, resetAllRecurringTasks, updateArchivedTasks } from 'src/commands';
 import { updateDecorationStyle } from 'src/decorations';
+import { getDocumentForDefaultFile } from 'src/documentActions';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from 'src/events';
 import { parseDocument } from 'src/parse';
 import { StatusBar } from 'src/statusBar';
@@ -31,6 +32,7 @@ export const state: State = {
 	taskTreeViewFilterValue: '',
 	// @ts-ignore
 	extensionContext: undefined,
+	activeDocument: undefined,
 };
 
 export const EXTENSION_NAME = 'todomd';
@@ -240,10 +242,6 @@ export function groupAndSortTreeItems(tasks: TheTask[]): TreeItems {
 		projects,
 		sortedTags,
 	};
-}
-
-export async function getDocumentForDefaultFile() {
-	return await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultFile));
 }
 
 export function deactivate(): void {

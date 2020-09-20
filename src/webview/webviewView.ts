@@ -1,5 +1,6 @@
 import { toggleTaskCompletionAtLine } from 'src/commands';
-import { extensionConfig, getDocumentForDefaultFile, Global } from 'src/extension';
+import { getActiveDocument } from 'src/documentActions';
+import { extensionConfig, Global } from 'src/extension';
 import { TheTask } from 'src/TheTask';
 import { IExtensionConfig, WebviewMessage } from 'src/types';
 import { getNonce } from 'src/webview/utils';
@@ -33,10 +34,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		webviewView.webview.onDidReceiveMessage(async message => {
+		webviewView.webview.onDidReceiveMessage(message => {
 			switch (message.type) {
 				case 'toggleDone': {
-					toggleTaskCompletionAtLine(message.value, await getDocumentForDefaultFile());
+					toggleTaskCompletionAtLine(message.value, getActiveDocument());
 					break;
 				}
 				case 'showNotification': {

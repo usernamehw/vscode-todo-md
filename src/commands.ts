@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
-import { deleteTask, hideTask } from 'src/documentActions';
-import { extensionConfig, getDocumentForDefaultFile, LAST_VISIT_STORAGE_KEY, state, updateState } from 'src/extension';
+import { deleteTask, getActiveDocument, hideTask } from 'src/documentActions';
+import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from 'src/extension';
 import { parseDocument } from 'src/parse';
 import { defaultSortTasks, SortProperty, sortTasks } from 'src/sort';
 import { Count, TheTask } from 'src/TheTask';
@@ -351,7 +351,7 @@ export function registerAllCommands() {
 			if (!isDefaultFileSpecified) {
 				return;
 			}
-			const document = await getDocumentForDefaultFile();
+			const document = getActiveDocument();
 			editor = await window.showTextDocument(document);
 		} else {
 			const { activeTextEditor } = window;
@@ -403,13 +403,13 @@ function noArchiveFileMessage() {
 	vscode.window.showWarningMessage('No default archive file specified');
 }
 
-export async function resetAllRecurringTasks(editor?: TextEditor): Promise<void> {
+export function resetAllRecurringTasks(editor?: TextEditor): void {
 	const wEdit = new WorkspaceEdit();
 	let document: vscode.TextDocument;
 	if (editor && state.theRightFileOpened) {
 		document = editor.document;
 	} else {
-		document = await getDocumentForDefaultFile();
+		document = getActiveDocument();
 	}
 	for (const task of state.tasks) {
 		if (task.due?.isRecurring && task.done) {

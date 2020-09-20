@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { resetAllRecurringTasks } from 'src/commands';
 import { updateCompletions } from 'src/completionProviders';
 import { updateEditorDecorations } from 'src/decorations';
+import { getDocumentForDefaultFile } from 'src/documentActions';
 import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from 'src/extension';
 import { updateAllTreeViews } from 'src/treeViewProviders/treeViews';
 import { VscodeContext } from 'src/types';
@@ -9,13 +10,15 @@ import { setContext } from 'src/vscodeUtils';
 import { updateWebviewView } from 'src/webview/webviewView';
 import vscode, { window, workspace } from 'vscode';
 
-export function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): void {
-	if (isTheRightFileFormat(editor)) {
-		activateExtensionFeatures(editor!);
+export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): Promise<void> {
+	if (editor && isTheRightFileName(editor)) {
+		state.activeDocument = editor.document;
+		activateExtensionFeatures(editor);
 	} else {
 		if (state.theRightFileOpened) {
 			deactivateExtensionFeatures();
 		}
+		state.activeDocument = await getDocumentForDefaultFile();
 	}
 }
 
@@ -43,7 +46,7 @@ export function onChangeTextDocument(): void {
 /**
  * Match Uri of editor against a glob specified by user.
  */
-export function isTheRightFileFormat(editor?: vscode.TextEditor): boolean {
+export function isTheRightFileName(editor?: vscode.TextEditor): boolean {
 	if (editor === undefined) {
 		editor = window.activeTextEditor;
 		if (editor === undefined) {
