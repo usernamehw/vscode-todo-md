@@ -30,12 +30,17 @@ window.addEventListener('click', event => {
 	if (target instanceof HTMLElement) {
 		const closestTask = target.closest('.list-item');
 		if (closestTask) {
-			const lineNumber = closestTask.attributes['data-id'].value;
+			const lineNumber = Number(closestTask.attributes['data-id'].value);
 			if (target.classList.contains('checkbox')) {
 				vscode.postMessage({
 					type: 'toggleDone',
-					value: Number(lineNumber),
+					value: lineNumber,
 				});
+			} else if (event.altKey) {
+				vscode.postMessage({
+					type: 'goToTask',
+					value: lineNumber,
+				})
 			}
 		}
 	}

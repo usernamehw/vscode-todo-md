@@ -1,4 +1,4 @@
-import { getActiveDocument, toggleDone } from 'src/documentActions';
+import { getActiveDocument, goToTask, toggleDone } from 'src/documentActions';
 import { extensionConfig, Global } from 'src/extension';
 import { TheTask } from 'src/TheTask';
 import { IExtensionConfig, WebviewMessage } from 'src/types';
@@ -34,7 +34,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 		this.updateWebviewConfig(extensionConfig.webview);
 
-		webviewView.webview.onDidReceiveMessage(message => {
+		webviewView.webview.onDidReceiveMessage((message: WebviewMessage) => {
 			switch (message.type) {
 				case 'toggleDone': {
 					toggleDone(getActiveDocument(), message.value);
@@ -42,6 +42,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				}
 				case 'showNotification': {
 					window.showInformationMessage(message.value);
+					break;
+				}
+				case 'goToTask': {
+					goToTask(message.value);
 					break;
 				}
 			}

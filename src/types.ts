@@ -116,4 +116,8 @@ interface WebviewMessageShowNotification extends WebviewMessageBase {
 	type: 'showNotification';
 	value: string;
 }
-export type WebviewMessage = WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification;
+interface WebviewMessageGoToTask extends WebviewMessageBase {
+	type: 'goToTask';
+	value: number;
+}
+export type WebviewMessage = WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask;

@@ -99,6 +99,14 @@ export function archiveTask(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.
 	updateArchivedTasks();
 }
 
+export async function goToTask(lineNumber: number) {
+	const document = getActiveDocument();
+	const editor = await vscode.window.showTextDocument(document);
+	const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
+	editor.selection = new vscode.Selection(range.start, range.end);
+	editor.revealRange(range, vscode.TextEditorRevealType.AtTop);
+}
+
 export function getActiveDocument() {
 	if (state.activeDocument === undefined) {
 		vscode.window.showErrorMessage('No active document');
