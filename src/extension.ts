@@ -80,6 +80,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	registerAllCommands();
 	createAllTreeViews();
 
+	onChangeActiveTextEditor(window.activeTextEditor);
 	await updateState();
 
 	const isNewDay = checkIfNewDayArrived();
@@ -99,7 +100,6 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		updateWebviewView(state.tasks);
 	}, 1000);
 
-	onChangeActiveTextEditor(window.activeTextEditor);
 	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 
 	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
