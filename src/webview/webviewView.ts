@@ -1,5 +1,4 @@
-import { toggleTaskCompletionAtLine } from 'src/commands';
-import { getActiveDocument } from 'src/documentActions';
+import { getActiveDocument, toggleDone } from 'src/documentActions';
 import { extensionConfig, Global } from 'src/extension';
 import { TheTask } from 'src/TheTask';
 import { IExtensionConfig, WebviewMessage } from 'src/types';
@@ -37,7 +36,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		webviewView.webview.onDidReceiveMessage(message => {
 			switch (message.type) {
 				case 'toggleDone': {
-					toggleTaskCompletionAtLine(message.value, getActiveDocument());
+					toggleDone(getActiveDocument(), message.value);
 					break;
 				}
 				case 'showNotification': {

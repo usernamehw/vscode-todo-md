@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-// TODO: toggle done should be used from the extension
 
 import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';

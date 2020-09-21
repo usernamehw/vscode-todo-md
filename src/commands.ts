@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
-import { deleteTask, getActiveDocument, hideTask } from 'src/documentActions';
+import { archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, removeCompletionDate, toggleDone, toggleTaskCompletionAtLine } from 'src/documentActions';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from 'src/extension';
 import { parseDocument } from 'src/parse';
 import { defaultSortTasks, SortProperty, sortTasks } from 'src/sort';
@@ -11,7 +11,8 @@ import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } 
 import { VscodeContext } from 'src/types';
 import { appendTaskToFile, fancyNumber, getRandomInt } from 'src/utils';
 import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from 'src/vscodeUtils';
-import vscode, { commands, Range, TextDocument, TextEditor, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { updateWebviewView } from 'src/webview/webviewView';
+import vscode, { commands, Range, TextEditor, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 
 class QuickPickItem implements vscode.QuickPickItem {
 	label: string;
@@ -39,18 +40,11 @@ export function registerAllCommands() {
 			document = editor.document;
 		}
 
-		const task = getTaskAtLine(lineNumber);
-		if (!task) {
-			return;
-		}
-		if (task.specialTags.count) {
-			await incrementCountForTask(document, lineNumber, task);
-		} else {
-			await toggleTaskCompletionAtLine(lineNumber, document);
-		}
+		await toggleDone(document, lineNumber);
 
 		await updateState();
 		updateAllTreeViews();
+		updateWebviewView(state.tasks);
 	});
 	commands.registerCommand('todomd.hideTask', async (treeItem?: TaskTreeItem) => {
 		if (!treeItem) {
@@ -392,13 +386,6 @@ export function registerAllCommands() {
 	});
 }
 
-function archiveTask(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine, shouldDelete: boolean) {
-	appendTaskToFile(line.text, extensionConfig.defaultArchiveFile);
-	if (shouldDelete) {
-		wEdit.delete(uri, line.rangeIncludingLineBreak);
-	}
-	updateArchivedTasks();
-}
 function noArchiveFileMessage() {
 	vscode.window.showWarningMessage('No default archive file specified');
 }
@@ -423,57 +410,6 @@ export function resetAllRecurringTasks(editor?: TextEditor): void {
 		}
 	}
 	applyEdit(wEdit, document);
-}
-async function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
-	const line = document.lineAt(lineNumber);
-	const wEdit = new WorkspaceEdit();
-	const count = task.specialTags.count;
-	if (!count) {
-		return Promise.resolve(undefined);
-	}
-	let newValue = 0;
-	if (count.current !== count.needed) {
-		newValue = count.current + 1;
-		if (newValue === count.needed) {
-			insertCompletionDate(wEdit, document.uri, line);
-		}
-		setCountCurrentValue(wEdit, document.uri, count, String(newValue));
-	} else {
-		setCountCurrentValue(wEdit, document.uri, count, '0');
-		removeCompletionDate(wEdit, document.uri, line);
-	}
-	return applyEdit(wEdit, document);
-}
-export async function toggleTaskCompletionAtLine(lineNumber: number, document: TextDocument): Promise<void> {
-	const { firstNonWhitespaceCharacterIndex } = document.lineAt(lineNumber);
-	const task = getTaskAtLine(lineNumber);
-	if (!task) {
-		return;
-	}
-	const line = document.lineAt(lineNumber);
-	const wEdit = new WorkspaceEdit();
-	if (task.done) {
-		if (!extensionConfig.addCompletionDate) {
-			if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
-				wEdit.delete(document.uri, new vscode.Range(lineNumber, firstNonWhitespaceCharacterIndex, lineNumber, firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
-			}
-		} else {
-			removeCompletionDate(wEdit, document.uri, line);
-		}
-	} else {
-		if (extensionConfig.addCompletionDate) {
-			insertCompletionDate(wEdit, document.uri, line);
-		} else {
-			wEdit.insert(document.uri, new vscode.Position(lineNumber, firstNonWhitespaceCharacterIndex), extensionConfig.doneSymbol);
-		}
-	}
-	await applyEdit(wEdit, document);
-
-	if (extensionConfig.autoArchiveTasks) {
-		const secondWorkspaceEdit = new WorkspaceEdit();
-		archiveTask(secondWorkspaceEdit, document.uri, line, !task.due?.isRecurring);
-		await applyEdit(secondWorkspaceEdit, document);// Not possible to apply conflicting ranges with just one edit
-	}
 }
 async function checkDefaultFileAndNotify(): Promise<boolean> {
 	const specify = 'Specify';
@@ -523,22 +459,15 @@ function specifyDefaultFile() {
 function specifyDefaultArchiveFile() {
 	openSettingGuiAt('todomd.defaultArchiveFile');
 }
-function insertCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
+export function insertCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), extensionConfig.completionDateIncludeTime)}}`);
 }
-function removeDoneSymbol(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine) {
+export function removeDoneSymbol(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine) {
 	if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
 		wEdit.delete(uri, new Range(line.lineNumber, line.firstNonWhitespaceCharacterIndex, line.lineNumber, line.firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
 	}
 }
-function removeCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
-	const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2})?}\s?/;
-	const match = completionDateRegex.exec(line.text);
-	if (match) {
-		wEdit.delete(uri, new Range(line.lineNumber, match.index, line.lineNumber, match.index + match[0].length));
-	}
-}
-function setCountCurrentValue(wEdit: WorkspaceEdit, uri: Uri, count: Count, value: string) {
+export function setCountCurrentValue(wEdit: WorkspaceEdit, uri: Uri, count: Count, value: string) {
 	const charIndexWithOffset = count.range.start.character + 'count:'.length + 1;
 	const currentRange = new vscode.Range(count.range.start.line, charIndexWithOffset, count.range.start.line, charIndexWithOffset + String(count.current).length);
 	wEdit.replace(uri, currentRange, String(value));
