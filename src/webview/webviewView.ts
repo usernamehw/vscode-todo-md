@@ -32,6 +32,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		};
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+		this.updateWebviewConfig(extensionConfig.webview);
 
 		webviewView.webview.onDidReceiveMessage(message => {
 			switch (message.type) {
@@ -50,12 +51,11 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				this.updateTasks(this._tasks);
 			}
 		});
-
-		this.updateWebviewConfig(extensionConfig.webview);
 	}
 
 	updateTasks(tasks: TheTask[]) {
 		if (this._view) {
+			this.updateWebviewConfig(extensionConfig.webview);
 			this._view.webview.postMessage({
 				type: 'updateTasks',
 				value: tasks,
