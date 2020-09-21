@@ -1,4 +1,4 @@
-## ❗ Starting from extension version `1.0.0` You need to enable proposed api to use this extension [How to enable proposed api](https://github.com/usernamehw/vscode-todo-md/blob/master/proposed-api.md)
+## ❗ Starting from extension version `1.0.0` You need to enable proposed api to use this extension [How to enable proposed api](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/proposed-api.md)
 ## ❗ Extension does not conform to the [todo.txt](https://github.com/todotxt/todo.txt) spec.
 ## ❗ Extension is in Alpha phase
 
