@@ -1,5 +1,5 @@
 import { getActiveDocument, goToTask, toggleDone } from 'src/documentActions';
-import { extensionConfig, Global } from 'src/extension';
+import { extensionConfig, Global, state } from 'src/extension';
 import { TheTask } from 'src/TheTask';
 import { IExtensionConfig, WebviewMessage } from 'src/types';
 import { getNonce } from 'src/webview/utils';
@@ -9,7 +9,6 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'todomd.webviewTasks';
 
 	private _view?: vscode.WebviewView;
-	private _tasks: TheTask[] = [];
 
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
@@ -52,7 +51,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		});
 		webviewView.onDidChangeVisibility(e => {
 			if (webviewView.visible === true) {
-				this.updateTasks(this._tasks);
+				this.updateTasks(state.tasks);
 			}
 		});
 	}
@@ -66,7 +65,6 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			} as WebviewMessage);
 		}
 		this.updateTitle(`webview (${tasks.length})`);
-		this._tasks = tasks;
 	}
 
 	updateWebviewConfig(config: IExtensionConfig['webview']) {
