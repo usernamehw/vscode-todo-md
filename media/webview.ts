@@ -57,6 +57,16 @@ window.addEventListener('click', event => {
 					value: lineNumber,
 				})
 			}
+
+			if (target.classList.contains('tag')) {
+				filterInputEl.value = `#${target.textContent}`;
+				filterInputEl.focus();
+				updateTasks();
+			} else if (target.classList.contains('project')) {
+				filterInputEl.value = `+${target.textContent}`;
+				filterInputEl.focus();
+				updateTasks();
+			}
 		}
 	}
 });

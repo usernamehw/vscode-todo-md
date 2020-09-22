@@ -126,7 +126,11 @@ button {
 	padding-right: 4px;
 	border-radius: 3px;
 	white-space: nowrap;
-	/* cursor: pointer; */
+	cursor: pointer;
+}
+
+.tag:hover {
+	background-color: rgba(0, 132, 255, 0.308)
 }
 
 .project {
@@ -135,6 +139,11 @@ button {
 	padding-left: 4px;
 	padding-right: 4px;
 	border-radius: 3px;
+	cursor: pointer;
+}
+
+.project:hover {
+	background-color: #36cc9a66;
 }
 
 .count {
@@ -143,8 +152,4 @@ button {
 	padding-right: 0.5ch;
 	background-color: rgba(0, 0, 0, 0.1);
 	border-radius: 3px;
-}
-
-.tag:hover {
-	background-color: rgba(0, 132, 255, 0.308)
 }
