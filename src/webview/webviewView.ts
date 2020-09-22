@@ -31,7 +31,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		};
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-		this.updateWebviewConfig(extensionConfig.webview);
+		this.updateTasks(state.tasks);
 
 		webviewView.webview.onDidReceiveMessage((message: WebviewMessage) => {
 			switch (message.type) {
@@ -106,5 +106,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 }
 
 export function updateWebviewView(tasks: TheTask[]) {
-	Global.webviewProvider.updateTasks(tasks);
+	if (Global.webviewProvider) {
+		Global.webviewProvider.updateTasks(tasks);
+	}
 }

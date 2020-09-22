@@ -11,7 +11,7 @@ import { StatusBar } from 'src/statusBar';
 import { TheTask } from 'src/TheTask';
 import { createAllTreeViews, updateAllTreeViews } from 'src/treeViewProviders/treeViews';
 import { IExtensionConfig, ItemForProvider, Items, SortTags, State } from 'src/types';
-import { TasksWebviewViewProvider, updateWebviewView } from 'src/webview/webviewView';
+import { TasksWebviewViewProvider } from 'src/webview/webviewView';
 import vscode, { window, workspace } from 'vscode';
 
 dayjs.extend(isBetween);
@@ -95,10 +95,6 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	state.extensionContext.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, Global.webviewProvider),
 	);
-
-	setTimeout(() => {
-		updateWebviewView(state.tasks);
-	}, 1000);
 
 	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 
