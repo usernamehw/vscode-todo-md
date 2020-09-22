@@ -370,9 +370,6 @@ export function registerAllCommands() {
 	commands.registerCommand('todomd.setLastVisitYesterday', () => {
 		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(1, 'day').toDate());
 	});
-	commands.registerCommand('todomd.webviewToggleFilter', (treeItem: TaskTreeItem) => {
-		// Toggle filter
-	});
 	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
 		openSettingGuiAt('todomd.webview');
 	});

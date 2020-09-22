@@ -736,12 +736,6 @@
 		},
 		"commands": [
 			{
-				"command": "todomd.webviewToggleFilter",
-				"title": "Toggle filter visibility",
-				"category": "Todo MD",
-				"icon": "$(filter)"
-			},
-			{
 				"command": "todomd.showWebviewSettings",
 				"title": "Show Webview Settings",
 				"category": "Todo MD",
