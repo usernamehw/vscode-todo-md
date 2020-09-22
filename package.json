@@ -1050,11 +1050,6 @@
 					"group": "navigation"
 				},
 				{
-					"command": "todomd.webviewToggleFilter",
-					"when": "view == todomd.webviewTasks",
-					"group": "navigation@0"
-				},
-				{
 					"command": "todomd.openDefaultFile",
 					"when": "view == todomd.webviewTasks",
 					"group": "navigation@1"
