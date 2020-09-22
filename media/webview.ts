@@ -22,7 +22,7 @@ const state: { tasks: TheTask[]; config: IExtensionConfig['webview'] } = {
 const filterInputEl = document.getElementById('filterInput') as HTMLInputElement;
 
 filterInputEl.addEventListener('input', e => {
-	updateTasks();
+	updateTasks();// TODO: update webview counter
 });
 
 window.addEventListener('click', event => {
@@ -110,10 +110,18 @@ function renderTask(task: TheTask): HTMLElement {
 	}
 	if (task.tags.length) {
 		for (const tag of task.tags) {
-			const tagElement = document.createElement('span');
-			tagElement.classList.add('tag');
-			tagElement.textContent = tag;
-			taskListItem.appendChild(tagElement);
+			const tagEl = document.createElement('span');
+			tagEl.classList.add('tag');
+			tagEl.textContent = tag;
+			taskListItem.appendChild(tagEl);
+		}
+	}
+	if (task.projects.length) {
+		for (const project of task.projects) {
+			const projectEl = document.createElement('span');
+			projectEl.classList.add('project');
+			projectEl.textContent = project;
+			taskListItem.appendChild(projectEl);
 		}
 	}
 	if (task.specialTags.count) {

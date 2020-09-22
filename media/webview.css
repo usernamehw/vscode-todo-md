@@ -129,6 +129,14 @@ button {
 	/* cursor: pointer; */
 }
 
+.project {
+	margin-left: 1ch;
+	background-color: #36cc9a66;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-radius: 3px;
+}
+
 .count {
 	margin-left: 1ch;
 	padding-left: 0.5ch;
