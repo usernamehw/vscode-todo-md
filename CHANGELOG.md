@@ -1,3 +1,12 @@
+## 1.0.0 `22 Sep 2020`
+
+- 💥 Version `1.0.0` does NOT mean that it's stable
+- 💥 You need to enable proposed api to use this extension [How to enable proposed api](https://github.com/usernamehw/vscode-todo-md/blob/master/proposed-api.md)
+- 💥 `{link:}` special tag is deprecated. Links should be now automatically parsed from the document
+- ✨ Add Webview View with tasks from the default file
+- ✨ Hide the Task from context menu in the Tree View
+- ✨ Delete the Task from context menu in the Tree View
+
 ## 0.0.19 `17 Aug 2020`
 
 - ✨ Add invalid due date state (highlighted in orange)
