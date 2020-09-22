@@ -22,6 +22,7 @@ const state: { tasks: TheTask[]; config: IExtensionConfig['webview'] } = {
 let filteredTasksGlobal: TheTask[] = [];
 
 const filterInputEl = document.getElementById('filterInput') as HTMLInputElement;
+filterInputEl.focus();
 
 filterInputEl.addEventListener('input', e => {
 	updateTasks();// TODO: update webview counter
