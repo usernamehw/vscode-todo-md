@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+// TODO: enable typescipt-eslint for this file
 
 import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';
@@ -18,12 +19,26 @@ const state: { tasks: TheTask[]; config: IExtensionConfig['webview'] } = {
 		showCompleted: true,
 	},
 };
+let filteredTasksGlobal: TheTask[] = [];
 
 const filterInputEl = document.getElementById('filterInput') as HTMLInputElement;
 
 filterInputEl.addEventListener('input', e => {
 	updateTasks();// TODO: update webview counter
 });
+filterInputEl.addEventListener('keydown', e => {
+	if (e.altKey && e.key === 'd') {
+		const firstMatch = filteredTasksGlobal[0];
+		if (!firstMatch) {
+			showNotification('No matches');
+			return;
+		}
+		vscode.postMessage({
+			type: 'toggleDone',
+			value: firstMatch.lineNumber
+		});
+	}
+})
 
 window.addEventListener('click', event => {
 	const target = event.target;
@@ -68,6 +83,7 @@ function updateTasks() {
 	for (const task of sortedTasks) {
 		list.appendChild(renderTask(task));
 	}
+	filteredTasksGlobal = sortedTasks;
 }
 
 function renderTask(task: TheTask): HTMLElement {
