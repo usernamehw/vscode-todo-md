@@ -33,10 +33,11 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 		this.updateTasks(state.tasks);
 
-		webviewView.webview.onDidReceiveMessage((message: WebviewMessage) => {
+		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
 			switch (message.type) {
 				case 'toggleDone': {
-					toggleDone(getActiveDocument(), message.value);
+					await toggleDone(getActiveDocument(), message.value);
+					this.updateTasks(state.tasks);
 					break;
 				}
 				case 'showNotification': {
