@@ -104,7 +104,15 @@ export async function goToTask(lineNumber: number) {
 	const editor = await vscode.window.showTextDocument(document);
 	const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
 	editor.selection = new vscode.Selection(range.start, range.end);
-	editor.revealRange(range, vscode.TextEditorRevealType.AtTop);
+	editor.revealRange(range, vscode.TextEditorRevealType.Default);
+	const lineHighlightDecorationType = vscode.window.createTextEditorDecorationType({
+		backgroundColor: '#ffa30468',
+		isWholeLine: true,
+	});
+	editor.setDecorations(lineHighlightDecorationType, [range]);
+	setTimeout(() => {
+		editor.setDecorations(lineHighlightDecorationType, []);
+	}, 600);
 }
 
 export function getActiveDocument() {
