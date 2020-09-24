@@ -1,5 +1,5 @@
 import { getActiveDocument, goToTask, toggleDone } from 'src/documentActions';
-import { extensionConfig, Global, state } from 'src/extension';
+import { extensionConfig, Global, state, updateState } from 'src/extension';
 import { TheTask } from 'src/TheTask';
 import { IExtensionConfig, WebviewMessage } from 'src/types';
 import { getNonce } from 'src/webview/utils';
@@ -37,6 +37,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			switch (message.type) {
 				case 'toggleDone': {
 					await toggleDone(getActiveDocument(), message.value);
+					await updateState();
 					this.updateTasks(state.tasks);
 					break;
 				}
