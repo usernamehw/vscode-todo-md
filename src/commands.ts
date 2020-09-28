@@ -404,6 +404,12 @@ export function resetAllRecurringTasks(editor?: TextEditor): void {
 			if (count) {
 				setCountCurrentValue(wEdit, document.uri, count, '0');
 			}
+		} else {
+			// Maybe handle not full count 3/4, for instance, differently
+			const count = task.specialTags.count;
+			if (count) {
+				setCountCurrentValue(wEdit, document.uri, count, '0');
+			}
 		}
 	}
 	applyEdit(wEdit, document);
