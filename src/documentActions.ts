@@ -112,7 +112,7 @@ export async function goToTask(lineNumber: number) {
 	editor.setDecorations(lineHighlightDecorationType, [range]);
 	setTimeout(() => {
 		editor.setDecorations(lineHighlightDecorationType, []);
-	}, 600);
+	}, 700);
 }
 
 export function getActiveDocument() {
