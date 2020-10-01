@@ -105,6 +105,7 @@ export async function goToTask(lineNumber: number) {
 	const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
 	editor.selection = new vscode.Selection(range.start, range.end);
 	editor.revealRange(range, vscode.TextEditorRevealType.Default);
+	// Highlight revealed range
 	const lineHighlightDecorationType = vscode.window.createTextEditorDecorationType({
 		backgroundColor: '#ffa30468',
 		isWholeLine: true,
