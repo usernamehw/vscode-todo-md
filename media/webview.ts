@@ -21,7 +21,7 @@ const state: { tasks: TheTask[]; config: IExtensionConfig['webview'] } = {
 };
 let filteredTasksGlobal: TheTask[] = [];
 
-const filterInputEl = document.getElementById('filterInput') as HTMLInputElement;
+const filterInputEl = document.getElementById('filterInput') as HTMLInputElement;// TODO: use $ for elements?
 filterInputEl.focus();
 
 filterInputEl.addEventListener('input', e => {
