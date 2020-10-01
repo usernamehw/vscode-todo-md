@@ -386,7 +386,7 @@ export function registerAllCommands() {
 function noArchiveFileMessage() {
 	vscode.window.showWarningMessage('No default archive file specified');
 }
-
+// TODO: this should be a document action
 export function resetAllRecurringTasks(editor?: TextEditor): void {
 	const wEdit = new WorkspaceEdit();
 	let document: vscode.TextDocument;

@@ -21,7 +21,7 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 		state.activeDocument = await getDocumentForDefaultFile();
 	}
 }
-
+// TODO: this function should be executed by interval (60s?)
 export function checkIfNewDayArrived(): boolean {
 	const lastVisit = state.extensionContext.globalState.get<string | undefined>(LAST_VISIT_STORAGE_KEY);
 	if (lastVisit && !dayjs().isSame(lastVisit, 'day')) {
@@ -75,7 +75,7 @@ export function activateExtensionFeatures(editor: vscode.TextEditor) {
 	checkIfNewDayArrived();
 	setContext(VscodeContext.isActive, true);
 
-	if (state.newDayArrived && !state.fileWasReset) {
+	if (state.newDayArrived && !state.fileWasReset) { // TODO: this should be in some other place
 		resetAllRecurringTasks(editor);
 		state.fileWasReset = true;
 	}
