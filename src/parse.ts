@@ -225,7 +225,7 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 				if (linksOnThisLine.length !== 0) {
 					parsedLine.value.links = linksOnThisLine.map(link => ({
 						characterRange: [link.range.start.character, link.range.end.character],
-						value: link.target!.toString(),
+						value: link.target!.toString(true),
 						scheme: link.target!.scheme,
 					}));
 				}
