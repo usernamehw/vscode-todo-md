@@ -136,7 +136,9 @@ export function resetAllRecurringTasks(): void {
 					const daysSinceLastVisit = dayjs().diff(lastVisit, 'day');
 					for (let i = daysSinceLastVisit; i > 0; i--) {
 						const date = dayjs().subtract(i, 'day');
-						const res = new DueDate(task.due.raw, date.toDate());
+						const res = new DueDate(task.due.raw, {
+							targetDate: date.toDate(),
+						});
 						if (res.isDue === DueState.due || res.isDue === DueState.overdue) {
 							addOverdueSpecialTag(wEdit, document.uri, line, date.format(DATE_FORMAT));
 							break;

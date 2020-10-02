@@ -17,7 +17,9 @@ const $5jan2018friday = new Date(2018, 0, 5);
 const $6jan2018saturday = new Date(2018, 0, 6);
 const $7jan2018sunday = new Date(2018, 0, 7);
 
-const $1jan2018mondayDueDate = new DueDate('2018-01-01', $1jan2018monday);
+const $1jan2018mondayDueDate = new DueDate('2018-01-01', {
+	targetDate: $1jan2018monday,
+});
 
 describe('Not recurring', () => {
 	it('Simple date format `2018-01-01`', () => {
@@ -30,7 +32,9 @@ describe('Not recurring', () => {
 
 describe('♻ Recurring', () => {
 	it('`ed` (every day alias). Is due on any day', () => {
-		const ed = new DueDate('ed', addDays($1jan2018monday, _.random(-100, 100)));
+		const ed = new DueDate('ed', {
+			targetDate: addDays($1jan2018monday, _.random(-100, 100)),
+		});
 		expect(ed.isDue === DueState.due).to.be.ok;
 	});
 	it('`monday` is recurring', () => {
@@ -42,32 +46,32 @@ describe('♻ Recurring', () => {
 		expect(mondayDueDate.isRecurring === true).to.be.ok;
 	});
 	it('monday', () => {
-		expect(new DueDate('monday', $1jan2018monday).isDue === DueState.due, 'monday').to.be.ok;
-		expect(new DueDate('mon', $1jan2018monday).isDue === DueState.due, 'mon').to.be.ok;
+		expect(new DueDate('monday', { targetDate: $1jan2018monday }).isDue === DueState.due, 'monday').to.be.ok;
+		expect(new DueDate('mon', { targetDate: $1jan2018monday }).isDue === DueState.due, 'mon').to.be.ok;
 	});
 	it('tuesday', () => {
-		expect(new DueDate('tuesday', $2jan2018tuesday).isDue === DueState.due, 'tuesday').to.be.ok;
-		expect(new DueDate('tue', $2jan2018tuesday).isDue === DueState.due, 'tue').to.be.ok;
+		expect(new DueDate('tuesday', { targetDate: $2jan2018tuesday }).isDue === DueState.due, 'tuesday').to.be.ok;
+		expect(new DueDate('tue', { targetDate: $2jan2018tuesday }).isDue === DueState.due, 'tue').to.be.ok;
 	});
 	it('wednesday', () => {
-		expect(new DueDate('wednesday', $3jan2018wednesday).isDue === DueState.due, 'wednesday').to.be.ok;
-		expect(new DueDate('wed', $3jan2018wednesday).isDue === DueState.due, 'wed').to.be.ok;
+		expect(new DueDate('wednesday', { targetDate: $3jan2018wednesday }).isDue === DueState.due, 'wednesday').to.be.ok;
+		expect(new DueDate('wed', { targetDate: $3jan2018wednesday }).isDue === DueState.due, 'wed').to.be.ok;
 	});
 	it('thursday', () => {
-		expect(new DueDate('thursday', $4jan2018thursday).isDue === DueState.due, 'thursday').to.be.ok;
-		expect(new DueDate('thu', $4jan2018thursday).isDue === DueState.due, 'thu').to.be.ok;
+		expect(new DueDate('thursday', { targetDate: $4jan2018thursday }).isDue === DueState.due, 'thursday').to.be.ok;
+		expect(new DueDate('thu', { targetDate: $4jan2018thursday }).isDue === DueState.due, 'thu').to.be.ok;
 	});
 	it('friday', () => {
-		expect(new DueDate('friday', $5jan2018friday).isDue === DueState.due, 'friday').to.be.ok;
-		expect(new DueDate('fri', $5jan2018friday).isDue === DueState.due, 'fri').to.be.ok;
+		expect(new DueDate('friday', { targetDate: $5jan2018friday }).isDue === DueState.due, 'friday').to.be.ok;
+		expect(new DueDate('fri', { targetDate: $5jan2018friday }).isDue === DueState.due, 'fri').to.be.ok;
 	});
 	it('saturday', () => {
-		expect(new DueDate('saturday', $6jan2018saturday).isDue === DueState.due, 'saturday').to.be.ok;
-		expect(new DueDate('sat', $6jan2018saturday).isDue === DueState.due, 'sat').to.be.ok;
+		expect(new DueDate('saturday', { targetDate: $6jan2018saturday }).isDue === DueState.due, 'saturday').to.be.ok;
+		expect(new DueDate('sat', { targetDate: $6jan2018saturday }).isDue === DueState.due, 'sat').to.be.ok;
 	});
 	it('sunday', () => {
-		expect(new DueDate('sunday', $7jan2018sunday).isDue === DueState.due, 'sunday').to.be.ok;
-		expect(new DueDate('sun', $7jan2018sunday).isDue === DueState.due, 'sun').to.be.ok;
+		expect(new DueDate('sunday', { targetDate: $7jan2018sunday }).isDue === DueState.due, 'sunday').to.be.ok;
+		expect(new DueDate('sun', { targetDate: $7jan2018sunday }).isDue === DueState.due, 'sun').to.be.ok;
 	});
 });
 

@@ -10,10 +10,10 @@ export class DueDate {
 	isDue = DueState.notDue;
 	closestDueDateInTheFuture: string | undefined;
 
-	constructor(dueString: string, targetDate?: Date) {
+	constructor(dueString: string, options?: { targetDate?: Date }) {
 		this.raw = dueString;
 
-		const result = DueDate.parseDue(dueString, targetDate);
+		const result = DueDate.parseDue(dueString, options?.targetDate);
 		this.isRecurring = result.isRecurring;
 		this.isDue = result.isDue;
 		if (result.isDue === DueState.notDue) {
