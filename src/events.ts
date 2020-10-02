@@ -101,11 +101,10 @@ export async function deactivateExtensionFeatures() {
 }
 
 export async function updateEverything(editor?: vscode.TextEditor) {
-	if (!editor) {
-		return;
+	await updateState(editor?.document);
+	if (editor) {
+		updateEditorDecorations(editor);
 	}
-	await updateState(editor.document);
-	updateEditorDecorations(editor);
 	statusBar.updateText(state.tasks);
 	updateAllTreeViews();
 	updateWebviewView(state.tasks);

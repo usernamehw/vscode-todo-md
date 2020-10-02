@@ -197,6 +197,7 @@ window.addEventListener('message', event => {
 		}
 		case 'updateConfig': {
 			state.config = message.value;
+			updateTasks();
 			break;
 		}
 	}
