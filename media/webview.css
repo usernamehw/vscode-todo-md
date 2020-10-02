@@ -67,7 +67,7 @@ button {
 
 .filter-input:focus {
 	outline: none !important;
-	border-color: var(--vscode-focusBorder) !important;
+	border: 1px solid var(--vscode-focusBorder) !important;
 }
 
 .list {
