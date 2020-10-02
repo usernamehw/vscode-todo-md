@@ -1208,10 +1208,10 @@
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^12.12.62",
 		"@types/vscode": "^1.49.0",
-		"@typescript-eslint/eslint-plugin": "^4.1.1",
-		"@typescript-eslint/parser": "^4.1.1",
+		"@typescript-eslint/eslint-plugin": "^4.3.0",
+		"@typescript-eslint/parser": "^4.3.0",
 		"chai": "^4.2.0",
-		"eslint": "^7.9.0",
+		"eslint": "^7.10.0",
 		"eslint-plugin-no-autofix": "^1.0.1",
 		"friendly-errors-webpack-plugin": "^1.7.0",
 		"glob": "^7.1.6",
@@ -1226,7 +1226,7 @@
 		"webpack-cli": "^3.3.12"
 	},
 	"dependencies": {
-		"dayjs": "^1.8.36",
+		"dayjs": "^1.9.1",
 		"markdown-table": "^2.0.0"
 	}
 }

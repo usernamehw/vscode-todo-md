@@ -220,7 +220,7 @@ export function registerAllCommands() {
 			await appendTaskToFile(creationDate + text, extensionConfig.defaultFile);
 		}
 	});
-	commands.registerTextEditorCommand('todomd.setDueDate', async editor => {
+	commands.registerTextEditorCommand('todomd.setDueDate', editor => {
 		const line = editor.selection.active.line;
 		const task = getTaskAtLine(line);
 		const inputBox = window.createInputBox();
