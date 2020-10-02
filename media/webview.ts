@@ -68,6 +68,10 @@ window.addEventListener('click', event => {
 				filterInputEl.value = `+${target.textContent}`;
 				filterInputEl.focus();
 				updateTasks();
+			} else if (target.classList.contains('context')) {
+				filterInputEl.value = `@${target.textContent}`;
+				filterInputEl.focus();
+				updateTasks();
 			} else if (target.classList.contains('decrement-count')) {
 				vscode.postMessage({
 					type: 'decrementCount',
@@ -160,6 +164,14 @@ function renderTask(task: TheTask): HTMLElement {
 			projectEl.classList.add('project');
 			projectEl.textContent = project;
 			taskListItem.appendChild(projectEl);
+		}
+	}
+	if (task.contexts.length) {
+		for (const context of task.contexts) {
+			const contextEl = document.createElement('span');
+			contextEl.classList.add('context');
+			contextEl.textContent = context;
+			taskListItem.appendChild(contextEl);
 		}
 	}
 	if (task.specialTags.count) {

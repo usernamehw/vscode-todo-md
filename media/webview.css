@@ -146,6 +146,18 @@ button {
 	background-color: #36cc9a66;
 }
 
+.context {
+	margin-left: 1ch;
+	padding-left: 4px;
+	padding-right: 4px;
+	background-color: #c972eb55;
+	cursor: pointer;
+}
+
+.context:hover {
+	background-color: #c972eb77;
+}
+
 .count-container {
 	margin-left: 1ch;
 	background-color: rgba(0, 0, 0, 0.1);
