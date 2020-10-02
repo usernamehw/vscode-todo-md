@@ -10,10 +10,10 @@ export class DueDate {
 	isDue = DueState.notDue;
 	closestDueDateInTheFuture: string | undefined;
 
-	constructor(dueString: string, options?: { targetDate?: Date }) {
+	constructor(dueString: string, options?: { targetDate?: Date; overdue?: string }) {
 		this.raw = dueString;
 
-		const result = DueDate.parseDue(dueString, options?.targetDate);
+		const result = DueDate.parseDue(dueString, options?.targetDate, options?.overdue);
 		this.isRecurring = result.isRecurring;
 		this.isDue = result.isDue;
 		if (result.isDue === DueState.notDue) {
@@ -31,17 +31,18 @@ export class DueDate {
 		}
 		return 'More than 100 days';
 	}
-	static parseDue(due: string, targetDate = new Date()): DueReturn {
+	static parseDue(due: string, targetDate = new Date(), overdue?: string): DueReturn {
 		const dueDates = due.split(',').filter(d => d.length);
 		const result = dueDates.map(dueDate => DueDate.parseDueDate(dueDate, targetDate));
 
 		const isRecurring = result.some(r => r.isRecurring);
 		const hasInvalid = result.some(r => r.isDue === DueState.invalid);
-		const hasOverdue = result.some(r => r.isDue === DueState.overdue);
+		const hasOverdue = result.some(r => r.isDue === DueState.overdue) || overdue;
 		const hasDue = result.some(r => r.isDue === DueState.due);
 		const isDue = hasInvalid ? DueState.invalid :
 			hasOverdue ? DueState.overdue :
 				hasDue ? DueState.due : DueState.notDue;
+
 		return {
 			isDue,
 			isRecurring,

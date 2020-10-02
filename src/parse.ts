@@ -221,9 +221,11 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 				continue;
 			}
 			default: {
+				// Additional tags ------------
 				if (additionalTags.length !== 0) {
 					parsedLine.value.tags.push(...additionalTags);
 				}
+				// Links ----------------------
 				const linksOnThisLine = links.filter(link => link.range.start.line === i && link.target !== undefined);
 				if (linksOnThisLine.length !== 0) {
 					parsedLine.value.links = linksOnThisLine.map(link => ({
@@ -231,6 +233,10 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 						value: link.target!.toString(true),
 						scheme: link.target!.scheme,
 					}));
+				}
+				// Overdue
+				if (parsedLine.value.specialTags.overdue) {
+					parsedLine.value.due = new DueDate(parsedLine.value.due!.raw, { overdue: parsedLine.value.specialTags.overdue });
 				}
 				tasks.push(parsedLine.value);
 			}
