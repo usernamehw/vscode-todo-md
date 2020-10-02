@@ -58,6 +58,21 @@ export async function incrementCountForTask(document: vscode.TextDocument, lineN
 	}
 	return applyEdit(wEdit, document);
 }
+export async function decrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
+	const line = document.lineAt(lineNumber);
+	const wEdit = new WorkspaceEdit();
+	const count = task.specialTags.count;
+	if (!count) {
+		return Promise.resolve(undefined);
+	}
+	if (count.current === 0) {
+		return Promise.resolve(undefined);
+	} else if (count.current === count.needed) {
+		removeCompletionDate(wEdit, document.uri, line);
+	}
+	setCountCurrentValue(wEdit, document.uri, count, String(count.current - 1));
+	return applyEdit(wEdit, document);
+}
 async function removeOverdueFromLine(document: vscode.TextDocument, task: TheTask) {
 	const wEdit = new WorkspaceEdit();
 	wEdit.replace(document.uri, task.overdueRange ?? new vscode.Range(0, 0, 0, 0), '');

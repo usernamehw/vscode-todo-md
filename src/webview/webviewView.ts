@@ -1,4 +1,5 @@
-import { getActiveDocument, goToTask, toggleDone } from 'src/documentActions';
+import { getTaskAtLine } from 'src/commands';
+import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleTaskCompletionAtLine } from 'src/documentActions';
 import { extensionConfig, Global, state, updateState } from 'src/extension';
 import { TheTask } from 'src/TheTask';
 import { IExtensionConfig, WebviewMessage } from 'src/types';
@@ -36,7 +37,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
 			switch (message.type) {
 				case 'toggleDone': {
-					await toggleDone(getActiveDocument(), message.value);
+					toggleTaskCompletionAtLine(message.value, getActiveDocument());
 					await updateState();
 					this.updateTasks(state.tasks);
 					break;
@@ -47,6 +48,18 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				}
 				case 'goToTask': {
 					goToTask(message.value);
+					break;
+				}
+				case 'incrementCount': {
+					await incrementCountForTask(getActiveDocument(), message.value, getTaskAtLine(message.value)!);
+					await updateState();
+					this.updateTasks(state.tasks);
+					break;
+				}
+				case 'decrementCount': {
+					await decrementCountForTask(getActiveDocument(), message.value, getTaskAtLine(message.value)!);
+					await updateState();
+					this.updateTasks(state.tasks);
 					break;
 				}
 			}

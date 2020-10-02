@@ -121,4 +121,12 @@ interface WebviewMessageGoToTask extends WebviewMessageBase {
 	type: 'goToTask';
 	value: number;
 }
-export type WebviewMessage = WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask;
+interface WebviewMessageIncrementCount extends WebviewMessageBase {
+	type: 'incrementCount';
+	value: number;
+}
+interface WebviewMessageDecrementCount extends WebviewMessageBase {
+	type: 'decrementCount';
+	value: number;
+}
+export type WebviewMessage = WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount;

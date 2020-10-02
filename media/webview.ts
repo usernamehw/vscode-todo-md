@@ -67,6 +67,16 @@ window.addEventListener('click', event => {
 				filterInputEl.value = `+${target.textContent}`;
 				filterInputEl.focus();
 				updateTasks();
+			} else if (target.classList.contains('decrement-count')) {
+				vscode.postMessage({
+					type: 'decrementCount',
+					value: lineNumber,
+				})
+			} else if (target.classList.contains('increment-count')) {
+				vscode.postMessage({
+					type: 'incrementCount',
+					value: lineNumber,
+				});
 			}
 		}
 	}
@@ -152,10 +162,26 @@ function renderTask(task: TheTask): HTMLElement {
 		}
 	}
 	if (task.specialTags.count) {
+		const countContainer = document.createElement('span');
+		countContainer.classList.add('count-container');
+
+		const minusButton = document.createElement('span');
+		minusButton.classList.add('decrement-count');
+		minusButton.textContent = '-';
+
+		const plusButton = document.createElement('span');
+		plusButton.classList.add('increment-count');
+		plusButton.textContent = '+';
+
 		const countEl = document.createElement('span');
 		countEl.classList.add('count');
 		countEl.textContent = `${task.specialTags.count.current} / ${task.specialTags.count.needed}`;
-		taskListItem.appendChild(countEl);
+
+		countContainer.appendChild(minusButton);
+		countContainer.appendChild(countEl);
+		countContainer.appendChild(plusButton);
+
+		taskListItem.appendChild(countContainer);
 	}
 	return taskListItem;
 }
