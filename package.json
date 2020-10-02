@@ -33,7 +33,16 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onStartupFinished"
+		"onStartupFinished",
+		"onView:todomd.tags",
+		"onView:todomd.tasks",
+		"onView:todomd.projects",
+		"onView:todomd.contexts",
+		"onView:todomd.archived",
+		"onView:todomd.generic1",
+		"onView:todomd.generic2",
+		"onView:todomd.generic3",
+		"onView:todomd.webviewTasks"
 	],
 	"main": "./dist/extension",
 	"preview": true,
