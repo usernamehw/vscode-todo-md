@@ -81,6 +81,7 @@ export interface IExtensionConfig {
 
 	webview: {
 		showCompleted: boolean;
+		showPriority: boolean;
 	};
 }
 

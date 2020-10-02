@@ -17,6 +17,7 @@ const state: { tasks: TheTask[]; config: IExtensionConfig['webview'] } = {
 	tasks: [],
 	config: {
 		showCompleted: true,
+		showPriority: true,
 	},
 };
 let filteredTasksGlobal: TheTask[] = [];
@@ -111,7 +112,7 @@ function renderTask(task: TheTask): HTMLElement {
 	const taskListItem = document.createElement('div');
 	taskListItem.classList.add('list-item');
 	taskListItem.dataset.id = String(task.lineNumber);
-	if (task.priority) {
+	if (task.priority && state.config.showPriority) {
 		switch (task.priority) {
 			case 'A': taskListItem.classList.add('pri1'); break;
 			case 'B': taskListItem.classList.add('pri2'); break;

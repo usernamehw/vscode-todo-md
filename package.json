@@ -47,6 +47,11 @@
 					"markdownDescription": "Controls whether completed tasks are shown or not in the webview.",
 					"default": true
 				},
+				"todomd.webview.showPriority": {
+					"type": "boolean",
+					"markdownDescription": "Controls whether priority is shown in the webview.",
+					"default": true
+				},
 				"todomd.defaultFile": {
 					"type": "string",
 					"markdownDescription": "Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`",
