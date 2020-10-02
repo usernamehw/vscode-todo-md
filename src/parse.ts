@@ -75,6 +75,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 	const specialTags: SpecialTags = {};
 	let due: DueDate | undefined;
 	let dueRange: Range | undefined;
+	let overdueRange: Range | undefined;
 
 	for (const word of words) {
 		switch (word[0]) {
@@ -92,7 +93,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 					}
 				} else if (specialTag === 'overdue') {
 					specialTags.overdue = value;
-					specialTagRanges.push(range);
+					overdueRange = range;
 				} else if (specialTag === 'cr') {
 					specialTagRanges.push(range);
 				} else if (specialTag === 'cm') {
@@ -185,6 +186,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 			specialTagRanges,
 			due,
 			dueRange,
+			overdueRange,
 			specialTags,
 			contexts,
 			contextRanges,

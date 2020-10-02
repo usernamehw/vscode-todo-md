@@ -29,6 +29,9 @@ export async function toggleDone(document: vscode.TextDocument, lineNumber: numb
 	if (!task) {
 		return;
 	}
+	if (task.specialTags.overdue) {
+		await removeOverdueFromLine(document, task);
+	}
 	if (task.specialTags.count) {
 		await incrementCountForTask(document, lineNumber, task);
 	} else {
@@ -53,6 +56,11 @@ export async function incrementCountForTask(document: vscode.TextDocument, lineN
 		setCountCurrentValue(wEdit, document.uri, count, '0');
 		removeCompletionDate(wEdit, document.uri, line);
 	}
+	return applyEdit(wEdit, document);
+}
+async function removeOverdueFromLine(document: vscode.TextDocument, task: TheTask) {
+	const wEdit = new WorkspaceEdit();
+	wEdit.replace(document.uri, task.overdueRange ?? new vscode.Range(0, 0, 0, 0), '');
 	return applyEdit(wEdit, document);
 }
 export async function toggleTaskCompletionAtLine(lineNumber: number, document: TextDocument): Promise<void> {

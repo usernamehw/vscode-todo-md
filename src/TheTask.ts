@@ -52,6 +52,7 @@ export class TheTask {
 	tagsDelimiterRanges?: Range[];
 	tagsRange?: Range[];
 	dueRange?: Range;
+	overdueRange?: Range;
 
 	constructor(init: TaskInit) {
 		this.title = init.title;
@@ -72,6 +73,7 @@ export class TheTask {
 		this.priorityRange = init.priorityRange;
 		this.tagsDelimiterRanges = init.tagsDelimiterRanges;
 		this.tagsRange = init.tagsRange;
+		this.overdueRange = init.overdueRange;
 	}
 
 	static formatTask(task: TheTask): string {
