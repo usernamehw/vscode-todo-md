@@ -1,4 +1,4 @@
-# To build this extension you need to run 2 scripts:
+# For dev build of this extension you need to run 2 scripts:
 
 ## This script watches files inside `src` directory
 
@@ -10,4 +10,10 @@ npm run watch
 
 ```
 npm run watchWebview
+```
+
+# Production build is the usual:
+
+```
+npm run vscode:prepublish
 ```
