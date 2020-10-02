@@ -2,15 +2,16 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { registerAllCommands, resetAllRecurringTasks, updateArchivedTasks } from 'src/commands';
+import { registerAllCommands, updateArchivedTasks } from 'src/commands';
 import { updateDecorationStyle } from 'src/decorations';
-import { getDocumentForDefaultFile } from 'src/documentActions';
+import { getDocumentForDefaultFile, resetAllRecurringTasks } from 'src/documentActions';
 import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from 'src/events';
 import { parseDocument } from 'src/parse';
 import { StatusBar } from 'src/statusBar';
 import { TheTask } from 'src/TheTask';
 import { createAllTreeViews, updateAllTreeViews } from 'src/treeViewProviders/treeViews';
-import { IExtensionConfig, ItemForProvider, Items, SortTags, State } from 'src/types';
+import { IExtensionConfig, ItemForProvider, Items, SortTags, State, VscodeContext } from 'src/types';
+import { setContext } from 'src/vscodeUtils';
 import { TasksWebviewViewProvider } from 'src/webview/webviewView';
 import vscode, { window, workspace } from 'vscode';
 
@@ -74,6 +75,9 @@ export class Global {
 }
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
+	if (process.env.NODE_ENV === 'development') {
+		setContext(VscodeContext.isDev, true);
+	}
 	state.extensionContext = extensionContext;
 
 	updateDecorationStyle();

@@ -86,6 +86,7 @@ export interface IExtensionConfig {
 
 export const enum VscodeContext {
 	isActive = 'todomd:isActive',
+	isDev = 'todomd:isDev',
 	filterActive = 'todomd:filterActive',
 	generic1FilterExists = 'todomd:generic1FilterExists',
 	generic2FilterExists = 'todomd:generic2FilterExists',

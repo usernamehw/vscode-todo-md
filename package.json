@@ -874,8 +874,8 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.setLastVisitYesterday",
-				"title": "DEV: Set last visit yesterday",
+				"command": "todomd.setLastVisit",
+				"title": "DEV: Set last visit",
 				"category": "Todo MD"
 			}
 		],
@@ -1129,6 +1129,10 @@
 				{
 					"command": "todomd.createSimilarTask",
 					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.setLastVisit",
+					"when": "todomd:isDev"
 				}
 			]
 		},

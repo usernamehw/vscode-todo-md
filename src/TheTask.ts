@@ -9,6 +9,10 @@ export interface SpecialTags {
 	threshold?: string;
 	isHidden?: boolean;
 	count?: Count;
+	/**
+	 * Oldest overdue date string in `YYYY-MM-DD` (for recurring tasks)
+	 */
+	overdue?: string;
 }
 /**
  * Modifier for task completion.

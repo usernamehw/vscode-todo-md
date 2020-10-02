@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
-import { archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, removeCompletionDate, toggleDone, toggleTaskCompletionAtLine } from 'src/documentActions';
+import { archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, resetAllRecurringTasks, toggleDone, toggleTaskCompletionAtLine } from 'src/documentActions';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from 'src/extension';
 import { parseDocument } from 'src/parse';
 import { defaultSortTasks, SortProperty, sortTasks } from 'src/sort';
@@ -12,7 +12,7 @@ import { VscodeContext } from 'src/types';
 import { appendTaskToFile, fancyNumber, getRandomInt } from 'src/utils';
 import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from 'src/vscodeUtils';
 import { updateWebviewView } from 'src/webview/webviewView';
-import vscode, { commands, Range, TextEditor, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 
 class QuickPickItem implements vscode.QuickPickItem {
 	label: string;
@@ -359,7 +359,7 @@ export function registerAllCommands() {
 		editor.revealRange(range, vscode.TextEditorRevealType.Default);
 	});
 	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
-		resetAllRecurringTasks(editor);
+		resetAllRecurringTasks();
 	});
 	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
 		const link = treeItem.task.links[0]?.value;
@@ -367,8 +367,12 @@ export function registerAllCommands() {
 			followLink(link);
 		}
 	});
-	commands.registerCommand('todomd.setLastVisitYesterday', () => {
-		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(1, 'day').toDate());
+	commands.registerCommand('todomd.setLastVisit', async () => { // TODO: prefix DEV
+		const numberOfDays = Number(await vscode.window.showInputBox());
+		if (!numberOfDays) {
+			return;
+		}
+		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(numberOfDays, 'day').toDate());
 	});
 	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
 		openSettingGuiAt('todomd.webview');
@@ -386,34 +390,7 @@ export function registerAllCommands() {
 function noArchiveFileMessage() {
 	vscode.window.showWarningMessage('No default archive file specified');
 }
-// TODO: this should be a document action
-export function resetAllRecurringTasks(editor?: TextEditor): void {
-	const wEdit = new WorkspaceEdit();
-	let document: vscode.TextDocument;
-	if (editor && state.theRightFileOpened) {
-		document = editor.document;
-	} else {
-		document = getActiveDocument();
-	}
-	for (const task of state.tasks) {
-		if (task.due?.isRecurring && task.done) {
-			const line = document.lineAt(task.lineNumber);
-			removeDoneSymbol(wEdit, document.uri, line);
-			removeCompletionDate(wEdit, document.uri, line);
-			const count = task.specialTags.count;
-			if (count) {
-				setCountCurrentValue(wEdit, document.uri, count, '0');
-			}
-		} else {
-			// Maybe handle not full count 3/4, for instance, differently
-			const count = task.specialTags.count;
-			if (count) {
-				setCountCurrentValue(wEdit, document.uri, count, '0');
-			}
-		}
-	}
-	applyEdit(wEdit, document);
-}
+
 async function checkDefaultFileAndNotify(): Promise<boolean> {
 	const specify = 'Specify';
 	if (!extensionConfig.defaultFile) {

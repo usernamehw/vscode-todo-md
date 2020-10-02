@@ -1,9 +1,11 @@
-// Given `vscode.TextDocument` and `lineNumber: number` do different things with the file
+import dayjs from 'dayjs';
 // TODO: maybe this file should be a class?
-
-import { applyEdit, getTaskAtLine, insertCompletionDate, setCountCurrentValue, updateArchivedTasks } from 'src/commands';
-import { extensionConfig, state } from 'src/extension';
+import { applyEdit, getTaskAtLine, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from 'src/commands';
+import { DueDate } from 'src/dueDate';
+import { extensionConfig, LAST_VISIT_STORAGE_KEY, state } from 'src/extension';
 import { TheTask } from 'src/TheTask';
+import { DATE_FORMAT } from 'src/timeUtils';
+import { DueState } from 'src/types';
 import { appendTaskToFile } from 'src/utils';
 import vscode, { TextDocument, WorkspaceEdit } from 'vscode';
 
@@ -98,6 +100,9 @@ export function archiveTask(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.
 	}
 	updateArchivedTasks();
 }
+function addOverdueSpecialTag(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, overdueDateString: string) {
+	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {overdue:${overdueDateString}}`);
+}
 
 export async function goToTask(lineNumber: number) {
 	const document = getActiveDocument();
@@ -114,6 +119,39 @@ export async function goToTask(lineNumber: number) {
 	setTimeout(() => {
 		editor.setDecorations(lineHighlightDecorationType, []);
 	}, 700);
+}
+
+export function resetAllRecurringTasks(): void {
+	const wEdit = new WorkspaceEdit();
+	const document = getActiveDocument();
+	for (const task of state.tasks) {
+		if (task.due?.isRecurring) {
+			const line = document.lineAt(task.lineNumber);
+			if (task.done) {
+				removeDoneSymbol(wEdit, document.uri, line);
+				removeCompletionDate(wEdit, document.uri, line);
+			} else {
+				if (!task.specialTags.overdue) {
+					const lastVisit = dayjs(state.extensionContext.globalState.get(LAST_VISIT_STORAGE_KEY) as string);
+					const daysSinceLastVisit = dayjs().diff(lastVisit, 'day');
+					for (let i = daysSinceLastVisit; i > 0; i--) {
+						const date = dayjs().subtract(i, 'day');
+						const res = new DueDate(task.due.raw, date.toDate());
+						if (res.isDue === DueState.due || res.isDue === DueState.overdue) {
+							addOverdueSpecialTag(wEdit, document.uri, line, date.format(DATE_FORMAT));
+							break;
+						}
+					}
+				}
+			}
+
+			const count = task.specialTags.count;
+			if (count) {
+				setCountCurrentValue(wEdit, document.uri, count, '0');
+			}
+		}
+	}
+	applyEdit(wEdit, document);
 }
 
 export function getActiveDocument() {

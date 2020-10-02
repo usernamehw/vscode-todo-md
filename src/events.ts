@@ -1,8 +1,7 @@
 import dayjs from 'dayjs';
-import { resetAllRecurringTasks } from 'src/commands';
 import { updateCompletions } from 'src/completionProviders';
 import { updateEditorDecorations } from 'src/decorations';
-import { getDocumentForDefaultFile } from 'src/documentActions';
+import { getDocumentForDefaultFile, resetAllRecurringTasks } from 'src/documentActions';
 import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from 'src/extension';
 import { updateAllTreeViews } from 'src/treeViewProviders/treeViews';
 import { VscodeContext } from 'src/types';
@@ -76,7 +75,7 @@ export function activateExtensionFeatures(editor: vscode.TextEditor) {
 	setContext(VscodeContext.isActive, true);
 
 	if (state.newDayArrived && !state.fileWasReset) { // TODO: this should be in some other place
-		resetAllRecurringTasks(editor);
+		resetAllRecurringTasks();
 		state.fileWasReset = true;
 	}
 }

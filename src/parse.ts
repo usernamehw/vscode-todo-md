@@ -90,6 +90,9 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 						due = new DueDate(value);
 						dueRange = range;
 					}
+				} else if (specialTag === 'overdue') {
+					specialTags.overdue = value;
+					specialTagRanges.push(range);
 				} else if (specialTag === 'cr') {
 					specialTagRanges.push(range);
 				} else if (specialTag === 'cm') {
