@@ -6,6 +6,7 @@
 - ✨ Add Webview View with tasks from the default file
 - ✨ Hide the Task from context menu in the Tree View
 - ✨ Delete the Task from context menu in the Tree View
+- ✨ Invalid due date highlighted with background instead of foreground
 
 ## 0.0.19 `17 Aug 2020`
 

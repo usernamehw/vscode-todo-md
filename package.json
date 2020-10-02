@@ -1025,9 +1025,18 @@
 			{
 				"id": "todomd.invalidDueDateForeground",
 				"defaults": {
-					"light": "#f7a103",
-					"dark": "#f7a103",
-					"highContrast": "#f7a103"
+					"light": "#ffffff",
+					"dark": "#ffffff",
+					"highContrast": "#ffffff"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.invalidDueDateBackground",
+				"defaults": {
+					"light": "#f75454",
+					"dark": "#f75454",
+					"highContrast": "#f75454"
 				},
 				"description": "Not empty"
 			}

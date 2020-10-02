@@ -145,6 +145,8 @@ Can be configured in `settings.json` (**`workbench.colorCustomizations`** sectio
 - `todomd.tagForeground`
 - `todomd.contextForeground`
 - `todomd.projectForeground`
+- `todomd.invalidDueDateForeground`
+- `todomd.invalidDueDateBackground`
 - `todomd.notDueForeground`
 - `todomd.dueForeground`
 - `todomd.overdueForeground`

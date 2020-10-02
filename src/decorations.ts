@@ -61,6 +61,7 @@ export function updateDecorationStyle(): void {
 	});
 	Global.invalidDueDateDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.invalidDueDateForeground'),
+		backgroundColor: new vscode.ThemeColor('todomd.invalidDueDateBackground'),
 	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
