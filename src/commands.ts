@@ -377,14 +377,6 @@ export function registerAllCommands() {
 	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
 		openSettingGuiAt('todomd.webview');
 	});
-	commands.registerCommand('todomd.openDefaultFile', async (treeItem: TaskTreeItem) => {
-		// TODO: should open active file and only if none opened - then open the default
-		const isDefaultFileSpecified = await checkDefaultFileAndNotify();
-		if (!isDefaultFileSpecified) {
-			return;
-		}
-		openFileInEditor(extensionConfig.defaultFile);
-	});
 }
 
 function noArchiveFileMessage() {

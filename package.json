@@ -756,12 +756,6 @@
 				"icon": "$(settings-gear)"
 			},
 			{
-				"command": "todomd.openDefaultFile",
-				"title": "Open default file",
-				"category": "Todo MD",
-				"icon": "$(go-to-file)"
-			},
-			{
 				"command": "todomd.toggleDone",
 				"title": "Toggle completion",
 				"category": "Todo MD",
@@ -1071,11 +1065,6 @@
 					"command": "todomd.addTask",
 					"when": "view == todomd.tasks",
 					"group": "navigation"
-				},
-				{
-					"command": "todomd.openDefaultFile",
-					"when": "view == todomd.webviewTasks",
-					"group": "navigation@1"
 				},
 				{
 					"command": "todomd.showWebviewSettings",
