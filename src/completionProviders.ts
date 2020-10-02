@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import { extensionConfig, Global, state } from 'src/extension';
-import { getDateInISOFormat } from 'src/timeUtils';
 import vscode from 'vscode';
+import { extensionConfig, Global, state } from './extension';
+import { getDateInISOFormat } from './timeUtils';
 
 export function updateCompletions(): void {
 	if (Global.tagAutocompleteDisposable) {

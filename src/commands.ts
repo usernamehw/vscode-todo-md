@@ -1,18 +1,18 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
-import { archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, resetAllRecurringTasks, toggleDone, toggleTaskCompletionAtLine } from 'src/documentActions';
-import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from 'src/extension';
-import { parseDocument } from 'src/parse';
-import { defaultSortTasks, SortProperty, sortTasks } from 'src/sort';
-import { Count, TheTask } from 'src/TheTask';
-import { DATE_FORMAT, getDateInISOFormat } from 'src/timeUtils';
-import { TaskTreeItem } from 'src/treeViewProviders/taskProvider';
-import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from 'src/treeViewProviders/treeViews';
-import { VscodeContext } from 'src/types';
-import { appendTaskToFile, fancyNumber, getRandomInt } from 'src/utils';
-import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from 'src/vscodeUtils';
-import { updateWebviewView } from 'src/webview/webviewView';
 import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, resetAllRecurringTasks, toggleDone, toggleTaskCompletionAtLine } from './documentActions';
+import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
+import { parseDocument } from './parse';
+import { defaultSortTasks, SortProperty, sortTasks } from './sort';
+import { Count, TheTask } from './TheTask';
+import { DATE_FORMAT, getDateInISOFormat } from './timeUtils';
+import { TaskTreeItem } from './treeViewProviders/taskProvider';
+import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
+import { VscodeContext } from './types';
+import { appendTaskToFile, fancyNumber, getRandomInt } from './utils';
+import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
+import { updateWebviewView } from './webview/webviewView';
 
 class QuickPickItem implements vscode.QuickPickItem {
 	label: string;

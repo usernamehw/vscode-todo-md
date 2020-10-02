@@ -1,5 +1,5 @@
-import { VscodeContext } from 'src/types';
 import vscode, { Uri } from 'vscode';
+import { VscodeContext } from './types';
 
 /**
  * Create new untitled file with provided content and language;

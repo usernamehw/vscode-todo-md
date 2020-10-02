@@ -1,7 +1,7 @@
-import { DueDate } from 'src/dueDate';
-import { extensionConfig } from 'src/extension';
-import { OptionalExceptFor } from 'src/types';
 import { Range } from 'vscode';
+import { DueDate } from './dueDate';
+import { extensionConfig } from './extension';
+import { OptionalExceptFor } from './types';
 
 export type Priority = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z';
 export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags'>;

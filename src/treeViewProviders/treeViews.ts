@@ -1,12 +1,12 @@
-import { extensionConfig, EXTENSION_NAME, state } from 'src/extension';
-import { filterItems } from 'src/filter';
-import { ContextProvider } from 'src/treeViewProviders/contextProvider';
-import { ProjectProvider } from 'src/treeViewProviders/projectProvider';
-import { TagProvider } from 'src/treeViewProviders/tagProvider';
-import { TaskProvider } from 'src/treeViewProviders/taskProvider';
-import { VscodeContext } from 'src/types';
-import { setContext } from 'src/vscodeUtils';
 import vscode, { TreeView } from 'vscode';
+import { extensionConfig, EXTENSION_NAME, state } from '../extension';
+import { filterItems } from '../filter';
+import { ContextProvider } from '../treeViewProviders/contextProvider';
+import { ProjectProvider } from '../treeViewProviders/projectProvider';
+import { TagProvider } from '../treeViewProviders/tagProvider';
+import { TaskProvider } from '../treeViewProviders/taskProvider';
+import { VscodeContext } from '../types';
+import { setContext } from '../vscodeUtils';
 
 export const tagProvider = new TagProvider([]);
 export const projectProvider = new ProjectProvider([]);

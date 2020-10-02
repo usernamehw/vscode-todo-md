@@ -1,5 +1,5 @@
-import { Priority, TheTask } from 'src/TheTask';
 import vscode, { DecorationRenderOptions } from 'vscode';
+import { Priority, TheTask } from './TheTask';
 
 export interface ItemForProvider {
 	title: string;

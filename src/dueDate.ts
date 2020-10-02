@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { DueState } from 'src/types';
+import { DueState } from './types';
 
 export class DueDate {
 	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(e\d+d))?$/;

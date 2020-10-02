@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { filterItems } from 'src/filter';
-import { TaskInit } from 'src/TheTask';
-import { DueState } from 'src/types';
+import { filterItems } from '../../filter';
+import { TaskInit, TheTask } from '../../TheTask';
+import { DueState } from '../../types';
 
 type Init = Partial<TaskInit>;
 function newTask(task: Init) {

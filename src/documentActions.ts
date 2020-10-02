@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
-// TODO: maybe this file should be a class?
-import { applyEdit, getTaskAtLine, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from 'src/commands';
-import { DueDate } from 'src/dueDate';
-import { extensionConfig, LAST_VISIT_STORAGE_KEY, state } from 'src/extension';
-import { TheTask } from 'src/TheTask';
-import { DATE_FORMAT } from 'src/timeUtils';
-import { DueState } from 'src/types';
-import { appendTaskToFile } from 'src/utils';
 import vscode, { TextDocument, WorkspaceEdit } from 'vscode';
+// TODO: maybe this file should be a class?
+import { applyEdit, getTaskAtLine, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from './commands';
+import { DueDate } from './dueDate';
+import { extensionConfig, LAST_VISIT_STORAGE_KEY, state } from './extension';
+import { TheTask } from './TheTask';
+import { DATE_FORMAT } from './timeUtils';
+import { DueState } from './types';
+import { appendTaskToFile } from './utils';
 
 export function hideTask(document: vscode.TextDocument, lineNumber: number) {
 	const wEdit = new WorkspaceEdit();

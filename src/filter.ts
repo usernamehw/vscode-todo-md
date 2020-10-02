@@ -1,5 +1,5 @@
-import { TheTask } from 'src/TheTask';
-import { DueState } from 'src/types';
+import { TheTask } from './TheTask';
+import { DueState } from './types';
 
 const enum FilterType {
 	titleEqual,

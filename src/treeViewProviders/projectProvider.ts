@@ -1,6 +1,6 @@
-import { EXTENSION_NAME } from 'src/extension';
-import { ItemForProvider } from 'src/types';
 import vscode from 'vscode';
+import { EXTENSION_NAME } from '../extension';
+import { ItemForProvider } from '../types';
 
 export class ProjectTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;

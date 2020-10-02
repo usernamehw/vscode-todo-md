@@ -1,10 +1,10 @@
-import { getTaskAtLine } from 'src/commands';
-import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleTaskCompletionAtLine } from 'src/documentActions';
-import { extensionConfig, Global, state, updateState } from 'src/extension';
-import { TheTask } from 'src/TheTask';
-import { IExtensionConfig, WebviewMessage } from 'src/types';
-import { getNonce } from 'src/webview/utils';
 import vscode, { window } from 'vscode';
+import { getTaskAtLine } from '../commands';
+import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleTaskCompletionAtLine } from '../documentActions';
+import { extensionConfig, Global, state, updateState } from '../extension';
+import { TheTask } from '../TheTask';
+import { IExtensionConfig, WebviewMessage } from '../types';
+import { getNonce } from '../webview/utils';
 
 export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'todomd.webviewTasks';
