@@ -134,6 +134,7 @@ describe('Special tags {}', () => {
 		const task = getLineAt(12)!;
 		expect(task.specialTags.isHidden === true).to.be.ok;
 	});
+	// TODO: {overdue} test
 	// TODO: parse links should be testing parseDocument function
 	// it('13 Link', () => { // TODO: test for multiple links in one line
 	// 	const task = getLineAt(13)!;
