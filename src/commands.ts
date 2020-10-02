@@ -367,7 +367,7 @@ export function registerAllCommands() {
 			followLink(link);
 		}
 	});
-	commands.registerCommand('todomd.setLastVisit', async () => { // TODO: prefix DEV
+	commands.registerCommand('todomd.setLastVisit', async () => {
 		const numberOfDays = Number(await vscode.window.showInputBox());
 		if (!numberOfDays) {
 			return;
