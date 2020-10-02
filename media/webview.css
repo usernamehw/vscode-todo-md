@@ -119,6 +119,10 @@ button {
 	box-shadow: inset 3px 0 0 0 #00cfad;
 }
 
+.checkbox {
+	float: left;
+}
+
 .tag {
 	background-color: rgba(0, 132, 255, 0.151);
 	margin-left: 2px;
