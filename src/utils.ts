@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 
 export async function appendTaskToFile(text: string, filePath: string) {
-	await fs.appendFile(filePath, `${text}\n`);// TODO: check if file ends with \n before writing
+	return await fs.appendFile(filePath, `${text}\n`);
 }
 
 export function getRandomInt(min: number, max: number): number {
