@@ -1205,7 +1205,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run scss & npm run webview & webpack --mode production --colors",
-		"watch": "concurrently \"npm run watchExtension\" \"npm run webviewWatch\" \"npm run scssWatch\"",
+		"watch": "concurrently \"npm run watchExtension\" \"npm run watchWebview\" \"npm run watchScss\"",
 		"watchExtension": "webpack --mode development --watch --display=minimal",
 		"scss": "node-sass media -o media",
 		"watchScss": "node-sass --watch media -o media",
