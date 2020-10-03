@@ -9,4 +9,5 @@ node_modules
 media/main.js
 media/webview.js
 media/webview.js.map
+media/webview.css
 src/**/*.js
