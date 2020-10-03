@@ -1206,7 +1206,7 @@
 	"scripts": {
 		"vscode:prepublish": "npm run webview & webpack --mode production --colors",
 		"watch": "webpack --mode development --watch --display=minimal",
-		"watchWebview": "webpack --watch --mode development --config media/webpack.config.js",
+		"watchWebview": "webpack --watch --display=minimal --mode development --config media/webpack.config.js",
 		"webview": "webpack --mode production --config media/webpack.config.js",
 		"watchTest": "tsc -watch -p ./",
 		"test": "node ./dist/test/runTest.js",
