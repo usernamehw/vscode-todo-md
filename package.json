@@ -1208,7 +1208,7 @@
 		"watch": "concurrently \"npm run watchExtension\" \"npm run watchWebview\" \"npm run watchScss\"",
 		"watchExtension": "webpack --mode development --watch --display=minimal",
 		"scss": "node-sass media -o media",
-		"watchScss": "node-sass --watch media -o media",
+		"watchScss": "npm run scss & node-sass --watch media -o media",
 		"webview": "webpack --mode production --config media/webpack.config.js",
 		"watchWebview": "webpack --watch --display=minimal --mode development --config media/webpack.config.js",
 		"watchTest": "tsc -watch -p ./",
