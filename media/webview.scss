@@ -1,8 +1,8 @@
+/* TODO: polish for dark theme */
+/* TODO: colors should not be constant */
 * {
 	box-sizing: border-box;
 }
-
-/* TODO: polish for dark theme */
 
 html {
 	overflow-y: hidden;
@@ -63,12 +63,13 @@ button {
 	margin-right: 12px;
 	display: block;
 	width: calc(100% - 24px);
+
+	&:focus {
+		outline: none !important;
+		border: 1px solid var(--vscode-focusBorder) !important;
+	}
 }
 
-.filter-input:focus {
-	outline: none !important;
-	border: 1px solid var(--vscode-focusBorder) !important;
-}
 
 .list {
 	padding-top: calc(6px + 6px + 24px);
@@ -87,44 +88,34 @@ button {
 	padding-left: 6px;
 	padding-right: 6px;
 	word-wrap: break-word;
-}
 
-.list-item:hover {
-	background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* TODO: colors should not be constant */
-
-.list-item.pri1 {
-	box-shadow: inset 3px 0 0 0 #ec4f47;
-}
-
-.list-item.pri2 {
-	box-shadow: inset 3px 0 0 0 #fd9f9a;
-}
-
-.list-item.pri3 {
-	box-shadow: inset 3px 0 0 0 #ffb648;
-}
-
-.list-item.pri4 {
-	box-shadow: inset 3px 0 0 0 #f1d900;
-}
-
-.list-item.pri5 {
-	box-shadow: inset 3px 0 0 0 #ace000;
-}
-
-.list-item.pri6 {
-	box-shadow: inset 3px 0 0 0 #00cfad;
-}
-
-.list-item.due {
-	border-right: 3px solid #82d30099;
-}
-
-.list-item.overdue {
-	border-right: 3px solid #d3000099;
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.05);
+	}
+	&.pri1 {
+		box-shadow: inset 3px 0 0 0 #ec4f47;
+	}
+	&.pri2 {
+		box-shadow: inset 3px 0 0 0 #fd9f9a;
+	}
+	&.pri3 {
+		box-shadow: inset 3px 0 0 0 #ffb648;
+	}
+	&.pri4 {
+		box-shadow: inset 3px 0 0 0 #f1d900;
+	}
+	&.pri5 {
+		box-shadow: inset 3px 0 0 0 #ace000;
+	}
+	&.pri6 {
+		box-shadow: inset 3px 0 0 0 #00cfad;
+	}
+	&.due {
+		border-right: 3px solid #82d30099;
+	}
+	&.overdue {
+		border-right: 3px solid #d3000099;
+	}
 }
 
 .checkbox {
@@ -152,10 +143,10 @@ button {
 	padding-right: 4px;
 	border-radius: 3px;
 	cursor: pointer;
-}
 
-.project:hover {
-	background-color: #36cc9a66;
+	&:hover {
+		background-color: #36cc9a66;
+	}
 }
 
 .context {
@@ -164,10 +155,10 @@ button {
 	padding-right: 4px;
 	background-color: #c972eb55;
 	cursor: pointer;
-}
 
-.context:hover {
-	background-color: #c972eb77;
+	&:hover {
+		background-color: #c972eb77;
+	}
 }
 
 .count-container {
