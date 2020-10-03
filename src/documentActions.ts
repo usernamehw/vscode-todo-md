@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import vscode, { TextDocument, WorkspaceEdit } from 'vscode';
-// TODO: maybe this file should be a class?
 import { applyEdit, getTaskAtLine, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from './commands';
 import { DueDate } from './dueDate';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state } from './extension';
