@@ -119,6 +119,14 @@ button {
 	box-shadow: inset 3px 0 0 0 #00cfad;
 }
 
+.list-item.due {
+	border-right: 3px solid #82d30099;
+}
+
+.list-item.overdue {
+	border-right: 3px solid #d3000099;
+}
+
 .checkbox {
 	float: left;
 }

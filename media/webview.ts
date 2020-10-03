@@ -3,7 +3,7 @@
 
 import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';
-import type { IExtensionConfig, WebviewMessage } from '../src/types';
+import { DueState, IExtensionConfig, WebviewMessage } from '../src/types';
 
 interface VscodeWebviewApi {
 	getState(): any;
@@ -126,6 +126,7 @@ function renderTask(task: TheTask): HTMLElement {
 			case 'F': taskListItem.classList.add('pri6'); break;
 		}
 	}
+
 	const checkbox = document.createElement('input');
 	checkbox.classList.add('checkbox');
 	checkbox.type = 'checkbox';
@@ -133,6 +134,19 @@ function renderTask(task: TheTask): HTMLElement {
 		checkbox.checked = true;
 	}
 	taskListItem.appendChild(checkbox);
+
+	if (task.due) {
+		if (task.due.isDue === DueState.overdue) {
+			taskListItem.classList.add('overdue');
+		} else if (task.due.isDue === DueState.due) {
+			taskListItem.classList.add('due');
+		} else if (task.due.isDue === DueState.notDue) {
+			taskListItem.classList.add('not-due');
+		} else if (task.due.isDue === DueState.invalid) {
+			taskListItem.classList.add('invalid');
+		}
+	}
+
 	const title = document.createElement('span');
 	let titleText = task.title;
 	const linkElements = [];
