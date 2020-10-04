@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 // TODO: enable typescipt-eslint for this file
-
+import { filterItems } from '../src/filter';
 import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';
 import { DueState, IExtensionConfig, WebviewMessage } from '../src/types';
@@ -107,8 +107,7 @@ function updateTasks() {
 
 	let filteredTasks = state.tasks;
 	if (filterInputEl.value !== '') {
-		const filterValueLowercase = filterInputEl.value.toLowerCase();
-		filteredTasks = filteredTasks.filter(task => task.rawText.toLowerCase().includes(filterValueLowercase));
+		filteredTasks = filterItems(filteredTasks, filterInputEl.value);
 	}
 	if (!state.config.showCompleted) {
 		filteredTasks = filteredTasks.filter(task => !task.done);
