@@ -62,11 +62,9 @@
 					"default": true
 				},
 				"todomd.webview.fontSize": {
-					"type": "number",
-					"markdownDescription": "Controls font size in the webview. (px)",
-					"default": 13,
-					"minimum": 10,
-					"maximum": 26
+					"type": "string",
+					"markdownDescription": "Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)",
+					"default": "13px"
 				},
 				"todomd.defaultFile": {
 					"type": "string",

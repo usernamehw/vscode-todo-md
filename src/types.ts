@@ -82,7 +82,7 @@ export interface IExtensionConfig {
 	webview: {
 		showCompleted: boolean;
 		showPriority: boolean;
-		fontSize: number;
+		fontSize: string;
 	};
 }
 
