@@ -1,6 +1,6 @@
 {
 	"name": "todo-md",
-	"displayName": "Todo Markdown",
+	"displayName": "Todo MD",
 	"description": "Todo tracking based on `todo.txt` format.",
 	"version": "1.0.0",
 	"publisher": "usernamehw",
