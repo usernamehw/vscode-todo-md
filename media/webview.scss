@@ -30,6 +30,8 @@ body {
 	--tag-hover-background: #0084ff4f;
 	--project-background: #36cc9a44;
 	--project-hover-background: #36cc9a66;
+	--count-background: #0000001a;
+	--count-button-background:  #0000001a;
 }
 
 body.vscode-dark {
@@ -40,6 +42,8 @@ body.vscode-dark {
 	--project-background: #29a078;
 	--project-hover-background: #21795b;
 	--project-foreground: #eee;
+	--count-background: #ffffff1a;
+	--count-button-background: #ffffff1a;
 }
 
 a {
@@ -182,7 +186,7 @@ button {
 
 .count-container {
 	margin-left: 1ch;
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: var(--count-background);
 	border-radius: 3px;
 	white-space: pre;
 }
@@ -196,7 +200,7 @@ button {
 .decrement-count, .increment-count {
 	padding-left: 0.3rem;
 	padding-right: 0.3rem;
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: var(--count-button-background);
 	cursor: pointer;
 	-webkit-user-select: none;
 }
