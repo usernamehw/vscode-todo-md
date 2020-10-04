@@ -88,6 +88,12 @@ window.addEventListener('click', event => {
 	}
 });
 
+window.addEventListener('focus', () => {
+	setTimeout(() => {
+		filterInputEl.focus();
+	}, 100);
+})
+
 function showNotification(text: string) {
 	vscode.postMessage({
 		type: 'showNotification',
