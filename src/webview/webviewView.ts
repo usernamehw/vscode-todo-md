@@ -96,10 +96,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.js'));
-		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.css'));
-		const codiconsUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.css'));
-		const codiconsFontUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.ttf'));
+		const JSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.js'));
+		const CSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.css'));
+		const codiconCSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'codicon.css'));
+		const codiconFontUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'codicon.ttf'));
 		const nonce = getNonce();// Use a nonce to only allow a specific script to be run.
 
 		return `<!DOCTYPE html>
@@ -107,9 +107,9 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconsFontUri}; style-src ${webview.cspSource} ${codiconsUri}; script-src 'nonce-${nonce}';">
-				<link href="${styleUri}" rel="stylesheet">
-				<link href="${codiconsUri}" rel="stylesheet" />
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconFontUri}; style-src ${webview.cspSource} ${codiconCSSUri}; script-src 'nonce-${nonce}';">
+				<link href="${CSSUri}" rel="stylesheet">
+				<link href="${codiconCSSUri}" rel="stylesheet" />
 				<title>Tasks</title>
 			</head>
 			<body>
@@ -117,7 +117,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					<input type="text" class="filter-input" id="filterInput">
 				</div>
 				<div class="list"></div>
-				<script defer nonce="${nonce}" src="${scriptUri}"></script>
+				<script defer nonce="${nonce}" src="${JSUri}"></script>
 			</body>
 			</html>`;
 	}

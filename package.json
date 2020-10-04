@@ -1215,6 +1215,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run scss & npm run webview & webpack --mode production --colors",
+		"postinstall": "node scripts/copyWebviewResourcesFromNodeModules.js",
 		"watch": "concurrently \"npm run watchExtension\" \"npm run watchWebview\" \"npm run watchScss\"",
 		"watchExtension": "webpack --mode development --watch --display=minimal",
 		"scss": "node-sass media -o media",
