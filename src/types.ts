@@ -83,6 +83,7 @@ export interface IExtensionConfig {
 		showCompleted: boolean;
 		showPriority: boolean;
 		fontSize: string;
+		padding: string;
 	};
 }
 

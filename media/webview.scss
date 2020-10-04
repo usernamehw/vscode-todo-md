@@ -105,6 +105,8 @@ button {
 	padding-left: 3px;
 	padding-right: 3px;
 	word-wrap: break-word;
+	padding-top: var(--padding);
+	padding-bottom: var(--padding);
 
 	&:hover {
 		background-color: rgba(0, 0, 0, 0.05);
