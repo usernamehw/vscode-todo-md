@@ -224,7 +224,7 @@ window.addEventListener('message', event => {
 		}
 		case 'updateConfig': {
 			state.config = message.value;
-			document.body.style.setProperty('--font-size', state.config.fontSize + 'px')
+			document.body.style.setProperty('--font-size', `${state.config.fontSize}px`);
 			updateTasks();
 			break;
 		}
