@@ -1248,6 +1248,7 @@
 		"ts-loader": "^8.0.4",
 		"typescript": "^4.0.3",
 		"typescript-json-schema": "^0.43.0",
+		"vscode-codicons": "0.0.12",
 		"vscode-test": "^1.4.0",
 		"webpack": "^4.44.2",
 		"webpack-cli": "^3.3.12"

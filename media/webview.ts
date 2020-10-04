@@ -135,6 +135,9 @@ function renderTask(task: TheTask): HTMLElement {
 		}
 	}
 
+	// const checkbox2 = document.createElement('span');
+	// checkbox2.classList.add('checkbox', 'codicon', 'codicon-check');
+	// taskListItem.appendChild(checkbox2);
 	const checkbox = document.createElement('input');
 	checkbox.classList.add('checkbox');
 	checkbox.type = 'checkbox';
