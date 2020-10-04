@@ -61,6 +61,13 @@
 					"markdownDescription": "Controls whether priority is shown in the webview.",
 					"default": true
 				},
+				"todomd.webview.fontSize": {
+					"type": "number",
+					"markdownDescription": "Controls font size in the webview. (px)",
+					"default": 13,
+					"minimum": 10,
+					"maximum": 26
+				},
 				"todomd.defaultFile": {
 					"type": "string",
 					"markdownDescription": "Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`",

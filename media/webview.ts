@@ -18,6 +18,7 @@ const state: { tasks: TheTask[]; config: IExtensionConfig['webview'] } = {
 	config: {
 		showCompleted: true,
 		showPriority: true,
+		fontSize: 13,
 	},
 };
 let filteredTasksGlobal: TheTask[] = [];
@@ -223,6 +224,7 @@ window.addEventListener('message', event => {
 		}
 		case 'updateConfig': {
 			state.config = message.value;
+			document.body.style.setProperty('--font-size', state.config.fontSize + 'px')
 			updateTasks();
 			break;
 		}
