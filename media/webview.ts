@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 // TODO: enable typescipt-eslint for this file
 
+import fuzzysearch from 'fuzzysearch';
 import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';
 import { DueState, IExtensionConfig, WebviewMessage } from '../src/types';
@@ -51,6 +52,9 @@ const awesomplete = new Awesomplete(filterInputEl, {
 	maxItems: 5,
 	// @ts-ignore
 	tabSelect: true,
+	filter: function (text, input) {
+		return fuzzysearch(input, text);
+	}
 });
 
 filterInputEl.addEventListener('keydown', e => {
