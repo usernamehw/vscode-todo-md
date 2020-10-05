@@ -47,7 +47,7 @@ filterInputEl.addEventListener('change', e => {
 const awesomplete = new Awesomplete(filterInputEl, {
 	list: [],
 	autoFirst: true,
-	minChars: 0,
+	minChars: 1,
 	maxItems: 5,
 	// @ts-ignore
 	tabSelect: true,
