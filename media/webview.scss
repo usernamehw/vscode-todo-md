@@ -30,6 +30,8 @@ body {
 	--tag-hover-background: #0084ff4f;
 	--project-background: #36cc9a44;
 	--project-hover-background: #36cc9a66;
+	--context-background: #c972eb55;
+	--context-hover-background: #c972eb77;
 	--count-background: #0000001a;
 	--count-button-background:  #0000001a;
 }
@@ -41,6 +43,8 @@ body.vscode-dark {
 	--tag-foreground: #eee;
 	--project-background: #29a078;
 	--project-hover-background: #21795b;
+	--context-background: #9347b1;
+	--context-hover-background: #733d8a;
 	--project-foreground: #eee;
 	--count-background: #ffffff1a;
 	--count-button-background: #ffffff1a;
@@ -194,10 +198,10 @@ button {
 }
 
 .context {
-	background-color: #c972eb55;
+	background-color: var(--context-background);
 
 	&:hover {
-		background-color: #c972eb77;
+		background-color: var(--context-hover-background);
 	}
 }
 
