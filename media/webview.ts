@@ -6,13 +6,17 @@ import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';
 import { DueState, IExtensionConfig, WebviewMessage } from '../src/types';
 
+interface SavedState {
+	filterInputValue: string;
+}
 interface VscodeWebviewApi {
-	getState(): any;
-	setState(state: any): void;
+	getState(): SavedState;
+	setState(state: SavedState): void;
 	postMessage(message: WebviewMessage): void;
 }
 /** @ts-ignore */
 const vscode: VscodeWebviewApi = acquireVsCodeApi();
+const savedState = getState();
 
 const state: {
 	tasks: TheTask[];
@@ -35,12 +39,13 @@ const state: {
 let filteredTasksGlobal: TheTask[] = [];
 
 const filterInputEl = document.getElementById('filterInput') as HTMLInputElement;// TODO: use $ for elements?
+filterInputEl.value = savedState.filterInputValue;
 
 filterInputEl.addEventListener('input', e => {
 	updateTasks();// TODO: update webview counter
-});
-filterInputEl.addEventListener('change', e => {
-	updateTasks();// TODO: update webview counter
+	vscode.setState({
+		filterInputValue: filterInputEl.value
+	});
 });
 
 // @ts-expect-error
@@ -68,7 +73,7 @@ filterInputEl.addEventListener('keydown', e => {
 			value: firstMatch.lineNumber
 		});
 	} else if (e.key === 'Tab' || e.key === 'Enter') {
-		var event = new Event('change');
+		var event = new Event('input');
 		filterInputEl.dispatchEvent(event);
 		// 🐛 Tab in Awesomplete moves focus away from input
 		setTimeout(() => {
@@ -289,5 +294,12 @@ window.addEventListener('message', event => {
 		}
 	}
 });
+
+function getState(): SavedState {
+	const saveStateDefaults: SavedState = {
+	filterInputValue: '',
+}
+	return vscode.getState() ?? saveStateDefaults;
+}
 
 filterInputEl.focus();
