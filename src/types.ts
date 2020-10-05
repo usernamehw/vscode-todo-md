@@ -14,6 +14,9 @@ export interface Items {// TODO: rename
 export interface State {
 	tasks: TheTask[];
 	archivedTasks: TheTask[];
+	tags: string[];
+	projects: string[];
+	contexts: string[];
 	tagsForTreeView: ItemForProvider[];
 	projectsForTreeView: ItemForProvider[];
 	contextsForTreeView: ItemForProvider[];
@@ -103,7 +106,16 @@ interface WebviewMessageBase {
 	value: unknown;
 }
 // From extension to webview
-interface WebviewMessageUpdateTasks extends WebviewMessageBase {
+interface WebviewMessageUpdateEverything extends WebviewMessageBase {
+	type: 'updateEverything';
+	value: {
+		tasks: TheTask[];
+		tags: string[];
+		projects: string[];
+		contexts: string[];
+	};
+}
+interface WebviewMessageUpdateTasks extends WebviewMessageBase {// TODO: remove?
 	type: 'updateTasks';
 	value: TheTask[];
 }
@@ -132,4 +144,4 @@ interface WebviewMessageDecrementCount extends WebviewMessageBase {
 	type: 'decrementCount';
 	value: number;
 }
-export type WebviewMessage = WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount;
+export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount;

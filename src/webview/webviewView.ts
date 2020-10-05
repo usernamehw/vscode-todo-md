@@ -32,14 +32,14 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		};
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-		this.updateTasks(state.tasks);
+		this.updateEverything();
 
 		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
 			switch (message.type) {
 				case 'toggleDone': {
 					toggleTaskCompletionAtLine(message.value, getActiveDocument());
 					await updateState();
-					this.updateTasks(state.tasks);
+					this.updateEverything();
 					break;
 				}
 				case 'showNotification': {
@@ -53,33 +53,38 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				case 'incrementCount': {
 					await incrementCountForTask(getActiveDocument(), message.value, getTaskAtLine(message.value)!);
 					await updateState();
-					this.updateTasks(state.tasks);
+					this.updateEverything();
 					break;
 				}
 				case 'decrementCount': {
 					await decrementCountForTask(getActiveDocument(), message.value, getTaskAtLine(message.value)!);
 					await updateState();
-					this.updateTasks(state.tasks);
+					this.updateEverything();
 					break;
 				}
 			}
 		});
 		webviewView.onDidChangeVisibility(e => {
 			if (webviewView.visible === true) {
-				this.updateTasks(state.tasks);
+				this.updateEverything();
 			}
 		});
 	}
 
-	updateTasks(tasks: TheTask[]) {
+	updateEverything() {
 		if (this._view) {
 			this.updateWebviewConfig(extensionConfig.webview);
 			this._view.webview.postMessage({
-				type: 'updateTasks',
-				value: tasks,
+				type: 'updateEverything',
+				value: {
+					tasks: state.tasks,
+					tags: state.tags,
+					projects: state.projects,
+					contexts: state.contexts,
+				},
 			} as WebviewMessage);
 		}
-		this.updateTitle(`webview (${tasks.length})`);
+		this.updateTitle(`webview (${state.tasks.length})`);
 	}
 
 	updateWebviewConfig(config: IExtensionConfig['webview']) {
@@ -98,8 +103,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	private _getHtmlForWebview(webview: vscode.Webview) {
 		const JSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.js'));
 		const CSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.css'));
-		const codiconCSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'codicon.css'));
-		const codiconFontUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'codicon.ttf'));
+		const codiconCSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'codicon.css'));
+		const codiconFontUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'codicon.ttf'));
+		const awesomepleteCSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'awesomplete.css'));
+		const awesomepleteJSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'awesomplete.js'));
 		const nonce = getNonce();// Use a nonce to only allow a specific script to be run.
 
 		return `<!DOCTYPE html>
@@ -107,16 +114,19 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconFontUri}; style-src ${webview.cspSource} ${codiconCSSUri}; script-src 'nonce-${nonce}';">
-				<link href="${CSSUri}" rel="stylesheet">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconFontUri}; style-src ${webview.cspSource} ${codiconCSSUri} ${awesomepleteCSSUri}; script-src 'nonce-${nonce}';">
 				<link href="${codiconCSSUri}" rel="stylesheet" />
+				<link href="${awesomepleteCSSUri}" rel="stylesheet" />
+				<link href="${CSSUri}" rel="stylesheet">
 				<title>Tasks</title>
 			</head>
 			<body>
 				<div class="filter-input-container">
 					<input type="text" class="filter-input" id="filterInput">
 				</div>
+				<input class="awesomplete" data-list="Ada, Java, JavaScript, Brainfuck, LOLCODE, Node.js, Ruby on Rails" />
 				<div class="list"></div>
+				<script defer nonce="${nonce}" src="${awesomepleteJSUri}"></script>
 				<script defer nonce="${nonce}" src="${JSUri}"></script>
 			</body>
 			</html>`;
@@ -125,6 +135,6 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 
 export function updateWebviewView(tasks: TheTask[]) {
 	if (Global.webviewProvider) {
-		Global.webviewProvider.updateTasks(tasks);
+		Global.webviewProvider.updateEverything();
 	}
 }

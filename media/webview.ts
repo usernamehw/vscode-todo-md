@@ -13,8 +13,17 @@ interface VscodeWebviewApi {
 /** @ts-ignore */
 const vscode: VscodeWebviewApi = acquireVsCodeApi();
 
-const state: { tasks: TheTask[]; config: IExtensionConfig['webview'] } = {
+const state: {
+	tasks: TheTask[];
+	config: IExtensionConfig['webview'];
+	tags: string[];
+	projects: string[];
+	contexts: string[];
+} = {
 	tasks: [],
+	tags: [],
+	projects: [],
+	contexts: [],
 	config: {
 		showCompleted: true,
 		showPriority: true,
@@ -30,6 +39,20 @@ filterInputEl.focus();
 filterInputEl.addEventListener('input', e => {
 	updateTasks();// TODO: update webview counter
 });
+filterInputEl.addEventListener('change', e => {
+	updateTasks();// TODO: update webview counter
+});
+
+// @ts-expect-error
+const awesomplete = new Awesomplete(filterInputEl, {
+	list: [],
+	autoFirst: true,
+	minChars: 0,
+	maxItems: 5,
+	// @ts-ignore
+	tabSelect: true,
+});
+
 filterInputEl.addEventListener('keydown', e => {
 	if (e.altKey && e.key === 'd') {
 		const firstMatch = filteredTasksGlobal[0];
@@ -41,6 +64,13 @@ filterInputEl.addEventListener('keydown', e => {
 			type: 'toggleDone',
 			value: firstMatch.lineNumber
 		});
+	} else if (e.key === 'Tab' || e.key === 'Enter') {
+		var event = new Event('change');
+		filterInputEl.dispatchEvent(event);
+		// 🐛 Tab in Awesomplete moves focus away from input
+		setTimeout(() => {
+			filterInputEl.focus();
+		}, 0);// TODO: move this to select event
 	}
 })
 
@@ -223,12 +253,27 @@ function renderTask(task: TheTask): HTMLElement {
 	}
 	return taskListItem;
 }
+function updateFilterInputAutocomplete(tags: string[], projects: string[], contexts: string[]) {
+	const autocompleteTags = tags.map(tag => `#${tag}`);
+	const autocompleteProjects = projects.map(project => `+${project}`);
+	const autocompleteContexts = contexts.map(context => `@${context}`);
+	awesomplete.list = autocompleteTags.concat(autocompleteProjects, autocompleteContexts);
+}
 // Handle messages sent from the extension to the webview
 window.addEventListener('message', event => {
 	const message: WebviewMessage = event.data; // The json data that the extension sent
 	switch (message.type) {
 		case 'updateTasks': {
 			state.tasks = message.value;
+			updateTasks();
+			break;
+		}
+		case 'updateEverything': {
+			state.tasks = message.value.tasks;
+			state.tags = message.value.tags;
+			state.projects = message.value.projects;
+			state.contexts = message.value.contexts;
+			updateFilterInputAutocomplete(state.tags, state.projects, state.contexts);
 			updateTasks();
 			break;
 		}

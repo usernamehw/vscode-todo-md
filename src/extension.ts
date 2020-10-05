@@ -22,6 +22,8 @@ dayjs.Ls.en.weekStart = 1;
 
 export const state: State = {
 	tasks: [],
+	projects: [],
+	contexts: [],
 	tagsForTreeView: [],
 	projectsForTreeView: [],
 	contextsForTreeView: [],
@@ -128,9 +130,12 @@ export async function updateState(document?: vscode.TextDocument) {
 	state.commentLines = parsedDocument.commentLines;
 
 	const treeItems = groupAndSortTreeItems(state.tasks);
-	state.tagsForTreeView = treeItems.sortedTags;
-	state.projectsForTreeView = treeItems.projects;
-	state.contextsForTreeView = treeItems.contexts;
+	state.tagsForTreeView = treeItems.sortedTagsForProvider;
+	state.projectsForTreeView = treeItems.projectsForProvider;
+	state.contextsForTreeView = treeItems.contextsForProvider;
+	state.tags = treeItems.tags;
+	state.projects = treeItems.projects;
+	state.contexts = treeItems.contexts;
 
 	return document;
 }
@@ -161,15 +166,18 @@ function disposeEverything(): void {
 	}
 }
 
-interface TreeItems {
-	sortedTags: ItemForProvider[];
-	projects: ItemForProvider[];
-	contexts: ItemForProvider[];
+interface ParsedItems {
+	tags: string[];
+	contexts: string[];
+	projects: string[];
+	sortedTagsForProvider: ItemForProvider[];
+	projectsForProvider: ItemForProvider[];
+	contextsForProvider: ItemForProvider[];
 }
 interface TempItemsMap {
 	[title: string]: Items[];
 }
-export function groupAndSortTreeItems(tasks: TheTask[]): TreeItems {
+export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 	const tagMap: TempItemsMap = {};
 	const projectMap: TempItemsMap = {};
 	const contextMap: TempItemsMap = {};
@@ -209,38 +217,41 @@ export function groupAndSortTreeItems(tasks: TheTask[]): TreeItems {
 			}
 		}
 	}
-	const tags: ItemForProvider[] = [];
+	const tagsForProvider: ItemForProvider[] = [];
 	for (const key in tagMap) {
-		tags.push({
+		tagsForProvider.push({
 			title: key,
 			items: tagMap[key],
 		});
 	}
-	let sortedTags: ItemForProvider[];
+	let sortedTagsForProvider: ItemForProvider[];
 	if (extensionConfig.sortTagsView === SortTags.alphabetic) {
-		sortedTags = tags.sort((a, b) => a.title.localeCompare(b.title));
+		sortedTagsForProvider = tagsForProvider.sort((a, b) => a.title.localeCompare(b.title));
 	} else {
-		sortedTags = tags.sort((a, b) => b.items.length - a.items.length);
+		sortedTagsForProvider = tagsForProvider.sort((a, b) => b.items.length - a.items.length);
 	}
 
-	const projects: ItemForProvider[] = [];
+	const projectsForProvider: ItemForProvider[] = [];
 	for (const key in projectMap) {
-		projects.push({
+		projectsForProvider.push({
 			title: key,
 			items: projectMap[key],
 		});
 	}
-	const contexts: ItemForProvider[] = [];
+	const contextsForProvider: ItemForProvider[] = [];
 	for (const key in contextMap) {
-		contexts.push({
+		contextsForProvider.push({
 			title: key,
 			items: contextMap[key],
 		});
 	}
 	return {
-		contexts,
-		projects,
-		sortedTags,
+		contextsForProvider,
+		projectsForProvider,
+		sortedTagsForProvider,
+		tags: Object.keys(tagMap),
+		projects: Object.keys(projectMap),
+		contexts: Object.keys(contextMap),
 	};
 }
 

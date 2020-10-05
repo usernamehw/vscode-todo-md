@@ -5,6 +5,9 @@
 		"moduleResolution": "Node",
 		"skipLibCheck": true,
 		"esModuleInterop": true,
+		"types": [
+			"awesomplete",
+		],
 		"lib": [
 			"es2015",
 			"dom"

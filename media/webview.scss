@@ -77,20 +77,23 @@ button {
 	left: 0;
 	top: 0;
 	right: 0;
-}
 
-.filter-input {
-	margin-left: 12px;
-	margin-right: 12px;
-	display: block;
-	width: calc(100% - 24px);
+	.awesomplete {
+		display: block;
 
-	&:focus {
-		outline: none !important;
-		border: 1px solid var(--vscode-focusBorder) !important;
+		.filter-input {
+			margin-left: 12px;
+			margin-right: 12px;
+			display: block;
+			width: calc(100% - 24px);
+
+			&:focus {
+				outline: none !important;
+				border: 1px solid var(--vscode-focusBorder) !important;
+			}
+		}
 	}
 }
-
 
 .list {
 	padding-top: calc(6px + 6px + 24px);
