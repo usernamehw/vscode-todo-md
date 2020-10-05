@@ -35,7 +35,6 @@ const state: {
 let filteredTasksGlobal: TheTask[] = [];
 
 const filterInputEl = document.getElementById('filterInput') as HTMLInputElement;// TODO: use $ for elements?
-filterInputEl.focus();
 
 filterInputEl.addEventListener('input', e => {
 	updateTasks();// TODO: update webview counter
@@ -290,3 +289,5 @@ window.addEventListener('message', event => {
 		}
 	}
 });
+
+filterInputEl.focus();
