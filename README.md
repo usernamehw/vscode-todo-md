@@ -93,7 +93,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 # comment
 ```
 
-## Filter
+## Filter (In Tasks Tree View)
 
 - `#tag` - tag
 - `+project` - project
