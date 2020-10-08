@@ -32,6 +32,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		};
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+
+		if (!state.theRightFileOpened && !extensionConfig.defaultFile) {
+			return;
+		}
 		this.updateEverything();
 
 		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {

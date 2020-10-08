@@ -127,6 +127,9 @@ export async function updateState(document?: vscode.TextDocument) {
 	if (!document) {
 		document = await getDocumentForDefaultFile();
 	}
+	if (!document) {
+		return undefined;
+	}
 	const parsedDocument = await parseDocument(document);
 
 	state.tasks = parsedDocument.tasks;

@@ -383,7 +383,7 @@ function noArchiveFileMessage() {
 	vscode.window.showWarningMessage('No default archive file specified');
 }
 
-async function checkDefaultFileAndNotify(): Promise<boolean> {
+export async function checkDefaultFileAndNotify(): Promise<boolean> {
 	const specify = 'Specify';
 	if (!extensionConfig.defaultFile) {
 		const shouldSpecify = await window.showWarningMessage('Default file is not specified.', specify);
