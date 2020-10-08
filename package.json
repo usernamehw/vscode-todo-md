@@ -6,9 +6,8 @@
 	"publisher": "usernamehw",
 	"license": "MIT",
 	"icon": "img/icon.png",
-	"enableProposedApi": true,
 	"engines": {
-		"vscode": "^1.49.0"
+		"vscode": "^1.50.0"
 	},
 	"repository": {
 		"type": "git",
@@ -1234,7 +1233,7 @@
 		"@types/markdown-table": "^2.0.0",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^12.12.62",
-		"@types/vscode": "^1.49.0",
+		"@types/vscode": "^1.50.0",
 		"@typescript-eslint/eslint-plugin": "^4.3.0",
 		"@typescript-eslint/parser": "^4.3.0",
 		"awesomplete": "^1.1.5",
