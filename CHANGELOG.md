@@ -1,3 +1,7 @@
+## 2.0.1 `09 Oct 2020`
+
+- 🐛 Remove markdown hover form Tree View
+
 ## 2.0.0 `09 Oct 2020`
 
 - 💥 Version `2.0.0` does NOT mean that this extension is stable
