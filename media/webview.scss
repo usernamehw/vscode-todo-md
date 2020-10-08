@@ -225,3 +225,32 @@ button {
 	cursor: pointer;
 	-webkit-user-select: none;
 }
+// Awesomplete style override
+.awesomplete > ul {
+	font-family: var(--vscode-editor-font-family) !important;
+	font-weight: bold;
+	border-color: var(--vscode-editorSuggestWidget-border) !important;
+	background: var(--vscode-editorSuggestWidget-background) !important;
+	color: var(--vscode-editorSuggestWidget-foreground) !important;
+}
+.awesomplete > ul:before {// pointer
+	background: var(--vscode-editorSuggestWidget-background) !important;
+}
+.awesomplete > ul > li[aria-selected="true"] {
+	background: var(--vscode-editorSuggestWidget-selectedBackground) !important;
+	color: var(--vscode-editorSuggestWidget-foreground) !important;
+}
+.awesomplete mark {
+	background: inherit !important;
+	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
+}
+.awesomplete li:hover mark {
+	background: inherit !important;
+	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
+}
+
+.awesomplete li[aria-selected="true"] mark {
+	background: inherit !important;
+	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
+}
+// Awesomplete style override END
