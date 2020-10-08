@@ -1,6 +1,6 @@
-## 1.0.0 `09 Oct 2020`
+## 2.0.0 `09 Oct 2020`
 
-- 💥 Version `1.0.0` does NOT mean that this extension is stable
+- 💥 Version `2.0.0` does NOT mean that this extension is stable
 - 💥 `{link:}` special tag is deprecated. Links should be now automatically parsed from the document
 - ✨ Add Webview View with tasks from the default file (first version)
 - ✨ Hide the Task from context menu in the Tree View
