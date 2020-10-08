@@ -143,7 +143,7 @@ export async function goToTask(lineNumber: number) {
 	}, 700);
 }
 
-export function resetAllRecurringTasks(): void {
+export async function resetAllRecurringTasks() {
 	const wEdit = new WorkspaceEdit();
 	const document = getActiveDocument();
 	for (const task of state.tasks) {
@@ -153,9 +153,12 @@ export function resetAllRecurringTasks(): void {
 				removeDoneSymbol(wEdit, document.uri, line);
 				removeCompletionDate(wEdit, document.uri, line);
 			} else {
-				if (!task.specialTags.overdue) {
-					const lastVisit = dayjs(state.extensionContext.globalState.get(LAST_VISIT_STORAGE_KEY) as string);
-					const daysSinceLastVisit = dayjs().diff(lastVisit, 'day');
+				const lastVisit = new Date(state.extensionContext.globalState.get(LAST_VISIT_STORAGE_KEY) as string);
+				if (!task.specialTags.overdue && !dayjs().isSame(lastVisit, 'day')) {
+					const lastVisitWithoutTime = new Date(lastVisit.getFullYear(), lastVisit.getMonth(), lastVisit.getDate());
+					const now = new Date();
+					const nowWithoutTime = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+					const daysSinceLastVisit = dayjs(nowWithoutTime).diff(lastVisitWithoutTime, 'day');
 					for (let i = daysSinceLastVisit; i > 0; i--) {
 						const date = dayjs().subtract(i, 'day');
 						const res = new DueDate(task.due.raw, {
@@ -175,7 +178,7 @@ export function resetAllRecurringTasks(): void {
 			}
 		}
 	}
-	applyEdit(wEdit, document);
+	return applyEdit(wEdit, document);
 }
 
 export function getActiveDocument() {

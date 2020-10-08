@@ -24,6 +24,9 @@ export interface State {
 	commentLines: vscode.Range[];
 
 	theRightFileOpened: boolean;
+	/**
+	 * Tracks if `resetAllRecurringTasks()` was already called this day
+	 */
 	fileWasReset: boolean;
 	newDayArrived: boolean;
 	taskTreeViewFilterValue: string;

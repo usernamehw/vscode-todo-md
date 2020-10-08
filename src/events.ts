@@ -62,7 +62,7 @@ export function isTheRightFileName(editor?: vscode.TextEditor): boolean {
  * They are only activated when user opens file named `todo.md` (by default)
  * Only then - completions, status bar text and other features are enabled.
  */
-export function activateExtensionFeatures(editor: vscode.TextEditor) {
+export async function activateExtensionFeatures(editor: vscode.TextEditor) {
 	state.theRightFileOpened = true;
 
 	updateEverything(editor);
@@ -71,12 +71,13 @@ export function activateExtensionFeatures(editor: vscode.TextEditor) {
 	updateCompletions();
 	statusBar.updateText(state.tasks);
 	statusBar.show();
-	checkIfNewDayArrived();
 	setContext(VscodeContext.isActive, true);
-
-	if (state.newDayArrived && !state.fileWasReset) { // TODO: this should be in some other place
-		resetAllRecurringTasks();
+	// TODO: maybe move it up?
+	checkIfNewDayArrived();
+	if (state.newDayArrived && !state.fileWasReset) {
+		await resetAllRecurringTasks();
 		state.fileWasReset = true;
+		updateEverything();
 	}
 }
 /**

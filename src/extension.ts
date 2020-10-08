@@ -89,10 +89,13 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	onChangeActiveTextEditor(window.activeTextEditor);
 	await updateState();
 
-	const isNewDay = checkIfNewDayArrived();
-	if (isNewDay && !state.theRightFileOpened) {
-		resetAllRecurringTasks();
-	}
+	setTimeout(() => {
+		const isNewDay = checkIfNewDayArrived();
+		if (isNewDay && !state.theRightFileOpened) {
+			resetAllRecurringTasks();
+			updateEverything();
+		}
+	}, 1000);
 
 	updateAllTreeViews();
 	updateArchivedTasks();
