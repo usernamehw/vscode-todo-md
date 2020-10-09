@@ -125,8 +125,8 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 
 export async function updateState(document?: vscode.TextDocument) {
 	if (!document) {
-		document = state.activeDocument;
-		// document = await getDocumentForDefaultFile();
+		// document = state.activeDocument;
+		document = await getDocumentForDefaultFile();
 	}
 	if (!document) {
 		return undefined;
