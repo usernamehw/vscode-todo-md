@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import vscode, { TextDocument, WorkspaceEdit } from 'vscode';
-import { applyEdit, checkDefaultFileAndNotify, getTaskAtLine, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from './commands';
+import { applyEdit, getTaskAtLine, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from './commands';
 import { DueDate } from './dueDate';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state } from './extension';
 import { TheTask } from './TheTask';
@@ -190,7 +190,8 @@ export function getActiveDocument() {
 }
 
 export async function getDocumentForDefaultFile() {
-	if (await checkDefaultFileAndNotify()) {
-		return await vscode.workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultFile));
+	if (!extensionConfig.defaultFile) {
+		return undefined;
 	}
+	return await vscode.workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultFile));
 }
