@@ -1,3 +1,7 @@
+## 2.0.2 `09 Oct 2020`
+
+- 🐛 Remove aggressive notification when switching editors
+
 ## 2.0.1 `09 Oct 2020`
 
 - 🐛 Remove markdown hover form Tree View
