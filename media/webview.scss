@@ -234,7 +234,7 @@ button {
 	color: var(--vscode-editorSuggestWidget-foreground) !important;
 }
 .awesomplete > ul:before {// pointer
-	background: var(--vscode-editorSuggestWidget-background) !important;
+	display: none !important;
 }
 .awesomplete > ul > li[aria-selected="true"] {
 	background: var(--vscode-editorSuggestWidget-selectedBackground) !important;
