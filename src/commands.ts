@@ -356,11 +356,13 @@ export function registerAllCommands() {
 		}
 	});
 	commands.registerCommand('todomd.setLastVisit', async () => {
-		const numberOfDays = Number(await vscode.window.showInputBox());
-		if (!numberOfDays) {
+		const numberOfHours = Number(await vscode.window.showInputBox({
+			prompt: 'Number of Hours ago',
+		}));
+		if (!numberOfHours) {
 			return;
 		}
-		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(numberOfDays, 'day').toDate());
+		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(numberOfHours, 'hour').toDate());
 	});
 	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
 		openSettingGuiAt('todomd.webview');
