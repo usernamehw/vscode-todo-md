@@ -263,10 +263,18 @@ function renderTask(task: TheTask): HTMLElement {
 	return taskListItem;
 }
 function updateFilterInputAutocomplete(tags: string[], projects: string[], contexts: string[]) {
+	const filterConstants = [
+		'$due',
+		'$done',
+		'$overdue',
+		'$noTag',
+		'$noProject',
+		'$noContext',
+	];
 	const autocompleteTags = tags.map(tag => `#${tag}`);
 	const autocompleteProjects = projects.map(project => `+${project}`);
 	const autocompleteContexts = contexts.map(context => `@${context}`);
-	awesomplete.list = autocompleteTags.concat(autocompleteProjects, autocompleteContexts);
+	awesomplete.list = filterConstants.concat(autocompleteTags, autocompleteProjects, autocompleteContexts);
 }
 // Handle messages sent from the extension to the webview
 window.addEventListener('message', event => {
