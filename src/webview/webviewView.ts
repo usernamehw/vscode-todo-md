@@ -2,7 +2,6 @@ import vscode, { window } from 'vscode';
 import { getTaskAtLine } from '../commands';
 import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleTaskCompletionAtLine } from '../documentActions';
 import { extensionConfig, Global, state, updateState } from '../extension';
-import { TheTask } from '../TheTask';
 import { IExtensionConfig, WebviewMessage } from '../types';
 import { getNonce } from '../webview/utils';
 
