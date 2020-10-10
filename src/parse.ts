@@ -238,7 +238,9 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 				}
 				// Overdue --------------------
 				if (parsedLine.value.specialTags.overdue && parsedLine.value.due?.raw) {
-					parsedLine.value.due = new DueDate(parsedLine.value.due.raw, { overdue: parsedLine.value.specialTags.overdue });
+					parsedLine.value.due = new DueDate(parsedLine.value.due.raw, {
+						overdue: parsedLine.value.specialTags.overdue,
+					});
 				}
 				// ----------------------------
 				tasks.push(parsedLine.value);
