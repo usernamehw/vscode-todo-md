@@ -97,12 +97,14 @@
 
 		"valid-jsdoc": 0,
 		"camelcase": 1,
-		"comma-dangle": [1, {
+		"comma-dangle": 0,
+		"@typescript-eslint/comma-dangle": [1, {
 			"arrays": "always-multiline",
 			"objects": "always-multiline",
 			"imports": "always-multiline",
 			"exports": "never",
-			"functions": "always-multiline"
+			"functions": "always-multiline",
+			"enums": "always"
 		}],
 		"no-alert": 0,
 		"curly": 0,
@@ -299,6 +301,7 @@
 		"no-useless-constructor": 0,
 		"no-dupe-class-members": 1,
 		"no-duplicate-imports": 0,
+		"@typescript-eslint/no-duplicate-imports": ["warn"],
 		"no-iterator": 1,
 
 		"prefer-numeric-literals": 1,
