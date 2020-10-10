@@ -2,7 +2,8 @@ import { TheTask } from './TheTask';
 import { DueState } from './types';
 
 const enum FilterType {
-	titleEqual,
+	rawContains,
+	titleContains,
 	tagEqual,
 	contextEqual,
 	projectEqual,
@@ -36,9 +37,9 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 		const results = [];
 		for (const filter of filters) {
 			let filterResult;
-			if (filter.filterType === FilterType.titleEqual) {
-				// Title
-				if (task.title.toLowerCase().includes(filter.value.toLowerCase())) {
+			if (filter.filterType === FilterType.rawContains) {
+				// Anything in the string (rawText)
+				if (task.rawText.toLowerCase().includes(filter.value.toLowerCase())) {
 					filterResult = true;
 				} else {
 					filterResult = false;
@@ -147,7 +148,7 @@ function parseFilter(filterStr: string) {
 	const titleMatch = titleRegex.exec(filterStr);
 	if (titleMatch) {
 		filters.push({
-			filterType: FilterType.titleEqual,
+			filterType: FilterType.rawContains, // TODO: should this be `titleEqual`?
 			value: titleMatch[1],
 			isNegation: false, // TODO: do
 		});
@@ -161,7 +162,7 @@ function parseFilter(filterStr: string) {
 		const filter: Filter = {
 			isNegation: false,
 			value: '',
-			filterType: FilterType.tagEqual, // TODO: default to text
+			filterType: FilterType.rawContains,
 		};
 		let isNegation;
 		let value;
@@ -211,7 +212,8 @@ function parseFilter(filterStr: string) {
 				break;
 			}
 			default: {
-				filter.filterType = FilterType.tagEqual;
+				value = word;
+				filter.filterType = FilterType.rawContains;
 			}
 		}
 		filter.value = value;
