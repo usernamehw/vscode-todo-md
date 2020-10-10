@@ -233,6 +233,10 @@ button {
 	background: var(--vscode-editorSuggestWidget-background) !important;
 	color: var(--vscode-editorSuggestWidget-foreground) !important;
 }
+.awesomplete > ul > li:hover {
+	background: var(--vscode-list-hoverBackground) !important;
+	color: var(--vscode-editorSuggestWidget-foreground) !important;
+}
 .awesomplete > ul:before {// pointer
 	display: none !important;
 }
@@ -245,7 +249,7 @@ button {
 	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
 }
 .awesomplete li:hover mark {
-	background: inherit !important;
+	background: none !important;
 	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
 }
 
