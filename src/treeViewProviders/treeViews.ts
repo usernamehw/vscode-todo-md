@@ -94,7 +94,10 @@ export function createAllTreeViews() {
 		setContext(VscodeContext.generic3FilterExists, false);
 	}
 }
-
+/**
+ * Update all tree views (including webviews)
+ * Items are taken from `state`
+ */
 export function updateAllTreeViews(): void {
 	tagProvider.refresh(state.tagsForTreeView);
 	setViewTitle(tagsView, 'tags', state.tagsForTreeView.length);
