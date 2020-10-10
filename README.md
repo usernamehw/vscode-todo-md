@@ -93,7 +93,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 # comment
 ```
 
-## Filter (In Tasks Tree View)
+## Filter (In Tasks Tree View and Webview View)
 
 - `#tag` - tag
 - `+project` - project
@@ -106,7 +106,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `$noTag` - Task with no tags
 - `$noProject` - Task with no projects
 - `$noContext` - Task with no contexts
-- `"TEXT_TO_SEARCH"` - Search only in task title (not in special fields, like tag or project)
+- `TEXT_TO_SEARCH` - Search in raw text (anything)
+<!-- - `"TEXT_TO_SEARCH"` - Search only in task title (not in special fields, like tag or project) -->
 
 # Commands
 
