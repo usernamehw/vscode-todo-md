@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, resetAllRecurringTasks, toggleDone, toggleTaskCompletionAtLine } from './documentActions';
+import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, resetAllRecurringTasks, toggleDone, toggleTaskCompletionAtLine } from './documentActions';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
@@ -10,7 +10,7 @@ import { DATE_FORMAT, getDateInISOFormat } from './timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
-import { appendTaskToFile, fancyNumber, getRandomInt } from './utils';
+import { fancyNumber, getRandomInt } from './utils';
 import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
 import { updateWebviewView } from './webview/webviewView';
 
@@ -196,29 +196,20 @@ export function registerAllCommands() {
 		}
 		vscode.window.showInformationMessage(TheTask.formatTask(resultTask));
 	});
-	commands.registerCommand('todomd.addTask', async () => {
+	commands.registerCommand('todomd.addTaskToDefaultFile', async () => {
 		const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
-		if (state.theRightFileOpened) {
-			const editor = window.activeTextEditor!;
-			const text = await window.showInputBox();
-			if (!text) {
-				return;
-			}
-			const line = editor.document.lineAt(editor.selection.active.line);
-			const wEdit = new WorkspaceEdit();
-			wEdit.insert(editor.document.uri, line.rangeIncludingLineBreak.start, creationDate + text);
-			applyEdit(wEdit, editor.document);
-		} else {
-			const isDefaultFileSpecified = await checkDefaultFileAndNotify();
-			if (!isDefaultFileSpecified) {
-				return;
-			}
-			const text = await window.showInputBox();
-			if (!text) {
-				return;
-			}
-			await appendTaskToFile(creationDate + text, extensionConfig.defaultFile);
+		const isDefaultFileSpecified = await checkDefaultFileAndNotify();
+		if (!isDefaultFileSpecified) {
+			return;
 		}
+		const text = await window.showInputBox();
+		if (!text) {
+			return;
+		}
+		await appendTaskToFile(creationDate + text, extensionConfig.defaultFile);
+		await updateState();
+		updateAllTreeViews();
+		updateWebviewView(state.tasks);
 	});
 	commands.registerTextEditorCommand('todomd.setDueDate', editor => {
 		const line = editor.selection.active.line;

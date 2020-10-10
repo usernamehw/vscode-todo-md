@@ -6,7 +6,6 @@ import { extensionConfig, LAST_VISIT_STORAGE_KEY, state } from './extension';
 import { TheTask } from './TheTask';
 import { DATE_FORMAT } from './timeUtils';
 import { DueState } from './types';
-import { appendTaskToFile } from './utils';
 
 export function hideTask(document: vscode.TextDocument, lineNumber: number) {
 	const wEdit = new WorkspaceEdit();
@@ -194,4 +193,12 @@ export async function getDocumentForDefaultFile() {
 		return undefined;
 	}
 	return await vscode.workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultFile));
+}
+export async function appendTaskToFile(text: string, filePath: string) {
+	const uri = vscode.Uri.file(filePath);
+	const document = await vscode.workspace.openTextDocument(uri);
+	const wEdit = new WorkspaceEdit();
+	const eofPosition = document.lineAt(document.lineCount - 1).rangeIncludingLineBreak.end;
+	wEdit.insert(uri, eofPosition, `\n${text}`);
+	return applyEdit(wEdit, document);
 }

@@ -784,7 +784,7 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.addTask",
+				"command": "todomd.addTaskToDefaultFile",
 				"title": "Add a Task",
 				"category": "Todo MD",
 				"icon": {
@@ -1071,8 +1071,8 @@
 					"group": "navigation"
 				},
 				{
-					"command": "todomd.addTask",
-					"when": "view == todomd.tasks",
+					"command": "todomd.addTaskToDefaultFile",
+					"when": "view =~ /todomd.(tasks|webviewTasks)/",
 					"group": "navigation"
 				},
 				{

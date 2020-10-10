@@ -1,9 +1,3 @@
-import { promises as fs } from 'fs';
-
-export async function appendTaskToFile(text: string, filePath: string) {
-	return await fs.appendFile(filePath, `${text}\n`);
-}
-
 export function getRandomInt(min: number, max: number): number {
 	return min + Math.floor(Math.random() * (max - min + 1));
 }
