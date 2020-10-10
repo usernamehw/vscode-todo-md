@@ -125,21 +125,25 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |Name|Default|Description|
 | --- | --- |--- |
 |activatePattern|`"**/{todo,todo.archive}.md"`|Choose files that extension will operate on. By default activated on 2 files (`todo.md` & `todo.archive.md`). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
-|addCompletionDate|**true**|When completing a task add completion date to it: `{cm:2020-04-30}`|
-|completionDateIncludeTime|**false**|When `addCompletionDate` setting enabled, includes date and time: `{cm:2020-04-30T09:11:17}`|
-|addCreationDate|**false**|When creating a task add creation date to it: `{cr:2020-04-30}`|
-|creationDateIncludeTime|**false**|When `addCreationDate` setting enabled, includes date and time: `{cr:2020-04-30T09:11:17}`|
-|defaultPriority|**"Z"**|Used in sorting for tasks without priority.|
-|getNextNumberOfTasks|**5**|Number of tasks returned by `getFewNextTasks` command.|
-|todomd.projects|[]|Projects added to autocomplete.|
-|todomd.contexts|[]|Contexts added to autocomplete.|
-|todomd.tags|[]|Tags added to autocomplete.|
-|treeViews|[...]|Tree Views that have predefined filters (3 max).|
-|savedFilters|[...]|Filters that you can pick when applying a filter.|
+|addCompletionDate|**`true`**|When completing a task add completion date to it: `{cm:2020-04-30}`|
+|completionDateIncludeTime|**`false`**|When `addCompletionDate` setting enabled, includes date and time: `{cm:2020-04-30T09:11:17}`|
+|addCreationDate|**`false`**|When creating a task add creation date to it: `{cr:2020-04-30}`|
+|creationDateIncludeTime|**`false`**|When `addCreationDate` setting enabled, includes date and time: `{cr:2020-04-30T09:11:17}`|
+|defaultPriority|`"Z"`|Used in sorting for tasks without priority.|
+|getNextNumberOfTasks|**`5`**|Number of tasks returned by `getFewNextTasks` command.|
+|todomd.projects|`[]`|Projects added to autocomplete.|
+|todomd.contexts|`[]`|Contexts added to autocomplete.|
+|todomd.tags|`[]`|Tags added to autocomplete.|
+|treeViews|`[...]`|Tree Views that have predefined filters (3 max).|
+|savedFilters|`[...]`|Filters that you can pick when applying a filter.|
+|webview.showCompleted|**`true`**|Controls whether completed tasks are shown or not in the webview.|
+|webview.showPriority|**`true`**|Controls whether priority is shown in the webview.|
+|webview.fontSize|`"13px"`|Controls font size in the webview.|
+|webview.padding|`"0px"`|Controls spacing between items in a list.|
 
 # Colors
 
-Can be configured in `settings.json` (**`workbench.colorCustomizations`** section)
+Can be specified in `settings.json` (**`workbench.colorCustomizations`** section)
 
 - `todomd.tagForeground`
 - `todomd.contextForeground`
