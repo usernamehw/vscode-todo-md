@@ -158,6 +158,11 @@
 					"markdownDescription": "Used in sorting for tasks without priority.",
 					"default": "Z"
 				},
+				"todomd.isDev": {
+					"type": "boolean",
+					"markdownDescription": "For emulating dev mode. Most likely of no use to anyone, except the extension author.",
+					"default": false
+				},
 				"todomd.savedFilters": {
 					"type": "array",
 					"items": {

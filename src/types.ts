@@ -51,6 +51,7 @@ const enum AdvancedDecorations {
 	comment = 'comment',
 }
 export interface IExtensionConfig {
+	isDev: boolean;
 	addCreationDate: boolean;
 	addCompletionDate: boolean;
 	completionDateIncludeTime: boolean;

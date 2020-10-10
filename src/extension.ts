@@ -77,7 +77,7 @@ export class Global {
 }
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
-	if (process.env.NODE_ENV === 'development') {
+	if (process.env.NODE_ENV === 'development' || extensionConfig.isDev) {
 		setContext(VscodeContext.isDev, true);
 	}
 	state.extensionContext = extensionContext;
