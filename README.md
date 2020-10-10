@@ -107,6 +107,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `$noProject` - Task with no projects
 - `$noContext` - Task with no contexts
 - `TEXT_TO_SEARCH` - Search in raw text (anything)
+- `-#tag` - (Negation) Task doesn't contain tag `#tag`
 <!-- - `"TEXT_TO_SEARCH"` - Search only in task title (not in special fields, like tag or project) -->
 
 # Commands
