@@ -1,3 +1,9 @@
+## 2.0.3 `10 Oct 2020`
+
+- ✨ **[webview]** Add task dialog
+- ✨ **[webview]** Reuse filter logic from extension
+- ✨ **[webview]** Add constant filters to autocomplete
+
 ## 2.0.2 `09 Oct 2020`
 
 - 🐛 Remove aggressive notification when switching editors
