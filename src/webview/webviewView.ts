@@ -136,7 +136,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	}
 }
 
-export function updateWebviewView(tasks: TheTask[]) { // TODO: remove argument
+export function updateWebviewView() {
 	if (Global.webviewProvider) {
 		Global.webviewProvider.updateEverything();
 	}

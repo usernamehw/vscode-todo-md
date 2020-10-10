@@ -108,5 +108,5 @@ export async function updateEverything(editor?: vscode.TextEditor) {
 	}
 	statusBar.updateText(state.tasks);
 	updateAllTreeViews();
-	updateWebviewView(state.tasks);
+	updateWebviewView();
 }

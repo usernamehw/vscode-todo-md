@@ -44,7 +44,7 @@ export function registerAllCommands() {
 
 		await updateState();
 		updateAllTreeViews();
-		updateWebviewView(state.tasks);
+		updateWebviewView();
 	});
 	commands.registerCommand('todomd.hideTask', async (treeItem?: TaskTreeItem) => {
 		if (!treeItem) {
@@ -209,7 +209,7 @@ export function registerAllCommands() {
 		await appendTaskToFile(creationDate + text, extensionConfig.defaultFile);
 		await updateState();
 		updateAllTreeViews();
-		updateWebviewView(state.tasks);
+		updateWebviewView();
 	});
 	commands.registerTextEditorCommand('todomd.setDueDate', editor => {
 		const line = editor.selection.active.line;
