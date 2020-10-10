@@ -1,3 +1,4 @@
+import { updateWebviewView } from 'src/webview/webviewView';
 import vscode, { TreeView } from 'vscode';
 import { extensionConfig, EXTENSION_NAME, state } from '../extension';
 import { filterItems } from '../filter';
@@ -121,6 +122,8 @@ export function updateAllTreeViews(): void {
 		generic3Provider.refresh(filteredTasks);
 		setViewTitle(generic3View, extensionConfig.treeViews[2].title, filteredTasks.length);
 	}
+	// ──────────────────────────────────────────────────────────────────────
+	updateWebviewView();
 }
 
 export function updateTasksTreeView() {

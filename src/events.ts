@@ -7,7 +7,6 @@ import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, upda
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { setContext } from './vscodeUtils';
-import { updateWebviewView } from './webview/webviewView';
 
 export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): Promise<void> {
 	if (editor && isTheRightFileName(editor)) {
@@ -108,5 +107,4 @@ export async function updateEverything(editor?: vscode.TextEditor) {
 	}
 	statusBar.updateText(state.tasks);
 	updateAllTreeViews();
-	updateWebviewView();
 }

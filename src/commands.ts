@@ -12,7 +12,6 @@ import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } 
 import { VscodeContext } from './types';
 import { fancyNumber, getRandomInt } from './utils';
 import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
-import { updateWebviewView } from './webview/webviewView';
 
 class QuickPickItem implements vscode.QuickPickItem {
 	label: string;
@@ -44,7 +43,6 @@ export function registerAllCommands() {
 
 		await updateState();
 		updateAllTreeViews();
-		updateWebviewView();
 	});
 	commands.registerCommand('todomd.hideTask', async (treeItem?: TaskTreeItem) => {
 		if (!treeItem) {
@@ -209,7 +207,6 @@ export function registerAllCommands() {
 		await appendTaskToFile(creationDate + text, extensionConfig.defaultFile);
 		await updateState();
 		updateAllTreeViews();
-		updateWebviewView();
 	});
 	commands.registerTextEditorCommand('todomd.setDueDate', editor => {
 		const line = editor.selection.active.line;
