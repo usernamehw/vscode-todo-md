@@ -2,6 +2,12 @@
 # and leave all files detected as binary untouched.
 * text=auto
 
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+
 *.ts eol=lf
 # * text eol=lf
 
