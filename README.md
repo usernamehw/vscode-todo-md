@@ -2,6 +2,8 @@
 
 ![demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/img/demo.png)
 
+![webview demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/img/webview_demo.png)
+
 By default works for files with names `todo.md` & `todo.archive.md` (But can be changed with `activatePattern` setting).
 
 # Features
