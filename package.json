@@ -1247,7 +1247,7 @@
 		"eslint": "^7.11.0",
 		"eslint-plugin-no-autofix": "^1.0.1",
 		"friendly-errors-webpack-plugin": "^1.7.0",
-		"fuzzysearch": "^1.0.3",
+		"fuzzysort": "^1.1.4",
 		"glob": "^7.1.6",
 		"lodash": "^4.17.20",
 		"mocha": "^7.2.0",

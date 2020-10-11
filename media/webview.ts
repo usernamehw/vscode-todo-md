@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // TODO: enable typescipt-eslint for this file
 
-import fuzzysearch from 'fuzzysearch';
+import fuzzysort from 'fuzzysort';
 import { filterItems } from '../src/filter';
 import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';
@@ -57,9 +57,20 @@ const awesomplete = new Awesomplete(filterInputEl, {
 	maxItems: 5,
 	// @ts-ignore
 	tabSelect: true,
-	filter: function (text, input) {
-		return fuzzysearch(input, text);
-	}
+	// @ts-expect-error
+	filter: function (text: {label: string; value: string}, input) {
+		if (input === '') {
+			return true;
+		}
+		const result = fuzzysort.go(input, [text.value]);
+		return result.length > 0;
+	},
+	// @ts-expect-error
+	item: function(text: {label: string; value: string}, input) {
+		var li = document.createElement('li');
+		li.innerHTML = fuzzysort.highlight(fuzzysort.single(input, text.value), '<mark>', '</mark>');
+		return li as HTMLElement;
+	},
 });
 
 filterInputEl.addEventListener('keydown', e => {
@@ -79,6 +90,7 @@ filterInputEl.addEventListener('keydown', e => {
 		// 🐛 Tab in Awesomplete moves focus away from input
 		setTimeout(() => {
 			filterInputEl.focus();
+			awesomplete.close();
 		}, 0);// TODO: move this to select event
 	}
 })
