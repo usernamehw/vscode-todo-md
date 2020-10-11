@@ -1,3 +1,7 @@
+## 2.0.4 `11 Oct 2020`
+
+- 🔨 Use fuzzysort instead of fuzzysearch (bc fuzzysearch doen't support highlight)
+
 ## 2.0.3 `10 Oct 2020`
 
 - ✨ **[webview]** Add task dialog
