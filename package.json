@@ -773,10 +773,7 @@
 				"command": "todomd.toggleDone",
 				"title": "Toggle completion",
 				"category": "Todo MD",
-				"icon": {
-					"light": "img/checkLight.svg",
-					"dark": "img/checkDark.svg"
-				}
+				"icon": "$(check)"
 			},
 			{
 				"command": "todomd.hideTask",
@@ -792,10 +789,7 @@
 				"command": "todomd.addTaskToDefaultFile",
 				"title": "Add a Task",
 				"category": "Todo MD",
-				"icon": {
-					"light": "img/addLight.svg",
-					"dark": "img/addDark.svg"
-				}
+				"icon": "$(add)"
 			},
 			{
 				"command": "todomd.sortByPriority",
@@ -866,19 +860,13 @@
 				"command": "todomd.filter",
 				"title": "Filter",
 				"category": "Todo MD",
-				"icon": {
-					"light": "img/filterLight.svg",
-					"dark": "img/filterDark.svg"
-				}
+				"icon": "$(filter)"
 			},
 			{
 				"command": "todomd.clearFilter",
 				"title": "Clear Filter",
 				"category": "Todo MD",
-				"icon": {
-					"light": "img/clearAllLight.svg",
-					"dark": "img/clearAllDark.svg"
-				}
+				"icon": "$(clear-all)"
 			},
 			{
 				"command": "todomd.clearGlobalState",
@@ -1212,7 +1200,7 @@
 					"type": "webview",
 					"id": "todomd.webviewTasks",
 					"name": "Webview",
-					"icon": "img/checkDark.svg"
+					"icon": "img/check.svg"
 				}
 			]
 		}
