@@ -13,12 +13,6 @@
 		"strict": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
-		"baseUrl": "./",
-		"paths": {
-			"src/*": [
-			  "./src/*"
-			]
-		},
 		"types": [
 			"node",
 			"mocha",
