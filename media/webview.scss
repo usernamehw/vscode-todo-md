@@ -120,7 +120,7 @@ button {
 	padding-bottom: var(--padding);
 
 	&:hover {
-		background-color: rgba(0, 0, 0, 0.05);
+		background-color: var(--vscode-list-hoverBackground);
 	}
 	&.pri1 {
 		border-left-color: #ec4f47;
