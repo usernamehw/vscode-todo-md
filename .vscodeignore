@@ -22,5 +22,6 @@ test.md
 proposed-api.md
 **/*.scss
 img/demo.png
+img/webview_demo.png
 img/calendar_pic.png
 scripts
