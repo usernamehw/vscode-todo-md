@@ -1,4 +1,3 @@
-import { updateWebviewView } from 'src/webview/webviewView';
 import vscode, { TreeView } from 'vscode';
 import { extensionConfig, EXTENSION_NAME, state } from '../extension';
 import { filterItems } from '../filter';
@@ -8,6 +7,7 @@ import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
 import { VscodeContext } from '../types';
 import { setContext } from '../vscodeUtils';
+import { updateWebviewView } from '../webview/webviewView';
 
 export const tagProvider = new TagProvider([]);
 export const projectProvider = new ProjectProvider([]);
