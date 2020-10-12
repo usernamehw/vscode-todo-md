@@ -1,12 +1,18 @@
+## 2.0.5 `12 Oct 2020`
+
+- ✨ [webview] Allow changing font family
+- ✨ [webview] Add first version of custom checkbox
+- ✨ Add open default file icon to Tree Views
+
 ## 2.0.4 `11 Oct 2020`
 
 - 🔨 Use fuzzysort instead of fuzzysearch (bc fuzzysearch doen't support highlighting)
 
 ## 2.0.3 `10 Oct 2020`
 
-- ✨ **[webview]** Add task dialog
-- ✨ **[webview]** Reuse filter logic from extension
-- ✨ **[webview]** Add constant filters to autocomplete
+- ✨ [webview] Add task dialog
+- ✨ [webview] Reuse filter logic from extension
+- ✨ [webview] Add constant filters to autocomplete
 
 ## 2.0.2 `09 Oct 2020`
 

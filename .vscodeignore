@@ -20,6 +20,8 @@ package-lock.json
 node_modules
 test.md
 demo.md
+LICENSE
+docs
 LICENSE.txt
 proposed-api.md
 **/*.scss
