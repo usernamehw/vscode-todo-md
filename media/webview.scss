@@ -100,6 +100,7 @@ button {
 }
 
 .list {
+	font-family: var(--font-family);
 	padding-top: calc(6px + 6px + 24px);
 	/* padding-top: 6px; */
 	line-height: 1.5;
@@ -110,7 +111,6 @@ button {
 }
 
 .list-item {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji';
 	border-left: 3px solid transparent;
 	box-shadow: 0 1px 0 0 var(--border-light);
 	padding-left: 3px;

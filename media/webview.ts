@@ -313,6 +313,7 @@ window.addEventListener('message', event => {
 		case 'updateConfig': {
 			state.config = message.value;
 			document.body.style.setProperty('--font-size', state.config.fontSize);
+			document.body.style.setProperty('--font-family', state.config.fontFamily);
 			document.body.style.setProperty('--padding', state.config.padding);
 			updateTasks();
 			break;

@@ -65,6 +65,11 @@
 					"markdownDescription": "Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)",
 					"default": "13px"
 				},
+				"todomd.webview.fontFamily": {
+					"type": "string",
+					"markdownDescription": "Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)",
+					"default": "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'"
+				},
 				"todomd.webview.padding": {
 					"type": "string",
 					"markdownDescription": "Controls spacing between items in a list. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)",
