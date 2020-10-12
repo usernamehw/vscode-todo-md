@@ -200,7 +200,9 @@ export function registerAllCommands() {
 		if (!isDefaultFileSpecified) {
 			return;
 		}
-		const text = await window.showInputBox();
+		const text = await window.showInputBox({
+			prompt: 'Add a task to default file',
+		});
 		if (!text) {
 			return;
 		}
