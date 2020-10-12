@@ -177,3 +177,4 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 
 - [#32813 \[theming\] Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
 - [#54285 Contributed webview context menu actions](https://github.com/microsoft/vscode/issues/54285)
+- [#5455 OnClick event on Gutter](https://github.com/microsoft/vscode/issues/5455)
