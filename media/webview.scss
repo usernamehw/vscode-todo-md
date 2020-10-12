@@ -177,6 +177,7 @@ button {
 	padding-right: 4px;
 	border-radius: 3px;
 	cursor: pointer;
+	vertical-align: middle;
 }
 
 .tag {
@@ -192,6 +193,7 @@ button {
 .project {
 	color: var(--project-foreground);
 	background-color: var(--project-background);
+	border-radius: 0;
 
 	&:hover {
 		background-color: var(--project-hover-background);
