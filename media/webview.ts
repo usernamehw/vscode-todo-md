@@ -189,12 +189,13 @@ function renderTask(task: TheTask): HTMLElement {
 		}
 	}
 
-	// const checkbox2 = document.createElement('span');
-	// checkbox2.classList.add('checkbox', 'codicon', 'codicon-check');
-	// taskListItem.appendChild(checkbox2);
 	const checkbox = document.createElement('input');
-	checkbox.classList.add('checkbox');
 	checkbox.type = 'checkbox';
+	if (state.config.customCheckboxEnabled) {
+		checkbox.classList.add('option-input', state.config.checkboxStyle);
+	} else {
+		checkbox.classList.add('checkbox');
+	}
 	if (task.done) {
 		checkbox.checked = true;
 	}

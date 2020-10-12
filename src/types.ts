@@ -91,6 +91,8 @@ export interface IExtensionConfig {
 		showPriority: boolean;
 		fontSize: string;
 		fontFamily: string;
+		customCheckboxEnabled: boolean;
+		checkboxStyle: string;
 		padding: string;
 	};
 }

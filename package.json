@@ -75,6 +75,24 @@
 					"markdownDescription": "Controls spacing between items in a list. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)",
 					"default": "0px"
 				},
+				"todomd.webview.customCheckboxEnabled": {
+					"type": "boolean",
+					"markdownDescription": "Whether checkbox is rendered as native input element or a custom styled element.",
+					"default": false
+				},
+				"todomd.webview.checkboxStyle": {
+					"type": "string",
+					"markdownDescription": "Controls checkbox style (round, square...).",
+					"enum": [
+						"round",
+						"rounded-square",
+						"fill-round",
+						"fill-square",
+						"fill-rounded-square",
+						"low-contrast"
+					],
+					"default": "rounded-square"
+				},
 				"todomd.defaultFile": {
 					"type": "string",
 					"markdownDescription": "Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`",

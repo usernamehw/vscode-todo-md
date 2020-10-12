@@ -48,6 +48,8 @@ body.vscode-dark {
 	--project-foreground: #eee;
 	--count-background: #ffffff1a;
 	--count-button-background: #ffffff1a;
+
+	--task-checkbox-bg: #3d4d63;
 }
 
 a {
@@ -154,20 +156,6 @@ button {
 	margin-left: 2px;
 }
 
-// .checkbox {
-// 	float: left;
-// 	height: 15px;
-//     width: 15px;
-//     border: 1px solid grey;
-// 	border-radius: 3px;
-// 	text-align: center;
-// 	padding: 0;
-// 	font-size: 10px;
-// 	display: flex;
-// 	flex-direction: column;
-// 	text-align: center;
-// }
-
 .tag,
 .project,
 .context {
@@ -260,4 +248,113 @@ button {
 	background: inherit !important;
 	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
 }
-// Awesomplete style override END
+// Custom-styled Checkbox ──────────────────────────────────────────────────────────────
+$blue: #41a6d9;
+
+:root {
+	--task-checkbox: #{$blue};
+	--task-checkbox-bg: #cbd1d8;
+	--task-checkbox-fg: #ffffff;
+	--task-checkbox-low-contrast-bg: #{lighten($blue, 32%)};
+	--task-checkbox-hover-bg: #9faab7;
+
+
+	--z-index-checkbox-1: 10;
+	--z-index-checkbox-2: 15;
+}
+
+$checkbox-size: 1rem;
+
+.option-input {
+	float: left;
+	margin: 0;
+	margin-left: 2px;
+	margin-right: 2px;
+	vertical-align: middle;
+	-webkit-appearance: none;
+	background-color: var(--task-checkbox-bg);
+	bottom: 0;
+	color: var(--task-checkbox-fg);
+	cursor: pointer;
+	display: inline-block;
+	height: $checkbox-size;
+	left: 0;
+	position: relative;
+	right: 0;
+	transition: all 0.2s ease-out 0s;
+	width: $checkbox-size;
+	z-index: var(--z-index-checkbox-2);
+
+	&.round {
+		border-radius: 50%;
+	}
+
+	&.rounded-square {
+		border-radius: 20%;
+	}
+
+	&.fill-round {
+		border-radius: 50%;
+
+		&:checked:before {
+			display: none;
+		}
+	}
+
+	&.fill-square {
+		border-radius: 0;
+
+		&:checked:before {
+			display: none;
+		}
+	}
+
+	&.fill-rounded-square {
+		border-radius: 20%;
+
+		&:checked:before {
+			display: none;
+		}
+	}
+
+	&.low-contrast {
+		&:checked {
+			background-color: var(--task-checkbox-low-contrast-bg);
+			color: var(--task-checkbox);
+		}
+	}
+
+
+	&:hover {
+		background-color: var(--task-checkbox-hover-bg);
+	}
+
+	&:focus {
+		outline: none !important;
+	}
+
+	&:checked {
+		background-color: var(--task-checkbox);
+
+		&:before {
+			content: '\2714 \FE0E';// TODO: replace flaky text with svg icon ?
+			display: inline-block;
+			font-family: 'Segoe UI Symbol', monospace;
+			font-size: 0.8rem;
+			height: $checkbox-size;
+			line-height: $checkbox-size;
+			position: absolute;
+			text-align: center;
+			width: $checkbox-size;
+		}
+
+		&:after {
+			background-color: var(--task-checkbox);
+			content: '';
+			display: block;
+			pointer-events: none;
+			position: relative;
+			z-index: var(--z-index-checkbox-1);
+		}
+	}
+}
