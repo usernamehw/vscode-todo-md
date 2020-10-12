@@ -270,7 +270,9 @@ export function registerAllCommands() {
 		// Show Quick Pick to complete a task
 		const document = getActiveDocument();
 		const notCompletedTasks = state.tasks.filter(task => !task.done).map(task => TheTask.formatTask(task));
-		const pickedTask = await window.showQuickPick(notCompletedTasks);
+		const pickedTask = await window.showQuickPick(notCompletedTasks, {
+			placeHolder: 'Choose a task to complete',
+		});
 		if (!pickedTask) {
 			return;
 		}
