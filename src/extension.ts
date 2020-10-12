@@ -77,9 +77,6 @@ export class Global {
 }
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
-	if (process.env.NODE_ENV === 'development' || extensionConfig.isDev) {
-		setContext(VscodeContext.isDev, true);
-	}
 	state.extensionContext = extensionContext;
 
 	updateDecorationStyle();
@@ -99,6 +96,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 
 	updateAllTreeViews();
 	updateArchivedTasks();
+	updateIsDevContext();
 
 	Global.webviewProvider = new TasksWebviewViewProvider(state.extensionContext.extensionUri);
 	state.extensionContext.subscriptions.push(
@@ -118,6 +116,12 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		disposeEverything();
 		updateDecorationStyle();
 		updateEverything();
+		updateIsDevContext();
+	}
+	function updateIsDevContext() {
+		if (process.env.NODE_ENV === 'development' || extensionConfig.isDev) {
+			setContext(VscodeContext.isDev, true);
+		}
 	}
 
 	extensionContext.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));
