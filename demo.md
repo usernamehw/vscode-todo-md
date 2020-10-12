@@ -5,4 +5,4 @@
 (D) Task with due date {due:2020-04-30}
 (E) Completed task {cm:2020-05-12}
 Task with link https://www.google.com
-
+Task with counter {count:2/5}
