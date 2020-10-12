@@ -65,6 +65,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					this.updateEverything();
 					break;
 				}
+				case 'updateTitle': {
+					this.updateTitle(`webview (${message.value})`);
+					break;
+				}
 			}
 		});
 		webviewView.onDidChangeVisibility(e => {

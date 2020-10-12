@@ -42,11 +42,15 @@ let filteredTasksGlobal: TheTask[] = [];
 const filterInputEl = document.getElementById('filterInput') as HTMLInputElement;// TODO: use $ for elements?
 filterInputEl.value = savedState.filterInputValue;
 
-filterInputEl.addEventListener('input', e => {
-	updateTasks();// TODO: update webview counter
+filterInputEl.addEventListener('input', () => {
+	updateTasks();
 	vscode.setState({
 		filterInputValue: filterInputEl.value
 	});
+	vscode.postMessage({
+		type: 'updateTitle',
+		value: String(filteredTasksGlobal.length),
+	})
 });
 
 // @ts-expect-error

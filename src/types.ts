@@ -148,4 +148,8 @@ interface WebviewMessageDecrementCount extends WebviewMessageBase {
 	type: 'decrementCount';
 	value: number;
 }
-export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount;
+interface WebviewMessageUpdateTitle extends WebviewMessageBase {
+	type: 'updateTitle';
+	value: string;
+}
+export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount | WebviewMessageUpdateTitle;
