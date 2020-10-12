@@ -268,6 +268,13 @@ export function registerAllCommands() {
 		}
 		openFileInEditor(extensionConfig.defaultArchiveFile);
 	});
+	commands.registerCommand('todomd.openDefaultFile', async () => {
+		const isDefaultFileSpecified = await checkDefaultFileAndNotify();
+		if (!isDefaultFileSpecified) {
+			return;
+		}
+		openFileInEditor(extensionConfig.defaultFile);
+	});
 	commands.registerCommand('todomd.completeTask', async () => {
 		// Show Quick Pick to complete a task
 		const document = getActiveDocument();

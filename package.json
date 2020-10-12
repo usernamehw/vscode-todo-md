@@ -837,6 +837,12 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.openDefaultFile",
+				"title": "Open default file",
+				"category": "Todo MD",
+				"icon": "$(go-to-file)"
+			},
+			{
 				"command": "todomd.createSimilarTask",
 				"title": "Create similar task (same tags, projects, contexts).",
 				"category": "Todo MD"
@@ -1070,6 +1076,11 @@
 				},
 				{
 					"command": "todomd.addTaskToDefaultFile",
+					"when": "view =~ /todomd.(tasks|webviewTasks)/",
+					"group": "navigation"
+				},
+				{
+					"command": "todomd.openDefaultFile",
 					"when": "view =~ /todomd.(tasks|webviewTasks)/",
 					"group": "navigation"
 				},
