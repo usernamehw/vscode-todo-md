@@ -183,7 +183,14 @@ function parseFilter(filterStr: string) {
 		}
 		switch (firstChar) {
 			case '#': {
-				filter.filterType = FilterType.tagEqual; break;
+				const tags = word.split('#').filter(tag => tag.length);
+				for (const tag of tags) {
+					filters.push({
+						filterType: FilterType.tagEqual,
+						value: tag,
+					});
+				}
+				continue;
 			}
 			case '@': {
 				filter.filterType = FilterType.contextEqual; break;
