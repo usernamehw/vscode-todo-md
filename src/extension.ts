@@ -88,7 +88,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 
 	setTimeout(() => {
 		const isNewDay = checkIfNewDayArrived();
-		if (isNewDay && !state.theRightFileOpened) {
+		if (isNewDay) {
 			resetAllRecurringTasks();
 			updateEverything();
 		}
