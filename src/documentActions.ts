@@ -22,18 +22,18 @@ export function deleteTask(document: vscode.TextDocument, lineNumber: number) {
 /**
  * Either toggle done or increment count
  */
-export async function toggleDone(document: vscode.TextDocument, lineNumber: number): Promise<void> {
+export async function toggleDone(document: vscode.TextDocument, lineNumber: number) {
 	const task = getTaskAtLine(lineNumber);
 	if (!task) {
-		return;
+		return undefined;
 	}
 	if (task.specialTags.overdue) {
-		await removeOverdueFromLine(document, task);
+		return await removeOverdueFromLine(document, task);
 	}
 	if (task.specialTags.count) {
-		await incrementCountForTask(document, lineNumber, task);
+		return await incrementCountForTask(document, lineNumber, task);
 	} else {
-		await toggleTaskCompletionAtLine(lineNumber, document);
+		return await toggleTaskCompletionAtLine(lineNumber, document);
 	}
 }
 export async function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
