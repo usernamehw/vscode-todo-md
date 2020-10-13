@@ -32,7 +32,7 @@ describe('Parsing text', () => {
 		expect(task.done).to.equal(false);
 		expect(task.tags).to.have.lengthOf(0);
 		expect(task.lineNumber).to.equal(1);
-		expect(task.priority).to.equal('Z');
+		expect(task.priority).to.equal('G');
 		expect(task.contexts).to.have.lengthOf(0);
 		expect(task.contextRanges).to.have.lengthOf(0);
 		expect(task.projects).to.have.lengthOf(0);
