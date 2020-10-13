@@ -229,7 +229,6 @@ function renderTask(task: TheTask): HTMLElement {
 		}
 	}
 	if (state.config.markdownEnabled) {
-		// @ts-ignor
 		title.innerHTML = marked(titleText);
 	} else {
 		title.textContent = titleText;
