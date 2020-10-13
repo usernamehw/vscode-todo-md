@@ -87,6 +87,7 @@ export interface IExtensionConfig {
 	getNextNumberOfTasks: number;
 
 	webview: {
+		markdownEnabled: boolean;
 		showCompleted: boolean;
 		showPriority: boolean;
 		fontSize: string;

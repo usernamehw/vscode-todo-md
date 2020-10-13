@@ -2,6 +2,7 @@
 // TODO: enable typescipt-eslint for this file
 
 import fuzzysort from 'fuzzysort';
+import marked from 'marked';
 import { filterItems } from '../src/filter';
 import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';
@@ -227,7 +228,12 @@ function renderTask(task: TheTask): HTMLElement {
 			titleText = titleText.slice(0, link.characterRange[0]) + titleText.slice(link.characterRange[1]);// TODO: fails to parse when special things are present such as priority (A) resulting in wrong substring
 		}
 	}
-	title.textContent = titleText;
+	if (state.config.markdownEnabled) {
+		// @ts-ignore
+		title.innerHTML = marked.parseInline(titleText);
+	} else {
+		title.textContent = titleText;
+	}
 	taskListItem.appendChild(title);
 	for (const linkEl of linkElements) {
 		taskListItem.appendChild(linkEl);
