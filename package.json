@@ -179,7 +179,7 @@
 				"todomd.defaultPriority": {
 					"type": "string",
 					"markdownDescription": "Used in sorting for tasks without priority.",
-					"default": "F"
+					"default": "G"
 				},
 				"todomd.isDev": {
 					"type": "boolean",
