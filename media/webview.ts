@@ -191,10 +191,11 @@ function renderTask(task: TheTask): HTMLElement {
 
 	const checkbox = document.createElement('input');
 	checkbox.type = 'checkbox';
+	checkbox.classList.add('checkbox');
 	if (state.config.customCheckboxEnabled) {
 		checkbox.classList.add('option-input', state.config.checkboxStyle);
 	} else {
-		checkbox.classList.add('checkbox');
+		checkbox.classList.add('native-checkbox');
 	}
 	if (task.done) {
 		checkbox.checked = true;
