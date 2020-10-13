@@ -13,10 +13,10 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 		state.activeDocument = editor.document;
 		activateExtensionFeatures(editor);
 	} else {
+		state.activeDocument = await getDocumentForDefaultFile();
 		if (state.theRightFileOpened) {
 			deactivateExtensionFeatures();
 		}
-		state.activeDocument = await getDocumentForDefaultFile();
 	}
 }
 // TODO: this function should be executed by interval (60s?)
