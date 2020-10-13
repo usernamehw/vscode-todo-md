@@ -214,7 +214,8 @@ export function registerAllCommands() {
 		const line = editor.selection.active.line;
 		const task = getTaskAtLine(line);
 		const inputBox = window.createInputBox();
-		let value: string | undefined;
+		let value: string | undefined = '+0';
+		inputBox.value = value;
 		inputBox.show();
 
 		inputBox.onDidChangeValue((e: string) => {
