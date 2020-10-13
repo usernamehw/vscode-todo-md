@@ -36,7 +36,7 @@ Priority is a single UPPERCASE letter surrounded by round brackets. It can be (A
 (A)
 ```
 
-## Special tag:value pairs
+## Special {tag:value} pairs
 
 ```
 {due:2020-04-30}
