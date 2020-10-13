@@ -64,13 +64,15 @@ export function updateCompletions(): void {
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 				const general = [];
+				const today = new vscode.CompletionItem('TODAY', vscode.CompletionItemKind.Constant);
+				today.insertText = getDateInISOFormat(new Date());
 				const setDueDateToday = new vscode.CompletionItem('SET_DUE_TODAY', vscode.CompletionItemKind.Constant);
 				setDueDateToday.insertText = `{due:${getDateInISOFormat(new Date())}}`;
 				const setDueDateTomorrow = new vscode.CompletionItem('SET_DUE_TOMORROW', vscode.CompletionItemKind.Constant);
 				setDueDateTomorrow.insertText = `{due:${getDateInISOFormat(dayjs().add(1, 'day'))}}`;
 				const setDueDateYesterday = new vscode.CompletionItem('YESTERDAY', vscode.CompletionItemKind.Constant);
 				setDueDateYesterday.insertText = `{due:${getDateInISOFormat(dayjs().subtract(1, 'day'))}}`;
-				general.push(setDueDateTomorrow, setDueDateYesterday, setDueDateToday);
+				general.push(today, setDueDateToday, setDueDateTomorrow, setDueDateYesterday);
 				return general;
 			},
 		},
