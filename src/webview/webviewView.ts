@@ -121,7 +121,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconFontUri}; style-src ${webview.cspSource} ${codiconCSSUri} ${awesomepleteCSSUri}; script-src 'nonce-${nonce}';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconFontUri}; style-src 'unsafe-inline' ${webview.cspSource} ${codiconCSSUri} ${awesomepleteCSSUri}; script-src 'nonce-${nonce}';">
 				<link href="${codiconCSSUri}" rel="stylesheet" />
 				<link href="${awesomepleteCSSUri}" rel="stylesheet" />
 				<link href="${CSSUri}" rel="stylesheet">

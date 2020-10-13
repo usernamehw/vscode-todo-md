@@ -229,8 +229,8 @@ function renderTask(task: TheTask): HTMLElement {
 		}
 	}
 	if (state.config.markdownEnabled) {
-		// @ts-ignore
-		title.innerHTML = marked.parseInline(titleText);
+		// @ts-ignor
+		title.innerHTML = marked(titleText);
 	} else {
 		title.textContent = titleText;
 	}
