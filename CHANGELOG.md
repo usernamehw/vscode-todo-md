@@ -1,3 +1,9 @@
+## 2.0.6 `13 Oct 2020`
+
+- 💥 Default priority is now `F`
+- ✨ Add commands to increment/decrement priority
+- 🐛 Fix when extension tries to use the wrong document
+
 ## 2.0.5 `12 Oct 2020`
 
 - ✨ [webview] Allow changing font family
