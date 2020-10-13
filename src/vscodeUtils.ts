@@ -43,3 +43,11 @@ export function followLink(link: string) {
 export function openSettingGuiAt(settingName: string) {
 	vscode.commands.executeCommand('workbench.action.openSettings', settingName);
 }
+/**
+ * Vscode input has a noisy propmt.
+ * This function makes some space between text and the prompt
+ * by using several non-breaking spaces.
+ */
+export function inputOffset(text: string): string {
+	return `${text}${' '.repeat(8)}`;
+}

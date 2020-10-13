@@ -11,7 +11,7 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { fancyNumber, getRandomInt } from './utils';
-import { followLink, getFullRangeFromLines, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
+import { followLink, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
 
 class QuickPickItem implements vscode.QuickPickItem {
 	label: string;
@@ -229,9 +229,9 @@ export function registerAllCommands() {
 				} else if (match[0] === '-') {
 					dueDateToInsert = dayjs().subtract(Number(match.slice(1)), 'day').toString();
 				}
-				inputBox.prompt = `${dueDateToInsert}        `;
+				inputBox.prompt = inputOffset(dueDateToInsert);
 			} else {
-				inputBox.prompt = '❌        ';
+				inputBox.prompt = inputOffset('❌');
 			}
 		});
 
