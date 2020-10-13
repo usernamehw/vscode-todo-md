@@ -115,6 +115,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 # Commands
 
 - `todomd.toggleDone` <kbd>Alt</kbd>+<kbd>D</kbd> - Toggle Done (Completion)
+- `todomd.incrementPriority` - Increment priority. Or add one if it doesn't exist.
+- `todomd.decrementPriority` - Decrement priority. Or add one if it doesn't exist.
 - `todomd.getNextTask` - Get due task from main file. If none are due - get one with the highest priority.
 - `todomd.getFewNextTasks` - Get several tasks. Due tasks are on top.
 - `todomd.getRandomTask` - Get random due task if exists. If none are due, get random task out of non-due tasks. (Taken from main file).
@@ -131,7 +133,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |completionDateIncludeTime|**`false`**|When `addCompletionDate` setting enabled, includes date and time: `{cm:2020-04-30T09:11:17}`|
 |addCreationDate|**`false`**|When creating a task add creation date to it: `{cr:2020-04-30}`|
 |creationDateIncludeTime|**`false`**|When `addCreationDate` setting enabled, includes date and time: `{cr:2020-04-30T09:11:17}`|
-|defaultPriority|`"Z"`|Used in sorting for tasks without priority.|
+|defaultPriority|`"F"`|Used in sorting for tasks without priority.|
 |getNextNumberOfTasks|**`5`**|Number of tasks returned by `getFewNextTasks` command.|
 |todomd.projects|`[]`|Projects added to autocomplete.|
 |todomd.contexts|`[]`|Contexts added to autocomplete.|

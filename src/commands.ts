@@ -375,6 +375,41 @@ export function registerAllCommands() {
 		}
 		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(numberOfHours, 'hour').toDate());
 	});
+	commands.registerTextEditorCommand('todomd.incrementPriority', editor => {
+		// TODO: move to a separate function
+		const lineNumber = editor.selection.active.line;
+		const task = getTaskAtLine(lineNumber);
+		if (!task || task.priority === 'A') {
+			return;
+		}
+		const newPriority = String.fromCharCode(task.priority.charCodeAt(0) - 1);
+		const wEdit = new WorkspaceEdit();
+		if (task.priorityRange) {
+			// Task has priority
+			wEdit.replace(editor.document.uri, task.priorityRange, `(${newPriority})`);
+		} else {
+			// No priority, create one
+			wEdit.insert(editor.document.uri, new vscode.Position(lineNumber, 0), `(${newPriority}) `);
+		}
+		applyEdit(wEdit, editor.document);
+	});
+	commands.registerTextEditorCommand('todomd.decrementPriority', editor => {
+		const lineNumber = editor.selection.active.line;
+		const task = getTaskAtLine(lineNumber);
+		if (!task || task.priority === 'Z') {
+			return;
+		}
+		const newPriority = String.fromCharCode(task.priority.charCodeAt(0) + 1);
+		const wEdit = new WorkspaceEdit();
+		if (task.priorityRange) {
+			// Task has priority
+			wEdit.replace(editor.document.uri, task.priorityRange, `(${newPriority})`);
+		} else {
+			// No priority, create one
+			wEdit.insert(editor.document.uri, new vscode.Position(lineNumber, 0), `(${newPriority}) `);
+		}
+		applyEdit(wEdit, editor.document);
+	});
 	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
 		openSettingGuiAt('todomd.webview');
 	});

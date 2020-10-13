@@ -179,7 +179,7 @@
 				"todomd.defaultPriority": {
 					"type": "string",
 					"markdownDescription": "Used in sorting for tasks without priority.",
-					"default": "Z"
+					"default": "F"
 				},
 				"todomd.isDev": {
 					"type": "boolean",
@@ -791,6 +791,16 @@
 				"title": "Show Webview Settings",
 				"category": "Todo MD",
 				"icon": "$(settings-gear)"
+			},
+			{
+				"command": "todomd.incrementPriority",
+				"title": "Increment priority",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.decrementPriority",
+				"title": "Decrement priority",
+				"category": "Todo MD"
 			},
 			{
 				"command": "todomd.toggleDone",
