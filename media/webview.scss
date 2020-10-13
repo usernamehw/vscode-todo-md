@@ -53,7 +53,9 @@ body.vscode-dark {
 }
 
 a {
+	margin-left: 0.25em;
 	text-decoration: none;
+	word-break: break-all;
 }
 
 input[type="text"] {
