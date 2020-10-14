@@ -71,6 +71,24 @@ export async function decrementCountForTask(document: vscode.TextDocument, lineN
 	setCountCurrentValue(wEdit, document.uri, count, String(count.current - 1));
 	return applyEdit(wEdit, document);
 }
+export async function incrementOrDecrementPriority(document: TextDocument, lineNumber: number, type: 'increment' | 'decrement') {
+	const task = getTaskAtLine(lineNumber);
+	if (!task ||
+			type === 'increment' && task.priority === 'A' ||
+			type === 'decrement' && task.priority === 'Z') {
+		return undefined;
+	}
+	const newPriority = type === 'increment' ? String.fromCharCode(task.priority.charCodeAt(0) - 1) : String.fromCharCode(task.priority.charCodeAt(0) + 1);
+	const wEdit = new WorkspaceEdit();
+	if (task.priorityRange) {
+		// Task has priority
+		wEdit.replace(document.uri, task.priorityRange, `(${newPriority})`);
+	} else {
+		// No priority, create one
+		wEdit.insert(document.uri, new vscode.Position(lineNumber, 0), `(${newPriority}) `);
+	}
+	return applyEdit(wEdit, document);
+}
 async function removeOverdueFromLine(document: vscode.TextDocument, task: TheTask) {
 	const wEdit = new WorkspaceEdit();
 	wEdit.replace(document.uri, task.overdueRange ?? new vscode.Range(0, 0, 0, 0), '');

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, resetAllRecurringTasks, toggleDone, toggleTaskCompletionAtLine } from './documentActions';
+import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleDone, toggleTaskCompletionAtLine } from './documentActions';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
@@ -377,39 +377,12 @@ export function registerAllCommands() {
 		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(numberOfHours, 'hour').toDate());
 	});
 	commands.registerTextEditorCommand('todomd.incrementPriority', editor => {
-		// TODO: move to a separate function
 		const lineNumber = editor.selection.active.line;
-		const task = getTaskAtLine(lineNumber);
-		if (!task || task.priority === 'A') {
-			return;
-		}
-		const newPriority = String.fromCharCode(task.priority.charCodeAt(0) - 1);
-		const wEdit = new WorkspaceEdit();
-		if (task.priorityRange) {
-			// Task has priority
-			wEdit.replace(editor.document.uri, task.priorityRange, `(${newPriority})`);
-		} else {
-			// No priority, create one
-			wEdit.insert(editor.document.uri, new vscode.Position(lineNumber, 0), `(${newPriority}) `);
-		}
-		applyEdit(wEdit, editor.document);
+		incrementOrDecrementPriority(editor.document, lineNumber, 'increment');
 	});
 	commands.registerTextEditorCommand('todomd.decrementPriority', editor => {
 		const lineNumber = editor.selection.active.line;
-		const task = getTaskAtLine(lineNumber);
-		if (!task || task.priority === 'Z') {
-			return;
-		}
-		const newPriority = String.fromCharCode(task.priority.charCodeAt(0) + 1);
-		const wEdit = new WorkspaceEdit();
-		if (task.priorityRange) {
-			// Task has priority
-			wEdit.replace(editor.document.uri, task.priorityRange, `(${newPriority})`);
-		} else {
-			// No priority, create one
-			wEdit.insert(editor.document.uri, new vscode.Position(lineNumber, 0), `(${newPriority}) `);
-		}
-		applyEdit(wEdit, editor.document);
+		incrementOrDecrementPriority(editor.document, lineNumber, 'decrement');
 	});
 	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
 		openSettingGuiAt('todomd.webview');
