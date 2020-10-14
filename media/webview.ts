@@ -90,6 +90,12 @@ const awesomplete = new Awesomplete(filterInputEl, {
 		return li as HTMLElement;
 	},
 });
+filterInputEl.addEventListener('awesomplete-select', (e) => {
+	setTimeout(() => {
+		filterInputEl.focus();
+		awesomplete.close();
+	}, 0)
+});
 setTimeout(() => {
 	awesomplete.close();
 }, 0)
@@ -107,11 +113,6 @@ filterInputEl.addEventListener('keydown', e => {
 		});
 	} else if (e.key === 'Tab' || e.key === 'Enter') {
 		triggerInputEvent();
-		// 🐛 Tab in Awesomplete moves focus away from input
-		setTimeout(() => {
-			filterInputEl.focus();
-			awesomplete.close();
-		}, 0);// TODO: move this to select event
 	}
 })
 
