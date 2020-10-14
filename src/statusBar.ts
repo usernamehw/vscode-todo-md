@@ -1,5 +1,6 @@
 import { StatusBarItem, window } from 'vscode';
 import { TheTask } from './TheTask';
+import { percentage } from './utils';
 
 export class StatusBar {
 	private readonly statusBarItem: StatusBarItem;
@@ -17,10 +18,10 @@ export class StatusBar {
 	/**
 	 * Show counter for tasks ( completed / all )
 	 * Example: ( 1 / 10 )
-	 * TODO: show percentage?
 	 */
 	updateText(tasks: TheTask[]) {
 		const completedTasks = tasks.filter(t => t.done);
-		this.statusBarItem.text = `( ${completedTasks.length} / ${tasks.length} )`;
+		const percentageString = percentage(completedTasks.length, tasks.length).toFixed(1);
+		this.statusBarItem.text = `${completedTasks.length}/${tasks.length} (${percentageString}%)`;
 	}
 }
