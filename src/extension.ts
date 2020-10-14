@@ -22,6 +22,7 @@ dayjs.Ls.en.weekStart = 1;
 
 export const state: State = {
 	tasks: [],
+	tags: [],
 	projects: [],
 	contexts: [],
 	tagsForTreeView: [],
