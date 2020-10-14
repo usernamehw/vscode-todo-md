@@ -124,10 +124,6 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 		contexts: string[];
 	};
 }
-interface WebviewMessageUpdateTasks extends WebviewMessageBase {// TODO: remove?
-	type: 'updateTasks';
-	value: TheTask[];
-}
 interface WebviewMessageUpdateConfig extends WebviewMessageBase {
 	type: 'updateConfig';
 	value: IExtensionConfig['webview'];
@@ -157,4 +153,4 @@ interface WebviewMessageUpdateTitle extends WebviewMessageBase {
 	type: 'updateTitle';
 	value: string;
 }
-export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageUpdateTasks | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount | WebviewMessageUpdateTitle;
+export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount | WebviewMessageUpdateTitle;
