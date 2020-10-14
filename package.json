@@ -937,7 +937,7 @@
 			{
 				"command": "todomd.toggleDone",
 				"key": "Alt+D",
-				"when": "editorTextFocus"
+				"when": "editorTextFocus && todomd:isActive"
 			}
 		],
 		"colors": [
