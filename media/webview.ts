@@ -84,6 +84,9 @@ const awesomplete = new Awesomplete(filterInputEl, {
 		return li as HTMLElement;
 	},
 });
+setTimeout(() => {
+	awesomplete.close();
+}, 0)
 
 filterInputEl.addEventListener('keydown', e => {
 	if (e.altKey && e.key === 'd') {
