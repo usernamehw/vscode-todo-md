@@ -184,7 +184,8 @@
 		"wrap-iife": 1,
 		"yoda": 1,
 		"no-label-var": 1,
-		"no-shadow": 1,
+		"no-shadow": 0,
+		"@typescript-eslint/no-shadow": 1,
 		"newline-before-return": 0,
 		"newline-after-var": 0,
 		"array-bracket-spacing": [
