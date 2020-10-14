@@ -114,7 +114,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	function updateConfig(): void {
 		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IExtensionConfig;
 
-		disposeEverything();
+		disposeEditorDisposables();
 		updateDecorationStyle();
 		updateEverything();
 		updateIsDevContext();
@@ -138,7 +138,7 @@ export async function updateState(document?: vscode.TextDocument) { // TODO: sho
 		document = await getDocumentForDefaultFile();
 	}
 	if (!document) {
-		return;
+		return;// TODO: reset all state here?
 	}
 	const parsedDocument = await parseDocument(document);
 
@@ -153,7 +153,7 @@ export async function updateState(document?: vscode.TextDocument) { // TODO: sho
 	state.projects = treeItems.projects;
 	state.contexts = treeItems.contexts;
 }
-function disposeEverything(): void {
+function disposeEditorDisposables(): void {
 	if (Global.completedTaskDecorationType) {
 		// if one set - that means that all decorations are set
 		Global.completedTaskDecorationType.dispose();
@@ -270,5 +270,5 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 }
 
 export function deactivate(): void {
-	disposeEverything();
+	disposeEditorDisposables();// TODO: should this dispose everything?
 }
