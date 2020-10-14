@@ -179,6 +179,7 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 ## Please upvote the following upstream vscode issues:
 
 - [#32813 \[theming\] Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
+- [#21611 Add option to always show word based suggestions](https://github.com/microsoft/vscode/issues/21611)
 - [#54285 Contributed webview context menu actions](https://github.com/microsoft/vscode/issues/54285)
 - [#25633 [theming] when completing color keys in settings, fill in current value](https://github.com/microsoft/vscode/issues/25633)
 - [#5455 OnClick event on Gutter](https://github.com/microsoft/vscode/issues/5455)
