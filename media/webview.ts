@@ -225,7 +225,7 @@ function renderTask(task: TheTask): HTMLElement {
 			linkEl.title = link.value;
 			linkEl.text = link.value;
 			linkElements.push(linkEl);
-			titleText = titleText.slice(0, link.characterRange[0]) + titleText.slice(link.characterRange[1]);// TODO: fails to parse when special things are present such as priority (A) resulting in wrong substring
+			titleText = titleText.replace(link.value, '');
 		}
 	}
 	if (state.config.markdownEnabled) {
