@@ -98,7 +98,12 @@ export async function deactivateExtensionFeatures() {
 	await updateState();
 	updateAllTreeViews();
 }
-
+/**
+ * - Update state
+ * - Update editor decorations
+ * - Update status bar
+ * - Update all tree views
+ */
 export async function updateEverything(editor?: vscode.TextEditor) {
 	await updateState(editor?.document);
 	if (editor) {
