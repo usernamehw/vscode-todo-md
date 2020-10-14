@@ -138,7 +138,7 @@ export async function updateState(document?: vscode.TextDocument) { // TODO: sho
 		document = await getDocumentForDefaultFile();
 	}
 	if (!document) {
-		return undefined;
+		return;
 	}
 	const parsedDocument = await parseDocument(document);
 
@@ -152,8 +152,6 @@ export async function updateState(document?: vscode.TextDocument) { // TODO: sho
 	state.tags = treeItems.tags;
 	state.projects = treeItems.projects;
 	state.contexts = treeItems.contexts;
-
-	return document;
 }
 function disposeEverything(): void {
 	if (Global.completedTaskDecorationType) {
