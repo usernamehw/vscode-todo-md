@@ -105,7 +105,7 @@ export async function deactivateEditorFeatures() {
  * - Update all tree views
  */
 export async function updateEverything(editor?: vscode.TextEditor) {
-	await updateState(editor?.document);
+	await updateState();
 	if (editor) {
 		updateEditorDecorations(editor);
 	}

@@ -130,10 +130,8 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 /**
  * Update primary `state` properties, such as `tasks` or `tags`, based on provided document or based on default file
  */
-export async function updateState(document?: vscode.TextDocument) { // TODO: should it even require argument?
-	if (!document) {
-		document = state.activeDocument;
-	}
+export async function updateState() {
+	let document = state.activeDocument;
 	if (!document) {
 		document = await getDocumentForDefaultFile();
 	}
