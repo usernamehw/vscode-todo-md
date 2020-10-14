@@ -350,8 +350,8 @@ window.addEventListener('message', event => {
 
 function getState(): SavedState {
 	const saveStateDefaults: SavedState = {
-	filterInputValue: '',
-}
+		filterInputValue: '',
+	}
 	return vscode.getState() ?? saveStateDefaults;
 }
 
