@@ -66,7 +66,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					break;
 				}
 				case 'updateTitle': {
-					this.updateTitle(`webview (${message.value})`);
+					this.updateTitle(message.value);
 					break;
 				}
 			}
@@ -100,9 +100,9 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		} as WebviewMessage);
 	}
 
-	updateTitle(newTitle: string) {
+	updateTitle(numberOfTasks: string) {
 		if (this._view) {
-			this._view.title = newTitle;
+			this._view.title = `webview (${numberOfTasks})`;
 		}
 	}
 
