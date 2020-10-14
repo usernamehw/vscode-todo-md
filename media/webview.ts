@@ -31,8 +31,10 @@ const state: {
 	tags: [],
 	projects: [],
 	contexts: [],
+	// @ts-ignore
 	config: {
 		showCompleted: true,
+		showRecurringCompleted: true,
 		showPriority: true,
 		fontSize: '13px',
 		padding: '0px',
@@ -164,6 +166,15 @@ function updateTasks() {
 	let filteredTasks = state.tasks;
 	if (filterInputEl.value !== '') {
 		filteredTasks = filterItems(filteredTasks, filterInputEl.value);
+	}
+	if (!state.config.showRecurringCompleted) {
+		filteredTasks = filteredTasks.filter(task => {
+			if (task.due?.isRecurring && task.done) {
+				return false;
+			} else {
+				return true;
+			}
+		})
 	}
 	if (!state.config.showCompleted) {
 		filteredTasks = filteredTasks.filter(task => !task.done);

@@ -141,7 +141,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |treeViews|`[...]`|Tree Views that have predefined filters (3 max).|
 |savedFilters|`[...]`|Filters that you can pick when applying a filter.|
 |decorations|`{...}`|Advanced decoration properties for editor decorations. Currently supported are `project`, `context`, `comment`|
-|webview.showCompleted|**`true`**|Controls whether completed tasks are shown or not in the webview.|
+|webview.showCompleted|**`true`**|Whether completed tasks are shown or not in the webview.|
+|webview.showRecurringCompleted|**`true`**|Whether recurring completed tasks are shown or not in the webview.|
 |webview.showPriority|**`true`**|Controls whether priority is shown in the webview.|
 |webview.fontSize|`"13px"`|Controls font size in the webview.|
 |webview.padding|`"0px"`|Controls spacing between items in a list.|
