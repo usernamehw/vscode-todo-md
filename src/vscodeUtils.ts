@@ -28,8 +28,8 @@ export function getFullRangeFromLines(document: vscode.TextDocument, lineStart: 
 /**
  * Set vscode context.
  */
-export function setContext(context: VscodeContext, value: any) {
-	vscode.commands.executeCommand('setContext', context, value);
+export async function setContext(context: VscodeContext, value: any) {
+	return await vscode.commands.executeCommand('setContext', context, value);
 }
 /**
  * Open URL in default browser.
