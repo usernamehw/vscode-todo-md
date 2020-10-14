@@ -56,6 +56,11 @@ filterInputEl.addEventListener('input', () => {
 	})
 });
 
+function triggerInputEvent() {
+	var event = new Event('input');
+	filterInputEl.dispatchEvent(event);
+}
+
 // @ts-expect-error
 const awesomplete = new Awesomplete(filterInputEl, {
 	list: [],
@@ -92,8 +97,7 @@ filterInputEl.addEventListener('keydown', e => {
 			value: firstMatch.lineNumber
 		});
 	} else if (e.key === 'Tab' || e.key === 'Enter') {
-		var event = new Event('input');
-		filterInputEl.dispatchEvent(event);
+		triggerInputEvent();
 		// 🐛 Tab in Awesomplete moves focus away from input
 		setTimeout(() => {
 			filterInputEl.focus();
@@ -123,14 +127,17 @@ window.addEventListener('click', event => {
 			if (target.classList.contains('tag')) {
 				filterInputEl.value = `#${target.textContent}`;
 				filterInputEl.focus();
+				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('project')) {
 				filterInputEl.value = `+${target.textContent}`;
 				filterInputEl.focus();
+				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('context')) {
 				filterInputEl.value = `@${target.textContent}`;
 				filterInputEl.focus();
+				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('decrement-count')) {
 				vscode.postMessage({
