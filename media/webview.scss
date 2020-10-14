@@ -52,8 +52,10 @@ body.vscode-dark {
 	--task-checkbox-bg: #3d4d63;
 }
 
+$approxOneSpace: 0.25em;
+
 a {
-	margin-left: 0.25em;
+	margin-left: $approxOneSpace;
 	text-decoration: none;
 	word-break: break-all;
 }
@@ -170,7 +172,7 @@ button {
 .project,
 .context {
 	white-space: pre;
-	margin-left: 1ch;
+	margin-left: $approxOneSpace;
 	padding-left: 4px;
 	padding-right: 4px;
 	border-radius: 3px;
@@ -207,7 +209,7 @@ button {
 }
 
 .count-container {
-	margin-left: 1ch;
+	margin-left: $approxOneSpace;
 	background-color: var(--count-background);
 	border-radius: 3px;
 	white-space: pre;
