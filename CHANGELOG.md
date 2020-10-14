@@ -1,6 +1,12 @@
+## 2.0.7 `14 Oct 2020`
+
+- ✨ [webview] Try rendering tasks as markdown
+- ✨ Filter should support multiple tag syntax: `#html#css`
+- 🐛 [webview] Fix links replacing sometimes leaving text
+
 ## 2.0.6 `13 Oct 2020`
 
-- 💥 Default priority is now `F`
+- 💥 Default priority is now `G`
 - ✨ Add commands to increment/decrement priority
 - 🐛 Fix when extension tries to use the wrong document
 
