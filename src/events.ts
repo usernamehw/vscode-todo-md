@@ -51,10 +51,9 @@ export function isTheRightFileName(editor?: vscode.TextEditor): boolean {
 			return false;
 		}
 	}
-	const documentFilter: vscode.DocumentFilter = {
+	return vscode.languages.match({
 		pattern: extensionConfig.activatePattern,
-	};
-	return vscode.languages.match(documentFilter, editor.document) !== 0;
+	},	editor.document) !== 0;
 }
 /**
  * There's a number of features that extension provides.
