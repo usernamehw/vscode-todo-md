@@ -9,14 +9,14 @@ import { VscodeContext } from './types';
 import { setContext } from './vscodeUtils';
 
 export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): Promise<void> {
+	if (state.theRightFileOpened) {
+		await deactivateEditorFeatures();
+	}
 	if (editor && isTheRightFileName(editor)) {
 		state.activeDocument = editor.document;
 		activateEditorFeatures(editor);
 	} else {
 		state.activeDocument = await getDocumentForDefaultFile();
-		if (state.theRightFileOpened) {
-			deactivateEditorFeatures();
-		}
 	}
 }
 // TODO: this function should be executed by interval (60s?)
@@ -63,13 +63,13 @@ export function isTheRightFileName(editor?: vscode.TextEditor): boolean {
 export async function activateEditorFeatures(editor: vscode.TextEditor) {
 	state.theRightFileOpened = true;
 
-	updateEverything(editor);
+	await updateEverything(editor);
 
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
 	statusBar.updateText(state.tasks);
 	statusBar.show();
-	setContext(VscodeContext.isActive, true);
+	await setContext(VscodeContext.isActive, true);
 	// TODO: maybe move it up?
 	checkIfNewDayArrived();
 	if (state.newDayArrived && !state.fileWasReset) {
@@ -94,7 +94,7 @@ export async function deactivateEditorFeatures() {
 		Global.generalAutocompleteDisposable.dispose();
 	}
 	statusBar.hide();
-	setContext(VscodeContext.isActive, false);
+	await setContext(VscodeContext.isActive, false);
 	await updateState();
 	updateAllTreeViews();
 }
