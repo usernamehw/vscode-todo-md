@@ -44,27 +44,23 @@ let filteredTasksGlobal: TheTask[] = [];
 
 const $filterInputEl = document.getElementById('filterInput') as HTMLInputElement;
 $filterInputEl.value = savedState.filterInputValue;
-updateWebviewCounter();
 
 $filterInputEl.addEventListener('input', () => {
 	updateTasks();
 	vscode.setState({
 		filterInputValue: $filterInputEl.value
 	});
-	updateWebviewCounter();
 });
 
 function triggerInputEvent() {
 	var event = new Event('input');
 	$filterInputEl.dispatchEvent(event);
 }
-function updateWebviewCounter() {
-	setTimeout(() => {
-		vscode.postMessage({
-			type: 'updateTitle',
-			value: String(filteredTasksGlobal.length),
-		});
-	}, 0)
+function updateWebviewCounter(numberOfTasks: number) {
+	vscode.postMessage({
+		type: 'updateTitle',
+		value: String(numberOfTasks),
+	});
 }
 
 // @ts-expect-error
@@ -201,6 +197,7 @@ function updateTasks() {
 		list.appendChild(renderTask(task));
 	}
 	filteredTasksGlobal = sortedTasks;
+	updateWebviewCounter(filteredTasksGlobal.length);
 }
 
 function renderTask(task: TheTask): HTMLElement {
