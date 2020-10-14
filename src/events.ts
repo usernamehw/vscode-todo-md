@@ -17,6 +17,7 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 		activateEditorFeatures(editor);
 	} else {
 		state.activeDocument = await getDocumentForDefaultFile();
+		updateEverything();
 	}
 }
 // TODO: this function should be executed by interval (60s?)
@@ -108,7 +109,7 @@ export async function updateEverything(editor?: vscode.TextEditor) {
 	await updateState();
 	if (editor) {
 		updateEditorDecorations(editor);
+		statusBar.updateText(state.tasks);
 	}
-	statusBar.updateText(state.tasks);
 	updateAllTreeViews();
 }
