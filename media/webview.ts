@@ -42,21 +42,21 @@ const state: {
 };
 let filteredTasksGlobal: TheTask[] = [];
 
-const filterInputEl = document.getElementById('filterInput') as HTMLInputElement;// TODO: use $ for elements?
-filterInputEl.value = savedState.filterInputValue;
+const $filterInputEl = document.getElementById('filterInput') as HTMLInputElement;
+$filterInputEl.value = savedState.filterInputValue;
 updateWebviewCounter();
 
-filterInputEl.addEventListener('input', () => {
+$filterInputEl.addEventListener('input', () => {
 	updateTasks();
 	vscode.setState({
-		filterInputValue: filterInputEl.value
+		filterInputValue: $filterInputEl.value
 	});
 	updateWebviewCounter();
 });
 
 function triggerInputEvent() {
 	var event = new Event('input');
-	filterInputEl.dispatchEvent(event);
+	$filterInputEl.dispatchEvent(event);
 }
 function updateWebviewCounter() {
 	setTimeout(() => {
@@ -68,7 +68,7 @@ function updateWebviewCounter() {
 }
 
 // @ts-expect-error
-const awesomplete = new Awesomplete(filterInputEl, {
+const awesomplete = new Awesomplete($filterInputEl, {
 	list: [],
 	autoFirst: true,
 	minChars: 1,
@@ -90,9 +90,9 @@ const awesomplete = new Awesomplete(filterInputEl, {
 		return li as HTMLElement;
 	},
 });
-filterInputEl.addEventListener('awesomplete-select', (e) => {
+$filterInputEl.addEventListener('awesomplete-select', (e) => {
 	setTimeout(() => {
-		filterInputEl.focus();
+		$filterInputEl.focus();
 		awesomplete.close();
 	}, 0)
 });
@@ -100,7 +100,7 @@ setTimeout(() => {
 	awesomplete.close();
 }, 0)
 
-filterInputEl.addEventListener('keydown', e => {
+$filterInputEl.addEventListener('keydown', e => {
 	if (e.altKey && e.key === 'd') {
 		const firstMatch = filteredTasksGlobal[0];
 		if (!firstMatch) {
@@ -135,18 +135,18 @@ window.addEventListener('click', event => {
 			}
 
 			if (target.classList.contains('tag')) {
-				filterInputEl.value = `#${target.textContent}`;
-				filterInputEl.focus();
+				$filterInputEl.value = `#${target.textContent}`;
+				$filterInputEl.focus();
 				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('project')) {
-				filterInputEl.value = `+${target.textContent}`;
-				filterInputEl.focus();
+				$filterInputEl.value = `+${target.textContent}`;
+				$filterInputEl.focus();
 				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('context')) {
-				filterInputEl.value = `@${target.textContent}`;
-				filterInputEl.focus();
+				$filterInputEl.value = `@${target.textContent}`;
+				$filterInputEl.focus();
 				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('decrement-count')) {
@@ -166,7 +166,7 @@ window.addEventListener('click', event => {
 
 window.addEventListener('focus', () => {
 	setTimeout(() => {
-		filterInputEl.focus();
+		$filterInputEl.focus();
 	}, 100);
 })
 
@@ -181,8 +181,8 @@ function updateTasks() {
 	list.textContent = '';
 
 	let filteredTasks = state.tasks;
-	if (filterInputEl.value !== '') {
-		filteredTasks = filterItems(filteredTasks, filterInputEl.value);
+	if ($filterInputEl.value !== '') {
+		filteredTasks = filterItems(filteredTasks, $filterInputEl.value);
 	}
 	if (!state.config.showRecurringCompleted) {
 		filteredTasks = filteredTasks.filter(task => {
@@ -331,11 +331,6 @@ function updateFilterInputAutocomplete(tags: string[], projects: string[], conte
 window.addEventListener('message', event => {
 	const message: WebviewMessage = event.data; // The json data that the extension sent
 	switch (message.type) {
-		case 'updateTasks': {
-			state.tasks = message.value;
-			updateTasks();
-			break;
-		}
 		case 'updateEverything': {
 			state.tasks = message.value.tasks;
 			state.tags = message.value.tags;
@@ -363,4 +358,4 @@ function getState(): SavedState {
 	return vscode.getState() ?? saveStateDefaults;
 }
 
-filterInputEl.focus();
+$filterInputEl.focus();
