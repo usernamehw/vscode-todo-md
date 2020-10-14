@@ -91,7 +91,6 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				},
 			} as WebviewMessage);
 		}
-		this.updateTitle(`webview (${state.tasks.length})`);
 	}
 
 	updateWebviewConfig(config: IExtensionConfig['webview']) {
