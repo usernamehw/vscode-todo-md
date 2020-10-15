@@ -155,6 +155,9 @@ button {
 	&.overdue {
 		border-right: 3px solid #d3000099;
 	}
+	&.not-due {
+		border-right: 3px solid grey;
+	}
 }
 
 .native-checkbox {
