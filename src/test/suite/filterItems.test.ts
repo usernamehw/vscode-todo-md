@@ -81,11 +81,18 @@ describe('\n──────────────────────�
 		expect(filtered).to.have.length(2);
 		expect(filtered).to.have.same.members([threeTagsTask, oneTagHtmlTask]);
 	});
-	it('Multiple tags', () => {
+	it('Multiple tags `#html #js`', () => {
 		const items = [justTextTask, threeTagsTask];
 		const filtered = filterItems(items, '#html #js');
 		expect(filtered).to.have.length(1);
 		expect(filtered).to.have.same.members([threeTagsTask]);
+	});
+	it('Multiple tags without space `#html#js`', () => {
+		const items = [justTextTask, threeTagsTask];
+		const filtered = filterItems(items, '#html#js');
+		expect(filtered).to.have.same.members([threeTagsTask]);
+		const filtered2 = filterItems(items, '#js#html');
+		expect(filtered2).to.have.same.members([threeTagsTask]);
 	});
 });
 describe('Filter contexts', () => {
