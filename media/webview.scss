@@ -8,11 +8,9 @@ html {
 }
 
 body {
-	/* background: transparent; */
 	padding-left: 0;
 	padding-right: 0;
-	padding-top: 0;
-	/* padding-top: 1px; */
+	padding-top: calc(6px + 6px + 24px);
 	font-size: var(--font-size);
 	position: relative;
 	margin: 0;
@@ -115,13 +113,9 @@ button {
 
 .list {
 	font-family: var(--font-family);
-	padding-top: calc(6px + 6px + 24px);
-	/* padding-top: 6px; */
 	line-height: 1.4;
 	overflow-y: auto;
-	/* TODO: calc actual filter height */
-	height: calc(100vh);
-	/*  - 6px - 6px - 24px */
+	height: calc(100vh - 6px - 6px - 24px);
 }
 
 .list-item {
