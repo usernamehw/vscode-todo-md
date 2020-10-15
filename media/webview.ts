@@ -43,6 +43,7 @@ let filteredTasksGlobal: TheTask[] = [];
 const $filterInputEl = document.getElementById('filterInput') as HTMLInputElement;
 const $listEl = document.getElementById('list') as HTMLInputElement;
 $filterInputEl.value = savedState.filterInputValue;
+focusInputAndCloseAutocomplete();
 
 $filterInputEl.addEventListener('input', () => {
 	updateTasks();
@@ -86,14 +87,8 @@ const awesomplete = new Awesomplete($filterInputEl, {
 	},
 });
 $filterInputEl.addEventListener('awesomplete-select', e => {
-	setTimeout(() => {
-		$filterInputEl.focus();
-		awesomplete.close();
-	}, 0);
+	focusInputAndCloseAutocomplete();
 });
-setTimeout(() => {
-	awesomplete.close();
-}, 0);
 
 $filterInputEl.addEventListener('keydown', e => {
 	if (e.altKey && e.key === 'd') {
@@ -131,17 +126,17 @@ window.addEventListener('click', event => {
 
 			if (target.classList.contains('tag')) {
 				$filterInputEl.value = `#${target.textContent}`;
-				$filterInputEl.focus();
+				focusInputAndCloseAutocomplete();
 				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('project')) {
 				$filterInputEl.value = `+${target.textContent}`;
-				$filterInputEl.focus();
+				focusInputAndCloseAutocomplete();
 				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('context')) {
 				$filterInputEl.value = `@${target.textContent}`;
-				$filterInputEl.focus();
+				focusInputAndCloseAutocomplete();
 				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('decrement-count')) {
@@ -353,4 +348,10 @@ function getState(): SavedState {
 	return vscode.getState() ?? saveStateDefaults;
 }
 
-$filterInputEl.focus();
+function focusInputAndCloseAutocomplete() {
+	setTimeout(() => {
+		$filterInputEl.focus();
+		awesomplete.close();
+	}, 0);
+}
+
