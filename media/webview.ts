@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-// TODO: enable typescipt-eslint for this file
-
 import fuzzysort from 'fuzzysort';
 import marked from 'marked';
 import { filterItems } from '../src/filter';
@@ -48,12 +46,12 @@ $filterInputEl.value = savedState.filterInputValue;
 $filterInputEl.addEventListener('input', () => {
 	updateTasks();
 	vscode.setState({
-		filterInputValue: $filterInputEl.value
+		filterInputValue: $filterInputEl.value,
 	});
 });
 
 function triggerInputEvent() {
-	var event = new Event('input');
+	const event = new Event('input');
 	$filterInputEl.dispatchEvent(event);
 }
 function updateWebviewCounter(numberOfTasks: number) {
@@ -72,7 +70,7 @@ const awesomplete = new Awesomplete($filterInputEl, {
 	// @ts-ignore
 	tabSelect: true,
 	// @ts-expect-error
-	filter: function (text: {label: string; value: string}, input) {
+	filter(text: {label: string; value: string}, input) {
 		if (input === '') {
 			return true;
 		}
@@ -80,21 +78,21 @@ const awesomplete = new Awesomplete($filterInputEl, {
 		return result.length > 0;
 	},
 	// @ts-expect-error
-	item: function(text: {label: string; value: string}, input) {
-		var li = document.createElement('li');
+	item(text: {label: string; value: string}, input) {
+		const li = document.createElement('li');
 		li.innerHTML = fuzzysort.highlight(fuzzysort.single(input, text.value), '<mark>', '</mark>');
 		return li as HTMLElement;
 	},
 });
-$filterInputEl.addEventListener('awesomplete-select', (e) => {
+$filterInputEl.addEventListener('awesomplete-select', e => {
 	setTimeout(() => {
 		$filterInputEl.focus();
 		awesomplete.close();
-	}, 0)
+	}, 0);
 });
 setTimeout(() => {
 	awesomplete.close();
-}, 0)
+}, 0);
 
 $filterInputEl.addEventListener('keydown', e => {
 	if (e.altKey && e.key === 'd') {
@@ -105,12 +103,12 @@ $filterInputEl.addEventListener('keydown', e => {
 		}
 		vscode.postMessage({
 			type: 'toggleDone',
-			value: firstMatch.lineNumber
+			value: firstMatch.lineNumber,
 		});
 	} else if (e.key === 'Tab' || e.key === 'Enter') {
 		triggerInputEvent();
 	}
-})
+});
 
 window.addEventListener('click', event => {
 	const target = event.target;
@@ -127,7 +125,7 @@ window.addEventListener('click', event => {
 				vscode.postMessage({
 					type: 'goToTask',
 					value: lineNumber,
-				})
+				});
 			}
 
 			if (target.classList.contains('tag')) {
@@ -149,7 +147,7 @@ window.addEventListener('click', event => {
 				vscode.postMessage({
 					type: 'decrementCount',
 					value: lineNumber,
-				})
+				});
 			} else if (target.classList.contains('increment-count')) {
 				vscode.postMessage({
 					type: 'incrementCount',
@@ -164,7 +162,7 @@ window.addEventListener('focus', () => {
 	setTimeout(() => {
 		$filterInputEl.focus();
 	}, 100);
-})
+});
 
 function showNotification(text: string) {
 	vscode.postMessage({
@@ -173,7 +171,7 @@ function showNotification(text: string) {
 	});
 }
 function updateTasks() {
-	const list = document.querySelector('.list') as HTMLElement;
+	const list = document.querySelector('.list');
 	list.textContent = '';
 
 	let filteredTasks = state.tasks;
@@ -187,7 +185,7 @@ function updateTasks() {
 			} else {
 				return true;
 			}
-		})
+		});
 	}
 	if (!state.config.showCompleted) {
 		filteredTasks = filteredTasks.filter(task => !task.done);
@@ -351,7 +349,7 @@ window.addEventListener('message', event => {
 function getState(): SavedState {
 	const saveStateDefaults: SavedState = {
 		filterInputValue: '',
-	}
+	};
 	return vscode.getState() ?? saveStateDefaults;
 }
 
