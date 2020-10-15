@@ -22,18 +22,15 @@ export function deleteTask(document: vscode.TextDocument, lineNumber: number) {
 /**
  * Either toggle done or increment count
  */
-export async function toggleDone(document: vscode.TextDocument, lineNumber: number) {
+export async function toggleDoneOrIncrementCount(document: vscode.TextDocument, lineNumber: number) {
 	const task = getTaskAtLine(lineNumber);
 	if (!task) {
 		return undefined;
 	}
-	if (task.specialTags.overdue) {
-		return await removeOverdueFromLine(document, task);
-	}
 	if (task.specialTags.count) {
 		return await incrementCountForTask(document, lineNumber, task);
 	} else {
-		return await toggleTaskCompletionAtLine(lineNumber, document);
+		return await toggleDoneAtLine(lineNumber, document);
 	}
 }
 export async function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
@@ -94,11 +91,14 @@ async function removeOverdueFromLine(document: vscode.TextDocument, task: TheTas
 	wEdit.replace(document.uri, task.overdueRange ?? new vscode.Range(0, 0, 0, 0), '');
 	return applyEdit(wEdit, document);
 }
-export async function toggleTaskCompletionAtLine(lineNumber: number, document: TextDocument): Promise<void> {
+export async function toggleDoneAtLine(lineNumber: number, document: TextDocument): Promise<void> {
 	const { firstNonWhitespaceCharacterIndex } = document.lineAt(lineNumber);
 	const task = getTaskAtLine(lineNumber);
 	if (!task) {
 		return;
+	}
+	if (task.specialTags.overdue) {
+		await removeOverdueFromLine(document, task);
 	}
 	const line = document.lineAt(lineNumber);
 	const wEdit = new WorkspaceEdit();

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleDone, toggleTaskCompletionAtLine } from './documentActions';
+import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleDoneOrIncrementCount, toggleDoneAtLine } from './documentActions';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
@@ -39,7 +39,7 @@ export function registerAllCommands() {
 			document = editor.document;
 		}
 
-		await toggleDone(document, lineNumber);
+		await toggleDoneOrIncrementCount(document, lineNumber);
 
 		await updateState();
 		updateAllTreeViews();
@@ -293,7 +293,7 @@ export function registerAllCommands() {
 		if (task.specialTags.count) {
 			await incrementCountForTask(document, task.lineNumber, task);
 		} else {
-			await toggleTaskCompletionAtLine(task.lineNumber, document);
+			await toggleDoneAtLine(task.lineNumber, document);
 		}
 		await updateState();
 		updateAllTreeViews();

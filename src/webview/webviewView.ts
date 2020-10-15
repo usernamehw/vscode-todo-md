@@ -1,6 +1,6 @@
 import vscode, { window } from 'vscode';
 import { getTaskAtLine } from '../commands';
-import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleTaskCompletionAtLine } from '../documentActions';
+import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleDoneAtLine } from '../documentActions';
 import { extensionConfig, Global, state, updateState } from '../extension';
 import { IExtensionConfig, WebviewMessage } from '../types';
 import { getNonce } from '../webview/utils';
@@ -40,7 +40,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
 			switch (message.type) {
 				case 'toggleDone': {
-					toggleTaskCompletionAtLine(message.value, getActiveDocument());
+					toggleDoneAtLine(message.value, getActiveDocument());
 					await updateState();
 					this.updateEverything();
 					break;
