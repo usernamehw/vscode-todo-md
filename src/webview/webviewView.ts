@@ -130,7 +130,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				<div class="filter-input-container">
 					<input type="text" class="filter-input" id="filterInput">
 				</div>
-				<div class="list"></div>
+				<div id="list" class="list"></div>
 				<script defer nonce="${nonce}" src="${awesomepleteJSUri}"></script>
 				<script defer nonce="${nonce}" src="${JSUri}"></script>
 			</body>

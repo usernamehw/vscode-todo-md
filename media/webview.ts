@@ -41,6 +41,7 @@ const state: {
 let filteredTasksGlobal: TheTask[] = [];
 
 const $filterInputEl = document.getElementById('filterInput') as HTMLInputElement;
+const $listEl = document.getElementById('list') as HTMLInputElement;
 $filterInputEl.value = savedState.filterInputValue;
 
 $filterInputEl.addEventListener('input', () => {
@@ -171,8 +172,7 @@ function showNotification(text: string) {
 	});
 }
 function updateTasks() {
-	const list = document.querySelector('.list');
-	list.textContent = '';
+	$listEl.textContent = '';
 
 	let filteredTasks = state.tasks;
 	if ($filterInputEl.value !== '') {
@@ -192,7 +192,7 @@ function updateTasks() {
 	}
 	const sortedTasks = defaultSortTasks(filteredTasks);
 	for (const task of sortedTasks) {
-		list.appendChild(renderTask(task));
+		$listEl.appendChild(renderTask(task));
 	}
 	filteredTasksGlobal = sortedTasks;
 	updateWebviewCounter(filteredTasksGlobal.length);
