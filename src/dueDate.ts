@@ -169,7 +169,7 @@ export class DueDate {
 		if (dueDateStart === undefined) {
 			throw new Error('dueDate was specified, but dueDateStart is missing');
 		}
-		const match = /(?!e)(\d+)(d)/.exec(dueString);// TODO: remove ?!
+		const match = /e(\d+)(d)/.exec(dueString);
 		if (match) {
 			const interval = match[1] ? +match[1] : 1;
 			const unit = match[2];

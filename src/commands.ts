@@ -63,7 +63,7 @@ export function registerAllCommands() {
 		const lineNumber = treeItem.task.lineNumber;
 		const document = getActiveDocument();
 
-		deleteTask(document, lineNumber);// TODO: get document in the function itself?
+		deleteTask(document, lineNumber);
 
 		await updateState();
 		updateAllTreeViews();
