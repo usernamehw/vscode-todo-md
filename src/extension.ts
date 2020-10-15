@@ -56,6 +56,7 @@ export class Global {
 	static generalAutocompleteDisposable: vscode.Disposable;
 
 	static changeTextDocumentDisposable: vscode.Disposable;
+	static changeActiveTextEditorDisposable: vscode.Disposable;
 
 	static completedTaskDecorationType: vscode.TextEditorDecorationType;
 	static commentDecorationType: vscode.TextEditorDecorationType;
@@ -104,7 +105,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		vscode.window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, Global.webviewProvider),
 	);
 
-	window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
+	Global.changeActiveTextEditorDisposable = window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 
 	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
 		if (!e.affectsConfiguration(EXTENSION_NAME)) return;
@@ -268,5 +269,11 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 }
 
 export function deactivate(): void {
-	disposeEditorDisposables();// TODO: should this dispose everything?
+	disposeEditorDisposables();
+	Global.tagAutocompleteDisposable.dispose();
+	Global.projectAutocompleteDisposable.dispose();
+	Global.contextAutocompleteDisposable.dispose();
+	Global.generalAutocompleteDisposable.dispose();
+	Global.changeTextDocumentDisposable.dispose();
+	Global.changeActiveTextEditorDisposable.dispose();
 }
