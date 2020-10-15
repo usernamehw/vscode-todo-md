@@ -74,7 +74,7 @@ const priorityZTask = newTask({
 	priority: 'Z',
 });
 // ──────────────────────────────────────────────────────────────────────
-describe('Filter tags', () => {
+describe('\n──────────────────────────────── FILTER ───────────────────────────────\nFilter tags', () => {
 	it('One tag', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask];
 		const filtered = filterItems(items, '#html');

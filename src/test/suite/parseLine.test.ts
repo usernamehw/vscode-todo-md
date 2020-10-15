@@ -17,7 +17,7 @@ function getLineAt(n: number): TheTask | undefined {
 	return task.value;
 }
 // ──────────────────────────────────────────────────────────────────────
-describe('Comment', () => {
+describe('\n─────────────────────────── PARSE ──────────────────────────\nComment', () => { // TODO: Make helper function delimeter()
 	it('0 Should not produce a task', () => {
 		const line = editor.document.lineAt(0);
 		const task = parseLine(line);

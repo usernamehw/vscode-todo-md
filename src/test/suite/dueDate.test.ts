@@ -21,7 +21,7 @@ const $1jan2018mondayDueDate = new DueDate('2018-01-01', {
 	targetDate: $1jan2018monday,
 });
 
-describe('Not recurring', () => {
+describe('\n─────────────────────────DUE DATE ────────────────────────────────\nNot recurring', () => {
 	it('Simple date format `2018-01-01`', () => {
 		expect($1jan2018mondayDueDate.isDue === DueState.due).to.be.ok;
 	});
