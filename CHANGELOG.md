@@ -1,3 +1,9 @@
+## 2.0.8 `15 Oct 2020`
+
+- ✨ Add option `webview.showRecurringCompleted`
+- ✨ Show percentage of completed tasks in status bar
+- 🔨🐛 Various bug fixes and refactorings
+
 ## 2.0.7 `14 Oct 2020`
 
 - ✨ [webview] Try rendering tasks as markdown
