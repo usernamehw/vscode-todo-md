@@ -10,7 +10,7 @@ html {
 body {
 	padding-left: 0;
 	padding-right: 0;
-	padding-top: calc(6px + 6px + 24px);
+	padding-top: calc(4px + 4px + 24px);
 	font-size: var(--font-size);
 	position: relative;
 	margin: 0;
@@ -88,8 +88,8 @@ button {
 	background-color: var(--vscode-sideBar-background);
 	position: fixed;
 	z-index: 999;
-	padding-top: 6px;
-	padding-bottom: 6px;
+	padding-top: 4px;
+	padding-bottom: 4px;
 	left: 0;
 	top: 0;
 	right: 0;
@@ -115,7 +115,7 @@ button {
 	font-family: var(--font-family);
 	line-height: 1.4;
 	overflow-y: auto;
-	height: calc(100vh - 6px - 6px - 24px);
+	height: calc(100vh - 4px - 4px - 24px);
 }
 
 .list-item {
