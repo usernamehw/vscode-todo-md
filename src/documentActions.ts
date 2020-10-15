@@ -203,6 +203,9 @@ export function getActiveDocument() {
 		vscode.window.showErrorMessage('No active document');
 		throw new Error('No active document');
 	}
+	if (state.activeDocument.isClosed) {
+		vscode.workspace.openTextDocument(state.activeDocument.uri);
+	}
 	return state.activeDocument;
 }
 
