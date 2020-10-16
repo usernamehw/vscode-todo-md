@@ -64,10 +64,9 @@ export function updateDecorationStyle(): void {
 		backgroundColor: new vscode.ThemeColor('todomd.invalidDueDateBackground'),
 	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
-		isWholeLine: true,
 		after: {
 			color: '#88888899',
-			margin: '2ch',
+			margin: '1ch',
 			backgroundColor: '#00000005',
 		},
 	});
@@ -134,7 +133,7 @@ export function updateEditorDecorations(editor: TextEditor) {
 			}
 			if (due.closestDueDateInTheFuture) {
 				closestDueDateDecorationOptions.push({
-					range: dueRange,
+					range: new vscode.Range(dueRange.end.line, dueRange.end.character - 1, dueRange.end.line, dueRange.end.character - 1),
 					renderOptions: {
 						after: {
 							contentText: due.closestDueDateInTheFuture,
