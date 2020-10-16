@@ -4,6 +4,7 @@ import { updateCompletions } from './completionProviders';
 import { updateEditorDecorations } from './decorations';
 import { getDocumentForDefaultFile, resetAllRecurringTasks } from './documentActions';
 import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from './extension';
+import { updateHover } from './hoverProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { setContext } from './vscodeUtils';
@@ -68,6 +69,7 @@ export async function activateEditorFeatures(editor: vscode.TextEditor) {
 
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
+	updateHover();
 	statusBar.updateText(state.tasks);
 	statusBar.show();
 	await setContext(VscodeContext.isActive, true);
@@ -93,6 +95,9 @@ export async function deactivateEditorFeatures() {
 		Global.tagAutocompleteDisposable.dispose();
 		Global.projectAutocompleteDisposable.dispose();
 		Global.generalAutocompleteDisposable.dispose();
+	}
+	if (Global.hoverDisposable) {
+		Global.hoverDisposable.dispose();
 	}
 	statusBar.hide();
 	await setContext(VscodeContext.isActive, false);
