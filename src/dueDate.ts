@@ -27,7 +27,7 @@ export class DueDate {
 			const date = dayjs().add(i, 'day');
 			const { isDue } = DueDate.parseDue(this.raw, date.toDate());
 			if (isDue) {
-				return dayjs().to(date);
+				return `${date.format('ddd')} [${dayjs().to(date)}]`;
 			}
 		}
 		return 'More than 100 days';
