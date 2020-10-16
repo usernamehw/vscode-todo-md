@@ -68,10 +68,6 @@ a {
 	word-break: break-all;
 }
 
-p {
-	display: inline;// marked lib adds extra paragraphs
-}
-
 input[type='text'] {
 	background-color: var(--vscode-input-background);
 	border: 1px solid var(--vscode-input-border);
@@ -296,8 +292,8 @@ button,
 }
 
 .awesomplete li:hover mark {
-	background: none !important;/* stylelint-disable-line property-blacklist */
-	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
+	background: none !important;
+	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;/* stylelint-disable-line property-blacklist */
 }
 
 .awesomplete li[aria-selected='true'] mark {

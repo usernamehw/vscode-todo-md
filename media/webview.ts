@@ -7,6 +7,8 @@ import { defaultSortTasks } from '../src/sort';
 import type { TheTask } from '../src/TheTask';
 import { DueState, IExtensionConfig, WebviewMessage } from '../src/types';
 
+marked.Renderer.prototype.paragraph = text => `${text}`;
+
 interface SavedState {
 	filterInputValue: string;
 }
