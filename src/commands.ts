@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleDoneOrIncrementCount, toggleDoneAtLine } from './documentActions';
+import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
@@ -276,6 +276,7 @@ export function registerAllCommands() {
 		}
 		openFileInEditor(extensionConfig.defaultFile);
 	});
+	commands.registerCommand('todomd.specifyDefaultFile', specifyDefaultFile);
 	commands.registerCommand('todomd.completeTask', async () => {
 		// Show Quick Pick to complete a task
 		const document = getActiveDocument();

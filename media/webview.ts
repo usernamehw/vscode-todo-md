@@ -24,11 +24,15 @@ const state: {
 	tags: string[];
 	projects: string[];
 	contexts: string[];
+	defaultFileSpecified: boolean;
+	activeDocumentOpened: boolean;
 } = {
 	tasks: [],
 	tags: [],
 	projects: [],
 	contexts: [],
+	defaultFileSpecified: false,
+	activeDocumentOpened: false,
 	// @ts-ignore
 	config: {
 		showCompleted: true,
@@ -42,6 +46,7 @@ let filteredTasksGlobal: TheTask[] = [];
 
 const $filterInputEl = document.getElementById('filterInput') as HTMLInputElement;
 const $listEl = document.getElementById('list') as HTMLInputElement;
+const $defaultFileNotSpecified = document.getElementById('defaultFileNotSpecified') as HTMLInputElement;
 $filterInputEl.value = savedState.filterInputValue;
 focusInputAndCloseAutocomplete();
 
@@ -167,6 +172,13 @@ function showNotification(text: string) {
 	});
 }
 function updateTasks() {
+	if (!state.defaultFileSpecified && !state.activeDocumentOpened) {
+		$defaultFileNotSpecified.classList.remove('hidden');
+		$listEl.classList.add('hidden');
+	} else {
+		$listEl.classList.remove('hidden');
+		$defaultFileNotSpecified.classList.add('hidden');
+	}
 	$listEl.textContent = '';
 
 	let filteredTasks = state.tasks;
@@ -326,6 +338,8 @@ window.addEventListener('message', event => {
 			state.tags = message.value.tags;
 			state.projects = message.value.projects;
 			state.contexts = message.value.contexts;
+			state.defaultFileSpecified = message.value.defaultFileSpecified;
+			state.activeDocumentOpened = message.value.activeDocumentOpened;
 			updateFilterInputAutocomplete(state.tags, state.projects, state.contexts);
 			updateTasks();
 			break;

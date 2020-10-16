@@ -77,11 +77,36 @@ input[type="text"] {
 	padding-left: 4px;
 }
 
-button {
+button,
+.btn {
+	font-family: var(--vscode-font-family);
 	color: var(--vscode-button-foreground);
 	background: var(--vscode-button-background);
 	border: none;
 	margin: 0 auto;
+
+	&:hover {
+		background-color: var(--vscode-button-hoverBackground);
+		color: var(--vscode-button-foreground);
+	}
+
+	&.btn-welcome {
+		max-width: 260px;
+		margin-left: auto;
+		margin-right: auto;
+		display: flex;
+		width: calc(100% - 40px);
+		padding: 4px;
+		text-align: center;
+		cursor: pointer;
+		outline-offset: 2px!important;
+		justify-content: center;
+		align-items: center;
+	}
+}
+.welcome-text {
+	display: block;
+	margin: 1em 20px;
 }
 
 .filter-input-container {
@@ -224,6 +249,9 @@ button {
 	background-color: var(--count-button-background);
 	cursor: pointer;
 	-webkit-user-select: none;
+}
+.hidden {
+	display: none;
 }
 // Awesomplete style override
 .awesomplete > ul {

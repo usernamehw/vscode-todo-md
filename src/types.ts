@@ -122,6 +122,8 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 		tags: string[];
 		projects: string[];
 		contexts: string[];
+		defaultFileSpecified: boolean;
+		activeDocumentOpened: boolean;
 	};
 }
 interface WebviewMessageUpdateConfig extends WebviewMessageBase {

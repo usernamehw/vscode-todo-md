@@ -22,9 +22,8 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		this._view = webviewView;
 
 		webviewView.webview.options = {
-			// Allow scripts in the webview
 			enableScripts: true,
-
+			enableCommandUris: true,
 			localResourceRoots: [
 				this._extensionUri,
 			],
@@ -32,9 +31,6 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		if (!state.theRightFileOpened && !extensionConfig.defaultFile) {
-			return;
-		}
 		this.updateEverything();
 
 		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
@@ -88,6 +84,8 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					tags: state.tags,
 					projects: state.projects,
 					contexts: state.contexts,
+					defaultFileSpecified: Boolean(extensionConfig.defaultFile),
+					activeDocumentOpened: Boolean(state.activeDocument),
 				},
 			} as WebviewMessage);
 		}
@@ -131,6 +129,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					<input type="text" class="filter-input" id="filterInput">
 				</div>
 				<div id="list" class="list"></div>
+				<div class="hidden" id="defaultFileNotSpecified">
+					<p class="welcome-text">Default file path is not specified.</p>
+					<div class="welcome"><a class="btn btn-welcome" href="command:todomd.specifyDefaultFile">Specify Default File</a></div>
+				</div>
 				<script defer nonce="${nonce}" src="${awesomepleteJSUri}"></script>
 				<script defer nonce="${nonce}" src="${JSUri}"></script>
 			</body>
