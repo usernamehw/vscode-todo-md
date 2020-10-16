@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { DATE_FORMAT } from './timeUtils';
 import { DueState } from './types';
 
 export class DueDate {
@@ -182,6 +183,25 @@ export class DueDate {
 		}
 
 		return DueState.notDue;
+	}
+	/**
+	 * - Returns undefined for invalid input
+	 * - Returns string value of due date for valid input
+	 */
+	static helpCreateDueDate(str: string): string | undefined {
+		const dayShiftMatch = /(\+|-)\d+?$/.exec(str);
+		if (dayShiftMatch) {
+			let dueDateToInsert = '';
+			const match = dayShiftMatch[0];
+			if (match[0] === '+') {
+				dueDateToInsert = dayjs().add(Number(match.slice(1)), 'day').format(DATE_FORMAT);
+			} else if (match[0] === '-') {
+				dueDateToInsert = dayjs().subtract(Number(match.slice(1)), 'day').format(DATE_FORMAT);
+			}
+			return dueDateToInsert;
+		} else {
+			return undefined;
+		}
 	}
 }
 

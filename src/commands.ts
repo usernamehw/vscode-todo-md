@@ -2,11 +2,12 @@ import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
+import { DueDate } from './dueDate';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { Count, TheTask } from './TheTask';
-import { DATE_FORMAT, getDateInISOFormat } from './timeUtils';
+import { getDateInISOFormat } from './timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
@@ -216,40 +217,26 @@ export function registerAllCommands() {
 		const inputBox = window.createInputBox();
 		let value: string | undefined = '+0';
 		inputBox.value = value;
+		inputBox.prompt = DueDate.helpCreateDueDate(value);
 		inputBox.show();
 
 		inputBox.onDidChangeValue((e: string) => {
 			value = e;
-			// TODO: refactor: remove duplicate code
-			const dayShiftMatch = /(\+|-)\d+?$/.exec(value);
-			if (dayShiftMatch) {
-				let dueDateToInsert = '';
-				const match = dayShiftMatch[0];
-				if (match[0] === '+') {
-					dueDateToInsert = dayjs().add(Number(match.slice(1)), 'day').toString();
-				} else if (match[0] === '-') {
-					dueDateToInsert = dayjs().subtract(Number(match.slice(1)), 'day').toString();
-				}
-				inputBox.prompt = inputOffset(dueDateToInsert);
-			} else {
+			const newDueDate = DueDate.helpCreateDueDate(value);
+			if (!newDueDate) {
 				inputBox.prompt = inputOffset('❌');
+				return;
 			}
+			inputBox.prompt = inputOffset(newDueDate);
 		});
 
 		inputBox.onDidAccept(() => {
 			if (!value) {
 				return;
 			}
-			const dayShiftMatch = /(\+|-)\d+?$/.exec(value);
-			if (dayShiftMatch) {
-				let dueDateToInsert = '';
-				const match = dayShiftMatch[0];
-				if (match[0] === '+') {
-					dueDateToInsert = dayjs().add(Number(match.slice(1)), 'day').format(DATE_FORMAT);
-				} else if (match[0] === '-') {
-					dueDateToInsert = dayjs().subtract(Number(match.slice(1)), 'day').format(DATE_FORMAT);
-				}
-				const dueDate = `{due:${dueDateToInsert}}`;
+			const newDueDate = DueDate.helpCreateDueDate(value);
+			if (newDueDate) {
+				const dueDate = `{due:${newDueDate}}`;
 				const wEdit = new WorkspaceEdit();
 				if (task?.dueRange) {
 					wEdit.replace(editor.document.uri, task.dueRange, dueDate);
@@ -257,9 +244,9 @@ export function registerAllCommands() {
 					wEdit.insert(editor.document.uri, editor.selection.active, ` ${dueDate}`);
 				}
 				applyEdit(wEdit, editor.document);
+				inputBox.hide();
+				inputBox.dispose();
 			}
-			inputBox.hide();
-			inputBox.dispose();
 		});
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
