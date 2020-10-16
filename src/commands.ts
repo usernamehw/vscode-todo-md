@@ -281,7 +281,7 @@ export function registerAllCommands() {
 		if (task.specialTags.count) {
 			await incrementCountForTask(document, task.lineNumber, task);
 		} else {
-			await toggleDoneAtLine(task.lineNumber, document);
+			await toggleDoneAtLine(document, task.lineNumber);
 		}
 		await updateState();
 		updateAllTreeViews();
