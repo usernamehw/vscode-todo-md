@@ -1263,6 +1263,9 @@
 			]
 		}
 	},
+	"browserslist": [
+		"electron 9.2"
+	],
 	"scripts": {
 		"vscode:prepublish": "npm run scss & npm run webview & webpack --mode production --colors",
 		"postinstall": "node scripts/copyWebviewResourcesFromNodeModules.js",
@@ -1297,6 +1300,14 @@
 		"mocha": "^7.2.0",
 		"node-sass": "^4.14.1",
 		"source-map-support": "^0.5.19",
+		"stylelint": "^13.7.2",
+		"stylelint-csstree-validator": "^1.8.0",
+		"stylelint-declaration-block-no-ignored-properties": "^2.3.0",
+		"stylelint-declaration-use-variable": "^1.7.2",
+		"stylelint-images": "^2.0.1",
+		"stylelint-no-unsupported-browser-features": "^4.0.0",
+		"stylelint-order": "^4.1.0",
+		"stylelint-scss": "^3.18.0",
 		"ts-loader": "^8.0.5",
 		"typescript": "^4.0.3",
 		"typescript-json-schema": "^0.43.0",

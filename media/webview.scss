@@ -1,4 +1,6 @@
 /* TODO: colors should not be constant */
+$blue: #41a6d9;
+
 * {
 	box-sizing: border-box;
 }
@@ -8,19 +10,6 @@ html {
 }
 
 body {
-	padding-left: 0;
-	padding-right: 0;
-	padding-top: calc(4px + 4px + 24px);
-	font-size: var(--font-size);
-	position: relative;
-	margin: 0;
-	font-family: Arial, Helvetica, sans-serif;
-	/* Iframe looks blurry================== */
-	-webkit-text-stroke: 0px !important;
-	-webkit-font-smoothing: antialiased !important;
-	backface-visibility: hidden;
-	transform: translateZ(0);
-	// ──────────────────────────────────────────────────────────────────────
 	--border-light: #cecece6c;
 	--foreground: var(--vscode-foreground);
 	--tag-foreground: var(--vscode-foreground);
@@ -31,19 +20,40 @@ body {
 	--context-background: #c972eb55;
 	--context-hover-background: #c972eb77;
 	--count-background: #0000001a;
-	--count-button-background:  #0000001a;
+	--count-button-background: #0000001a;
+	--task-checkbox: #{$blue};
+	--task-checkbox-bg: #cbd1d8;
+	--task-checkbox-fg: #ffffff;
+	--task-checkbox-low-contrast-bg: #{lighten($blue, 32%)};
+	--task-checkbox-hover-bg: #9faab7;
+
+	--z-index-checkbox-1: 10;
+	--z-index-checkbox-2: 15;
+	--z-index-filter-input: 999;
+	// ──────────────────────────────────────────────────────────────────────
+	backface-visibility: hidden;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: var(--font-size);
+	-webkit-font-smoothing: antialiased !important;
+	margin: 0;
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: calc(4px + 4px + 24px);
+	position: relative;
+	-webkit-text-stroke: 0 !important;
+	transform: translateZ(0);
 }
 
 body.vscode-dark {
-	--border-light:#ffffff1c;
+	--border-light: #ffffff1c;
 	--tag-background: #347dd1;
 	--tag-hover-background: #2b67ac;
-	--tag-foreground: #eee;
+	--tag-foreground: #eeeeee;
 	--project-background: #29a078;
 	--project-hover-background: #21795b;
 	--context-background: #9347b1;
 	--context-hover-background: #733d8a;
-	--project-foreground: #eee;
+	--project-foreground: #eeeeee;
 	--count-background: #ffffff1a;
 	--count-button-background: #ffffff1a;
 
@@ -58,31 +68,27 @@ a {
 	word-break: break-all;
 }
 
-p {// marked lib adds extra paragraphs
-    display: inline;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
+p {
+	display: inline;// marked lib adds extra paragraphs
 }
 
-input[type="text"] {
-	color: var(--vscode-input-foreground);
+input[type='text'] {
 	background-color: var(--vscode-input-background);
-	outline: none !important;
 	border: 1px solid var(--vscode-input-border);
-	height: 24px;
+	color: var(--vscode-input-foreground);
 	font-size: 13px;
+	height: 24px;
+	outline: none !important;
 	padding: 3px;
 	padding-left: 4px;
 }
 
 button,
 .btn {
-	font-family: var(--vscode-font-family);
-	color: var(--vscode-button-foreground);
-	background: var(--vscode-button-background);
+	background-color: var(--vscode-button-background);
 	border: none;
+	color: var(--vscode-button-foreground);
+	font-family: var(--vscode-font-family);
 	margin: 0 auto;
 
 	&:hover {
@@ -91,19 +97,20 @@ button,
 	}
 
 	&.btn-welcome {
-		max-width: 260px;
+		align-items: center;
+		cursor: pointer;
+		display: flex;
+		justify-content: center;
 		margin-left: auto;
 		margin-right: auto;
-		display: flex;
-		width: calc(100% - 40px);
+		max-width: 260px;
+		outline-offset: 2px !important;
 		padding: 4px;
 		text-align: center;
-		cursor: pointer;
-		outline-offset: 2px!important;
-		justify-content: center;
-		align-items: center;
+		width: calc(100% - 40px);
 	}
 }
+
 .welcome-text {
 	display: block;
 	margin: 1em 20px;
@@ -111,26 +118,26 @@ button,
 
 .filter-input-container {
 	background-color: var(--vscode-sideBar-background);
-	position: fixed;
-	z-index: 999;
-	padding-top: 4px;
-	padding-bottom: 4px;
 	left: 0;
-	top: 0;
+	padding-bottom: 4px;
+	padding-top: 4px;
+	position: fixed;
 	right: 0;
+	top: 0;
+	z-index: var(--z-index-filter-input);
 
 	.awesomplete {
 		display: block;
 
 		.filter-input {
+			display: block;
 			margin-left: 12px;
 			margin-right: 12px;
-			display: block;
 			width: calc(100% - 24px);
 
 			&:focus {
-				outline: none !important;
 				border: 1px solid var(--vscode-focusBorder) !important;
+				outline: none !important;
 			}
 		}
 	}
@@ -138,50 +145,55 @@ button,
 
 .list {
 	font-family: var(--font-family);
+	height: calc(100vh - 4px - 4px - 24px);
 	line-height: 1.4;
 	overflow-y: auto;
-	height: calc(100vh - 4px - 4px - 24px);
 }
 
 .list-item {
 	border-left: 3px solid transparent;
 	box-shadow: 0 1px 0 0 var(--border-light);
-	padding-left: 3px;
-	padding-right: 3px;
+	padding: var(--padding) 3px;
 	word-wrap: break-word;
-	padding-top: var(--padding);
-	padding-bottom: var(--padding);
 
 	&:hover {
 		background-color: var(--vscode-list-hoverBackground);
 	}
+
 	&.pri1 {
 		border-left-color: #ec4f47;
 	}
+
 	&.pri2 {
 		border-left-color: #fd9f9a;
 	}
+
 	&.pri3 {
 		border-left-color: #ffb648;
 	}
+
 	&.pri4 {
 		border-left-color: #f1d900;
-
 	}
+
 	&.pri5 {
 		border-left-color: #ace000;
 	}
+
 	&.pri6 {
 		border-left-color: #00cfad;
 	}
+
 	&.due {
 		border-right: 3px solid #82d30099;
 	}
+
 	&.overdue {
 		border-right: 3px solid #d3000099;
 	}
+
 	&.not-due {
-		border-right: 3px solid grey;
+		border-right: 3px solid #808080;
 	}
 }
 
@@ -193,18 +205,18 @@ button,
 .tag,
 .project,
 .context {
-	white-space: pre;
+	border-radius: 3px;
+	cursor: pointer;
 	margin-left: $approxOneSpace;
 	padding-left: 4px;
 	padding-right: 4px;
-	border-radius: 3px;
-	cursor: pointer;
 	vertical-align: middle;
+	white-space: pre;
 }
 
 .tag {
-	color: var(--tag-foreground);
 	background-color: var(--tag-background);
+	color: var(--tag-foreground);
 	margin-left: 3px;
 
 	&:hover {
@@ -213,9 +225,9 @@ button,
 }
 
 .project {
-	color: var(--project-foreground);
 	background-color: var(--project-background);
 	border-radius: 0;
+	color: var(--project-foreground);
 
 	&:hover {
 		background-color: var(--project-hover-background);
@@ -231,94 +243,87 @@ button,
 }
 
 .count-container {
-	margin-left: $approxOneSpace;
 	background-color: var(--count-background);
 	border-radius: 3px;
+	margin-left: $approxOneSpace;
 	white-space: pre;
 }
 
 .count {
+	cursor: default;
 	padding-left: 0.2rem;
 	padding-right: 0.2rem;
-	cursor: default;
 }
 
-.decrement-count, .increment-count {
-	padding-left: 0.3rem;
-	padding-right: 0.3rem;
+.decrement-count,
+.increment-count {
 	background-color: var(--count-button-background);
 	cursor: pointer;
+	padding-left: 0.3rem;
+	padding-right: 0.3rem;
 	-webkit-user-select: none;
 }
+
 .hidden {
 	display: none;
 }
 // Awesomplete style override
 .awesomplete > ul {
+	background-color: var(--vscode-editorSuggestWidget-background) !important;
+	border-color: var(--vscode-editorSuggestWidget-border) !important;
+	color: var(--vscode-editorSuggestWidget-foreground) !important;
 	font-family: var(--vscode-editor-font-family) !important;
 	font-weight: bold;
-	border-color: var(--vscode-editorSuggestWidget-border) !important;
-	background: var(--vscode-editorSuggestWidget-background) !important;
-	color: var(--vscode-editorSuggestWidget-foreground) !important;
 }
+
 .awesomplete > ul > li:hover {
-	background: var(--vscode-list-hoverBackground) !important;
+	background-color: var(--vscode-list-hoverBackground) !important;
 	color: var(--vscode-editorSuggestWidget-foreground) !important;
 }
+
 .awesomplete > ul:before {// pointer
 	display: none !important;
 }
-.awesomplete > ul > li[aria-selected="true"] {
-	background: var(--vscode-editorSuggestWidget-selectedBackground) !important;
+
+.awesomplete > ul > li[aria-selected='true'] {
+	background-color: var(--vscode-editorSuggestWidget-selectedBackground) !important;
 	color: var(--vscode-editorSuggestWidget-foreground) !important;
 }
+
 .awesomplete mark {
-	background: inherit !important;
-	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
-}
-.awesomplete li:hover mark {
-	background: none !important;
+	background-color: inherit !important;
 	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
 }
 
-.awesomplete li[aria-selected="true"] mark {
-	background: inherit !important;
+.awesomplete li:hover mark {
+	background: none !important;/* stylelint-disable-line property-blacklist */
+	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
+}
+
+.awesomplete li[aria-selected='true'] mark {
+	background-color: inherit !important;
 	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
 }
 // Custom-styled Checkbox ──────────────────────────────────────────────────────────────
-$blue: #41a6d9;
-
-:root {
-	--task-checkbox: #{$blue};
-	--task-checkbox-bg: #cbd1d8;
-	--task-checkbox-fg: #ffffff;
-	--task-checkbox-low-contrast-bg: #{lighten($blue, 32%)};
-	--task-checkbox-hover-bg: #9faab7;
-
-
-	--z-index-checkbox-1: 10;
-	--z-index-checkbox-2: 15;
-}
-
 $checkbox-size: 1rem;
 
 .option-input {
-	float: left;
-	margin: 0;
-	margin-left: 2px;
-	margin-right: 2px;
-	vertical-align: middle;
 	-webkit-appearance: none;
 	background-color: var(--task-checkbox-bg);
 	bottom: 0;
 	color: var(--task-checkbox-fg);
 	cursor: pointer;
 	display: inline-block;
+	// float: left;
 	height: $checkbox-size;
 	left: 0;
+	margin: 0;
+	margin-left: 2px;
+	margin-right: 2px;
 	position: relative;
 	right: 0;
 	transition: all 0.2s ease-out 0s;
+	vertical-align: middle;
 	width: $checkbox-size;
 	z-index: var(--z-index-checkbox-2);
 
@@ -374,7 +379,7 @@ $checkbox-size: 1rem;
 		background-color: var(--task-checkbox);
 
 		&:before {
-			content: '\2714 \FE0E';// TODO: replace flaky text with svg icon ?
+			content: '\2714 \FE0E';
 			display: inline-block;
 			font-family: 'Segoe UI Symbol', monospace;
 			font-size: 0.8rem;
