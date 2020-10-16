@@ -115,6 +115,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 # Commands
 
 - `todomd.toggleDone` <kbd>Alt</kbd>+<kbd>D</kbd> - Toggle Done (Completion)
+- `todomd.toggleComment` - Toggle comment. (Not binded by default).
 - `todomd.incrementPriority` - Increment priority. Or add one if it doesn't exist.
 - `todomd.decrementPriority` - Decrement priority. Or add one if it doesn't exist.
 - `todomd.getNextTask` - Get due task from main file. If none are due - get one with the highest priority.
