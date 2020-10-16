@@ -189,16 +189,34 @@ export class DueDate {
 	 * - Returns string value of due date for valid input
 	 */
 	static helpCreateDueDate(str: string): string | undefined {
-		const dayShiftMatch = /(\+|-)\d+?$/.exec(str);
+		if (str === '+') {
+			str = '+1';// alias for tomorrow
+		}
+		const dayShiftMatch = /(\+|-)(\d+?)(d|w)?$/.exec(str);
 		if (dayShiftMatch) {
-			let dueDateToInsert = '';
 			const match = dayShiftMatch[0];
-			if (match[0] === '+') {
-				dueDateToInsert = dayjs().add(Number(match.slice(1)), 'day').format(DATE_FORMAT);
-			} else if (match[0] === '-') {
-				dueDateToInsert = dayjs().subtract(Number(match.slice(1)), 'day').format(DATE_FORMAT);
+			const sign = match[0];
+			const number = Number(match[1]);
+			const unit = match[2];
+			let date: dayjs.Dayjs;
+			if (sign === '+') {
+				if (!unit || unit === 'd') {
+					date = dayjs().add(number, 'day');
+				} else if (unit === 'w') {
+					date = dayjs().add(number, 'week');
+				} else {
+					throw Error('Should never happen');
+				}
+			} else {
+				if (!unit || unit === 'd') {
+					date = dayjs().subtract(number, 'day');
+				} else if (unit === 'w') {
+					date = dayjs().subtract(number, 'week');
+				} else {
+					throw Error('Should never happen');
+				}
 			}
-			return dueDateToInsert;
+			return date.format(DATE_FORMAT);
 		} else {
 			return undefined;
 		}
