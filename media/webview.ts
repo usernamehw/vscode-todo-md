@@ -255,7 +255,7 @@ function renderTask(task: TheTask): HTMLElement {
 			linkEl.title = link.value;
 			linkEl.text = link.value;
 			linkElements.push(linkEl);
-			titleText = titleText.replace(link.value, '');
+			titleText = titleText.replace(link.value.replace(/\/$/, ''), '');
 		}
 	}
 	if (state.config.markdownEnabled) {
