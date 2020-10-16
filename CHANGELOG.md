@@ -1,3 +1,9 @@
+## 2.0.9 `16 Oct 2020`
+
+- ✨ [webview] Add welcome page asking to fill out default path when it's not defined
+- ✨ Add hover for editor
+- 🐛 Default sort no longer filters out not due items
+
 ## 2.0.8 `15 Oct 2020`
 
 - ✨ Add option `webview.showRecurringCompleted`
