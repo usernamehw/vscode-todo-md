@@ -3,6 +3,7 @@ import { describe, it } from 'mocha';
 import { filterItems } from '../../filter';
 import { TaskInit, TheTask } from '../../TheTask';
 import { DueState } from '../../types';
+import { headerDelimiter } from './testUtils';
 
 type Init = Partial<TaskInit>;
 function newTask(task: Init) {
@@ -74,7 +75,7 @@ const priorityZTask = newTask({
 	priority: 'Z',
 });
 // ──────────────────────────────────────────────────────────────────────
-describe('\n──────────────────────────────── FILTER ───────────────────────────────\nFilter tags', () => {
+describe(`${headerDelimiter('filter')}Filter tags`, () => {
 	it('One tag', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask];
 		const filtered = filterItems(items, '#html');

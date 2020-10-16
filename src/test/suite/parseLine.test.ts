@@ -3,6 +3,7 @@ import { describe, it } from 'mocha';
 import vscode, { Range } from 'vscode';
 import { parseLine } from '../../parse';
 import { TheTask } from '../../TheTask';
+import { headerDelimiter } from './testUtils';
 
 const editor = vscode.window.activeTextEditor!;
 /**
@@ -17,7 +18,7 @@ function getLineAt(n: number): TheTask | undefined {
 	return task.value;
 }
 // ──────────────────────────────────────────────────────────────────────
-describe('\n─────────────────────────── PARSE ──────────────────────────\nComment', () => { // TODO: Make helper function delimeter()
+describe(`${headerDelimiter('parse')}Comment`, () => {
 	it('0 Should not produce a task', () => {
 		const line = editor.document.lineAt(0);
 		const task = parseLine(line);

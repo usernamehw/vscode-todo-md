@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { describe, it } from 'mocha';
 import { DueDate } from '../../dueDate';
 import { DueState } from '../../types';
+import { headerDelimiter } from './testUtils';
 
 function addDays(date: Date, n: number) {
 	return dayjs(date).add(n, 'day').toDate();
@@ -21,7 +22,7 @@ const $1jan2018mondayDueDate = new DueDate('2018-01-01', {
 	targetDate: $1jan2018monday,
 });
 
-describe('\n─────────────────────────DUE DATE ────────────────────────────────\nNot recurring', () => {
+describe(`${headerDelimiter('due date')}Not recurring`, () => {
 	it('Simple date format `2018-01-01`', () => {
 		expect($1jan2018mondayDueDate.isDue === DueState.due).to.be.ok;
 	});
