@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
+import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleCommentAtLine, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
 import { DueDate } from './dueDate';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
 import { parseDocument } from './parse';
@@ -374,6 +374,18 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
 		openSettingGuiAt('todomd.webview');
+	});
+	commands.registerTextEditorCommand('todomd.toggleComment', editor => {
+		const wEdit = new WorkspaceEdit();
+		const selections = editor.selections;
+		for (const selection of selections) {
+			const start = selection.start.line;
+			const end = selection.end.line;
+			for (let i = start; i <= end; i++) {
+				toggleCommentAtLine(wEdit, editor.document, i);
+			}
+		}
+		applyEdit(wEdit, editor.document);
 	});
 }
 

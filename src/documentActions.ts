@@ -223,3 +223,11 @@ export async function appendTaskToFile(text: string, filePath: string) {
 	wEdit.insert(uri, eofPosition, `\n${text}`);
 	return applyEdit(wEdit, document);
 }
+export function toggleCommentAtLine(wEdit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
+	const line = document.lineAt(lineNumber);
+	if (line.text.startsWith('# ')) {
+		wEdit.delete(document.uri, new vscode.Range(lineNumber, 0, lineNumber, 2));
+	} else {
+		wEdit.insert(document.uri, new vscode.Position(lineNumber, 0), '# ');
+	}
+}
