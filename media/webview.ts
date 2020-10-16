@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import fuzzysort from 'fuzzysort';
+import escapeRegexp from 'lodash/escapeRegExp';
 import marked from 'marked';
 import { filterItems } from '../src/filter';
 import { defaultSortTasks } from '../src/sort';
@@ -255,7 +256,7 @@ function renderTask(task: TheTask): HTMLElement {
 			linkEl.title = link.value;
 			linkEl.text = link.value;
 			linkElements.push(linkEl);
-			titleText = titleText.replace(link.value.replace(/\/$/, ''), '');
+			titleText = titleText.replace(new RegExp(`${escapeRegexp(link.value)}?`), '');
 		}
 	}
 	if (state.config.markdownEnabled) {
