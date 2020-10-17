@@ -16,7 +16,8 @@ export function updateCompletions(): void {
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 				const tagCompletions = [];
-				for (const tag of state.tags.concat(extensionConfig.tags)) {
+				const tags = Array.from(new Set(state.tags.concat(extensionConfig.tags)));
+				for (const tag of tags) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
 					tagCompletion.commitCharacters = ['#'];
 					tagCompletions.push(tagCompletion);
@@ -31,14 +32,15 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-				const tagCompletions = [];
-				for (const tag of state.projects.concat(extensionConfig.projects)) {
+				const projectCompletions = [];
+				const projects = Array.from(new Set(state.projects.concat(extensionConfig.projects)));
+				for (const tag of projects) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
 					tagCompletion.commitCharacters = ['+'];
-					tagCompletions.push(tagCompletion);
+					projectCompletions.push(tagCompletion);
 				}
 
-				return tagCompletions;
+				return projectCompletions;
 			},
 		},
 		'+',
@@ -48,7 +50,8 @@ export function updateCompletions(): void {
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 				const contextCompletions = [];
-				for (const context of state.contexts.concat(extensionConfig.contexts)) {
+				const contexts = Array.from(new Set(state.contexts.concat(extensionConfig.contexts)));
+				for (const context of contexts) {
 					const contextCompletion = new vscode.CompletionItem(context, vscode.CompletionItemKind.Field);
 					contextCompletion.commitCharacters = ['@'];
 					contextCompletions.push(contextCompletion);
