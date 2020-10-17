@@ -139,7 +139,17 @@ export async function updateState() {
 		document = await getDocumentForDefaultFile();
 	}
 	if (!document) {
-		return;// TODO: reset all state here?
+		state.activeDocument = undefined;
+		state.theRightFileOpened = false;
+		state.tasks = [];
+		state.tags = [];
+		state.contexts = [];
+		state.projects = [];
+		state.commentLines = [];
+		state.projectsForTreeView = [];
+		state.tagsForTreeView = [];
+		state.contextsForTreeView = [];
+		return;
 	}
 	const parsedDocument = await parseDocument(document);
 
