@@ -1,3 +1,9 @@
+## 2.0.10 `17 Oct 2020`
+
+- ✨ Add command to toggle comment
+- ✨ Closest due date editor decoration - prepend short name of the day of the week (e.g. Sun)
+- ✨ Set due date command should support adding/subtracting weeks (e.g. `+2w`)
+
 ## 2.0.9 `16 Oct 2020`
 
 - ✨ [webview] Add welcome page asking to fill out default path when it's not defined
