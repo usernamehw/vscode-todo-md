@@ -192,15 +192,14 @@ export class DueDate {
 		if (str === '+') {
 			str = '+1';// alias for tomorrow
 		}
-		const dayShiftMatch = /(\+|-)(\d+?)(d|w)?$/.exec(str);
+		const dayShiftMatch = /(\+|-)(\d+)(d|w)?$/.exec(str);
 		if (dayShiftMatch) {
-			const match = dayShiftMatch[0];
-			const sign = match[0];
-			const number = Number(match[1]);
-			const unit = match[2];
+			const sign = dayShiftMatch[1];
+			const number = Number(dayShiftMatch[2]);
+			const unit = dayShiftMatch[3] ?? 'd';
 			let date: dayjs.Dayjs;
 			if (sign === '+') {
-				if (!unit || unit === 'd') {
+				if (unit === 'd') {
 					date = dayjs().add(number, 'day');
 				} else if (unit === 'w') {
 					date = dayjs().add(number, 'week');
@@ -208,7 +207,7 @@ export class DueDate {
 					throw Error('Should never happen');
 				}
 			} else {
-				if (!unit || unit === 'd') {
+				if (unit === 'd') {
 					date = dayjs().subtract(number, 'day');
 				} else if (unit === 'w') {
 					date = dayjs().subtract(number, 'week');
