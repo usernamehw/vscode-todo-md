@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { DATE_FORMAT } from './timeUtils';
 import { DueState } from './types';
 
 export class DueDate {
@@ -198,7 +197,8 @@ export class DueDate {
 		if (str === '+') {
 			str = '+1';// alias for tomorrow
 		}
-		const dayShiftMatch = /(\+|-)(\d+)(d|w)?$/.exec(str);
+		const justDateMatch = /^(\d+)$/.exec(str);
+		const dayShiftMatch = /^(\+|-)(\d+)(d|w)?$/.exec(str);
 		if (dayShiftMatch) {
 			const sign = dayShiftMatch[1];
 			const number = Number(dayShiftMatch[2]);
@@ -222,6 +222,12 @@ export class DueDate {
 				}
 			}
 			return date;
+		} else if (justDateMatch) {
+			const now = dayjs();
+			const currentDate = now.date();
+			const targetDate = Number(justDateMatch[1]);
+			return targetDate >= currentDate ? now.set('date', targetDate) :
+				now.add(1, 'month').set('date', targetDate);
 		} else {
 			return undefined;
 		}
