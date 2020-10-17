@@ -36,13 +36,16 @@ const state: {
 	contexts: [],
 	defaultFileSpecified: false,
 	activeDocumentOpened: false,
-	// @ts-ignore
 	config: {
 		showCompleted: true,
 		showRecurringCompleted: true,
 		showPriority: true,
 		fontSize: '13px',
 		padding: '0px',
+		customCheckboxEnabled: false,
+		markdownEnabled: false,
+		checkboxStyle: 'rounded-square',
+		fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`,
 	},
 };
 let filteredTasksGlobal: TheTask[] = [];
