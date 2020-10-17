@@ -232,6 +232,7 @@ function renderTask(task: TheTask): HTMLElement {
 		checkbox.classList.add('native-checkbox');
 	}
 	if (task.done) {
+		taskListItem.classList.add('done');
 		checkbox.checked = true;
 	}
 	taskListItem.appendChild(checkbox);

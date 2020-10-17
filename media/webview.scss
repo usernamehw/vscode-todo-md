@@ -12,6 +12,7 @@ html {
 body {
 	--border-light: #cecece6c;
 	--foreground: var(--vscode-foreground);
+	--done-task-background: #ace00018;
 	--tag-foreground: var(--vscode-foreground);
 	--tag-background: #0084ff27;
 	--tag-hover-background: #0084ff4f;
@@ -56,6 +57,7 @@ body.vscode-dark {
 	--project-foreground: #eeeeee;
 	--count-background: #ffffff1a;
 	--count-button-background: #ffffff1a;
+	--done-task-background: #ace00038;
 
 	--task-checkbox-bg: #3d4d63;
 }
@@ -151,6 +153,10 @@ button,
 	box-shadow: 0 1px 0 0 var(--border-light);
 	padding: var(--padding) 3px;
 	word-wrap: break-word;
+
+	&.done {
+		background-color: var(--done-task-background);
+	}
 
 	&:hover {
 		background-color: var(--vscode-list-hoverBackground);
