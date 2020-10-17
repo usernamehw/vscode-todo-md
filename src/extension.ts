@@ -13,7 +13,7 @@ import { TheTask } from './TheTask';
 import { createAllTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { IExtensionConfig, ItemForProvider, Items, SortTags, State, VscodeContext } from './types';
 import { setContext } from './vscodeUtils';
-import { TasksWebviewViewProvider } from './webview/webviewView';
+import { TasksWebviewViewProvider, updateWebviewConfig } from './webview/webviewView';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -98,14 +98,14 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		}
 	}, 1000);
 
-	updateAllTreeViews();
-	updateArchivedTasks();
-	updateIsDevContext();
-
 	Global.webviewProvider = new TasksWebviewViewProvider(state.extensionContext.extensionUri);
 	state.extensionContext.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, Global.webviewProvider),
 	);
+
+	updateAllTreeViews();
+	updateArchivedTasks();
+	updateIsDevContext();
 
 	Global.changeActiveTextEditorDisposable = window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 
@@ -118,6 +118,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IExtensionConfig;
 
 		disposeEditorDisposables();
+		updateWebviewConfig();
 		updateDecorationStyle();
 		updateEverything();
 		updateIsDevContext();

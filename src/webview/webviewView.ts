@@ -2,7 +2,7 @@ import vscode, { window } from 'vscode';
 import { getTaskAtLine } from '../commands';
 import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleDoneAtLine } from '../documentActions';
 import { extensionConfig, Global, state, updateState } from '../extension';
-import { IExtensionConfig, WebviewMessage } from '../types';
+import { WebviewMessage } from '../types';
 import { getNonce } from '../webview/utils';
 
 export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
@@ -31,6 +31,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
+		this.updateWebviewConfig();
 		this.updateEverything();
 
 		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
@@ -76,7 +77,6 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 
 	updateEverything() {
 		if (this._view) {
-			this.updateWebviewConfig(extensionConfig.webview);
 			this._view.webview.postMessage({
 				type: 'updateEverything',
 				value: {
@@ -91,10 +91,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		}
 	}
 
-	updateWebviewConfig(config: IExtensionConfig['webview']) {
+	updateWebviewConfig() {
 		this._view?.webview.postMessage({
 			type: 'updateConfig',
-			value: config,
+			value: extensionConfig.webview,
 		} as WebviewMessage);
 	}
 
@@ -143,5 +143,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 export function updateWebviewView() {
 	if (Global.webviewProvider) {
 		Global.webviewProvider.updateEverything();
+	}
+}
+export function updateWebviewConfig() {
+	if (Global.webviewProvider) {
+		Global.webviewProvider.updateWebviewConfig();
 	}
 }
