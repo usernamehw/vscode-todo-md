@@ -1119,13 +1119,13 @@
 				},
 				{
 					"command": "todomd.openDefaultFile",
-					"when": "view =~ /todomd.(tasks|webviewTasks)/",
+					"when": "view == todomd.tasks",
 					"group": "navigation"
 				},
 				{
 					"command": "todomd.showWebviewSettings",
 					"when": "view == todomd.webviewTasks",
-					"group": "navigation@2"
+					"group": "navigation@9"
 				}
 			],
 			"view/item/context": [
