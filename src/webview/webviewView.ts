@@ -70,6 +70,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		});
 		webviewView.onDidChangeVisibility(e => {
 			if (webviewView.visible === true) {
+				this.updateWebviewConfig();
 				this.updateEverything();
 			}
 		});
