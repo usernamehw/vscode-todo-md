@@ -27,10 +27,16 @@ export class DueDate {
 			const date = dayjs().add(i, 'day');
 			const { isDue } = DueDate.parseDue(this.raw, date.toDate());
 			if (isDue) {
-				return `${date.format('ddd')} [${dayjs().to(date)}]`;
+				return `${DueDate.dayOfTheWeek(date)} [${DueDate.dateDiff(date)}]`;
 			}
 		}
 		return 'More than 100 days';
+	}
+	static dayOfTheWeek(date: dayjs.Dayjs) {
+		return date.format('ddd');
+	}
+	static dateDiff(date: dayjs.Dayjs) {
+		return dayjs().to(date);
 	}
 	static parseDue(due: string, targetDate = new Date(), overdue?: string): DueReturn {
 		const dueDates = due.split(',').filter(d => d.length);
@@ -186,9 +192,9 @@ export class DueDate {
 	}
 	/**
 	 * - Returns undefined for invalid input
-	 * - Returns string value of due date for valid input
+	 * - Returns dayjs date for valid input
 	 */
-	static helpCreateDueDate(str: string): string | undefined {
+	static helpCreateDueDate(str: string): dayjs.Dayjs | undefined {
 		if (str === '+') {
 			str = '+1';// alias for tomorrow
 		}
@@ -215,7 +221,7 @@ export class DueDate {
 					throw Error('Should never happen');
 				}
 			}
-			return date.format(DATE_FORMAT);
+			return date;
 		} else {
 			return undefined;
 		}

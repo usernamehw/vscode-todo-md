@@ -7,7 +7,7 @@ import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './e
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { Count, TheTask } from './TheTask';
-import { getDateInISOFormat } from './timeUtils';
+import { DATE_FORMAT, getDateInISOFormat } from './timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
@@ -217,7 +217,6 @@ export function registerAllCommands() {
 		const inputBox = window.createInputBox();
 		let value: string | undefined = '+0';
 		inputBox.value = value;
-		inputBox.prompt = DueDate.helpCreateDueDate(value);
 		inputBox.show();
 
 		inputBox.onDidChangeValue((e: string) => {
@@ -227,7 +226,7 @@ export function registerAllCommands() {
 				inputBox.prompt = inputOffset('❌');
 				return;
 			}
-			inputBox.prompt = inputOffset(newDueDate);
+			inputBox.prompt = inputOffset(`${newDueDate.format(DATE_FORMAT)}  ${DueDate.dayOfTheWeek(newDueDate)}  [${DueDate.dateDiff(newDueDate)}]`);
 		});
 
 		inputBox.onDidAccept(() => {
@@ -236,7 +235,7 @@ export function registerAllCommands() {
 			}
 			const newDueDate = DueDate.helpCreateDueDate(value);
 			if (newDueDate) {
-				const dueDate = `{due:${newDueDate}}`;
+				const dueDate = `{due:${newDueDate.format(DATE_FORMAT)}}`;
 				const wEdit = new WorkspaceEdit();
 				if (task?.dueRange) {
 					wEdit.replace(editor.document.uri, task.dueRange, dueDate);
