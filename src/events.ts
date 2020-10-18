@@ -11,11 +11,12 @@ import { setContext } from './vscodeUtils';
 
 export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): Promise<void> {
 	if (state.theRightFileOpened) {
-		await deactivateEditorFeatures();
+		deactivateEditorFeatures();
 	}
 	if (editor && isTheRightFileName(editor)) {
 		state.activeDocument = editor.document;
-		activateEditorFeatures(editor);
+		updateEverything(editor);
+		await activateEditorFeatures(editor);
 	} else {
 		state.activeDocument = await getDocumentForDefaultFile();
 		updateEverything();
@@ -37,7 +38,7 @@ export function checkIfNewDayArrived(): boolean {
 	return false;
 }
 
-export function onChangeTextDocument(): void {
+export function onChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
 	const activeTextEditor = window.activeTextEditor;
 	if (activeTextEditor && state.theRightFileOpened) {
 		updateEverything(activeTextEditor);
@@ -46,13 +47,7 @@ export function onChangeTextDocument(): void {
 /**
  * Match Uri of editor against a glob specified by user.
  */
-export function isTheRightFileName(editor?: vscode.TextEditor): boolean {
-	if (editor === undefined) {
-		editor = window.activeTextEditor;
-		if (editor === undefined) {
-			return false;
-		}
-	}
+export function isTheRightFileName(editor: vscode.TextEditor): boolean {
 	return vscode.languages.match({
 		pattern: extensionConfig.activatePattern,
 	},	editor.document) !== 0;
@@ -64,13 +59,9 @@ export function isTheRightFileName(editor?: vscode.TextEditor): boolean {
  */
 export async function activateEditorFeatures(editor: vscode.TextEditor) {
 	state.theRightFileOpened = true;
-
-	await updateEverything(editor);
-
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
 	updateHover();
-	statusBar.updateText(state.tasks);
 	statusBar.show();
 	await setContext(VscodeContext.isActive, true);
 	// TODO: maybe move it up?
@@ -85,7 +76,7 @@ export async function activateEditorFeatures(editor: vscode.TextEditor) {
  * When `todo.md` document is closed - all the features except for the Tree Views
  * will be disabled.
  */
-export async function deactivateEditorFeatures() {
+export function deactivateEditorFeatures() {
 	state.theRightFileOpened = false;
 	if (Global.changeTextDocumentDisposable) {
 		Global.changeTextDocumentDisposable.dispose();
@@ -100,9 +91,7 @@ export async function deactivateEditorFeatures() {
 		Global.hoverDisposable.dispose();
 	}
 	statusBar.hide();
-	await setContext(VscodeContext.isActive, false);
-	await updateState();
-	updateAllTreeViews();
+	setContext(VscodeContext.isActive, false);
 }
 /**
  * - Update state
