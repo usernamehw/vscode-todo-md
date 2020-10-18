@@ -353,6 +353,7 @@ window.addEventListener('message', event => {
 			document.body.style.setProperty('--padding', state.config.padding);
 			updateFilterInputAutocomplete(state.tags, state.projects, state.contexts);
 			updateTasks();
+			awesomplete.close();
 			break;
 		}
 	}
@@ -371,4 +372,3 @@ function focusInputAndCloseAutocomplete() {
 		awesomplete.close();
 	}, 0);
 }
-
