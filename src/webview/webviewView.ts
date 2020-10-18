@@ -75,7 +75,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	}
 
 	updateEverything() {
-		if (this._view) {
+		if (this._view && this._view.visible === true) {
 			this._view.webview.postMessage({
 				type: 'updateEverything',
 				value: {
