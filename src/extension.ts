@@ -13,7 +13,7 @@ import { TheTask } from './TheTask';
 import { createAllTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { IExtensionConfig, ItemForProvider, Items, SortTags, State, VscodeContext } from './types';
 import { setContext } from './vscodeUtils';
-import { TasksWebviewViewProvider, updateWebviewConfig } from './webview/webviewView';
+import { TasksWebviewViewProvider } from './webview/webviewView';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -118,7 +118,6 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IExtensionConfig;
 
 		disposeEditorDisposables();
-		updateWebviewConfig();
 		updateDecorationStyle();
 		updateEverything();
 		updateIsDevContext();

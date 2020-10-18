@@ -124,11 +124,8 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 		contexts: string[];
 		defaultFileSpecified: boolean;
 		activeDocumentOpened: boolean;
+		config: IExtensionConfig['webview'];
 	};
-}
-interface WebviewMessageUpdateConfig extends WebviewMessageBase {
-	type: 'updateConfig';
-	value: IExtensionConfig['webview'];
 }
 // From webview to extension
 interface WebviewMessageToggleDone extends WebviewMessageBase {
@@ -155,4 +152,4 @@ interface WebviewMessageUpdateTitle extends WebviewMessageBase {
 	type: 'updateTitle';
 	value: string;
 }
-export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageUpdateConfig | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount | WebviewMessageUpdateTitle;
+export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount | WebviewMessageUpdateTitle;

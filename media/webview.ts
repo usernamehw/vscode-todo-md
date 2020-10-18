@@ -347,15 +347,11 @@ window.addEventListener('message', event => {
 			state.contexts = message.value.contexts;
 			state.defaultFileSpecified = message.value.defaultFileSpecified;
 			state.activeDocumentOpened = message.value.activeDocumentOpened;
-			updateFilterInputAutocomplete(state.tags, state.projects, state.contexts);
-			updateTasks();
-			break;
-		}
-		case 'updateConfig': {
-			state.config = message.value;
+			state.config = message.value.config;
 			document.body.style.setProperty('--font-size', state.config.fontSize);
 			document.body.style.setProperty('--font-family', state.config.fontFamily);
 			document.body.style.setProperty('--padding', state.config.padding);
+			updateFilterInputAutocomplete(state.tags, state.projects, state.contexts);
 			updateTasks();
 			break;
 		}

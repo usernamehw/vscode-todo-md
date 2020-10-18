@@ -31,7 +31,6 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		this.updateWebviewConfig();
 		this.updateEverything();
 
 		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
@@ -70,7 +69,6 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		});
 		webviewView.onDidChangeVisibility(e => {
 			if (webviewView.visible === true) {
-				this.updateWebviewConfig();
 				this.updateEverything();
 			}
 		});
@@ -87,16 +85,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					contexts: state.contexts,
 					defaultFileSpecified: Boolean(extensionConfig.defaultFile),
 					activeDocumentOpened: Boolean(state.activeDocument),
+					config: extensionConfig.webview,
 				},
 			} as WebviewMessage);
 		}
-	}
-
-	updateWebviewConfig() {
-		this._view?.webview.postMessage({
-			type: 'updateConfig',
-			value: extensionConfig.webview,
-		} as WebviewMessage);
 	}
 
 	updateTitle(numberOfTasks: string) {
@@ -146,8 +138,4 @@ export function updateWebviewView() {
 		Global.webviewProvider.updateEverything();
 	}
 }
-export function updateWebviewConfig() {
-	if (Global.webviewProvider) {
-		Global.webviewProvider.updateWebviewConfig();
-	}
-}
+
