@@ -10,16 +10,20 @@ html {
 }
 
 body {
+	$tagBackground: #c2e1ff;
+	$projectBackground: #b6e5d6;
+	$contextBackground: #eec4ff;
+
 	--border-light: #cecece6c;
 	--foreground: var(--vscode-foreground);
-	--done-task-background: #e4eccc;
+	--done-task-background: #e9f0d6;
 	--tag-foreground: var(--vscode-foreground);
-	--tag-background: #0084ff27;
-	--tag-hover-background: #0084ff4f;
-	--project-background: #36cc9a44;
-	--project-hover-background: #36cc9a66;
-	--context-background: #c972eb55;
-	--context-hover-background: #c972eb77;
+	--tag-background: #{$tagBackground};
+	--tag-hover-background: #{darken($tagBackground, 8%)};
+	--project-background: #{$projectBackground};
+	--project-hover-background: #{darken($projectBackground, 8%)};
+	--context-background: #{$contextBackground};
+	--context-hover-background: #{darken($contextBackground, 8%)};
 	--count-background: #0000001a;
 	--count-button-background: #0000001a;
 	--task-checkbox: #{$blue};
