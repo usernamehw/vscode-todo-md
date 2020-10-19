@@ -39,9 +39,15 @@ export function dayOfWeekToIndexOfWeek(dayOfWeek: string): number {
 	}
 	throw Error('Unknown day of the week.');
 }
-export function dayOfTheWeek(date: dayjs.Dayjs) {
+/**
+ * Short day of the week `Mon` - `Sun`
+ */
+export function dayOfTheWeek(date: dayjs.Dayjs): string {
 	return date.format('ddd');
 }
-export function dateDiff(date: dayjs.Dayjs) {
+/**
+ * Human readable date diff? `in 2 days`
+ */
+export function dateDiff(date: dayjs.Dayjs): string {
 	return dayjs().to(date);
 }
