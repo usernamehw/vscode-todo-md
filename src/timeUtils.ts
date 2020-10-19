@@ -19,4 +19,21 @@ export function getDateInISOFormat(date: Date | Dayjs = new Date(), includeTime 
 	return dayjs(date).format(format);
 }
 
-
+export function dayOfWeekToIndexOfWeek(dayOfWeek: string): number {
+	if (/^sun|sunday$/i.test(dayOfWeek)) {
+		return 0;
+	} else if (/^mon|monday$/i.test(dayOfWeek)) {
+		return 1;
+	} else if (/^tue|tuesday$/i.test(dayOfWeek)) {
+		return 2;
+	} else if (/^wed|wednesday$/i.test(dayOfWeek)) {
+		return 3;
+	} else if (/^thu|thursday$/i.test(dayOfWeek)) {
+		return 4;
+	} else if (/^fri|friday$/i.test(dayOfWeek)) {
+		return 5;
+	} else if (/^sat|saturday$/i.test(dayOfWeek)) {
+		return 6;
+	}
+	throw Error('Unknown day of the week.');
+}

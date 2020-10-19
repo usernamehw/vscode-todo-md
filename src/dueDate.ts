@@ -3,6 +3,7 @@ import { DueState } from './types';
 
 export class DueDate {
 	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(e\d+d))?$/;
+	private static readonly dayOfTheWeekRegexp = /^sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday$/i;
 	private static readonly dueRecurringRegexp = /^ed|sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday$/i;
 	/** Unmodified value of due date */
 	raw: string;
@@ -199,6 +200,8 @@ export class DueDate {
 		}
 		const justDateMatch = /^(\d+)$/.exec(str);
 		const dayShiftMatch = /^(\+|-)(\d+)(d|w)?$/.exec(str);
+		const dayOfTheWeekMatch = DueDate.dayOfTheWeekRegexp.exec(str);
+		const now = dayjs();
 		if (dayShiftMatch) {
 			const sign = dayShiftMatch[1];
 			const number = Number(dayShiftMatch[2]);
@@ -206,28 +209,31 @@ export class DueDate {
 			let date: dayjs.Dayjs;
 			if (sign === '+') {
 				if (unit === 'd') {
-					date = dayjs().add(number, 'day');
+					date = now.add(number, 'day');
 				} else if (unit === 'w') {
-					date = dayjs().add(number, 'week');
+					date = now.add(number, 'week');
 				} else {
 					throw Error('Should never happen');
 				}
 			} else {
 				if (unit === 'd') {
-					date = dayjs().subtract(number, 'day');
+					date = now.subtract(number, 'day');
 				} else if (unit === 'w') {
-					date = dayjs().subtract(number, 'week');
+					date = now.subtract(number, 'week');
 				} else {
 					throw Error('Should never happen');
 				}
 			}
 			return date;
 		} else if (justDateMatch) {
-			const now = dayjs();
 			const currentDate = now.date();
 			const targetDate = Number(justDateMatch[1]);
 			return targetDate >= currentDate ? now.set('date', targetDate) :
 				now.add(1, 'month').set('date', targetDate);
+		} else if (dayOfTheWeekMatch) {
+			// const dayOfTheWeekShort = now.format('ddd').toLowerCase();
+			// const dayOfTheWeekLong = now.format('dddd').toLowerCase();
+			return undefined;// TODO: do
 		} else {
 			return undefined;
 		}
