@@ -3,6 +3,7 @@ import { before, describe, it } from 'mocha';
 import vscode from 'vscode';
 import { parseDocument } from '../../parse';
 import { TheTask } from '../../TheTask';
+import { DueState } from '../../types';
 import { headerDelimiter } from './testUtils';
 
 const editor = vscode.window.activeTextEditor!;
@@ -24,5 +25,8 @@ describe(`${headerDelimiter('parse document')}`, () => {
 		const links = tasks[12].links;
 		expect(links[0].characterRange).have.same.members([9, 31]);
 		expect(links[1].characterRange).have.same.members([37, 56]);
+	});
+	it('Special tag `{overdue}`', () => {
+		expect(tasks[13].due?.isDue === DueState.overdue).to.be.ok;
 	});
 });

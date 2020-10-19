@@ -135,10 +135,8 @@ describe('Special tags {}', () => {
 		const task = getLineAt(12)!;
 		expect(task.specialTags.isHidden === true).to.be.ok;
 	});
-	// TODO: {overdue} test
-	// TODO: parse links should be testing parseDocument function
-	// it('13 Link', () => { // TODO: test for multiple links in one line
-	// 	const task = getLineAt(13)!;
-	// 	expect(task.links[0].value === 'https://www.google.com').to.be.ok;
-	// });
+	it('12 Hidden', () => {
+		const task = getLineAt(12)!;
+		expect(task.specialTags.isHidden === true).to.be.ok;
+	});
 });
