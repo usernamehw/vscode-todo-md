@@ -2,12 +2,12 @@ import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleCommentAtLine, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
-import { DueDate } from './dueDate';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { Count, TheTask } from './TheTask';
-import { DATE_FORMAT, getDateInISOFormat } from './timeUtils';
+import { helpCreateDueDate } from './time/setDueDateHelper';
+import { dateDiff, DATE_FORMAT, dayOfTheWeek, getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
@@ -221,19 +221,19 @@ export function registerAllCommands() {
 
 		inputBox.onDidChangeValue((e: string) => {
 			value = e;
-			const newDueDate = DueDate.helpCreateDueDate(value);
+			const newDueDate = helpCreateDueDate(value);
 			if (!newDueDate) {
 				inputBox.prompt = inputOffset('❌');
 				return;
 			}
-			inputBox.prompt = inputOffset(`${newDueDate.format(DATE_FORMAT)}  ${DueDate.dayOfTheWeek(newDueDate)}  [${DueDate.dateDiff(newDueDate)}]`);
+			inputBox.prompt = inputOffset(`${newDueDate.format(DATE_FORMAT)}  ${dayOfTheWeek(newDueDate)}  [${dateDiff(newDueDate)}]`);
 		});
 
 		inputBox.onDidAccept(() => {
 			if (!value) {
 				return;
 			}
-			const newDueDate = DueDate.helpCreateDueDate(value);
+			const newDueDate = helpCreateDueDate(value);
 			if (newDueDate) {
 				const dueDate = `{due:${newDueDate.format(DATE_FORMAT)}}`;
 				const wEdit = new WorkspaceEdit();

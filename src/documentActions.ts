@@ -4,7 +4,7 @@ import { applyEdit, getTaskAtLine, insertCompletionDate, removeDoneSymbol, setCo
 import { DueDate } from './dueDate';
 import { extensionConfig, LAST_VISIT_STORAGE_KEY, state } from './extension';
 import { TheTask } from './TheTask';
-import { DATE_FORMAT } from './timeUtils';
+import { DATE_FORMAT } from './time/timeUtils';
 import { DueState } from './types';
 
 export function hideTask(document: vscode.TextDocument, lineNumber: number) {

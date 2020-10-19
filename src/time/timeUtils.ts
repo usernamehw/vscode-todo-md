@@ -9,6 +9,8 @@ export const DATE_FORMAT = 'YYYY-MM-DD';
 export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = `${DATE_FORMAT}T${TIME_FORMAT}`;
 
+export const dayOfTheWeekRegexp = /^sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday$/i;
+
 /**
  * Get date or datetime ISO 8601
  * Example: `2020-04-21` or `2020-04-30T09:11:17`
@@ -36,4 +38,10 @@ export function dayOfWeekToIndexOfWeek(dayOfWeek: string): number {
 		return 6;
 	}
 	throw Error('Unknown day of the week.');
+}
+export function dayOfTheWeek(date: dayjs.Dayjs) {
+	return date.format('ddd');
+}
+export function dateDiff(date: dayjs.Dayjs) {
+	return dayjs().to(date);
 }

@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
+import { dateDiff, dayOfTheWeek } from './time/timeUtils';
 import { DueState } from './types';
 
 export class DueDate {
 	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(e\d+d))?$/;
-	private static readonly dayOfTheWeekRegexp = /^sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday$/i;
 	private static readonly dueRecurringRegexp = /^ed|sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday$/i;
 	/** Unmodified value of due date */
 	raw: string;
@@ -27,16 +27,10 @@ export class DueDate {
 			const date = dayjs().add(i, 'day');
 			const { isDue } = DueDate.parseDue(this.raw, date.toDate());
 			if (isDue) {
-				return `${DueDate.dayOfTheWeek(date)} [${DueDate.dateDiff(date)}]`;
+				return `${dayOfTheWeek(date)} [${dateDiff(date)}]`;
 			}
 		}
 		return 'More than 100 days';
-	}
-	static dayOfTheWeek(date: dayjs.Dayjs) {
-		return date.format('ddd');
-	}
-	static dateDiff(date: dayjs.Dayjs) {
-		return dayjs().to(date);
 	}
 	static parseDue(due: string, targetDate = new Date(), overdue?: string): DueReturn {
 		const dueDates = due.split(',').filter(d => d.length);
@@ -189,54 +183,6 @@ export class DueDate {
 		}
 
 		return DueState.notDue;
-	}
-	/**
-	 * - Returns undefined for invalid input
-	 * - Returns dayjs date for valid input
-	 */
-	static helpCreateDueDate(str: string): dayjs.Dayjs | undefined {
-		if (str === '+') {
-			str = '+1';// alias for tomorrow
-		}
-		const justDateMatch = /^(\d+)$/.exec(str);
-		const dayShiftMatch = /^(\+|-)(\d+)(d|w)?$/.exec(str);
-		const dayOfTheWeekMatch = DueDate.dayOfTheWeekRegexp.exec(str);
-		const now = dayjs();
-		if (dayShiftMatch) {
-			const sign = dayShiftMatch[1];
-			const number = Number(dayShiftMatch[2]);
-			const unit = dayShiftMatch[3] ?? 'd';
-			let date: dayjs.Dayjs;
-			if (sign === '+') {
-				if (unit === 'd') {
-					date = now.add(number, 'day');
-				} else if (unit === 'w') {
-					date = now.add(number, 'week');
-				} else {
-					throw Error('Should never happen');
-				}
-			} else {
-				if (unit === 'd') {
-					date = now.subtract(number, 'day');
-				} else if (unit === 'w') {
-					date = now.subtract(number, 'week');
-				} else {
-					throw Error('Should never happen');
-				}
-			}
-			return date;
-		} else if (justDateMatch) {
-			const currentDate = now.date();
-			const targetDate = Number(justDateMatch[1]);
-			return targetDate >= currentDate ? now.set('date', targetDate) :
-				now.add(1, 'month').set('date', targetDate);
-		} else if (dayOfTheWeekMatch) {
-			// const dayOfTheWeekShort = now.format('ddd').toLowerCase();
-			// const dayOfTheWeekLong = now.format('dddd').toLowerCase();
-			return undefined;// TODO: do
-		} else {
-			return undefined;
-		}
 	}
 }
 
