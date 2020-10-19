@@ -206,6 +206,7 @@ button,
 
 .native-checkbox {
 	margin-left: 2px;
+	transform: scale(1.15);
 }
 
 .tag,
@@ -337,7 +338,6 @@ $checkbox-size: 1rem;
 	position: relative;
 	right: 0;
 	transition: all 0.2s ease-out 0s;
-	vertical-align: middle;
 	width: $checkbox-size;
 	z-index: var(--z-index-checkbox-2);
 
