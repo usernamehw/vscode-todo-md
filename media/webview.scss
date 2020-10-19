@@ -24,8 +24,9 @@ body {
 	--project-hover-background: #{darken($projectBackground, 8%)};
 	--context-background: #{$contextBackground};
 	--context-hover-background: #{darken($contextBackground, 8%)};
-	--count-background: #0000001a;
-	--count-button-background: #0000001a;
+	--count-background: #00000014;
+	--count-button-background: #00000014;
+	--count-button-hover-background: #0000002b;
 	--task-checkbox: #{$blue};
 	--task-checkbox-bg: #cbd1d8;
 	--task-checkbox-fg: #ffffff;
@@ -264,9 +265,17 @@ button,
 .increment-count {
 	background-color: var(--count-button-background);
 	cursor: pointer;
-	padding-left: 0.3rem;
-	padding-right: 0.3rem;
+	display: inline-block;
+	max-width: 1.4em;
+	padding-left: 0.2rem;
+	padding-right: 0.2rem;
+	text-align: center;
 	-webkit-user-select: none;
+	width: 1.3em;
+
+	&:hover {
+		background-color: var(--count-button-hover-background);
+	}
 }
 
 .hidden {
