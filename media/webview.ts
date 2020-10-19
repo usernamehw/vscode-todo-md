@@ -19,6 +19,12 @@ interface VscodeWebviewApi {
 }
 /** @ts-ignore */
 const vscode: VscodeWebviewApi = acquireVsCodeApi();
+window.onerror = function(message, source, lineno, colno, error) {
+	vscode.postMessage({
+		type: 'showNotification',
+		value: `[WEBVIEW] ${message}`,
+	});
+};
 const savedState = getState();
 
 const state: {
