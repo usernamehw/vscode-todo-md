@@ -302,11 +302,11 @@ function renderTask(task: TheTask): HTMLElement {
 		const countContainer = document.createElement('span');
 		countContainer.classList.add('count-container');
 
-		const minusButton = document.createElement('span');
+		const minusButton = document.createElement('button');
 		minusButton.classList.add('decrement-count');
 		minusButton.textContent = '-';
 
-		const plusButton = document.createElement('span');
+		const plusButton = document.createElement('button');
 		plusButton.classList.add('increment-count');
 		plusButton.textContent = '+';
 

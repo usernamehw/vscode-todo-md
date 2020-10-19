@@ -265,6 +265,7 @@ button,
 .decrement-count,
 .increment-count {
 	background-color: var(--count-button-background);
+	color: var(--vscode-foreground);
 	cursor: pointer;
 	display: inline-block;
 	max-width: 1.4em;
