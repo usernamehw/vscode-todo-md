@@ -1,3 +1,9 @@
+## 2.0.11 `19 Oct 2020`
+
+- ✨ Set due date helper - support date as single number without signs (e.g. `20`)
+- ✨ Show day of week and date diff in set due date helper
+- ✨ [webview] Completed task should have different background
+
 ## 2.0.10 `17 Oct 2020`
 
 - ✨ Add command to toggle comment
