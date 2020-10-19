@@ -19,7 +19,9 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 		await activateEditorFeatures(editor);
 	} else {
 		state.activeDocument = await getDocumentForDefaultFile();
-		updateEverything();
+		setTimeout(() => {
+			updateEverything();
+		}, 15);// Workaround for event fired twice very fast when closing an editor
 	}
 }
 // TODO: this function should be executed by interval (60s?)
