@@ -1,11 +1,12 @@
 import vscode, { TreeView } from 'vscode';
 import { extensionConfig, EXTENSION_NAME, state } from '../extension';
 import { filterItems } from '../filter';
+import { TheTask } from '../TheTask';
 import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
-import { VscodeContext } from '../types';
+import { ItemForProvider, Items, SortTags, VscodeContext } from '../types';
 import { setContext } from '../vscodeUtils';
 import { updateWebviewView } from '../webview/webviewView';
 
@@ -160,4 +161,93 @@ function getTasksForTreeView() {
 
 function setViewTitle(view: TreeView<any>, title: string, counter: number, filterValue = '') {
 	view.title = `${title} (${counter}) ${filterValue}`;
+}
+
+export interface ParsedItems {
+	tags: string[];
+	contexts: string[];
+	projects: string[];
+	sortedTagsForProvider: ItemForProvider[];
+	projectsForProvider: ItemForProvider[];
+	contextsForProvider: ItemForProvider[];
+}
+interface TempItemsMap {
+	[title: string]: Items[];
+}
+export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
+	const tagMap: TempItemsMap = {};
+	const projectMap: TempItemsMap = {};
+	const contextMap: TempItemsMap = {};
+	for (const task of tasks) {
+		// Tags grouping
+		for (const tag of task.tags) {
+			if (!tagMap[tag]) {
+				tagMap[tag] = [];
+			}
+			tagMap[tag].push({
+				lineNumber: task.lineNumber,
+				title: task.title,
+			});
+		}
+		// Projects grouping
+		if (task.projects.length) {
+			for (const project of task.projects) {
+				if (!projectMap[project]) {
+					projectMap[project] = [];
+				}
+				projectMap[project].push({
+					lineNumber: task.lineNumber,
+					title: task.title,
+				});
+			}
+		}
+		// Contexts grouping
+		if (task.contexts.length) {
+			for (const context of task.contexts) {
+				if (!contextMap[context]) {
+					contextMap[context] = [];
+				}
+				contextMap[context].push({
+					lineNumber: task.lineNumber,
+					title: task.title,
+				});
+			}
+		}
+	}
+	const tagsForProvider: ItemForProvider[] = [];
+	for (const key in tagMap) {
+		tagsForProvider.push({
+			title: key,
+			items: tagMap[key],
+		});
+	}
+	let sortedTagsForProvider: ItemForProvider[];
+	if (extensionConfig.sortTagsView === SortTags.alphabetic) {
+		sortedTagsForProvider = tagsForProvider.sort((a, b) => a.title.localeCompare(b.title));
+	} else {
+		sortedTagsForProvider = tagsForProvider.sort((a, b) => b.items.length - a.items.length);
+	}
+
+	const projectsForProvider: ItemForProvider[] = [];
+	for (const key in projectMap) {
+		projectsForProvider.push({
+			title: key,
+			items: projectMap[key],
+		});
+	}
+	const contextsForProvider: ItemForProvider[] = [];
+	for (const key in contextMap) {
+		contextsForProvider.push({
+			title: key,
+			items: contextMap[key],
+		});
+	}
+	return {
+		contextsForProvider,
+		projectsForProvider,
+		sortedTagsForProvider,
+		tags: Object.keys(tagMap),
+		projects: Object.keys(projectMap),
+		contexts: Object.keys(contextMap),
+	};
 }

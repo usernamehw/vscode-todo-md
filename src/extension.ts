@@ -9,9 +9,8 @@ import { getDocumentForDefaultFile, resetAllRecurringTasks } from './documentAct
 import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor, updateEverything } from './events';
 import { parseDocument } from './parse';
 import { StatusBar } from './statusBar';
-import { TheTask } from './TheTask';
-import { createAllTreeViews, updateAllTreeViews } from './treeViewProviders/treeViews';
-import { IExtensionConfig, ItemForProvider, Items, SortTags, State, VscodeContext } from './types';
+import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews } from './treeViewProviders/treeViews';
+import { IExtensionConfig, State, VscodeContext } from './types';
 import { setContext } from './vscodeUtils';
 import { TasksWebviewViewProvider } from './webview/webviewView';
 
@@ -193,95 +192,6 @@ function disposeEditorDisposables(): void {
 	if (Global.changeTextDocumentDisposable) {
 		Global.changeTextDocumentDisposable.dispose();
 	}
-}
-
-interface ParsedItems {
-	tags: string[];
-	contexts: string[];
-	projects: string[];
-	sortedTagsForProvider: ItemForProvider[];
-	projectsForProvider: ItemForProvider[];
-	contextsForProvider: ItemForProvider[];
-}
-interface TempItemsMap {
-	[title: string]: Items[];
-}
-export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
-	const tagMap: TempItemsMap = {};
-	const projectMap: TempItemsMap = {};
-	const contextMap: TempItemsMap = {};
-	for (const task of tasks) {
-		// Tags grouping
-		for (const tag of task.tags) {
-			if (!tagMap[tag]) {
-				tagMap[tag] = [];
-			}
-			tagMap[tag].push({
-				lineNumber: task.lineNumber,
-				title: task.title,
-			});
-		}
-		// Projects grouping
-		if (task.projects.length) {
-			for (const project of task.projects) {
-				if (!projectMap[project]) {
-					projectMap[project] = [];
-				}
-				projectMap[project].push({
-					lineNumber: task.lineNumber,
-					title: task.title,
-				});
-			}
-		}
-		// Contexts grouping
-		if (task.contexts.length) {
-			for (const context of task.contexts) {
-				if (!contextMap[context]) {
-					contextMap[context] = [];
-				}
-				contextMap[context].push({
-					lineNumber: task.lineNumber,
-					title: task.title,
-				});
-			}
-		}
-	}
-	const tagsForProvider: ItemForProvider[] = [];
-	for (const key in tagMap) {
-		tagsForProvider.push({
-			title: key,
-			items: tagMap[key],
-		});
-	}
-	let sortedTagsForProvider: ItemForProvider[];
-	if (extensionConfig.sortTagsView === SortTags.alphabetic) {
-		sortedTagsForProvider = tagsForProvider.sort((a, b) => a.title.localeCompare(b.title));
-	} else {
-		sortedTagsForProvider = tagsForProvider.sort((a, b) => b.items.length - a.items.length);
-	}
-
-	const projectsForProvider: ItemForProvider[] = [];
-	for (const key in projectMap) {
-		projectsForProvider.push({
-			title: key,
-			items: projectMap[key],
-		});
-	}
-	const contextsForProvider: ItemForProvider[] = [];
-	for (const key in contextMap) {
-		contextsForProvider.push({
-			title: key,
-			items: contextMap[key],
-		});
-	}
-	return {
-		contextsForProvider,
-		projectsForProvider,
-		sortedTagsForProvider,
-		tags: Object.keys(tagMap),
-		projects: Object.keys(projectMap),
-		contexts: Object.keys(contextMap),
-	};
 }
 export function updateLastVisitGlobalState() {
 	state.extensionContext.globalState.update(LAST_VISIT_BY_FILE_STORAGE_KEY, state.lastVisitByFile);
