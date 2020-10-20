@@ -76,16 +76,26 @@ describe('♻ Recurring', () => {
 	});
 });
 
-// describe('♻ Recurring with starting date', () => {
-// 	const dueString = '2018-01-01|e2d';
-// 	it(`${dueString} is due on the same day`, () => {
-// 		expect(new DueDate(dueString, new Date(2018, 0, 1)).isDue === DueState.due).to.be.ok;
-// 	});
-// 	it(`${dueString} is not due on the next day`, () => {
-// 		const dueDate = new DueDate(dueString, new Date(2018, 0, 2));
-// 		expect(dueDate.isDue === DueState.notDue, dueDate.isDue.toString()).to.be.ok;
-// 	});
-// });
+describe('♻ Recurring with starting date', () => {
+	const dueString = '2018-01-01|e2d';
+	it(`${dueString} is due on the same day`, () => {
+		expect(new DueDate(dueString, {
+			targetDate: new Date(2018, 0, 1),
+		}).isDue === DueState.due).to.be.ok;
+	});
+	it(`${dueString} is not due on the next day`, () => {
+		const dueDate = new DueDate(dueString, {
+			targetDate: new Date(2018, 0, 2),
+		});
+		expect(dueDate.isDue === DueState.notDue, dueDate.isDue.toString()).to.be.ok;
+	});
+	it(`${dueString} is due in 2 days`, () => {
+		const dueDate = new DueDate(dueString, {
+			targetDate: new Date(2018, 0, 3),
+		});
+		expect(dueDate.isDue === DueState.due, dueDate.isDue.toString()).to.be.ok;
+	});
+});
 
 describe('🚫 Invalid due date', () => {
 	it('Due date should have `invalid` state', () => {
@@ -94,3 +104,4 @@ describe('🚫 Invalid due date', () => {
 		expect(new DueDate('2020-07-31|e14').isDue === DueState.invalid, '2020-07-31|e14').to.be.ok;
 	});
 });
+// TODO: comma delimited due date tests
