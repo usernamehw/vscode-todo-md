@@ -11,6 +11,7 @@ const $4jan2018thursday = new Date(2018, 0, 4);
 const $5jan2018friday = new Date(2018, 0, 5);
 const $6jan2018saturday = new Date(2018, 0, 6);
 const $7jan2018sunday = new Date(2018, 0, 7);
+const $8jan2018monday = new Date(2018, 0, 8);
 
 describe(`${headerDelimiter('set due date helper')}Relative date`, () => {
 	it('`+` - tomorrow', () => {
@@ -55,5 +56,49 @@ describe('Absolute date', () => {
 	it('`4` About a month later if current the date is 5.', () => {
 		const due = helpCreateDueDate('4', $5jan2018friday);
 		expect(due?.isSame(dayjs(new Date(2018, 1, 4)), 'day')).to.be.ok;
+	});
+});
+describe('Closest future day of the week', () => {
+	it('`mon` & `monday` In 6 days.', () => {
+		const due = helpCreateDueDate('mon', $2jan2018tuesday);
+		expect(due?.isSame($8jan2018monday, 'day')).to.be.ok;
+		const dueFull = helpCreateDueDate('monday', $2jan2018tuesday);
+		expect(dueFull?.isSame($8jan2018monday, 'day')).to.be.ok;
+	});
+	it('`tue` & `tuesday` The same day.', () => {
+		const due = helpCreateDueDate('tue', $2jan2018tuesday);
+		expect(due?.isSame($2jan2018tuesday, 'day')).to.be.ok;
+		const dueFull = helpCreateDueDate('tuesday', $2jan2018tuesday);
+		expect(dueFull?.isSame($2jan2018tuesday, 'day')).to.be.ok;
+	});
+	it('`wed` & `wednesday` The next day.', () => {
+		const due = helpCreateDueDate('wed', $2jan2018tuesday);
+		expect(due?.isSame($3jan2018wednesday, 'day')).to.be.ok;
+		const dueFull = helpCreateDueDate('wednesday', $2jan2018tuesday);
+		expect(dueFull?.isSame($3jan2018wednesday, 'day')).to.be.ok;
+	});
+	it('`thu` & `thursday` In 2 days.', () => {
+		const due = helpCreateDueDate('thu', $2jan2018tuesday);
+		expect(due?.isSame($4jan2018thursday, 'day')).to.be.ok;
+		const dueFull = helpCreateDueDate('thursday', $2jan2018tuesday);
+		expect(dueFull?.isSame($4jan2018thursday, 'day')).to.be.ok;
+	});
+	it('`fri` & `friday` In 3 days.', () => {
+		const due = helpCreateDueDate('fri', $2jan2018tuesday);
+		expect(due?.isSame($5jan2018friday, 'day')).to.be.ok;
+		const dueFull = helpCreateDueDate('friday', $2jan2018tuesday);
+		expect(dueFull?.isSame($5jan2018friday, 'day')).to.be.ok;
+	});
+	it('`sat` & `saturday` In 4 days.', () => {
+		const due = helpCreateDueDate('sat', $2jan2018tuesday);
+		expect(due?.isSame($6jan2018saturday, 'day')).to.be.ok;
+		const dueFull = helpCreateDueDate('saturday', $2jan2018tuesday);
+		expect(dueFull?.isSame($6jan2018saturday, 'day')).to.be.ok;
+	});
+	it('`sun` & `sunday` In 5 days.', () => {
+		const due = helpCreateDueDate('sun', $2jan2018tuesday);
+		expect(due?.isSame($7jan2018sunday, 'day')).to.be.ok;
+		const dueFull = helpCreateDueDate('sunday', $2jan2018tuesday);
+		expect(dueFull?.isSame($7jan2018sunday, 'day')).to.be.ok;
 	});
 });
