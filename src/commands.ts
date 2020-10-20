@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleCommentAtLine, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
-import { extensionConfig, LAST_VISIT_STORAGE_KEY, state, updateState } from './extension';
+import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { Count, TheTask } from './TheTask';
@@ -346,7 +346,8 @@ export function registerAllCommands() {
 		editor.revealRange(range, vscode.TextEditorRevealType.Default);
 	});
 	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
-		resetAllRecurringTasks();
+		const lastVisit = state.lastVisitByFile[editor.document.uri.toString()];
+		resetAllRecurringTasks(editor.document, lastVisit);
 	});
 	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
 		const link = treeItem.task.links[0]?.value;
@@ -361,7 +362,10 @@ export function registerAllCommands() {
 		if (!numberOfHours) {
 			return;
 		}
-		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, dayjs().subtract(numberOfHours, 'hour').toDate());
+		for (const filePath in state.lastVisitByFile) {
+			state.lastVisitByFile[filePath] = dayjs().subtract(numberOfHours, 'hour').toDate();
+		}
+		updateLastVisitGlobalState();
 	});
 	commands.registerTextEditorCommand('todomd.incrementPriority', editor => {
 		const lineNumber = editor.selection.active.line;

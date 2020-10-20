@@ -17,18 +17,15 @@ export interface State {
 	tags: string[];
 	projects: string[];
 	contexts: string[];
+	lastVisitByFile: {
+		[filePath: string]: Date;
+	};
 	tagsForTreeView: ItemForProvider[];
 	projectsForTreeView: ItemForProvider[];
 	contextsForTreeView: ItemForProvider[];
-	lastVisit?: Date;
 	commentLines: vscode.Range[];
 
 	theRightFileOpened: boolean;
-	/**
-	 * Tracks if `resetAllRecurringTasks()` was already called this day
-	 */
-	fileWasReset: boolean;
-	newDayArrived: boolean;
 	taskTreeViewFilterValue: string;
 	extensionContext: vscode.ExtensionContext;
 	activeDocument: vscode.TextDocument | undefined;

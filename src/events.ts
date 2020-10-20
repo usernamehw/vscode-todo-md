@@ -3,7 +3,7 @@ import vscode, { window, workspace } from 'vscode';
 import { updateCompletions } from './completionProviders';
 import { updateEditorDecorations } from './decorations';
 import { getDocumentForDefaultFile, resetAllRecurringTasks } from './documentActions';
-import { extensionConfig, Global, LAST_VISIT_STORAGE_KEY, state, statusBar, updateState } from './extension';
+import { extensionConfig, Global, state, statusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateHover } from './hoverProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
@@ -24,20 +24,24 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 		}, 15);// Workaround for event fired twice very fast when closing an editor
 	}
 }
-// TODO: this function should be executed by interval (60s?)
-export function checkIfNewDayArrived(): boolean {
-	const lastVisit = state.extensionContext.globalState.get<string | undefined>(LAST_VISIT_STORAGE_KEY);
-	if (lastVisit && !dayjs().isSame(lastVisit, 'day')) {
-		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
-		state.newDayArrived = true;
-		state.fileWasReset = false;
-		return true;
+export function checkIfNeedResetRecurringTasks(filePath: string): undefined | {lastVisit: Date} {
+	const lastVisitForFile = state.lastVisitByFile[filePath];
+	if (lastVisitForFile) {
+		if (!dayjs().isSame(lastVisitForFile, 'day')) {
+			// First time this file opened this day => reset
+			return {
+				lastVisit: lastVisitForFile,
+			};
+		} else {
+			// This file was already reset this day
+			return undefined;
+		}
+	} else {
+		// New file
+		return {
+			lastVisit: new Date(),
+		};
 	}
-	// first visit ever
-	if (!lastVisit) {
-		state.extensionContext.globalState.update(LAST_VISIT_STORAGE_KEY, new Date());
-	}
-	return false;
 }
 
 export function onChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
@@ -66,12 +70,13 @@ export async function activateEditorFeatures(editor: vscode.TextEditor) {
 	updateHover();
 	statusBar.show();
 	await setContext(VscodeContext.isActive, true);
-	// TODO: maybe move it up?
-	checkIfNewDayArrived();
-	if (state.newDayArrived && !state.fileWasReset) {
-		await resetAllRecurringTasks();
-		state.fileWasReset = true;
+
+	const needReset = checkIfNeedResetRecurringTasks(editor.document.uri.toString());
+	if (needReset) {
+		await resetAllRecurringTasks(editor.document, needReset.lastVisit);
 		updateEverything();
+		state.lastVisitByFile[editor.document.uri.toString()] = new Date();
+		updateLastVisitGlobalState();
 	}
 }
 /**

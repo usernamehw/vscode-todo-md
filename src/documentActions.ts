@@ -2,7 +2,8 @@ import dayjs from 'dayjs';
 import vscode, { TextDocument, WorkspaceEdit } from 'vscode';
 import { applyEdit, getTaskAtLine, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from './commands';
 import { DueDate } from './dueDate';
-import { extensionConfig, LAST_VISIT_STORAGE_KEY, state } from './extension';
+import { extensionConfig, state } from './extension';
+import { parseDocument } from './parse';
 import { TheTask } from './TheTask';
 import { DATE_FORMAT } from './time/timeUtils';
 import { DueState } from './types';
@@ -160,17 +161,19 @@ export async function goToTask(lineNumber: number) {
 	}, 700);
 }
 
-export async function resetAllRecurringTasks() {
+export async function resetAllRecurringTasks(document: vscode.TextDocument, lastVisit: Date | string = new Date()) {
+	if (typeof lastVisit === 'string') {
+		lastVisit = new Date(lastVisit);
+	}
 	const wEdit = new WorkspaceEdit();
-	const document = getActiveDocument();
-	for (const task of state.tasks) {
+	const tasks = (await parseDocument(document)).tasks;
+	for (const task of tasks) {
 		if (task.due?.isRecurring) {
 			const line = document.lineAt(task.lineNumber);
 			if (task.done) {
 				removeDoneSymbol(wEdit, document.uri, line);
 				removeCompletionDate(wEdit, document.uri, line);
 			} else {
-				const lastVisit = new Date(state.extensionContext.globalState.get(LAST_VISIT_STORAGE_KEY) as string);
 				if (!task.specialTags.overdue && !dayjs().isSame(lastVisit, 'day')) {
 					const lastVisitWithoutTime = new Date(lastVisit.getFullYear(), lastVisit.getMonth(), lastVisit.getDate());
 					const now = new Date();

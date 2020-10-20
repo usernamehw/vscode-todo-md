@@ -2,11 +2,11 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import vscode, { window, workspace } from 'vscode';
+import vscode, { ExtensionContext, window, workspace } from 'vscode';
 import { registerAllCommands, updateArchivedTasks } from './commands';
 import { updateDecorationStyle } from './decorations';
 import { getDocumentForDefaultFile, resetAllRecurringTasks } from './documentActions';
-import { checkIfNewDayArrived, onChangeActiveTextEditor, updateEverything } from './events';
+import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor, updateEverything } from './events';
 import { parseDocument } from './parse';
 import { StatusBar } from './statusBar';
 import { TheTask } from './TheTask';
@@ -31,16 +31,15 @@ export const state: State = {
 	archivedTasks: [],
 	commentLines: [],
 	theRightFileOpened: false,
-	fileWasReset: false,
-	newDayArrived: false,
+	lastVisitByFile: {},
 	taskTreeViewFilterValue: '',
-	// @ts-ignore
-	extensionContext: undefined,
+	extensionContext: undefined as any as ExtensionContext,
 	activeDocument: undefined,
 };
 
+
 export const EXTENSION_NAME = 'todomd';
-export const LAST_VISIT_STORAGE_KEY = 'LAST_VISIT_STORAGE_KEY';
+export const LAST_VISIT_BY_FILE_STORAGE_KEY = 'LAST_VISIT_BY_FILE_STORAGE_KEY';
 
 export let extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IExtensionConfig;
 export const statusBar = new StatusBar();
@@ -82,21 +81,26 @@ export class Global {
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
 	state.extensionContext = extensionContext;
+	const lastVisitByFile = extensionContext.globalState.get<State['lastVisitByFile'] | undefined>(LAST_VISIT_BY_FILE_STORAGE_KEY);
+	state.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
 	updateDecorationStyle();
 	registerAllCommands();
 	createAllTreeViews();
 
+	const defaultFileDocument = await getDocumentForDefaultFile();
+	if (defaultFileDocument) {
+		const filePath = defaultFileDocument.uri.toString();
+		const needReset = checkIfNeedResetRecurringTasks(filePath);
+		if (needReset) {
+			await resetAllRecurringTasks(defaultFileDocument, needReset.lastVisit);
+			state.lastVisitByFile[filePath] = new Date();
+			updateLastVisitGlobalState();
+		}
+	}
+
 	onChangeActiveTextEditor(window.activeTextEditor);
 	await updateState();
-
-	setTimeout(() => {
-		const isNewDay = checkIfNewDayArrived();
-		if (isNewDay) {
-			resetAllRecurringTasks();
-			updateEverything();
-		}
-	}, 1000);
 
 	Global.webviewProvider = new TasksWebviewViewProvider(state.extensionContext.extensionUri);
 	state.extensionContext.subscriptions.push(
@@ -278,6 +282,9 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 		projects: Object.keys(projectMap),
 		contexts: Object.keys(contextMap),
 	};
+}
+export function updateLastVisitGlobalState() {
+	state.extensionContext.globalState.update(LAST_VISIT_BY_FILE_STORAGE_KEY, state.lastVisitByFile);
 }
 
 export function deactivate(): void {
