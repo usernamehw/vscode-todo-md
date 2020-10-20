@@ -4,16 +4,17 @@ import { dayOfTheWeekRegexp } from './timeUtils';
 /**
  * - Returns undefined for invalid input
  * - Returns dayjs date for valid input
- * TODO: add tests
  */
-export function helpCreateDueDate(str: string): dayjs.Dayjs | undefined {
+export function helpCreateDueDate(str: string, targetNow = new Date()): dayjs.Dayjs | undefined {
 	if (str === '+') {
 		str = '+1';// alias for tomorrow
+	} else if (str === '-') {
+		str = '-1';
 	}
 	const justDateMatch = /^(\d+)$/.exec(str);
 	const dayShiftMatch = /^(\+|-)(\d+)(d|w)?$/.exec(str);
 	const dayOfTheWeekMatch = dayOfTheWeekRegexp.exec(str);
-	const now = dayjs();
+	const now = dayjs(targetNow);
 	if (dayShiftMatch) {
 		const sign = dayShiftMatch[1];
 		const number = Number(dayShiftMatch[2]);
