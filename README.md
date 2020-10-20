@@ -61,12 +61,6 @@ tag | description | example
 - ❌ note
 -->
 
-### Due as range `..`
-
-```
-{due:2020-05-08..2020-05-12}
-```
-
 ### Recurring due date
 
 Recurring due dates should not be archived and their completion state should be reset every day.

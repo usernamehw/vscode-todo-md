@@ -56,10 +56,6 @@ export class DueDate {
 				isDue: DueState.due,
 			};
 		}
-		const tryAsRange = due.split('..');
-		if (tryAsRange.length > 1) {
-			return DueDate.isDueBetween(tryAsRange[0], tryAsRange[1]);
-		}
 		let isRecurring = false;
 		let isDue = DueState.notDue;
 		const dueWithDateMatch = DueDate.dueWithDateRegexp.exec(due);
@@ -98,21 +94,21 @@ export class DueDate {
 		const diffInDays = dayjs(date).diff(dayjs(targetDate), 'day');
 		return diffInDays === 0 ? DueState.due : DueState.overdue;
 	}
-	private static isDueBetween(d1: string, d2: string): DueReturn {
-		const now = dayjs();
-		const date1 = dayjs(d1);
-		const date2 = dayjs(d2);
-		let isDue;
-		if (date1.isBefore(now, 'day') && date2.isBefore(now, 'day')) {
-			isDue = DueState.overdue;
-		} else {
-			isDue = dayjs().isBetween(d1, dayjs(d2), 'day', '[]') ? DueState.due : DueState.notDue;
-		}
-		return {
-			isRecurring: false,
-			isDue,
-		};
-	}
+	// private static isDueBetween(d1: string, d2: string): DueReturn {
+	// 	const now = dayjs();
+	// 	const date1 = dayjs(d1);
+	// 	const date2 = dayjs(d2);
+	// 	let isDue;
+	// 	if (date1.isBefore(now, 'day') && date2.isBefore(now, 'day')) {
+	// 		isDue = DueState.overdue;
+	// 	} else {
+	// 		isDue = dayjs().isBetween(d1, dayjs(d2), 'day', '[]') ? DueState.due : DueState.notDue;
+	// 	}
+	// 	return {
+	// 		isRecurring: false,
+	// 		isDue,
+	// 	};
+	// }
 
 	private static isDueToday(dueString: string, targetDate: Date): DueState {
 		const value = dueString.toLowerCase();
