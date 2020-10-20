@@ -9,7 +9,7 @@ export const DATE_FORMAT = 'YYYY-MM-DD';
 export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = `${DATE_FORMAT}T${TIME_FORMAT}`;
 
-export const dayOfTheWeekRegexp = /^sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday$/i;
+export const dayOfTheWeekRegexp = /^(sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday)$/i;
 
 /**
  * Get date or datetime ISO 8601
@@ -22,19 +22,19 @@ export function getDateInISOFormat(date: Date | Dayjs = new Date(), includeTime 
 }
 
 export function dayOfWeekToIndexOfWeek(dayOfWeek: string): number {
-	if (/^sun|sunday$/i.test(dayOfWeek)) {
+	if (/^(sun|sunday)$/i.test(dayOfWeek)) {
 		return 0;
-	} else if (/^mon|monday$/i.test(dayOfWeek)) {
+	} else if (/^(mon|monday)$/i.test(dayOfWeek)) {
 		return 1;
-	} else if (/^tue|tuesday$/i.test(dayOfWeek)) {
+	} else if (/^(tue|tuesday)$/i.test(dayOfWeek)) {
 		return 2;
-	} else if (/^wed|wednesday$/i.test(dayOfWeek)) {
+	} else if (/^(wed|wednesday)$/i.test(dayOfWeek)) {
 		return 3;
-	} else if (/^thu|thursday$/i.test(dayOfWeek)) {
+	} else if (/^(thu|thursday)$/i.test(dayOfWeek)) {
 		return 4;
-	} else if (/^fri|friday$/i.test(dayOfWeek)) {
+	} else if (/^(fri|friday)$/i.test(dayOfWeek)) {
 		return 5;
-	} else if (/^sat|saturday$/i.test(dayOfWeek)) {
+	} else if (/^(sat|saturday)$/i.test(dayOfWeek)) {
 		return 6;
 	}
 	throw Error('Unknown day of the week.');

@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
-import { dayOfTheWeekRegexp } from './timeUtils';
+import { dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek } from './timeUtils';
 
 /**
  * - Returns undefined for invalid input
  * - Returns dayjs date for valid input
+ * TODO: create recurring dates with starting date
  */
 export function helpCreateDueDate(str: string, targetNow = new Date()): dayjs.Dayjs | undefined {
 	if (str === '+') {
@@ -44,9 +45,12 @@ export function helpCreateDueDate(str: string, targetNow = new Date()): dayjs.Da
 		return targetDate >= currentDate ? now.set('date', targetDate) :
 			now.add(1, 'month').set('date', targetDate);
 	} else if (dayOfTheWeekMatch) {
-		// const dayOfTheWeekShort = now.format('ddd').toLowerCase();
-		// const dayOfTheWeekLong = now.format('dddd').toLowerCase();
-		return undefined;// TODO: do
+		const targetDayIndex = dayOfWeekToIndexOfWeek(str);
+		let tryDay = now.set('day', targetDayIndex);
+		if (tryDay.isBefore(now, 'day')) {
+			tryDay = tryDay.add(7, 'day');
+		}
+		return tryDay;
 	} else {
 		return undefined;
 	}
