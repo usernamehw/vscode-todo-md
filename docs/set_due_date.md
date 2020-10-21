@@ -1,4 +1,4 @@
-## Set due date helper function
+## Set due date helper function `todomd.setDueDate`
 
 example | description
 --- | ---
