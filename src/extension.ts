@@ -94,7 +94,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		if (needReset) {
 			await resetAllRecurringTasks(defaultFileDocument, needReset.lastVisit);
 			state.lastVisitByFile[filePath] = new Date();
-			updateLastVisitGlobalState();
+			await updateLastVisitGlobalState();
 		}
 	}
 
@@ -193,8 +193,8 @@ function disposeEditorDisposables(): void {
 		Global.changeTextDocumentDisposable.dispose();
 	}
 }
-export function updateLastVisitGlobalState() {
-	state.extensionContext.globalState.update(LAST_VISIT_BY_FILE_STORAGE_KEY, state.lastVisitByFile);
+export async function updateLastVisitGlobalState() {
+	return await state.extensionContext.globalState.update(LAST_VISIT_BY_FILE_STORAGE_KEY, state.lastVisitByFile);
 }
 
 export function deactivate(): void {
