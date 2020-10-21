@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek } from './timeUtils';
+import { dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek, monthStringToMonthIndex } from './timeUtils';
 
 /**
  * - Returns undefined for invalid input
@@ -10,11 +10,12 @@ export function helpCreateDueDate(str: string, targetNow = new Date()): dayjs.Da
 	if (str === '+') {
 		str = '+1';// alias for tomorrow
 	} else if (str === '-') {
-		str = '-1';
+		str = '-1';// alias for yesterday
 	}
 	const justDateMatch = /^(\d+)$/.exec(str);
 	const dayShiftMatch = /^(\+|-)(\d+)(d|w)?$/.exec(str);
 	const dayOfTheWeekMatch = dayOfTheWeekRegexp.exec(str);
+	const monthMatch = /^(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)\s?(\d\d?)$/i.exec(str);
 	const now = dayjs(targetNow);
 	if (dayShiftMatch) {
 		const sign = dayShiftMatch[1];
@@ -39,6 +40,15 @@ export function helpCreateDueDate(str: string, targetNow = new Date()): dayjs.Da
 			}
 		}
 		return date;
+	} else if (monthMatch) {
+		const month = monthMatch[1];
+		const date = Number(monthMatch[2]);
+		let tryDate = now.set('month', monthStringToMonthIndex(month));
+		tryDate = tryDate.set('date', date);
+		if (tryDate.isBefore(now, 'date')) {
+			tryDate = tryDate.add(1, 'year');
+		}
+		return tryDate;
 	} else if (justDateMatch) {
 		const currentDate = now.date();
 		const targetDate = Number(justDateMatch[1]);
