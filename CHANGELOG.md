@@ -1,3 +1,9 @@
+## 2.0.12 `21 Oct 2020`
+
+- 💥 Remove due date as range
+- ✨ Set due date helper - closest future day of the week (e.g. `fri`)
+- ✨ Reset recurring tasks should be working separately for every file
+
 ## 2.0.11 `19 Oct 2020`
 
 - ✨ Set due date helper - support date as single number without signs (e.g. `20`)
