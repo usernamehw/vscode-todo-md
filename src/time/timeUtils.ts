@@ -10,6 +10,7 @@ export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = `${DATE_FORMAT}T${TIME_FORMAT}`;
 
 export const dayOfTheWeekRegexp = /^(sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday)$/i;
+export const monthRegexp = /^(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)$/i;
 
 /**
  * Get date or datetime ISO 8601
@@ -37,7 +38,35 @@ export function dayOfWeekToIndexOfWeek(dayOfWeek: string): number {
 	} else if (/^(sat|saturday)$/i.test(dayOfWeek)) {
 		return 6;
 	}
-	throw Error('Unknown day of the week.');
+	throw Error(`Unknown day of the week. [${dayOfWeek}]`);
+}
+export function monthStringToMonthIndex(month: string): number {
+	if (/^(Jan|January)$/i.test(month)) {
+		return 0;
+	} else if (/^(Feb|February)$/i.test(month)) {
+		return 1;
+	} else if (/^(Mar|March)$/i.test(month)) {
+		return 2;
+	} else if (/^(Apr|April)$/i.test(month)) {
+		return 3;
+	} else if (/^May$/i.test(month)) {
+		return 4;
+	} else if (/^(Jun|June)$/i.test(month)) {
+		return 5;
+	} else if (/^(Jul|July)$/i.test(month)) {
+		return 6;
+	} else if (/^(Aug|August)$/i.test(month)) {
+		return 7;
+	} else if (/^(Sep|September)$/i.test(month)) {
+		return 8;
+	} else if (/^(Oct|October)$/i.test(month)) {
+		return 9;
+	} else if (/^(Nov|November)$/i.test(month)) {
+		return 10;
+	} else if (/^(Dec|December)$/i.test(month)) {
+		return 11;
+	}
+	throw Error(`Unknown month. [${month}]`);
 }
 /**
  * Short day of the week `Mon` - `Sun`
