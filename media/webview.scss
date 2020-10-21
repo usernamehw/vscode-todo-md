@@ -70,9 +70,12 @@ body.vscode-dark {
 $approxOneSpace: 0.25em;
 
 a {
-	margin-left: $approxOneSpace;
 	text-decoration: none;
 	word-break: break-all;
+
+	+ a {
+		margin-left: $approxOneSpace;
+	}
 }
 
 input[type='text'] {
@@ -206,7 +209,8 @@ button,
 
 .native-checkbox {
 	margin-left: 2px;
-	transform: scale(1.15);
+	margin-right: 5px;
+	transform: scale(1.11);
 }
 
 .tag,
