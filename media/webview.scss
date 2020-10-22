@@ -70,12 +70,9 @@ body.vscode-dark {
 $approxOneSpace: 0.25em;
 
 a {
+	margin-left: $approxOneSpace;
 	text-decoration: none;
 	word-break: break-all;
-
-	+ a {
-		margin-left: $approxOneSpace;
-	}
 }
 
 input[type='text'] {
@@ -204,6 +201,12 @@ button,
 
 	&.not-due {
 		border-right: 3px solid #808080;
+	}
+}
+
+.checkbox {
+	+ a {
+		margin-left: 0;
 	}
 }
 

@@ -271,12 +271,14 @@ function renderTask(task: TheTask): HTMLElement {
 			titleText = titleText.replace(new RegExp(`${escapeRegexp(link.value)}?`), '');
 		}
 	}
-	if (state.config.markdownEnabled) {
-		title.innerHTML = marked(titleText);
-	} else {
-		title.textContent = titleText;
+	if (titleText.trim().length !== 0) {
+		if (state.config.markdownEnabled) {
+			title.innerHTML = marked(titleText);
+		} else {
+			title.textContent = titleText;
+		}
+		taskListItem.appendChild(title);
 	}
-	taskListItem.appendChild(title);
 	for (const linkEl of linkElements) {
 		taskListItem.appendChild(linkEl);
 	}
