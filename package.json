@@ -90,13 +90,13 @@
 					"markdownDescription": "Controls checkbox style (round, square...).",
 					"enum": [
 						"round",
+						"square",
 						"rounded-square",
 						"fill-round",
 						"fill-square",
-						"fill-rounded-square",
-						"low-contrast"
+						"fill-rounded-square"
 					],
-					"default": "rounded-square"
+					"default": "square"
 				},
 				"todomd.webview.markdownEnabled": {
 					"type": "boolean",

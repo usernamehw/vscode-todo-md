@@ -1,6 +1,4 @@
 /* TODO: colors should not be constant */
-$blue: #41a6d9;
-
 * {
 	box-sizing: border-box;
 }
@@ -9,11 +7,13 @@ html {
 	overflow-y: hidden;
 }
 
-body {
-	$tagBackground: #c2e1ff;
-	$projectBackground: #b6e5d6;
-	$contextBackground: #eec4ff;
+$approxOneSpace: 0.25em;
+$tagBackground: #c2e1ff;
+$projectBackground: #b6e5d6;
+$contextBackground: #eec4ff;
+$checkboxBackground: #cbd1d8;
 
+body {
 	--border-light: #cecece6c;
 	--foreground: var(--vscode-foreground);
 	--done-task-background: #e9f0d6;
@@ -24,14 +24,14 @@ body {
 	--project-hover-background: #{darken($projectBackground, 8%)};
 	--context-background: #{$contextBackground};
 	--context-hover-background: #{darken($contextBackground, 8%)};
-	--count-background: #00000014;
+	--count-background: #0000000c;
 	--count-button-background: #00000014;
 	--count-button-hover-background: #0000002b;
-	--task-checkbox: #{$blue};
-	--task-checkbox-bg: #cbd1d8;
-	--task-checkbox-fg: #ffffff;
-	--task-checkbox-low-contrast-bg: #{lighten($blue, 32%)};
-	--task-checkbox-hover-bg: #9faab7;
+
+	--checkbox-bg: #{$checkboxBackground};
+	--checkbox-done-bg: #{darken($checkboxBackground, 20%)};
+	--checkbox-fg: #ffffff;
+	--checkbox-hover-bg: #9faab7;// TODO: use darken to get this color?
 
 	--z-index-checkbox-1: 10;
 	--z-index-checkbox-2: 15;
@@ -64,10 +64,9 @@ body.vscode-dark {
 	--count-button-background: #ffffff1a;
 	--done-task-background: #ace0001c;
 
-	--task-checkbox-bg: #3d4d63;
+	--checkbox-bg: #3d4d63;
+	--checkbox-low-contrast-bg: #{darken($checkboxBackground, 20%)};
 }
-
-$approxOneSpace: 0.25em;
 
 a {
 	margin-left: $approxOneSpace;
@@ -257,7 +256,7 @@ button,
 
 .count-container {
 	background-color: var(--count-background);
-	border-radius: 3px;
+	border: 1px solid var(--border-light);
 	margin-left: $approxOneSpace;
 	white-space: pre;
 }
@@ -270,11 +269,10 @@ button,
 
 .decrement-count,
 .increment-count {
-	background-color: var(--count-button-background);
+	background-color: inherit;
 	color: var(--vscode-foreground);
 	cursor: pointer;
 	display: inline-block;
-	max-width: 1.4em;
 	padding: 0 0.2rem;
 	text-align: center;
 	-webkit-user-select: none;
@@ -283,6 +281,14 @@ button,
 	&:hover {
 		background-color: var(--count-button-hover-background);
 	}
+}
+
+.decrement-count {
+	border-right: 1px solid var(--border-light);
+}
+
+.increment-count {
+	border-left: 1px solid var(--border-light);
 }
 
 .hidden {
@@ -330,12 +336,11 @@ $checkbox-size: 1rem;
 
 .option-input {
 	-webkit-appearance: none;
-	background-color: var(--task-checkbox-bg);
+	background-color: var(--checkbox-bg);
 	bottom: 0;
-	color: var(--task-checkbox-fg);
+	color: var(--checkbox-fg);
 	cursor: pointer;
 	display: inline-block;
-	// float: left;
 	height: $checkbox-size;
 	left: 0;
 	margin: 0;
@@ -343,6 +348,7 @@ $checkbox-size: 1rem;
 	margin-right: 2px;
 	position: relative;
 	right: 0;
+	top: 2px;
 	transition: all 0.2s ease-out 0s;
 	width: $checkbox-size;
 	z-index: var(--z-index-checkbox-2);
@@ -379,16 +385,8 @@ $checkbox-size: 1rem;
 		}
 	}
 
-	&.low-contrast {
-		&:checked {
-			background-color: var(--task-checkbox-low-contrast-bg);
-			color: var(--task-checkbox);
-		}
-	}
-
-
 	&:hover {
-		background-color: var(--task-checkbox-hover-bg);
+		background-color: var(--checkbox-hover-bg);
 	}
 
 	&:focus {
@@ -396,7 +394,7 @@ $checkbox-size: 1rem;
 	}
 
 	&:checked {
-		background-color: var(--task-checkbox);
+		background-color: var(--checkbox-done-bg);
 
 		&:before {
 			content: '\2714 \FE0E';
