@@ -1,6 +1,6 @@
 # Reveal the task
 
-<kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> shows a task in the file
+<kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> - Reveals the task in the file
 
 # Render tasks as markdown
 
