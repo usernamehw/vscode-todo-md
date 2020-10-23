@@ -173,6 +173,10 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 "window.dialogStyle": "custom",// VSCode >= 1.50.0
 ```
 
+## More Documentation
+
+https://github.com/usernamehw/vscode-todo-md/tree/master/docs
+
 ## Please upvote the following upstream vscode issues:
 
 - [#32813 \[theming\] Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
