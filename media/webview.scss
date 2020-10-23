@@ -332,9 +332,9 @@ button,
 	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
 }
 // Custom-styled Checkbox ──────────────────────────────────────────────────────────────
-$checkbox-size: 1rem;
+$checkbox-size: 0.9rem;
 
-.option-input {
+.custom-checkbox {
 	-webkit-appearance: none;
 	background-color: var(--checkbox-bg);
 	bottom: 0;
@@ -400,7 +400,7 @@ $checkbox-size: 1rem;
 			content: '\2714 \FE0E';
 			display: inline-block;
 			font-family: 'Segoe UI Symbol', monospace;
-			font-size: 0.8rem;
+			font-size: 0.7rem;
 			height: $checkbox-size;
 			line-height: $checkbox-size;
 			position: absolute;
