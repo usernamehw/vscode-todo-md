@@ -96,7 +96,7 @@ export function createAllTreeViews() {
 	}
 }
 /**
- * Update all tree views (including webviews)
+ * Update all tree views (excluding archived tasks) and webviews
  * Items are taken from `state`
  */
 export function updateAllTreeViews(): void {
