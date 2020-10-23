@@ -1,3 +1,8 @@
+## 2.0.13 `23 Oct 2020`
+
+- ✨ Set due date helper - closest future date by month+date (e.g. `nov 20`)
+- ✨ [webview] Style tweaks
+
 ## 2.0.12 `21 Oct 2020`
 
 - 💥 Remove due date as range
