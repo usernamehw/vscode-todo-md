@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import vscode from 'vscode';
 import { extensionConfig, Global, state } from './extension';
-import { getDateInISOFormat } from './time/timeUtils';
+import { helpCreateDueDate } from './time/setDueDateHelper';
+import { dateAndDateDiff, getDateInISOFormat } from './time/timeUtils';
 
 export function updateCompletions(): void {
 	if (Global.tagAutocompleteDisposable) {
@@ -73,13 +74,47 @@ export function updateCompletions(): void {
 				setDueDateToday.insertText = `{due:${getDateInISOFormat(new Date())}}`;
 				const setDueDateTomorrow = new vscode.CompletionItem('SET_DUE_TOMORROW', vscode.CompletionItemKind.Constant);
 				setDueDateTomorrow.insertText = `{due:${getDateInISOFormat(dayjs().add(1, 'day'))}}`;
-				const setDueDateYesterday = new vscode.CompletionItem('YESTERDAY', vscode.CompletionItemKind.Constant);
+				const setDueDateYesterday = new vscode.CompletionItem('SET_DUE_YESTERDAY', vscode.CompletionItemKind.Constant);
 				setDueDateYesterday.insertText = `{due:${getDateInISOFormat(dayjs().subtract(1, 'day'))}}`;
 				general.push(today, setDueDateToday, setDueDateTomorrow, setDueDateYesterday);
 				return general;
 			},
 		},
 		'',
+	);
+	Global.setDueDateAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+		{ scheme: 'file' },
+		{
+			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+				const wordRange = document.getWordRangeAtPosition(position, /\S+/);
+				if (!wordRange) {
+					return [];
+				}
+				const word = document.getText(wordRange);
+				if (word[word.length - 1] === '$') {
+					const dueDate = helpCreateDueDate(word.slice(0, -1));
+					if (!dueDate) {
+						return [];
+					}
+					const completionItem = new vscode.CompletionItem(dateAndDateDiff(dueDate), vscode.CompletionItemKind.Constant);
+					completionItem.insertText = '';
+					completionItem.filterText = word;
+					completionItem.command = {
+						command: 'todomd.setDueDateWithArgs',
+						title: 'Set Due Date with arguments',
+						arguments: [
+							document,
+							wordRange,
+							dueDate,
+						],
+					};
+					return [completionItem];
+				} else {
+					return [];
+				}
+			},
+		},
+		'$',
 	);
 }
 

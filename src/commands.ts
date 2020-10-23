@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
-import vscode, { commands, Range, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, toggleCommentAtLine, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
+import vscode, { commands, Range, TextDocument, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLine, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
 import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { Count, TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
-import { dateDiff, DATE_FORMAT, dayOfTheWeek, getDateInISOFormat } from './time/timeUtils';
+import { dateAndDateDiff, getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
@@ -213,7 +213,6 @@ export function registerAllCommands() {
 	});
 	commands.registerTextEditorCommand('todomd.setDueDate', editor => {
 		const line = editor.selection.active.line;
-		const task = getTaskAtLine(line);
 		const inputBox = window.createInputBox();
 		let value: string | undefined = '+0';
 		inputBox.value = value;
@@ -226,7 +225,7 @@ export function registerAllCommands() {
 				inputBox.prompt = inputOffset('❌');
 				return;
 			}
-			inputBox.prompt = inputOffset(`${newDueDate.format(DATE_FORMAT)}  ${dayOfTheWeek(newDueDate)}  [${dateDiff(newDueDate)}]`);
+			inputBox.prompt = inputOffset(dateAndDateDiff(newDueDate));
 		});
 
 		inputBox.onDidAccept(() => {
@@ -234,19 +233,20 @@ export function registerAllCommands() {
 				return;
 			}
 			const newDueDate = helpCreateDueDate(value);
+
 			if (newDueDate) {
-				const dueDate = `{due:${newDueDate.format(DATE_FORMAT)}}`;
-				const wEdit = new WorkspaceEdit();
-				if (task?.dueRange) {
-					wEdit.replace(editor.document.uri, task.dueRange, dueDate);
-				} else {
-					wEdit.insert(editor.document.uri, editor.selection.active, ` ${dueDate}`);
-				}
-				applyEdit(wEdit, editor.document);
+				setDueDate(editor.document, line, newDueDate);
 				inputBox.hide();
 				inputBox.dispose();
 			}
 		});
+	});
+	commands.registerCommand('todomd.setDueDateWithArgs', async (document: TextDocument, wordRange: vscode.Range, dueDate: dayjs.Dayjs) => {
+		const lineNumber = wordRange.start.line;
+		const wEdit = new WorkspaceEdit();
+		wEdit.delete(document.uri, wordRange);
+		await applyEdit(wEdit, document);
+		setDueDate(document, lineNumber, dueDate);
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
 		const isDefaultFileSpecified = await checkArchiveFileAndNotify();

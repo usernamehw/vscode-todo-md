@@ -93,6 +93,7 @@ export function deactivateEditorFeatures() {
 		Global.tagAutocompleteDisposable.dispose();
 		Global.projectAutocompleteDisposable.dispose();
 		Global.generalAutocompleteDisposable.dispose();
+		Global.setDueDateAutocompleteDisposable.dispose();
 	}
 	if (Global.hoverDisposable) {
 		Global.hoverDisposable.dispose();

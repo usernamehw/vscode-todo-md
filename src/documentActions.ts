@@ -15,6 +15,18 @@ export function hideTask(document: vscode.TextDocument, lineNumber: number) {
 	applyEdit(wEdit, document);
 }
 
+export async function setDueDate(document: vscode.TextDocument, lineNumber: number, newDueDate: dayjs.Dayjs) {
+	const dueDate = `{due:${newDueDate.format(DATE_FORMAT)}}`;
+	const wEdit = new WorkspaceEdit();
+	const task = getTaskAtLine(lineNumber);
+	if (task?.dueRange) {
+		wEdit.replace(document.uri, task.dueRange, dueDate);
+	} else {
+		wEdit.insert(document.uri, new vscode.Position(lineNumber, 0), ` ${dueDate} `);
+	}
+	return await applyEdit(wEdit, document);
+}
+
 export function deleteTask(document: vscode.TextDocument, lineNumber: number) {
 	const wEdit = new WorkspaceEdit();
 	wEdit.delete(document.uri, document.lineAt(lineNumber).rangeIncludingLineBreak);
