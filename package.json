@@ -91,12 +91,14 @@
 					"enum": [
 						"round",
 						"square",
+						"round-border",
+						"square-border",
 						"rounded-square",
 						"fill-round",
 						"fill-square",
 						"fill-rounded-square"
 					],
-					"default": "square"
+					"default": "rounded-square"
 				},
 				"todomd.webview.markdownEnabled": {
 					"type": "boolean",

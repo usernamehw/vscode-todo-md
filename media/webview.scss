@@ -332,7 +332,7 @@ button,
 	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
 }
 // Custom-styled Checkbox ──────────────────────────────────────────────────────────────
-$checkbox-size: 0.9rem;
+$checkbox-size: 1rem;
 
 .custom-checkbox {
 	-webkit-appearance: none;
@@ -346,6 +346,7 @@ $checkbox-size: 0.9rem;
 	margin: 0;
 	margin-left: 2px;
 	margin-right: 2px;
+
 	position: relative;
 	right: 0;
 	top: 2px;
@@ -355,6 +356,19 @@ $checkbox-size: 0.9rem;
 
 	&.round {
 		border-radius: 50%;
+	}
+
+	&.round-border {
+		background-color: inherit !important;
+		border: 1px solid var(--foreground);
+		border-radius: 50%;
+		color: var(--foreground) !important;
+	}
+
+	&.square-border {
+		background-color: inherit !important;
+		border: 1px solid var(--foreground);
+		color: var(--foreground) !important;
 	}
 
 	&.rounded-square {
@@ -408,13 +422,12 @@ $checkbox-size: 0.9rem;
 			width: $checkbox-size;
 		}
 
-		&:after {
-			background-color: var(--task-checkbox);
-			content: '';
-			display: block;
-			pointer-events: none;
-			position: relative;
-			z-index: var(--z-index-checkbox-1);
+		&.round-border,
+		&.square-border {
+			&:before {
+				left: -1px;
+				top: -1px;
+			}
 		}
 	}
 }
