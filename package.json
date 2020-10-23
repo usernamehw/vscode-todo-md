@@ -1317,10 +1317,10 @@
 		"webpack-cli": "^3.3.12"
 	},
 	"dependencies": {
-		"dayjs": "^1.9.3",
+		"dayjs": "^1.9.4",
 		"fuzzysort": "^1.1.4",
 		"markdown-table": "^2.0.0",
-		"marked": "^1.2.0",
+		"marked": "^1.2.2",
 		"lodash": "^4.17.20",
 		"awesomplete": "^1.1.5"
 	}
