@@ -4,7 +4,8 @@ import { dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek, monthStringToMonthIndex } f
 /**
  * - Returns undefined for invalid input
  * - Returns dayjs date for valid input
- * TODO: create recurring dates with starting date
+ * - TODO: relative month +1m
+ * - TODO: create recurring dates with starting date
  */
 export function helpCreateDueDate(str: string, targetNow = new Date()): dayjs.Dayjs | undefined {
 	if (str === '+') {
