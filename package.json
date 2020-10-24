@@ -55,6 +55,11 @@
 					"markdownDescription": "Whether completed tasks are shown or not in the webview.",
 					"default": true
 				},
+				"todomd.webview.completedStrikeThrough": {
+					"type": "boolean",
+					"markdownDescription": "Whether completed tasks should have a line drawn on them in the webview.",
+					"default": false
+				},
 				"todomd.webview.showRecurringCompleted": {
 					"type": "boolean",
 					"markdownDescription": "Whether recurring completed tasks are shown or not in the webview.",

@@ -44,6 +44,7 @@ const state: {
 	activeDocumentOpened: false,
 	config: {
 		showCompleted: true,
+		completedStrikeThrough: false,
 		showRecurringCompleted: true,
 		showPriority: true,
 		fontSize: '13px',
@@ -259,6 +260,7 @@ function renderTask(task: TheTask): HTMLElement {
 	}
 
 	const title = document.createElement('span');
+	title.classList.add('title');
 	let titleText = task.title;
 	const linkElements = [];
 	if (task.links.length) {
@@ -359,6 +361,11 @@ window.addEventListener('message', event => {
 			document.body.style.setProperty('--font-size', state.config.fontSize);
 			document.body.style.setProperty('--font-family', state.config.fontFamily);
 			document.body.style.setProperty('--padding', state.config.padding);
+			if (state.config.completedStrikeThrough) {
+				$listEl.classList.add('completed-strike-through');
+			} else {
+				$listEl.classList.remove('completed-strike-through');
+			}
 			updateFilterInputAutocomplete(state.tags, state.projects, state.contexts);
 			updateTasks();
 			awesomplete.close();

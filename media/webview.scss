@@ -150,6 +150,12 @@ button,
 	height: calc(100vh - 4px - 4px - 24px);
 	line-height: 1.4;
 	overflow-y: auto;
+
+	&.completed-strike-through {
+		.list-item.done .title {
+			text-decoration: line-through;
+		}
+	}
 }
 
 .list-item {

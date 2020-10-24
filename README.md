@@ -141,6 +141,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |decorations|`{...}`|Advanced decoration properties for editor decorations. Currently supported are `project`, `context`, `comment`|
 |webview.showCompleted|**`true`**|Whether completed tasks are shown or not in the webview.|
 |webview.showRecurringCompleted|**`true`**|Whether recurring completed tasks are shown or not in the webview.|
+|webview.completedStrikeThrough|**`false`**|Whether completed tasks should have a line drawn on them in the webview.|
 |webview.showPriority|**`true`**|Controls whether priority is shown in the webview.|
 |webview.customCheckboxEnabled|**`false`**|Whether checkbox is rendered as native input element or a custom styled element.|
 |webview.checkboxStyle|`"rounded-square"`|Controls checkbox style (round, square...).|
