@@ -105,3 +105,12 @@ export function dateDiff(date: dayjs.Dayjs): string {
 export function dateAndDateDiff(date: dayjs.Dayjs): string {
 	return `${date.format(DATE_FORMAT)} ${dayOfTheWeek(date)} [${dateDiff(date)}]`;
 }
+/**
+ * Check if the date is valid.
+ *
+ * For instance `2020` `10` `32` is an invalid date bc date 32 doesn't exist
+ */
+export function isValidDate(year: number, month: number, date: number): boolean {
+	const jsDate = new Date(year, month, date);
+	return year === jsDate.getFullYear() && month === jsDate.getMonth() && date === jsDate.getDate();
+}

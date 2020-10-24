@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { dateDiff, dayOfTheWeek } from './time/timeUtils';
+import { dateDiff, dayOfTheWeek, isValidDate } from './time/timeUtils';
 import { DueState } from './types';
 
 export class DueDate {
@@ -65,6 +65,14 @@ export class DueDate {
 			const date = Number(dueWithDateMatch[3]);
 			const dateObject = new Date(year, month, date);
 			const dueRecurringPart = dueWithDateMatch[5];
+
+			const isDueDateValid = isValidDate(year, month, date);
+			if (!isDueDateValid) {
+				return {
+					isRecurring: Boolean(dueRecurringPart),
+					isDue: DueState.invalid,
+				};
+			}
 
 			if (!dueRecurringPart) {
 				isDue = DueDate.isDueExactDate(dateObject, targetDate);
