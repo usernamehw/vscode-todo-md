@@ -106,7 +106,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`
 <!-- - `"TEXT_TO_SEARCH"` - Search only in task title (not in special fields, like tag or project) -->
 
-# Commands
+## Commands
 
 - `todomd.toggleDone` <kbd>Alt</kbd>+<kbd>D</kbd> - Toggle Done (Completion)
 - `todomd.toggleComment` - Toggle comment. (Not binded by default). You can bind it only for active file: **{"key": "ctrl+/","command": "todomd.toggleComment","when": "editorFocus && todomd:isActive"},** in keybindings.json.
@@ -119,7 +119,10 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `todomd.createSimilarTask` - Create similar task (same tags, projects, contexts).
 - `todomd.setDueDate` - Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/set_due_date.md)
 
-# Settings
+
+## Settings (prefix `todomd.`)
+
+<details><summary>Settings list</summary>
 
 |Name|Default|Description|
 | --- | --- |--- |
@@ -145,7 +148,11 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.padding|`"0px"`|Controls spacing between items in a list.|
 |webview.fontFamily|`'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`|Controls font family in the webview.|
 
-# Colors
+</details>
+
+## Colors
+
+<details><summary>Colors list</summary>
 
 Can be specified in `settings.json` (**`workbench.colorCustomizations`** section)
 
@@ -165,6 +172,8 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 - `priorityDForeground`
 - `priorityEForeground`
 - `priorityFForeground`
+
+</details>
 
 ## Recommended settings
 
