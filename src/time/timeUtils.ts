@@ -84,9 +84,15 @@ export function dateDiff(date: dayjs.Dayjs): string {
  * Return date, day of the week and a diff
  *
  * e.g. `2020-10-23 Fri [in 2 days]`
- *
- * TODO: `today`, `tomorrow` should be shown exactly like that
  */
 export function dateAndDateDiff(date: dayjs.Dayjs): string {
-	return `${date.format(DATE_FORMAT)} ${dayOfTheWeek(date)} [${dateDiff(date)}]`;
+	let diff;
+	if (dayjs().isSame(date, 'date')) {
+		diff = 'today';
+	} else if (dayjs().add(1, 'day').isSame(date, 'date')) {
+		diff = 'tomorrow';
+	} else {
+		diff = dateDiff(date);
+	}
+	return `${date.format(DATE_FORMAT)} ${dayOfTheWeek(date)} [${diff}]`;
 }
