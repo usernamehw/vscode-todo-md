@@ -10,7 +10,7 @@ You can set an option to render tasks as markdown (in Settings)
 "todomd.webview.markdownEnabled": true,
 ```
 
-It will treat each line as separate markdown line (no multi-line features).
+It will treat each line as a separate markdown line (no multi-line features).
 
 ```
 <kbd>Ctrl</kbd>+<kbd>Enter</kbd>
