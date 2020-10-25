@@ -263,14 +263,16 @@ function renderTask(task: TheTask): HTMLElement {
 	title.classList.add('title');
 	let titleText = task.title;
 	const linkElements = [];
-	if (task.links.length) {
-		for (const link of task.links) {
-			const linkEl = document.createElement('a');
-			linkEl.href = link.value;
-			linkEl.title = link.value;
-			linkEl.text = link.value;
-			linkElements.push(linkEl);
-			titleText = titleText.replace(new RegExp(`${escapeRegexp(link.value)}?`), '');
+	if (!state.config.markdownEnabled) {
+		if (task.links.length) { // Remove links and append them to the end
+			for (const link of task.links) {
+				const linkEl = document.createElement('a');
+				linkEl.href = link.value;
+				linkEl.title = link.value;
+				linkEl.text = link.value;
+				linkElements.push(linkEl);
+				titleText = titleText.replace(new RegExp(`${escapeRegexp(link.value)}?`), '');
+			}
 		}
 	}
 	if (titleText.trim().length !== 0) {
