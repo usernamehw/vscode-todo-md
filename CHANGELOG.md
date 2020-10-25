@@ -1,3 +1,10 @@
+## 2.0.14 `25 Oct 2020`
+
+- ✨ Set due date from autocomplete (using `$` sign at the end of the word)
+- ✨ [webview] Add option to strike-through completed tasks
+- 💥 [Tree View] Remove toggle done from context menu (There's still an inline button)
+- 🐛 Fix some cases of date validation
+
 ## 2.0.13 `23 Oct 2020`
 
 - ✨ Set due date helper - closest future date by month+date (e.g. `nov 20`)
