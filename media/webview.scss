@@ -12,6 +12,7 @@ $tagBackground: #d2e8ff;
 $projectBackground: #c5ece0;
 $contextBackground: #f7e0ff;
 $checkboxBackground: #cbd1d8;
+$darkenPercent: 8%;
 
 body {
 	--border-light: #cecece6c;
@@ -19,11 +20,11 @@ body {
 	--done-task-background: #e9f0d6;
 	--tag-foreground: var(--vscode-foreground);
 	--tag-background: #{$tagBackground};
-	--tag-hover-background: #{darken($tagBackground, 8%)};
+	--tag-hover-background: #{darken($tagBackground, $darkenPercent)};
 	--project-background: #{$projectBackground};
-	--project-hover-background: #{darken($projectBackground, 8%)};
+	--project-hover-background: #{darken($projectBackground, $darkenPercent)};
 	--context-background: #{$contextBackground};
-	--context-hover-background: #{darken($contextBackground, 8%)};
+	--context-hover-background: #{darken($contextBackground, $darkenPercent)};
 	--count-background: #0000000c;
 	--count-button-background: #00000014;
 	--count-button-hover-background: #0000002b;
