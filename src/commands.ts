@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextDocument, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTask, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLine, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
+import { appendTaskToFile, archiveTaskWorkspaceEdit, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
 import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
@@ -81,7 +81,7 @@ export function registerAllCommands() {
 		const wEdit = new WorkspaceEdit();
 		for (const task of completedTasks) {
 			const line = editor.document.lineAt(task.lineNumber);
-			archiveTask(wEdit, editor.document.uri, line, !task.due?.isRecurring);
+			archiveTaskWorkspaceEdit(wEdit, editor.document.uri, line, !task.due?.isRecurring);
 		}
 		applyEdit(wEdit, editor.document);
 	});
@@ -99,7 +99,7 @@ export function registerAllCommands() {
 				continue;
 			}
 			const line = editor.document.lineAt(i);
-			archiveTask(wEdit, editor.document.uri, line, !task.due?.isRecurring);
+			archiveTaskWorkspaceEdit(wEdit, editor.document.uri, line, !task.due?.isRecurring);
 		}
 		applyEdit(wEdit, editor.document);
 	});
@@ -385,7 +385,7 @@ export function registerAllCommands() {
 			const start = selection.start.line;
 			const end = selection.end.line;
 			for (let i = start; i <= end; i++) {
-				toggleCommentAtLine(wEdit, editor.document, i);
+				toggleCommentAtLineWorkspaceEdit(wEdit, editor.document, i);
 			}
 		}
 		applyEdit(wEdit, editor.document);

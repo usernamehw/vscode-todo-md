@@ -62,7 +62,7 @@ export async function incrementCountForTask(document: vscode.TextDocument, lineN
 		setCountCurrentValue(wEdit, document.uri, count, String(newValue));
 	} else {
 		setCountCurrentValue(wEdit, document.uri, count, '0');
-		removeCompletionDate(wEdit, document.uri, line);
+		removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
 	}
 	return applyEdit(wEdit, document);
 }
@@ -76,7 +76,7 @@ export async function decrementCountForTask(document: vscode.TextDocument, lineN
 	if (count.current === 0) {
 		return Promise.resolve(undefined);
 	} else if (count.current === count.needed) {
-		removeCompletionDate(wEdit, document.uri, line);
+		removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
 	}
 	setCountCurrentValue(wEdit, document.uri, count, String(count.current - 1));
 	return applyEdit(wEdit, document);
@@ -121,7 +121,7 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 				wEdit.delete(document.uri, new vscode.Range(lineNumber, firstNonWhitespaceCharacterIndex, lineNumber, firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
 			}
 		} else {
-			removeCompletionDate(wEdit, document.uri, line);
+			removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
 		}
 	} else {
 		if (extensionConfig.addCompletionDate) {
@@ -134,25 +134,25 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 
 	if (extensionConfig.autoArchiveTasks) {
 		const secondWorkspaceEdit = new WorkspaceEdit();
-		archiveTask(secondWorkspaceEdit, document.uri, line, !task.due?.isRecurring);
+		archiveTaskWorkspaceEdit(secondWorkspaceEdit, document.uri, line, !task.due?.isRecurring);
 		await applyEdit(secondWorkspaceEdit, document);// Not possible to apply conflicting ranges with just one edit
 	}
 }
-export function removeCompletionDate(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine) {
+export function removeCompletionDateWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine) {
 	const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2})?}\s?/;
 	const match = completionDateRegex.exec(line.text);
 	if (match) {
 		wEdit.delete(uri, new vscode.Range(line.lineNumber, match.index, line.lineNumber, match.index + match[0].length));
 	}
 }
-export function archiveTask(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, shouldDelete: boolean) {
+export function archiveTaskWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, shouldDelete: boolean) {
 	appendTaskToFile(line.text, extensionConfig.defaultArchiveFile);
 	if (shouldDelete) {
 		wEdit.delete(uri, line.rangeIncludingLineBreak);
 	}
 	updateArchivedTasks();
 }
-function addOverdueSpecialTag(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, overdueDateString: string) {
+function addOverdueSpecialTagWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, overdueDateString: string) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {overdue:${overdueDateString}}`);
 }
 
@@ -184,7 +184,7 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 			const line = document.lineAt(task.lineNumber);
 			if (task.done) {
 				removeDoneSymbol(wEdit, document.uri, line);
-				removeCompletionDate(wEdit, document.uri, line);
+				removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
 			} else {
 				if (!task.specialTags.overdue && !dayjs().isSame(lastVisit, 'day')) {
 					const lastVisitWithoutTime = new Date(lastVisit.getFullYear(), lastVisit.getMonth(), lastVisit.getDate());
@@ -197,7 +197,7 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 							targetDate: date.toDate(),
 						});
 						if (res.isDue === DueState.due || res.isDue === DueState.overdue) {
-							addOverdueSpecialTag(wEdit, document.uri, line, date.format(DATE_FORMAT));
+							addOverdueSpecialTagWorkspaceEdit(wEdit, document.uri, line, date.format(DATE_FORMAT));
 							break;
 						}
 					}
@@ -238,7 +238,7 @@ export async function appendTaskToFile(text: string, filePath: string) {
 	wEdit.insert(uri, eofPosition, `\n${text}`);
 	return applyEdit(wEdit, document);
 }
-export function toggleCommentAtLine(wEdit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
+export function toggleCommentAtLineWorkspaceEdit(wEdit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
 	const line = document.lineAt(lineNumber);
 	if (line.text.startsWith('# ')) {
 		wEdit.delete(document.uri, new vscode.Range(lineNumber, 0, lineNumber, 2));
