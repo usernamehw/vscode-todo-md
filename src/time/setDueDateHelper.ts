@@ -4,7 +4,6 @@ import { dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek, monthStringToMonthIndex } f
 /**
  * - Returns undefined for invalid input
  * - Returns dayjs date for valid input
- * - TODO: relative month +1m
  * - TODO: create recurring dates with starting date
  */
 export function helpCreateDueDate(str: string, targetNow = new Date()): dayjs.Dayjs | undefined {
@@ -14,7 +13,7 @@ export function helpCreateDueDate(str: string, targetNow = new Date()): dayjs.Da
 		str = '-1';// alias for yesterday
 	}
 	const justDateMatch = /^(\d+)$/.exec(str);
-	const dayShiftMatch = /^(\+|-)(\d+)(d|w)?$/.exec(str);
+	const dayShiftMatch = /^(\+|-)(\d+)(d|w|m)?$/.exec(str);
 	const dayOfTheWeekMatch = dayOfTheWeekRegexp.exec(str);
 	const monthMatch = /^(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)\s?(\d\d?)$/i.exec(str);
 	const now = dayjs(targetNow);
@@ -22,23 +21,18 @@ export function helpCreateDueDate(str: string, targetNow = new Date()): dayjs.Da
 		const sign = dayShiftMatch[1];
 		const number = Number(dayShiftMatch[2]);
 		const unit = dayShiftMatch[3] ?? 'd';
+		const dayJSUnit = unit === 'd' ? 'day' :
+			unit === 'w' ? 'week' :
+				unit === 'm' ? 'month' : 'unknown';
+		if (dayJSUnit === 'unknown') {
+			return undefined;
+		}
 		let date: dayjs.Dayjs;
+
 		if (sign === '+') {
-			if (unit === 'd') {
-				date = now.add(number, 'day');
-			} else if (unit === 'w') {
-				date = now.add(number, 'week');
-			} else {
-				throw Error('Should never happen');
-			}
+			date = now.add(number, dayJSUnit);
 		} else {
-			if (unit === 'd') {
-				date = now.subtract(number, 'day');
-			} else if (unit === 'w') {
-				date = now.subtract(number, 'week');
-			} else {
-				throw Error('Should never happen');
-			}
+			date = now.subtract(number, dayJSUnit);
 		}
 		return date;
 	} else if (monthMatch) {

@@ -23,6 +23,18 @@ describe(`${headerDelimiter('set due date helper')}Relative date`, () => {
 		const due = helpCreateDueDate('+1', $1jan2018monday);
 		expect(due?.isSame($2jan2018tuesday, 'date')).to.be.ok;
 	});
+	it('`+1d` - tomorrow', () => {
+		const due = helpCreateDueDate('+1', $1jan2018monday);
+		expect(due?.isSame($2jan2018tuesday, 'date')).to.be.ok;
+	});
+	it('`+1w` - in a week', () => {
+		const due = helpCreateDueDate('+1w', $1jan2018monday);
+		expect(due?.isSame($8jan2018monday, 'date')).to.be.ok;
+	});
+	it('`+1m` - in a month', () => {
+		const due = helpCreateDueDate('+1m', $1jan2018monday);
+		expect(due?.isSame(new Date(2018, 1, 1), 'date')).to.be.ok;
+	});
 	it('`+0` - today', () => {
 		const due = helpCreateDueDate('+0', $1jan2018monday);
 		expect(due?.isSame($1jan2018monday, 'date')).to.be.ok;
@@ -38,6 +50,18 @@ describe(`${headerDelimiter('set due date helper')}Relative date`, () => {
 	it('`-1` - yesterday', () => {
 		const due = helpCreateDueDate('-1', $2jan2018tuesday);
 		expect(due?.isSame($1jan2018monday, 'date')).to.be.ok;
+	});
+	it('`-1d` - yesterday', () => {
+		const due = helpCreateDueDate('-1d', $2jan2018tuesday);
+		expect(due?.isSame($1jan2018monday, 'date')).to.be.ok;
+	});
+	it('`-1w` - A week ago', () => {
+		const due = helpCreateDueDate('-1w', $1jan2018monday);
+		expect(due?.isSame(new Date(2017, 11, 25), 'date')).to.be.ok;
+	});
+	it('`-1m` - A month ago', () => {
+		const due = helpCreateDueDate('-1m', $1jan2018monday);
+		expect(due?.isSame(new Date(2017, 11, 1), 'date')).to.be.ok;
 	});
 	it('`-2` - the day before yesterday', () => {
 		const due = helpCreateDueDate('-2', $3jan2018wednesday);
