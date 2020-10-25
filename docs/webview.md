@@ -16,7 +16,8 @@ It will treat each line as a separate markdown line (no multi-line features).
 <kbd>Ctrl</kbd>+<kbd>Enter</kbd>
 Some text <mark>Important</mark> text text text
 **BOLD** *italic* `inline code`
+A markdown link [GitHub](https://github.com)
 <span style="display:inline-block;background:linear-gradient(0.25turn,#3f87a6,#ebf8e1,#f69d3c);color:#fff;padding:0.5rem;border-radius:3px;font-style:bold;">==========</span>
 ```
 
-![webview renders markdown demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/docs/img/webview.png)
+![webview renders markdown demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/docs/img/webview_markdown_enabled.png)
