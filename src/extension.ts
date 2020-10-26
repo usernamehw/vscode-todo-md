@@ -32,7 +32,7 @@ export const state: State = {
 	theRightFileOpened: false,
 	lastVisitByFile: {},
 	taskTreeViewFilterValue: '',
-	extensionContext: undefined as any as ExtensionContext,
+	extensionContext: {} as any as ExtensionContext,
 	activeDocument: undefined,
 };
 
