@@ -65,9 +65,9 @@ export function updateDecorationStyle(): void {
 	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		after: {
-			color: '#88888899',
+			color: new vscode.ThemeColor('todomd.closestDueDateForeground'),
 			margin: '1ch',
-			backgroundColor: '#00000005',
+			backgroundColor: new vscode.ThemeColor('todomd.closestDueDateBackground'),
 		},
 	});
 }

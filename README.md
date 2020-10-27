@@ -168,12 +168,14 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 - `todomd.overdueForeground`
 - `todomd.tagDelimiterForeground`
 - `todomd.commentForeground`
-- `priorityAForeground`
-- `priorityBForeground`
-- `priorityCForeground`
-- `priorityDForeground`
-- `priorityEForeground`
-- `priorityFForeground`
+- `todomd.priorityAForeground`
+- `todomd.priorityBForeground`
+- `todomd.priorityCForeground`
+- `todomd.priorityDForeground`
+- `todomd.priorityEForeground`
+- `todomd.priorityFForeground`
+- `todomd.closestDueDateForeground`
+- `todomd.closestDueDateBackground`
 
 </details>
 

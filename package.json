@@ -1105,6 +1105,24 @@
 					"highContrast": "#f75454"
 				},
 				"description": "Not empty"
+			},
+			{
+				"id": "todomd.closestDueDateBackground",
+				"defaults": {
+					"light": "#00000005",
+					"dark": "#00000005",
+					"highContrast": "#00000005"
+				},
+				"description": "Not empty"
+			},
+			{
+				"id": "todomd.closestDueDateForeground",
+				"defaults": {
+					"light": "#88888899",
+					"dark": "#88888899",
+					"highContrast": "#88888899"
+				},
+				"description": "Not empty"
 			}
 		],
 		"menus": {
