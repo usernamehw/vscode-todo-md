@@ -135,8 +135,4 @@ describe('Special tags {}', () => {
 		const task = getLineAt(12)!;
 		expect(task.specialTags.isHidden === true).to.be.ok;
 	});
-	it('12 Hidden', () => {
-		const task = getLineAt(12)!;
-		expect(task.specialTags.isHidden === true).to.be.ok;
-	});
 });
