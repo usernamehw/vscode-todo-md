@@ -102,6 +102,7 @@ describe('🚫 Invalid due date', () => {
 		expect(new DueDate('2020').isDue === DueState.invalid, '2020').to.be.ok;
 		expect(new DueDate('2020-05-2').isDue === DueState.invalid, '2020-05-2').to.be.ok;
 		expect(new DueDate('2020-07-31|e14').isDue === DueState.invalid, '2020-07-31|e14').to.be.ok;
+		expect(new DueDate('2020-07-35').isDue === DueState.invalid, '2020-07-35').to.be.ok;
 	});
 });
 // TODO: comma delimited due date tests
