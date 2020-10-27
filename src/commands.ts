@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextDocument, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTaskWorkspaceEdit, deleteTask, getActiveDocument, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
+import { appendTaskToFile, archiveTaskWorkspaceEdit, deleteTask, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
 import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
@@ -324,26 +324,8 @@ export function registerAllCommands() {
 		state.extensionContext.globalState._value = {};
 		state.extensionContext.globalState.update('hack', 'toClear');// Is this required to clear state?
 	});
-	commands.registerCommand('todomd.goToLine', async (lineNumber: number) => {
-		const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
-		let editor;
-		if (!state.theRightFileOpened) {
-			const isDefaultFileSpecified = await checkDefaultFileAndNotify();
-			if (!isDefaultFileSpecified) {
-				return;
-			}
-			const document = getActiveDocument();
-			editor = await window.showTextDocument(document);
-		} else {
-			const { activeTextEditor } = window;
-			if (!activeTextEditor) {
-				return;
-			}
-			await vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
-			editor = activeTextEditor;
-		}
-		editor.selection = new vscode.Selection(range.start, range.end);
-		editor.revealRange(range, vscode.TextEditorRevealType.Default);
+	commands.registerCommand('todomd.goToLine', (lineNumber: number) => {
+		goToTask(lineNumber);
 	});
 	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
 		const lastVisit = state.lastVisitByFile[editor.document.uri.toString()];
