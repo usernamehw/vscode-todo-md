@@ -46,6 +46,7 @@ describe('♻ Recurring', () => {
 		expect(mondayDueDate.isDue !== DueState.invalid).to.be.ok;
 		expect(mondayDueDate.isRecurring === true).to.be.ok;
 	});
+	// TODO: tests that date should not be due at
 	it('monday', () => {
 		expect(new DueDate('monday', { targetDate: $1jan2018monday }).isDue === DueState.due, 'monday').to.be.ok;
 		expect(new DueDate('mon', { targetDate: $1jan2018monday }).isDue === DueState.due, 'mon').to.be.ok;
