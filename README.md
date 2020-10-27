@@ -99,6 +99,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `$done` - Completed task
 - `$due` - Due or Overdue task
 - `$overdue` - Overdue task
+- `$recurring` - Recurring tasks
 - `$noTag` - Task with no tags
 - `$noProject` - Task with no projects
 - `$noContext` - Task with no contexts

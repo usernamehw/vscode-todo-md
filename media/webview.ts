@@ -339,6 +339,7 @@ function updateFilterInputAutocomplete(tags: string[], projects: string[], conte
 		'$due',
 		'$done',
 		'$overdue',
+		'$recurring',
 		'$noTag',
 		'$noProject',
 		'$noContext',
