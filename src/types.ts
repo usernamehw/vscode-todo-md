@@ -13,6 +13,7 @@ export interface Items {// TODO: rename
 
 export interface State {
 	tasks: TheTask[];
+	tasksAsTree: TheTask[];
 	archivedTasks: TheTask[];
 	tags: string[];
 	projects: string[];
@@ -29,6 +30,7 @@ export interface State {
 	taskTreeViewFilterValue: string;
 	extensionContext: vscode.ExtensionContext;
 	activeDocument: vscode.TextDocument | undefined;
+	activeDocumentTabSize: number;
 }
 
 export const enum DueState {
@@ -68,6 +70,8 @@ export interface IExtensionConfig {
 	decorations: {
 		[key in AdvancedDecorations]: DecorationRenderOptions;
 	};
+
+	tabSize: number;
 
 	savedFilters: {
 		title: string;

@@ -203,6 +203,13 @@
 					"markdownDescription": "For emulating dev mode. Most likely of no use to anyone, except the extension author.",
 					"default": false
 				},
+				"todomd.tabSize": {
+					"type": "number",
+					"minimum": 1,
+					"maximum": 8,
+					"markdownDescription": "Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).",
+					"default": 4
+				},
 				"todomd.savedFilters": {
 					"type": "array",
 					"items": {

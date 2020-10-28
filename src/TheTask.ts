@@ -4,7 +4,7 @@ import { extensionConfig } from './extension';
 import { OptionalExceptFor } from './types';
 
 export type Priority = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z';
-export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags'>;
+export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags' | 'indentLvl'>;
 export interface SpecialTags {
 	threshold?: string;
 	isHidden?: boolean;
@@ -38,6 +38,9 @@ export class TheTask {
 	done: boolean;
 	rawText: string;
 	lineNumber: number;
+	indentLvl: number;
+	parentTaskLineNumber: number | undefined;
+	children: TheTask[];
 	tags: string[];
 	projects: string[];
 	due?: DueDate;
@@ -57,6 +60,8 @@ export class TheTask {
 	constructor(init: TaskInit) {
 		this.title = init.title;
 		this.lineNumber = init.lineNumber;
+		this.indentLvl = init.indentLvl;
+		this.children = init.children ?? [];
 		this.rawText = init.rawText;
 		this.done = init.done ?? false;
 		this.tags = init.tags ?? [];

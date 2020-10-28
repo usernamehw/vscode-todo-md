@@ -15,10 +15,12 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 	}
 	if (editor && isTheRightFileName(editor)) {
 		state.activeDocument = editor.document;
+		state.activeDocumentTabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : extensionConfig.tabSize;
 		updateEverything(editor);
 		await activateEditorFeatures(editor);
 	} else {
 		state.activeDocument = await getDocumentForDefaultFile();
+		state.activeDocumentTabSize = extensionConfig.tabSize;
 		setTimeout(() => {
 			updateEverything();
 		}, 15);// Workaround for event fired twice very fast when closing an editor

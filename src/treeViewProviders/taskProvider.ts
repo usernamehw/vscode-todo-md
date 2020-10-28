@@ -1,9 +1,10 @@
+import dayjs from 'dayjs';
 import vscode from 'vscode';
 import { EXTENSION_NAME } from '../extension';
 import { TheTask } from '../TheTask';
 
 export class TaskTreeItem extends vscode.TreeItem {
-	readonly collapsibleState = vscode.TreeItemCollapsibleState.None;
+	collapsibleState = vscode.TreeItemCollapsibleState.None;
 	contextValue = 'task';
 
 	constructor(
@@ -14,6 +15,9 @@ export class TaskTreeItem extends vscode.TreeItem {
 		super(label);
 		if (task.links.length) {
 			this.contextValue = 'link';
+		}
+		if (task.children.length) {
+			this.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
 		}
 	}
 	// @ts-ignore
@@ -44,19 +48,35 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 		// @ts-ignore
 		return element;
 	}
-
-	getChildren(element: TaskTreeItem | undefined): TaskTreeItem[] | undefined {
+	// @ts-ignore
+	getChildren(element: TaskTreeItem | undefined): (TaskTreeItem | undefined)[] | undefined {
 		if (element) {
-			return undefined;
+			const children = element.task.children;
+			if (children.length) {
+				return children.map(task => taskToTreeItem(task));
+			} else {
+				return undefined;
+			}
 		} else {
-			return this.tasks.map(task => new TaskTreeItem(
-				TheTask.formatTask(task),
-				task,
-				{
-					command: `${EXTENSION_NAME}.goToLine`,
-					title: 'Go To Line',
-					arguments: [task.lineNumber],
-				}));
+			return this.tasks.map(task => taskToTreeItem(task));
 		}
 	}
+}
+
+function taskToTreeItem(task: TheTask) {
+	if (task.specialTags.isHidden) {
+		return undefined;
+	}
+	if (task.specialTags.threshold && dayjs().isAfter(new Date(task.specialTags.threshold), 'date')) {
+		return undefined;
+	}
+	return new TaskTreeItem(
+		TheTask.formatTask(task),
+		task,
+		{
+			command: `${EXTENSION_NAME}.goToLine`,
+			title: 'Go To Line',
+			arguments: [task.lineNumber],
+		},
+	);
 }

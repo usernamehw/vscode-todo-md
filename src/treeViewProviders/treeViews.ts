@@ -112,17 +112,17 @@ export function updateAllTreeViews(): void {
 	setViewTitle(contextView, 'contexts', state.contextsForTreeView.length);
 
 	if (generic1View) {
-		const filteredTasks = filterItems(getTasksForTreeView(), extensionConfig.treeViews[0].filter);
+		const filteredTasks = filterItems(state.tasksAsTree, extensionConfig.treeViews[0].filter);
 		generic1Provider.refresh(filteredTasks);
 		setViewTitle(generic1View, extensionConfig.treeViews[0].title, filteredTasks.length);
 	}
 	if (generic2View) {
-		const filteredTasks = filterItems(getTasksForTreeView(), extensionConfig.treeViews[1].filter);
+		const filteredTasks = filterItems(state.tasksAsTree, extensionConfig.treeViews[1].filter);
 		generic2Provider.refresh(filteredTasks);
 		setViewTitle(generic2View, extensionConfig.treeViews[1].title, filteredTasks.length);
 	}
 	if (generic3View) {
-		const filteredTasks = filterItems(getTasksForTreeView(), extensionConfig.treeViews[2].filter);
+		const filteredTasks = filterItems(state.tasksAsTree, extensionConfig.treeViews[2].filter);
 		generic3Provider.refresh(filteredTasks);
 		setViewTitle(generic3View, extensionConfig.treeViews[2].title, filteredTasks.length);
 	}
@@ -133,9 +133,9 @@ export function updateAllTreeViews(): void {
 export function updateTasksTreeView() {
 	let tasksForProvider;
 	if (state.taskTreeViewFilterValue) {
-		tasksForProvider = filterItems(getTasksForTreeView(), state.taskTreeViewFilterValue);
+		tasksForProvider = filterItems(state.tasksAsTree, state.taskTreeViewFilterValue);
 	} else {
-		tasksForProvider = getTasksForTreeView();
+		tasksForProvider = state.tasksAsTree;
 	}
 	taskProvider.refresh(tasksForProvider);
 	setViewTitle(tasksView, 'tasks', tasksForProvider.length, state.taskTreeViewFilterValue);
@@ -145,18 +145,6 @@ export function updateArchivedTasksTreeView() {
 	const archivedTasks = state.archivedTasks;
 	archivedProvider.refresh(archivedTasks);
 	setViewTitle(archivedView, 'archived', archivedTasks.length);
-}
-
-function getTasksForTreeView() {
-	return state.tasks.filter(task => {
-		if (task.specialTags.isHidden) {
-			return false;
-		}
-		if (!task.specialTags.threshold) {
-			return true;
-		}
-		return new Date(task.specialTags.threshold).getTime() < Date.now();
-	});
 }
 
 function setViewTitle(view: TreeView<any>, title: string, counter: number, filterValue = '') {

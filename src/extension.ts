@@ -21,6 +21,7 @@ dayjs.Ls.en.weekStart = 1;
 
 export const state: State = {
 	tasks: [],
+	tasksAsTree: [],
 	tags: [],
 	projects: [],
 	contexts: [],
@@ -34,6 +35,7 @@ export const state: State = {
 	taskTreeViewFilterValue: '',
 	extensionContext: {} as any as ExtensionContext,
 	activeDocument: undefined,
+	activeDocumentTabSize: 4,
 };
 
 
@@ -158,6 +160,7 @@ export async function updateState() {
 	const parsedDocument = await parseDocument(document);
 
 	state.tasks = parsedDocument.tasks;
+	state.tasksAsTree = parsedDocument.tasksAsTree;
 	state.commentLines = parsedDocument.commentLines;
 
 	const treeItems = groupAndSortTreeItems(state.tasks);

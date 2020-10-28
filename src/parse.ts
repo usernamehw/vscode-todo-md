@@ -1,6 +1,6 @@
 import vscode, { Range } from 'vscode';
 import { DueDate } from './dueDate';
-import { extensionConfig } from './extension';
+import { extensionConfig, state } from './extension';
 import { Priority, SpecialTags, TheTask } from './TheTask';
 
 interface ParseLineReturn {
@@ -48,6 +48,8 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 			value: tags,
 		};
 	}
+
+	const indentLvl = Math.floor(textLine.firstNonWhitespaceCharacterIndex / state.activeDocumentTabSize);
 
 	/** Offset of the current word (Used to calculate ranges for decorations) */
 	let index = textLine.firstNonWhitespaceCharacterIndex;
@@ -192,12 +194,14 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 			contextRanges,
 			title: text.join(' '),
 			lineNumber,
+			indentLvl,
 		}),
 	};
 }
 
 interface ParsedDocument {
 	tasks: TheTask[];
+	tasksAsTree: TheTask[];
 	commentLines: Range[];
 }
 
@@ -242,13 +246,40 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 						overdue: parsedLine.value.specialTags.overdue,
 					});
 				}
-				// ----------------------------
+				// Handle nested tasks (find parent task lineNumber)
+				if (parsedLine.value.indentLvl) {
+					for (let j = tasks.length - 1; j > 0; j--) {
+						if (tasks[j].indentLvl < parsedLine.value.indentLvl) {
+							parsedLine.value.parentTaskLineNumber = tasks[j].lineNumber;
+							break;
+						}
+					}
+				}
 				tasks.push(parsedLine.value);
 			}
 		}
 	}
+	// Move nested tasks inside the task
+	const tasksMap: {
+		[lineNumber: number]: TheTask;
+	} = Object.create(null);
+	for (const task of tasks) {
+		tasksMap[task.lineNumber] = {
+			...task,
+			children: [],
+		};
+	}
+	const tasksAsTree: TheTask[] = [];
+	for (const task of tasks) {
+		if (task.parentTaskLineNumber) {
+			tasksMap[task.parentTaskLineNumber].children.push(tasksMap[task.lineNumber]);
+		} else {
+			tasksAsTree.push(tasksMap[task.lineNumber]);
+		}
+	}
 
 	return {
+		tasksAsTree,
 		tasks,
 		commentLines,
 	};
