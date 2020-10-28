@@ -173,6 +173,28 @@ button,
 		background-color: var(--vscode-list-hoverBackground);
 	}
 
+	$nestedItemMarginSize: 1rem;
+
+	&.nested-lvl-1 {
+		padding-left: $nestedItemMarginSize;
+	}
+
+	&.nested-lvl-2 {
+		padding-left: $nestedItemMarginSize * 2;
+	}
+
+	&.nested-lvl-3 {
+		padding-left: $nestedItemMarginSize * 3;
+	}
+
+	&.nested-lvl-4 {
+		padding-left: $nestedItemMarginSize * 4;
+	}
+
+	&.nested-lvl-5 {
+		padding-left: $nestedItemMarginSize * 5;
+	}
+
 	&.pri1 {
 		border-left-color: #ec4f47;
 	}

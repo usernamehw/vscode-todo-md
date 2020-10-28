@@ -222,6 +222,11 @@ function renderTask(task: TheTask): HTMLElement {
 	const taskListItem = document.createElement('div');
 	taskListItem.classList.add('list-item');
 	taskListItem.dataset.id = String(task.lineNumber);
+
+	if (task.parentTaskLineNumber) {
+		taskListItem.classList.add(`nested-lvl-${task.indentLvl}`);
+	}
+
 	if (task.priority && state.config.showPriority) {
 		switch (task.priority) {
 			case 'A': taskListItem.classList.add('pri1'); break;
@@ -332,7 +337,16 @@ function renderTask(task: TheTask): HTMLElement {
 
 		taskListItem.appendChild(countContainer);
 	}
-	return taskListItem;
+	let taskWrapper: HTMLElement | undefined = undefined;
+	if (task.children.length) {
+		taskWrapper = document.createElement('div');
+		taskWrapper.appendChild(taskListItem);
+		for (const nestedTask of task.children) {
+			const nestedTaskElement = renderTask(nestedTask);
+			taskWrapper.appendChild(nestedTaskElement);
+		}
+	}
+	return taskWrapper ?? taskListItem;
 }
 function updateFilterInputAutocomplete(tags: string[], projects: string[], contexts: string[]) {
 	const filterConstants = [
