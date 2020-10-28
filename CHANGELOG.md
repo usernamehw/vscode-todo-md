@@ -1,3 +1,7 @@
+## 2.1.0 `28 Oct 2020`
+
+- ✨ [Tree View] Show nested tasks
+
 ## 2.0.14 `25 Oct 2020`
 
 - ✨ Set due date from autocomplete (using `$` sign at the end of the word)
