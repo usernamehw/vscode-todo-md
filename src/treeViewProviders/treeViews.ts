@@ -47,6 +47,7 @@ export function createAllTreeViews() {
 
 	tasksView = vscode.window.createTreeView(`${EXTENSION_NAME}.tasks`, {
 		treeDataProvider: taskProvider,
+		showCollapseAll: true,
 	});
 
 	archivedView = vscode.window.createTreeView(`${EXTENSION_NAME}.archived`, {
@@ -61,6 +62,7 @@ export function createAllTreeViews() {
 			} else {
 				generic1View = vscode.window.createTreeView('todomd.generic1', {
 					treeDataProvider: generic1Provider,
+					showCollapseAll: true,
 				});
 				setContext(VscodeContext.generic1FilterExists, true);
 			}
@@ -73,6 +75,7 @@ export function createAllTreeViews() {
 			} else {
 				generic2View = vscode.window.createTreeView('todomd.generic2', {
 					treeDataProvider: generic2Provider,
+					showCollapseAll: true,
 				});
 				setContext(VscodeContext.generic2FilterExists, true);
 			}
@@ -85,6 +88,7 @@ export function createAllTreeViews() {
 			} else {
 				generic3View = vscode.window.createTreeView('todomd.generic3', {
 					treeDataProvider: generic3Provider,
+					showCollapseAll: true,
 				});
 				setContext(VscodeContext.generic3FilterExists, true);
 			}
