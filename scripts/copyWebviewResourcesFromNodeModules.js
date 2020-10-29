@@ -13,7 +13,7 @@ fs.copyFile('node_modules/awesomplete/awesomplete.css', 'media/vendor/awesomplet
 	if (err) throw err;
 	console.log('✅ awesomplete.css copy success');
 });
-fs.copyFile('node_modules/awesomplete/awesomplete.js', 'media/vendor/awesomplete.js', (err) => {
+fs.copyFile('node_modules/awesomplete/awesomplete.min.js', 'media/vendor/awesomplete.js', (err) => {
 	if (err) throw err;
 	console.log('✅ awesomplete.js copy success');
 });
