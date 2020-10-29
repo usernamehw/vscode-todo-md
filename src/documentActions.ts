@@ -225,13 +225,13 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 	return applyEdit(wEdit, document);
 }
 
-export function getActiveDocument() {
+export async function getActiveDocument() {
 	if (state.activeDocument === undefined) {
 		vscode.window.showErrorMessage('No active document');
 		throw new Error('No active document');
 	}
 	if (state.activeDocument.isClosed) {
-		vscode.workspace.openTextDocument(state.activeDocument.uri);
+		state.activeDocument = await vscode.workspace.openTextDocument(state.activeDocument.uri);
 	}
 	return state.activeDocument;
 }
