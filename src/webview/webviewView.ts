@@ -36,7 +36,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
 			switch (message.type) {
 				case 'toggleDone': {
-					await toggleDoneAtLine(getActiveDocument(), message.value);
+					await toggleDoneAtLine(await getActiveDocument(), message.value);
 					await updateState();
 					this.updateEverything();
 					break;
@@ -50,19 +50,19 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					break;
 				}
 				case 'toggleTaskCollapse': {
-					await toggleTaskCollapse(getActiveDocument(), message.value);
+					await toggleTaskCollapse(await getActiveDocument(), message.value);
 					await updateState();
 					this.updateEverything();
 					break;
 				}
 				case 'incrementCount': {
-					await incrementCountForTask(getActiveDocument(), message.value, getTaskAtLine(message.value)!);
+					await incrementCountForTask(await getActiveDocument(), message.value, getTaskAtLine(message.value)!);
 					await updateState();
 					this.updateEverything();
 					break;
 				}
 				case 'decrementCount': {
-					await decrementCountForTask(getActiveDocument(), message.value, getTaskAtLine(message.value)!);
+					await decrementCountForTask(await getActiveDocument(), message.value, getTaskAtLine(message.value)!);
 					await updateState();
 					this.updateEverything();
 					break;

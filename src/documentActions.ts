@@ -169,7 +169,7 @@ function addOverdueSpecialTagWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri
 }
 
 export async function goToTask(lineNumber: number) {
-	const document = getActiveDocument();
+	const document = await getActiveDocument();
 	const editor = await vscode.window.showTextDocument(document);
 	const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
 	editor.selection = new vscode.Selection(range.start, range.end);
