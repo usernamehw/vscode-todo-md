@@ -17,6 +17,7 @@ $darkenPercent: 8%;
 body {
 	--line-height: 1.4;
 	--border-light: #cecece6c;
+	--border-darker: #cecece;
 	--foreground: var(--vscode-foreground);
 	--done-task-background: #e9f0d6;
 	--tag-foreground: var(--vscode-foreground);
@@ -54,6 +55,7 @@ body {
 
 body.vscode-dark {
 	--border-light: #ffffff1c;
+	--border-darker: #6d6d6d;
 	--tag-background: #347dd1;
 	--tag-hover-background: #2b67ac;
 	--tag-foreground: #eeeeee;
@@ -68,6 +70,18 @@ body.vscode-dark {
 
 	--checkbox-bg: #3d4d63;
 	--checkbox-low-contrast-bg: #{darken($checkboxBackground, 20%)};
+}
+
+table {
+	border-collapse: collapse;
+	margin-bottom: 0.3rem;
+	margin-top: 0.3rem;
+}
+
+td,
+th {
+	border: 1px solid var(--border-darker);
+	padding: 0.2rem;
 }
 
 a {
