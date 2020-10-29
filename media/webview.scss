@@ -15,6 +15,7 @@ $checkboxBackground: #cbd1d8;
 $darkenPercent: 8%;
 
 body {
+	--line-height: 1.4;
 	--border-light: #cecece6c;
 	--foreground: var(--vscode-foreground);
 	--done-task-background: #e9f0d6;
@@ -149,7 +150,7 @@ button,
 .list {
 	font-family: var(--font-family);
 	height: calc(100vh - 4px - 4px - 24px);
-	line-height: 1.4;
+	line-height: var(--line-height);
 	overflow-y: auto;
 
 	&.completed-strike-through {
@@ -229,6 +230,12 @@ button,
 
 	&.not-due {
 		border-right: 3px solid #808080;
+	}
+
+	.twistie {
+		cursor: pointer;
+		position: relative;
+		top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height)) - 16px) / 2);// Try to center the element
 	}
 }
 
@@ -374,11 +381,10 @@ $checkbox-size: 1rem;
 	margin: 0;
 	margin-left: 2px;
 	margin-right: 4px;
-
+	min-width: $checkbox-size;
 	position: relative;
 	right: 0;
 	top: 2px;
-	transition: all 0.2s ease-out 0s;
 	width: $checkbox-size;
 	z-index: var(--z-index-checkbox-2);
 

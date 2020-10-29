@@ -19,6 +19,9 @@ export class TaskTreeItem extends vscode.TreeItem {
 		if (task.children.length) {
 			this.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
 		}
+		if (task.specialTags.collapsed) {
+			this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+		}
 	}
 	// @ts-ignore
 	get tooltip() {

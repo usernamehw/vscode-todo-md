@@ -157,6 +157,11 @@ window.addEventListener('click', event => {
 				focusInputAndCloseAutocomplete();
 				triggerInputEvent();
 				updateTasks();
+			} else if (target.classList.contains('twistie')) {
+				vscode.postMessage({
+					type: 'toggleTaskCollapse',
+					value: lineNumber,
+				});
 			} else if (target.classList.contains('decrement-count')) {
 				vscode.postMessage({
 					type: 'decrementCount',
@@ -225,6 +230,20 @@ function renderTask(task: TheTask): HTMLElement {
 
 	if (task.parentTaskLineNumber) {
 		taskListItem.classList.add(`nested-lvl-${task.indentLvl}`);
+	}
+
+	let isCollapsed = false;
+
+	if (task.children.length) {
+		const twistie = document.createElement('span');
+		twistie.classList.add('twistie', 'codicon');
+		if (task.specialTags.collapsed) {
+			isCollapsed = true;
+			twistie.classList.add('codicon-chevron-right');
+		} else {
+			twistie.classList.add('codicon-chevron-down');
+		}
+		taskListItem.appendChild(twistie);
 	}
 
 	if (task.priority && state.config.showPriority) {
@@ -343,6 +362,9 @@ function renderTask(task: TheTask): HTMLElement {
 		taskWrapper.appendChild(taskListItem);
 		for (const nestedTask of task.children) {
 			const nestedTaskElement = renderTask(nestedTask);
+			if (isCollapsed) {
+				nestedTaskElement.classList.add('hidden');
+			}
 			taskWrapper.appendChild(nestedTaskElement);
 		}
 	}

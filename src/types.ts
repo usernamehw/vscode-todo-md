@@ -134,6 +134,10 @@ interface WebviewMessageToggleDone extends WebviewMessageBase {
 	type: 'toggleDone';
 	value: number;
 }
+interface WebviewMessageToggleCollapse extends WebviewMessageBase {
+	type: 'toggleTaskCollapse';
+	value: number;
+}
 interface WebviewMessageShowNotification extends WebviewMessageBase {
 	type: 'showNotification';
 	value: string;
@@ -154,4 +158,4 @@ interface WebviewMessageUpdateTitle extends WebviewMessageBase {
 	type: 'updateTitle';
 	value: string;
 }
-export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount | WebviewMessageUpdateTitle;
+export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount | WebviewMessageUpdateTitle | WebviewMessageToggleCollapse;

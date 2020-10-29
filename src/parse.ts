@@ -78,6 +78,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 	let due: DueDate | undefined;
 	let dueRange: Range | undefined;
 	let overdueRange: Range | undefined;
+	let collapseRange: Range | undefined;
 
 	for (const word of words) {
 		switch (word[0]) {
@@ -126,6 +127,10 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 					specialTagRanges.push(range);
 				} else if (specialTag === 'h') {
 					specialTags.isHidden = true;
+					specialTagRanges.push(range);
+				} else if (specialTag === 'c') {
+					specialTags.collapsed = true;
+					collapseRange = range;
 					specialTagRanges.push(range);
 				} else {
 					text.push(word);
@@ -189,6 +194,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 			due,
 			dueRange,
 			overdueRange,
+			collapseRange,
 			specialTags,
 			contexts,
 			contextRanges,

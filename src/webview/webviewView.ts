@@ -1,6 +1,6 @@
 import vscode, { window } from 'vscode';
 import { getTaskAtLine } from '../commands';
-import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleDoneAtLine } from '../documentActions';
+import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse } from '../documentActions';
 import { extensionConfig, Global, state, updateState } from '../extension';
 import { WebviewMessage } from '../types';
 import { getNonce } from '../webview/utils';
@@ -47,6 +47,12 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				}
 				case 'goToTask': {
 					goToTask(message.value);
+					break;
+				}
+				case 'toggleTaskCollapse': {
+					await toggleTaskCollapse(getActiveDocument(), message.value);
+					await updateState();
+					this.updateEverything();
 					break;
 				}
 				case 'incrementCount': {

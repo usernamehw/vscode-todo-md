@@ -8,6 +8,7 @@ export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawT
 export interface SpecialTags {
 	threshold?: string;
 	isHidden?: boolean;
+	collapsed?: boolean;
 	count?: Count;
 	/**
 	 * Oldest overdue date string in `YYYY-MM-DD` (for recurring tasks)
@@ -56,6 +57,7 @@ export class TheTask {
 	tagsRange?: Range[];
 	dueRange?: Range;
 	overdueRange?: Range;
+	collapseRange?: Range;
 
 	constructor(init: TaskInit) {
 		this.title = init.title;
@@ -79,6 +81,7 @@ export class TheTask {
 		this.tagsDelimiterRanges = init.tagsDelimiterRanges;
 		this.tagsRange = init.tagsRange;
 		this.overdueRange = init.overdueRange;
+		this.collapseRange = init.collapseRange;
 	}
 
 	static formatTask(task: TheTask): string {

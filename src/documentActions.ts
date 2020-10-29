@@ -8,11 +8,23 @@ import { TheTask } from './TheTask';
 import { DATE_FORMAT } from './time/timeUtils';
 import { DueState } from './types';
 
-export function hideTask(document: vscode.TextDocument, lineNumber: number) {
+export async function hideTask(document: vscode.TextDocument, lineNumber: number) {
 	const wEdit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
 	wEdit.insert(document.uri, new vscode.Position(lineNumber, line.range.end.character), ' {h}');
-	applyEdit(wEdit, document);
+	return applyEdit(wEdit, document);
+}
+
+export async function toggleTaskCollapse(document: vscode.TextDocument, lineNumber: number) {
+	const wEdit = new WorkspaceEdit();
+	const line = document.lineAt(lineNumber);
+	const task = getTaskAtLine(lineNumber);
+	if (task?.collapseRange) {
+		wEdit.delete(document.uri, task.collapseRange);
+	} else {
+		wEdit.insert(document.uri, new vscode.Position(lineNumber, line.range.end.character), ' {c}');
+	}
+	return applyEdit(wEdit, document);
 }
 
 export async function setDueDate(document: vscode.TextDocument, lineNumber: number, newDueDate: dayjs.Dayjs) {

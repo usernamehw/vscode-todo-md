@@ -1,4 +1,5 @@
 import vscode, { TreeView } from 'vscode';
+import { getActiveDocument, toggleTaskCollapse } from '../documentActions';
 import { extensionConfig, EXTENSION_NAME, state } from '../extension';
 import { filterItems } from '../filter';
 import { TheTask } from '../TheTask';
@@ -49,6 +50,12 @@ export function createAllTreeViews() {
 		treeDataProvider: taskProvider,
 		showCollapseAll: true,
 	});
+	tasksView.onDidCollapseElement(event => {
+		toggleTaskCollapse(getActiveDocument(), (event.element.task as TheTask).lineNumber);
+	});
+	tasksView.onDidExpandElement(event => {
+		toggleTaskCollapse(getActiveDocument(), (event.element.task as TheTask).lineNumber);
+	});
 
 	archivedView = vscode.window.createTreeView(`${EXTENSION_NAME}.archived`, {
 		treeDataProvider: archivedProvider,
@@ -64,6 +71,12 @@ export function createAllTreeViews() {
 					treeDataProvider: generic1Provider,
 					showCollapseAll: true,
 				});
+				generic1View.onDidCollapseElement(event => {
+					toggleTaskCollapse(getActiveDocument(), (event.element.task as TheTask).lineNumber);
+				});
+				generic1View.onDidExpandElement(event => {
+					toggleTaskCollapse(getActiveDocument(), (event.element.task as TheTask).lineNumber);
+				});
 				setContext(VscodeContext.generic1FilterExists, true);
 			}
 		}
@@ -77,6 +90,12 @@ export function createAllTreeViews() {
 					treeDataProvider: generic2Provider,
 					showCollapseAll: true,
 				});
+				generic2View.onDidCollapseElement(event => {
+					toggleTaskCollapse(getActiveDocument(), (event.element.task as TheTask).lineNumber);
+				});
+				generic2View.onDidExpandElement(event => {
+					toggleTaskCollapse(getActiveDocument(), (event.element.task as TheTask).lineNumber);
+				});
 				setContext(VscodeContext.generic2FilterExists, true);
 			}
 		}
@@ -89,6 +108,12 @@ export function createAllTreeViews() {
 				generic3View = vscode.window.createTreeView('todomd.generic3', {
 					treeDataProvider: generic3Provider,
 					showCollapseAll: true,
+				});
+				generic3View.onDidCollapseElement(event => {
+					toggleTaskCollapse(getActiveDocument(), (event.element.task as TheTask).lineNumber);
+				});
+				generic3View.onDidExpandElement(event => {
+					toggleTaskCollapse(getActiveDocument(), (event.element.task as TheTask).lineNumber);
 				});
 				setContext(VscodeContext.generic3FilterExists, true);
 			}
