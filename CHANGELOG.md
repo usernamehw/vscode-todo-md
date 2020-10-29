@@ -1,3 +1,8 @@
+## 2.1.1 `29 Oct 2020`
+
+- ✨ [webview] Show nested tasks
+- ✨ [webview] Save collapsed state of nested tasks
+
 ## 2.1.0 `28 Oct 2020`
 
 - ✨ [Tree View] Show nested tasks
