@@ -174,7 +174,7 @@ button,
 		background-color: var(--vscode-list-hoverBackground);
 	}
 
-	$nestedItemMarginSize: 1rem;
+	$nestedItemMarginSize: 1.7rem;
 
 	&.nested-lvl-1 {
 		padding-left: $nestedItemMarginSize;
@@ -379,7 +379,7 @@ $checkbox-size: 1rem;
 	height: $checkbox-size;
 	left: 0;
 	margin: 0;
-	margin-left: 2px;
+	margin-left: 1px;
 	margin-right: 4px;
 	min-width: $checkbox-size;
 	position: relative;
