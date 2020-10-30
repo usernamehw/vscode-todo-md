@@ -26,7 +26,7 @@ export interface Count {
 	current: number;
 }
 
-interface Link {
+export interface Link {
 	value: string;
 	scheme: string;
 	characterRange: [number, number];

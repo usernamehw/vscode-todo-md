@@ -1,4 +1,5 @@
 import vscode, { Uri } from 'vscode';
+import { Link } from './TheTask';
 import { VscodeContext } from './types';
 
 /**
@@ -34,7 +35,14 @@ export async function setContext(context: VscodeContext, value: any) {
 /**
  * Open URL in default browser.
  */
-export function followLink(link: string) {
+export async function followLink(links: Link[]) {
+	let link: string | undefined = links[0].value;
+	if (links.length > 1) {
+		link = await vscode.window.showQuickPick(links.map(l => l.value));
+		if (!link) {
+			return;
+		}
+	}
 	vscode.env.openExternal(Uri.parse(link));
 }
 /**

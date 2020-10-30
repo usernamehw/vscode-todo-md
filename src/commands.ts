@@ -158,7 +158,7 @@ export function registerAllCommands() {
 			const buttonName = 'Follow link';
 			const shouldFollow = await vscode.window.showInformationMessage(TheTask.formatTask(task), buttonName);
 			if (shouldFollow === buttonName) {
-				followLink(task.links[0].value);
+				followLink(task.links);
 			}
 		} else {
 			vscode.window.showInformationMessage(TheTask.formatTask(task));
@@ -332,10 +332,7 @@ export function registerAllCommands() {
 		resetAllRecurringTasks(editor.document, lastVisit);
 	});
 	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
-		const link = treeItem.task.links[0]?.value;
-		if (link) {
-			followLink(link);
-		}
+		followLink(treeItem.task.links);
 	});
 	commands.registerCommand('todomd.setLastVisit', async () => {
 		const numberOfHours = Number(await vscode.window.showInputBox({
