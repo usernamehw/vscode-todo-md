@@ -43,6 +43,7 @@ const state: {
 	defaultFileSpecified: false,
 	activeDocumentOpened: false,
 	config: {
+		autoShowSuggest: true,
 		showCompleted: true,
 		completedStrikeThrough: false,
 		showRecurringCompleted: true,
@@ -86,13 +87,13 @@ const awesomplete = new Awesomplete($filterInputEl, {
 	list: [],
 	autoFirst: true,
 	minChars: 1,
-	maxItems: 5,
+	maxItems: 6,
 	// @ts-ignore
 	tabSelect: true,
 	// @ts-expect-error
 	filter(text: {label: string; value: string}, input) {
-		if (input === '') {
-			return true;
+		if (!state.config.autoShowSuggest) {
+			return false;
 		}
 		const result = fuzzysort.go(input, [text.value]);
 		return result.length > 0;
@@ -121,6 +122,11 @@ $filterInputEl.addEventListener('keydown', e => {
 		});
 	} else if (e.key === 'Tab' || e.key === 'Enter') {
 		triggerInputEvent();
+	} else if (e.ctrlKey && e.key === ' ') {
+		state.config.autoShowSuggest = true;
+		triggerInputEvent();
+		awesomplete.open();
+		state.config.autoShowSuggest = false;
 	}
 });
 

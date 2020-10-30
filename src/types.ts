@@ -89,6 +89,7 @@ export interface IExtensionConfig {
 
 	webview: {
 		markdownEnabled: boolean;
+		autoShowSuggest: boolean;
 		showCompleted: boolean;
 		completedStrikeThrough: boolean;
 		showRecurringCompleted: boolean;

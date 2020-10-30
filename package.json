@@ -110,6 +110,11 @@
 					"markdownDescription": "Whether to render tasks as markdown (treating every line/task as a separate entity).",
 					"default": false
 				},
+				"todomd.webview.autoShowSuggest": {
+					"type": "boolean",
+					"markdownDescription": "Show autocomplete when typing. (When disabled suggest can be called by `Ctrl`+`Space`)",
+					"default": true
+				},
 				"todomd.defaultFile": {
 					"type": "string",
 					"markdownDescription": "Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`",
