@@ -30,3 +30,4 @@ describe(`${headerDelimiter('parse document')}`, () => {
 		expect(tasks[13].due?.isDue === DueState.overdue).to.be.ok;
 	});
 });
+// TODO: tests for nested tasks

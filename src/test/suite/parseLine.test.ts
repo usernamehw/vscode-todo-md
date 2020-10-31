@@ -9,7 +9,7 @@ const editor = vscode.window.activeTextEditor!;
 /**
  * Helper function to get the task excluding empty lines and comments
  */
-function getLineAt(n: number): TheTask | undefined {
+function getTaskAt(n: number): TheTask | undefined {
 	const textLine = editor.document.lineAt(n);
 	const task = parseLine(textLine);
 	if (task.lineType === 'empty' || task.lineType === 'comment' || task.lineType === 'specialComment') {
@@ -28,7 +28,7 @@ describe(`${headerDelimiter('parse')}Comment`, () => {
 
 describe('Parsing text', () => {
 	it('1 just text task (should not produce any extra properties)', () => {
-		const task = getLineAt(1)!;
+		const task = getTaskAt(1)!;
 		expect(task.title).to.equal('1 just text task');
 		expect(task.done).to.equal(false);
 		expect(task.tags).to.have.lengthOf(0);
@@ -45,15 +45,15 @@ describe('Parsing text', () => {
 
 describe('Projects', () => {
 	it('2 single project +Project', () => {
-		const task = getLineAt(2)!;
+		const task = getTaskAt(2)!;
 		expect(task.projects).to.have.all.members(['Project']);
 	});
 	it('3 multiple projects +Project', () => {
-		const task = getLineAt(3)!;
+		const task = getTaskAt(3)!;
 		expect(task.projects).to.have.all.members(['One', 'Two', 'Three']);
 	});
 	it('3 multiple projects have correct Ranges', () => {
-		const task = getLineAt(3)!;
+		const task = getTaskAt(3)!;
 		const projectRanges = [new Range(3, 2, 3, 6), new Range(3, 12, 3, 16), new Range(3, 17, 3, 23)];
 		for (let i = 0; i < task.projectRanges.length; i++) {
 			const range = task.projectRanges[i];
@@ -64,11 +64,11 @@ describe('Projects', () => {
 
 describe('Contexts', () => {
 	it('4 multiple contexts @Context', () => {
-		const task = getLineAt(4)!;
+		const task = getTaskAt(4)!;
 		expect(task.contexts).to.have.all.members(['One', 'Two', 'Three']);
 	});
 	it('4 multiple contexts have correct Ranges', () => {
-		const task = getLineAt(4)!;
+		const task = getTaskAt(4)!;
 		const contextRanges = [new Range(4, 2, 4, 6), new Range(4, 12, 4, 16), new Range(4, 17, 4, 23)];
 		for (let i = 0; i < task.contextRanges.length; i++) {
 			const range = task.contextRanges[i];
@@ -78,61 +78,61 @@ describe('Contexts', () => {
 });
 describe('Tags', () => {
 	it('5 multiple tags #tag1#tag2', () => {
-		const task = getLineAt(5)!;
+		const task = getTaskAt(5)!;
 		expect(task.tags).to.have.all.members(['one', 'two', 'three', 'four']);
 	});
 });
 describe('Priority', () => {
 	it('6 single priority', () => {
-		const task = getLineAt(6)!;
+		const task = getTaskAt(6)!;
 		expect(task.priority).to.equal('C');
 	});
 });
 describe('Completed state', () => {
 	it('7 With symbol', () => {
-		const task = getLineAt(7)!;
+		const task = getTaskAt(7)!;
 		expect(task.done).to.equal(true);
 	});
 	it('8 With completion date', () => {
-		const task = getLineAt(8)!;
+		const task = getTaskAt(8)!;
 		expect(task.done).to.equal(true);
 	});
 });
 describe('Should not produce extra tags/contexts/...', () => {
 	it('9 No extra tags', () => {
-		const task = getLineAt(9)!;
+		const task = getTaskAt(9)!;
 		expect(task.tags).to.have.lengthOf(0);
 	});
 	it('9 No extra contexts', () => {
-		const task = getLineAt(9)!;
+		const task = getTaskAt(9)!;
 		expect(task.contexts).to.have.lengthOf(0);
 	});
 	it('9 No extra projects', () => {
-		const task = getLineAt(9)!;
+		const task = getTaskAt(9)!;
 		expect(task.projects).to.have.lengthOf(0);
 	});
 	it('9 No extra special tags', () => {
-		const task = getLineAt(9)!;
+		const task = getTaskAt(9)!;
 		expect(task.specialTagRanges).to.have.lengthOf(0);
 	});
 	it('9 No extra done symbol', () => {
-		const task = getLineAt(9)!;
+		const task = getTaskAt(9)!;
 		expect(task.done).to.equal(false);
 	});
 });
 describe('Special tags {}', () => {
 	it('10 Count', () => {
-		const task = getLineAt(10)!;
+		const task = getTaskAt(10)!;
 		expect(task.specialTags.count).to.not.be.an('undefined');
 		expect(task.specialTags.count?.current).to.equal(1);
 		expect(task.specialTags.count?.needed).to.equal(2);
 	});
 	it('11 Threshold', () => {
-		const task = getLineAt(11)!;
+		const task = getTaskAt(11)!;
 		expect(task.specialTags.threshold).to.equal('2020-05-02');
 	});
 	it('12 Hidden', () => {
-		const task = getLineAt(12)!;
+		const task = getTaskAt(12)!;
 		expect(task.specialTags.isHidden === true).to.be.ok;
 	});
 });
