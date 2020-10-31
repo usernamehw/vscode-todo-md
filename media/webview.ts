@@ -149,18 +149,32 @@ window.addEventListener('click', event => {
 				});
 			}
 
+			const ctrlKey = event.ctrlKey;
+
 			if (target.classList.contains('tag')) {
-				$filterInputEl.value = `#${target.textContent}`;
+				if (ctrlKey) {
+					$filterInputEl.value += ` #${target.textContent}`;
+				} else {
+					$filterInputEl.value = `#${target.textContent}`;
+				}
 				focusInputAndCloseAutocomplete();
 				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('project')) {
-				$filterInputEl.value = `+${target.textContent}`;
+				if (ctrlKey) {
+					$filterInputEl.value += ` +${target.textContent}`;
+				} else {
+					$filterInputEl.value = `+${target.textContent}`;
+				}
 				focusInputAndCloseAutocomplete();
 				triggerInputEvent();
 				updateTasks();
 			} else if (target.classList.contains('context')) {
-				$filterInputEl.value = `@${target.textContent}`;
+				if (ctrlKey) {
+					$filterInputEl.value += ` @${target.textContent}`;
+				} else {
+					$filterInputEl.value = `@${target.textContent}`;
+				}
 				focusInputAndCloseAutocomplete();
 				triggerInputEvent();
 				updateTasks();
