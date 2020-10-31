@@ -1,5 +1,9 @@
 # Filter
 
+## By default filter applied as case-insensitive text search
+
+![filter_demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/docs/img/filter.png)
+
 ## Filter uses AND logic
 
 For instance, filter `#html #css` will only return items containing both tags (1 and 4)
