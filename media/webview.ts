@@ -45,8 +45,9 @@ const state: {
 	config: {
 		autoShowSuggest: true,
 		showCompleted: true,
-		completedStrikeThrough: false,
 		showRecurringCompleted: true,
+		showRecurringNotDue: true,
+		completedStrikeThrough: false,
 		showPriority: true,
 		fontSize: '13px',
 		padding: '0px',
@@ -212,6 +213,15 @@ function updateTasks() {
 	if (!state.config.showRecurringCompleted) {
 		filteredTasks = filteredTasks.filter(task => {
 			if (task.due?.isRecurring && task.done) {
+				return false;
+			} else {
+				return true;
+			}
+		});
+	}
+	if (!state.config.showRecurringNotDue) {
+		filteredTasks = filteredTasks.filter(task => {
+			if (task.due?.isRecurring && task.due.isDue === DueState.notDue) {
 				return false;
 			} else {
 				return true;

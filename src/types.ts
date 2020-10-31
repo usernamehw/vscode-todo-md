@@ -91,8 +91,9 @@ export interface IExtensionConfig {
 		markdownEnabled: boolean;
 		autoShowSuggest: boolean;
 		showCompleted: boolean;
-		completedStrikeThrough: boolean;
+		showRecurringNotDue: boolean;
 		showRecurringCompleted: boolean;
+		completedStrikeThrough: boolean;
 		showPriority: boolean;
 		fontSize: string;
 		fontFamily: string;
