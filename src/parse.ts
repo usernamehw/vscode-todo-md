@@ -149,8 +149,12 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 				break;
 			}
 			case '@': {
-				contexts.push(word.slice(1));
-				contextRanges.push(new Range(lineNumber, index, lineNumber, index + word.length));
+				if (word.length !== 1) {
+					contexts.push(word.slice(1));
+					contextRanges.push(new Range(lineNumber, index, lineNumber, index + word.length));
+				} else {
+					text.push(word);
+				}
 				break;
 			}
 			case '+': {
