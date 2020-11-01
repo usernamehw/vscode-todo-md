@@ -977,7 +977,7 @@
 					"dark": "#b4b4b4",
 					"highContrast": "#b4b4b4"
 				},
-				"description": "Not empty"
+				"description": "Color of comments `# Comment`"
 			},
 			{
 				"id": "todomd.priorityAForeground",
@@ -986,7 +986,7 @@
 					"dark": "#ec4f47",
 					"highContrast": "#ec4f47"
 				},
-				"description": "Not empty"
+				"description": "`(A)`"
 			},
 			{
 				"id": "todomd.priorityBForeground",
@@ -995,7 +995,7 @@
 					"dark": "#fd9f9a",
 					"highContrast": "#fd9f9a"
 				},
-				"description": "Not empty"
+				"description": "`(B)`"
 			},
 			{
 				"id": "todomd.priorityCForeground",
@@ -1004,7 +1004,7 @@
 					"dark": "#ffb039",
 					"highContrast": "#ffb648"
 				},
-				"description": "Not empty"
+				"description": "`(C)`"
 			},
 			{
 				"id": "todomd.priorityDForeground",
@@ -1013,7 +1013,7 @@
 					"dark": "#e2cb00",
 					"highContrast": "#f1d900"
 				},
-				"description": "Not empty"
+				"description": "`(D)`"
 			},
 			{
 				"id": "todomd.priorityEForeground",
@@ -1022,7 +1022,7 @@
 					"dark": "#97c500",
 					"highContrast": "#ace000"
 				},
-				"description": "Not empty"
+				"description": "`(E)`"
 			},
 			{
 				"id": "todomd.priorityFForeground",
@@ -1031,7 +1031,7 @@
 					"dark": "#00cfad",
 					"highContrast": "#00cfad"
 				},
-				"description": "Not empty"
+				"description": "`(F)`"
 			},
 			{
 				"id": "todomd.tagForeground",
@@ -1040,7 +1040,7 @@
 					"dark": "#1abaff",
 					"highContrast": "#1abaff"
 				},
-				"description": "Not empty"
+				"description": "Tag color `#Tag`"
 			},
 			{
 				"id": "todomd.contextForeground",
@@ -1049,25 +1049,25 @@
 					"dark": "#7284eb",
 					"highContrast": "#7284eb"
 				},
-				"description": "Not empty"
+				"description": "Context color `@Context`"
 			},
 			{
 				"id": "todomd.specialTagForeground",
 				"defaults": {
-					"light": "#cf2596",
-					"dark": "#cf2596",
-					"highContrast": "#cf2596"
+					"light": "#7e8081",
+					"dark": "#7e8081",
+					"highContrast": "#7e8081"
 				},
-				"description": "Not empty"
+				"description": "Color of special tags `{h}`"
 			},
 			{
 				"id": "todomd.tagDelimiterForeground",
 				"defaults": {
-					"light": "#b4b4b4",
+					"light": "#9ba6b1",
 					"dark": "#b4b4b4",
 					"highContrast": "#b4b4b4"
 				},
-				"description": "Not empty"
+				"description": "Color of the `#` symbol between tags"
 			},
 			{
 				"id": "todomd.projectForeground",
@@ -1076,16 +1076,16 @@
 					"dark": "#36cc9a",
 					"highContrast": "#36cc9a"
 				},
-				"description": "Not empty"
+				"description": "Project color `+Project`"
 			},
 			{
 				"id": "todomd.notDueForeground",
 				"defaults": {
-					"light": "#afafaf",
+					"light": "#7e8081",
 					"dark": "#afafaf",
 					"highContrast": "#afafaf"
 				},
-				"description": "Not empty"
+				"description": "Not due"
 			},
 			{
 				"id": "todomd.dueForeground",
@@ -1094,7 +1094,7 @@
 					"dark": "#5faedb",
 					"highContrast": "#5faedb"
 				},
-				"description": "Not empty"
+				"description": "Due"
 			},
 			{
 				"id": "todomd.overdueForeground",
@@ -1103,7 +1103,7 @@
 					"dark": "#f64f4f",
 					"highContrast": "#f64f4f"
 				},
-				"description": "Not empty"
+				"description": "Overdue"
 			},
 			{
 				"id": "todomd.invalidDueDateForeground",
@@ -1112,7 +1112,7 @@
 					"dark": "#ffffff",
 					"highContrast": "#ffffff"
 				},
-				"description": "Not empty"
+				"description": "Due date that is either has an invalid format `2020-05` or an invalid date `2020-12-35`"
 			},
 			{
 				"id": "todomd.invalidDueDateBackground",
@@ -1121,7 +1121,7 @@
 					"dark": "#f75454",
 					"highContrast": "#f75454"
 				},
-				"description": "Not empty"
+				"description": "Due date that is either has an invalid format `2020-05` or an invalid date `2020-12-35`"
 			},
 			{
 				"id": "todomd.closestDueDateBackground",
@@ -1130,7 +1130,7 @@
 					"dark": "#00000005",
 					"highContrast": "#00000005"
 				},
-				"description": "Not empty"
+				"description": "Decoration that shows when the task will be due. Example: `Tue [in 9 days]`"
 			},
 			{
 				"id": "todomd.closestDueDateForeground",
@@ -1139,7 +1139,7 @@
 					"dark": "#88888899",
 					"highContrast": "#88888899"
 				},
-				"description": "Not empty"
+				"description": "Decoration that shows when the task will be due. Example: `Tue [in 9 days]`"
 			}
 		],
 		"menus": {
