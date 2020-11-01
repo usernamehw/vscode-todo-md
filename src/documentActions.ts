@@ -45,7 +45,7 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 		return undefined;
 	}
 	const edit = new WorkspaceEdit();
-	if (task.children.length) {
+	if (task.subtasks.length) {
 		const buttonDeleteNested = 'Delete nested';
 		const buttonDeleteOnlyTask = 'Delete only this task';
 		const button = await vscode.window.showWarningMessage('Delete nested tasks?', {

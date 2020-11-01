@@ -264,7 +264,7 @@ function renderTask(task: TheTask): HTMLElement {
 
 	let isCollapsed = false;
 
-	if (task.children.length) {
+	if (task.subtasks.length) {
 		const twistie = document.createElement('span');
 		twistie.classList.add('twistie', 'codicon');
 		if (task.specialTags.collapsed) {
@@ -387,10 +387,10 @@ function renderTask(task: TheTask): HTMLElement {
 		taskListItem.appendChild(countContainer);
 	}
 	let taskWrapper: HTMLElement | undefined = undefined;
-	if (task.children.length) {
+	if (task.subtasks.length) {
 		taskWrapper = document.createElement('div');
 		taskWrapper.appendChild(taskListItem);
-		for (const nestedTask of task.children) {
+		for (const nestedTask of task.subtasks) {
 			const nestedTaskElement = renderTask(nestedTask);
 			if (isCollapsed) {
 				nestedTaskElement.classList.add('hidden');

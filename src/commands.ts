@@ -441,8 +441,8 @@ export function getTaskAtLine(lineNumber: number, tasks = state.tasksAsTree): Th
 		if (task.lineNumber === lineNumber) {
 			return task;
 		}
-		if (task.children.length) {
-			const foundTask = getTaskAtLine(lineNumber, task?.children);
+		if (task.subtasks.length) {
+			const foundTask = getTaskAtLine(lineNumber, task?.subtasks);
 			if (foundTask) {
 				return foundTask;
 			}

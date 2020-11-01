@@ -16,7 +16,7 @@ export class TaskTreeItem extends vscode.TreeItem {
 		if (task.links.length) {
 			this.contextValue = 'link';
 		}
-		if (task.children.length) {
+		if (task.subtasks.length) {
 			this.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
 		}
 		if (task.specialTags.collapsed) {
@@ -54,9 +54,9 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 	// @ts-ignore
 	getChildren(element: TaskTreeItem | undefined): (TaskTreeItem | undefined)[] | undefined {
 		if (element) {
-			const children = element.task.children;
-			if (children.length) {
-				return children.map(task => taskToTreeItem(task));
+			const subtasks = element.task.subtasks;
+			if (subtasks.length) {
+				return subtasks.map(task => taskToTreeItem(task));
 			} else {
 				return undefined;
 			}

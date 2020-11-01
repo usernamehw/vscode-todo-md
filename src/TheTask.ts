@@ -41,7 +41,7 @@ export class TheTask {
 	lineNumber: number;
 	indentLvl: number;
 	parentTaskLineNumber: number | undefined;
-	children: TheTask[];
+	subtasks: TheTask[];
 	tags: string[];
 	projects: string[];
 	due?: DueDate;
@@ -63,7 +63,7 @@ export class TheTask {
 		this.title = init.title;
 		this.lineNumber = init.lineNumber;
 		this.indentLvl = init.indentLvl;
-		this.children = init.children ?? [];
+		this.subtasks = init.subtasks ?? [];
 		this.rawText = init.rawText;
 		this.done = init.done ?? false;
 		this.tags = init.tags ?? [];
@@ -84,12 +84,12 @@ export class TheTask {
 		this.collapseRange = init.collapseRange;
 	}
 
-	getNestedTasksIds(tasks = this.children): number[] {
+	getNestedTasksIds(tasks = this.subtasks): number[] {
 		const ids = [];
 		for (const task of tasks) {
 			ids.push(task.lineNumber);
-			if (task.children) {
-				ids.push(...this.getNestedTasksIds(task.children));
+			if (task.subtasks) {
+				ids.push(...this.getNestedTasksIds(task.subtasks));
 			}
 		}
 		return ids;

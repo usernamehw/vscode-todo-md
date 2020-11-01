@@ -276,13 +276,13 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 	for (const task of tasks) {
 		tasksMap[task.lineNumber] = new TheTask({
 			...task,
-			children: [],
+			subtasks: [],
 		});
 	}
 	const tasksAsTree: TheTask[] = [];
 	for (const task of tasks) {
 		if (task.parentTaskLineNumber) {
-			tasksMap[task.parentTaskLineNumber].children.push(tasksMap[task.lineNumber]);
+			tasksMap[task.parentTaskLineNumber].subtasks.push(tasksMap[task.lineNumber]);
 		} else {
 			tasksAsTree.push(tasksMap[task.lineNumber]);
 		}
