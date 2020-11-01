@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import * as fs from 'fs';
 import vscode, { commands, Range, TextDocument, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTaskWorkspaceEdit, deleteTask, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount } from './documentActions';
+import { appendTaskToFile, archiveTaskWorkspaceEdit, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
 import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
@@ -64,7 +64,7 @@ export function registerAllCommands() {
 		const lineNumber = treeItem.task.lineNumber;
 		const document = await getActiveDocument();
 
-		deleteTask(document, lineNumber);
+		await tryToDeleteTask(document, lineNumber);
 
 		await updateState();
 		updateAllTreeViews();
@@ -436,10 +436,16 @@ export function setCountCurrentValue(wEdit: WorkspaceEdit, uri: Uri, count: Coun
 	const currentRange = new vscode.Range(count.range.start.line, charIndexWithOffset, count.range.start.line, charIndexWithOffset + String(count.current).length);
 	wEdit.replace(uri, currentRange, String(value));
 }
-export function getTaskAtLine(lineNumber: number): TheTask | undefined {
-	for (const line of state.tasks) {
-		if (line.lineNumber === lineNumber) {
-			return line;
+export function getTaskAtLine(lineNumber: number, tasks = state.tasksAsTree): TheTask | undefined {
+	for (const task of tasks) {
+		if (task.lineNumber === lineNumber) {
+			return task;
+		}
+		if (task.children.length) {
+			const foundTask = getTaskAtLine(lineNumber, task?.children);
+			if (foundTask) {
+				return foundTask;
+			}
 		}
 	}
 	return undefined;

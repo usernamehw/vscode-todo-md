@@ -84,6 +84,17 @@ export class TheTask {
 		this.collapseRange = init.collapseRange;
 	}
 
+	getNestedTasksIds(tasks = this.children): number[] {
+		const ids = [];
+		for (const task of tasks) {
+			ids.push(task.lineNumber);
+			if (task.children) {
+				ids.push(...this.getNestedTasksIds(task.children));
+			}
+		}
+		return ids;
+	}
+
 	static formatTask(task: TheTask): string {
 		return task.title + (task.specialTags.count ? ` ${task.specialTags.count.current}/${task.specialTags.count.needed}` : '');
 	}

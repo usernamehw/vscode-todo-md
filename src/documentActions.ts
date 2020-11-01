@@ -39,10 +39,32 @@ export async function setDueDate(document: vscode.TextDocument, lineNumber: numb
 	return await applyEdit(wEdit, document);
 }
 
-export function deleteTask(document: vscode.TextDocument, lineNumber: number) {
-	const wEdit = new WorkspaceEdit();
+export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber: number) {
+	const task = getTaskAtLine(lineNumber);
+	if (!task) {
+		return undefined;
+	}
+	const edit = new WorkspaceEdit();
+	if (task.children.length) {
+		const buttonDeleteNested = 'Delete nested';
+		const buttonDeleteOnlyTask = 'Delete only this task';
+		const button = await vscode.window.showWarningMessage('Delete nested tasks?', {
+			modal: true,
+		}, buttonDeleteNested, buttonDeleteOnlyTask);
+		if (button === buttonDeleteNested) {
+			const tasksToDeleteLineNumbers = task.getNestedTasksIds().concat(task.lineNumber);
+			for (const ln of tasksToDeleteLineNumbers) {
+				deleteTaskWorkspaceEdit(edit, document, ln);
+			}
+		} else if (button === buttonDeleteOnlyTask) {
+			deleteTaskWorkspaceEdit(edit, document, lineNumber);
+		}
+	}
+	return applyEdit(edit, document);
+}
+
+export function deleteTaskWorkspaceEdit(wEdit: WorkspaceEdit, document: vscode.TextDocument, lineNumber: number) {
 	wEdit.delete(document.uri, document.lineAt(lineNumber).rangeIncludingLineBreak);
-	applyEdit(wEdit, document);
 }
 /**
  * Either toggle done or increment count
