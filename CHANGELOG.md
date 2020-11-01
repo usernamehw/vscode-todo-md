@@ -1,3 +1,11 @@
+## 2.1.2 `01 Nov 2020`
+
+- ✨ [webview] Option to prevent autocomplete popping up `todomd.webview.autoShowSuggest`. (When disabled suggest can be called by <kbd>Ctrl</kbd>+<kbd>Space</kbd>)
+- ✨ [webview] Add option to hide recurring tasks that are not due `todomd.webview.showRecurringNotDue`
+- ✨ [webview] <kbd>Ctrl</kbd>+<kbd>Click</kbd> on tag/project/context adds it to filter instead of replacing
+- ✨ [Tree View] Deleting a task that has subtasks now showing modal dialog to choose whether to delete all nested tasks or not
+- ✨ When task has multiple links `followLink` should show a Quick Pick to choose which one of the links to open
+
 ## 2.1.1 `29 Oct 2020`
 
 - ✨ [webview] Show nested tasks
