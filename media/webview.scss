@@ -456,7 +456,6 @@ $checkbox-size: 1rem;
 	font-weight: bold;
 	position: relative;
 	width: 100%;
-	z-index: 1000000;
 }
 
 .autosuggest__results {
@@ -470,9 +469,7 @@ $checkbox-size: 1rem;
 	max-height: 150px;
 	overflow-y: auto;
 	padding: 0;
-	position: relative;
 	width: 100%;
-	z-index: 2000000;
 
 	mark {
 		background-color: inherit !important;
