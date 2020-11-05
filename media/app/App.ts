@@ -1,4 +1,5 @@
 import fuzzysort from 'fuzzysort';
+import debounce from 'lodash/debounce';
 import marked from 'marked';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
@@ -72,6 +73,7 @@ export default class App extends Vue {
 		});
 		this.updateWebviewCounter(this.filteredSortedTasks.length);
 	}
+	onFilterChangeDebounced = debounce(this.onFilterInputChange, 100);
 	/**
 	 * Event of accepting autocomplete suggestions
 	 */

@@ -6,7 +6,7 @@
         :suggestions="filteredSuggestions"
         :inputProps="{id:'autosuggest__input'}"
         :shouldRenderSuggestions="(size, loading) => (size >= 0 && !loading) && config.autoShowSuggest"
-        @input="onFilterInputChange"
+        @input="onFilterChangeDebounced"
         @selected="onSelect"
         @keydown.tab="tabHandler"
         @keydown.ctrl.space="openSuggest"
