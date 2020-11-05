@@ -1,12 +1,13 @@
 <template>
 <div>
     <vue-autosuggest
-        ref="suggest"
+        ref="autosuggest"
         v-model="filterInputValue"
         :suggestions="filteredSuggestions"
         :inputProps="{id:'autosuggest__input'}"
         @input="onFilterInputChange"
-        @selected="onSelect">
+        @selected="onSelect"
+        @keydown.tab.prevent="tabHandler">
         <div slot-scope="{suggestion}">
             <div v-html="fuzzyHighlight(suggestion.item)"></div>
         </div>

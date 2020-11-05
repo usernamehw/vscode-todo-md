@@ -31,7 +31,7 @@ export default class App extends Vue {
 	filteredSuggestions = [];
 
 	$refs!: {
-		filterInput: HTMLInputElement;
+		autosuggest: any;
 	};
 	// ──────────────────────────────────────────────────────────────────────
 	fuzzyHighlight(value: string) {
@@ -46,6 +46,12 @@ export default class App extends Vue {
 	}
 	onSelect(e: { item: string }) {
 		this.onFilterInputChange(e.item);
+	}
+	tabHandler() {
+		const { listeners, setCurrentIndex, setChangeItem, getItemByIndex } = this.$refs.autosuggest;
+		setChangeItem(getItemByIndex(this.$refs.autosuggest.currentIndex), true);
+		this.$refs.autosuggest.loading = true;
+		listeners.selected(true);
 	}
 	updateWebviewCounter(numberOfTasks: number) {
 		vscodeApi.postMessage({
@@ -64,6 +70,8 @@ export default class App extends Vue {
 		Vue.nextTick(() => {
 			const suggest = document.getElementById('autosuggest__input');
 			suggest.focus();
+			// const autosuggest = this.$refs.autosuggest;
+			// console.log(autosuggest);
 		});
 	}
 }
