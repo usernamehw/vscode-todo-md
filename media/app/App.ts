@@ -16,12 +16,11 @@ Vue.component('task', TaskComponent);// needs to be global for recursive renderi
 
 @Component({
 	computed: {
-		...mapState(['tasks', 'filterInputValue', 'config', 'defaultFileSpecified', 'activeDocumentOpened']),
+		...mapState(['filterInputValue', 'config', 'defaultFileSpecified', 'activeDocumentOpened']),
 		...mapGetters(['filteredSortedTasks', 'autocompleteItems']),
 	},
 })
 export default class App extends Vue {
-	tasks!: TheTask[];
 	filteredSortedTasks!: TheTask[];
 	filterInputValue!: string;
 	config!: IExtensionConfig['webview'];
