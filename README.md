@@ -186,8 +186,7 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 ## Recommended settings
 
 ```js
-"workbench.dialogs.customEnabled": true,// VSCode < 1.50.0
-"window.dialogStyle": "custom",// VSCode >= 1.50.0
+"window.dialogStyle": "custom",
 ```
 
 ## More Documentation
