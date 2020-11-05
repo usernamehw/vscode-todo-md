@@ -55,6 +55,9 @@ export default class Task extends Vue {
 		});
 	}
 	// ──────────────────────────────────────────────────────────────────────
+	/**
+	 * Task title (either markdown or text)
+	 */
 	get taskTitle() {
 		let title = this.model.title;
 
@@ -77,6 +80,9 @@ export default class Task extends Vue {
 		}
 		return title;
 	}
+	/**
+	 * Computed classes assigned to task-list-item element
+	 */
 	get classes() {
 		const cls: {
 			[className: string]: boolean;
