@@ -114,5 +114,11 @@ export default class App extends Vue {
 			const suggest = document.getElementById('autosuggest__input');
 			suggest.focus();
 		});
+		window.addEventListener('focus', () => {
+			Vue.nextTick(() => {
+				const suggest = document.getElementById('autosuggest__input');
+				suggest.focus();
+			});
+		});
 	}
 }
