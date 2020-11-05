@@ -17,6 +17,8 @@ package-lock.json
 .npmrc
 .gitattributes
 
+media/app
+
 node_modules
 test.md
 demo.md
