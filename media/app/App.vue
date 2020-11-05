@@ -7,7 +7,7 @@
         :inputProps="{id:'autosuggest__input'}"
         @input="onFilterInputChange"
         @selected="onSelect"
-        @keydown.tab.prevent="tabHandler">
+        @keydown.tab="tabHandler">
         <div slot-scope="{suggestion}">
             <div v-html="fuzzyHighlight(suggestion.item)"></div>
         </div>

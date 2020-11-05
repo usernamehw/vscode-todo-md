@@ -47,9 +47,14 @@ export default class App extends Vue {
 	onSelect(e: { item: string }) {
 		this.onFilterInputChange(e.item);
 	}
-	tabHandler() {
+	tabHandler(e: KeyboardEvent) {
 		const { listeners, setCurrentIndex, setChangeItem, getItemByIndex } = this.$refs.autosuggest;
-		setChangeItem(getItemByIndex(this.$refs.autosuggest.currentIndex), true);
+		const item = getItemByIndex(this.$refs.autosuggest.currentIndex);
+		if (!item) {
+			return;
+		}
+		e.preventDefault();
+		setChangeItem(item, true);
 		this.$refs.autosuggest.loading = true;
 		listeners.selected(true);
 	}
@@ -70,8 +75,6 @@ export default class App extends Vue {
 		Vue.nextTick(() => {
 			const suggest = document.getElementById('autosuggest__input');
 			suggest.focus();
-			// const autosuggest = this.$refs.autosuggest;
-			// console.log(autosuggest);
 		});
 	}
 }
