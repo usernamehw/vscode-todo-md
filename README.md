@@ -153,6 +153,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.fontSize|`"13px"`|Controls font size in the webview.|
 |webview.padding|`"0px"`|Controls spacing between items in a list.|
 |webview.fontFamily|`'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`|Controls font family in the webview.|
+|webview.tagStyles|**`{}`**|Set different color for any tag in a webview. `"todomd.webview.tagStyles": { "inbox": { "color": "#000", "backgroundColor": "#00b7ff" } }`|
 
 </details>
 

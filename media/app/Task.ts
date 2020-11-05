@@ -54,6 +54,12 @@ export default class Task extends Vue {
 			value: this.model.lineNumber,
 		});
 	}
+	styleForTag(tag: string) {
+		if (tag in this.config.tagStyles) {
+			return this.config.tagStyles[tag];
+		}
+		return undefined;
+	}
 	// ──────────────────────────────────────────────────────────────────────
 	/**
 	 * Task title (either markdown or text)

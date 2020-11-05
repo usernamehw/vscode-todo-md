@@ -23,8 +23,9 @@
         --><template v-for="tag of model.tags">
             <span :key="tag"
                   class="tag"
+                  :style="styleForTag(tag)"
                   @click.exact="updateFilterValue('#' + tag)"
-                  @click.ctrl="updateFilterValue('#' + tag, true)">{{ tag }}</span>
+				  @click.ctrl="updateFilterValue('#' + tag, true)">{{ tag }}</span>
         </template><!--
         --><template v-for="project of model.projects">
             <span :key="project"

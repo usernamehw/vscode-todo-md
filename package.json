@@ -120,6 +120,26 @@
 					"markdownDescription": "Show autocomplete when typing. (When disabled suggest can be called by `Ctrl`+`Space`)",
 					"default": true
 				},
+				"todomd.webview.tagStyles": {
+					"type": "object",
+					"markdownDescription": "Set different color for any tag in a webview.",
+					"default": {},
+					"patternProperties": {
+						".+": {
+							"type": "object",
+							"properties": {
+								"color": {
+									"type": "string",
+									"format": "color"
+								},
+								"backgroundColor": {
+									"type": "string",
+									"format": "color"
+								}
+							}
+						}
+					}
+				},
 				"todomd.defaultFile": {
 					"type": "string",
 					"markdownDescription": "Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`",

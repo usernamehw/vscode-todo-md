@@ -100,6 +100,12 @@ export interface IExtensionConfig {
 		customCheckboxEnabled: boolean;
 		checkboxStyle: string;
 		padding: string;
+		tagStyles: {
+			[tagName: string]: {
+				color: string;
+				backgroundColor: string;
+			};
+		};
 	};
 }
 

@@ -23,7 +23,6 @@ body {
 	--done-task-background: #e9f0d6;
 	--tag-foreground: var(--vscode-foreground);
 	--tag-background: #{$tagBackground};
-	--tag-hover-background: #{darken($tagBackground, $darkenPercent)};
 	--project-background: #{$projectBackground};
 	--project-hover-background: #{darken($projectBackground, $darkenPercent)};
 	--context-background: #{$contextBackground};
@@ -58,7 +57,6 @@ body.vscode-dark {
 	--border-light: #ffffff1c;
 	--border-darker: #6d6d6d;
 	--tag-background: #347dd1;
-	--tag-hover-background: #2b67ac;
 	--tag-foreground: #eeeeee;
 	--project-background: #29a078;
 	--project-hover-background: #21795b;
@@ -256,7 +254,7 @@ button,
 	margin-left: 3px;
 
 	&:hover {
-		background-color: var(--tag-hover-background);
+		filter: brightness(95%);
 	}
 }
 
