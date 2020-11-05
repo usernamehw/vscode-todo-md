@@ -127,21 +127,16 @@ window.addEventListener('message', event => {
 	const message: WebviewMessage = event.data; // The json data that the extension sent
 	switch (message.type) {
 		case 'updateEverything': {
+			store.state.config = message.value.config;
+			store.state.defaultFileSpecified = message.value.defaultFileSpecified;
+			store.state.activeDocumentOpened = message.value.activeDocumentOpened;
 			store.state.tasks = message.value.tasks;
 			store.state.tags = message.value.tags;
 			store.state.projects = message.value.projects;
 			store.state.contexts = message.value.contexts;
-			store.state.defaultFileSpecified = message.value.defaultFileSpecified;
-			store.state.activeDocumentOpened = message.value.activeDocumentOpened;
-			store.state.config = message.value.config;
 			document.body.style.setProperty('--font-size', message.value.config.fontSize);
 			document.body.style.setProperty('--font-family', message.value.config.fontFamily);
 			document.body.style.setProperty('--padding', message.value.config.padding);
-			// if (this.config.completedStrikeThrough) {
-			// 	$listEl.classList.add('completed-strike-through');
-			// } else {
-			// 	$listEl.classList.remove('completed-strike-through');
-			// }
 			break;
 		}
 	}

@@ -139,12 +139,6 @@ button,
 	height: calc(100vh - 4px - 4px - 24px);
 	line-height: var(--line-height);
 	overflow-y: auto;
-
-	&.completed-strike-through {
-		.list-item.done .title {
-			text-decoration: line-through;
-		}
-	}
 }
 
 .list-item {
@@ -155,6 +149,10 @@ button,
 
 	&.done {
 		background-color: var(--done-task-background);
+
+		&.strike-through > .title {
+			text-decoration: line-through;
+		}
 	}
 
 	&:hover {

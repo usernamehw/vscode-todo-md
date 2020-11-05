@@ -101,6 +101,9 @@ export default class Task extends Vue {
 				case DueState.invalid: cls.invalid = true;break;
 			}
 		}
+		if (this.config.completedStrikeThrough) {
+			cls['strike-through'] = true;
+		}
 		return cls;
 	}
 }
