@@ -42,6 +42,10 @@ export default class App extends Vue {
 		this.filteredSuggestions = [{
 			data: fuzzysort.go(value, this.autocompleteItems[0].data).map(item => item.target),
 		}];
+		Vue.nextTick(() => {
+			const { setCurrentIndex } = this.$refs.autosuggest;
+			setCurrentIndex(0);
+		});
 		this.updateWebviewCounter(this.filteredSortedTasks.length);
 	}
 	onSelect(e: { item: string }) {
