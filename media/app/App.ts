@@ -29,6 +29,7 @@ export default class App extends Vue {
 	autocompleteItems!: any;
 
 	filteredSuggestions = [];
+	shouldRevokeAutoShowSuggest = false;
 
 	$refs!: {
 		autosuggest: any;
@@ -39,6 +40,24 @@ export default class App extends Vue {
 	 */
 	fuzzyHighlight(value: string) {
 		return fuzzysort.highlight(fuzzysort.single(this.filterInputValue, value), '<mark>', '</mark>');
+	}
+	/**
+	 * Open autocomplete on Ctrl+Space
+	 */
+	openSuggest() {
+		if (!this.config.autoShowSuggest) {
+			this.config.autoShowSuggest = true;
+			this.shouldRevokeAutoShowSuggest = true;
+		}
+	}
+	/**
+	 * Event fired when autocomplete list is closed
+	 */
+	onClosed() {
+		if (this.shouldRevokeAutoShowSuggest) {
+			this.config.autoShowSuggest = false;
+			this.shouldRevokeAutoShowSuggest = false;
+		}
 	}
 	/**
 	 * Event that is fired when typing in filter input

@@ -8,7 +8,9 @@
         :shouldRenderSuggestions="(size, loading) => (size >= 0 && !loading) && config.autoShowSuggest"
         @input="onFilterInputChange"
         @selected="onSelect"
-        @keydown.tab="tabHandler">
+        @keydown.tab="tabHandler"
+        @keydown.ctrl.space="openSuggest"
+        @closed="onClosed">
         <div slot-scope="{suggestion}">
             <div v-html="fuzzyHighlight(suggestion.item)"></div>
         </div>
