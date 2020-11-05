@@ -469,7 +469,8 @@ $checkbox-size: 1rem;
 	color: var(--vscode-editorSuggestWidget-foreground) !important;
 	font-family: var(--vscode-editor-font-family) !important;
 	margin: 0;
-	max-height: 200px;
+	max-height: 150px;
+	overflow-y: auto;
 	padding: 0;
 	position: relative;
 	width: 100%;
@@ -504,6 +505,6 @@ $checkbox-size: 1rem;
 }
 
 .autosuggest__results-item:hover {
-	background-color: var(--vscode-list-hoverBackground);
-	color: var(--vscode-editorSuggestWidget-foreground);
+	background-color: var(--vscode-list-hoverBackground) !important;
+	color: var(--vscode-editorSuggestWidget-foreground) !important;
 }
