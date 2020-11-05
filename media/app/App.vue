@@ -5,6 +5,7 @@
         v-model="filterInputValue"
         :suggestions="filteredSuggestions"
         :inputProps="{id:'autosuggest__input'}"
+        :shouldRenderSuggestions="() => config.autoShowSuggest"
         @input="onFilterInputChange"
         @selected="onSelect"
         @keydown.tab="tabHandler">
