@@ -34,9 +34,15 @@ export default class App extends Vue {
 		autosuggest: any;
 	};
 	// ──────────────────────────────────────────────────────────────────────
+	/**
+	 * Highlight filter matches for single autocomplete item
+	 */
 	fuzzyHighlight(value: string) {
 		return fuzzysort.highlight(fuzzysort.single(this.filterInputValue, value), '<mark>', '</mark>');
 	}
+	/**
+	 * Event that is fired when typing in filter input
+	 */
 	onFilterInputChange(value: string) {
 		updateFilterValueMutation(value);
 		this.filteredSuggestions = [{
@@ -47,9 +53,16 @@ export default class App extends Vue {
 		});
 		this.updateWebviewCounter(this.filteredSortedTasks.length);
 	}
+	/**
+	 * Event of accepting autocomplete suggestions
+	 */
 	onSelect(e: { item: string }) {
 		this.onFilterInputChange(e.item);
 	}
+	/**
+	 * Handle Tab keypress as Autocomplete accept suggestion
+	 * (only when autocomplete is visible)
+	 */
 	tabHandler(e: KeyboardEvent) {
 		const { listeners, setCurrentIndex, setChangeItem, getItemByIndex } = this.$refs.autosuggest;
 		const item = getItemByIndex(this.$refs.autosuggest.currentIndex);
@@ -61,6 +74,7 @@ export default class App extends Vue {
 		this.$refs.autosuggest.loading = true;
 		listeners.selected(true);
 	}
+	// ──────────────────────────────────────────────────────────────────────
 	updateWebviewCounter(numberOfTasks: number) {
 		vscodeApi.postMessage({
 			type: 'updateTitle',
