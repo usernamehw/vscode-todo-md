@@ -75,10 +75,11 @@ export default class App extends Vue {
 	}
 	onFilterChangeDebounced = debounce(this.onFilterInputChange, 100);
 	/**
-	 * Event of accepting autocomplete suggestions
+	 * Event fired when accepting autocomplete suggestions
 	 */
-	onSelect(e: { item: string }) {
+	onSelected(e: { item: string }) {
 		this.onFilterInputChange(e.item);
+		this.focusFilterInput();
 	}
 	/**
 	 * Handle Tab keypress as Autocomplete accept suggestion
@@ -108,17 +109,15 @@ export default class App extends Vue {
 			value: text,
 		});
 	}
-	// ──────────────────────────────────────────────────────────────────────
-	mounted() {
+	focusFilterInput() {
 		Vue.nextTick(() => {
 			const suggest = document.getElementById('autosuggest__input');
 			suggest.focus();
 		});
-		window.addEventListener('focus', () => {
-			Vue.nextTick(() => {
-				const suggest = document.getElementById('autosuggest__input');
-				suggest.focus();
-			});
-		});
+	}
+	// ──────────────────────────────────────────────────────────────────────
+	mounted() {
+		this.focusFilterInput();
+		window.addEventListener('focus', this.focusFilterInput);
 	}
 }
