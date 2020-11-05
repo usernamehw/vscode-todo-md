@@ -21,8 +21,7 @@
               :key="task.lineNumber"
               :model="task" />
     </div>
-    <div v-if="!defaultFileSpecified && !activeDocumentOpened"
-         class="hidden">
+    <div v-if="!defaultFileSpecified && !activeDocumentOpened">
         <p class="welcome-text">Default file path is not specified.</p>
         <div class="welcome"><a class="btn btn-welcome"
                                 href="command:todomd.specifyDefaultFile">Specify Default File</a></div>
