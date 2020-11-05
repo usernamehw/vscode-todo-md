@@ -386,10 +386,6 @@ $checkbox-size: 1rem;
 		background-color: var(--checkbox-hover-bg);
 	}
 
-	&:focus {
-		outline: none !important;
-	}
-
 	&:checked {
 		background-color: var(--checkbox-done-bg);
 
