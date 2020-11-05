@@ -19,7 +19,7 @@ export const store = new Store({
 		tags: [],
 		projects: [],
 		contexts: [],
-		defaultFileSpecified: false,
+		defaultFileSpecified: true,
 		activeDocumentOpened: false,
 		filterInputValue: '',
 		config: {
