@@ -104,6 +104,7 @@ interface VscodeWebviewApi {
 	postMessage(message: WebviewMessage): void;
 }
 /** @ts-ignore */
+// eslint-disable-next-line no-undef
 export const vscodeApi: VscodeWebviewApi = acquireVsCodeApi();
 window.onerror = function(message, source, lineno, colno, error) {
 	vscodeApi.postMessage({

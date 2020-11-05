@@ -38,12 +38,15 @@ export default class App extends Vue {
 	fuzzyHighlight(value: string) {
 		return fuzzysort.highlight(fuzzysort.single(this.filterInputValue, value), '<mark>', '</mark>');
 	}
-	onInputChange(e: string) {
-		updateFilterValueMutation(e);
+	onFilterInputChange(value: string) {
+		updateFilterValueMutation(value);
 		this.filteredSuggestions = [{
-			data: fuzzysort.go(e, this.autocompleteItems[0].data).map(item => item.target),
+			data: fuzzysort.go(value, this.autocompleteItems[0].data).map(item => item.target),
 		}];
 		this.updateWebviewCounter(this.filteredSortedTasks.length);
+	}
+	onSelect(e: { item: string }) {
+		this.onFilterInputChange(e.item);
 	}
 	updateWebviewCounter(numberOfTasks: number) {
 		vscodeApi.postMessage({

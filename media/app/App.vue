@@ -5,7 +5,8 @@
         v-model="filterInputValue"
         :suggestions="filteredSuggestions"
         :inputProps="{id:'autosuggest__input'}"
-        @input="onInputChange">
+        @input="onFilterInputChange"
+        @selected="onSelect">
         <div slot-scope="{suggestion}">
             <div v-html="fuzzyHighlight(suggestion.item)"></div>
         </div>
