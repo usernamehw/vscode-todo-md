@@ -134,7 +134,94 @@ button,
 	margin: 1em 20px;
 }
 
-.filter-input-container {
+#autosuggest {
+	background-color: var(--vscode-sideBar-background);
+	left: 0;
+	margin-left: 12px;
+	margin-right: 12px;
+	padding-bottom: 4px;
+	padding-top: 4px;
+	position: fixed;
+	right: 0;
+	top: 0;
+	width: calc(100% - 24px);
+	z-index: var(--z-index-filter-input);
+}
+
+#autosuggest__input {
+	background-color: var(--vscode-input-background);
+	border: 1px solid var(--vscode-input-border);
+	color: var(--vscode-input-foreground);
+	display: block;
+	font-family: Consolas, monospace;
+	font-size: 13px;
+	height: 24px;
+	outline: none !important;
+	padding: 3px;
+	padding-left: 4px;
+	// position: relative;
+	width: 100%;
+	// z-index: 1000000;
+	&:focus {
+		border: 1px solid var(--vscode-focusBorder) !important;
+		outline: none !important;
+	}
+}
+
+.autosuggest__results-container {
+	background-color: var(--vscode-sideBar-background) !important;
+	color: var(--vscode-editorSuggestWidget-foreground) !important;
+	font-family: var(--vscode-editor-font-family) !important;
+	font-weight: bold;
+	position: relative;
+	width: 100%;
+	z-index: 1000000;
+}
+
+.autosuggest__results {
+	background-color: var(--vscode-sideBar-background) !important;
+	border-color: var(--vscode-editorSuggestWidget-border) !important;
+	border-style: solid;
+	border-width: 1px;
+	color: var(--vscode-editorSuggestWidget-foreground) !important;
+	font-family: var(--vscode-editor-font-family) !important;
+	margin: 0;
+	max-height: 200px;
+	padding: 0;
+	position: relative;
+	width: 100%;
+	z-index: 2000000;
+}
+
+.autosuggest__results ul {
+	cursor: pointer;
+	list-style: none;
+	margin: 0;
+	padding-left: 0;
+}
+
+#autosuggest ul:nth-child(1) > .autosuggest__results_title {
+	border-top: none;
+}
+
+.autosuggest__results-item {
+	padding: 3px 7px;
+}
+
+.autosuggest__results-item:active,
+.autosuggest__results-item:focus,
+.autosuggest__results-item--highlighted {
+	background-color: var(--vscode-editorSuggestWidget-selectedBackground) !important;
+	color: var(--vscode-editorSuggestWidget-foreground) !important;
+}
+
+.autosuggest__results-item:hover {
+	background-color: var(--vscode-list-hoverBackground);
+	color: var(--vscode-editorSuggestWidget-foreground);
+}
+
+
+.filter__container {
 	background-color: var(--vscode-sideBar-background);
 	left: 0;
 	padding-bottom: 4px;
@@ -144,24 +231,23 @@ button,
 	top: 0;
 	z-index: var(--z-index-filter-input);
 
-	.awesomplete {
+	// .awesomplete {
+	// display: block;
+	.filter__input {
 		display: block;
+		margin-left: 12px;
+		margin-right: 12px;
+		width: calc(100% - 24px);
 
-		.filter-input {
-			display: block;
-			margin-left: 12px;
-			margin-right: 12px;
-			width: calc(100% - 24px);
-
-			&:focus {
-				border: 1px solid var(--vscode-focusBorder) !important;
-				outline: none !important;
-			}
+		&:focus {
+			border: 1px solid var(--vscode-focusBorder) !important;
+			outline: none !important;
 		}
 	}
+	// }
 }
 
-.list {
+.task-list {
 	font-family: var(--font-family);
 	height: calc(100vh - 4px - 4px - 24px);
 	line-height: var(--line-height);
@@ -345,46 +431,9 @@ button,
 .hidden {
 	display: none;
 }
-// Awesomplete style override
-.awesomplete > ul {
-	background-color: var(--vscode-editorSuggestWidget-background) !important;
-	border-color: var(--vscode-editorSuggestWidget-border) !important;
-	color: var(--vscode-editorSuggestWidget-foreground) !important;
-	font-family: var(--vscode-editor-font-family) !important;
-	font-weight: bold;
-}
-
-.awesomplete > ul > li:hover {
-	background-color: var(--vscode-list-hoverBackground) !important;
-	color: var(--vscode-editorSuggestWidget-foreground) !important;
-}
-
-.awesomplete > ul:before {// pointer
-	display: none !important;
-}
-
-.awesomplete > ul > li[aria-selected='true'] {
-	background-color: var(--vscode-editorSuggestWidget-selectedBackground) !important;
-	color: var(--vscode-editorSuggestWidget-foreground) !important;
-}
-
-.awesomplete mark {
-	background-color: inherit !important;
-	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
-}
-
-.awesomplete li:hover mark {
-	background: none !important;
-	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;/* stylelint-disable-line property-blacklist */
-}
-
-.awesomplete li[aria-selected='true'] mark {
-	background-color: inherit !important;
-	color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
-}
 // Custom-styled Checkbox ──────────────────────────────────────────────────────────────
 $checkbox-size: 1rem;
-
+// Maybe assign the class on the parent element
 .custom-checkbox {
 	-webkit-appearance: none;
 	background-color: var(--checkbox-bg);

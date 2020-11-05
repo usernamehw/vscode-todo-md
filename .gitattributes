@@ -8,6 +8,5 @@
 *.gif binary
 *.ico binary
 
-*.ts eol=lf
-# * text eol=lf
+* text eol=lf
 

@@ -5,6 +5,7 @@
 		"moduleResolution": "Node",
 		"skipLibCheck": true,
 		"esModuleInterop": true,
+		"experimentalDecorators": true,
 		"types": [
 			"awesomplete",
 		],

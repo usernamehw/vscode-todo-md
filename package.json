@@ -1331,15 +1331,21 @@
 		"@types/vscode": "^1.50.0",
 		"@typescript-eslint/eslint-plugin": "^4.6.0",
 		"@typescript-eslint/parser": "^4.6.0",
+		"babel-eslint": "^10.1.0",
 		"chai": "^4.2.0",
 		"concurrently": "^5.3.0",
+		"css-loader": "^5.0.0",
 		"eslint": "^7.12.1",
+		"eslint-plugin-html": "^6.1.0",
 		"eslint-plugin-no-autofix": "^1.0.1",
+		"eslint-plugin-vue": "^7.1.0",
 		"friendly-errors-webpack-plugin": "^1.7.0",
 		"glob": "^7.1.6",
 		"mocha": "^8.2.0",
 		"node-sass": "^4.14.1",
+		"sass-loader": "^10.0.5",
 		"source-map-support": "^0.5.19",
+		"style-loader": "^2.0.0",
 		"stylelint": "^13.7.2",
 		"stylelint-csstree-validator": "^1.9.0",
 		"stylelint-declaration-block-no-ignored-properties": "^2.3.0",
@@ -1353,6 +1359,10 @@
 		"typescript-json-schema": "^0.43.0",
 		"vscode-codicons": "0.0.12",
 		"vscode-test": "^1.4.1",
+		"vue-class-component": "^7.2.6",
+		"vue-loader": "^15.9.5",
+		"vue-property-decorator": "^9.0.2",
+		"vue-template-compiler": "^2.6.12",
 		"webpack": "^4.44.2",
 		"webpack-cli": "^3.3.12"
 	},
@@ -1361,6 +1371,9 @@
 		"dayjs": "^1.9.4",
 		"fuzzysort": "^1.1.4",
 		"lodash": "^4.17.20",
-		"marked": "^1.2.2"
+		"marked": "^1.2.2",
+		"vue": "^2.6.12",
+		"vue-autosuggest": "^2.2.0",
+		"vuex": "^3.5.1"
 	}
 }

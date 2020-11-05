@@ -108,8 +108,6 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		const CSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.css'));
 		const codiconCSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'codicon.css'));
 		const codiconFontUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'codicon.ttf'));
-		const awesomepleteCSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'awesomplete.css'));
-		const awesomepleteJSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'awesomplete.js'));
 		const nonce = getNonce();// Use a nonce to only allow a specific script to be run.
 
 		return `<!DOCTYPE html>
@@ -117,22 +115,13 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconFontUri}; style-src 'unsafe-inline' ${webview.cspSource} ${codiconCSSUri} ${awesomepleteCSSUri}; script-src 'nonce-${nonce}';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconFontUri}; style-src 'unsafe-inline' ${webview.cspSource} ${codiconCSSUri}; script-src 'nonce-${nonce}';">
 				<link href="${codiconCSSUri}" rel="stylesheet" />
-				<link href="${awesomepleteCSSUri}" rel="stylesheet" />
 				<link href="${CSSUri}" rel="stylesheet">
 				<title>Tasks</title>
 			</head>
 			<body>
-				<div class="filter-input-container">
-					<input type="text" class="filter-input" id="filterInput">
-				</div>
-				<div id="list" class="list"></div>
-				<div class="hidden" id="defaultFileNotSpecified">
-					<p class="welcome-text">Default file path is not specified.</p>
-					<div class="welcome"><a class="btn btn-welcome" href="command:todomd.specifyDefaultFile">Specify Default File</a></div>
-				</div>
-				<script defer nonce="${nonce}" src="${awesomepleteJSUri}"></script>
+				<div id="app"></div>
 				<script defer nonce="${nonce}" src="${JSUri}"></script>
 			</body>
 			</html>`;
