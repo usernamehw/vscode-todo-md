@@ -42,14 +42,9 @@
 
 .autosuggest__results {
 	background-color: var(--vscode-sideBar-background) !important;
-	border-color: var(--vscode-editorSuggestWidget-border) !important;
-	border-style: solid;
-	border-width: 1px;
 	color: var(--vscode-editorSuggestWidget-foreground) !important;
 	font-family: var(--vscode-editor-font-family) !important;
 	margin: 0;
-	max-height: 150px;
-	overflow-y: auto;
 	padding: 0;
 	width: 100%;
 
@@ -63,7 +58,15 @@
 	cursor: pointer;
 	list-style: none;
 	margin: 0;
+	max-height: 150px;
+	overflow-y: auto;
 	padding-left: 0;
+
+	&:not(:empty) {
+		border-color: var(--vscode-editorSuggestWidget-border) !important;
+		border-style: solid;
+		border-width: 1px;
+	}
 }
 
 #autosuggest ul:nth-child(1) > .autosuggest__results_title {
