@@ -1,3 +1,9 @@
+## 2.2.0 `06 Nov 2020`
+
+- 🔨 [webview] Use Vue framework
+- 💥 [webview] Enable markdown rendering by default
+- ✨ [webview] Allow to change tag colors (targeted by tag name) `todomd.webview.tagStyles`
+
 ## 2.1.2 `01 Nov 2020`
 
 - ✨ [webview] Option to prevent autocomplete popping up `todomd.webview.autoShowSuggest`. (When disabled suggest can be called by <kbd>Ctrl</kbd>+<kbd>Space</kbd>)
