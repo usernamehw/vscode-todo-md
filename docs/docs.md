@@ -1,3 +1,16 @@
+<!-- TOC -->
+
+- [Filter](#filter)
+    - [By default filter applied as case-insensitive text search](#by-default-filter-applied-as-case-insensitive-text-search)
+    - [Filter uses AND logic](#filter-uses-and-logic)
+- [Set due date helper function `todomd.setDueDate`](#set-due-date-helper-function-todomdsetduedate)
+- [Set due date with autocomplete](#set-due-date-with-autocomplete)
+- [Webview](#webview)
+    - [Reveal the task](#reveal-the-task)
+    - [Render tasks as markdown](#render-tasks-as-markdown)
+
+<!-- /TOC -->
+
 ## Filter
 
 ### By default filter applied as case-insensitive text search
