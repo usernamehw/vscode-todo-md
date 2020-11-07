@@ -192,7 +192,7 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 
 ## More Documentation
 
-https://github.com/usernamehw/vscode-todo-md/tree/master/docs
+https://github.com/usernamehw/vscode-todo-md/tree/master/docs/docs.md
 
 ## Please upvote the following upstream vscode issues:
 
