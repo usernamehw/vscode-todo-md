@@ -4,7 +4,8 @@
     - [By default filter applied as case-insensitive text search](#by-default-filter-applied-as-case-insensitive-text-search)
     - [Filter uses AND logic](#filter-uses-and-logic)
 - [Set due date helper function `todomd.setDueDate`](#set-due-date-helper-function-todomdsetduedate)
-- [Set due date with autocomplete](#set-due-date-with-autocomplete)
+    - [Syntax](#syntax)
+    - [Set due date with autocomplete](#set-due-date-with-autocomplete)
 - [Webview](#webview)
     - [Reveal the task](#reveal-the-task)
     - [Render tasks as markdown](#render-tasks-as-markdown)
@@ -32,6 +33,8 @@ For instance, filter `#html #css` will only return items containing both tags (1
 
 ## Set due date helper function `todomd.setDueDate`
 
+### Syntax
+
 example | description
 --- | ---
 `+0`|today
@@ -46,7 +49,7 @@ example | description
 `fri` or `friday`|closest future friday.
 `nov 20` or `november 20`|closest future 20th of November.
 
-## Set due date with autocomplete
+### Set due date with autocomplete
 
 It's also possible to set due date by typing `$` at the end of the word of the future date:
 
