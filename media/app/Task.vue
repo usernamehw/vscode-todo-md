@@ -56,7 +56,7 @@
     </div>
     <div v-if="model.subtasks.length && !model.collapseRange">
         <task v-for="model in model.subtasks"
-              :key="model.lineNumber"
+              :key="model.lineNumber + model.rawText"
               :model="model" />
     </div>
 </div>
