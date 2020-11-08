@@ -75,7 +75,7 @@ export async function toggleDoneOrIncrementCount(document: vscode.TextDocument, 
 	if (!task) {
 		return undefined;
 	}
-	if (task.specialTags.count) {
+	if (task.count) {
 		return await incrementCountForTask(document, lineNumber, task);
 	} else {
 		return await toggleDoneAtLine(document, lineNumber);
@@ -84,7 +84,7 @@ export async function toggleDoneOrIncrementCount(document: vscode.TextDocument, 
 export async function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
 	const line = document.lineAt(lineNumber);
 	const wEdit = new WorkspaceEdit();
-	const count = task.specialTags.count;
+	const count = task.count;
 	if (!count) {
 		return Promise.resolve(undefined);
 	}
@@ -104,7 +104,7 @@ export async function incrementCountForTask(document: vscode.TextDocument, lineN
 export async function decrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
 	const line = document.lineAt(lineNumber);
 	const wEdit = new WorkspaceEdit();
-	const count = task.specialTags.count;
+	const count = task.count;
 	if (!count) {
 		return Promise.resolve(undefined);
 	}
@@ -145,7 +145,7 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	if (!task) {
 		return;
 	}
-	if (task.specialTags.overdue) {
+	if (task.overdue) {
 		await removeOverdueFromLine(document, task);
 	}
 	const line = document.lineAt(lineNumber);
@@ -221,7 +221,7 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 				removeDoneSymbol(wEdit, document.uri, line);
 				removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
 			} else {
-				if (!task.specialTags.overdue && !dayjs().isSame(lastVisit, 'day')) {
+				if (!task.overdue && !dayjs().isSame(lastVisit, 'day')) {
 					const lastVisitWithoutTime = new Date(lastVisit.getFullYear(), lastVisit.getMonth(), lastVisit.getDate());
 					const now = new Date();
 					const nowWithoutTime = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -239,7 +239,7 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 				}
 			}
 
-			const count = task.specialTags.count;
+			const count = task.count;
 			if (count) {
 				setCountCurrentValue(wEdit, document.uri, count, '0');
 			}

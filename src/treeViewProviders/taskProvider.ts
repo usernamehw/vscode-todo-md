@@ -19,7 +19,7 @@ export class TaskTreeItem extends vscode.TreeItem {
 		if (task.subtasks.length) {
 			this.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
 		}
-		if (task.specialTags.collapsed) {
+		if (task.isCollapsed) {
 			this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
 		}
 	}
@@ -67,10 +67,10 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 }
 
 function taskToTreeItem(task: TheTask) {
-	if (task.specialTags.isHidden) {
+	if (task.isHidden) {
 		return undefined;
 	}
-	if (task.specialTags.threshold && dayjs().isAfter(new Date(task.specialTags.threshold), 'date')) {
+	if (task.threshold && dayjs().isAfter(new Date(task.threshold), 'date')) {
 		return undefined;
 	}
 	return new TaskTreeItem(

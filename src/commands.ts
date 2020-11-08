@@ -278,7 +278,7 @@ export function registerAllCommands() {
 		if (!task) {
 			return;
 		}
-		if (task.specialTags.count) {
+		if (task.count) {
 			await incrementCountForTask(document, task.lineNumber, task);
 		} else {
 			await toggleDoneAtLine(document, task.lineNumber);

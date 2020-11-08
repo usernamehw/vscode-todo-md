@@ -123,16 +123,16 @@ describe('Should not produce extra tags/contexts/...', () => {
 describe('Special tags {}', () => {
 	it('10 Count', () => {
 		const task = getTaskAt(10)!;
-		expect(task.specialTags.count).to.not.be.an('undefined');
-		expect(task.specialTags.count?.current).to.equal(1);
-		expect(task.specialTags.count?.needed).to.equal(2);
+		expect(task.count).to.not.be.an('undefined');
+		expect(task.count?.current).to.equal(1);
+		expect(task.count?.needed).to.equal(2);
 	});
 	it('11 Threshold', () => {
 		const task = getTaskAt(11)!;
-		expect(task.specialTags.threshold).to.equal('2020-05-02');
+		expect(task.threshold).to.equal('2020-05-02');
 	});
 	it('12 Hidden', () => {
 		const task = getTaskAt(12)!;
-		expect(task.specialTags.isHidden === true).to.be.ok;
+		expect(task.isHidden === true).to.be.ok;
 	});
 });

@@ -15,7 +15,7 @@ export function isTaskVisible(task: TheTask): boolean {
 		if (!parentTask) {
 			return false;
 		}
-		if (parentTask.specialTags.collapsed) {
+		if (parentTask.isCollapsed) {
 			return false;
 		}
 		currentTask = parentTask;

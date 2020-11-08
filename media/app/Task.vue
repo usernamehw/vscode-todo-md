@@ -41,11 +41,11 @@
                   @click.exact="updateFilterValue('@' + context)"
                   @click.ctrl="updateFilterValue('@' + context, true)">{{ context }}</span>
         </template><!--
-        --><span v-if="model.specialTags.count"
+        --><span v-if="model.count"
               class="count-container">
             <button class="decrement-count"
                     @click="decrementCount">-</button>
-            <span class="count">{{ model.specialTags.count.current }} / {{ model.specialTags.count.needed }}</span>
+            <span class="count">{{ model.count.current }} / {{ model.count.needed }}</span>
             <button class="increment-count"
                     @click="incrementCount">+</button>
         </span><!--

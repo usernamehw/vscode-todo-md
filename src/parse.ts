@@ -1,7 +1,7 @@
 import vscode, { Range } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionConfig, state } from './extension';
-import { Priority, SpecialTags, TheTask } from './TheTask';
+import { Count, Priority, TheTask } from './TheTask';
 
 interface ParseLineReturn {
 	lineType: string;
@@ -62,7 +62,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 
 	const words = line.split(' ');
 
-	const rawText = textLine.text;
+	const rawText = textLine.text;// TODO: use init object?
 	const contexts = [];
 	const contextRanges: Range[] = [];
 	const projects = [];
@@ -74,7 +74,11 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 	const tags: string[] = [];
 	const tagsDelimiterRanges: Range[] = [];
 	const tagsRange: Range[] = [];
-	const specialTags: SpecialTags = {};
+	let count: Count | undefined;
+	let threshold: string | undefined;
+	let overdue: string | undefined;
+	let isHidden: boolean | undefined;
+	let isCollapsed: boolean | undefined;
 	let due: DueDate | undefined;
 	let dueRange: Range | undefined;
 	let overdueRange: Range | undefined;
@@ -95,7 +99,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 						dueRange = range;
 					}
 				} else if (specialTag === 'overdue') {
-					specialTags.overdue = value;
+					overdue = value;
 					overdueRange = range;
 				} else if (specialTag === 'cr') {
 					specialTagRanges.push(range);
@@ -117,19 +121,19 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 					if (currentValue === neededValue) {
 						done = true;
 					}
-					specialTags.count = {
+					count = {
 						range,
 						current: currentValue,
 						needed: neededValue,
 					};
 				} else if (specialTag === 't') {
-					specialTags.threshold = value;
+					threshold = value;
 					specialTagRanges.push(range);
 				} else if (specialTag === 'h') {
-					specialTags.isHidden = true;
+					isHidden = true;
 					specialTagRanges.push(range);
 				} else if (specialTag === 'c') {
-					specialTags.collapsed = true;
+					isCollapsed = true;
 					collapseRange = range;
 					specialTagRanges.push(range);
 				} else {
@@ -199,7 +203,11 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 			dueRange,
 			overdueRange,
 			collapseRange,
-			specialTags,
+			count,
+			threshold,
+			overdue,
+			isHidden,
+			isCollapsed,
 			contexts,
 			contextRanges,
 			title: text.join(' '),
@@ -251,9 +259,9 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 					}));
 				}
 				// Overdue --------------------
-				if (parsedLine.value.specialTags.overdue && parsedLine.value.due?.raw) {
+				if (parsedLine.value.overdue && parsedLine.value.due?.raw) {
 					parsedLine.value.due = new DueDate(parsedLine.value.due.raw, {
-						overdue: parsedLine.value.specialTags.overdue,
+						overdue: parsedLine.value.overdue,
 					});
 				}
 				// Handle nested tasks (find parent task lineNumber)

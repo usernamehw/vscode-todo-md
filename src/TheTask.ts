@@ -4,17 +4,7 @@ import { extensionConfig } from './extension';
 import { OptionalExceptFor } from './types';
 
 export type Priority = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z';
-export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'specialTags' | 'indentLvl'>;
-export interface SpecialTags {
-	threshold?: string;
-	isHidden?: boolean;
-	collapsed?: boolean;
-	count?: Count;
-	/**
-	 * Oldest overdue date string in `YYYY-MM-DD` (for recurring tasks)
-	 */
-	overdue?: string;
-}
+export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'indentLvl'>;
 /**
  * Modifier for task completion.
  * Instead of completing the task increases count by 1.
@@ -46,8 +36,27 @@ export class TheTask {
 	projects: string[];
 	due?: DueDate;
 	links: Link[];
-	specialTags: SpecialTags;
+	/**
+	 * Special tag `{count:1/2}`. Used for tasks that require multiple iterations.
+	 */
+	count?: Count;
+	/**
+	 * Special tag `{t:2020-05-20}`. Used for hiding item from Tree View up to a certain date.
+	 */
+	threshold?: string;
 	priority: Priority;
+	/**
+	 * Special tag `{h}`. Used for hiding items from Tree View.
+	 */
+	isHidden?: boolean;
+	/**
+	 * Special tag `{c}`. Used for webview and Tree View to store state of nested tasks.
+	 */
+	isCollapsed?: boolean;
+	/**
+	 * Special tag `{}` Oldest overdue date string in `YYYY-MM-DD` (for recurring tasks)
+	 */
+	overdue?: string;
 	contexts: string[];
 	contextRanges: Range[];
 	priorityRange?: Range;
@@ -72,7 +81,14 @@ export class TheTask {
 		this.links = init.links ?? [];
 		this.due = init.due;
 		this.dueRange = init.dueRange;
-		this.specialTags = init.specialTags;
+		this.count = init.count;
+		this.threshold = init.threshold;
+		this.isHidden = init.isHidden;
+		this.isCollapsed = init.isCollapsed;
+		/**
+		 * Oldest overdue date string in `YYYY-MM-DD` (for recurring tasks)
+		 */
+		this.overdue = init.overdue;
 		this.parentTaskLineNumber = init.parentTaskLineNumber;
 		this.contexts = init.contexts ?? [];
 		this.specialTagRanges = init.specialTagRanges ?? [];
@@ -97,6 +113,6 @@ export class TheTask {
 	}
 
 	static formatTask(task: TheTask): string {
-		return task.title + (task.specialTags.count ? ` ${task.specialTags.count.current}/${task.specialTags.count.needed}` : '');
+		return task.title + (task.count ? ` ${task.count.current}/${task.count.needed}` : '');
 	}
 }
