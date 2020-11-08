@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
-import * as fs from 'fs';
+import fs from 'fs';
 import vscode, { commands, Range, TextDocument, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTaskWorkspaceEdit, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
 import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
+import { findTaskAtLine } from './taskUtils';
 import { Count, TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { dateAndDateDiff, getDateInISOFormat } from './time/timeUtils';
@@ -94,7 +95,7 @@ export function registerAllCommands() {
 		const wEdit = new WorkspaceEdit();
 
 		for (let i = selection.start.line; i <= selection.end.line; i++) {
-			const task = getTaskAtLine(i);
+			const task = findTaskAtLine(i, state.tasksAsTree);
 			if (!task || !task.done) {
 				continue;
 			}
@@ -113,7 +114,7 @@ export function registerAllCommands() {
 		const lineEnd = selection.end.line;
 		const tasks: TheTask[] = [];
 		for (let i = lineStart; i <= lineEnd; i++) {
-			const task = getTaskAtLine(i);
+			const task = findTaskAtLine(i, state.tasksAsTree);
 			if (task) {
 				tasks.push(task);
 			}
@@ -125,7 +126,7 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand('todomd.createSimilarTask', async editor => {
 		// Create a task with all the tags, projects and contexts of another task
 		const selection = editor.selection;
-		const task = getTaskAtLine(selection.start.line);
+		const task = findTaskAtLine(selection.start.line, state.tasksAsTree);
 		if (!task) {
 			return;
 		}
@@ -435,20 +436,6 @@ export function setCountCurrentValue(wEdit: WorkspaceEdit, uri: Uri, count: Coun
 	const charIndexWithOffset = count.range.start.character + 'count:'.length + 1;
 	const currentRange = new vscode.Range(count.range.start.line, charIndexWithOffset, count.range.start.line, charIndexWithOffset + String(count.current).length);
 	wEdit.replace(uri, currentRange, String(value));
-}
-export function getTaskAtLine(lineNumber: number, tasks = state.tasksAsTree): TheTask | undefined {
-	for (const task of tasks) {
-		if (task.lineNumber === lineNumber) {
-			return task;
-		}
-		if (task.subtasks.length) {
-			const foundTask = getTaskAtLine(lineNumber, task?.subtasks);
-			if (foundTask) {
-				return foundTask;
-			}
-		}
-	}
-	return undefined;
 }
 /**
  * Updates state for archived tasks

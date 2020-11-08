@@ -7,7 +7,7 @@ import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { IExtensionConfig } from '../../src/types';
-import { updateFilterValueMutation, vscodeApi } from './store';
+import { selectNextTaskAction, selectPrevTaskAction, showNotification, updateFilterValueMutation, vscodeApi } from './store';
 import TaskComponent from './Task.vue';
 
 marked.Renderer.prototype.paragraph = text => `${text}`;
@@ -31,6 +31,8 @@ export default class App extends Vue {
 
 	filteredSuggestions = [];
 	shouldRevokeAutoShowSuggest = false;
+
+	showNotification = showNotification;
 
 	$refs!: {
 		autosuggest: any;
@@ -103,21 +105,33 @@ export default class App extends Vue {
 			value: String(numberOfTasks),
 		});
 	}
-	showNotification(text: string) {
-		vscodeApi.postMessage({
-			type: 'showNotification',
-			value: text,
-		});
-	}
 	focusFilterInput() {
 		Vue.nextTick(() => {
 			const suggest = document.getElementById('autosuggest__input');
 			suggest.focus();
 		});
 	}
+	scrollIntoView(lineNumber: number) {
+		const element = document.getElementById(`ln${lineNumber}`);
+		// @ts-ignore https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded
+		element.scrollIntoViewIfNeeded(false);
+	}
 	// ──────────────────────────────────────────────────────────────────────
 	mounted() {
 		this.focusFilterInput();
 		window.addEventListener('focus', this.focusFilterInput);
+		window.addEventListener('keydown', async e => {
+			if (e.key === 'ArrowDown') {
+				const selectedTaskLineNumber = await selectNextTaskAction();
+				if (selectedTaskLineNumber) {
+					this.scrollIntoView(selectedTaskLineNumber);
+				}
+			} else if (e.key === 'ArrowUp') {
+				const selectedTaskLineNumber = await selectPrevTaskAction();
+				if (selectedTaskLineNumber) {
+					this.scrollIntoView(selectedTaskLineNumber);
+				}
+			}
+		});
 	}
 }

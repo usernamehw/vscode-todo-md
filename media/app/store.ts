@@ -2,23 +2,39 @@ import Vue from 'vue';
 import Vuex, { Store } from 'vuex';
 import { filterItems } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
+import { findTaskAtLine } from '../../src/taskUtils';
 import { TheTask } from '../../src/TheTask';
 import { DueState, WebviewMessage } from '../../src/types';
+import { flattenDeep } from '../../src/utils';
+import { isTaskVisible } from './storeUtils';
 
 Vue.use(Vuex);
 
 const enum Mutation {
 	UPDATE_FILTER_VALUE = 'UPDATE_FILTER_VALUE',
 	TOGGLE_DONE = 'TOGGLE_DONE',
+	SELECT_TASK = 'SELECT_TASK',
+}
+const enum Action {
+	SELECT_NEXT_TASK = 'SELECT_NEXT_TASK',
+	SELECT_PREV_TASK = 'SELECT_PREV_TASK',
+}
+// TODO: maybe use dynamic type with keyof and ReturnType<>?
+export interface Getters {
+	filteredSortedTasks: TheTask[];
+	flattenedFilteredSortedTasks: TheTask[];
+	autocompleteItems: [{
+		data: string[];
+	}];
 }
 
 export const store = new Store({
 	// strict: isDev,
 	state: {
-		tasks: [],
-		tags: [],
-		projects: [],
-		contexts: [],
+		tasksAsTree: [] as TheTask[],
+		tags: [] as string[],
+		projects: [] as string[],
+		contexts: [] as string[],
 		defaultFileSpecified: true,
 		activeDocumentOpened: false,
 		filterInputValue: '',
@@ -36,10 +52,11 @@ export const store = new Store({
 			checkboxStyle: 'rounded-square',
 			fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`,
 		},
+		selectedTaskLineNumber: -1,
 	},
 	getters: {
 		filteredSortedTasks: state => {
-			let filteredTasks = state.tasks;
+			let filteredTasks = state.tasksAsTree;
 			if (state.filterInputValue !== '') {
 				filteredTasks = filterItems(filteredTasks, state.filterInputValue);
 			}
@@ -66,6 +83,7 @@ export const store = new Store({
 			}
 			return defaultSortTasks(filteredTasks);
 		},
+		flattenedFilteredSortedTasks: (state, getters) => flattenDeep(getters.filteredSortedTasks),
 		autocompleteItems: state => {
 			const filterConstants = [
 				'$due',
@@ -85,6 +103,9 @@ export const store = new Store({
 		},
 	},
 	mutations: {
+		[Mutation.SELECT_TASK]: (state, lineNumber: number) => {
+			state.selectedTaskLineNumber = lineNumber;
+		},
 		[Mutation.UPDATE_FILTER_VALUE]: (state, newValue: string) => {
 			state.filterInputValue = newValue;
 		},
@@ -92,7 +113,63 @@ export const store = new Store({
 			task.done = !task.done;
 		},
 	},
-	actions: {},
+	actions: {
+		[Action.SELECT_NEXT_TASK]({ commit, state, getters: gt }) {
+			const getters = gt as Getters;
+			if (!getters.filteredSortedTasks.length) {
+				return undefined;
+			}
+			let targetTask: TheTask;
+			if (state.selectedTaskLineNumber === -1) {
+				// None selected. Select the first visible task
+				targetTask = getters.filteredSortedTasks[0];
+			} else {
+				// Selected task exists
+				const selectedTask = findTaskAtLine(state.selectedTaskLineNumber, state.tasksAsTree);
+
+				const tasks = getters.flattenedFilteredSortedTasks.filter(task => isTaskVisible(task));
+				if (tasks.length < 2) {
+					return undefined;
+				}
+
+				const currentIndex = tasks.findIndex(task => selectedTask.lineNumber === task.lineNumber);
+				targetTask = currentIndex === tasks.length - 1 ? tasks[0] : tasks[currentIndex + 1];
+			}
+			selectTaskMutation(targetTask.lineNumber);
+			return targetTask.lineNumber;
+		},
+		[Action.SELECT_PREV_TASK]({ commit, state, getters: gt }) {
+			const getters = gt as Getters;
+			if (!getters.filteredSortedTasks.length) {
+				return undefined;
+			}
+			let targetTask: TheTask;
+			if (state.selectedTaskLineNumber === -1) {
+				// None selected. Select the first visible task
+				targetTask = getters.flattenedFilteredSortedTasks[getters.flattenedFilteredSortedTasks.length - 1];
+			} else {
+				const selectedTask = findTaskAtLine(state.selectedTaskLineNumber, state.tasksAsTree);
+				if (!selectedTask) {
+					return undefined;
+				}
+
+				const tasks = getters.flattenedFilteredSortedTasks.filter(task => isTaskVisible(task));
+
+				if (tasks.length < 2) {
+					return undefined;
+				}
+
+				const currentIndex = tasks.findIndex(task => selectedTask.lineNumber === task.lineNumber);
+				if (currentIndex === 0) {
+					targetTask = tasks[tasks.length - 1];
+				} else {
+					targetTask = tasks[currentIndex - 1];
+				}
+			}
+			selectTaskMutation(targetTask.lineNumber);
+			return targetTask.lineNumber;
+		},
+	},
 });
 
 interface SavedState {
@@ -114,13 +191,19 @@ window.onerror = function(message, source, lineno, colno, error) {
 };
 const savedState = getState();
 updateFilterValueMutation(savedState.filterInputValue);
-// store.state.filterInputValue = savedState.filterInputValue;
 
 function getState(): SavedState {
 	const savedStateDefaults: SavedState = {
 		filterInputValue: '',
 	};
 	return vscodeApi.getState() ?? savedStateDefaults;
+}
+
+export function showNotification(text: string) {
+	vscodeApi.postMessage({
+		type: 'showNotification',
+		value: text,
+	});
 }
 
 window.addEventListener('message', event => {
@@ -130,7 +213,7 @@ window.addEventListener('message', event => {
 			store.state.config = message.value.config;
 			store.state.defaultFileSpecified = message.value.defaultFileSpecified;
 			store.state.activeDocumentOpened = message.value.activeDocumentOpened;
-			store.state.tasks = message.value.tasks;
+			store.state.tasksAsTree = message.value.tasks;
 			store.state.tags = message.value.tags;
 			store.state.projects = message.value.projects;
 			store.state.contexts = message.value.contexts;
@@ -142,6 +225,7 @@ window.addEventListener('message', event => {
 	}
 });
 
+// mutations
 export function updateFilterValueMutation(newValue: string) {
 	store.commit(Mutation.UPDATE_FILTER_VALUE, newValue);
 	vscodeApi.setState({
@@ -154,4 +238,15 @@ export function toggleDoneMutation(task: TheTask) {
 		type: 'toggleDone',
 		value: task.lineNumber,
 	});
+}
+export function selectTaskMutation(lineNumber: number) {
+	store.commit(Mutation.SELECT_TASK, lineNumber);
+}
+
+// actions
+export async function selectNextTaskAction() {
+	return store.dispatch(Action.SELECT_NEXT_TASK);
+}
+export async function selectPrevTaskAction() {
+	return store.dispatch(Action.SELECT_PREV_TASK);
 }

@@ -38,7 +38,7 @@ const sassLoader = {
 module.exports = (env, options) => {
 	/** @type {import('webpack').Configuration}*/
 	const config = {
-		target: 'web',
+		target: 'node',
 
 		entry: './media/index.ts',
 		output: {

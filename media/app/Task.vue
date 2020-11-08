@@ -1,6 +1,7 @@
 <template>
 <div>
-    <div class="list-item"
+    <div :id="'ln' + model.lineNumber"
+         class="list-item"
          :class="classes"
          @click.alt="revealTask">
         <span v-if="model.subtasks.length"

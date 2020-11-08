@@ -204,7 +204,7 @@
 					"enums": "always"
 				}],
 				"no-alert": 0,
-				"curly": 0,
+				"curly": 1,
 				"no-var": 1,
 				"no-undef": 1,
 				"no-cond-assign": 1,

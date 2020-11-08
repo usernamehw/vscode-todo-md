@@ -9,7 +9,7 @@ import { toggleDoneMutation, updateFilterValueMutation, vscodeApi } from './stor
 
 @Component({
 	computed: {
-		...mapState(['config', 'filterInputValue']),
+		...mapState(['config', 'filterInputValue', 'selectedTaskLineNumber']),
 	},
 })
 export default class Task extends Vue {
@@ -18,6 +18,7 @@ export default class Task extends Vue {
 
 	config!: IExtensionConfig['webview'];
 	filterInputValue!: string;
+	selectedTaskLineNumber!: number;
 
 	// ──────────────────────────────────────────────────────────────────────
 	toggleDone() {
@@ -94,7 +95,7 @@ export default class Task extends Vue {
 			[className: string]: boolean;
 		} = {};
 		cls.done = this.model.done;
-		if (!this.model.parentTaskLineNumber) {
+		if (this.model.parentTaskLineNumber) {
 			cls[`nested-lvl-${this.model.indentLvl}`] = true;
 		}
 		switch (this.model.priority) {
@@ -115,6 +116,9 @@ export default class Task extends Vue {
 		}
 		if (this.config.completedStrikeThrough) {
 			cls['strike-through'] = true;
+		}
+		if (this.selectedTaskLineNumber === this.model.lineNumber) {
+			cls.selected = true;
 		}
 		return cls;
 	}

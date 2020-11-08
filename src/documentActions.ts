@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 import vscode, { TextDocument, WorkspaceEdit } from 'vscode';
-import { applyEdit, getTaskAtLine, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from './commands';
+import { applyEdit, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from './commands';
 import { DueDate } from './dueDate';
 import { extensionConfig, state } from './extension';
 import { parseDocument } from './parse';
+import { findTaskAtLine } from './taskUtils';
 import { TheTask } from './TheTask';
 import { DATE_FORMAT } from './time/timeUtils';
 import { DueState } from './types';
@@ -18,7 +19,7 @@ export async function hideTask(document: vscode.TextDocument, lineNumber: number
 export async function toggleTaskCollapse(document: vscode.TextDocument, lineNumber: number) {
 	const wEdit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
-	const task = getTaskAtLine(lineNumber);
+	const task = findTaskAtLine(lineNumber, state.tasksAsTree);
 	if (task?.collapseRange) {
 		wEdit.delete(document.uri, task.collapseRange);
 	} else {
@@ -30,7 +31,7 @@ export async function toggleTaskCollapse(document: vscode.TextDocument, lineNumb
 export async function setDueDate(document: vscode.TextDocument, lineNumber: number, newDueDate: dayjs.Dayjs) {
 	const dueDate = `{due:${newDueDate.format(DATE_FORMAT)}}`;
 	const wEdit = new WorkspaceEdit();
-	const task = getTaskAtLine(lineNumber);
+	const task = findTaskAtLine(lineNumber, state.tasksAsTree);
 	if (task?.dueRange) {
 		wEdit.replace(document.uri, task.dueRange, dueDate);
 	} else {
@@ -40,7 +41,7 @@ export async function setDueDate(document: vscode.TextDocument, lineNumber: numb
 }
 
 export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber: number) {
-	const task = getTaskAtLine(lineNumber);
+	const task = findTaskAtLine(lineNumber, state.tasksAsTree);
 	if (!task) {
 		return undefined;
 	}
@@ -70,7 +71,7 @@ export function deleteTaskWorkspaceEdit(wEdit: WorkspaceEdit, document: vscode.T
  * Either toggle done or increment count
  */
 export async function toggleDoneOrIncrementCount(document: vscode.TextDocument, lineNumber: number) {
-	const task = getTaskAtLine(lineNumber);
+	const task = findTaskAtLine(lineNumber, state.tasksAsTree);
 	if (!task) {
 		return undefined;
 	}
@@ -116,7 +117,7 @@ export async function decrementCountForTask(document: vscode.TextDocument, lineN
 	return applyEdit(wEdit, document);
 }
 export async function incrementOrDecrementPriority(document: TextDocument, lineNumber: number, type: 'increment' | 'decrement') {
-	const task = getTaskAtLine(lineNumber);
+	const task = findTaskAtLine(lineNumber, state.tasksAsTree);
 	if (!task ||
 			type === 'increment' && task.priority === 'A' ||
 			type === 'decrement' && task.priority === 'Z') {
@@ -140,7 +141,7 @@ async function removeOverdueFromLine(document: vscode.TextDocument, task: TheTas
 }
 export async function toggleDoneAtLine(document: TextDocument, lineNumber: number): Promise<void> {
 	const { firstNonWhitespaceCharacterIndex } = document.lineAt(lineNumber);
-	const task = getTaskAtLine(lineNumber);
+	const task = findTaskAtLine(lineNumber, state.tasksAsTree);
 	if (!task) {
 		return;
 	}
