@@ -5,9 +5,10 @@ import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
+import { findTaskAtLine } from '../../src/taskUtils';
 import { TheTask } from '../../src/TheTask';
 import { IExtensionConfig } from '../../src/types';
-import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, updateFilterValueMutation, vscodeApi } from './store';
+import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, updateFilterValueMutation, vscodeApi } from './store';
 import TaskComponent from './Task.vue';
 
 marked.Renderer.prototype.paragraph = text => `${text}`;
@@ -17,17 +18,19 @@ Vue.component('task', TaskComponent);// needs to be global for recursive renderi
 
 @Component({
 	computed: {
-		...mapState(['filterInputValue', 'config', 'defaultFileSpecified', 'activeDocumentOpened']),
+		...mapState(['tasksAsTree', 'filterInputValue', 'config', 'defaultFileSpecified', 'activeDocumentOpened', 'selectedTaskLineNumber']),
 		...mapGetters(['filteredSortedTasks', 'autocompleteItems']),
 	},
 })
 export default class App extends Vue {
+	tasksAsTree!: TheTask[];
 	filteredSortedTasks!: TheTask[];
 	filterInputValue!: string;
 	config!: IExtensionConfig['webview'];
 	defaultFileSpecified!: boolean;
 	activeDocumentOpened!: boolean;
 	autocompleteItems!: any;
+	selectedTaskLineNumber!: number;
 
 	filteredSuggestions = [];
 	shouldRevokeAutoShowSuggest = false;
@@ -134,6 +137,9 @@ export default class App extends Vue {
 				}
 			} else if (e.key === 'Escape') {
 				selectTaskMutation(-1);
+			} else if (e.key === 'd' && e.altKey) {
+				const task = findTaskAtLine(this.selectedTaskLineNumber, this.tasksAsTree);
+				toggleDoneMutation(task);
 			}
 		});
 	}
