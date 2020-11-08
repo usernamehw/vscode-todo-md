@@ -96,3 +96,4 @@ Key | Description
 <kbd>↑</kbd>|Select previous task
 <kbd>→</kbd>|Toggle collapsing of nested tasks
 <kbd>Alt</kbd>+<kbd>D</kbd>|Toggle task completion
+<kbd>Ctrl</kbd>+<kbd>Space</kbd>|Open autocomplete (When `todomd.webview.autoShowSuggest` is disabled)
