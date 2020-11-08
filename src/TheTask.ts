@@ -73,6 +73,7 @@ export class TheTask {
 		this.due = init.due;
 		this.dueRange = init.dueRange;
 		this.specialTags = init.specialTags;
+		this.parentTaskLineNumber = init.parentTaskLineNumber;
 		this.contexts = init.contexts ?? [];
 		this.specialTagRanges = init.specialTagRanges ?? [];
 		this.contextRanges = init.contextRanges ?? [];
