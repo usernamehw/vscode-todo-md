@@ -7,7 +7,7 @@ import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { IExtensionConfig } from '../../src/types';
-import { selectNextTaskAction, selectPrevTaskAction, showNotification, updateFilterValueMutation, vscodeApi } from './store';
+import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, updateFilterValueMutation, vscodeApi } from './store';
 import TaskComponent from './Task.vue';
 
 marked.Renderer.prototype.paragraph = text => `${text}`;
@@ -66,6 +66,7 @@ export default class App extends Vue {
 	 * Event that is fired when typing in filter input
 	 */
 	onFilterInputChange(value: string) {
+		selectTaskMutation(-1);
 		updateFilterValueMutation(value);
 		this.filteredSuggestions = [{
 			data: fuzzysort.go(value, this.autocompleteItems[0].data).map(item => item.target),
@@ -131,6 +132,8 @@ export default class App extends Vue {
 				if (selectedTaskLineNumber) {
 					this.scrollIntoView(selectedTaskLineNumber);
 				}
+			} else if (e.key === 'Escape') {
+				selectTaskMutation(-1);
 			}
 		});
 	}
