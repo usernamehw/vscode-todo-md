@@ -3,7 +3,8 @@
     <div :id="'ln' + model.lineNumber"
          class="list-item"
          :class="classes"
-         @click.alt="revealTask">
+         @click.alt="revealTask"
+         @click.self.exact="selectThisTask">
         <span v-if="model.subtasks.length"
               class="twistie codicon"
               :class="[model.collapseRange ? 'codicon-chevron-right' : 'codicon-chevron-down']"

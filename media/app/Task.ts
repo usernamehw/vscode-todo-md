@@ -5,7 +5,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { DueState, IExtensionConfig } from '../../src/types';
-import { toggleDoneMutation, updateFilterValueMutation, vscodeApi } from './store';
+import { selectTaskMutation, toggleDoneMutation, updateFilterValueMutation, vscodeApi } from './store';
 
 @Component({
 	computed: {
@@ -21,6 +21,9 @@ export default class Task extends Vue {
 	selectedTaskLineNumber!: number;
 
 	// ──────────────────────────────────────────────────────────────────────
+	selectThisTask() {
+		selectTaskMutation(this.model.lineNumber);
+	}
 	toggleDone() {
 		toggleDoneMutation(this.model);
 	}
