@@ -9,6 +9,7 @@
 - [Webview](#webview)
     - [Reveal the task](#reveal-the-task)
     - [Render tasks as markdown](#render-tasks-as-markdown)
+    - [Webview Hotkeys](#webview-hotkeys)
 
 <!-- /TOC -->
 
@@ -86,3 +87,12 @@ A markdown link [GitHub](https://github.com)
 ```
 
 ![webview renders markdown demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/docs/img/webview_markdown_enabled.png)
+
+### Webview Hotkeys
+
+Key | Description
+--- | ---
+<kbd>↓</kbd>|Select next task
+<kbd>↑</kbd>|Select previous task
+<kbd>→</kbd>|Toggle collapsing of nested tasks
+<kbd>Alt</kbd>+<kbd>D</kbd>|Toggle task completion
