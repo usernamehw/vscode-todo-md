@@ -1,3 +1,9 @@
+## 2.2.1 `09 Nov 2020`
+
+- ✨ [webview] Add task selection <kbd>↓</kbd>, <kbd>↑</kbd>, <kbd>LMouseButton</kbd>
+- ✨ [webview] Toggle collapsed state of nested tasks <kbd>→</kbd>
+- ✨ [webview] Toggle selected task completion <kbd>Alt</kbd>+<kbd>D</kbd>
+
 ## 2.2.0 `06 Nov 2020`
 
 - 🔨 [webview] Use Vue framework
