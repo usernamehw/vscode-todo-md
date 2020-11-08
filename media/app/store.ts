@@ -205,6 +205,12 @@ export function showNotification(text: string) {
 		value: text,
 	});
 }
+export function toggleTaskCollapse(lineNumber: number) {
+	vscodeApi.postMessage({
+		type: 'toggleTaskCollapse',
+		value: lineNumber,
+	});
+}
 
 window.addEventListener('message', event => {
 	const message: WebviewMessage = event.data; // The json data that the extension sent

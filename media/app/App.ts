@@ -8,7 +8,7 @@ import { mapGetters, mapState } from 'vuex';
 import { findTaskAtLine } from '../../src/taskUtils';
 import { TheTask } from '../../src/TheTask';
 import { IExtensionConfig } from '../../src/types';
-import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, updateFilterValueMutation, vscodeApi } from './store';
+import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
 import TaskComponent from './Task.vue';
 
 marked.Renderer.prototype.paragraph = text => `${text}`;
@@ -135,6 +135,8 @@ export default class App extends Vue {
 				if (selectedTaskLineNumber) {
 					this.scrollIntoView(selectedTaskLineNumber);
 				}
+			} else if (e.key === 'ArrowRight') {
+				toggleTaskCollapse(this.selectedTaskLineNumber);
 			} else if (e.key === 'Escape') {
 				selectTaskMutation(-1);
 			} else if (e.key === 'd' && e.altKey) {

@@ -5,7 +5,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { DueState, IExtensionConfig } from '../../src/types';
-import { selectTaskMutation, toggleDoneMutation, updateFilterValueMutation, vscodeApi } from './store';
+import { selectTaskMutation, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
 
 @Component({
 	computed: {
@@ -20,6 +20,9 @@ export default class Task extends Vue {
 	filterInputValue!: string;
 	selectedTaskLineNumber!: number;
 
+	toggleTaskCollapse = () => {
+		toggleTaskCollapse(this.model.lineNumber);
+	};
 	// ──────────────────────────────────────────────────────────────────────
 	selectThisTask() {
 		selectTaskMutation(this.model.lineNumber);
@@ -39,12 +42,6 @@ export default class Task extends Vue {
 		} else {
 			updateFilterValueMutation(newValue);
 		}
-	}
-	toggleTaskCollapse() {
-		vscodeApi.postMessage({
-			type: 'toggleTaskCollapse',
-			value: this.model.lineNumber,
-		});
 	}
 	incrementCount() {
 		vscodeApi.postMessage({
