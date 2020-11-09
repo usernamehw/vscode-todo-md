@@ -211,6 +211,12 @@ export function toggleTaskCollapse(lineNumber: number) {
 		value: lineNumber,
 	});
 }
+export function deleteTask(lineNumber: number) {
+	vscodeApi.postMessage({
+		type: 'deleteTask',
+		value: lineNumber,
+	});
+}
 
 window.addEventListener('message', event => {
 	const message: WebviewMessage = event.data; // The json data that the extension sent

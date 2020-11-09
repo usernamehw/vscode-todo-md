@@ -60,6 +60,9 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 		} else if (button === buttonDeleteOnlyTask) {
 			deleteTaskWorkspaceEdit(edit, document, lineNumber);
 		}
+	} else {
+		// No subtasks, delete without confirmation
+		deleteTaskWorkspaceEdit(edit, document, lineNumber);
 	}
 	return applyEdit(edit, document);
 }
