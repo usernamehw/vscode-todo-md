@@ -1,3 +1,9 @@
+## 2.2.2 `10 Nov 2020`
+
+- ✨ Filter: Double quotes to search only in task title
+- ✨ [webview] <kbd>Delete</kbd> key to delete selected task
+- 🐛 [webview] Up/Down arrows should not cause scrolling
+
 ## 2.2.1 `09 Nov 2020`
 
 - ✨ [webview] Add task selection <kbd>↓</kbd>, <kbd>↑</kbd>, <kbd>LMouseButton</kbd>
