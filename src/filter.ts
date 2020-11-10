@@ -44,6 +44,13 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 				} else {
 					filterResult = false;
 				}
+			} else if (filter.filterType === FilterType.titleContains) {
+				// Title match
+				if (task.title.toLowerCase().includes(filter.value.toLowerCase())) {
+					filterResult = true;
+				} else {
+					filterResult = false;
+				}
 			} else if (filter.filterType === FilterType.tagEqual) {
 				// #Tag
 				if (task.tags.includes(filter.value)) {
@@ -144,13 +151,13 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 
 function parseFilter(filterStr: string) {
 	const filters: Filter[] = [];
-	const titleRegex = /"(.+?)"/;
+	const titleRegex = /(-)?"(.+?)"/;
 	const titleMatch = titleRegex.exec(filterStr);
 	if (titleMatch) {
 		filters.push({
-			filterType: FilterType.rawContains, // TODO: should this be `titleEqual`?
-			value: titleMatch[1],
-			isNegation: false, // TODO: do
+			filterType: FilterType.titleContains,
+			value: titleMatch[2],
+			isNegation: Boolean(titleMatch[1]),
 		});
 		filterStr = filterStr.replace(titleRegex, '');
 	}
