@@ -83,7 +83,7 @@
 				"todomd.webview.fontFamily": {
 					"type": "string",
 					"markdownDescription": "Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)",
-					"default": "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'"
+					"default": "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'"
 				},
 				"todomd.webview.padding": {
 					"type": "string",
