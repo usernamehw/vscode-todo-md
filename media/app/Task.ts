@@ -98,13 +98,15 @@ export default class Task extends Vue {
 		if (this.model.parentTaskLineNumber) {
 			cls[`nested-lvl-${this.model.indentLvl}`] = true;
 		}
-		switch (this.model.priority) {
-			case 'A': cls.pri1 = true; break;
-			case 'B': cls.pri2 = true; break;
-			case 'C': cls.pri3 = true; break;
-			case 'D': cls.pri4 = true; break;
-			case 'E': cls.pri5 = true; break;
-			case 'F': cls.pri6 = true; break;
+		if (this.config.showPriority) {
+			switch (this.model.priority) {
+				case 'A': cls.pri1 = true; break;
+				case 'B': cls.pri2 = true; break;
+				case 'C': cls.pri3 = true; break;
+				case 'D': cls.pri4 = true; break;
+				case 'E': cls.pri5 = true; break;
+				case 'F': cls.pri6 = true; break;
+			}
 		}
 		if (this.model.due) {
 			switch (this.model.due.isDue) {
