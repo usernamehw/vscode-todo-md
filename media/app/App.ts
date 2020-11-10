@@ -128,11 +128,13 @@ export default class App extends Vue {
 			if (e.key === 'ArrowDown') {
 				const selectedTaskLineNumber = await selectNextTaskAction();
 				if (selectedTaskLineNumber) {
+					e.preventDefault();
 					this.scrollIntoView(selectedTaskLineNumber);
 				}
 			} else if (e.key === 'ArrowUp') {
 				const selectedTaskLineNumber = await selectPrevTaskAction();
 				if (selectedTaskLineNumber) {
+					e.preventDefault();
 					this.scrollIntoView(selectedTaskLineNumber);
 				}
 			} else if (e.key === 'ArrowRight') {
