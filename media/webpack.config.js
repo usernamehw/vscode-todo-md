@@ -1,10 +1,9 @@
 // @ts-check
 
-'use strict';
+const path = require('path');
 
 const webpack = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
-const path = require('path');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
@@ -76,18 +75,20 @@ module.exports = (env, options) => {
 		// Prod
 		config.optimization = {
 			minimize: true,
-				minimizer: [
-					// @ts-ignore
-					new TerserPlugin({
-						terserOptions: {
-							// @ts-ignore
-							format: {
-								comments: false,// Opt out of LICENSE.txt creation
-							},
+			minimizer: [
+				// @ts-ignore
+				new TerserPlugin({
+					terserOptions: {
+						ecma: 2019,
+						toplevel: true,
+						// @ts-ignore
+						format: {
+							comments: false,// Opt out of LICENSE.txt creation
 						},
-						extractComments: false,
-					}),
-				],
+					},
+					extractComments: false,
+				}),
+			],
 		}
 	} else {
 		// Dev
