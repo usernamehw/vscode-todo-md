@@ -3,6 +3,7 @@
 'use strict';
 
 const webpack = require('webpack');
+const TerserPlugin = require("terser-webpack-plugin");
 const path = require('path');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -44,7 +45,7 @@ module.exports = (env, options) => {
 		output: {
 			path: path.resolve(__dirname),
 			filename: 'webview.js',
-			libraryTarget: 'var',
+			libraryTarget: 'window',
 			devtoolModuleFilenameTemplate: '../[resource-path]',
 		},
 		devtool: 'source-map',
@@ -73,6 +74,21 @@ module.exports = (env, options) => {
 
 	if (options.mode === 'production') {
 		// Prod
+		config.optimization = {
+			minimize: true,
+				minimizer: [
+					// @ts-ignore
+					new TerserPlugin({
+						terserOptions: {
+							// @ts-ignore
+							format: {
+								comments: false,// Opt out of LICENSE.txt creation
+							},
+						},
+						extractComments: false,
+					}),
+				],
+		}
 	} else {
 		// Dev
 		// config.module.rules[0] = tsLoader;

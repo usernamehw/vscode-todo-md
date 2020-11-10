@@ -1326,18 +1326,18 @@
 		}
 	},
 	"browserslist": [
-		"electron 9.2"
+		"electron 9.3"
 	],
 	"scripts": {
-		"vscode:prepublish": "npm run scss & npm run webview & webpack --mode production --colors",
+		"vscode:prepublish": "npm run scss & npm run webview & webpack --mode production --color",
 		"postinstall": "node scripts/copyWebviewResourcesFromNodeModules.js",
 		"watch": "concurrently \"npm run watchExtension\" \"npm run watchWebview\" \"npm run watchScss\"",
-		"watchExtension": "webpack --mode development --watch --display=minimal",
+		"watchExtension": "webpack --mode development --watch --stats minimal",
 		"scss": "node-sass media/scss/webview.scss -o media --output-style compressed",
 		"watchScss": "npm run scss & node-sass --watch media/scss/webview.scss -o media",
 		"copyAndCompressVendorCss": "node-sass node_modules/vscode-codicons/dist/codicon.css -o media/vendor --output-style compressed",
 		"webview": "webpack --mode production --config media/webpack.config.js",
-		"watchWebview": "webpack --watch --display=minimal --mode development --config media/webpack.config.js",
+		"watchWebview": "webpack --watch --stats minimal --mode development --config media/webpack.config.js",
 		"watchTest": "tsc -watch -p ./",
 		"test": "node ./dist/test/runTest.js",
 		"generateDecorationSchema": "tsc scripts\\generateDecorationSchema.ts && node scripts\\generateDecorationSchema.js"
@@ -1385,8 +1385,8 @@
 		"vue-loader": "^15.9.5",
 		"vue-property-decorator": "^9.0.2",
 		"vue-template-compiler": "^2.6.12",
-		"webpack": "^4.44.2",
-		"webpack-cli": "^3.3.12"
+		"webpack": "^5.4.0",
+		"webpack-cli": "^4.2.0"
 	},
 	"dependencies": {
 		"awesomplete": "^1.1.5",
