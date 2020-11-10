@@ -35,7 +35,7 @@ body {
 	--checkbox-bg: #{$checkboxBackground};
 	--checkbox-done-bg: #{darken($checkboxBackground, 20%)};
 	--checkbox-fg: #ffffff;
-	--checkbox-hover-bg: #9faab7;// TODO: use darken to get this color?
+	--checkbox-hover-bg: #{darken($checkboxBackground, 10%)};
 
 	--z-index-checkbox-1: 10;
 	--z-index-checkbox-2: 15;
