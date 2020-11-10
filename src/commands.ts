@@ -5,7 +5,7 @@ import { appendTaskToFile, archiveTaskWorkspaceEdit, getActiveDocument, goToTask
 import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
-import { findTaskAtLine } from './taskUtils';
+import { findTaskAtLineExtension } from './taskUtils';
 import { Count, TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { dateAndDateDiff, getDateInISOFormat } from './time/timeUtils';
@@ -95,7 +95,7 @@ export function registerAllCommands() {
 		const wEdit = new WorkspaceEdit();
 
 		for (let i = selection.start.line; i <= selection.end.line; i++) {
-			const task = findTaskAtLine(i, state.tasksAsTree);
+			const task = findTaskAtLineExtension(i);
 			if (!task || !task.done) {
 				continue;
 			}
@@ -114,7 +114,7 @@ export function registerAllCommands() {
 		const lineEnd = selection.end.line;
 		const tasks: TheTask[] = [];
 		for (let i = lineStart; i <= lineEnd; i++) {
-			const task = findTaskAtLine(i, state.tasksAsTree);
+			const task = findTaskAtLineExtension(i);
 			if (task) {
 				tasks.push(task);
 			}
@@ -126,7 +126,7 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand('todomd.createSimilarTask', async editor => {
 		// Create a task with all the tags, projects and contexts of another task
 		const selection = editor.selection;
-		const task = findTaskAtLine(selection.start.line, state.tasksAsTree);
+		const task = findTaskAtLineExtension(selection.start.line);
 		if (!task) {
 			return;
 		}

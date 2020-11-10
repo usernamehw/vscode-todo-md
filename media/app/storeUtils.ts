@@ -1,4 +1,3 @@
-import { findTaskAtLine } from '../../src/taskUtils';
 import { TheTask } from '../../src/TheTask';
 import { Getters, store } from './store';
 /**
@@ -22,4 +21,24 @@ export function isTaskVisible(task: TheTask): boolean {
 	}
 
 	return true;
+}
+
+// eslint-disable-next-line no-redeclare
+function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefined {
+	for (const task of tasks) {
+		if (task.lineNumber === lineNumber) {
+			return task;
+		}
+		if (task.subtasks.length) {
+			const foundTask = findTaskAtLine(lineNumber, task.subtasks);
+			if (foundTask) {
+				return foundTask;
+			}
+		}
+	}
+	return undefined;
+}
+
+export function findTaskAtLineWebview(lineNumber: number) {
+	return findTaskAtLine(lineNumber, store.state.tasksAsTree);
 }

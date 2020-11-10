@@ -2,11 +2,10 @@ import Vue from 'vue';
 import Vuex, { Store } from 'vuex';
 import { filterItems } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
-import { findTaskAtLine } from '../../src/taskUtils';
 import { TheTask } from '../../src/TheTask';
 import { DueState, WebviewMessage } from '../../src/types';
 import { flattenDeep } from '../../src/utils';
-import { isTaskVisible } from './storeUtils';
+import { findTaskAtLineWebview, isTaskVisible } from './storeUtils';
 
 Vue.use(Vuex);
 
@@ -125,7 +124,7 @@ export const store = new Store({
 				targetTask = getters.filteredSortedTasks[0];
 			} else {
 				// Selected task exists
-				const selectedTask = findTaskAtLine(state.selectedTaskLineNumber, state.tasksAsTree);
+				const selectedTask = findTaskAtLineWebview(state.selectedTaskLineNumber);
 
 				const tasks = getters.flattenedFilteredSortedTasks.filter(task => isTaskVisible(task));
 				if (tasks.length < 2) {
@@ -148,7 +147,7 @@ export const store = new Store({
 				// None selected. Select the first visible task
 				targetTask = getters.flattenedFilteredSortedTasks[getters.flattenedFilteredSortedTasks.length - 1];
 			} else {
-				const selectedTask = findTaskAtLine(state.selectedTaskLineNumber, state.tasksAsTree);
+				const selectedTask = findTaskAtLineWebview(state.selectedTaskLineNumber);
 				if (!selectedTask) {
 					return undefined;
 				}

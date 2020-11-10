@@ -1,6 +1,6 @@
 import vscode, { MarkdownString } from 'vscode';
-import { Global, state } from './extension';
-import { findTaskAtLine } from './taskUtils';
+import { Global } from './extension';
+import { findTaskAtLineExtension } from './taskUtils';
 
 export function updateHover() {
 	if (Global.hoverDisposable) {
@@ -10,7 +10,7 @@ export function updateHover() {
 		{ scheme: 'file' },
 		{
 			provideHover(document, position, token) {
-				const task = findTaskAtLine(position.line, state.tasksAsTree);
+				const task = findTaskAtLineExtension(position.line);
 				if (!task) {
 					return undefined;
 				}

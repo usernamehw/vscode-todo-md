@@ -1,7 +1,7 @@
 import vscode, { window } from 'vscode';
 import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
 import { extensionConfig, Global, state, updateState } from '../extension';
-import { findTaskAtLine } from '../taskUtils';
+import { findTaskAtLineExtension } from '../taskUtils';
 import { WebviewMessage } from '../types';
 import { getNonce } from '../webview/utils';
 
@@ -56,13 +56,13 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					break;
 				}
 				case 'incrementCount': {
-					await incrementCountForTask(await getActiveDocument(), message.value, findTaskAtLine(message.value, state.tasksAsTree)!);
+					await incrementCountForTask(await getActiveDocument(), message.value, findTaskAtLineExtension(message.value)!);
 					await updateState();
 					this.updateEverything();
 					break;
 				}
 				case 'decrementCount': {
-					await decrementCountForTask(await getActiveDocument(), message.value, findTaskAtLine(message.value, state.tasksAsTree)!);
+					await decrementCountForTask(await getActiveDocument(), message.value, findTaskAtLineExtension(message.value)!);
 					await updateState();
 					this.updateEverything();
 					break;

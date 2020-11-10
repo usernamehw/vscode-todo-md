@@ -5,10 +5,10 @@ import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
-import { findTaskAtLine } from '../../src/taskUtils';
 import { TheTask } from '../../src/TheTask';
 import { IExtensionConfig } from '../../src/types';
 import { deleteTask, selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
+import { findTaskAtLineWebview } from './storeUtils';
 import TaskComponent from './Task.vue';
 
 marked.Renderer.prototype.paragraph = text => `${text}`;
@@ -144,7 +144,7 @@ export default class App extends Vue {
 			} else if (e.key === 'Escape') {
 				selectTaskMutation(-1);
 			} else if (e.key === 'd' && e.altKey) {
-				const task = findTaskAtLine(this.selectedTaskLineNumber, this.tasksAsTree);
+				const task = findTaskAtLineWebview(this.selectedTaskLineNumber);
 				toggleDoneMutation(task);
 			}
 		});
