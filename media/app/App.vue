@@ -5,12 +5,15 @@
         v-model="filterInputValue"
         :suggestions="filteredSuggestions"
         :inputProps="{id:'autosuggest__input'}"
-        :shouldRenderSuggestions="(size, loading) => (size >= 0 && !loading) && config.autoShowSuggest"
+        :shouldRenderSuggestions="(size, loading) => (size >= 0 && !loading) && config.autoShowSuggest && !shouldHideSuggest"
         @input="onFilterChangeDebounced"
         @selected="onSelected"
         @keydown.tab="tabHandler"
         @keydown.ctrl.space="openSuggest"
-        @closed="onClosed">
+        @keydown.down="downHandler"
+        @keydown.up="upHandler"
+        @closed="onClosedSuggest"
+        @opened="onOpenedSuggest">
         <div slot-scope="{suggestion}">
             <div v-html="fuzzyHighlight(suggestion.item)"></div>
         </div>

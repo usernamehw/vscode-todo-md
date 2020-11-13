@@ -33,6 +33,11 @@ export default class App extends Vue {
 	selectedTaskLineNumber!: number;
 
 	filteredSuggestions = [];
+	isSuggestVisible = false;
+	/**
+	 * Hack to prevent keydown event opening suggest
+	 */
+	shouldHideSuggest = false;
 	shouldRevokeAutoShowSuggest = false;
 
 	showNotification = showNotification;
@@ -55,11 +60,13 @@ export default class App extends Vue {
 			this.config.autoShowSuggest = true;
 			this.shouldRevokeAutoShowSuggest = true;
 		}
+		this.shouldHideSuggest = false;
 	}
-	/**
-	 * Event fired when autocomplete list is closed
-	 */
-	onClosed() {
+	onOpenedSuggest() {
+		this.isSuggestVisible = true;
+	}
+	onClosedSuggest() {
+		this.isSuggestVisible = false;
 		if (this.shouldRevokeAutoShowSuggest) {
 			this.config.autoShowSuggest = false;
 			this.shouldRevokeAutoShowSuggest = false;
@@ -69,6 +76,7 @@ export default class App extends Vue {
 	 * Event that is fired when typing in filter input
 	 */
 	onFilterInputChange(value: string) {
+		this.shouldHideSuggest = false;
 		selectTaskMutation(-1);
 		updateFilterValueMutation(value);
 		this.filteredSuggestions = [{
@@ -102,6 +110,32 @@ export default class App extends Vue {
 		this.$refs.autosuggest.loading = true;
 		listeners.selected(true);
 	}
+	async downHandler(e: KeyboardEvent) {
+		const { getItemByIndex } = this.$refs.autosuggest;
+		const item = getItemByIndex(this.$refs.autosuggest.currentIndex);
+
+		if (item.item === this.filterInputValue || !item) {
+			this.shouldHideSuggest = true;
+			const selectedTaskLineNumber = await selectNextTaskAction();
+			if (selectedTaskLineNumber && !this.isSuggestVisible) {
+				this.scrollIntoView(selectedTaskLineNumber);
+				e.preventDefault();
+			}
+			return;
+		}
+	}
+	async upHandler(e: KeyboardEvent) {
+		const { getItemByIndex } = this.$refs.autosuggest;
+		const item = getItemByIndex(this.$refs.autosuggest.currentIndex);
+		if (!item) {
+			const selectedTaskLineNumber = await selectPrevTaskAction();
+			if (selectedTaskLineNumber && !this.isSuggestVisible) {
+				this.scrollIntoView(selectedTaskLineNumber);
+				e.preventDefault();
+			}
+			return;
+		}
+	}
 	// ──────────────────────────────────────────────────────────────────────
 	updateWebviewCounter(numberOfTasks: number) {
 		vscodeApi.postMessage({
@@ -124,20 +158,8 @@ export default class App extends Vue {
 	mounted() {
 		this.focusFilterInput();
 		window.addEventListener('focus', this.focusFilterInput);
-		window.addEventListener('keydown', async e => {
-			if (e.key === 'ArrowDown') {
-				const selectedTaskLineNumber = await selectNextTaskAction();
-				if (selectedTaskLineNumber) {
-					e.preventDefault();
-					this.scrollIntoView(selectedTaskLineNumber);
-				}
-			} else if (e.key === 'ArrowUp') {
-				const selectedTaskLineNumber = await selectPrevTaskAction();
-				if (selectedTaskLineNumber) {
-					e.preventDefault();
-					this.scrollIntoView(selectedTaskLineNumber);
-				}
-			} else if (e.key === 'ArrowRight') {
+		window.addEventListener('keydown', e => {
+			if (e.key === 'ArrowRight') {
 				toggleTaskCollapse(this.selectedTaskLineNumber);
 			} else if (e.key === 'Delete') {
 				if (this.selectedTaskLineNumber !== -1) {
