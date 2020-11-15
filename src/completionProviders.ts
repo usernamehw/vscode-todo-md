@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
 import vscode from 'vscode';
+import { DueDate } from './dueDate';
 import { extensionConfig, Global, state } from './extension';
 import { helpCreateDueDate } from './time/setDueDateHelper';
-import { dateAndDateDiff, getDateInISOFormat } from './time/timeUtils';
+import { getDateInISOFormat } from './time/timeUtils';
 
 export function updateCompletions(): void {
 	if (Global.tagAutocompleteDisposable) {
@@ -96,7 +97,7 @@ export function updateCompletions(): void {
 					if (!dueDate) {
 						return [];
 					}
-					const completionItem = new vscode.CompletionItem(dateAndDateDiff(dueDate), vscode.CompletionItemKind.Constant);
+					const completionItem = new vscode.CompletionItem(new DueDate(dueDate).closestDueDateInTheFuture, vscode.CompletionItemKind.Constant);
 					completionItem.insertText = '';
 					completionItem.filterText = word;
 					completionItem.command = {

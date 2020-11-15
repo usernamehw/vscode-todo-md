@@ -2,13 +2,14 @@ import dayjs from 'dayjs';
 import fs from 'fs';
 import vscode, { commands, Range, TextDocument, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTaskWorkspaceEdit, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
+import { DueDate } from './dueDate';
 import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { findTaskAtLineExtension } from './taskUtils';
 import { Count, TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
-import { dateAndDateDiff, getDateInISOFormat } from './time/timeUtils';
+import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
@@ -226,7 +227,7 @@ export function registerAllCommands() {
 				inputBox.prompt = inputOffset('❌');
 				return;
 			}
-			inputBox.prompt = inputOffset(dateAndDateDiff(newDueDate));
+			inputBox.prompt = inputOffset(new DueDate(newDueDate).closestDueDateInTheFuture);
 		});
 
 		inputBox.onDidAccept(() => {
@@ -242,7 +243,7 @@ export function registerAllCommands() {
 			}
 		});
 	});
-	commands.registerCommand('todomd.setDueDateWithArgs', async (document: TextDocument, wordRange: vscode.Range, dueDate: dayjs.Dayjs) => {
+	commands.registerCommand('todomd.setDueDateWithArgs', async (document: TextDocument, wordRange: vscode.Range, dueDate: string) => {
 		const lineNumber = wordRange.start.line;
 		const wEdit = new WorkspaceEdit();
 		wEdit.delete(document.uri, wordRange);

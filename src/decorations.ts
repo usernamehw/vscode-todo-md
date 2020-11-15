@@ -131,7 +131,7 @@ export function updateEditorDecorations(editor: TextEditor) {
 			} else if (due.isDue === DueState.invalid) {
 				invalidDueDateDecorationRanges.push(dueRange);
 			}
-			if (due.closestDueDateInTheFuture) {
+			if (due.isDue === DueState.notDue && due.closestDueDateInTheFuture) {
 				closestDueDateDecorationOptions.push({
 					range: new vscode.Range(dueRange.end.line, dueRange.end.character - 1, dueRange.end.line, dueRange.end.character - 1),
 					renderOptions: {

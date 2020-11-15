@@ -28,8 +28,8 @@ export async function toggleTaskCollapse(document: vscode.TextDocument, lineNumb
 	return applyEdit(wEdit, document);
 }
 
-export async function setDueDate(document: vscode.TextDocument, lineNumber: number, newDueDate: dayjs.Dayjs) {
-	const dueDate = `{due:${newDueDate.format(DATE_FORMAT)}}`;
+export async function setDueDate(document: vscode.TextDocument, lineNumber: number, newDueDate: string) {
+	const dueDate = `{due:${newDueDate}}`;
 	const wEdit = new WorkspaceEdit();
 	const task = findTaskAtLineExtension(lineNumber);
 	if (task?.dueRange) {

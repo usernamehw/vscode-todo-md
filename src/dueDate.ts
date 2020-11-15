@@ -9,7 +9,7 @@ export class DueDate {
 	raw: string;
 	isRecurring = false;
 	isDue = DueState.notDue;
-	closestDueDateInTheFuture: string | undefined;
+	closestDueDateInTheFuture: string;
 
 	constructor(dueString: string, options?: { targetDate?: Date; overdue?: string }) {
 		this.raw = dueString;
@@ -19,6 +19,10 @@ export class DueDate {
 		this.isDue = result.isDue;
 		if (result.isDue === DueState.notDue) {
 			this.closestDueDateInTheFuture = this.calcClosestDueDateInTheFuture();
+		} else if (result.isDue === DueState.due || result.isDue === DueState.overdue) {
+			this.closestDueDateInTheFuture = `${dayOfTheWeek(dayjs())} [today]`;
+		} else {
+			this.closestDueDateInTheFuture = '';
 		}
 	}
 
