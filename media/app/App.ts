@@ -14,7 +14,7 @@ import { IExtensionConfig } from '../../src/types';
 import { deleteTask, selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
 import { findTaskAtLineWebview } from './storeUtils';
 import TaskComponent from './Task.vue';
-import { VueEvents } from './types';
+import { contextMenuItems, VueEvents } from './webviewTypes';
 
 marked.Renderer.prototype.paragraph = text => `${text}`;
 
@@ -53,7 +53,7 @@ export default class App extends Vue {
 
 	options = [
 		{
-			name: 'Delete',
+			name: contextMenuItems.delete,
 			ref: String(Math.random()),
 		},
 	];
@@ -168,8 +168,10 @@ export default class App extends Vue {
 		// @ts-ignore https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded
 		element.scrollIntoViewIfNeeded(false);
 	}
-	contextMenuOptionClicked(event: {item: TheTask; option: { name: string; ref: string}}) {
-		notify(event.item.rawText);
+	contextMenuOptionClicked(event: {item: TheTask; option: { name: contextMenuItems; ref: string}}) {
+		if (event.option.name === contextMenuItems.delete) {
+			notify(event.item.rawText);
+		}
 	}
 	// ──────────────────────────────────────────────────────────────────────
 	mounted() {
