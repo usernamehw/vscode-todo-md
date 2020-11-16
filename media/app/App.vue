@@ -21,7 +21,7 @@
     <div v-if="filteredSortedTasks.length"
          class="task-list">
         <task v-for="task in filteredSortedTasks"
-              :key="task.lineNumber"
+              :key="task.lineNumber + task.rawText"
               :model="task" />
     </div>
     <div v-if="!defaultFileSpecified && !activeDocumentOpened">

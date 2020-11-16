@@ -23,21 +23,18 @@
             <span class="title">{{ taskTitle }}</span>
         </template><!--
         --><template v-for="tag of model.tags">
-            <span :key="tag"
-                  class="tag"
+            <span class="tag"
                   :style="styleForTag(tag)"
                   @click.exact="updateFilterValue('#' + tag)"
 				  @click.ctrl="updateFilterValue('#' + tag, true)">{{ tag }}</span>
         </template><!--
         --><template v-for="project of model.projects">
-            <span :key="project"
-                  class="project"
+            <span class="project"
                   @click.exact="updateFilterValue('+' + project)"
                   @click.ctrl="updateFilterValue('+' + project, true)">{{ project }}</span>
         </template><!--
         --><template v-for="context of model.contexts">
-            <span :key="context"
-                  class="context"
+            <span class="context"
                   @click.exact="updateFilterValue('@' + context)"
                   @click.ctrl="updateFilterValue('@' + context, true)">{{ context }}</span>
         </template><!--
