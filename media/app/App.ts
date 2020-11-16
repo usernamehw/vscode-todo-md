@@ -34,7 +34,9 @@ export default class App extends Vue {
 	autocompleteItems!: any;
 	selectedTaskLineNumber!: number;
 
-	filteredSuggestions = [];
+	filteredSuggestions: {
+		data: string[];
+	}[] = [];
 	isSuggestVisible = false;
 	/**
 	 * Hack to prevent keydown event opening suggest
@@ -94,8 +96,10 @@ export default class App extends Vue {
 	 * Event fired when accepting autocomplete suggestions
 	 */
 	onSelected(e: { item: string }) {
-		this.onFilterInputChange(e.item);
-		this.focusFilterInput();
+		if (e) {
+			this.onFilterInputChange(e.item);
+			this.focusFilterInput();
+		}
 	}
 	/**
 	 * Handle Tab keypress as Autocomplete accept suggestion
@@ -113,10 +117,7 @@ export default class App extends Vue {
 		listeners.selected(true);
 	}
 	async downHandler(e: KeyboardEvent) {
-		const { getItemByIndex } = this.$refs.autosuggest;
-		const item = getItemByIndex(this.$refs.autosuggest.currentIndex);
-
-		if (item.item === this.filterInputValue || !item) {
+		if (!this.filteredSuggestions.length || this.filteredSuggestions[0].data[0] === this.filterInputValue) {
 			this.shouldHideSuggest = true;
 			const selectedTaskLineNumber = await selectNextTaskAction();
 			if (selectedTaskLineNumber && !this.isSuggestVisible) {
@@ -127,9 +128,7 @@ export default class App extends Vue {
 		}
 	}
 	async upHandler(e: KeyboardEvent) {
-		const { getItemByIndex } = this.$refs.autosuggest;
-		const item = getItemByIndex(this.$refs.autosuggest.currentIndex);
-		if (!item) {
+		if (!this.filteredSuggestions.length || this.filteredSuggestions[0].data[0] === this.filterInputValue) {
 			const selectedTaskLineNumber = await selectPrevTaskAction();
 			if (selectedTaskLineNumber && !this.isSuggestVisible) {
 				this.scrollIntoView(selectedTaskLineNumber);
