@@ -35,7 +35,7 @@ export async function setContext(context: VscodeContext, value: any) {
 /**
  * Open URL in default browser.
  */
-export async function followLink(links: Link[]) {
+export async function followLinks(links: Link[]) {
 	let link: string | undefined = links[0].value;
 	if (links.length > 1) {
 		link = await vscode.window.showQuickPick(links.map(l => l.value));
@@ -43,7 +43,11 @@ export async function followLink(links: Link[]) {
 			return;
 		}
 	}
-	vscode.env.openExternal(Uri.parse(link));
+	followLink(link);
+}
+
+export function followLink(linkString: string) {
+	vscode.env.openExternal(Uri.parse(linkString));
 }
 /**
  * Open vscode Settings GUI with input value set to the specified value.

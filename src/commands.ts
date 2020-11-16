@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import fs from 'fs';
-import vscode, { commands, Range, TextDocument, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import vscode, { commands, Range, TextDocument, TextLine, ThemeIcon, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTaskWorkspaceEdit, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
@@ -14,7 +14,7 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { fancyNumber, getRandomInt } from './utils';
-import { followLink, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
+import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
 
 class QuickPickItem implements vscode.QuickPickItem {
 	label: string;
@@ -160,7 +160,7 @@ export function registerAllCommands() {
 			const buttonName = 'Follow link';
 			const shouldFollow = await vscode.window.showInformationMessage(TheTask.formatTask(task), buttonName);
 			if (shouldFollow === buttonName) {
-				followLink(task.links);
+				followLinks(task.links);
 			}
 		} else {
 			vscode.window.showInformationMessage(TheTask.formatTask(task));
@@ -218,6 +218,18 @@ export function registerAllCommands() {
 		const inputBox = window.createInputBox();
 		let value: string | undefined = '+0';
 		inputBox.value = value;
+		inputBox.title = 'Set due date';
+		const docsButtonName = 'Documentation';
+		inputBox.onDidTriggerButton(e => {
+			if (e.tooltip === docsButtonName) {
+				followLink('https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate');
+			}
+		});
+		inputBox.buttons = [{
+			iconPath: new ThemeIcon('question'),
+			tooltip: docsButtonName,
+		}];
+		inputBox.prompt = inputOffset(new DueDate(helpCreateDueDate(value)!).closestDueDateInTheFuture);
 		inputBox.show();
 
 		inputBox.onDidChangeValue((e: string) => {
@@ -334,7 +346,7 @@ export function registerAllCommands() {
 		resetAllRecurringTasks(editor.document, lastVisit);
 	});
 	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
-		followLink(treeItem.task.links);
+		followLinks(treeItem.task.links);
 	});
 	commands.registerCommand('todomd.setLastVisit', async () => {
 		const numberOfHours = Number(await vscode.window.showInputBox({
