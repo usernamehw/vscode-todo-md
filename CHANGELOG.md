@@ -1,3 +1,8 @@
+## 2.2.3 `16 Nov 2020`
+
+- 🐛 [webview] Try to fix Up/Down arrow conflicts of suggest and selection
+- ✨ Set due date helper - support recurring date of the format `e2d`
+
 ## 2.2.2 `10 Nov 2020`
 
 - ✨ Filter: Double quotes to search only in task title
