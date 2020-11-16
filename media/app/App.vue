@@ -2,7 +2,7 @@
 <div>
     <vue-autosuggest
         ref="autosuggest"
-        v-model="filterInputValue"
+        :value="filterInputValue"
         :suggestions="filteredSuggestions"
         :inputProps="{id:'autosuggest__input'}"
         :shouldRenderSuggestions="(size, loading) => (size >= 0 && !loading) && config.autoShowSuggest && !shouldHideSuggest"
