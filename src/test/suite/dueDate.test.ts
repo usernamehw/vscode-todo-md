@@ -105,6 +105,18 @@ describe('♻ Recurring with starting date', () => {
 	});
 });
 
+describe('Comma delimited `,`', () => {
+	it('`mon,sun`', () => {
+		expect(new DueDate('mon,sun', { targetDate: $1jan2018monday }).isDue === DueState.due).to.be.ok;
+		expect(new DueDate('mon,sun', { targetDate: $7jan2018sunday }).isDue === DueState.due).to.be.ok;
+		expect(new DueDate('mon,sun', { targetDate: $2jan2018tuesday }).isDue === DueState.notDue).to.be.ok;
+		expect(new DueDate('mon,sun', { targetDate: $3jan2018wednesday }).isDue === DueState.notDue).to.be.ok;
+		expect(new DueDate('mon,sun', { targetDate: $4jan2018thursday }).isDue === DueState.notDue).to.be.ok;
+		expect(new DueDate('mon,sun', { targetDate: $5jan2018friday }).isDue === DueState.notDue).to.be.ok;
+		expect(new DueDate('mon,sun', { targetDate: $6jan2018saturday }).isDue === DueState.notDue).to.be.ok;
+	});
+});
+
 describe('🚫 Invalid due date', () => {
 	it('Due date should have `invalid` state', () => {
 		expect(new DueDate('2020').isDue === DueState.invalid, '2020').to.be.ok;
@@ -113,4 +125,4 @@ describe('🚫 Invalid due date', () => {
 		expect(new DueDate('2020-07-35').isDue === DueState.invalid, '2020-07-35').to.be.ok;
 	});
 });
-// TODO: comma delimited due date tests
+
