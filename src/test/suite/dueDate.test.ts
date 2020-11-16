@@ -46,10 +46,17 @@ describe('♻ Recurring', () => {
 		expect(mondayDueDate.isDue !== DueState.invalid).to.be.ok;
 		expect(mondayDueDate.isRecurring === true).to.be.ok;
 	});
-	// TODO: tests that date should not be due at
 	it('monday', () => {
 		expect(new DueDate('monday', { targetDate: $1jan2018monday }).isDue === DueState.due, 'monday').to.be.ok;
 		expect(new DueDate('mon', { targetDate: $1jan2018monday }).isDue === DueState.due, 'mon').to.be.ok;
+	});
+	it('monday is not due on any other day', () => {
+		expect(new DueDate('monday', { targetDate: $2jan2018tuesday }).isDue === DueState.notDue, 'monday').to.be.ok;
+		expect(new DueDate('monday', { targetDate: $3jan2018wednesday }).isDue === DueState.notDue, 'monday').to.be.ok;
+		expect(new DueDate('monday', { targetDate: $4jan2018thursday }).isDue === DueState.notDue, 'monday').to.be.ok;
+		expect(new DueDate('monday', { targetDate: $5jan2018friday }).isDue === DueState.notDue, 'monday').to.be.ok;
+		expect(new DueDate('monday', { targetDate: $6jan2018saturday }).isDue === DueState.notDue, 'monday').to.be.ok;
+		expect(new DueDate('monday', { targetDate: $7jan2018sunday }).isDue === DueState.notDue, 'monday').to.be.ok;
 	});
 	it('tuesday', () => {
 		expect(new DueDate('tuesday', { targetDate: $2jan2018tuesday }).isDue === DueState.due, 'tuesday').to.be.ok;
