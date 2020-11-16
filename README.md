@@ -1,4 +1,4 @@
-## ❗ Extension does not conform to the [todo.txt](https://github.com/todotxt/todo.txt) spec.
+## ❗ Extension does NOT conform to the [todo.txt](https://github.com/todotxt/todo.txt) spec.
 
 ![demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/img/demo.png)
 
