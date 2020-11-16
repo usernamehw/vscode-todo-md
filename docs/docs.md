@@ -7,7 +7,6 @@
     - [Syntax](#syntax)
     - [Set due date with autocomplete](#set-due-date-with-autocomplete)
 - [Webview](#webview)
-    - [Reveal the task](#reveal-the-task)
     - [Render tasks as markdown](#render-tasks-as-markdown)
     - [Webview Hotkeys](#webview-hotkeys)
 
@@ -65,10 +64,6 @@ It's also possible to set due date by typing `$` at the end of the word of the f
 
 ## Webview
 
-### Reveal the task
-
-<kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> - Reveals the task in the file
-
 ### Render tasks as markdown
 
 You can set an option to render tasks as markdown (in Settings)
@@ -99,3 +94,6 @@ Key | Description
 <kbd>Alt</kbd>+<kbd>D</kbd>|Toggle selected task completion
 <kbd>Delete</kbd>|Delete selected task
 <kbd>Ctrl</kbd>+<kbd>Space</kbd>|Open autocomplete (When `todomd.webview.autoShowSuggest` is disabled)
+<kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> (on a task)|Reveals task in the file
+<kbd>L Mouse Button</kbd> (on tag/project/context)|Set filter to the value of the item
+<kbd>Ctrl</kbd> + <kbd>L Mouse Button</kbd> (on tag/project/context)|Append item value to the filter
