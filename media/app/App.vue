@@ -29,6 +29,8 @@
         <div class="welcome"><a class="btn btn-welcome"
                                 href="command:todomd.specifyDefaultFile">Specify Default File</a></div>
     </div>
+    <notifications position="bottom right"
+                   group="default" />
 </div>
 </template>
 

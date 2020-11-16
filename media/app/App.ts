@@ -3,6 +3,7 @@ import debounce from 'lodash/debounce';
 import marked from 'marked';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
+import Notifications from 'vue-notification';
 import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
@@ -14,6 +15,7 @@ import TaskComponent from './Task.vue';
 marked.Renderer.prototype.paragraph = text => `${text}`;
 
 Vue.use(VueAutosuggest);
+Vue.use(Notifications);
 Vue.component('task', TaskComponent);// needs to be global for recursive rendering
 
 @Component({
