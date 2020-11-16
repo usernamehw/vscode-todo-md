@@ -62,7 +62,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 
 	const words = line.split(' ');
 
-	const rawText = textLine.text;// TODO: use init object?
+	const rawText = textLine.text;
 	const contexts = [];
 	const contextRanges: Range[] = [];
 	const projects = [];

@@ -3,10 +3,10 @@ import { Priority, TheTask } from './TheTask';
 
 export interface ItemForProvider {
 	title: string;
-	items: Items[];
+	items: TitleAndLineNumber[];
 }
 
-export interface Items {// TODO: rename
+export interface TitleAndLineNumber {
 	lineNumber: number;
 	title: string;
 }

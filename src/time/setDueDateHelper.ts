@@ -3,8 +3,7 @@ import { DATE_FORMAT, dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek, monthStringToM
 
 /**
  * - Returns undefined for invalid input
- * - Returns dayjs date for valid input
- * - TODO: create recurring weekdays
+ * - Returns string version of due date for valid input
  */
 export function helpCreateDueDate(str: string, targetNow = new Date()): string | undefined {
 	if (str === '+') {
