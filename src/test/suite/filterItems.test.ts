@@ -170,4 +170,17 @@ describe('Filter $C priority', () => {
 	});
 });
 
-// TODO: title match tests
+describe('Filter "title"', () => {
+	it('"needle"', () => {
+		const needleInTheTag = newTask({
+			title: '',
+			tags: ['needle'],
+		});
+		const needleInTheTitle = newTask({
+			title: 'needle',
+		});
+		const items = [needleInTheTag, needleInTheTitle];
+		const filtered = filterItems(items, '"needle"');
+		expect(filtered).to.have.same.members([needleInTheTitle]);
+	});
+});
