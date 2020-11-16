@@ -4,7 +4,8 @@
          class="list-item"
          :class="classes"
          @click.alt="revealTask"
-         @click.self.exact="selectThisTask">
+         @click.self.exact="selectThisTask"
+         @contextmenu.prevent.stop="openTaskContextMenu($event, model)">
         <span v-if="model.subtasks.length"
               class="twistie codicon"
               :class="[model.collapseRange ? 'codicon-chevron-right' : 'codicon-chevron-down']"

@@ -3,19 +3,24 @@ import debounce from 'lodash/debounce';
 import marked from 'marked';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
-import Notifications from 'vue-notification';
+import VueNotifications from 'vue-notification';
 import { Component } from 'vue-property-decorator';
+import VueSimpleContextMenu from 'vue-simple-context-menu';
+import 'vue-simple-context-menu/dist/vue-simple-context-menu.css';
 import { mapGetters, mapState } from 'vuex';
+import { notify } from '..';
 import { TheTask } from '../../src/TheTask';
 import { IExtensionConfig } from '../../src/types';
 import { deleteTask, selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
 import { findTaskAtLineWebview } from './storeUtils';
 import TaskComponent from './Task.vue';
+import { VueEvents } from './types';
 
 marked.Renderer.prototype.paragraph = text => `${text}`;
 
 Vue.use(VueAutosuggest);
-Vue.use(Notifications);
+Vue.use(VueNotifications);
+Vue.component('vue-simple-context-menu', VueSimpleContextMenu);
 Vue.component('task', TaskComponent);// needs to be global for recursive rendering
 
 @Component({
@@ -46,8 +51,16 @@ export default class App extends Vue {
 
 	showNotification = showNotification;
 
+	options = [
+		{
+			name: 'Delete',
+			ref: String(Math.random()),
+		},
+	];
+
 	$refs!: {
 		autosuggest: any;
+		vueSimpleContextMenu: any;
 	};
 	// ──────────────────────────────────────────────────────────────────────
 	/**
@@ -155,10 +168,17 @@ export default class App extends Vue {
 		// @ts-ignore https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded
 		element.scrollIntoViewIfNeeded(false);
 	}
+	contextMenuOptionClicked(event: {item: TheTask; option: { name: string; ref: string}}) {
+		notify(event.item.rawText);
+	}
 	// ──────────────────────────────────────────────────────────────────────
 	mounted() {
 		this.focusFilterInput();
 		window.addEventListener('focus', this.focusFilterInput);
+
+		this.$root.$on(VueEvents.openTaskContextMenu, (data: {e: MouseEvent; task: TheTask}) => {
+			this.$refs.vueSimpleContextMenu.showMenu(data.e, data.task);
+		});
 		window.addEventListener('keydown', e => {
 			if (e.key === 'ArrowRight') {
 				toggleTaskCollapse(this.selectedTaskLineNumber);

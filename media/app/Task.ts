@@ -24,6 +24,12 @@ export default class Task extends Vue {
 		toggleTaskCollapse(this.model.lineNumber);
 	};
 	// ──────────────────────────────────────────────────────────────────────
+	openTaskContextMenu(e: MouseEvent, task: TheTask) {
+		// this.$root.$emit(VueEvents.openTaskContextMenu, {
+		// 	e,
+		// 	task,
+		// });
+	}
 	selectThisTask() {
 		selectTaskMutation(this.model.lineNumber);
 	}

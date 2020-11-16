@@ -30,6 +30,10 @@
                                 href="command:todomd.specifyDefaultFile">Specify Default File</a></div>
     </div>
     <notifications position="bottom right" />
+    <vue-simple-context-menu :ref="'vueSimpleContextMenu'"
+                             :elementId="'myUniqueId'"
+                             :options="options"
+                             @option-clicked="contextMenuOptionClicked" />
 </div>
 </template>
 
