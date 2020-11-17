@@ -5,6 +5,7 @@ import { mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { DueState, IExtensionConfig } from '../../src/types';
 import { selectTaskMutation, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
+import { VueEvents } from './webviewTypes';
 
 @Component({
 	computed: {
@@ -24,10 +25,10 @@ export default class Task extends Vue {
 	};
 	// ──────────────────────────────────────────────────────────────────────
 	openTaskContextMenu(e: MouseEvent, task: TheTask) {
-		// this.$root.$emit(VueEvents.openTaskContextMenu, {
-		// 	e,
-		// 	task,
-		// });
+		this.$root.$emit(VueEvents.openTaskContextMenu, {
+			e,
+			task,
+		});
 	}
 	selectThisTask() {
 		selectTaskMutation(this.model.lineNumber);
