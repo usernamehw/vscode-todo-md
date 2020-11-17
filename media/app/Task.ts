@@ -1,4 +1,3 @@
-import escapeRegexp from 'lodash/escapeRegExp';
 import marked from 'marked';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
@@ -72,26 +71,7 @@ export default class Task extends Vue {
 	 * Task title (either markdown or text)
 	 */
 	get taskTitle() {
-		let title = this.model.title;
-
-		if (!this.config.markdownEnabled) {
-			if (this.model.links.length) { // Remove links and append them to the end
-				for (const link of this.model.links) {
-					const linkEl = document.createElement('a');
-					linkEl.href = link.value;
-					linkEl.title = link.value;
-					linkEl.text = link.value;
-					title = title.replace(new RegExp(`${escapeRegexp(link.value)}?`), '');
-				}
-			}
-		}
-
-		if (this.model.title.trim().length !== 0) {
-			if (this.config.markdownEnabled) {
-				title = marked(this.model.title);
-			}
-		}
-		return title;
+		return this.model.title.trim().length !== 0 ? marked(this.model.title) : this.model.title;
 	}
 	/**
 	 * Computed classes assigned to task-list-item element

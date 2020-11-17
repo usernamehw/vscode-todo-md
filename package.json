@@ -110,11 +110,6 @@
 					],
 					"default": "rounded-square"
 				},
-				"todomd.webview.markdownEnabled": {
-					"type": "boolean",
-					"markdownDescription": "Whether to render tasks as markdown (treating every line/task as a separate entity).",
-					"default": true
-				},
 				"todomd.webview.autoShowSuggest": {
 					"type": "boolean",
 					"markdownDescription": "Show autocomplete when typing. (When disabled suggest can be called by `Ctrl`+`Space`)",

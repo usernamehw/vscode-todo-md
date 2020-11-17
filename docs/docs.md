@@ -7,7 +7,7 @@
     - [Syntax](#syntax)
     - [Set due date with autocomplete](#set-due-date-with-autocomplete)
 - [Webview](#webview)
-    - [Render tasks as markdown](#render-tasks-as-markdown)
+    - [Tasks are rendered as markdown](#tasks-are-rendered-as-markdown)
     - [Webview Hotkeys](#webview-hotkeys)
 
 <!-- /TOC -->
@@ -64,15 +64,9 @@ It's also possible to set due date by typing `$` at the end of the word of the f
 
 ## Webview
 
-### Render tasks as markdown
+### Tasks are rendered as markdown
 
-You can set an option to render tasks as markdown (in Settings)
-
-```js
-"todomd.webview.markdownEnabled": true,
-```
-
-It will treat each line as a separate markdown line (no multi-line features).
+Treating each line as a separate markdown line (no multi-line features).
 
 ```
 <kbd>Ctrl</kbd>+<kbd>Enter</kbd>

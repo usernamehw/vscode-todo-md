@@ -88,7 +88,6 @@ export interface IExtensionConfig {
 	getNextNumberOfTasks: number;
 
 	webview: {
-		markdownEnabled: boolean;
 		autoShowSuggest: boolean;
 		showCompleted: boolean;
 		showRecurringNotDue: boolean;

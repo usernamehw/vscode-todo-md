@@ -16,13 +16,8 @@
                class="checkbox"
                :class="[config.customCheckboxEnabled ? 'custom-checkbox ' + config.checkboxStyle : 'native-checkbox']"
                @change="toggleDone"><!--
-        --><template v-if="config.markdownEnabled">
-            <span class="title"
-                  v-html="taskTitle"></span>
-        </template><!--
-        --><template v-else>
-            <span class="title">{{ taskTitle }}</span>
-        </template><!--
+        --><span class="title"
+                  v-html="taskTitle"></span><!--
         --><template v-for="tag of model.tags">
             <span class="tag"
                   :style="styleForTag(tag)"
@@ -46,13 +41,7 @@
             <span class="count">{{ model.count.current }} / {{ model.count.needed }}</span>
             <button class="increment-count"
                     @click="incrementCount">+</button>
-        </span><!--
-        --><template v-if="!config.markdownEnabled">
-            <template v-for="link of model.links">
-                <a :href="link.value"
-                   :title="link.value">{{ link.value }}</a>
-            </template>
-        </template>
+        </span>
     </div>
     <div v-if="model.subtasks.length && !model.collapseRange">
         <task v-for="model in model.subtasks"
