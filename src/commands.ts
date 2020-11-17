@@ -348,17 +348,14 @@ export function registerAllCommands() {
 	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
 		followLinks(treeItem.task.links);
 	});
-	commands.registerCommand('todomd.setLastVisit', async () => {
+	commands.registerTextEditorCommand('todomd.setLastVisit', async editor => {
 		const numberOfHours = Number(await vscode.window.showInputBox({
 			prompt: 'Number of Hours ago',
 		}));
 		if (!numberOfHours) {
 			return;
 		}
-		for (const filePath in state.lastVisitByFile) {
-			state.lastVisitByFile[filePath] = dayjs().subtract(numberOfHours, 'hour').toDate();
-		}
-		updateLastVisitGlobalState();
+		updateLastVisitGlobalState(editor.document.uri.toString(), dayjs().subtract(numberOfHours, 'hour').toDate());
 	});
 	commands.registerTextEditorCommand('todomd.incrementPriority', editor => {
 		const lineNumber = editor.selection.active.line;

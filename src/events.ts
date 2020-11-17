@@ -77,8 +77,7 @@ export async function activateEditorFeatures(editor: vscode.TextEditor) {
 	if (needReset) {
 		await resetAllRecurringTasks(editor.document, needReset.lastVisit);
 		updateEverything();
-		state.lastVisitByFile[editor.document.uri.toString()] = new Date();
-		updateLastVisitGlobalState();
+		updateLastVisitGlobalState(editor.document.uri.toString(), new Date());
 	}
 }
 /**

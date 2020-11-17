@@ -96,8 +96,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		const needReset = checkIfNeedResetRecurringTasks(filePath);
 		if (needReset) {
 			await resetAllRecurringTasks(defaultFileDocument, needReset.lastVisit);
-			state.lastVisitByFile[filePath] = new Date();
-			await updateLastVisitGlobalState();
+			await updateLastVisitGlobalState(filePath, new Date());
 		}
 	}
 
@@ -116,7 +115,9 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	Global.changeActiveTextEditorDisposable = window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
 
 	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
-		if (!e.affectsConfiguration(EXTENSION_NAME)) return;
+		if (!e.affectsConfiguration(EXTENSION_NAME)) {
+			return;
+		}
 		updateConfig();
 	}
 
@@ -197,8 +198,9 @@ function disposeEditorDisposables(): void {
 		Global.changeTextDocumentDisposable.dispose();
 	}
 }
-export async function updateLastVisitGlobalState() {
-	return await state.extensionContext.globalState.update(LAST_VISIT_BY_FILE_STORAGE_KEY, state.lastVisitByFile);
+export async function updateLastVisitGlobalState(stringUri: string, date: Date) {
+	state.lastVisitByFile[stringUri] = date;
+	await state.extensionContext.globalState.update(LAST_VISIT_BY_FILE_STORAGE_KEY, state.lastVisitByFile);
 }
 
 export function deactivate(): void {
