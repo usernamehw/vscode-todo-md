@@ -130,7 +130,7 @@ export default class App extends Vue {
 		listeners.selected(true);
 	}
 	async downHandler(e: KeyboardEvent) {
-		if (!this.filteredSuggestions.length || this.filteredSuggestions[0].data[0] === this.filterInputValue) {
+		if (!this.filteredSuggestions.length || this.filteredSuggestions[0].data[0] === this.filterInputValue || !this.isSuggestVisible) {
 			this.shouldHideSuggest = true;
 			const selectedTaskLineNumber = await selectNextTaskAction();
 			if (selectedTaskLineNumber && !this.isSuggestVisible) {
@@ -141,7 +141,7 @@ export default class App extends Vue {
 		}
 	}
 	async upHandler(e: KeyboardEvent) {
-		if (!this.filteredSuggestions.length || this.filteredSuggestions[0].data[0] === this.filterInputValue) {
+		if (!this.filteredSuggestions.length || this.filteredSuggestions[0].data[0] === this.filterInputValue || !this.isSuggestVisible) {
 			const selectedTaskLineNumber = await selectPrevTaskAction();
 			if (selectedTaskLineNumber && !this.isSuggestVisible) {
 				this.scrollIntoView(selectedTaskLineNumber);
