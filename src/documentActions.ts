@@ -1,12 +1,12 @@
 import dayjs from 'dayjs';
-import vscode, { TextDocument, WorkspaceEdit } from 'vscode';
-import { applyEdit, insertCompletionDate, removeDoneSymbol, setCountCurrentValue, updateArchivedTasks } from './commands';
+import vscode, { TextDocument, TextLine, Uri, WorkspaceEdit } from 'vscode';
+import { applyEdit, updateArchivedTasks } from './commands';
 import { DueDate } from './dueDate';
 import { extensionConfig, state } from './extension';
 import { parseDocument } from './parse';
 import { findTaskAtLineExtension } from './taskUtils';
-import { TheTask } from './TheTask';
-import { DATE_FORMAT } from './time/timeUtils';
+import { Count, TheTask } from './TheTask';
+import { DATE_FORMAT, getDateInISOFormat } from './time/timeUtils';
 import { DueState } from './types';
 
 export async function hideTask(document: vscode.TextDocument, lineNumber: number) {
@@ -96,11 +96,12 @@ export async function incrementCountForTask(document: vscode.TextDocument, lineN
 	if (count.current !== count.needed) {
 		newValue = count.current + 1;
 		if (newValue === count.needed) {
-			insertCompletionDate(wEdit, document.uri, line);
+			insertCompletionDateEdit(wEdit, document.uri, line);
+			removeOverdueEdit(wEdit, document.uri, task);
 		}
-		setCountCurrentValue(wEdit, document.uri, count, String(newValue));
+		setCountCurrentValueEdit(wEdit, document.uri, count, String(newValue));
 	} else {
-		setCountCurrentValue(wEdit, document.uri, count, '0');
+		setCountCurrentValueEdit(wEdit, document.uri, count, '0');
 		removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
 	}
 	return applyEdit(wEdit, document);
@@ -117,7 +118,7 @@ export async function decrementCountForTask(document: vscode.TextDocument, lineN
 	} else if (count.current === count.needed) {
 		removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
 	}
-	setCountCurrentValue(wEdit, document.uri, count, String(count.current - 1));
+	setCountCurrentValueEdit(wEdit, document.uri, count, String(count.current - 1));
 	return applyEdit(wEdit, document);
 }
 export async function incrementOrDecrementPriority(document: TextDocument, lineNumber: number, type: 'increment' | 'decrement') {
@@ -138,10 +139,23 @@ export async function incrementOrDecrementPriority(document: TextDocument, lineN
 	}
 	return applyEdit(wEdit, document);
 }
+function removeOverdueEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
+	if (task.overdueRange) {
+		edit.delete(uri, task.overdueRange);
+	}
+}
+export function insertCompletionDateEdit(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
+	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), extensionConfig.completionDateIncludeTime)}}`);
+}
+export function removeDoneSymbolEdit(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine) {
+	if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
+		wEdit.delete(uri, new vscode.Range(line.lineNumber, line.firstNonWhitespaceCharacterIndex, line.lineNumber, line.firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
+	}
+}
 async function removeOverdueFromLine(document: vscode.TextDocument, task: TheTask) {
-	const wEdit = new WorkspaceEdit();
-	wEdit.replace(document.uri, task.overdueRange ?? new vscode.Range(0, 0, 0, 0), '');
-	return applyEdit(wEdit, document);
+	const edit = new WorkspaceEdit();
+	removeOverdueEdit(edit, document.uri, task);
+	return applyEdit(edit, document);
 }
 export async function toggleDoneAtLine(document: TextDocument, lineNumber: number) {
 	const { firstNonWhitespaceCharacterIndex } = document.lineAt(lineNumber);
@@ -164,7 +178,7 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 		}
 	} else {
 		if (extensionConfig.addCompletionDate) {
-			insertCompletionDate(wEdit, document.uri, line);
+			insertCompletionDateEdit(wEdit, document.uri, line);
 		} else {
 			wEdit.insert(document.uri, new vscode.Position(lineNumber, firstNonWhitespaceCharacterIndex), extensionConfig.doneSymbol);
 		}
@@ -194,6 +208,11 @@ export function archiveTaskWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri, 
 function addOverdueSpecialTagWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, overdueDateString: string) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {overdue:${overdueDateString}}`);
 }
+export function setCountCurrentValueEdit(wEdit: WorkspaceEdit, uri: Uri, count: Count, value: string) {
+	const charIndexWithOffset = count.range.start.character + 'count:'.length + 1;
+	const currentRange = new vscode.Range(count.range.start.line, charIndexWithOffset, count.range.start.line, charIndexWithOffset + String(count.current).length);
+	wEdit.replace(uri, currentRange, String(value));
+}
 
 export async function goToTask(lineNumber: number) {
 	const document = await getActiveDocument();
@@ -222,7 +241,7 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 		if (task.due?.isRecurring) {
 			const line = document.lineAt(task.lineNumber);
 			if (task.done) {
-				removeDoneSymbol(wEdit, document.uri, line);
+				removeDoneSymbolEdit(wEdit, document.uri, line);
 				removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
 			} else {
 				if (!task.overdue && !dayjs().isSame(lastVisit, 'day')) {
@@ -245,7 +264,7 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 
 			const count = task.count;
 			if (count) {
-				setCountCurrentValue(wEdit, document.uri, count, '0');
+				setCountCurrentValueEdit(wEdit, document.uri, count, '0');
 			}
 		}
 	}

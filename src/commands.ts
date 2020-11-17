@@ -434,19 +434,6 @@ function specifyDefaultFile() {
 function specifyDefaultArchiveFile() {
 	openSettingGuiAt('todomd.defaultArchiveFile');
 }
-export function insertCompletionDate(wEdit: WorkspaceEdit, uri: Uri, line: TextLine) {
-	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), extensionConfig.completionDateIncludeTime)}}`);
-}
-export function removeDoneSymbol(wEdit: WorkspaceEdit, uri: Uri, line: vscode.TextLine) {
-	if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
-		wEdit.delete(uri, new Range(line.lineNumber, line.firstNonWhitespaceCharacterIndex, line.lineNumber, line.firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
-	}
-}
-export function setCountCurrentValue(wEdit: WorkspaceEdit, uri: Uri, count: Count, value: string) {
-	const charIndexWithOffset = count.range.start.character + 'count:'.length + 1;
-	const currentRange = new vscode.Range(count.range.start.line, charIndexWithOffset, count.range.start.line, charIndexWithOffset + String(count.current).length);
-	wEdit.replace(uri, currentRange, String(value));
-}
 /**
  * Updates state for archived tasks
  */
