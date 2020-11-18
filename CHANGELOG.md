@@ -1,3 +1,9 @@
+## 2.2.4 `18 Nov 2020`
+
+- 💥 [webview] Remove `markdownEnabled` setting
+- ✨ [webview] Add first version of context menu
+- ✨ [Tree View] Show icon for completed tasks
+
 ## 2.2.3 `16 Nov 2020`
 
 - 🐛 [webview] Try to fix Up/Down arrow conflicts of suggest and selection
