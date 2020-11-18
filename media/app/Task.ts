@@ -25,6 +25,7 @@ export default class Task extends Vue {
 	};
 	// ──────────────────────────────────────────────────────────────────────
 	openTaskContextMenu(e: MouseEvent, task: TheTask) {
+		selectTaskMutation(task.lineNumber);
 		this.$root.$emit(VueEvents.openTaskContextMenu, {
 			e,
 			task,

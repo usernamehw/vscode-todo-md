@@ -3,16 +3,16 @@ import debounce from 'lodash/debounce';
 import marked from 'marked';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
+import VueContext from 'vue-context';
 import VueNotifications from 'vue-notification';
 import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
-import { notify } from '..';
 import { TheTask } from '../../src/TheTask';
 import { IExtensionConfig } from '../../src/types';
 import { deleteTask, selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
 import { findTaskAtLineWebview } from './storeUtils';
 import TaskComponent from './Task.vue';
-import { contextMenuItems, VueEvents } from './webviewTypes';
+import { VueEvents } from './webviewTypes';
 
 marked.Renderer.prototype.paragraph = text => `${text}`;
 
@@ -21,6 +21,9 @@ Vue.use(VueNotifications);
 Vue.component('task', TaskComponent);// needs to be global for recursive rendering
 
 @Component({
+	components: {
+		VueContext,
+	},
 	computed: {
 		...mapState(['tasksAsTree', 'filterInputValue', 'config', 'defaultFileSpecified', 'activeDocumentOpened', 'selectedTaskLineNumber']),
 		...mapGetters(['filteredSortedTasks', 'autocompleteItems']),
@@ -36,6 +39,8 @@ export default class App extends Vue {
 	autocompleteItems!: any;
 	selectedTaskLineNumber!: number;
 
+	contextMenuTask: TheTask;
+
 	filteredSuggestions: {
 		data: string[];
 	}[] = [];
@@ -50,6 +55,7 @@ export default class App extends Vue {
 
 	$refs!: {
 		autosuggest: any;
+		taskContextMenu: any;
 	};
 	// ──────────────────────────────────────────────────────────────────────
 	/**
@@ -139,6 +145,12 @@ export default class App extends Vue {
 			return;
 		}
 	}
+	deleteTask() {
+		deleteTask(this.contextMenuTask.lineNumber);
+	}
+	onTaskListScroll() {
+		this.$refs.taskContextMenu.close();
+	}
 	// ──────────────────────────────────────────────────────────────────────
 	updateWebviewCounter(numberOfTasks: number) {
 		vscodeApi.postMessage({
@@ -163,7 +175,10 @@ export default class App extends Vue {
 		window.addEventListener('focus', this.focusFilterInput);
 
 		this.$root.$on(VueEvents.openTaskContextMenu, (data: {e: MouseEvent; task: TheTask}) => {
+			this.contextMenuTask = data.task;
+			this.$refs.taskContextMenu.open(data.e);
 		});
+
 		window.addEventListener('keydown', e => {
 			if (e.key === 'ArrowRight') {
 				toggleTaskCollapse(this.selectedTaskLineNumber);

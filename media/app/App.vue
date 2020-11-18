@@ -19,7 +19,8 @@
         </div>
     </vue-autosuggest>
     <div v-if="filteredSortedTasks.length"
-         class="task-list">
+         class="task-list"
+         @scroll.passive="onTaskListScroll">
         <task v-for="task in filteredSortedTasks"
               :key="task.lineNumber + task.rawText"
               :model="task" />
@@ -30,6 +31,14 @@
                                 href="command:todomd.specifyDefaultFile">Specify Default File</a></div>
     </div>
     <notifications position="bottom right" />
+    <vue-context ref="taskContextMenu"
+                 :closeOnScroll="false">
+        <li>
+            <a href="#"
+               @click="deleteTask">Delete</a>
+        </li>
+        <!-- <div class="codicon codicon-trash"></div> -->
+    </vue-context>
 </div>
 </template>
 
