@@ -1156,6 +1156,15 @@
 					"highContrast": "#88888899"
 				},
 				"description": "Decoration that shows when the task will be due. Example: `Tue [in 9 days]`"
+			},
+			{
+				"id": "todomd.treeViewCompletedTaskIcon",
+				"defaults": {
+					"light": "#7cc54b",
+					"dark": "#7cc54b",
+					"highContrast": "#7cc54b"
+				},
+				"description": "Color of completed task icon in Tree View."
 			}
 		],
 		"menus": {

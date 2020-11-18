@@ -181,6 +181,7 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 - `todomd.priorityFForeground`
 - `todomd.closestDueDateForeground`
 - `todomd.closestDueDateBackground`
+- `todomd.treeViewCompletedTaskIcon`
 
 </details>
 

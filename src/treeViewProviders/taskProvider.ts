@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import vscode from 'vscode';
+import vscode, { ThemeColor, ThemeIcon } from 'vscode';
 import { EXTENSION_NAME } from '../extension';
 import { TheTask } from '../TheTask';
 
@@ -21,6 +21,9 @@ export class TaskTreeItem extends vscode.TreeItem {
 		}
 		if (task.isCollapsed) {
 			this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+		}
+		if (task.done) {
+			this.iconPath = new ThemeIcon('pass', new ThemeColor('todomd.treeViewCompletedTaskIcon'));
 		}
 	}
 	// @ts-ignore
