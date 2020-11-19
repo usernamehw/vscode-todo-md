@@ -16,6 +16,9 @@ export function updateHover() {
 				}
 				const markdown = new MarkdownString(undefined, true);
 				markdown.isTrusted = true;
+				if (task.done) {
+					markdown.appendMarkdown('$(pass) ');
+				}
 				const priorityColor = task.priority === 'A' ? '#ec4f47' :
 					task.priority === 'B' ? '#fd9f9a' :
 						task.priority === 'C' ? '#ffb648' :
