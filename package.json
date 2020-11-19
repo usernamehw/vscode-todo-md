@@ -870,7 +870,13 @@
 			},
 			{
 				"command": "todomd.addTaskToDefaultFile",
-				"title": "Add a Task",
+				"title": "Add a Task to DEFAULT file",
+				"category": "Todo MD",
+				"icon": "$(add)"
+			},
+			{
+				"command": "todomd.addTaskToActiveFile",
+				"title": "Add a Task to ACTIVE file",
 				"category": "Todo MD",
 				"icon": "$(add)"
 			},
@@ -1180,7 +1186,7 @@
 					"group": "navigation"
 				},
 				{
-					"command": "todomd.addTaskToDefaultFile",
+					"command": "todomd.addTaskToActiveFile",
 					"when": "view =~ /todomd.(tasks|webviewTasks)/",
 					"group": "navigation"
 				},

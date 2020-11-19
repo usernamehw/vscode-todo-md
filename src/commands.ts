@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
 import fs from 'fs';
-import vscode, { commands, Range, TextDocument, TextLine, ThemeIcon, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import vscode, { commands, TextDocument, ThemeIcon, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTaskWorkspaceEdit, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { findTaskAtLineExtension } from './taskUtils';
-import { Count, TheTask } from './TheTask';
+import { TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
@@ -198,7 +198,6 @@ export function registerAllCommands() {
 		vscode.window.showInformationMessage(TheTask.formatTask(resultTask));
 	});
 	commands.registerCommand('todomd.addTaskToDefaultFile', async () => {
-		const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
 		const isDefaultFileSpecified = await checkDefaultFileAndNotify();
 		if (!isDefaultFileSpecified) {
 			return;
@@ -209,10 +208,29 @@ export function registerAllCommands() {
 		if (!text) {
 			return;
 		}
-		await appendTaskToFile(creationDate + text, extensionConfig.defaultFile);
+		await addTaskToFile(text, extensionConfig.defaultFile);
 		await updateState();
 		updateAllTreeViews();
 	});
+	commands.registerCommand('todomd.addTaskToActiveFile', async () => {
+		const activeFilePath = state.activeDocument?.uri.fsPath;
+		if (!activeFilePath) {
+			return;
+		}
+		const text = await window.showInputBox({
+			prompt: 'Add a task to active file',
+		});
+		if (!text) {
+			return;
+		}
+		addTaskToFile(text, activeFilePath);
+		await updateState();
+		updateAllTreeViews();
+	});
+	async function addTaskToFile(text: string, filePath: string) {
+		const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
+		return await appendTaskToFile(`${creationDate}${text}`, filePath);
+	}
 	commands.registerTextEditorCommand('todomd.setDueDate', editor => {
 		const line = editor.selection.active.line;
 		const inputBox = window.createInputBox();
