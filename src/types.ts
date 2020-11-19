@@ -3,12 +3,7 @@ import { Priority, TheTask } from './TheTask';
 
 export interface ItemForProvider {
 	title: string;
-	items: TitleAndLineNumber[];
-}
-
-export interface TitleAndLineNumber {
-	lineNumber: number;
-	title: string;
+	tasks: TheTask[];
 }
 
 export interface State {

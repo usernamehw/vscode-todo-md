@@ -1,50 +1,22 @@
 import vscode from 'vscode';
-import { EXTENSION_NAME } from '../extension';
+import { TheTask } from '../TheTask';
 import { ItemForProvider } from '../types';
+import { tasksToTreeItems, TaskTreeItem } from './taskProvider';
 
 export class ProjectTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
 
 	constructor(
 		readonly label: string,
-		readonly items: LineTreeItem[],
+		readonly tasks: TheTask[],
 	) {
 		super(label);
-	}
-	// @ts-ignore
-	get tooltip(): string | undefined {
-		return undefined;
-	}
-	// @ts-ignore
-	get description(): undefined {
-		return undefined;
 	}
 
 	contextValue = 'project';
 }
 
-class LineTreeItem extends vscode.TreeItem {
-	readonly collapsibleState = vscode.TreeItemCollapsibleState.None;
-
-	constructor(
-		readonly label: string,
-		readonly command: vscode.Command,
-	) {
-		super(label);
-	}
-	// @ts-ignore
-	get tooltip(): undefined {
-		return undefined;
-	}
-	// @ts-ignore
-	get description(): undefined {
-		return undefined;
-	}
-
-	contextValue = 'line';
-}
-
-export class ProjectProvider implements vscode.TreeDataProvider<ProjectTreeItem | LineTreeItem> {
+export class ProjectProvider implements vscode.TreeDataProvider<ProjectTreeItem | TaskTreeItem> {
 	private readonly _onDidChangeTreeData: vscode.EventEmitter<ProjectTreeItem | undefined> = new vscode.EventEmitter<ProjectTreeItem | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<ProjectTreeItem | undefined> = this._onDidChangeTreeData.event;
 
@@ -57,22 +29,23 @@ export class ProjectProvider implements vscode.TreeDataProvider<ProjectTreeItem 
 		this._onDidChangeTreeData.fire(undefined);
 	}
 
-	getTreeItem(element: ProjectTreeItem | LineTreeItem): vscode.TreeItem {
+	getTreeItem(element: ProjectTreeItem | TaskTreeItem): vscode.TreeItem {
 		return element;
 	}
 
-	getChildren(element: ProjectTreeItem | undefined): ProjectTreeItem[] | LineTreeItem[] {
-		if (element) {
-			return element.items;
+	getChildren(element: ProjectTreeItem | TaskTreeItem | undefined): ProjectTreeItem[] | TaskTreeItem[] {
+		if (!element) {
+			return this.projects.map(project => new ProjectTreeItem(`${project.title} [${project.tasks.length}]`, project.tasks));
+		}
+		if (element instanceof ProjectTreeItem) {
+			return tasksToTreeItems(element.tasks);
 		} else {
-			return this.projects.map(project => new ProjectTreeItem(`${project.title} [${project.items.length}]`, project.items.map(item => new LineTreeItem(
-				item.title,
-				{
-					command: `${EXTENSION_NAME}.goToLine`,
-					title: 'Go To Line',
-					arguments: [item.lineNumber],
-				},
-			))));
+			const subtasks = element.task.subtasks;
+			if (subtasks.length) {
+				return tasksToTreeItems(subtasks);
+			} else {
+				return [];
+			}
 		}
 	}
 }

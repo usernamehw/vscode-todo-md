@@ -7,7 +7,7 @@ import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
-import { ItemForProvider, TitleAndLineNumber, SortTags, VscodeContext } from '../types';
+import { ItemForProvider, SortTags, VscodeContext } from '../types';
 import { setContext } from '../vscodeUtils';
 import { updateWebviewView } from '../webview/webviewView';
 
@@ -189,7 +189,7 @@ export interface ParsedItems {
 	contextsForProvider: ItemForProvider[];
 }
 interface TempTitleLineNumberMap {
-	[title: string]: TitleAndLineNumber[];
+	[title: string]: TheTask[];
 }
 export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 	const tagMap: TempTitleLineNumberMap = {};
@@ -201,10 +201,7 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 			if (!tagMap[tag]) {
 				tagMap[tag] = [];
 			}
-			tagMap[tag].push({
-				lineNumber: task.lineNumber,
-				title: task.title,
-			});
+			tagMap[tag].push(task);
 		}
 		// Projects grouping
 		if (task.projects.length) {
@@ -212,10 +209,7 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 				if (!projectMap[project]) {
 					projectMap[project] = [];
 				}
-				projectMap[project].push({
-					lineNumber: task.lineNumber,
-					title: task.title,
-				});
+				projectMap[project].push(task);
 			}
 		}
 		// Contexts grouping
@@ -224,10 +218,7 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 				if (!contextMap[context]) {
 					contextMap[context] = [];
 				}
-				contextMap[context].push({
-					lineNumber: task.lineNumber,
-					title: task.title,
-				});
+				contextMap[context].push(task);
 			}
 		}
 	}
@@ -235,28 +226,28 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 	for (const key in tagMap) {
 		tagsForProvider.push({
 			title: key,
-			items: tagMap[key],
+			tasks: tagMap[key],
 		});
 	}
 	let sortedTagsForProvider: ItemForProvider[];
 	if (extensionConfig.sortTagsView === SortTags.alphabetic) {
 		sortedTagsForProvider = tagsForProvider.sort((a, b) => a.title.localeCompare(b.title));
 	} else {
-		sortedTagsForProvider = tagsForProvider.sort((a, b) => b.items.length - a.items.length);
+		sortedTagsForProvider = tagsForProvider.sort((a, b) => b.tasks.length - a.tasks.length);
 	}
 
 	const projectsForProvider: ItemForProvider[] = [];
 	for (const key in projectMap) {
 		projectsForProvider.push({
 			title: key,
-			items: projectMap[key],
+			tasks: projectMap[key],
 		});
 	}
 	const contextsForProvider: ItemForProvider[] = [];
 	for (const key in contextMap) {
 		contextsForProvider.push({
 			title: key,
-			items: contextMap[key],
+			tasks: contextMap[key],
 		});
 	}
 	return {

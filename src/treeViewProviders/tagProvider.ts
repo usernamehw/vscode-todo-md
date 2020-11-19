@@ -1,49 +1,22 @@
 import vscode from 'vscode';
-import { EXTENSION_NAME } from '../extension';
+import { TheTask } from '../TheTask';
 import { ItemForProvider } from '../types';
+import { tasksToTreeItems, TaskTreeItem } from './taskProvider';
 
 export class TagTreeItem extends vscode.TreeItem {
 	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
 
 	constructor(
 		readonly label: string,
-		readonly items: LineTreeItem[],
+		readonly tasks: TheTask[],
 	) {
 		super(label);
-	}
-	// @ts-ignore
-	get tooltip(): undefined {
-		return undefined;
-	}
-	// @ts-ignore
-	get description(): undefined {
-		return undefined;
 	}
 
 	contextValue = 'tag';
 }
-export class LineTreeItem extends vscode.TreeItem {
-	readonly collapsibleState = vscode.TreeItemCollapsibleState.None;
 
-	constructor(
-		readonly label: string,
-		readonly command: vscode.Command,
-	) {
-		super(label);
-	}
-	// @ts-ignore
-	get tooltip(): undefined {
-		return undefined;
-	}
-	// @ts-ignore
-	get description(): undefined {
-		return undefined;
-	}
-
-	contextValue = 'line';
-}
-
-export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | LineTreeItem> {
+export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | TaskTreeItem> {
 	private readonly _onDidChangeTreeData: vscode.EventEmitter<TagTreeItem | undefined> = new vscode.EventEmitter<TagTreeItem | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<TagTreeItem | undefined> = this._onDidChangeTreeData.event;
 
@@ -56,22 +29,23 @@ export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | LineTr
 		this._onDidChangeTreeData.fire(undefined);
 	}
 
-	getTreeItem(element: TagTreeItem | LineTreeItem): vscode.TreeItem {
+	getTreeItem(element: TagTreeItem | TaskTreeItem): vscode.TreeItem {
 		return element;
 	}
 
-	getChildren(element: TagTreeItem | undefined): TagTreeItem[] | LineTreeItem[] {
-		if (element) {
-			return element.items;
+	getChildren(element: TagTreeItem | TaskTreeItem | undefined): TagTreeItem[] | TaskTreeItem[] {
+		if (!element) {
+			return this.tags.map(tag => new TagTreeItem(`${tag.title} [${tag.tasks.length}]`, tag.tasks));
+		}
+		if (element instanceof TagTreeItem) {
+			return tasksToTreeItems(element.tasks);
 		} else {
-			return this.tags.map(tag => new TagTreeItem(`${tag.title} [${tag.items.length}]`, tag.items.map(item => new LineTreeItem(
-				item.title,
-				{
-					command: `${EXTENSION_NAME}.goToLine`,
-					title: 'Go To Line',
-					arguments: [item.lineNumber],
-				},
-			))));
+			const subtasks = element.task.subtasks;
+			if (subtasks.length) {
+				return tasksToTreeItems(subtasks);
+			} else {
+				return [];
+			}
 		}
 	}
 }

@@ -164,7 +164,7 @@ export async function updateState() {
 	state.tasksAsTree = parsedDocument.tasksAsTree;
 	state.commentLines = parsedDocument.commentLines;
 
-	const treeItems = groupAndSortTreeItems(state.tasks);
+	const treeItems = groupAndSortTreeItems(state.tasksAsTree);
 	state.tagsForTreeView = treeItems.sortedTagsForProvider;
 	state.projectsForTreeView = treeItems.projectsForProvider;
 	state.contextsForTreeView = treeItems.contextsForProvider;

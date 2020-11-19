@@ -51,38 +51,41 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 	}
 
 	getTreeItem(element: TaskTreeItem): vscode.TreeItem {
-		// @ts-ignore
 		return element;
 	}
-	// @ts-ignore
-	getChildren(element: TaskTreeItem | undefined): (TaskTreeItem | undefined)[] | undefined {
+
+	getChildren(element: TaskTreeItem | undefined): TaskTreeItem[] {
 		if (element) {
 			const subtasks = element.task.subtasks;
 			if (subtasks.length) {
-				return subtasks.map(task => taskToTreeItem(task));
+				return tasksToTreeItems(subtasks);
 			} else {
-				return undefined;
+				return [];
 			}
 		} else {
-			return this.tasks.map(task => taskToTreeItem(task));
+			return tasksToTreeItems(this.tasks);
 		}
 	}
 }
 
-function taskToTreeItem(task: TheTask) {
-	if (task.isHidden) {
-		return undefined;
+export function tasksToTreeItems(tasks: TheTask[]) {
+	const result = [];
+	for (const task of tasks) {
+		if (task.isHidden) {
+			continue;
+		}
+		if (task.threshold && dayjs().isAfter(new Date(task.threshold), 'date')) {
+			continue;
+		}
+		result.push(new TaskTreeItem(
+			TheTask.formatTask(task),
+			task,
+			{
+				command: `${EXTENSION_NAME}.goToLine`,
+				title: 'Go To Line',
+				arguments: [task.lineNumber],
+			},
+		));
 	}
-	if (task.threshold && dayjs().isAfter(new Date(task.threshold), 'date')) {
-		return undefined;
-	}
-	return new TaskTreeItem(
-		TheTask.formatTask(task),
-		task,
-		{
-			command: `${EXTENSION_NAME}.goToLine`,
-			title: 'Go To Line',
-			arguments: [task.lineNumber],
-		},
-	);
+	return result;
 }
