@@ -16,9 +16,6 @@ export function updateHover() {
 				}
 				const markdown = new MarkdownString(undefined, true);
 				markdown.isTrusted = true;
-				if (task.done) {
-					markdown.appendMarkdown('$(pass) ');
-				}
 				const priorityColor = task.priority === 'A' ? '#ec4f47' :
 					task.priority === 'B' ? '#fd9f9a' :
 						task.priority === 'C' ? '#ffb648' :
@@ -27,6 +24,9 @@ export function updateHover() {
 									task.priority === 'F' ? '#00cfad' : undefined;
 				if (priorityColor) {
 					markdown.appendMarkdown(`<span style="background-color:${priorityColor};">&nbsp;</span>&nbsp;`);
+				}
+				if (task.done) {
+					markdown.appendMarkdown('$(pass) ');
 				}
 				markdown.appendText(`${task.title}\n`);
 				for (const tag of task.tags) {
