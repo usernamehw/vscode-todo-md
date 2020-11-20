@@ -155,7 +155,7 @@ export default class App extends Vue {
 	updateWebviewCounter(numberOfTasks: number) {
 		vscodeApi.postMessage({
 			type: 'updateTitle',
-			value: String(numberOfTasks),
+			value: numberOfTasks,
 		});
 	}
 	focusFilterInput() {

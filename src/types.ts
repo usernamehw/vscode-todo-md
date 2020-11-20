@@ -162,6 +162,6 @@ interface WebviewMessageDeleteTask extends WebviewMessageBase {
 }
 interface WebviewMessageUpdateTitle extends WebviewMessageBase {
 	type: 'updateTitle';
-	value: string;
+	value: number;
 }
 export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount | WebviewMessageUpdateTitle | WebviewMessageToggleCollapse | WebviewMessageDeleteTask;

@@ -32,6 +32,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
 		this.updateEverything();
+		this.updateTitle(state.tasksAsTree.length);
 
 		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
 			switch (message.type) {
@@ -103,7 +104,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		}
 	}
 
-	updateTitle(numberOfTasks: string) {
+	updateTitle(numberOfTasks: number) {
 		if (this._view) {
 			this._view.title = `webview (${numberOfTasks})`;
 		}
