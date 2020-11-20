@@ -13,3 +13,4 @@ x 7 Completed task
 12 Hidden {h}
 13 Links https://www.google.com text https://github.com/
 14 Overdue {due:ed} {overdue:2020-05-10}
+15 Collapsed {c}

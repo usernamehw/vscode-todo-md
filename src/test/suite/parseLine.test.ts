@@ -135,4 +135,8 @@ describe('Special tags {}', () => {
 		const task = getTaskAt(12)!;
 		expect(task.isHidden === true).to.be.ok;
 	});
+	it('15 Collapsed', () => {
+		const task = getTaskAt(15)!;
+		expect(task.isCollapsed === true).to.be.ok;
+	});
 });
