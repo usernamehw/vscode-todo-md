@@ -1,3 +1,9 @@
+## 2.2.5 `20 Nov 2020`
+
+- ✨ [Tree View] tag/context/project should render nested tasks
+- 🐛 [webview] Add a task icon should use active file instead of default
+- 🐛 [editor] Autocomplete tag/context/project should honor word prefix
+
 ## 2.2.4 `18 Nov 2020`
 
 - 💥 [webview] Remove `markdownEnabled` setting
