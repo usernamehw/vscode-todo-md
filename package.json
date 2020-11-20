@@ -1398,7 +1398,6 @@
 		"webpack-cli": "^4.2.0"
 	},
 	"dependencies": {
-		"awesomplete": "^1.1.5",
 		"dayjs": "^1.9.6",
 		"fuzzysort": "^1.1.4",
 		"lodash": "^4.17.20",
