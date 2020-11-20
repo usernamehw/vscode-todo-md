@@ -2,7 +2,7 @@
 1 just text task
 2 single project +Project
 3 +One text +Two +Three
-	4 @One multiple contexts, their ranges and indentation @Two @Three
+4 @One multiple contexts, their ranges @Two @Three
 5 #one#two text #three#four
 6 (C) text
 x 7 Completed task
@@ -14,3 +14,7 @@ x 7 Completed task
 13 Links https://www.google.com text https://github.com/
 14 Overdue {due:ed} {overdue:2020-05-10}
 15 Collapsed {c}
+16 Parent task
+    17 Nested 1lvl
+        18 Nested 2lvl
+    19 Nested 1lvl
