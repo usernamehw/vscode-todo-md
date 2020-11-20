@@ -63,3 +63,15 @@ export function openSettingGuiAt(settingName: string) {
 export function inputOffset(text: string): string {
 	return `${text}${' '.repeat(8)}`;
 }
+
+export function getWordRangeAtPosition(document: vscode.TextDocument, position: vscode.Position) {
+	return document.getWordRangeAtPosition(position, /\S+/);
+}
+
+export function getWordAtPosition(document: vscode.TextDocument, position: vscode.Position) {
+	const wordRange = getWordRangeAtPosition(document, position);
+	if (wordRange) {
+		return document.getText(wordRange);
+	}
+	return undefined;
+}

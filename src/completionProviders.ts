@@ -4,6 +4,7 @@ import { DueDate } from './dueDate';
 import { extensionConfig, Global, state } from './extension';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
+import { getWordAtPosition, getWordRangeAtPosition } from './vscodeUtils';
 
 export function updateCompletions(): void {
 	if (Global.tagAutocompleteDisposable) {
@@ -17,6 +18,10 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+				const wordAtCursor = getWordAtPosition(document, position);
+				if (!wordAtCursor || !wordAtCursor.startsWith('#')) {
+					return undefined;
+				}
 				const tagCompletions = [];
 				const tags = Array.from(new Set(state.tags.concat(extensionConfig.tags)));
 				for (const tag of tags) {
@@ -34,6 +39,10 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+				const wordAtCursor = getWordAtPosition(document, position);
+				if (!wordAtCursor || !wordAtCursor.startsWith('+')) {
+					return undefined;
+				}
 				const projectCompletions = [];
 				const projects = Array.from(new Set(state.projects.concat(extensionConfig.projects)));
 				for (const tag of projects) {
@@ -51,6 +60,10 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+				const wordAtCursor = getWordAtPosition(document, position);
+				if (!wordAtCursor || !wordAtCursor.startsWith('@')) {
+					return undefined;
+				}
 				const contextCompletions = [];
 				const contexts = Array.from(new Set(state.contexts.concat(extensionConfig.contexts)));
 				for (const context of contexts) {
@@ -87,19 +100,20 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-				const wordRange = document.getWordRangeAtPosition(position, /\S+/);
-				if (!wordRange) {
-					return [];
+				const wordRange = getWordRangeAtPosition(document, position);
+				const wordAtCursor = getWordAtPosition(document, position);
+				if (!wordAtCursor) {
+					return undefined;
 				}
-				const word = document.getText(wordRange);
-				if (word[word.length - 1] === '$') {
-					const dueDate = helpCreateDueDate(word.slice(0, -1));
+
+				if (wordAtCursor[wordAtCursor.length - 1] === '$') {
+					const dueDate = helpCreateDueDate(wordAtCursor.slice(0, -1));
 					if (!dueDate) {
 						return [];
 					}
 					const completionItem = new vscode.CompletionItem(new DueDate(dueDate).closestDueDateInTheFuture, vscode.CompletionItemKind.Constant);
 					completionItem.insertText = '';
-					completionItem.filterText = word;
+					completionItem.filterText = wordAtCursor;
 					completionItem.command = {
 						command: 'todomd.setDueDateWithArgs',
 						title: 'Set Due Date with arguments',
