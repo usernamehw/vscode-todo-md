@@ -1,7 +1,9 @@
 @import 'suggest.scss';
 @import 'contextMenu.scss';
 
-* {
+*,
+*:before,
+*:after {
 	box-sizing: border-box;
 }
 
