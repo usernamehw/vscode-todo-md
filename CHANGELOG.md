@@ -1,3 +1,7 @@
+## 2.2.6 `11 Dec 2020`
+
+- ✨ [Tree View] Use markdown hover
+
 ## 2.2.5 `20 Nov 2020`
 
 - ✨ [Tree View] tag/context/project should render nested tasks
