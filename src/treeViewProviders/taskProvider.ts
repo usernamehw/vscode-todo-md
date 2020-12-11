@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import vscode, { ThemeColor, ThemeIcon } from 'vscode';
 import { EXTENSION_NAME } from '../extension';
+import { getTaskHover } from '../hover/getTaskHover';
 import { TheTask } from '../TheTask';
 
 export class TaskTreeItem extends vscode.TreeItem {
@@ -28,12 +29,7 @@ export class TaskTreeItem extends vscode.TreeItem {
 	}
 	// @ts-ignore
 	get tooltip() {
-		return undefined;
-		// return new MarkdownString(`${this.task.title}\n\n${this.task.done}`);
-	}
-	// @ts-ignore
-	get description() {
-		return undefined;
+		return getTaskHover(this.task);
 	}
 }
 

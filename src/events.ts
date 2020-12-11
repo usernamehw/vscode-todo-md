@@ -4,7 +4,7 @@ import { updateCompletions } from './completionProviders';
 import { updateEditorDecorations } from './decorations';
 import { getDocumentForDefaultFile, resetAllRecurringTasks } from './documentActions';
 import { extensionConfig, Global, state, statusBar, updateLastVisitGlobalState, updateState } from './extension';
-import { updateHover } from './hoverProvider';
+import { updateHover } from './hover/hoverProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { setContext } from './vscodeUtils';
