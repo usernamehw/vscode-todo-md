@@ -1284,7 +1284,7 @@
 			"activitybar": [
 				{
 					"id": "todomd",
-					"icon": "./img/checklist.svg",
+					"icon": "$(checklist)",
 					"title": "TodoMD"
 				}
 			]
@@ -1330,7 +1330,7 @@
 					"type": "webview",
 					"id": "todomd.webviewTasks",
 					"name": "Webview",
-					"icon": "img/check.svg"
+					"icon": "$(check)"
 				}
 			]
 		}
