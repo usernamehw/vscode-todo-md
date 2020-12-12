@@ -15,7 +15,7 @@ export function getTaskHover(task: TheTask) {
 		markdown.appendMarkdown(`<span style="background-color:${priorityColor};">&nbsp;</span>&nbsp;`);
 	}
 	if (task.done) {
-		markdown.appendMarkdown('$(pass) ');
+		markdown.appendMarkdown(`<span style="color:#7cc54b;">$(pass)</span> `);
 	}
 
 	let count = '';
