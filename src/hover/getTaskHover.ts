@@ -12,7 +12,7 @@ export function getTaskHover(task: TheTask) {
 					task.priority === 'E' ? '#97c500' :
 						task.priority === 'F' ? '#00cfad' : undefined;
 	if (priorityColor) {
-		markdown.appendMarkdown(`<span style="background-color:${priorityColor};">&nbsp;</span>&nbsp;`);
+		markdown.appendMarkdown(`<span style="background-color:${priorityColor};">&thinsp;</span>&nbsp;`);
 	}
 	if (task.done) {
 		markdown.appendMarkdown(`<span style="color:#7cc54b;">$(pass)</span> `);
