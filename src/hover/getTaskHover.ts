@@ -16,7 +16,14 @@ export function getTaskHover(task: TheTask) {
 	if (task.done) {
 		markdown.appendMarkdown('$(pass) ');
 	}
-	markdown.appendMarkdown(`${task.title}\n\n`);
+
+	let count = '';
+	if (task.count) {
+		count = ` \`[${task.count.current}/${task.count.needed}]\``;
+	}
+
+	markdown.appendMarkdown(`${task.title}${count}\n\n`);
+
 	for (const tag of task.tags) {
 		markdown.appendMarkdown(`<span style="color:#fff;background-color:#029cdf;">&nbsp;#${tag}&nbsp;</span>&nbsp;`);
 	}
