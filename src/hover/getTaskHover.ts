@@ -1,5 +1,6 @@
 import { MarkdownString } from 'vscode';
 import { TheTask } from '../TheTask';
+import { DueState } from '../types';
 
 export function getTaskHover(task: TheTask) {
 	const markdown = new MarkdownString(undefined, true);
@@ -21,8 +22,18 @@ export function getTaskHover(task: TheTask) {
 	if (task.count) {
 		count = ` \`[${task.count.current}/${task.count.needed}]\``;
 	}
+	let due = '';
+	if (task.due || task.overdue) {
+		let dueColor = '';
+		if (task.due?.isDue === DueState.due) {
+			dueColor = '#5faedb';
+		} else if (task.due?.isDue === DueState.overdue) {
+			dueColor = '#d44343';
+		}
+		due = ` <span title="due state" style="color:${dueColor || 'inherit'};">$(watch)</span>&nbsp;`;
+	}
 
-	markdown.appendMarkdown(`${task.title}${count}\n\n`);
+	markdown.appendMarkdown(`${task.title}${count}${due}\n\n`);
 
 	for (const tag of task.tags) {
 		markdown.appendMarkdown(`<span style="color:#fff;background-color:#029cdf;">&nbsp;#${tag}&nbsp;</span>&nbsp;`);
