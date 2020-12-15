@@ -15,7 +15,7 @@ export function getTaskHover(task: TheTask) {
 		markdown.appendMarkdown(`<span style="background-color:${priorityColor};">&thinsp;</span>&nbsp;`);
 	}
 	if (task.done) {
-		markdown.appendMarkdown(`<span style="color:#7cc54b;">$(pass)</span> `);
+		markdown.appendMarkdown(`<span title="Completed" style="color:#7cc54b;font-size:larger;">$(pass)</span> `);
 	}
 
 	let count = '';
@@ -30,7 +30,7 @@ export function getTaskHover(task: TheTask) {
 		} else if (task.due?.isDue === DueState.overdue) {
 			dueColor = '#d44343';
 		}
-		due = ` <span title="due state" style="color:${dueColor || 'inherit'};font-size:larger">$(watch)</span>&nbsp;`;
+		due = ` <span title="Due state" style="color:${dueColor || 'inherit'};font-size:larger;">$(watch)</span>&nbsp;`;
 		if (task.due?.isDue === DueState.notDue) {
 			due = '';
 		}
