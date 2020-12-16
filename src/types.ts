@@ -52,6 +52,7 @@ export interface IExtensionConfig {
 	creationDateIncludeTime: boolean;
 	defaultPriority: Priority;
 	autoArchiveTasks: boolean;
+	confirmTaskDelete: 'always' | 'never' | 'hasNestedTasks';
 
 	sortTagsView: SortTags;
 

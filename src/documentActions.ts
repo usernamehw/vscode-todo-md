@@ -46,24 +46,38 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 		return undefined;
 	}
 	const edit = new WorkspaceEdit();
+
+	let willDeleteMultipleTasks = '';
+	let showConfirmationDialog = false;
+
+	const taskLineNumbersToDelete = [lineNumber];
 	if (task.subtasks.length) {
-		const buttonDeleteNested = 'Delete nested';
-		const buttonDeleteOnlyTask = 'Delete only this task';
-		const button = await vscode.window.showWarningMessage('Delete nested tasks?', {
-			modal: true,
-		}, buttonDeleteNested, buttonDeleteOnlyTask);
-		if (button === buttonDeleteNested) {
-			const tasksToDeleteLineNumbers = task.getNestedTasksIds().concat(task.lineNumber);
-			for (const ln of tasksToDeleteLineNumbers) {
-				deleteTaskWorkspaceEdit(edit, document, ln);
-			}
-		} else if (button === buttonDeleteOnlyTask) {
-			deleteTaskWorkspaceEdit(edit, document, lineNumber);
-		}
-	} else {
-		// No subtasks, delete without confirmation
-		deleteTaskWorkspaceEdit(edit, document, lineNumber);
+		taskLineNumbersToDelete.push(...task.getNestedTasksIds());
+		willDeleteMultipleTasks = `\n ❗ [ ${task.subtasks.length + 1} ] tasks will be deleted.`;
 	}
+
+	if (extensionConfig.confirmTaskDelete === 'always') {
+		showConfirmationDialog = true;
+	} else if (extensionConfig.confirmTaskDelete === 'hasNestedTasks') {
+		if (task.subtasks.length) {
+			showConfirmationDialog = true;
+		}
+	}
+
+	if (showConfirmationDialog) {
+		const confirmBtnName = 'Delete';
+		const button = await vscode.window.showWarningMessage(`Confirm deletion?${willDeleteMultipleTasks}`, {
+			modal: true,
+		}, confirmBtnName);
+		if (button !== confirmBtnName) {
+			return undefined;
+		}
+	}
+
+	for (const ln of taskLineNumbersToDelete) {
+		deleteTaskWorkspaceEdit(edit, document, ln);
+	}
+
 	return applyEdit(edit, document);
 }
 
