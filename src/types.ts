@@ -53,6 +53,7 @@ export interface IExtensionConfig {
 	defaultPriority: Priority;
 	autoArchiveTasks: boolean;
 	confirmTaskDelete: 'always' | 'never' | 'hasNestedTasks';
+	statusBarCounterEnabled: boolean;
 
 	sortTagsView: SortTags;
 

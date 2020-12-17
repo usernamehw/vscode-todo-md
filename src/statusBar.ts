@@ -1,4 +1,5 @@
 import { StatusBarItem, window } from 'vscode';
+import { extensionConfig } from './extension';
 import { TheTask } from './TheTask';
 import { percentage } from './utils';
 
@@ -10,7 +11,9 @@ export class StatusBar {
 	}
 
 	show() {
-		this.statusBarItem.show();
+		if (extensionConfig.statusBarCounterEnabled) {
+			this.statusBarItem.show();
+		}
 	}
 	hide() {
 		this.statusBarItem.hide();

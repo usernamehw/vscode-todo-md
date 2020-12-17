@@ -208,6 +208,11 @@
 					"description": "Contexts added to autocomplete.",
 					"default": []
 				},
+				"todomd.statusBarCounterEnabled": {
+					"type": "boolean",
+					"markdownDescription": "Controls visibility of status bar task progress item `1/3 33%`",
+					"default": true
+				},
 				"todomd.addCompletionDate": {
 					"type": "boolean",
 					"markdownDescription": "When completing a task add completion date to it: `{cm:2020-04-30}`",
