@@ -11,7 +11,7 @@ import { TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
-import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
+import { tasksView, updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { State, VscodeContext } from './types';
 import { fancyNumber, getRandomInt } from './utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
@@ -341,12 +341,14 @@ export function registerAllCommands() {
 			if (!filterStr || !filterStr.length) {
 				return;
 			}
+			tasksView.description = filterStr;
 			setContext(VscodeContext.filterActive, true);
 			state.taskTreeViewFilterValue = filterStr;
 			updateTasksTreeView();
 		});
 	});
 	commands.registerCommand('todomd.clearFilter', editor => {
+		tasksView.description = undefined;
 		setContext(VscodeContext.filterActive, false);
 		state.taskTreeViewFilterValue = '';
 		updateTasksTreeView();

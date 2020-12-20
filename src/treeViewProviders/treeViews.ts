@@ -24,7 +24,7 @@ const generic3Provider = new TaskProvider([]);
 let tagsView: vscode.TreeView<any>;
 let projectView: vscode.TreeView<any>;
 let contextView: vscode.TreeView<any>;
-let tasksView: vscode.TreeView<any>;
+export let tasksView: vscode.TreeView<any>;
 let archivedView: vscode.TreeView<any>;
 let generic1View: vscode.TreeView<any>;
 let generic2View: vscode.TreeView<any>;
@@ -167,7 +167,7 @@ export function updateTasksTreeView() {
 		tasksForProvider = state.tasksAsTree;
 	}
 	taskProvider.refresh(tasksForProvider);
-	setViewTitle(tasksView, 'tasks', tasksForProvider.length, state.taskTreeViewFilterValue);
+	setViewTitle(tasksView, 'tasks', tasksForProvider.length);
 }
 
 export function updateArchivedTasksTreeView() {
