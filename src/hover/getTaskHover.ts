@@ -30,7 +30,7 @@ export function getTaskHover(task: TheTask) {
 		} else if (task.due?.isDue === DueState.overdue) {
 			dueColor = '#d44343';
 		}
-		due = ` <span style="color:${dueColor || 'inherit'};">$(watch)</span>&nbsp;`;
+		due = ` <span style="color:${dueColor || 'inherit'};">$(history)</span>&nbsp;`;
 		if (task.due?.isDue === DueState.notDue) {
 			due = '';
 		}
