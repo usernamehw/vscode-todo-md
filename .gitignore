@@ -12,3 +12,4 @@ media/webview.js.map
 media/webview.css
 media/contextMenu.css
 src/**/*.js
+scripts/generateDecorationSchema.js

@@ -57,16 +57,28 @@ function generateSchema() {
 	});
 
 	const result: any = {};
+	const supportedAdvancedColors = [
+		"project",
+		"context",
+		"comment",
+		"notDue",
+		"due",
+		"overdue",
+		"invalidDue"
+	];
+	const defaultObj = {};
+	for (const color of supportedAdvancedColors) {
+		defaultObj[color] = {};
+	}
 	result['todomd.decorations'] = {
 		type: 'object',
 		description: 'Advanced decoration tweaking.',
-		default: {
-			project: {},
-			context: {},
-			comment: {},
+		propertyNames: {
+			enum: supportedAdvancedColors
 		},
+		default: defaultObj,
 		patternProperties: {
-			'^(project|context|comment)$': {
+			[`^(${supportedAdvancedColors.join('|')})$`]: {
 				type: 'object',
 				properties: {
 					...decoration.properties,

@@ -295,13 +295,28 @@
 				"todomd.decorations": {
 					"type": "object",
 					"description": "Advanced decoration tweaking.",
+					"propertyNames": {
+						"enum": [
+							"project",
+							"context",
+							"comment",
+							"notDue",
+							"due",
+							"overdue",
+							"invalidDue"
+						]
+					},
 					"default": {
 						"project": {},
 						"context": {},
-						"comment": {}
+						"comment": {},
+						"notDue": {},
+						"due": {},
+						"overdue": {},
+						"invalidDue": {}
 					},
 					"patternProperties": {
-						"^(project|context|comment)$": {
+						"^(project|context|comment|notDue|due|overdue|invalidDue)$": {
 							"type": "object",
 							"properties": {
 								"isWholeLine": {

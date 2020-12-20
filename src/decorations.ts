@@ -52,16 +52,20 @@ export function updateDecorationStyle(): void {
 	});
 	Global.notDueDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.notDueForeground'),
+		...extensionConfig.decorations.notDue,
 	});
 	Global.dueDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.dueForeground'),
+		...extensionConfig.decorations.due,
 	});
 	Global.overdueDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.overdueForeground'),
+		...extensionConfig.decorations.overdue,
 	});
 	Global.invalidDueDateDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.invalidDueDateForeground'),
 		backgroundColor: new vscode.ThemeColor('todomd.invalidDueDateBackground'),
+		...extensionConfig.decorations.invalidDue,
 	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		after: {

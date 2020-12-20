@@ -43,6 +43,10 @@ const enum AdvancedDecorations {
 	project = 'project',
 	context = 'context',
 	comment = 'comment',
+	notDue = 'notDue',
+	due = 'due',
+	overdue = 'overdue',
+	invalidDue = 'invalidDue',
 }
 export interface IExtensionConfig {
 	isDev: boolean;
