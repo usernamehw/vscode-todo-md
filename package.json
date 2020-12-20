@@ -997,6 +997,11 @@
 				"command": "todomd.setLastVisit",
 				"title": "DEV: Set last visit",
 				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.showGlobalState",
+				"title": "DEV: Show Global State",
+				"category": "Todo MD"
 			}
 		],
 		"keybindings": [
@@ -1291,6 +1296,10 @@
 				},
 				{
 					"command": "todomd.clearGlobalState",
+					"when": "todomd:isDev"
+				},
+				{
+					"command": "todomd.showGlobalState",
 					"when": "todomd:isDev"
 				}
 			]

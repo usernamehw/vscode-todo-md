@@ -356,6 +356,10 @@ export function registerAllCommands() {
 		state.extensionContext.globalState._value = {};
 		state.extensionContext.globalState.update('hack', 'toClear');// Is this required to clear state?
 	});
+	commands.registerCommand('todomd.showGlobalState', () => {
+		// @ts-ignore
+		console.warn(state.extensionContext.globalState._value);
+	});
 	commands.registerCommand('todomd.goToLine', (lineNumber: number) => {
 		goToTask(lineNumber);
 	});
