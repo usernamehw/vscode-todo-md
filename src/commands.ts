@@ -3,7 +3,7 @@ import fs from 'fs';
 import vscode, { commands, TextDocument, ThemeIcon, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTaskWorkspaceEdit, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
-import { extensionConfig, state, updateLastVisitGlobalState, updateState } from './extension';
+import { extensionConfig, LAST_VISIT_BY_FILE_STORAGE_KEY, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { findTaskAtLineExtension } from './taskUtils';
@@ -12,7 +12,7 @@ import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
-import { VscodeContext } from './types';
+import { State, VscodeContext } from './types';
 import { fancyNumber, getRandomInt } from './utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
 
@@ -358,7 +358,10 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.showGlobalState', () => {
 		// @ts-ignore
-		console.warn(state.extensionContext.globalState._value);
+		const lastVisitByFile: State['lastVisitByFile'] = state.extensionContext.globalState.get(LAST_VISIT_BY_FILE_STORAGE_KEY);
+		for (const key in lastVisitByFile) {
+			console.log(key, new Date(lastVisitByFile[key]), dayjs().to(lastVisitByFile[key]));
+		}
 	});
 	commands.registerCommand('todomd.goToLine', (lineNumber: number) => {
 		goToTask(lineNumber);
