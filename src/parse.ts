@@ -266,7 +266,7 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 				}
 				// Handle nested tasks (find parent task lineNumber)
 				if (parsedLine.value.indentLvl) {
-					for (let j = tasks.length - 1; j > 0; j--) {
+					for (let j = tasks.length - 1; j >= 0; j--) {
 						if (tasks[j].indentLvl < parsedLine.value.indentLvl) {
 							parsedLine.value.parentTaskLineNumber = tasks[j].lineNumber;
 							break;
@@ -289,7 +289,7 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 	}
 	const tasksAsTree: TheTask[] = [];
 	for (const task of tasks) {
-		if (task.parentTaskLineNumber) {
+		if (task.parentTaskLineNumber !== undefined) {
 			tasksMap[task.parentTaskLineNumber].subtasks.push(tasksMap[task.lineNumber]);
 		} else {
 			tasksAsTree.push(tasksMap[task.lineNumber]);

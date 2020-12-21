@@ -83,7 +83,7 @@ export default class Task extends Vue {
 			[className: string]: boolean;
 		} = {};
 		cls.done = this.model.done;
-		if (this.model.parentTaskLineNumber) {
+		if (this.model.parentTaskLineNumber !== undefined) {
 			cls[`nested-lvl-${this.model.indentLvl}`] = true;
 		}
 		if (this.config.showPriority) {
