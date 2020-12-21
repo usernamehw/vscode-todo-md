@@ -1,3 +1,10 @@
+## 2.2.7 `21 Dec 2020`
+
+- ✨ Hover: Show due date icon and count special tag
+- ✨ Add option `confirmTaskDelete` with values: [`always`, `never`, `hasNestedTasks`]
+- ✨ Setting to hide status bar task counter
+- ✨ Add ability to use advanced decorations for due date
+
 ## 2.2.6 `11 Dec 2020`
 
 - ✨ [Tree View] Use markdown hover
