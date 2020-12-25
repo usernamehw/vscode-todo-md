@@ -16,16 +16,6 @@ import { State, VscodeContext } from './types';
 import { fancyNumber, getRandomInt } from './utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
 
-class QuickPickItem implements vscode.QuickPickItem {
-	label: string;
-	description?: string;
-
-	constructor(label: string, description?: string) {
-		this.label = label;
-		this.description = description;
-	}
-}
-
 export function registerAllCommands() {
 	commands.registerCommand('todomd.toggleDone', async (treeItem?: TaskTreeItem) => {
 		const editor = window.activeTextEditor;
@@ -319,7 +309,9 @@ export function registerAllCommands() {
 	});
 	commands.registerTextEditorCommand('todomd.filter', editor => {
 		const quickPick = window.createQuickPick();
-		quickPick.items = extensionConfig.savedFilters.map(filter => new QuickPickItem(filter.title));
+		quickPick.items = extensionConfig.savedFilters.map(filter => ({
+			label: filter.title,
+		}) as vscode.QuickPickItem);
 		let value: string | undefined;
 		let selected: string | undefined;
 		quickPick.onDidChangeValue(e => {
