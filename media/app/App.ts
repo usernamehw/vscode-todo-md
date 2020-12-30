@@ -4,6 +4,7 @@ import marked from 'marked';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 import VueContext from 'vue-context';
+import VModal from 'vue-js-modal';
 import VueNotifications from 'vue-notification';
 import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
@@ -18,6 +19,7 @@ marked.Renderer.prototype.paragraph = text => `${text}`;
 
 Vue.use(VueAutosuggest);
 Vue.use(VueNotifications);
+Vue.use(VModal);
 Vue.component('task', TaskComponent);// needs to be global for recursive rendering
 
 @Component({
