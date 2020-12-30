@@ -39,10 +39,6 @@
         </li>
         <!-- <div class="codicon codicon-trash"></div> -->
     </vue-context>
-    <modal :adaptive="true"
-           name="modal">
-        modal
-    </modal>
 </div>
 </template>
 
