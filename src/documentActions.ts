@@ -35,7 +35,9 @@ export async function setDueDate(document: vscode.TextDocument, lineNumber: numb
 	if (task?.dueRange) {
 		wEdit.replace(document.uri, task.dueRange, dueDate);
 	} else {
-		wEdit.insert(document.uri, new vscode.Position(lineNumber, 0), ` ${dueDate} `);
+		const line = document.lineAt(lineNumber);
+		const isLineEndsWithWhitespace = line.text.endsWith(' ');
+		wEdit.insert(document.uri, line.range.end, `${isLineEndsWithWhitespace ? '' : ' '}${dueDate}`);
 	}
 	return await applyEdit(wEdit, document);
 }
