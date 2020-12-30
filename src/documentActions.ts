@@ -12,7 +12,7 @@ import { DueState } from './types';
 export async function hideTask(document: vscode.TextDocument, lineNumber: number) {
 	const wEdit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
-	wEdit.insert(document.uri, new vscode.Position(lineNumber, line.range.end.character), ' {h}');
+	wEdit.insert(document.uri, line.range.end, ' {h}');
 	return applyEdit(wEdit, document);
 }
 
@@ -23,7 +23,7 @@ export async function toggleTaskCollapse(document: vscode.TextDocument, lineNumb
 	if (task?.collapseRange) {
 		wEdit.delete(document.uri, task.collapseRange);
 	} else {
-		wEdit.insert(document.uri, new vscode.Position(lineNumber, line.range.end.character), ' {c}');
+		wEdit.insert(document.uri, line.range.end, ' {c}');
 	}
 	return applyEdit(wEdit, document);
 }
