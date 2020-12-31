@@ -20,19 +20,26 @@ export function registerAllCommands() {
 	commands.registerCommand('todomd.toggleDone', async (treeItem?: TaskTreeItem) => {
 		const editor = window.activeTextEditor;
 		let document: vscode.TextDocument;
-		let lineNumber: number;
+		let lineNumbers: number[] = [];
 		if (treeItem) {
-			lineNumber = treeItem.task.lineNumber;
+			lineNumbers.push(treeItem.task.lineNumber);
 			document = await getActiveDocument();
 		} else {
 			if (!editor) {
 				return;
 			}
-			lineNumber = editor.selection.active.line;
+			for (const selection of editor.selections) {
+				for (let i = selection.start.line; i <= selection.end.line; i++) {
+					lineNumbers.push(i);
+				}
+			}
+			lineNumbers = Array.from(new Set(lineNumbers));// leave only unique line numbers
 			document = editor.document;
 		}
 
-		await toggleDoneOrIncrementCount(document, lineNumber);
+		for (const ln of lineNumbers) {
+			await toggleDoneOrIncrementCount(document, ln);
+		}
 
 		await updateState();
 		updateAllTreeViews();
