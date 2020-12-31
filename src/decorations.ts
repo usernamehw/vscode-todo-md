@@ -17,21 +17,27 @@ export function updateDecorationStyle(): void {
 	});
 	Global.priorityADecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityAForeground'),
+		...extensionConfig.decorations.priorityAForeground,
 	});
 	Global.priorityBDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityBForeground'),
+		...extensionConfig.decorations.priorityBForeground,
 	});
 	Global.priorityCDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityCForeground'),
+		...extensionConfig.decorations.priorityCForeground,
 	});
 	Global.priorityDDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityDForeground'),
+		...extensionConfig.decorations.priorityDForeground,
 	});
 	Global.priorityEDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityEForeground'),
+		...extensionConfig.decorations.priorityEForeground,
 	});
 	Global.priorityFDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.priorityFForeground'),
+		...extensionConfig.decorations.priorityFForeground,
 	});
 	Global.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.tagForeground'),

@@ -1,8 +1,8 @@
+// Generate decoration json schema from vscode.d.ts file
 import * as fs from 'fs';
 import * as https from 'https';
 import { resolve } from 'path';
 import * as TJS from 'typescript-json-schema';
-
 
 // Fetch the latest definitions
 const file = fs.createWriteStream('vscode.d.ts');
@@ -64,7 +64,13 @@ function generateSchema() {
 		"notDue",
 		"due",
 		"overdue",
-		"invalidDue"
+		"invalidDue",
+		"priorityAForeground",
+		"priorityBForeground",
+		"priorityCForeground",
+		"priorityDForeground",
+		"priorityEForeground",
+		"priorityFForeground",
 	];
 	const defaultObj = {};
 	for (const color of supportedAdvancedColors) {
@@ -103,6 +109,7 @@ function forEachRecursive(items: any, func: any, parentKey?: string) {
 				delete items.anyOf;
 				items.type = 'string';
 			}
+			// Show color picker in `settings.json` file
 			if (['backgroundColor', 'color', 'outlineColor', 'borderColor', 'overviewRulerColor'].includes(key)) {
 				items[key].format = 'color';
 			}

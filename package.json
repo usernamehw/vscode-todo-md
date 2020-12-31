@@ -303,7 +303,13 @@
 							"notDue",
 							"due",
 							"overdue",
-							"invalidDue"
+							"invalidDue",
+							"priorityAForeground",
+							"priorityBForeground",
+							"priorityCForeground",
+							"priorityDForeground",
+							"priorityEForeground",
+							"priorityFForeground"
 						]
 					},
 					"default": {
@@ -313,10 +319,16 @@
 						"notDue": {},
 						"due": {},
 						"overdue": {},
-						"invalidDue": {}
+						"invalidDue": {},
+						"priorityAForeground": {},
+						"priorityBForeground": {},
+						"priorityCForeground": {},
+						"priorityDForeground": {},
+						"priorityEForeground": {},
+						"priorityFForeground": {}
 					},
 					"patternProperties": {
-						"^(project|context|comment|notDue|due|overdue|invalidDue)$": {
+						"^(project|context|comment|notDue|due|overdue|invalidDue|priorityAForeground|priorityBForeground|priorityCForeground|priorityDForeground|priorityEForeground|priorityFForeground)$": {
 							"type": "object",
 							"properties": {
 								"isWholeLine": {

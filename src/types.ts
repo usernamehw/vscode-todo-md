@@ -47,6 +47,12 @@ const enum AdvancedDecorations {
 	due = 'due',
 	overdue = 'overdue',
 	invalidDue = 'invalidDue',
+	priorityAForeground = 'priorityAForeground',
+	priorityBForeground = 'priorityBForeground',
+	priorityCForeground = 'priorityCForeground',
+	priorityDForeground = 'priorityDForeground',
+	priorityEForeground = 'priorityEForeground',
+	priorityFForeground = 'priorityFForeground',
 }
 export interface IExtensionConfig {
 	isDev: boolean;
