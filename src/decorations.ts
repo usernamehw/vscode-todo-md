@@ -101,43 +101,46 @@ export function updateEditorDecorations(editor: TextEditor) {
 	const invalidDueDateDecorationRanges: Range[] = [];
 	const closestDueDateDecorationOptions: vscode.DecorationOptions[] = [];
 
-	for (const line of state.tasks) {
-		if (line.done) {
-			completedDecorationRanges.push(new vscode.Range(line.lineNumber, 0, line.lineNumber, 0));
+	for (const task of state.tasks) {
+		if (task.done) {
+			completedDecorationRanges.push(new vscode.Range(task.lineNumber, 0, task.lineNumber, 0));
 		}
-		if (line.tagsRange) {
-			tagsDecorationRanges.push(...line.tagsRange);
+		if (task.tagsRange) {
+			tagsDecorationRanges.push(...task.tagsRange);
 			// @ts-ignore If `tagsRange` exists - `tagsDelimiterRanges` also exists
-			tagsDelimiterDecorationRanges.push(...line.tagsDelimiterRanges);
+			tagsDelimiterDecorationRanges.push(...task.tagsDelimiterRanges);
 		}
-		if (line.priorityRange) {
-			switch (line.priority) {
-				case 'A': priorityADecorationRanges.push(line.priorityRange); break;
-				case 'B': priorityBDecorationRanges.push(line.priorityRange); break;
-				case 'C': priorityCDecorationRanges.push(line.priorityRange); break;
-				case 'D': priorityDDecorationRanges.push(line.priorityRange); break;
-				case 'E': priorityEDecorationRanges.push(line.priorityRange); break;
-				default: priorityFDecorationRanges.push(line.priorityRange);
+		if (task.priorityRange) {
+			switch (task.priority) {
+				case 'A': priorityADecorationRanges.push(task.priorityRange); break;
+				case 'B': priorityBDecorationRanges.push(task.priorityRange); break;
+				case 'C': priorityCDecorationRanges.push(task.priorityRange); break;
+				case 'D': priorityDDecorationRanges.push(task.priorityRange); break;
+				case 'E': priorityEDecorationRanges.push(task.priorityRange); break;
+				default: priorityFDecorationRanges.push(task.priorityRange);
 			}
 		}
-		if (line.specialTagRanges.length) {
-			specialtagDecorationRanges.push(...line.specialTagRanges);
+		if (task.specialTagRanges.length) {
+			specialtagDecorationRanges.push(...task.specialTagRanges);
 		}
-		if (line.contextRanges && line.contextRanges.length) {
-			contextDecorationRanges.push(...line.contextRanges);
+		if (task.contextRanges && task.contextRanges.length) {
+			contextDecorationRanges.push(...task.contextRanges);
 		}
-		if (line.projectRanges && line.projectRanges.length) {
-			projectDecorationRanges.push(...line.projectRanges);
+		if (task.projectRanges && task.projectRanges.length) {
+			projectDecorationRanges.push(...task.projectRanges);
 		}
-		if (line.due) {
-			const due = line.due;
-			const dueRange = line.dueRange!;// if due exists - dueRange exists too
+		if (task.due) {
+			const due = task.due;
+			const dueRange = task.dueRange!;// if due exists - dueRange exists too
 			if (due.isDue === DueState.due) {
 				dueDecorationRanges.push(dueRange);
 			} else if (due.isDue === DueState.notDue) {
 				notDueDecorationRanges.push(dueRange);
 			} else if (due.isDue === DueState.overdue) {
 				overdueDecorationRanges.push(dueRange);
+				if (task.overdueRange) {
+					specialtagDecorationRanges.push(task.overdueRange);
+				}
 			} else if (due.isDue === DueState.invalid) {
 				invalidDueDateDecorationRanges.push(dueRange);
 			}
