@@ -137,7 +137,7 @@ export async function decrementCountForTask(document: vscode.TextDocument, lineN
 	setCountCurrentValueEdit(wEdit, document.uri, count, String(count.current - 1));
 	return applyEdit(wEdit, document);
 }
-export async function incrementOrDecrementPriority(document: TextDocument, lineNumber: number, type: 'increment' | 'decrement') {
+export async function incrementOrDecrementPriority(document: TextDocument, lineNumber: number, type: 'decrement' | 'increment') {
 	const task = findTaskAtLineExtension(lineNumber);
 	if (!task ||
 			type === 'increment' && task.priority === 'A' ||

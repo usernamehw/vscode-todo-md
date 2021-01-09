@@ -361,7 +361,7 @@ export function registerAllCommands() {
 		// @ts-ignore
 		const lastVisitByFile: State['lastVisitByFile'] = state.extensionContext.globalState.get(LAST_VISIT_BY_FILE_STORAGE_KEY);
 		for (const key in lastVisitByFile) {
-			console.log(key, new Date(lastVisitByFile[key]), dayjs().to(lastVisitByFile[key]));
+			console.log(key, new Date(lastVisitByFile[key]), dayjs().to(lastVisitByFile[key]));// TODO: show in output / untitled
 		}
 	});
 	commands.registerCommand('todomd.goToLine', (lineNumber: number) => {
@@ -409,7 +409,7 @@ export function registerAllCommands() {
 }
 
 function noArchiveFileMessage() {
-	vscode.window.showWarningMessage('No default archive file specified');
+	vscode.window.showWarningMessage('Default archive file is not specified.');
 }
 
 export async function checkDefaultFileAndNotify(): Promise<boolean> {
@@ -467,8 +467,8 @@ export async function updateArchivedTasks() {
 	if (!extensionConfig.defaultArchiveFile) {
 		return;
 	}
-	const document = await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultArchiveFile));
-	const parsedArchiveTasks = await parseDocument(document);
+	const archivedDocument = await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultArchiveFile));
+	const parsedArchiveTasks = await parseDocument(archivedDocument);
 	state.archivedTasks = parsedArchiveTasks.tasks;
 	updateArchivedTasksTreeView();
 }
