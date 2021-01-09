@@ -118,6 +118,7 @@
 				"no-autofix/prefer-const": 1,
 
 				"@typescript-eslint/semi": 1,
+				"@typescript-eslint/sort-type-union-intersection-members": 1,
 				"@typescript-eslint/adjacent-overload-signatures": 1,
 				"@typescript-eslint/array-type": [1, {
 					"default": "array"
