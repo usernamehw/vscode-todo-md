@@ -226,11 +226,16 @@ button,
 	}
 
 	.twistie {
+		border-radius: 3px;
 		cursor: pointer;
 		height: 16px;
 		position: relative;
 		top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height)) - 16px) / 2);
 		width: 16px;// Try to center the element
+
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.1);
+		}
 	}
 }
 
