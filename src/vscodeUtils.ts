@@ -1,4 +1,4 @@
-import vscode, { Uri } from 'vscode';
+import vscode, { commands, Uri } from 'vscode';
 import { Link } from './TheTask';
 import { VscodeContext } from './types';
 
@@ -45,9 +45,11 @@ export async function followLinks(links: Link[]) {
 	}
 	followLink(link);
 }
-
-export function followLink(linkString: string) {
-	vscode.env.openExternal(Uri.parse(linkString));
+/**
+ * Opens a link externally using the default application.
+ */
+export async function followLink(linkString: string) {
+	return await vscode.env.openExternal(Uri.parse(linkString));
 }
 /**
  * Open vscode Settings GUI with input value set to the specified value.

@@ -3,6 +3,7 @@ import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTa
 import { extensionConfig, Global, state, updateState } from '../extension';
 import { findTaskAtLineExtension } from '../taskUtils';
 import { WebviewMessage } from '../types';
+import { followLink } from '../vscodeUtils';
 import { getNonce } from '../webview/utils';
 
 export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
@@ -76,6 +77,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				}
 				case 'updateTitle': {
 					this.updateTitle(message.value);
+					break;
+				}
+				case 'followLink': {
+					followLink(message.value);
 					break;
 				}
 			}

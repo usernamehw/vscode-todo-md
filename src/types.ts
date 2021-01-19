@@ -182,4 +182,8 @@ interface WebviewMessageUpdateTitle extends WebviewMessageBase {
 	type: 'updateTitle';
 	value: number;
 }
-export type WebviewMessage = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateEverything | WebviewMessageUpdateTitle;
+interface WebviewMessageOpenLinkFileProtocol extends WebviewMessageBase {
+	type: 'followLink';
+	value: string;
+}
+export type WebviewMessage = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateEverything | WebviewMessageUpdateTitle;

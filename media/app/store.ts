@@ -215,6 +215,12 @@ export function deleteTask(lineNumber: number) {
 		value: lineNumber,
 	});
 }
+export function openInDefaultApp(path: string) {
+	vscodeApi.postMessage({
+		type: 'followLink',
+		value: path,
+	});
+}
 
 window.addEventListener('message', event => {
 	const message: WebviewMessage = event.data; // The json data that the extension sent

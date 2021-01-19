@@ -9,7 +9,7 @@ import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { IExtensionConfig } from '../../src/types';
-import { deleteTask, selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
+import { deleteTask, openInDefaultApp, selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
 import { findTaskAtLineWebview } from './storeUtils';
 import TaskComponent from './Task.vue';
 import { VueEvents } from './webviewTypes';
@@ -177,6 +177,13 @@ export default class App extends Vue {
 		this.$root.$on(VueEvents.openTaskContextMenu, (data: {e: MouseEvent; task: TheTask}) => {
 			this.contextMenuTask = data.task;
 			this.$refs.taskContextMenu.open(data.e);
+		});
+
+		window.addEventListener('click', e => {
+			const link = (e.target as HTMLElement).closest('a');
+			if (link && link.href.startsWith('file:///')) {
+				openInDefaultApp(link.href);
+			}
 		});
 
 		window.addEventListener('keydown', e => {
