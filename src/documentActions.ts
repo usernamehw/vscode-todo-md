@@ -32,6 +32,9 @@ export async function setDueDate(document: vscode.TextDocument, lineNumber: numb
 	const dueDate = `{due:${newDueDate}}`;
 	const wEdit = new WorkspaceEdit();
 	const task = findTaskAtLineExtension(lineNumber);
+	if (task?.overdueRange) {
+		wEdit.delete(document.uri, task.overdueRange);
+	}
 	if (task?.dueRange) {
 		wEdit.replace(document.uri, task.dueRange, dueDate);
 	} else {
