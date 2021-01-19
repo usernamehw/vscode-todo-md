@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import fs from 'fs';
 import vscode, { commands, TextDocument, ThemeIcon, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTaskWorkspaceEdit, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
+import { appendTaskToFile, archiveTasks, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { extensionConfig, LAST_VISIT_BY_FILE_STORAGE_KEY, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
@@ -69,38 +69,20 @@ export function registerAllCommands() {
 		updateAllTreeViews();
 	});
 	commands.registerTextEditorCommand('todomd.archiveCompletedTasks', editor => {
-		if (!extensionConfig.defaultArchiveFile) {
-			noArchiveFileMessage();
-			return;
-		}
 		const completedTasks = state.tasks.filter(t => t.done);
-		if (!completedTasks.length) {
-			return;
-		}
-		const wEdit = new WorkspaceEdit();
-		for (const task of completedTasks) {
-			const line = editor.document.lineAt(task.lineNumber);
-			archiveTaskWorkspaceEdit(wEdit, editor.document.uri, line, !task.due?.isRecurring);
-		}
-		applyEdit(wEdit, editor.document);
+		archiveTasks(completedTasks, editor.document);
 	});
 	commands.registerTextEditorCommand('todomd.archiveSelectedCompletedTasks', editor => {
-		if (!extensionConfig.defaultArchiveFile) {
-			noArchiveFileMessage();
-			return;
-		}
 		const selection = editor.selection;
-		const wEdit = new WorkspaceEdit();
+		const selectedCompletedTasks = [];
 
 		for (let i = selection.start.line; i <= selection.end.line; i++) {
 			const task = findTaskAtLineExtension(i);
-			if (!task || !task.done) {
-				continue;
+			if (task && task.done) {
+				selectedCompletedTasks.push(task);
 			}
-			const line = editor.document.lineAt(i);
-			archiveTaskWorkspaceEdit(wEdit, editor.document.uri, line, !task.due?.isRecurring);
 		}
-		applyEdit(wEdit, editor.document);
+		archiveTasks(selectedCompletedTasks, editor.document);
 	});
 	commands.registerTextEditorCommand('todomd.sortByPriority', (editor, edit) => {
 		const selection = editor.selection;
@@ -224,6 +206,11 @@ export function registerAllCommands() {
 		await updateState();
 		updateAllTreeViews();
 	});
+	/**
+	 * Append task to the file.
+	 *
+	 * Optionally adds creation date if user configured `addCreationDate`.
+	 */
 	async function addTaskToFile(text: string, filePath: string) {
 		const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
 		return await appendTaskToFile(`${creationDate}${text}`, filePath);
@@ -278,8 +265,8 @@ export function registerAllCommands() {
 		setDueDate(document, lineNumber, dueDate);
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
-		const isDefaultFileSpecified = await checkArchiveFileAndNotify();
-		if (!isDefaultFileSpecified) {
+		const isDefaultArchiveFileSpecified = await checkArchiveFileAndNotify();
+		if (!isDefaultArchiveFileSpecified) {
 			return;
 		}
 		openFileInEditor(extensionConfig.defaultArchiveFile);
@@ -433,7 +420,7 @@ export async function checkDefaultFileAndNotify(): Promise<boolean> {
 		}
 	}
 }
-async function checkArchiveFileAndNotify(): Promise<boolean> {
+export async function checkArchiveFileAndNotify(): Promise<boolean> {
 	const specify = 'Specify';
 	if (!extensionConfig.defaultArchiveFile) {
 		const shouldSpecify = await window.showWarningMessage('Default archive file is not specified.', specify);
@@ -461,7 +448,7 @@ function specifyDefaultArchiveFile() {
 	openSettingGuiAt('todomd.defaultArchiveFile');
 }
 /**
- * Updates state for archived tasks
+ * Updates state and Tree View for archived tasks
  */
 export async function updateArchivedTasks() {
 	if (!extensionConfig.defaultArchiveFile) {

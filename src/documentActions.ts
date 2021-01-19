@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import vscode, { TextDocument, TextLine, Uri, WorkspaceEdit } from 'vscode';
-import { applyEdit, updateArchivedTasks } from './commands';
+import { applyEdit, checkArchiveFileAndNotify, updateArchivedTasks } from './commands';
 import { DueDate } from './dueDate';
 import { extensionConfig, state } from './extension';
 import { parseDocument } from './parse';
@@ -54,7 +54,7 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 
 	const taskLineNumbersToDelete = [lineNumber];
 	if (task.subtasks.length) {
-		taskLineNumbersToDelete.push(...task.getNestedTasksIds());
+		taskLineNumbersToDelete.push(...task.getNestedTasksLineNumbers());
 		willDeleteMultipleTasks = `\n ❗ [ ${task.subtasks.length + 1} ] tasks will be deleted.`;
 	}
 
@@ -202,25 +202,71 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	await applyEdit(wEdit, document);
 
 	if (extensionConfig.autoArchiveTasks) {
-		const secondWorkspaceEdit = new WorkspaceEdit();
-		archiveTaskWorkspaceEdit(secondWorkspaceEdit, document.uri, line, !task.due?.isRecurring);
-		await applyEdit(secondWorkspaceEdit, document);// Not possible to apply conflicting ranges with just one edit
+		await archiveTasks([task], document);
 	}
 }
 export function removeCompletionDateWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine) {
-	const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2})?}\s?/;
+	const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2})?}\s?/;// TODO: use range from the task
 	const match = completionDateRegex.exec(line.text);
 	if (match) {
 		wEdit.delete(uri, new vscode.Range(line.lineNumber, match.index, line.lineNumber, match.index + match[0].length));
 	}
 }
-export function archiveTaskWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, shouldDelete: boolean) {
-	appendTaskToFile(line.text, extensionConfig.defaultArchiveFile);
-	if (shouldDelete) {
-		wEdit.delete(uri, line.rangeIncludingLineBreak);
+/**
+ * - Warning and noop when archive file path is not specified
+ * - Archive only works for completed tasks
+ * - When the task is non-root (has parent task) - noop
+ * - When the task has subtasks -> archive them too
+ */
+export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
+	const isDefaultArchiveFileSpecified = await checkArchiveFileAndNotify();
+	if (!isDefaultArchiveFileSpecified) {
+		return undefined;
 	}
+
+	const fileEdit = new WorkspaceEdit();
+	const archiveFileEdit = new WorkspaceEdit();
+	const archiveFileUri = vscode.Uri.file(extensionConfig.defaultArchiveFile);
+	const archiveDocument = await vscode.workspace.openTextDocument(archiveFileUri);
+	let taskLineNumbersToArchive = [];
+
+	for (const task of tasks) {
+		// Only root tasks provided will be archived
+		if (task.parentTaskLineNumber !== undefined) {
+			continue;
+		}
+		// Recurring tasks cannot be archived
+		if (task.due?.isRecurring) {
+			continue;
+		}
+		taskLineNumbersToArchive.push(task.lineNumber);
+		if (task.subtasks.length) {
+			taskLineNumbersToArchive.push(...task.getNestedTasksLineNumbers());
+		}
+	}
+
+	taskLineNumbersToArchive = Array.from(new Set(taskLineNumbersToArchive));
+	for (const lineNumber of taskLineNumbersToArchive) {
+		const task = findTaskAtLineExtension(lineNumber);
+		if (!task) {
+			continue;
+		}
+		const line = document.lineAt(lineNumber);
+		archiveTaskWorkspaceEdit(fileEdit, archiveFileEdit, archiveDocument, document.uri, line, true);
+	}
+
+	await applyEdit(fileEdit, document);
+	await applyEdit(archiveFileEdit, archiveDocument);
 	updateArchivedTasks();
+	return undefined;
 }
+export function archiveTaskWorkspaceEdit(edit: WorkspaceEdit, archiveFileEdit: WorkspaceEdit, archiveDocument: TextDocument, uri: vscode.Uri, line: vscode.TextLine, shouldDelete: boolean) {
+	appendTaskToFileWorkspaceEdit(archiveFileEdit, archiveDocument, line.text);// Add task to archive file
+	if (shouldDelete) {
+		edit.delete(uri, line.rangeIncludingLineBreak);// Delete task from active file
+	}
+}
+
 function addOverdueSpecialTagWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, overdueDateString: string) {
 	wEdit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {overdue:${overdueDateString}}`);
 }
@@ -303,6 +349,10 @@ export async function getDocumentForDefaultFile() {
 		return undefined;
 	}
 	return await vscode.workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultFile));
+}
+function appendTaskToFileWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, text: string) {
+	const eofPosition = document.lineAt(document.lineCount - 1).rangeIncludingLineBreak.end;
+	edit.insert(document.uri, eofPosition, `\n${text}`);
 }
 export async function appendTaskToFile(text: string, filePath: string) {
 	const uri = vscode.Uri.file(filePath);

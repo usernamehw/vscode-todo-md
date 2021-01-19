@@ -4,7 +4,7 @@ import { extensionConfig } from './extension';
 import { OptionalExceptFor } from './types';
 
 export type Priority = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z';
-export type TaskInit = OptionalExceptFor<TheTask, 'title' | 'lineNumber' | 'rawText' | 'indentLvl'>;
+export type TaskInit = OptionalExceptFor<TheTask, 'indentLvl' | 'lineNumber' | 'rawText' | 'title'>;
 /**
  * Modifier for task completion.
  * Instead of completing the task increases count by 1.
@@ -100,13 +100,15 @@ export class TheTask {
 		this.overdueRange = init.overdueRange;
 		this.collapseRange = init.collapseRange;
 	}
-
-	getNestedTasksIds(tasks = this.subtasks): number[] {
+	/**
+	 * Gets all nested task line numbers (recursive)
+	 */
+	getNestedTasksLineNumbers(tasks = this.subtasks): number[] {
 		const ids = [];
 		for (const task of tasks) {
 			ids.push(task.lineNumber);
 			if (task.subtasks) {
-				ids.push(...this.getNestedTasksIds(task.subtasks));
+				ids.push(...this.getNestedTasksLineNumbers(task.subtasks));
 			}
 		}
 		return ids;

@@ -62,7 +62,7 @@ export interface IExtensionConfig {
 	creationDateIncludeTime: boolean;
 	defaultPriority: Priority;
 	autoArchiveTasks: boolean;
-	confirmTaskDelete: 'always' | 'never' | 'hasNestedTasks';
+	confirmTaskDelete: 'always' | 'hasNestedTasks' | 'never';
 	statusBarCounterEnabled: boolean;
 
 	sortTagsView: SortTags;
@@ -85,7 +85,13 @@ export interface IExtensionConfig {
 		filter: string;
 	}[];
 
+	/**
+	 * Absolute file path to default file. (Used for webview or TreeView when no active file is opened)
+	 */
 	defaultFile: string;
+	/**
+	 * Absolute file path to archive file
+	 */
 	defaultArchiveFile: string;
 
 	treeViews: {
@@ -176,4 +182,4 @@ interface WebviewMessageUpdateTitle extends WebviewMessageBase {
 	type: 'updateTitle';
 	value: number;
 }
-export type WebviewMessage = WebviewMessageUpdateEverything | WebviewMessageToggleDone | WebviewMessageShowNotification | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageDecrementCount | WebviewMessageUpdateTitle | WebviewMessageToggleCollapse | WebviewMessageDeleteTask;
+export type WebviewMessage = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateEverything | WebviewMessageUpdateTitle;

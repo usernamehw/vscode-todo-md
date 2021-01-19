@@ -18,7 +18,12 @@ function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefin
 	}
 	return undefined;
 }
-
+/**
+ * There are 2 functions that do the same thing, but one is for the webview
+ *
+ * Suffix `Extension` means it gets task from the extension side
+ * Suffix `Webview` means it gets task from the webview side
+ */
 export function findTaskAtLineExtension(lineNumber: number) {
 	return findTaskAtLine(lineNumber, state.tasksAsTree);
 }
