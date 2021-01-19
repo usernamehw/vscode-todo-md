@@ -112,6 +112,10 @@ export interface IExtensionConfig {
 		customCheckboxEnabled: boolean;
 		checkboxStyle: string;
 		padding: string;
+		/**
+		 * Visual distance of nested items.
+		 */
+		indentSize: string;
 		tagStyles: {
 			[tagName: string]: {
 				color: string;

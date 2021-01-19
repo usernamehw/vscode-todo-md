@@ -90,6 +90,11 @@
 					"markdownDescription": "Controls spacing between items in a list. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)",
 					"default": "0px"
 				},
+				"todomd.webview.indentSize": {
+					"type": "string",
+					"markdownDescription": "Controls visual indent of nested elements in a webview.",
+					"default": "1.8em"
+				},
 				"todomd.webview.customCheckboxEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Whether checkbox is rendered as native input element or a custom styled element.",

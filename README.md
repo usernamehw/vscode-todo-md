@@ -153,6 +153,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.checkboxStyle|`"rounded-square"`|Controls checkbox style (round, square...).|
 |webview.fontSize|`"13px"`|Controls font size in the webview.|
 |webview.padding|`"0px"`|Controls spacing between items in a list.|
+|webview.indentSize|`"1.8em"`|Controls visual indent of nested elements in a webview.|
 |webview.fontFamily|`'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'`|Controls font family in the webview.|
 |webview.tagStyles|**`{}`**|Set different color for any tag in a webview. `"todomd.webview.tagStyles": { "inbox": { "color": "#000", "backgroundColor": "#00b7ff" } }`|
 

@@ -163,26 +163,28 @@ button,
 		background-color: var(--vscode-list-hoverBackground);
 	}
 
-	$nestedItemMarginSize: 1.7rem;
-
 	&.nested-lvl-1 {
-		padding-left: $nestedItemMarginSize;
+		padding-left: var(--indent-size);
 	}
 
 	&.nested-lvl-2 {
-		padding-left: $nestedItemMarginSize * 2;
+		padding-left: calc(var(--indent-size) * 2);
 	}
 
 	&.nested-lvl-3 {
-		padding-left: $nestedItemMarginSize * 3;
+		padding-left: calc(var(--indent-size) * 3);
 	}
 
 	&.nested-lvl-4 {
-		padding-left: $nestedItemMarginSize * 4;
+		padding-left: calc(var(--indent-size) * 4);
 	}
 
 	&.nested-lvl-5 {
-		padding-left: $nestedItemMarginSize * 5;
+		padding-left: calc(var(--indent-size) * 5);
+	}
+
+	&.nested-lvl-6 {
+		padding-left: calc(var(--indent-size) * 6);
 	}
 
 	&.pri1 {
