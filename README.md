@@ -116,7 +116,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `todomd.decrementPriority` - Decrement priority. Or add one if it doesn't exist.
 - `todomd.getNextTask` - Get due task from main file. If none are due - get one with the highest priority.
 - `todomd.getFewNextTasks` - Get several tasks. Due tasks are on top.
-- `todomd.getRandomTask` - Get random due task if exists. If none are due, get random task out of non-due tasks. (Taken from main file).
+- `todomd.getRandomTask` - Get random not completed task.
 - `todomd.sortByPriority` - Sort selected lines by priority
 - `todomd.createSimilarTask` - Create similar task (same tags, projects, contexts).
 - `todomd.setDueDate` - Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate)
