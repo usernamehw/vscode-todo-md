@@ -66,6 +66,7 @@ export class TheTask {
 	tagsRange?: Range[];
 	dueRange?: Range;
 	overdueRange?: Range;
+	completionDateRange?: Range;
 	collapseRange?: Range;
 
 	constructor(init: TaskInit) {
@@ -99,6 +100,7 @@ export class TheTask {
 		this.tagsRange = init.tagsRange;
 		this.overdueRange = init.overdueRange;
 		this.collapseRange = init.collapseRange;
+		this.completionDateRange = init.completionDateRange;
 	}
 	/**
 	 * Gets all nested task line numbers (recursive)

@@ -22,7 +22,7 @@ interface EmptyLineReturn extends ParseLineReturn {
 	lineType: 'empty';
 }
 
-export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommentReturn | CommentReturn | EmptyLineReturn {
+export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineReturn | SpecialCommentReturn | TaskReturn {
 	let line = textLine.text.trim();
 	if (!line.length) {
 		return {
@@ -83,6 +83,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 	let dueRange: Range | undefined;
 	let overdueRange: Range | undefined;
 	let collapseRange: Range | undefined;
+	let completionDateRange: Range | undefined;
 
 	for (const word of words) {
 		switch (word[0]) {
@@ -106,6 +107,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 				} else if (specialTag === 'cm') {
 					// Presence of completion date indicates that the task is done
 					done = true;
+					completionDateRange = range;
 					specialTagRanges.push(range);
 				} else if (specialTag === 'count') {
 					if (value === undefined) {
@@ -203,6 +205,7 @@ export function parseLine(textLine: vscode.TextLine): TaskReturn | SpecialCommen
 			dueRange,
 			overdueRange,
 			collapseRange,
+			completionDateRange,
 			count,
 			threshold,
 			overdue,

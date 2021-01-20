@@ -121,12 +121,11 @@ export async function incrementCountForTask(document: vscode.TextDocument, lineN
 		setCountCurrentValueEdit(wEdit, document.uri, count, String(newValue));
 	} else {
 		setCountCurrentValueEdit(wEdit, document.uri, count, '0');
-		removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
+		removeCompletionDateWorkspaceEdit(wEdit, document.uri, task);
 	}
 	return applyEdit(wEdit, document);
 }
 export async function decrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
-	const line = document.lineAt(lineNumber);
 	const wEdit = new WorkspaceEdit();
 	const count = task.count;
 	if (!count) {
@@ -135,7 +134,7 @@ export async function decrementCountForTask(document: vscode.TextDocument, lineN
 	if (count.current === 0) {
 		return Promise.resolve(undefined);
 	} else if (count.current === count.needed) {
-		removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
+		removeCompletionDateWorkspaceEdit(wEdit, document.uri, task);
 	}
 	setCountCurrentValueEdit(wEdit, document.uri, count, String(count.current - 1));
 	return applyEdit(wEdit, document);
@@ -193,7 +192,7 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 				wEdit.delete(document.uri, new vscode.Range(lineNumber, firstNonWhitespaceCharacterIndex, lineNumber, firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
 			}
 		} else {
-			removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
+			removeCompletionDateWorkspaceEdit(wEdit, document.uri, task);
 		}
 	} else {
 		if (extensionConfig.addCompletionDate) {
@@ -208,11 +207,9 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 		await archiveTasks([task], document);
 	}
 }
-export function removeCompletionDateWorkspaceEdit(wEdit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine) {
-	const completionDateRegex = /\s{cm:\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2})?}\s?/;// TODO: use range from the task
-	const match = completionDateRegex.exec(line.text);
-	if (match) {
-		wEdit.delete(uri, new vscode.Range(line.lineNumber, match.index, line.lineNumber, match.index + match[0].length));
+export function removeCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: vscode.Uri, task: TheTask) {
+	if (task.completionDateRange) {
+		edit.delete(uri, task.completionDateRange);
 	}
 }
 /**
@@ -307,7 +304,7 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 			const line = document.lineAt(task.lineNumber);
 			if (task.done) {
 				removeDoneSymbolEdit(wEdit, document.uri, line);
-				removeCompletionDateWorkspaceEdit(wEdit, document.uri, line);
+				removeCompletionDateWorkspaceEdit(wEdit, document.uri, task);
 			} else {
 				if (!task.overdue && !dayjs().isSame(lastVisit, 'day')) {
 					const lastVisitWithoutTime = new Date(lastVisit.getFullYear(), lastVisit.getMonth(), lastVisit.getDate());
