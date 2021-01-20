@@ -4,6 +4,7 @@ import sample from 'lodash/sample';
 import vscode, { commands, TextDocument, ThemeIcon, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTasks, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
+import { updateEverything } from './events';
 import { extensionConfig, LAST_VISIT_BY_FILE_STORAGE_KEY, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
@@ -17,6 +18,7 @@ import { State, VscodeContext } from './types';
 import { forEachTask } from './utils/extensionUtils';
 import { fancyNumber } from './utils/utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './utils/vscodeUtils';
+import { updateWebviewView } from './webview/webviewView';
 
 export function registerAllCommands() {
 	commands.registerCommand('todomd.toggleDone', async (treeItem?: TaskTreeItem) => {
@@ -66,7 +68,9 @@ export function registerAllCommands() {
 				toggleTaskCollapseWorkspaceEdit(edit, activeDocument, task.lineNumber);
 			}
 		});
-		applyEdit(edit, activeDocument);
+		await applyEdit(edit, activeDocument);
+		updateEverything();
+		updateWebviewView();
 	});
 	commands.registerCommand('todomd.expandAllTasks', async () => {
 		const edit = new WorkspaceEdit();
@@ -76,7 +80,9 @@ export function registerAllCommands() {
 				toggleTaskCollapseWorkspaceEdit(edit, activeDocument, task.lineNumber);
 			}
 		});
-		applyEdit(edit, activeDocument);
+		await applyEdit(edit, activeDocument);
+		updateEverything();
+		updateWebviewView();
 	});
 	commands.registerCommand('todomd.deleteTask', async (treeItem?: TaskTreeItem) => {
 		if (!treeItem) {
