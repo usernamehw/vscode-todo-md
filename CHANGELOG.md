@@ -1,3 +1,13 @@
+## 2.3.0 `20 Jan 2021`
+
+- ✨ [webview] Collapse All / Expand All (alt) icon
+- ✨ [webview] Add visual indent size config `todomd.webview.indentSize`
+- ✨ Archive task also archives nested tasks
+- ✨ Toggle completion for multiple selected tasks
+- ✨ Add priority colors to advanced decorations
+- 💥 Set due date function removes `{overdue}` tag & adds to the end of the line instead of the start
+- 💥 Get random task no longer starts with due tasks
+
 ## 2.2.7 `21 Dec 2020`
 
 - ✨ Hover: Show due date icon and count special tag
