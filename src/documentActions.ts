@@ -46,7 +46,9 @@ export async function setDueDate(document: vscode.TextDocument, lineNumber: numb
 	}
 	return await applyEdit(wEdit, document);
 }
-
+/**
+ * Delete the task. Show confirmation dialog if necessary. The dialog shows all the tasks that will be deleted.
+ */
 export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber: number) {
 	const task = findTaskAtLineExtension(lineNumber);
 	if (!task) {
@@ -54,14 +56,23 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 	}
 	const edit = new WorkspaceEdit();
 
-	let willDeleteMultipleTasks = '';
+	let numberOfTasksToBeDeleted = '';
+	let deletedTasksAsText = '';
 	let showConfirmationDialog = false;
 
 	const taskLineNumbersToDelete = [lineNumber];
 	if (task.subtasks.length) {
 		taskLineNumbersToDelete.push(...task.getNestedTasksLineNumbers());
-		willDeleteMultipleTasks = `\n ❗ [ ${task.subtasks.length + 1} ] tasks will be deleted.`;
 	}
+
+	for (const ln of taskLineNumbersToDelete) {
+		const taskAtLine = findTaskAtLineExtension(ln);
+		if (!taskAtLine) {
+			continue;
+		}
+		deletedTasksAsText += `${taskAtLine.rawText.replace(/\s\s/g, '┄')}\n`;
+	}
+	numberOfTasksToBeDeleted = `❗ [ ${taskLineNumbersToDelete.length} ] task${taskLineNumbersToDelete.length > 1 ? 's' : ''} will be deleted.`;
 
 	if (extensionConfig.confirmTaskDelete === 'always') {
 		showConfirmationDialog = true;
@@ -73,7 +84,7 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 
 	if (showConfirmationDialog) {
 		const confirmBtnName = 'Delete';
-		const button = await vscode.window.showWarningMessage(`Confirm deletion?${willDeleteMultipleTasks}`, {
+		const button = await vscode.window.showWarningMessage(`${numberOfTasksToBeDeleted}\n${deletedTasksAsText}`, {
 			modal: true,
 		}, confirmBtnName);
 		if (button !== confirmBtnName) {
