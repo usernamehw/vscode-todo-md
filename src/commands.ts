@@ -14,7 +14,7 @@ import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { tasksView, updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { State, VscodeContext } from './types';
-import { fancyNumber, getRandomInt } from './utils';
+import { fancyNumber } from './utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
 
 export function registerAllCommands() {
