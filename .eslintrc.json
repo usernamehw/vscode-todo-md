@@ -435,7 +435,9 @@
 				"prefer-destructuring": 0,
 				"prefer-rest-params": 1,
 				"prefer-template": 1,
-				"prefer-arrow-callback": 1,
+				"prefer-arrow-callback": [1, {
+					"allowNamedFunctions": true
+				}],
 				"arrow-spacing": [1, { "before": true, "after": true }],
 				"arrow-parens": [1, "as-needed", { "requireForBlockBody": false }],
 				"arrow-body-style": [1, "as-needed"],

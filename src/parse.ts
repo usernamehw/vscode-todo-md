@@ -21,7 +21,9 @@ interface CommentReturn extends ParseLineReturn {
 interface EmptyLineReturn extends ParseLineReturn {
 	lineType: 'empty';
 }
-
+/**
+ * Main parsing function. 1 Line - 1 Task.
+ */
 export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineReturn | SpecialCommentReturn | TaskReturn {
 	let line = textLine.text.trim();
 	if (!line.length) {

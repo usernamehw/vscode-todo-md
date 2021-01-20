@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import fs from 'fs';
+import sample from 'lodash/sample';
 import vscode, { commands, TextDocument, ThemeIcon, window, workspace, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTasks, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
@@ -160,21 +161,14 @@ export function registerAllCommands() {
 		});
 	});
 	commands.registerCommand('todomd.getRandomTask', async () => {
+		// TODO: maybe should include nested tasks?
 		await updateState();
-		let tasks = state.tasks.filter(t => !t.done);
+		const tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
 			return;
 		}
-		const dueTasks = tasks.filter(t => t.due?.isDue);
-		let resultTask;
-		if (dueTasks.length) {
-			resultTask = dueTasks[getRandomInt(0, dueTasks.length - 1)];
-		} else {
-			tasks = tasks.filter(t => !t.due);
-			resultTask = tasks[getRandomInt(0, tasks.length - 1)];
-		}
-		vscode.window.showInformationMessage(TheTask.formatTask(resultTask));
+		window.showInformationMessage(TheTask.formatTask(sample(tasks)!));
 	});
 	commands.registerCommand('todomd.addTaskToDefaultFile', async () => {
 		const isDefaultFileSpecified = await checkDefaultFileAndNotify();
