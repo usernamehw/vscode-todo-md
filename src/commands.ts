@@ -182,7 +182,6 @@ export function registerAllCommands() {
 		});
 	});
 	commands.registerCommand('todomd.getRandomTask', async () => {
-		// TODO: maybe should include nested tasks?
 		await updateState();
 		const tasks = state.tasks.filter(t => !t.done);
 		if (!tasks.length) {
