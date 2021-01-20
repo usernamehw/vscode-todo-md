@@ -1,3 +1,7 @@
+## 2.3.1 `20 Jan 2021`
+
+- 🐛 Update everything after executing collapse/expand all
+
 ## 2.3.0 `20 Jan 2021`
 
 - ✨ [webview] Collapse All / Expand All (alt) icon
