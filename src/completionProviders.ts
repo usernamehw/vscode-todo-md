@@ -4,7 +4,7 @@ import { DueDate } from './dueDate';
 import { extensionConfig, Global, state } from './extension';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
-import { getWordAtPosition, getWordRangeAtPosition } from './vscodeUtils';
+import { getWordAtPosition, getWordRangeAtPosition } from './utils/vscodeUtils';
 
 export function updateCompletions(): void {
 	if (Global.tagAutocompleteDisposable) {

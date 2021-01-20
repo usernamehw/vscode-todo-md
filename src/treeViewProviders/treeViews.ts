@@ -8,7 +8,7 @@ import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
 import { ItemForProvider, SortTags, VscodeContext } from '../types';
-import { setContext } from '../vscodeUtils';
+import { setContext } from '../utils/vscodeUtils';
 import { updateWebviewView } from '../webview/webviewView';
 
 export const tagProvider = new TagProvider([]);

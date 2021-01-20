@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import fs from 'fs';
 import sample from 'lodash/sample';
 import vscode, { commands, TextDocument, ThemeIcon, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTasks, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, tryToDeleteTask } from './documentActions';
+import { appendTaskToFile, archiveTasks, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { extensionConfig, LAST_VISIT_BY_FILE_STORAGE_KEY, state, updateLastVisitGlobalState, updateState } from './extension';
 import { parseDocument } from './parse';
@@ -14,8 +14,9 @@ import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { tasksView, updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { State, VscodeContext } from './types';
-import { fancyNumber } from './utils';
-import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './vscodeUtils';
+import { forEachTask } from './utils/extensionUtils';
+import { fancyNumber } from './utils/utils';
+import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './utils/vscodeUtils';
 
 export function registerAllCommands() {
 	commands.registerCommand('todomd.toggleDone', async (treeItem?: TaskTreeItem) => {
@@ -56,6 +57,26 @@ export function registerAllCommands() {
 
 		await updateState();
 		updateAllTreeViews();
+	});
+	commands.registerCommand('todomd.collapseAllNestedTasks', async () => {
+		const edit = new WorkspaceEdit();
+		const activeDocument = await getActiveDocument();
+		forEachTask(task => {
+			if (task.hasNestedTasks() && !task.isCollapsed) {
+				toggleTaskCollapseWorkspaceEdit(edit, activeDocument, task.lineNumber);
+			}
+		});
+		applyEdit(edit, activeDocument);
+	});
+	commands.registerCommand('todomd.expandAllTasks', async () => {
+		const edit = new WorkspaceEdit();
+		const activeDocument = await getActiveDocument();
+		forEachTask(task => {
+			if (task.hasNestedTasks() && task.isCollapsed) {
+				toggleTaskCollapseWorkspaceEdit(edit, activeDocument, task.lineNumber);
+			}
+		});
+		applyEdit(edit, activeDocument);
 	});
 	commands.registerCommand('todomd.deleteTask', async (treeItem?: TaskTreeItem) => {
 		if (!treeItem) {

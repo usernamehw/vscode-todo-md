@@ -3,7 +3,7 @@ import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTa
 import { extensionConfig, Global, state, updateState } from '../extension';
 import { findTaskAtLineExtension } from '../taskUtils';
 import { WebviewMessage } from '../types';
-import { followLink } from '../vscodeUtils';
+import { followLink } from '../utils/vscodeUtils';
 import { getNonce } from '../webview/utils';
 
 export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {

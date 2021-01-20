@@ -11,7 +11,7 @@ import { parseDocument } from './parse';
 import { StatusBar } from './statusBar';
 import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews } from './treeViewProviders/treeViews';
 import { IExtensionConfig, State, VscodeContext } from './types';
-import { setContext } from './vscodeUtils';
+import { setContext } from './utils/vscodeUtils';
 import { TasksWebviewViewProvider } from './webview/webviewView';
 
 dayjs.extend(isBetween);

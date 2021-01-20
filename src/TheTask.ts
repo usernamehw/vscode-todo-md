@@ -115,6 +115,14 @@ export class TheTask {
 		}
 		return ids;
 	}
+	// TODO: use this helper function
+	isRoot() {
+		return this.parentTaskLineNumber !== undefined;
+	}
+
+	hasNestedTasks() {
+		return this.subtasks.length !== 0;
+	}
 
 	static formatTask(task: TheTask): string {
 		return task.title + (task.count ? ` ${task.count.current}/${task.count.needed}` : '');

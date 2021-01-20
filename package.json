@@ -890,6 +890,18 @@
 				"icon": "$(settings-gear)"
 			},
 			{
+				"command": "todomd.collapseAllNestedTasks",
+				"title": "Collapse all nested tasks.",
+				"category": "Todo MD",
+				"icon": "$(collapse-all)"
+			},
+			{
+				"command": "todomd.expandAllTasks",
+				"title": "Expand all tasks.",
+				"category": "Todo MD",
+				"icon": "$(expand-all)"
+			},
+			{
 				"command": "todomd.incrementPriority",
 				"title": "Increment priority",
 				"category": "Todo MD"
@@ -1249,6 +1261,12 @@
 				},
 				{
 					"command": "todomd.showWebviewSettings",
+					"when": "view == todomd.webviewTasks",
+					"group": "navigation@8"
+				},
+				{
+					"command": "todomd.collapseAllNestedTasks",
+					"alt": "todomd.expandAllTasks",
 					"when": "view == todomd.webviewTasks",
 					"group": "navigation@9"
 				}

@@ -7,7 +7,7 @@ import { extensionConfig, Global, state, statusBar, updateLastVisitGlobalState, 
 import { updateHover } from './hover/hoverProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
-import { setContext } from './vscodeUtils';
+import { setContext } from './utils/vscodeUtils';
 
 export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): Promise<void> {
 	if (state.theRightFileOpened) {

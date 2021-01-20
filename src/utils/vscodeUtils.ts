@@ -1,6 +1,6 @@
 import vscode, { commands, Uri } from 'vscode';
-import { Link } from './TheTask';
-import { VscodeContext } from './types';
+import { Link } from '../TheTask';
+import { VscodeContext } from '../types';
 
 /**
  * Create new untitled file with provided content and language;

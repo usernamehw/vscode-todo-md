@@ -4,7 +4,7 @@ import { filterItems } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import { TheTask } from '../../src/TheTask';
 import { DueState, WebviewMessage } from '../../src/types';
-import { flattenDeep } from '../../src/utils';
+import { flattenDeep } from '../../src/utils/utils';
 import { findTaskAtLineWebview, isTaskVisible } from './storeUtils';
 
 Vue.use(Vuex);

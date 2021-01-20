@@ -15,17 +15,19 @@ export async function hideTask(document: vscode.TextDocument, lineNumber: number
 	wEdit.insert(document.uri, line.range.end, ' {h}');
 	return applyEdit(wEdit, document);
 }
-
-export async function toggleTaskCollapse(document: vscode.TextDocument, lineNumber: number) {
-	const wEdit = new WorkspaceEdit();
+export async function toggleTaskCollapse(document: TextDocument, lineNumber: number) {
+	const edit = new WorkspaceEdit();
+	toggleTaskCollapseWorkspaceEdit(edit, document, lineNumber);
+	return applyEdit(edit, document);
+}
+export function toggleTaskCollapseWorkspaceEdit(edit: WorkspaceEdit, document: vscode.TextDocument, lineNumber: number) {
 	const line = document.lineAt(lineNumber);
 	const task = findTaskAtLineExtension(lineNumber);
 	if (task?.collapseRange) {
-		wEdit.delete(document.uri, task.collapseRange);
+		edit.delete(document.uri, task.collapseRange);
 	} else {
-		wEdit.insert(document.uri, line.range.end, ' {c}');
+		edit.insert(document.uri, line.range.end, ' {c}');
 	}
-	return applyEdit(wEdit, document);
 }
 
 export async function setDueDate(document: vscode.TextDocument, lineNumber: number, newDueDate: string) {

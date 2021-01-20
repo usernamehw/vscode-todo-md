@@ -1,7 +1,7 @@
 import { StatusBarItem, window } from 'vscode';
 import { extensionConfig } from './extension';
 import { TheTask } from './TheTask';
-import { percentage } from './utils';
+import { percentage } from './utils/utils';
 
 export class StatusBar {
 	private readonly statusBarItem: StatusBarItem;
