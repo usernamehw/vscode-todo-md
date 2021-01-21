@@ -35,9 +35,12 @@
                  :closeOnScroll="false">
         <li>
             <a href="#"
+               @click="revealTask">Reveal</a>
+        </li>
+        <li>
+            <a href="#"
                @click="deleteTask">Delete</a>
         </li>
-        <!-- <div class="codicon codicon-trash"></div> -->
     </vue-context>
 </div>
 </template>

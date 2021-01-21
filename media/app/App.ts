@@ -148,6 +148,12 @@ export default class App extends Vue {
 	deleteTask() {
 		deleteTask(this.contextMenuTask.lineNumber);
 	}
+	revealTask() {
+		vscodeApi.postMessage({
+			type: 'goToTask',
+			value: this.contextMenuTask.lineNumber,
+		});
+	}
 	onTaskListScroll() {
 		this.$refs.taskContextMenu.close();
 	}
