@@ -18,7 +18,7 @@
             <div v-html="fuzzyHighlight(suggestion.item)"></div>
         </div>
     </vue-autosuggest>
-    <div v-if="filteredSortedTasks.length"
+    <div v-if="filteredSortedTasks && filteredSortedTasks.length"
          class="task-list"
          @scroll.passive="onTaskListScroll">
         <task v-for="task in filteredSortedTasks"

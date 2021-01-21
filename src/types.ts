@@ -144,7 +144,7 @@ interface WebviewMessageBase {
 interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 	type: 'updateEverything';
 	value: {
-		tasks: TheTask[];
+		tasksAsTree: TheTask[];
 		tags: string[];
 		projects: string[];
 		contexts: string[];

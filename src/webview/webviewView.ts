@@ -97,7 +97,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			this._view.webview.postMessage({
 				type: 'updateEverything',
 				value: {
-					tasks: state.tasksAsTree,
+					tasksAsTree: state.tasksAsTree,
 					tags: state.tags,
 					projects: state.projects,
 					contexts: state.contexts,

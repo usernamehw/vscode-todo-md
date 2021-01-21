@@ -26,7 +26,7 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 		}, 15);// Workaround for event fired twice very fast when closing an editor
 	}
 }
-export function checkIfNeedResetRecurringTasks(filePath: string): undefined | {lastVisit: Date} {
+export function checkIfNeedResetRecurringTasks(filePath: string): {lastVisit: Date} | undefined {
 	const lastVisitForFile = state.lastVisitByFile[filePath];
 	if (lastVisitForFile) {
 		if (!dayjs().isSame(lastVisitForFile, 'day')) {

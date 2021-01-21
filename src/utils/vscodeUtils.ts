@@ -1,4 +1,4 @@
-import vscode, { commands, Uri } from 'vscode';
+import vscode, { Uri } from 'vscode';
 import { Link } from '../TheTask';
 import { VscodeContext } from '../types';
 

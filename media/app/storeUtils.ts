@@ -42,3 +42,25 @@ function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefin
 export function findTaskAtLineWebview(lineNumber: number) {
 	return findTaskAtLine(lineNumber, store.state.tasksAsTree);
 }
+
+interface NestedObject {
+	subtasks: NestedObject[];
+}
+/**
+ * Recursive function to flatten an array.
+ * Nested property name is hardcoded as `subtasks`
+ */
+export function flattenDeep<T extends NestedObject>(arr: T[]): T[] {
+	const flattened: T[] = [];
+	function flatten(innerArr: T[]) {
+		for (const item of innerArr) {
+			flattened.push(item);
+			if (item.subtasks.length) {
+				// @ts-ignore
+				flatten(item.subtasks);
+			}
+		}
+	}
+	flatten(arr);
+	return flattened;
+}

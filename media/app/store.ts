@@ -4,8 +4,7 @@ import { filterItems } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import { TheTask } from '../../src/TheTask';
 import { DueState, WebviewMessage } from '../../src/types';
-import { flattenDeep } from '../../src/utils/utils';
-import { findTaskAtLineWebview, isTaskVisible } from './storeUtils';
+import { findTaskAtLineWebview, flattenDeep, isTaskVisible } from './storeUtils';
 
 Vue.use(Vuex);
 
@@ -56,7 +55,7 @@ export const store = new Store({
 		filteredSortedTasks: state => {
 			let filteredTasks = state.tasksAsTree;
 			if (state.filterInputValue !== '') {
-				filteredTasks = filterItems(filteredTasks, state.filterInputValue);
+				filteredTasks = filterItems(filteredTasks, state.filterInputValue || '');
 			}
 			if (!state.config.showRecurringCompleted) {
 				filteredTasks = filteredTasks.filter(task => {
@@ -229,7 +228,7 @@ window.addEventListener('message', event => {
 			store.state.config = message.value.config;
 			store.state.defaultFileSpecified = message.value.defaultFileSpecified;
 			store.state.activeDocumentOpened = message.value.activeDocumentOpened;
-			store.state.tasksAsTree = message.value.tasks;
+			store.state.tasksAsTree = message.value.tasksAsTree;
 			store.state.tags = message.value.tags;
 			store.state.projects = message.value.projects;
 			store.state.contexts = message.value.contexts;
