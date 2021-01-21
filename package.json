@@ -1432,7 +1432,7 @@
 		"@types/lodash": "^4.14.168",
 		"@types/marked": "^1.2.1",
 		"@types/mocha": "^8.2.0",
-		"@types/node": "^12.19.14",
+		"@types/node": "^12.19.15",
 		"@types/vscode": "^1.52.0",
 		"@typescript-eslint/eslint-plugin": "^4.14.0",
 		"@typescript-eslint/parser": "^4.14.0",
@@ -1451,7 +1451,7 @@
 		"sass-loader": "^10.1.1",
 		"source-map-support": "^0.5.19",
 		"style-loader": "^2.0.0",
-		"stylelint": "^13.8.0",
+		"stylelint": "^13.9.0",
 		"stylelint-csstree-validator": "^1.9.0",
 		"stylelint-declaration-block-no-ignored-properties": "^2.3.0",
 		"stylelint-declaration-use-variable": "^1.7.2",
@@ -1468,8 +1468,8 @@
 		"vue-loader": "^15.9.6",
 		"vue-property-decorator": "^9.1.2",
 		"vue-template-compiler": "^2.6.12",
-		"webpack": "^5.15.0",
-		"webpack-cli": "^4.3.1"
+		"webpack": "^5.16.0",
+		"webpack-cli": "^4.4.0"
 	},
 	"dependencies": {
 		"dayjs": "^1.10.3",
