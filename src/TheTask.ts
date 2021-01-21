@@ -1,7 +1,7 @@
 import { Range } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionConfig } from './extension';
-import { OptionalExceptFor } from './types';
+import { DueState, OptionalExceptFor } from './types';
 
 export type Priority = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z';
 export type TaskInit = OptionalExceptFor<TheTask, 'indentLvl' | 'lineNumber' | 'rawText' | 'title'>;
@@ -125,6 +125,16 @@ export class TheTask {
 	}
 
 	static formatTask(task: TheTask): string {
-		return task.title + (task.count ? ` ${task.count.current}/${task.count.needed}` : '');
+		let result = '';
+		if (task.due?.isDue === DueState.due) {
+			result += '🟩 ';
+		} else if (task.due?.isDue === DueState.overdue) {
+			result += '🟥 ';
+		}
+		result += task.title;
+		if (task.count) {
+			result += ` ${task.count.current}/${task.count.needed}`;
+		}
+		return result;
 	}
 }
