@@ -151,6 +151,9 @@ export default class App extends Vue {
 	deleteTask() {
 		SendMessage.deleteTask(this.contextMenuTask.lineNumber);
 	}
+	revealTask() {
+		SendMessage.revealTask(this.contextMenuTask.lineNumber);
+	}
 	onTaskListScroll() {
 		this.$refs.taskContextMenu.close();
 	}
