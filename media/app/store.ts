@@ -3,7 +3,8 @@ import Vuex, { Store } from 'vuex';
 import { filterItems } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import { TheTask } from '../../src/TheTask';
-import { DueState, WebviewMessage } from '../../src/types';
+import { DueState, MessageFromWebview } from '../../src/types';
+import { SendMessage } from './SendMessage';
 import { findTaskAtLineWebview, flattenDeep, isTaskVisible } from './storeUtils';
 
 Vue.use(Vuex);
@@ -175,16 +176,13 @@ interface SavedState {
 interface VscodeWebviewApi {
 	getState(): SavedState;
 	setState(state: SavedState): void;
-	postMessage(message: WebviewMessage): void;
+	postMessage(message: MessageFromWebview): void;
 }
 /** @ts-ignore */
 // eslint-disable-next-line no-undef
 export const vscodeApi: VscodeWebviewApi = acquireVsCodeApi();
 window.onerror = function(message, source, lineno, colno, error) {
-	vscodeApi.postMessage({
-		type: 'showNotification',
-		value: `[WEBVIEW] ${message}`,
-	});
+	SendMessage.showNotification(`[WEBVIEW] ${message}`);
 };
 const savedState = getState();
 updateFilterValueMutation(savedState.filterInputValue);
@@ -196,33 +194,8 @@ function getState(): SavedState {
 	return vscodeApi.getState() ?? savedStateDefaults;
 }
 
-export function showNotification(text: string) {
-	vscodeApi.postMessage({
-		type: 'showNotification',
-		value: text,
-	});
-}
-export function toggleTaskCollapse(lineNumber: number) {
-	vscodeApi.postMessage({
-		type: 'toggleTaskCollapse',
-		value: lineNumber,
-	});
-}
-export function deleteTask(lineNumber: number) {
-	vscodeApi.postMessage({
-		type: 'deleteTask',
-		value: lineNumber,
-	});
-}
-export function openInDefaultApp(path: string) {
-	vscodeApi.postMessage({
-		type: 'followLink',
-		value: path,
-	});
-}
-
 window.addEventListener('message', event => {
-	const message: WebviewMessage = event.data; // The json data that the extension sent
+	const message: MessageFromWebview = event.data; // The json data that the extension sent
 	switch (message.type) {
 		case 'updateEverything': {
 			store.state.config = message.value.config;
@@ -250,10 +223,7 @@ export function updateFilterValueMutation(newValue: string) {
 }
 export function toggleDoneMutation(task: TheTask) {
 	store.commit(Mutation.TOGGLE_DONE, task);
-	vscodeApi.postMessage({
-		type: 'toggleDone',
-		value: task.lineNumber,
-	});
+	SendMessage.toggleDone(task.lineNumber);
 }
 export function selectTaskMutation(lineNumber: number) {
 	store.commit(Mutation.SELECT_TASK, lineNumber);

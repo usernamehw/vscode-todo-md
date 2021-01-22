@@ -3,8 +3,9 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
-import { DueState, IExtensionConfig } from '../../src/types';
-import { selectTaskMutation, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
+import { DueState, ExtensionConfig } from '../../src/types';
+import { SendMessage } from './SendMessage';
+import { selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
 import { VueEvents } from './webviewTypes';
 
 @Component({
@@ -16,12 +17,12 @@ export default class Task extends Vue {
 	@Prop()
 	private readonly model!: TheTask;
 
-	config!: IExtensionConfig['webview'];
+	config!: ExtensionConfig['webview'];
 	filterInputValue!: string;
 	selectedTaskLineNumber!: number;
 
 	toggleTaskCollapse = () => {
-		toggleTaskCollapse(this.model.lineNumber);
+		SendMessage.toggleTaskCollapse(this.model.lineNumber);
 	};
 	// ──────────────────────────────────────────────────────────────────────
 	openTaskContextMenu(e: MouseEvent, task: TheTask) {
@@ -38,10 +39,7 @@ export default class Task extends Vue {
 		toggleDoneMutation(this.model);
 	}
 	revealTask() {
-		vscodeApi.postMessage({
-			type: 'goToTask',
-			value: this.model.lineNumber,
-		});
+		SendMessage.revealTask(this.model.lineNumber);
 	}
 	updateFilterValue(newValue: string, append = false) {
 		if (append) {
@@ -51,16 +49,10 @@ export default class Task extends Vue {
 		}
 	}
 	incrementCount() {
-		vscodeApi.postMessage({
-			type: 'incrementCount',
-			value: this.model.lineNumber,
-		});
+		SendMessage.incrementCount(this.model.lineNumber);
 	}
 	decrementCount() {
-		vscodeApi.postMessage({
-			type: 'decrementCount',
-			value: this.model.lineNumber,
-		});
+		SendMessage.decrementCount(this.model.lineNumber);
 	}
 	styleForTag(tag: string) {
 		if (tag in this.config.tagStyles) {

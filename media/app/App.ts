@@ -9,11 +9,14 @@ import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { ExtensionConfig } from '../../src/types';
-import { deleteTask, openInDefaultApp, selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
+import { SendMessage } from './SendMessage';
+import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
 import { findTaskAtLineWebview } from './storeUtils';
 import TaskComponent from './Task.vue';
 import { VueEvents } from './webviewTypes';
-
+/**
+ * Render paragraph without actual `<p>` tag
+ */
 marked.Renderer.prototype.paragraph = text => `${text}`;
 
 Vue.use(VueAutosuggest);
@@ -51,7 +54,7 @@ export default class App extends Vue {
 	shouldHideSuggest = false;
 	shouldRevokeAutoShowSuggest = false;
 
-	showNotification = showNotification;
+	showNotification = SendMessage.showNotification;
 
 	$refs!: {
 		autosuggest: any;
@@ -146,23 +149,14 @@ export default class App extends Vue {
 		}
 	}
 	deleteTask() {
-		deleteTask(this.contextMenuTask.lineNumber);
-	}
-	revealTask() {
-		vscodeApi.postMessage({
-			type: 'goToTask',
-			value: this.contextMenuTask.lineNumber,
-		});
+		SendMessage.deleteTask(this.contextMenuTask.lineNumber);
 	}
 	onTaskListScroll() {
 		this.$refs.taskContextMenu.close();
 	}
 	// ──────────────────────────────────────────────────────────────────────
 	updateWebviewCounter(numberOfTasks: number) {
-		vscodeApi.postMessage({
-			type: 'updateTitle',
-			value: numberOfTasks,
-		});
+		SendMessage.updateWebviewTitle(numberOfTasks);
 	}
 	focusFilterInput() {
 		Vue.nextTick(() => {
@@ -188,16 +182,16 @@ export default class App extends Vue {
 		window.addEventListener('click', e => {
 			const link = (e.target as HTMLElement).closest('a');
 			if (link && link.href.startsWith('file:///')) {
-				openInDefaultApp(link.href);
+				SendMessage.openInDefaultApp(link.href);
 			}
 		});
 
 		window.addEventListener('keydown', e => {
 			if (e.key === 'ArrowRight') {
-				toggleTaskCollapse(this.selectedTaskLineNumber);
+				SendMessage.toggleTaskCollapse(this.selectedTaskLineNumber);
 			} else if (e.key === 'Delete') {
 				if (this.selectedTaskLineNumber !== -1) {
-					deleteTask(this.selectedTaskLineNumber);
+					SendMessage.deleteTask(this.selectedTaskLineNumber);
 				}
 			} else if (e.key === 'Escape') {
 				selectTaskMutation(-1);

@@ -348,4 +348,4 @@ interface WebviewMessageOpenLinkFileProtocol extends WebviewMessageBase {
 	type: 'followLink';
 	value: string;
 }
-export type messageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateEverything | WebviewMessageUpdateTitle;
+export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateEverything | WebviewMessageUpdateTitle;

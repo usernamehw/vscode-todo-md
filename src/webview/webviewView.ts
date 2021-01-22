@@ -1,7 +1,7 @@
 import vscode, { window } from 'vscode';
 import { decrementCountForTask, goToTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
 import { extensionConfig, extensionState, Global, updateState } from '../extension';
-import { messageFromWebview } from '../types';
+import { MessageFromWebview } from '../types';
 import { getActiveDocument } from '../utils/extensionUtils';
 import { findTaskAtLineExtension } from '../utils/taskUtils';
 import { followLink } from '../utils/vscodeUtils';
@@ -36,7 +36,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		this.updateEverything();
 		this.updateTitle(extensionState.tasksAsTree.length);
 
-		webviewView.webview.onDidReceiveMessage(async (message: messageFromWebview) => {
+		webviewView.webview.onDidReceiveMessage(async (message: MessageFromWebview) => {
 			switch (message.type) {
 				case 'toggleDone': {
 					await toggleDoneAtLine(await getActiveDocument(), message.value);
@@ -108,7 +108,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					activeDocumentOpened: Boolean(extensionState.activeDocument),
 					config: extensionConfig.webview,
 				},
-			} as messageFromWebview);
+			} as MessageFromWebview);
 		}
 	}
 	/**
