@@ -13,7 +13,7 @@ export async function openInUntitled(content: string, language?: string): Promis
 	vscode.window.showTextDocument(document);
 }
 /**
- * Open file by absolute path in the editor.
+ * Open file by absolute path in the editor(tab).
  */
 export async function openFileInEditor(path: string) {
 	const document = await vscode.workspace.openTextDocument(path);
@@ -65,11 +65,15 @@ export function openSettingGuiAt(settingName: string) {
 export function inputOffset(text: string): string {
 	return `${text}${' '.repeat(8)}`;
 }
-
+/**
+ * Get word range, but using regexp defining word as a thing surrounded by spaces
+ */
 export function getWordRangeAtPosition(document: vscode.TextDocument, position: vscode.Position) {
 	return document.getWordRangeAtPosition(position, /\S+/);
 }
-
+/**
+ * Get a word at position (word delimiter is a whitespace)
+ */
 export function getWordAtPosition(document: vscode.TextDocument, position: vscode.Position) {
 	const wordRange = getWordRangeAtPosition(document, position);
 	if (wordRange) {

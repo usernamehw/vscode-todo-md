@@ -1,25 +1,24 @@
 import dayjs from 'dayjs';
-import fs from 'fs';
 import sample from 'lodash/sample';
-import vscode, { commands, TextDocument, ThemeIcon, window, workspace, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTasks, getActiveDocument, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
+import vscode, { commands, TextDocument, ThemeIcon, window, WorkspaceEdit } from 'vscode';
+import { appendTaskToFile, archiveTasks, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
-import { extensionConfig, LAST_VISIT_BY_FILE_STORAGE_KEY, state, updateLastVisitGlobalState, updateState } from './extension';
-import { parseDocument } from './parse';
+import { extensionConfig, extensionState, LAST_VISIT_BY_FILE_STORAGE_KEY, updateLastVisitGlobalState, updateState } from './extension';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
-import { findTaskAtLineExtension } from './taskUtils';
 import { TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
-import { tasksView, updateAllTreeViews, updateArchivedTasksTreeView, updateTasksTreeView } from './treeViewProviders/treeViews';
-import { State, VscodeContext } from './types';
-import { forEachTask } from './utils/extensionUtils';
+import { tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
+import { ExtensionState, VscodeContext } from './types';
+import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveDocument, specifyDefaultFile } from './utils/extensionUtils';
+import { findTaskAtLineExtension, forEachTask } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './utils/vscodeUtils';
-import { updateWebviewView } from './webview/webviewView';
-
+/**
+ * Register all commands. Names should match **"commands"** in `package.json`
+ */
 export function registerAllCommands() {
 	commands.registerCommand('todomd.toggleDone', async (treeItem?: TaskTreeItem) => {
 		const editor = window.activeTextEditor;
@@ -70,7 +69,6 @@ export function registerAllCommands() {
 		});
 		await applyEdit(edit, activeDocument);
 		updateEverything();
-		updateWebviewView();
 	});
 	commands.registerCommand('todomd.expandAllTasks', async () => {
 		const edit = new WorkspaceEdit();
@@ -82,7 +80,6 @@ export function registerAllCommands() {
 		});
 		await applyEdit(edit, activeDocument);
 		updateEverything();
-		updateWebviewView();
 	});
 	commands.registerCommand('todomd.deleteTask', async (treeItem?: TaskTreeItem) => {
 		if (!treeItem) {
@@ -97,7 +94,7 @@ export function registerAllCommands() {
 		updateAllTreeViews();
 	});
 	commands.registerTextEditorCommand('todomd.archiveCompletedTasks', editor => {
-		const completedTasks = state.tasks.filter(t => t.done);
+		const completedTasks = extensionState.tasks.filter(t => t.done);
 		archiveTasks(completedTasks, editor.document);
 	});
 	commands.registerTextEditorCommand('todomd.archiveSelectedCompletedTasks', editor => {
@@ -155,7 +152,7 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.getNextTask', async () => {
 		await updateState();
-		const tasks = state.tasks.filter(t => !t.done);
+		const tasks = extensionState.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
 			return;
@@ -175,7 +172,7 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.getFewNextTasks', async () => {
 		await updateState();
-		const tasks = state.tasks.filter(t => !t.done);
+		const tasks = extensionState.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
 			return;
@@ -189,7 +186,7 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.getRandomTask', async () => {
 		await updateState();
-		const tasks = state.tasks.filter(t => !t.done);
+		const tasks = extensionState.tasks.filter(t => !t.done);
 		if (!tasks.length) {
 			vscode.window.showInformationMessage('No tasks');
 			return;
@@ -212,7 +209,7 @@ export function registerAllCommands() {
 		updateAllTreeViews();
 	});
 	commands.registerCommand('todomd.addTaskToActiveFile', async () => {
-		const activeFilePath = state.activeDocument?.uri.fsPath;
+		const activeFilePath = extensionState.activeDocument?.uri.fsPath;
 		if (!activeFilePath) {
 			return;
 		}
@@ -302,14 +299,14 @@ export function registerAllCommands() {
 	commands.registerCommand('todomd.completeTask', async () => {
 		// Show Quick Pick to complete a task
 		const document = await getActiveDocument();
-		const notCompletedTasks = state.tasks.filter(task => !task.done).map(task => TheTask.formatTask(task));
+		const notCompletedTasks = extensionState.tasks.filter(task => !task.done).map(task => TheTask.formatTask(task));
 		const pickedTask = await window.showQuickPick(notCompletedTasks, {
 			placeHolder: 'Choose a task to complete',
 		});
 		if (!pickedTask) {
 			return;
 		}
-		const task = state.tasks.find(t => TheTask.formatTask(t) === pickedTask);
+		const task = extensionState.tasks.find(t => TheTask.formatTask(t) === pickedTask);
 		if (!task) {
 			return;
 		}
@@ -349,24 +346,24 @@ export function registerAllCommands() {
 			}
 			tasksView.description = filterStr;
 			setContext(VscodeContext.filterActive, true);
-			state.taskTreeViewFilterValue = filterStr;
+			extensionState.taskTreeViewFilterValue = filterStr;
 			updateTasksTreeView();
 		});
 	});
 	commands.registerCommand('todomd.clearFilter', editor => {
 		tasksView.description = undefined;
 		setContext(VscodeContext.filterActive, false);
-		state.taskTreeViewFilterValue = '';
+		extensionState.taskTreeViewFilterValue = '';
 		updateTasksTreeView();
 	});
 	commands.registerCommand('todomd.clearGlobalState', () => {
 	// @ts-ignore No API
-		state.extensionContext.globalState._value = {};
-		state.extensionContext.globalState.update('hack', 'toClear');// Is this required to clear state?
+		extensionState.extensionContext.globalState._value = {};
+		extensionState.extensionContext.globalState.update('hack', 'toClear');// Is this required to clear state?
 	});
 	commands.registerCommand('todomd.showGlobalState', () => {
 		// @ts-ignore
-		const lastVisitByFile: State['lastVisitByFile'] = state.extensionContext.globalState.get(LAST_VISIT_BY_FILE_STORAGE_KEY);
+		const lastVisitByFile: ExtensionState['lastVisitByFile'] = extensionState.extensionContext.globalState.get(LAST_VISIT_BY_FILE_STORAGE_KEY);
 		for (const key in lastVisitByFile) {
 			console.log(key, new Date(lastVisitByFile[key]), dayjs().to(lastVisitByFile[key]));// TODO: show in output / untitled
 		}
@@ -375,7 +372,7 @@ export function registerAllCommands() {
 		goToTask(lineNumber);
 	});
 	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
-		const lastVisit = state.lastVisitByFile[editor.document.uri.toString()];
+		const lastVisit = extensionState.lastVisitByFile[editor.document.uri.toString()];
 		resetAllRecurringTasks(editor.document, lastVisit);
 	});
 	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
@@ -415,77 +412,6 @@ export function registerAllCommands() {
 	});
 }
 
-function noArchiveFileMessage() {
-	vscode.window.showWarningMessage('Default archive file is not specified.');
-}
 
-export async function checkDefaultFileAndNotify(): Promise<boolean> {
-	const specify = 'Specify';
-	if (!extensionConfig.defaultFile) {
-		const shouldSpecify = await window.showWarningMessage('Default file is not specified.', specify);
-		if (shouldSpecify === specify) {
-			specifyDefaultFile();
-		}
-		return false;
-	} else {
-		const exists = fs.existsSync(extensionConfig.defaultFile);
-		if (!exists) {
-			const shouldSpecify = await window.showErrorMessage('Default file does not exist.', specify);
-			if (shouldSpecify === specify) {
-				specifyDefaultFile();
-			}
-			return false;
-		} else {
-			return true;
-		}
-	}
-}
-export async function checkArchiveFileAndNotify(): Promise<boolean> {
-	const specify = 'Specify';
-	if (!extensionConfig.defaultArchiveFile) {
-		const shouldSpecify = await window.showWarningMessage('Default archive file is not specified.', specify);
-		if (shouldSpecify === specify) {
-			specifyDefaultArchiveFile();
-		}
-		return false;
-	} else {
-		const exists = fs.existsSync(extensionConfig.defaultArchiveFile);
-		if (!exists) {
-			const shouldSpecify = await window.showErrorMessage('Specified default archive file does not exist.', specify);
-			if (shouldSpecify === specify) {
-				specifyDefaultArchiveFile();
-			}
-			return false;
-		} else {
-			return true;
-		}
-	}
-}
-function specifyDefaultFile() {
-	openSettingGuiAt('todomd.defaultFile');
-}
-function specifyDefaultArchiveFile() {
-	openSettingGuiAt('todomd.defaultArchiveFile');
-}
-/**
- * Updates state and Tree View for archived tasks
- */
-export async function updateArchivedTasks() {
-	if (!extensionConfig.defaultArchiveFile) {
-		return;
-	}
-	const archivedDocument = await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultArchiveFile));
-	const parsedArchiveTasks = await parseDocument(archivedDocument);
-	state.archivedTasks = parsedArchiveTasks.tasks;
-	updateArchivedTasksTreeView();
-}
-/**
- * vscode `WorkspaceEdit` allowes changing files that are not even opened.
- *
- * `document.save()` is needed to prevent opening those files after applying the edit.
- */
-export async function applyEdit(wEdit: WorkspaceEdit, document: vscode.TextDocument) {
-	await workspace.applyEdit(wEdit);
-	return await document.save();
-}
+
 

@@ -1,7 +1,9 @@
 import { MarkdownString } from 'vscode';
 import { TheTask } from '../TheTask';
 import { DueState } from '../types';
-
+/**
+ * Transform task to show it in Tree View or Editor hover as markdown
+ */
 export function getTaskHover(task: TheTask) {
 	const markdown = new MarkdownString(undefined, true);
 	markdown.isTrusted = true;

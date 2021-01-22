@@ -1,6 +1,6 @@
 import vscode, { Range } from 'vscode';
 import { DueDate } from './dueDate';
-import { extensionConfig, state } from './extension';
+import { extensionConfig, extensionState } from './extension';
 import { Count, Priority, TheTask } from './TheTask';
 
 interface ParseLineReturn {
@@ -51,7 +51,7 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 		};
 	}
 
-	const indentLvl = Math.floor(textLine.firstNonWhitespaceCharacterIndex / state.activeDocumentTabSize);
+	const indentLvl = Math.floor(textLine.firstNonWhitespaceCharacterIndex / extensionState.activeDocumentTabSize);
 
 	/** Offset of the current word (Used to calculate ranges for decorations) */
 	let index = textLine.firstNonWhitespaceCharacterIndex;
@@ -227,7 +227,12 @@ interface ParsedDocument {
 	tasksAsTree: TheTask[];
 	commentLines: Range[];
 }
-
+/**
+ * Some features require knowledge beyond 1 line.
+ * Parsing links, for example, is taken from vscode api that runs on a document. This function maps it to each line.
+ *
+ * Also other things, like nested tasks...
+ */
 export async function parseDocument(document: vscode.TextDocument): Promise<ParsedDocument> {
 	const tasks: TheTask[] = [];
 	const commentLines: Range[] = [];

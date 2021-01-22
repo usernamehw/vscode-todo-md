@@ -1,10 +1,15 @@
 import { TheTask } from './TheTask';
 import { DueState } from './types';
-
+/**
+ * Sorting direction
+ */
 const enum SortDirection {
 	DESC,
 	ASC,
 }
+/**
+ * Sorting property
+ */
 export const enum SortProperty {
 	priority,
 }

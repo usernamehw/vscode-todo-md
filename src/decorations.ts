@@ -1,7 +1,9 @@
 import vscode, { Range, TextEditor, window } from 'vscode';
-import { extensionConfig, Global, state } from './extension';
+import { extensionConfig, extensionState, Global } from './extension';
 import { DueState } from './types';
-
+/**
+ * Update editor decoration style
+ */
 export function updateDecorationStyle(): void {
 	Global.completedTaskDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
@@ -81,7 +83,9 @@ export function updateDecorationStyle(): void {
 		},
 	});
 }
-
+/**
+ * Actually update the editor decorations
+ */
 export function updateEditorDecorations(editor: TextEditor) {
 	const completedDecorationRanges: Range[] = [];
 	const tagsDecorationRanges: Range[] = [];
@@ -101,7 +105,7 @@ export function updateEditorDecorations(editor: TextEditor) {
 	const invalidDueDateDecorationRanges: Range[] = [];
 	const closestDueDateDecorationOptions: vscode.DecorationOptions[] = [];
 
-	for (const task of state.tasks) {
+	for (const task of extensionState.tasks) {
 		if (task.done) {
 			completedDecorationRanges.push(new vscode.Range(task.lineNumber, 0, task.lineNumber, 0));
 		}
@@ -174,5 +178,5 @@ export function updateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(Global.overdueDecorationType, overdueDecorationRanges);
 	editor.setDecorations(Global.invalidDueDateDecorationType, invalidDueDateDecorationRanges);
 	editor.setDecorations(Global.closestDueDateDecorationType, closestDueDateDecorationOptions);
-	editor.setDecorations(Global.commentDecorationType, state.commentLines);
+	editor.setDecorations(Global.commentDecorationType, extensionState.commentLines);
 }

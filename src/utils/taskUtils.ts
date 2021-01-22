@@ -1,5 +1,5 @@
-import { state } from './extension';
-import { TheTask } from './TheTask';
+import { extensionState } from '../extension';
+import { TheTask } from '../TheTask';
 
 /**
  * Get task at line (might be nested)
@@ -25,5 +25,17 @@ function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefin
  * Suffix `Webview` means it gets task from the webview side
  */
 export function findTaskAtLineExtension(lineNumber: number) {
-	return findTaskAtLine(lineNumber, state.tasksAsTree);
+	return findTaskAtLine(lineNumber, extensionState.tasksAsTree);
+}
+
+/**
+ * Execute callback function for every task.
+ */
+export function forEachTask(f: (task: TheTask)=> void, tasks = extensionState.tasksAsTree) {
+	for (const task of tasks) {
+		f(task);
+		if (task.subtasks.length) {
+			forEachTask(f, task.subtasks);
+		}
+	}
 }

@@ -3,14 +3,15 @@ import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import vscode, { ExtensionContext, window, workspace } from 'vscode';
-import { registerAllCommands, updateArchivedTasks } from './commands';
+import { registerAllCommands } from './commands';
 import { updateDecorationStyle } from './decorations';
-import { getDocumentForDefaultFile, resetAllRecurringTasks } from './documentActions';
+import { resetAllRecurringTasks } from './documentActions';
 import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor, updateEverything } from './events';
 import { parseDocument } from './parse';
 import { StatusBar } from './statusBar';
-import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews } from './treeViewProviders/treeViews';
-import { IExtensionConfig, State, VscodeContext } from './types';
+import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
+import { ExtensionConfig, ExtensionState, VscodeContext } from './types';
+import { getDocumentForDefaultFile } from './utils/extensionUtils';
 import { setContext } from './utils/vscodeUtils';
 import { TasksWebviewViewProvider } from './webview/webviewView';
 
@@ -18,8 +19,10 @@ dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
 dayjs.extend(isoWeek);
 dayjs.Ls.en.weekStart = 1;
-
-export const state: State = {
+/**
+ * Things extension keeps a global reference to and uses extensively throughout the extension
+ */
+export const extensionState: ExtensionState = {
 	tasks: [],
 	tasksAsTree: [],
 	tags: [],
@@ -42,7 +45,7 @@ export const state: State = {
 export const EXTENSION_NAME = 'todomd';
 export const LAST_VISIT_BY_FILE_STORAGE_KEY = 'LAST_VISIT_BY_FILE_STORAGE_KEY';
 
-export let extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IExtensionConfig;
+export let extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as ExtensionConfig;
 export const statusBar = new StatusBar();
 /**
  * Global vscode variables
@@ -82,9 +85,9 @@ export class Global {
 }
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
-	state.extensionContext = extensionContext;
-	const lastVisitByFile = extensionContext.globalState.get<State['lastVisitByFile'] | undefined>(LAST_VISIT_BY_FILE_STORAGE_KEY);
-	state.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
+	extensionState.extensionContext = extensionContext;
+	const lastVisitByFile = extensionContext.globalState.get<ExtensionState['lastVisitByFile'] | undefined>(LAST_VISIT_BY_FILE_STORAGE_KEY);
+	extensionState.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
 	updateDecorationStyle();
 	registerAllCommands();
@@ -103,8 +106,8 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	onChangeActiveTextEditor(window.activeTextEditor);
 	await updateState();
 
-	Global.webviewProvider = new TasksWebviewViewProvider(state.extensionContext.extensionUri);
-	state.extensionContext.subscriptions.push(
+	Global.webviewProvider = new TasksWebviewViewProvider(extensionState.extensionContext.extensionUri);
+	extensionState.extensionContext.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, Global.webviewProvider),
 	);
 
@@ -122,7 +125,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	}
 
 	function updateConfig(): void {
-		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as IExtensionConfig;
+		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as ExtensionConfig;
 
 		disposeEditorDisposables();
 		updateDecorationStyle();
@@ -141,36 +144,36 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
  * Update primary `state` properties, such as `tasks` or `tags`, based on provided document or based on default file
  */
 export async function updateState() {
-	let document = state.activeDocument;
+	let document = extensionState.activeDocument;
 	if (!document) {
 		document = await getDocumentForDefaultFile();
 	}
 	if (!document) {
-		state.activeDocument = undefined;
-		state.theRightFileOpened = false;
-		state.tasks = [];
-		state.tags = [];
-		state.contexts = [];
-		state.projects = [];
-		state.commentLines = [];
-		state.projectsForTreeView = [];
-		state.tagsForTreeView = [];
-		state.contextsForTreeView = [];
+		extensionState.activeDocument = undefined;
+		extensionState.theRightFileOpened = false;
+		extensionState.tasks = [];
+		extensionState.tags = [];
+		extensionState.contexts = [];
+		extensionState.projects = [];
+		extensionState.commentLines = [];
+		extensionState.projectsForTreeView = [];
+		extensionState.tagsForTreeView = [];
+		extensionState.contextsForTreeView = [];
 		return;
 	}
 	const parsedDocument = await parseDocument(document);
 
-	state.tasks = parsedDocument.tasks;
-	state.tasksAsTree = parsedDocument.tasksAsTree;
-	state.commentLines = parsedDocument.commentLines;
+	extensionState.tasks = parsedDocument.tasks;
+	extensionState.tasksAsTree = parsedDocument.tasksAsTree;
+	extensionState.commentLines = parsedDocument.commentLines;
 
-	const treeItems = groupAndSortTreeItems(state.tasksAsTree);
-	state.tagsForTreeView = treeItems.sortedTagsForProvider;
-	state.projectsForTreeView = treeItems.projectsForProvider;
-	state.contextsForTreeView = treeItems.contextsForProvider;
-	state.tags = treeItems.tags;
-	state.projects = treeItems.projects;
-	state.contexts = treeItems.contexts;
+	const treeItems = groupAndSortTreeItems(extensionState.tasksAsTree);
+	extensionState.tagsForTreeView = treeItems.sortedTagsForProvider;
+	extensionState.projectsForTreeView = treeItems.projectsForProvider;
+	extensionState.contextsForTreeView = treeItems.contextsForProvider;
+	extensionState.tags = treeItems.tags;
+	extensionState.projects = treeItems.projects;
+	extensionState.contexts = treeItems.contexts;
 }
 function disposeEditorDisposables(): void {
 	if (Global.completedTaskDecorationType) {
@@ -198,9 +201,12 @@ function disposeEditorDisposables(): void {
 		Global.changeTextDocumentDisposable.dispose();
 	}
 }
+/**
+ * Update global storage value of last visit by file
+ */
 export async function updateLastVisitGlobalState(stringUri: string, date: Date) {
-	state.lastVisitByFile[stringUri] = date;
-	await state.extensionContext.globalState.update(LAST_VISIT_BY_FILE_STORAGE_KEY, state.lastVisitByFile);
+	extensionState.lastVisitByFile[stringUri] = date;
+	await extensionState.extensionContext.globalState.update(LAST_VISIT_BY_FILE_STORAGE_KEY, extensionState.lastVisitByFile);
 }
 
 export function deactivate(): void {

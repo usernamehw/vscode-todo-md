@@ -102,7 +102,7 @@
 				},
 				"todomd.webview.checkboxStyle": {
 					"type": "string",
-					"markdownDescription": "Controls checkbox style (round, square...).",
+					"markdownDescription": "Controls custom checkbox style (round, square...).",
 					"enum": [
 						"round",
 						"square",
@@ -152,7 +152,7 @@
 				},
 				"todomd.autoArchiveTasks": {
 					"type": "boolean",
-					"markdownDescription": "When enabled - will move completed tasks automatically (when `toggleDone` command runs).",
+					"markdownDescription": "When enabled - will move tasks to archive file (on completion).",
 					"default": false
 				},
 				"todomd.confirmTaskDelete": {
@@ -172,7 +172,8 @@
 				},
 				"todomd.doneSymbol": {
 					"type": "string",
-					"default": "x "
+					"default": "x ",
+					"markdownDescription": "Controls string sequence that indicates that the task is complete (at the start of the line) when `#todomd.addCompletionDate#` is `false`."
 				},
 				"todomd.getNextNumberOfTasks": {
 					"type": "number",
@@ -187,7 +188,8 @@
 						"alphabetic",
 						"frequency"
 					],
-					"default": "frequency"
+					"default": "frequency",
+					"description": "Controls tags Tree View sorting."
 				},
 				"todomd.tags": {
 					"type": "array",
@@ -220,7 +222,7 @@
 				},
 				"todomd.addCompletionDate": {
 					"type": "boolean",
-					"markdownDescription": "When completing a task add completion date to it: `{cm:2020-04-30}`",
+					"markdownDescription": "When completing a task add completion date to it: `{cm:2020-04-30}` instead of `#todomd.doneSymbol#`",
 					"default": true
 				},
 				"todomd.addCreationDate": {

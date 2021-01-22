@@ -1,13 +1,15 @@
-import vscode, { TreeView } from 'vscode';
-import { getActiveDocument, toggleTaskCollapse } from '../documentActions';
-import { extensionConfig, EXTENSION_NAME, state } from '../extension';
+import vscode, { TreeView, workspace } from 'vscode';
+import { toggleTaskCollapse } from '../documentActions';
+import { extensionConfig, extensionState, EXTENSION_NAME } from '../extension';
 import { filterItems } from '../filter';
+import { parseDocument } from '../parse';
 import { TheTask } from '../TheTask';
 import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
 import { ItemForProvider, SortTags, VscodeContext } from '../types';
+import { getActiveDocument } from '../utils/extensionUtils';
 import { setContext } from '../utils/vscodeUtils';
 import { updateWebviewView } from '../webview/webviewView';
 
@@ -29,7 +31,9 @@ let archivedView: vscode.TreeView<any>;
 let generic1View: vscode.TreeView<any>;
 let generic2View: vscode.TreeView<any>;
 let generic3View: vscode.TreeView<any>;
-
+/**
+ * Create all Tree Views
+ */
 export function createAllTreeViews() {
 	tagsView = vscode.window.createTreeView(`${EXTENSION_NAME}.tags`, {
 		treeDataProvider: tagProvider,
@@ -125,57 +129,62 @@ export function createAllTreeViews() {
 	}
 }
 /**
- * Update all tree views (excluding archived tasks) and webviews
- * Items are taken from `state`
+ * Update all tree views (excluding archived tasks)
  */
 export function updateAllTreeViews(): void {
-	tagProvider.refresh(state.tagsForTreeView);
-	setViewTitle(tagsView, 'tags', state.tagsForTreeView.length);
+	tagProvider.refresh(extensionState.tagsForTreeView);
+	setViewTitle(tagsView, 'tags', extensionState.tagsForTreeView.length);
 
 	updateTasksTreeView();
 
-	projectProvider.refresh(state.projectsForTreeView);
-	setViewTitle(projectView, 'projects', state.projectsForTreeView.length);
+	projectProvider.refresh(extensionState.projectsForTreeView);
+	setViewTitle(projectView, 'projects', extensionState.projectsForTreeView.length);
 
-	contextProvider.refresh(state.contextsForTreeView);
-	setViewTitle(contextView, 'contexts', state.contextsForTreeView.length);
+	contextProvider.refresh(extensionState.contextsForTreeView);
+	setViewTitle(contextView, 'contexts', extensionState.contextsForTreeView.length);
 
 	if (generic1View) {
-		const filteredTasks = filterItems(state.tasksAsTree, extensionConfig.treeViews[0].filter);
+		const filteredTasks = filterItems(extensionState.tasksAsTree, extensionConfig.treeViews[0].filter);
 		generic1Provider.refresh(filteredTasks);
 		setViewTitle(generic1View, extensionConfig.treeViews[0].title, filteredTasks.length);
 	}
 	if (generic2View) {
-		const filteredTasks = filterItems(state.tasksAsTree, extensionConfig.treeViews[1].filter);
+		const filteredTasks = filterItems(extensionState.tasksAsTree, extensionConfig.treeViews[1].filter);
 		generic2Provider.refresh(filteredTasks);
 		setViewTitle(generic2View, extensionConfig.treeViews[1].title, filteredTasks.length);
 	}
 	if (generic3View) {
-		const filteredTasks = filterItems(state.tasksAsTree, extensionConfig.treeViews[2].filter);
+		const filteredTasks = filterItems(extensionState.tasksAsTree, extensionConfig.treeViews[2].filter);
 		generic3Provider.refresh(filteredTasks);
 		setViewTitle(generic3View, extensionConfig.treeViews[2].title, filteredTasks.length);
 	}
 	// ──────────────────────────────────────────────────────────────────────
 	updateWebviewView();
 }
-
+/**
+ * Update only Tasks Tree View
+ */
 export function updateTasksTreeView() {
 	let tasksForProvider;
-	if (state.taskTreeViewFilterValue) {
-		tasksForProvider = filterItems(state.tasksAsTree, state.taskTreeViewFilterValue);
+	if (extensionState.taskTreeViewFilterValue) {
+		tasksForProvider = filterItems(extensionState.tasksAsTree, extensionState.taskTreeViewFilterValue);
 	} else {
-		tasksForProvider = state.tasksAsTree;
+		tasksForProvider = extensionState.tasksAsTree;
 	}
 	taskProvider.refresh(tasksForProvider);
 	setViewTitle(tasksView, 'tasks', tasksForProvider.length);
 }
-
+/**
+ * Update archived Tasks Tree View (since it's only changing on archiving of the task, which is rare)
+ */
 export function updateArchivedTasksTreeView() {
-	const archivedTasks = state.archivedTasks;
+	const archivedTasks = extensionState.archivedTasks;
 	archivedProvider.refresh(archivedTasks);
 	setViewTitle(archivedView, 'archived', archivedTasks.length);
 }
-
+/**
+ * Set tree view title
+ */
 function setViewTitle(view: TreeView<any>, title: string, counter: number, filterValue = '') {
 	view.title = `${title} (${counter}) ${filterValue}`;
 }
@@ -191,6 +200,9 @@ export interface ParsedItems {
 interface TempTitleLineNumberMap {
 	[title: string]: TheTask[];
 }
+/**
+ * Prepare tags/projects/context for Tree View
+ */
 export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 	const tagMap: TempTitleLineNumberMap = {};
 	const projectMap: TempTitleLineNumberMap = {};
@@ -258,4 +270,17 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 		projects: Object.keys(projectMap),
 		contexts: Object.keys(contextMap),
 	};
+}
+
+/**
+ * Updates state and Tree View for archived tasks
+ */
+export async function updateArchivedTasks() {
+	if (!extensionConfig.defaultArchiveFile) {
+		return;
+	}
+	const archivedDocument = await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultArchiveFile));
+	const parsedArchiveTasks = await parseDocument(archivedDocument);
+	extensionState.archivedTasks = parsedArchiveTasks.tasks;
+	updateArchivedTasksTreeView();
 }

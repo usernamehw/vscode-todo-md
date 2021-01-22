@@ -1,11 +1,13 @@
 import dayjs from 'dayjs';
 import vscode from 'vscode';
 import { DueDate } from './dueDate';
-import { extensionConfig, Global, state } from './extension';
+import { extensionConfig, extensionState, Global } from './extension';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
 import { getWordAtPosition, getWordRangeAtPosition } from './utils/vscodeUtils';
-
+/**
+ * Update editor autocomplete/suggest
+ */
 export function updateCompletions(): void {
 	if (Global.tagAutocompleteDisposable) {
 		Global.tagAutocompleteDisposable.dispose();
@@ -23,7 +25,7 @@ export function updateCompletions(): void {
 					return undefined;
 				}
 				const tagCompletions = [];
-				const tags = Array.from(new Set(state.tags.concat(extensionConfig.tags)));
+				const tags = Array.from(new Set(extensionState.tags.concat(extensionConfig.tags)));
 				for (const tag of tags) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
 					tagCompletion.commitCharacters = ['#'];
@@ -44,7 +46,7 @@ export function updateCompletions(): void {
 					return undefined;
 				}
 				const projectCompletions = [];
-				const projects = Array.from(new Set(state.projects.concat(extensionConfig.projects)));
+				const projects = Array.from(new Set(extensionState.projects.concat(extensionConfig.projects)));
 				for (const tag of projects) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
 					tagCompletion.commitCharacters = ['+'];
@@ -65,7 +67,7 @@ export function updateCompletions(): void {
 					return undefined;
 				}
 				const contextCompletions = [];
-				const contexts = Array.from(new Set(state.contexts.concat(extensionConfig.contexts)));
+				const contexts = Array.from(new Set(extensionState.contexts.concat(extensionConfig.contexts)));
 				for (const context of contexts) {
 					const contextCompletion = new vscode.CompletionItem(context, vscode.CompletionItemKind.Field);
 					contextCompletion.commitCharacters = ['@'];

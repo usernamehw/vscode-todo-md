@@ -2,8 +2,13 @@ import { Range } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionConfig } from './extension';
 import { DueState, OptionalExceptFor } from './types';
-
+/**
+ * All possible values for task priority
+ */
 export type Priority = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z';
+/**
+ * Task can be create with just a few required properties.
+ */
 export type TaskInit = OptionalExceptFor<TheTask, 'indentLvl' | 'lineNumber' | 'rawText' | 'title'>;
 /**
  * Modifier for task completion.
@@ -15,7 +20,9 @@ export interface Count {
 	needed: number;
 	current: number;
 }
-
+/**
+ * Parsed link
+ */
 export interface Link {
 	value: string;
 	scheme: string;
@@ -25,16 +32,53 @@ export interface Link {
  * `The` prefix because of auto import conflict with vscode `Task`
  */
 export class TheTask {
+	/**
+	 * rawText without indent
+	 */
 	title: string;
+	/**
+	 * If task is completed or not
+	 */
 	done: boolean;
+	/**
+	 * Unmodified task text
+	 */
 	rawText: string;
+	/**
+	 * Line number of the task. Also might be an id, since 1 line - 1 task
+	 */
 	lineNumber: number;
+	/**
+	 * How much the task is nested.
+	 */
 	indentLvl: number;
+	/**
+	 * Parent task line number (id) task is non-root.
+	 */
 	parentTaskLineNumber: number | undefined;
+	/**
+	 * Nested tasks that this task is a parent of (if they exist)
+	 */
 	subtasks: TheTask[];
+	/**
+	 * Tags as an array of strings
+	 */
 	tags: string[];
+	/**
+	 * Projects as an array of strings
+	 */
 	projects: string[];
+	/**
+	 * Contexts as an array of strings
+	 */
+	contexts: string[];
+	/**
+	 * Due date if exists
+	 */
 	due?: DueDate;
+	/**
+	 * Parsed links in the task
+	 */
 	links: Link[];
 	/**
 	 * Special tag `{count:1/2}`. Used for tasks that require multiple iterations.
@@ -44,6 +88,9 @@ export class TheTask {
 	 * Special tag `{t:2020-05-20}`. Used for hiding item from Tree View up to a certain date.
 	 */
 	threshold?: string;
+	/**
+	 * Priority `(A)`
+	 */
 	priority: Priority;
 	/**
 	 * Special tag `{h}`. Used for hiding items from Tree View.
@@ -54,19 +101,48 @@ export class TheTask {
 	 */
 	isCollapsed?: boolean;
 	/**
-	 * Special tag `{}` Oldest overdue date string in `YYYY-MM-DD` (for recurring tasks)
+	 * Special tag `{overdue:2020-05-05}` Oldest overdue date string in `YYYY-MM-DD` (for recurring tasks)
 	 */
 	overdue?: string;
-	contexts: string[];
+	/**
+	 * Context ranges needed for editor decorations
+	 */
 	contextRanges: Range[];
-	priorityRange?: Range;
-	specialTagRanges: Range[];
+	/**
+	 * Project ranges needed for editor decorations
+	 */
 	projectRanges: Range[];
+	/**
+	 * Special tags ranges `{}` needed for editor decorations
+	 */
+	specialTagRanges: Range[];
+	/**
+	 * Priority range needed for editor decorations
+	 */
+	priorityRange?: Range;
+	/**
+	 * Tags delimiter ranges `#` sign needed for editor decorations
+	 */
 	tagsDelimiterRanges?: Range[];
+	/**
+	 * Tags ranges needed for editor decorations
+	 */
 	tagsRange?: Range[];
+	/**
+	 * Due date range needed for editor decorations
+	 */
 	dueRange?: Range;
+	/**
+	 * Overdue special tag range needed for editor decorations
+	 */
 	overdueRange?: Range;
+	/**
+	 * Completion special tag
+	 */
 	completionDateRange?: Range;
+	/**
+	 * Collapse special tag range `{c}`
+	 */
 	collapseRange?: Range;
 
 	constructor(init: TaskInit) {
@@ -123,7 +199,9 @@ export class TheTask {
 	hasNestedTasks() {
 		return this.subtasks.length !== 0;
 	}
-
+	/**
+	 * Format task title for notification or modal dialog
+	 */
 	static formatTask(task: TheTask): string {
 		let result = '';
 		if (task.due?.isDue === DueState.due) {

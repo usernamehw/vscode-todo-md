@@ -2,32 +2,38 @@ import dayjs from 'dayjs';
 import vscode, { window, workspace } from 'vscode';
 import { updateCompletions } from './completionProviders';
 import { updateEditorDecorations } from './decorations';
-import { getDocumentForDefaultFile, resetAllRecurringTasks } from './documentActions';
-import { extensionConfig, Global, state, statusBar, updateLastVisitGlobalState, updateState } from './extension';
+import { resetAllRecurringTasks } from './documentActions';
+import { extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateHover } from './hover/hoverProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
+import { getDocumentForDefaultFile } from './utils/extensionUtils';
 import { setContext } from './utils/vscodeUtils';
-
+/**
+ * Active text editor changes (tab). There is a <s>bug</s>(feature) that event fired twice in rapid succession when you close the tab.
+ */
 export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): Promise<void> {
-	if (state.theRightFileOpened) {
+	if (extensionState.theRightFileOpened) {
 		deactivateEditorFeatures();
 	}
 	if (editor && isTheRightFileName(editor)) {
-		state.activeDocument = editor.document;
-		state.activeDocumentTabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : extensionConfig.tabSize;
+		extensionState.activeDocument = editor.document;
+		extensionState.activeDocumentTabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : extensionConfig.tabSize;
 		updateEverything(editor);
 		await activateEditorFeatures(editor);
 	} else {
-		state.activeDocument = await getDocumentForDefaultFile();
-		state.activeDocumentTabSize = extensionConfig.tabSize;
+		extensionState.activeDocument = await getDocumentForDefaultFile();
+		extensionState.activeDocumentTabSize = extensionConfig.tabSize;
 		setTimeout(() => {
 			updateEverything();
 		}, 15);// Workaround for event fired twice very fast when closing an editor
 	}
 }
+/**
+ * Only run reset all recurring tasks when needed (first open file in a day)
+ */
 export function checkIfNeedResetRecurringTasks(filePath: string): {lastVisit: Date} | undefined {
-	const lastVisitForFile = state.lastVisitByFile[filePath];
+	const lastVisitForFile = extensionState.lastVisitByFile[filePath];
 	if (lastVisitForFile) {
 		if (!dayjs().isSame(lastVisitForFile, 'day')) {
 			// First time this file opened this day => reset
@@ -45,10 +51,12 @@ export function checkIfNeedResetRecurringTasks(filePath: string): {lastVisit: Da
 		};
 	}
 }
-
+/**
+ * Called when active text document changes (typing in it, for instance)
+ */
 export function onChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
 	const activeTextEditor = window.activeTextEditor;
-	if (activeTextEditor && state.theRightFileOpened) {
+	if (activeTextEditor && extensionState.theRightFileOpened) {
 		updateEverything(activeTextEditor);
 	}
 }
@@ -61,12 +69,12 @@ export function isTheRightFileName(editor: vscode.TextEditor): boolean {
 	},	editor.document) !== 0;
 }
 /**
- * There's a number of features that extension provides.
- * They are only activated when user opens file named `todo.md` (by default)
- * Only then - completions, status bar text and other features are enabled.
+ * There's a number of editor features that are only needed when the active file matches a pattern.
+ *
+ * For example: completions, status bar text, editor hover.
  */
 export async function activateEditorFeatures(editor: vscode.TextEditor) {
-	state.theRightFileOpened = true;
+	extensionState.theRightFileOpened = true;
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
 	updateHover();
@@ -85,7 +93,7 @@ export async function activateEditorFeatures(editor: vscode.TextEditor) {
  * will be disabled.
  */
 export function deactivateEditorFeatures() {
-	state.theRightFileOpened = false;
+	extensionState.theRightFileOpened = false;
 	if (Global.changeTextDocumentDisposable) {
 		Global.changeTextDocumentDisposable.dispose();
 	}
@@ -103,16 +111,16 @@ export function deactivateEditorFeatures() {
 	setContext(VscodeContext.isActive, false);
 }
 /**
- * - Update state
+ * - Update state (parse the active/default file)
  * - Update editor decorations
- * - Update status bar
- * - Update all tree views
+ * - Update status bar item
+ * - Update all tree views (including webview, excluding archived tasks)
  */
 export async function updateEverything(editor?: vscode.TextEditor) {
 	await updateState();
 	if (editor) {
 		updateEditorDecorations(editor);
-		statusBar.updateText(state.tasks);
+		statusBar.updateText(extensionState.tasks);
 	}
 	updateAllTreeViews();
 }

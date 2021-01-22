@@ -1,3 +1,6 @@
+/**
+ * Use a nonce to only allow specific scripts to be run in the webview
+ */
 export function getNonce() {
 	let text = '';
 	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

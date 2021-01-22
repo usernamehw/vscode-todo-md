@@ -1,14 +1,25 @@
 import dayjs from 'dayjs';
 import { dateDiff, dayOfTheWeek, isValidDate } from './time/timeUtils';
 import { DueState } from './types';
-
+/**
+ * Should handle most of the due date functions
+ */
 export class DueDate {
 	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(e\d+d))?$/;
 	private static readonly dueRecurringRegexp = /^(ed|sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday)$/i;
 	/** Unmodified value of due date */
 	raw: string;
+	/**
+	 * If this due date is recurring or not
+	 */
 	isRecurring = false;
+	/**
+	 * Due state. Can be: due, notDue, overdue, invalid.
+	 */
 	isDue = DueState.notDue;
+	/**
+	 * Closest due date (assigned only when the task is not due today)
+	 */
 	closestDueDateInTheFuture: string;
 
 	constructor(dueString: string, options?: { targetDate?: Date; overdue?: string }) {
@@ -25,7 +36,9 @@ export class DueDate {
 			this.closestDueDateInTheFuture = '';
 		}
 	}
-
+	/**
+	 * When the next time the task is going to be due.
+	 */
 	calcClosestDueDateInTheFuture() {
 		for (let i = 1; i < 100; i++) {
 			const date = dayjs().add(i, 'day');
@@ -36,6 +49,9 @@ export class DueDate {
 		}
 		return 'More than 100 days';
 	}
+	/**
+	 * Parse due date that can be multiple of them delimited by comma
+	 */
 	static parseDue(due: string, targetDate = new Date(), overdue?: string): DueReturn {
 		const dueDates = due.split(',').filter(d => d.length);
 		const result = dueDates.map(dueDate => DueDate.parseDueDate(dueDate, targetDate));
@@ -99,6 +115,9 @@ export class DueDate {
 			isRecurring,
 		};
 	}
+	/**
+	 * Parse a simple date `2020-02-15`
+	 */
 	private static isDueExactDate(date: Date, targetDate: Date): DueState {
 		if (dayjs(targetDate).isBefore(date)) {
 			return DueState.notDue;
@@ -121,7 +140,9 @@ export class DueDate {
 	// 		isDue,
 	// 	};
 	// }
-
+	/**
+	 * Parse constant due date
+	 */
 	private static isDueToday(dueString: string, targetDate: Date): DueState {
 		const value = dueString.toLowerCase();
 		if (value === 'ed') {
@@ -174,7 +195,10 @@ export class DueDate {
 		}
 		return DueState.notDue;
 	}
-	private static isDueWithDate(dueString: string, dueDateStart: number | Date | undefined, targetDate = new Date()): DueState {
+	/**
+	 * Parse recurring due date with starting date `due:2019-06-19|e2d`
+	 */
+	private static isDueWithDate(dueString: string, dueDateStart: Date | number | undefined, targetDate = new Date()): DueState {
 		if (dueDateStart === undefined) {
 			throw new Error('dueDate was specified, but dueDateStart is missing');
 		}

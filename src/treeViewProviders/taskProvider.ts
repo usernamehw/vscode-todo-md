@@ -63,7 +63,9 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 		}
 	}
 }
-
+/**
+ * Transform tasks to be able to use in a Tree View
+ */
 export function tasksToTreeItems(tasks: TheTask[]) {
 	const result = [];
 	for (const task of tasks) {

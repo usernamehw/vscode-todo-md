@@ -1,10 +1,11 @@
 import vscode, { window } from 'vscode';
-import { decrementCountForTask, getActiveDocument, goToTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
-import { extensionConfig, Global, state, updateState } from '../extension';
-import { findTaskAtLineExtension } from '../taskUtils';
-import { WebviewMessage } from '../types';
+import { decrementCountForTask, goToTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
+import { extensionConfig, extensionState, Global, updateState } from '../extension';
+import { messageFromWebview } from '../types';
+import { getActiveDocument } from '../utils/extensionUtils';
+import { findTaskAtLineExtension } from '../utils/taskUtils';
 import { followLink } from '../utils/vscodeUtils';
-import { getNonce } from '../webview/utils';
+import { getNonce } from './webviewUtils';
 
 export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'todomd.webviewTasks';
@@ -33,9 +34,9 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
 		this.updateEverything();
-		this.updateTitle(state.tasksAsTree.length);
+		this.updateTitle(extensionState.tasksAsTree.length);
 
-		webviewView.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
+		webviewView.webview.onDidReceiveMessage(async (message: messageFromWebview) => {
 			switch (message.type) {
 				case 'toggleDone': {
 					await toggleDoneAtLine(await getActiveDocument(), message.value);
@@ -91,24 +92,28 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			}
 		});
 	}
-
+	/**
+	 * Send all the needed data to webview view
+	 */
 	updateEverything() {
 		if (this._view && this._view.visible === true) {
 			this._view.webview.postMessage({
 				type: 'updateEverything',
 				value: {
-					tasksAsTree: state.tasksAsTree,
-					tags: state.tags,
-					projects: state.projects,
-					contexts: state.contexts,
+					tasksAsTree: extensionState.tasksAsTree,
+					tags: extensionState.tags,
+					projects: extensionState.projects,
+					contexts: extensionState.contexts,
 					defaultFileSpecified: Boolean(extensionConfig.defaultFile),
-					activeDocumentOpened: Boolean(state.activeDocument),
+					activeDocumentOpened: Boolean(extensionState.activeDocument),
 					config: extensionConfig.webview,
 				},
-			} as WebviewMessage);
+			} as messageFromWebview);
 		}
 	}
-
+	/**
+	 * Update webview title (counter)
+	 */
 	updateTitle(numberOfTasks: number) {
 		if (this._view) {
 			this._view.title = `webview (${numberOfTasks})`;
@@ -139,7 +144,9 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			</html>`;
 	}
 }
-
+/**
+ * Update main webview view (tasks)
+ */
 export function updateWebviewView() {
 	if (Global.webviewProvider) {
 		Global.webviewProvider.updateEverything();

@@ -8,7 +8,7 @@ import VueNotifications from 'vue-notification';
 import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
-import { IExtensionConfig } from '../../src/types';
+import { ExtensionConfig } from '../../src/types';
 import { deleteTask, openInDefaultApp, selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, showNotification, toggleDoneMutation, toggleTaskCollapse, updateFilterValueMutation, vscodeApi } from './store';
 import { findTaskAtLineWebview } from './storeUtils';
 import TaskComponent from './Task.vue';
@@ -33,7 +33,7 @@ export default class App extends Vue {
 	tasksAsTree!: TheTask[];
 	filteredSortedTasks!: TheTask[];
 	filterInputValue!: string;
-	config!: IExtensionConfig['webview'];
+	config!: ExtensionConfig['webview'];
 	defaultFileSpecified!: boolean;
 	activeDocumentOpened!: boolean;
 	autocompleteItems!: any;

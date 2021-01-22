@@ -27,7 +27,9 @@ interface Filter {
 	isNegation?: boolean;
 	filterMoreLess?: FilterMoreLess;
 }
-
+/**
+ * Take tasks and a filter string and return filtered tasks.
+ */
 export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 	if (filterStr.length === 0) {
 		return tasks;

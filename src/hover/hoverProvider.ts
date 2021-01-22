@@ -1,7 +1,7 @@
 import vscode from 'vscode';
 import { Global } from '../extension';
 import { getTaskHover } from './getTaskHover';
-import { findTaskAtLineExtension } from '../taskUtils';
+import { findTaskAtLineExtension } from '../utils/taskUtils';
 
 export function updateHover() {
 	if (Global.hoverDisposable) {

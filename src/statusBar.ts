@@ -2,7 +2,9 @@ import { StatusBarItem, window } from 'vscode';
 import { extensionConfig } from './extension';
 import { TheTask } from './TheTask';
 import { percentage } from './utils/utils';
-
+/**
+ * Handles counter status bar item
+ */
 export class StatusBar {
 	private readonly statusBarItem: StatusBarItem;
 
@@ -20,7 +22,7 @@ export class StatusBar {
 	}
 	/**
 	 * Show counter for tasks ( completed / all )
-	 * Example: ( 1 / 10 )
+	 * Example: `1 / 10 (10%)`
 	 */
 	updateText(tasks: TheTask[]) {
 		const completedTasks = tasks.filter(t => t.done);

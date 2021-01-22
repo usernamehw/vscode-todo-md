@@ -7,7 +7,6 @@ export function percentage(a: number, b: number): number {
 }
 /**
  * Replace numbers with emoji.
- * Works for multiple digits too.
  */
 export function fancyNumber(n: number): string {
 	const digitMap = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
