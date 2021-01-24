@@ -202,12 +202,14 @@ export class TheTask {
 	/**
 	 * Format task title for notification or modal dialog
 	 */
-	static formatTask(task: TheTask): string {
+	static formatTask(task: TheTask, ignoreDueDate = false): string {
 		let result = '';
-		if (task.due?.isDue === DueState.due) {
-			result += '🟩 ';
-		} else if (task.due?.isDue === DueState.overdue) {
-			result += '🟥 ';
+		if (!ignoreDueDate) {
+			if (task.due?.isDue === DueState.due) {
+				result += '🟩 ';
+			} else if (task.due?.isDue === DueState.overdue) {
+				result += '🟥 ';
+			}
 		}
 		result += task.title;
 		if (task.count) {

@@ -76,7 +76,7 @@ export function tasksToTreeItems(tasks: TheTask[]) {
 			continue;
 		}
 		result.push(new TaskTreeItem(
-			TheTask.formatTask(task),
+			TheTask.formatTask(task, true),
 			task,
 			{
 				command: `${EXTENSION_NAME}.goToLine`,
