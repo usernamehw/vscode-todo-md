@@ -71,6 +71,7 @@ function generateSchema() {
 		"priorityDForeground",
 		"priorityEForeground",
 		"priorityFForeground",
+		"completedTask",
 	];
 	const defaultObj = {};
 	for (const color of supportedAdvancedColors) {

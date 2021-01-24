@@ -11,6 +11,7 @@ export function updateDecorationStyle(): void {
 		light: {
 			textDecoration: 'line-through rgba(0, 0, 0, 0.25)',
 		},
+		...extensionConfig.decorations.completedTask,
 	});
 	Global.commentDecorationType = window.createTextEditorDecorationType({
 		color: new vscode.ThemeColor('todomd.commentForeground'),

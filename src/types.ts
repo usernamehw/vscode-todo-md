@@ -114,6 +114,7 @@ const enum AdvancedDecorations {
 	priorityDForeground = 'priorityDForeground',
 	priorityEForeground = 'priorityEForeground',
 	priorityFForeground = 'priorityFForeground',
+	completedTask = 'completedTask',
 }
 /**
  * Extension options available to user. Names should match **"configuration"** object properties in `package.json` file.

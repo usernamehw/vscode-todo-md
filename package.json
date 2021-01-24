@@ -316,7 +316,8 @@
 							"priorityCForeground",
 							"priorityDForeground",
 							"priorityEForeground",
-							"priorityFForeground"
+							"priorityFForeground",
+							"completedTask"
 						]
 					},
 					"default": {
@@ -332,10 +333,11 @@
 						"priorityCForeground": {},
 						"priorityDForeground": {},
 						"priorityEForeground": {},
-						"priorityFForeground": {}
+						"priorityFForeground": {},
+						"completedTask": {}
 					},
 					"patternProperties": {
-						"^(project|context|comment|notDue|due|overdue|invalidDue|priorityAForeground|priorityBForeground|priorityCForeground|priorityDForeground|priorityEForeground|priorityFForeground)$": {
+						"^(project|context|comment|notDue|due|overdue|invalidDue|priorityAForeground|priorityBForeground|priorityCForeground|priorityDForeground|priorityEForeground|priorityFForeground|completedTask)$": {
 							"type": "object",
 							"properties": {
 								"isWholeLine": {
