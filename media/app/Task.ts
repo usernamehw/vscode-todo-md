@@ -47,6 +47,7 @@ export default class Task extends Vue {
 		} else {
 			updateFilterValueMutation(newValue);
 		}
+		this.$root.$emit(VueEvents.focusFilterInput);
 	}
 	incrementCount() {
 		SendMessage.incrementCount(this.model.lineNumber);

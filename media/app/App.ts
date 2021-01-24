@@ -181,6 +181,9 @@ export default class App extends Vue {
 			this.contextMenuTask = data.task;
 			this.$refs.taskContextMenu.open(data.e);
 		});
+		this.$root.$on(VueEvents.focusFilterInput, () => {
+			this.focusFilterInput();
+		});
 
 		window.addEventListener('click', e => {
 			const link = (e.target as HTMLElement).closest('a');

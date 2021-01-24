@@ -1,7 +1,8 @@
 /**
- * Event names send through 
+ * Event names send through
  */
 export const enum VueEvents {
 	openTaskContextMenu = 'openTaskContextMenu',
+	focusFilterInput = 'focusFilterInput',
 }
 
