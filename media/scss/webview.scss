@@ -40,6 +40,8 @@ body {
 	--checkbox-fg: #ffffff;
 	--checkbox-hover-bg: #{darken($checkboxBackground, 10%)};
 
+	--inline-code-bg: rgba(27, 31, 35, 0.05);
+
 	--z-index-checkbox-1: 10;
 	--z-index-checkbox-2: 15;
 	--z-index-filter-input: 999;
@@ -74,6 +76,8 @@ body.vscode-dark {
 
 	--checkbox-bg: #3d4d63;
 	--checkbox-low-contrast-bg: #{darken($checkboxBackground, 20%)};
+
+	--inline-code-bg: rgba(240, 246, 252, 0.15);
 }
 
 table {
@@ -107,6 +111,14 @@ input[type='text'] {
 
 blockquote {
 	margin: 0;
+}
+
+code {
+	background-color: var(--inline-code-bg);
+	border-radius: 3px;
+	color: var(--vscode-editor-foreground);
+	font-family: var(--font-family);
+	padding: 0 0.2em;
 }
 
 button,
