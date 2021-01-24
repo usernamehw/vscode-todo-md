@@ -107,6 +107,10 @@ input[type='text'] {
 	outline: none !important;
 	padding: 3px;
 	padding-left: 4px;
+
+	&::selection {
+		background-color: var(--vscode-selection-background);
+	}
 }
 
 blockquote {
