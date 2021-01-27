@@ -166,7 +166,7 @@ button,
 }
 
 .list-item {
-	border-left: 3px solid transparent;
+	border-left: var(--priority-left-padding) solid transparent;
 	box-shadow: 0 1px 0 0 var(--border-light);
 	padding: var(--padding) 3px;
 	word-wrap: break-word;
