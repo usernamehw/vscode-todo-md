@@ -203,7 +203,9 @@ export default class App extends Vue {
 				selectTaskMutation(-1);
 			} else if (e.key === 'd' && e.altKey) {
 				const task = findTaskAtLineWebview(this.selectedTaskLineNumber);
-				toggleDoneMutation(task);
+				if (task) {
+					toggleDoneMutation(task);
+				}
 			}
 		});
 	}

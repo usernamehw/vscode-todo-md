@@ -23,7 +23,6 @@ export function isTaskVisible(task: TheTask): boolean {
 	return true;
 }
 
-// eslint-disable-next-line no-redeclare
 function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefined {
 	for (const task of tasks) {
 		if (task.lineNumber === lineNumber) {
@@ -39,7 +38,7 @@ function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefin
 	return undefined;
 }
 
-export function findTaskAtLineWebview(lineNumber: number) {
+export function findTaskAtLineWebview(lineNumber: number): TheTask | undefined {
 	return findTaskAtLine(lineNumber, store.state.tasksAsTree);
 }
 
