@@ -364,7 +364,7 @@ export function toggleTaskCollapseWorkspaceEdit(edit: WorkspaceEdit, document: v
 export function deleteTaskWorkspaceEdit(wEdit: WorkspaceEdit, document: vscode.TextDocument, lineNumber: number) {
 	wEdit.delete(document.uri, document.lineAt(lineNumber).rangeIncludingLineBreak);
 }
-function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
+export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
 	if (task.overdueRange) {
 		edit.delete(uri, task.overdueRange);
 	}

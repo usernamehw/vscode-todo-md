@@ -1050,6 +1050,11 @@
 				"command": "todomd.showGlobalState",
 				"title": "DEV: Show Global State",
 				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.removeAllOverdue",
+				"title": "DEV: Remove all overdue tags.",
+				"category": "Todo MD"
 			}
 		],
 		"keybindings": [
@@ -1354,6 +1359,10 @@
 				},
 				{
 					"command": "todomd.showGlobalState",
+					"when": "todomd:isDev"
+				},
+				{
+					"command": "todomd.removeAllOverdue",
 					"when": "todomd:isDev"
 				}
 			]

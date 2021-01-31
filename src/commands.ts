@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import sample from 'lodash/sample';
 import vscode, { commands, TextDocument, ThemeIcon, window, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTasks, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
+import { appendTaskToFile, archiveTasks, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
 import { extensionConfig, extensionState, LAST_VISIT_BY_FILE_STORAGE_KEY, updateLastVisitGlobalState, updateState } from './extension';
@@ -367,6 +367,19 @@ export function registerAllCommands() {
 		for (const key in lastVisitByFile) {
 			console.log(key, new Date(lastVisitByFile[key]), dayjs().to(lastVisitByFile[key]));// TODO: show in output / untitled
 		}
+	});
+	commands.registerCommand('todomd.removeAllOverdue', async () => {
+		const activeDocument = await getActiveDocument();
+		if (!activeDocument) {
+			return;
+		}
+		const edit = new WorkspaceEdit();
+		forEachTask(task => {
+			if (task.overdueRange) {
+				removeOverdueWorkspaceEdit(edit, activeDocument.uri, task);
+			}
+		});
+		applyEdit(edit, activeDocument);
 	});
 	commands.registerCommand('todomd.goToLine', (lineNumber: number) => {
 		goToTask(lineNumber);
