@@ -21,6 +21,10 @@ export class DueDate {
 	 * Closest due date (assigned only when the task is not due today)
 	 */
 	closestDueDateInTheFuture: string;
+	/**
+	 * Overdue date when the task was first time missed to complete.
+	 */
+	overdueStr?: string;
 
 	constructor(dueString: string, options?: { targetDate?: Date; overdue?: string }) {
 		this.raw = dueString;
@@ -28,6 +32,7 @@ export class DueDate {
 		const result = DueDate.parseDue(dueString, options?.targetDate, options?.overdue);
 		this.isRecurring = result.isRecurring;
 		this.isDue = result.isDue;
+		this.overdueStr = options?.overdue;
 		if (result.isDue === DueState.notDue) {
 			this.closestDueDateInTheFuture = this.calcClosestDueDateInTheFuture();
 		} else if (result.isDue === DueState.due || result.isDue === DueState.overdue) {
@@ -48,6 +53,16 @@ export class DueDate {
 			}
 		}
 		return 'More than 100 days';
+	}
+	/**
+	 * Get diff (in days) between today and overdue date
+	 */
+	getOverdueInDays(): number {
+		if (this.overdueStr) {
+			return dayjs().diff(this.overdueStr, 'day');
+		} else {
+			return 0;
+		}
 	}
 	/**
 	 * Parse due date that can be multiple of them delimited by comma
