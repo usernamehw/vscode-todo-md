@@ -151,6 +151,10 @@ button,
 		text-align: center;
 		width: calc(100% - 40px);
 	}
+
+	&.btn-link {
+		padding: 0.07em 0.4em;
+	}
 }
 
 .welcome-text {

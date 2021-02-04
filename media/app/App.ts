@@ -19,6 +19,17 @@ import { VueEvents } from './webviewTypes';
  */
 marked.Renderer.prototype.paragraph = text => `${text}`;
 
+marked.Renderer.prototype.link = (href, title = '', text) => {
+	let style = '';
+	let role = '';
+	if (text.startsWith('btn:')) {
+		style = 'btn btn-link';
+		text = text.replace(/^btn:/, '');
+		role = 'role="button"';
+	}
+	return `<a href="${href}" title="${title}" class="${style}" ${role}>${text}</a>`;
+};
+
 Vue.use(VueAutosuggest);
 Vue.use(VueNotifications);
 Vue.component('task', TaskComponent);// needs to be global for recursive rendering
