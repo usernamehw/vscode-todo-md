@@ -9,6 +9,8 @@
 - [Webview](#webview)
     - [Tasks are rendered as markdown](#tasks-are-rendered-as-markdown)
     - [Webview Hotkeys](#webview-hotkeys)
+    - [Command Uri](#command-uri)
+    - [File Uri](#file-uri)
 
 <!-- /TOC -->
 
@@ -91,3 +93,30 @@ Key | Description
 <kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> (on a task)|Reveals task in the file
 <kbd>L Mouse Button</kbd> (on tag/project/context)|Set filter to the value of the item
 <kbd>Ctrl</kbd> + <kbd>L Mouse Button</kbd> (on tag/project/context)|Append item value to the filter
+
+### Command Uri
+
+You can make links that execute vscode commands:
+
+```md
+[Open Settings](command:workbench.action.openSettings2)
+```
+
+Also with arguments:
+
+```md
+[Open Workbench Settings](command:workbench.action.openSettings?%22workbench%22)
+```
+
+> Arguments should be encoded: `encodeURIComponent(JSON.stringify(args))`
+
+https://code.visualstudio.com/api/extension-guides/command#command-uris
+
+### File Uri
+
+File uri will open file in default app:
+
+```md
+[Config File](file:///C:config/config.txt)
+[Index HTML](file:///C:config/index.html)
+```
