@@ -35,6 +35,8 @@ body {
 	--count-button-hover-background: #0000002b;
 	--selected-task-background: #d4e9ff;
 
+	--twistie-hover-bg: rgba(0, 0, 0, 0.1);
+
 	--checkbox-bg: #{$checkboxBackground};
 	--checkbox-done-bg: #{darken($checkboxBackground, 20%)};
 	--checkbox-fg: #ffffff;
@@ -113,7 +115,8 @@ input[type='text'] {
 	}
 }
 
-blockquote {
+blockquote,
+ul {
 	margin: 0;
 }
 
@@ -260,7 +263,7 @@ button,
 		width: 16px;// Try to center the element
 
 		&:hover {
-			background-color: rgba(0, 0, 0, 0.1);
+			background-color: var(--twistie-hover-bg);
 		}
 	}
 }
