@@ -1,18 +1,20 @@
 {
 	"compilerOptions": {
-		"target": "ES2019",
 		"module": "None",
+		"target": "ES2019",
 		"moduleResolution": "Node",
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
+		"strict": true,
+		"sourceMap": true,
 		"lib": [
-			"es2015",
-			"es2016",
-			"es2017",
-			"es2018",
-			"es2019",
-			"dom"
+			"ES2015",
+			"ES2016",
+			"ES2017",
+			"ES2018",
+			"ES2019",
+			"DOM"
 		],
 	}
 }
