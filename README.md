@@ -134,7 +134,6 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |addCreationDate|**`false`**|When creating a task add creation date to it: `{cr:2020-04-30}`|
 |creationDateIncludeTime|**`false`**|When `addCreationDate` setting enabled, includes date and time: `{cr:2020-04-30T09:11:17}`|
 |confirmTaskDelete|`"always"`|Show confirmation when deleting task from Tree View or Webview.|
-|defaultPriority|`"G"`|Used in sorting for tasks without priority.|
 |getNextNumberOfTasks|**`5`**|Number of tasks returned by `getFewNextTasks` command.|
 |autoArchiveTasks|**`false`**|When enabled - will move tasks to archive file (on completion)|
 |statusBarCounterEnabled|**`true`**|Controls visibility of status bar task progress item `1/3 33%`|

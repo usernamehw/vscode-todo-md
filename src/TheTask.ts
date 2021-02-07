@@ -1,6 +1,5 @@
-import { Range } from 'vscode';
+import type { Range } from 'vscode';
 import { DueDate } from './dueDate';
-import { extensionConfig } from './extension';
 import { DueState, OptionalExceptFor } from './types';
 /**
  * All possible values for task priority
@@ -154,7 +153,7 @@ export class TheTask {
 		this.done = init.done ?? false;
 		this.tags = init.tags ?? [];
 		this.projects = init.projects ?? [];
-		this.priority = init.priority ?? extensionConfig.defaultPriority;
+		this.priority = init.priority ?? 'G';
 		this.links = init.links ?? [];
 		this.due = init.due;
 		this.dueRange = init.dueRange;

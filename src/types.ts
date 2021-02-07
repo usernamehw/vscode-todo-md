@@ -141,10 +141,6 @@ export interface ExtensionConfig {
 	 */
 	creationDateIncludeTime: boolean;
 	/**
-	 * Used in sorting for tasks without priority.
-	 */
-	defaultPriority: Priority;
-	/**
 	 * When enabled - will move tasks to archive file (on completion).
 	 */
 	autoArchiveTasks: boolean;
