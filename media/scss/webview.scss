@@ -42,6 +42,11 @@ body {
 	--checkbox-fg: #ffffff;
 	--checkbox-hover-bg: #{darken($checkboxBackground, 10%)};
 
+	--due-fg: #5faedb;
+	--due-bg: #5faedb12;
+	--overdue-fg: #d3000099;
+	--overdue-bg: #d3000012;
+
 	--inline-code-bg: rgba(27, 31, 35, 0.06);
 
 	--z-index-checkbox-1: 10;
@@ -78,6 +83,9 @@ body.vscode-dark {
 
 	--checkbox-bg: #3d4d63;
 	--checkbox-low-contrast-bg: #{darken($checkboxBackground, 20%)};
+
+	--overdue-bg: #fc424222;
+	--overdue-fg: #fc4242e1;
 
 	--inline-code-bg: rgba(240, 246, 252, 0.15);
 }
@@ -238,18 +246,6 @@ button,
 		border-left-color: #00cfad;
 	}
 
-	&.due {
-		border-right: 3px solid #82d30099;
-	}
-
-	&.overdue {
-		border-right: 3px solid #d3000099;
-	}
-
-	&.not-due {
-		border-right: 3px solid #808080;
-	}
-
 	&.selected {
 		background-color: var(--selected-task-background);
 	}
@@ -265,6 +261,26 @@ button,
 		&:hover {
 			background-color: var(--twistie-hover-bg);
 		}
+	}
+
+	.due-state {
+		float: right;
+		margin-right: -5px;
+		padding: 0.05em 0.3em;
+
+		&.due {
+			background-color: var(--due-bg);
+			color: var(--due-fg);
+		}
+
+		&.overdue {
+			background-color: var(--overdue-bg);
+			color: var(--overdue-fg);
+		}
+	}
+
+	.codicon {
+		font-size: var(--font-size);
 	}
 }
 

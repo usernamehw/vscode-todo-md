@@ -105,4 +105,35 @@ export default class Task extends Vue {
 		}
 		return cls;
 	}
+	get dueDate() {
+		if (this.model.due?.isDue === undefined) {
+			return undefined;
+		} else {
+			const dueClasses: string[] = ['due-state'];
+			let dueText = '';
+			switch (this.model.due.isDue) {
+				case DueState.notDue: {
+					dueClasses.push('not-due');
+					dueText = '';
+					break;
+				}
+				case DueState.due: {
+					dueClasses.push('due');
+					dueText = '<span class="codicon codicon-history"></span>';
+					break;
+				}
+				case DueState.overdue: {
+					dueClasses.push('overdue');
+					dueText = `<span class="codicon codicon-history"></span> <span>${this.model.due?.overdueInDays || ''}</span>`;
+					break;
+				}
+				case DueState.invalid: {
+					dueClasses.push('invalid');
+					dueText = 'invalid';
+					break;
+				}
+			}
+			return `<span class="${dueClasses.join(' ')}">${dueText}</span>`;
+		}
+	}
 }

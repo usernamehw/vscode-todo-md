@@ -42,6 +42,9 @@
             <button class="increment-count"
                     @click="incrementCount">+</button>
         </span>
+        <template v-if="dueDate">
+            <span v-html="dueDate"></span>
+        </template>
     </div>
     <div v-if="model.subtasks.length && !model.collapseRange">
         <task v-for="model in model.subtasks"

@@ -25,6 +25,10 @@ export class DueDate {
 	 * Overdue date when the task was first time missed to complete.
 	 */
 	overdueStr?: string;
+	/**
+	 * Number of days that task is overdue
+	 */
+	overdueInDays?: number;
 
 	constructor(dueString: string, options?: { targetDate?: Date; overdue?: string }) {
 		this.raw = dueString;
@@ -40,11 +44,14 @@ export class DueDate {
 		} else {
 			this.closestDueDateInTheFuture = '';
 		}
+		if (this.overdueStr) {
+			this.overdueInDays = this.getOverdueInDays();
+		}
 	}
 	/**
 	 * When the next time the task is going to be due.
 	 */
-	calcClosestDueDateInTheFuture() {
+	private calcClosestDueDateInTheFuture() {
 		for (let i = 1; i < 100; i++) {
 			const date = dayjs().add(i, 'day');
 			const { isDue } = DueDate.parseDue(this.raw, date.toDate());
@@ -57,7 +64,7 @@ export class DueDate {
 	/**
 	 * Get diff (in days) between today and overdue date
 	 */
-	getOverdueInDays(): number {
+	private getOverdueInDays(): number {
 		if (this.overdueStr) {
 			return dayjs().diff(this.overdueStr, 'day');
 		} else {
