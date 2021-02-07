@@ -1,3 +1,13 @@
+## 2.4.0 `07 Feb 2021`
+
+- ✨ [webview] Change inline code style
+- ✨ [webview] Add Reveal to context menu
+- ✨ [webview] Add button styled link `[btn:But](https://www.google.com)`
+- ✨ [editor] Advanced decorations: add completed task
+- ✨ Calculate and show number of days the task is overdue in webview and in hover
+- ✨ Show text of deleted tasks in task deletion confirmation dialog
+- 💥 Remove defaultPriority setting
+
 ## 2.3.1 `20 Jan 2021`
 
 - 🐛 Update everything after executing collapse/expand all
