@@ -119,17 +119,17 @@ export default class Task extends Vue {
 				}
 				case DueState.due: {
 					dueClasses.push('due');
-					dueText = '<span class="codicon codicon-history"></span>';
+					dueText = '<span class="codicon codicon-history" title="Due Today"></span>';
 					break;
 				}
 				case DueState.overdue: {
 					dueClasses.push('overdue');
-					dueText = `<span class="codicon codicon-history"></span> <span>${this.model.due?.overdueInDays || ''}</span>`;
+					dueText = `<span class="codicon codicon-history" title="Overdue"></span> <span>${this.model.due?.overdueInDays || ''}</span>`;
 					break;
 				}
 				case DueState.invalid: {
 					dueClasses.push('invalid');
-					dueText = '<span class="codicon codicon-error"></span>';
+					dueText = '<span class="codicon codicon-error" title="Due date is Invalid"></span>';
 					break;
 				}
 			}
