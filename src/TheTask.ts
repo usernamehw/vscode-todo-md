@@ -208,6 +208,8 @@ export class TheTask {
 				result += '🟩 ';
 			} else if (task.due?.isDue === DueState.overdue) {
 				result += '🟥 ';
+			} else if (task.due?.isDue === DueState.invalid) {
+				result += '🟪 ';
 			}
 		}
 		result += task.title;

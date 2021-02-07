@@ -1207,9 +1207,9 @@
 			{
 				"id": "todomd.invalidDueDateBackground",
 				"defaults": {
-					"light": "#f75454",
-					"dark": "#f75454",
-					"highContrast": "#f75454"
+					"light": "#7284eb",
+					"dark": "#7284eb",
+					"highContrast": "#7284eb"
 				},
 				"description": "Due date that is either has an invalid format `2020-05` or an invalid date `2020-12-35`"
 			},

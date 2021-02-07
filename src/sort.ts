@@ -43,9 +43,10 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 export function defaultSortTasks(tasks: TheTask[]) {
 	const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.overdue);
 	const dueTasks = tasks.filter(t => t.due?.isDue === DueState.due);
+	const invalidDue = tasks.filter(t => t.due?.isDue === DueState.invalid);
 	const notDueTasks = tasks.filter(t => !t.due?.isDue || !t.due);
 	const sortedOverdueTasks = sortTasks(overdueTasks, SortProperty.priority);
 	const sortedDueTasks = sortTasks(dueTasks, SortProperty.priority);
 	const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
-	return [...sortedOverdueTasks, ...sortedDueTasks, ...sortedNotDueTasks];
+	return [...sortedOverdueTasks, ...sortedDueTasks, ...invalidDue, ...sortedNotDueTasks];
 }

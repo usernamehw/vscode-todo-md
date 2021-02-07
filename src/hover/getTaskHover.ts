@@ -28,13 +28,17 @@ export function getTaskHover(task: TheTask) {
 	if (task.due || task.overdue) {
 		let dueColor = '';
 		let overdueNumberOfDays = '';
+		let codicon = '$(history)';
 		if (task.due?.isDue === DueState.due) {
 			dueColor = '#5faedb';
 		} else if (task.due?.isDue === DueState.overdue) {
 			dueColor = '#d44343';
 			overdueNumberOfDays = String(task.due.overdueInDays);
+		} else if (task.due?.isDue === DueState.invalid) {
+			dueColor = '#7284eb';
+			codicon = '$(error)';
 		}
-		due = ` <span style="color:${dueColor || 'inherit'};">$(history) ${overdueNumberOfDays}</span>&nbsp;`;
+		due = ` <span style="color:${dueColor || 'inherit'};">${codicon} ${overdueNumberOfDays}</span>&nbsp;`;
 		if (task.due?.isDue === DueState.notDue) {
 			due = '';
 		}

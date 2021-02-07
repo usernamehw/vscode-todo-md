@@ -7,7 +7,6 @@
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
 		"strict": true,
-		"sourceMap": true,
 		"lib": [
 			"ES2015",
 			"ES2016",

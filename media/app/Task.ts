@@ -129,7 +129,7 @@ export default class Task extends Vue {
 				}
 				case DueState.invalid: {
 					dueClasses.push('invalid');
-					dueText = 'invalid';
+					dueText = '<span class="codicon codicon-error"></span>';
 					break;
 				}
 			}
