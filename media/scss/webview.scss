@@ -255,6 +255,7 @@ button,
 	.twistie {
 		border-radius: 3px;
 		cursor: pointer;
+		float: left;
 		height: 16px;
 		position: relative;
 		top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height)) - 16px) / 2);
@@ -298,6 +299,8 @@ button,
 }
 
 .checkbox {
+	float: left;
+
 	+ a {
 		margin-left: 0;
 	}
