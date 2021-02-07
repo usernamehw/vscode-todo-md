@@ -289,6 +289,12 @@ button,
 	.codicon {
 		font-size: var(--font-size);
 	}
+
+	&::after {
+		clear: both;
+		content: '';
+		display: table;
+	}
 }
 
 .checkbox {
