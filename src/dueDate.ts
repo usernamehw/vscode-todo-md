@@ -44,7 +44,7 @@ export class DueDate {
 		} else {
 			this.closestDueDateInTheFuture = '';
 		}
-		if (this.overdueStr) {
+		if (this.isDue === DueState.overdue) {
 			this.overdueInDays = this.getOverdueInDays();
 		}
 	}
@@ -68,7 +68,9 @@ export class DueDate {
 		if (this.overdueStr) {
 			return dayjs().diff(this.overdueStr, 'day');
 		} else {
-			return 0;
+			const now = new Date();
+			const nowWithoutTime = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+			return dayjs(nowWithoutTime).diff(dayjs(this.raw), 'day');
 		}
 	}
 	/**
