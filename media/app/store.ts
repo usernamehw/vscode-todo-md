@@ -208,7 +208,7 @@ window.addEventListener('message', event => {
 			document.body.style.setProperty('--font-size', message.value.config.fontSize);
 			document.body.style.setProperty('--font-family', message.value.config.fontFamily);
 			document.body.style.setProperty('--padding', message.value.config.padding);
-			document.body.style.setProperty('--priority-left-padding', message.value.config.showPriority ? '3px' : '0');
+			document.body.style.setProperty('--priority-left-padding', message.value.config.showPriority ? '3px' : '1px');
 			document.body.style.setProperty('--indent-size', message.value.config.indentSize);
 			break;
 		}
