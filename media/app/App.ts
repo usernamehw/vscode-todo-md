@@ -27,7 +27,7 @@ marked.Renderer.prototype.link = (href, title = '', text) => {
 		text = text.replace(/^btn:/, '');
 		role = 'role="button"';
 	}
-	return `<a href="${href}" title="${title}" class="${style}" ${role}>${text}</a>`;
+	return `<a href="${href}" title="${href}" class="${style}" ${role}>${text}</a>`;
 };
 
 Vue.use(VueAutosuggest);
