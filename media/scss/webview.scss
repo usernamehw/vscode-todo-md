@@ -20,6 +20,7 @@ $darkenPercent: 8%;
 
 body {
 	--line-height: 1.4;
+	--list-item-left-padding: 4px;
 	--border-light: #cecece6c;
 	--border-darker: #cecece;
 	--foreground: var(--vscode-foreground);
@@ -185,7 +186,7 @@ button,
 .list-item {
 	border-left: var(--priority-left-padding) solid transparent;
 	box-shadow: 0 1px 0 0 var(--border-light);
-	padding: var(--padding) 3px;
+	padding: var(--padding) var(--list-item-left-padding);
 	word-wrap: break-word;
 
 	&.done {
@@ -257,6 +258,7 @@ button,
 		cursor: pointer;
 		float: left;
 		height: 16px;
+		margin-left: -2px;
 		position: relative;
 		top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height)) - 16px) / 2);
 		width: 16px;// Try to center the element
