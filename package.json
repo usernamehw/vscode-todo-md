@@ -1411,6 +1411,7 @@
 				{
 					"type": "webview",
 					"id": "todomd.webviewTasks",
+					"contextualTitle": "Tasks",
 					"name": "Webview",
 					"icon": "$(check)"
 				}
@@ -1418,7 +1419,7 @@
 		}
 	},
 	"browserslist": [
-		"electron 9.3"
+		"electron 11.2"
 	],
 	"scripts": {
 		"vscode:prepublish": "npm run scss & npm run webview & webpack --mode production --color",
