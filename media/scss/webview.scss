@@ -184,16 +184,16 @@ button,
 	padding: var(--padding) var(--list-item-left-padding);
 	word-wrap: break-word;
 
+	&:hover {
+		background-color: var(--vscode-list-hoverBackground);
+	}
+
 	&.done {
 		background-color: var(--done-task-background);
 
 		&.strike-through > .title {
 			text-decoration: line-through;
 		}
-	}
-
-	&:hover {
-		background-color: var(--vscode-list-hoverBackground);
 	}
 
 	&.nested-lvl-1 {
@@ -403,7 +403,6 @@ button,
 	margin: 0;
 	margin-left: 0;
 	margin-right: 4px;
-	opacity: 0.8;
 	padding: 0;
 	position: relative;
 	right: 0;
@@ -424,9 +423,5 @@ button,
 		text-align: center;
 		text-decoration: none;
 		text-rendering: auto;
-	}
-
-	&:hover {
-		opacity: 1;
 	}
 }
