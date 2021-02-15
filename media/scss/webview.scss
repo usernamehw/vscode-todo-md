@@ -15,7 +15,6 @@ $approxOneSpace: 0.25em;
 $tagBackground: #d2e8ff;
 $projectBackground: #c5ece0;
 $contextBackground: #f7e0ff;
-$checkboxBackground: #cbd1d8;
 $darkenPercent: 8%;
 
 body {
@@ -37,11 +36,6 @@ body {
 	--selected-task-background: #d4e9ff;
 
 	--twistie-hover-bg: rgba(0, 0, 0, 0.1);
-
-	--checkbox-bg: #{$checkboxBackground};
-	--checkbox-done-bg: #{darken($checkboxBackground, 20%)};
-	--checkbox-fg: #ffffff;
-	--checkbox-hover-bg: #{darken($checkboxBackground, 10%)};
 
 	--due-fg: #5faedb;
 	--due-bg: #5faedb12;
@@ -83,9 +77,6 @@ body.vscode-dark {
 	--count-button-background: #ffffff1a;
 	--done-task-background: #ace0001c;
 	--selected-task-background: #d4e9ff40;
-
-	--checkbox-bg: #3d4d63;
-	--checkbox-low-contrast-bg: #{darken($checkboxBackground, 20%)};
 
 	--overdue-bg: #fc424222;
 	--overdue-fg: #fc4242e1;
@@ -393,97 +384,45 @@ button,
 	display: none;
 }
 // Custom-styled Checkbox ──────────────────────────────────────────────────────────────
-$checkbox-size: 1rem;
-// Maybe assign the class on the parent element
 .custom-checkbox {
+	--checkbox-size: calc(var(--font-size) + 2px);
 	-webkit-appearance: none;
-	background-color: var(--checkbox-bg);
+	background-color: var(--vscode-checkbox-background);
+	border: 1px solid var(--vscode-checkbox-border);
+	border-radius: 3px;
 	bottom: 0;
-	color: var(--checkbox-fg);
+	color: var(--vscode-checkbox-foreground);
 	cursor: pointer;
 	display: inline-block;
-	height: $checkbox-size;
+	height: var(--checkbox-size);
 	left: 0;
 	margin: 0;
-	margin-left: 1px;
-	margin-right: 4px;
-	min-width: $checkbox-size;
+	margin-left: 0;
+	margin-right: calc(var(--checkbox-size) / 2);
+	opacity: 0.8;
+	padding: 0;
 	position: relative;
 	right: 0;
 	top: 2px;
-	width: $checkbox-size;
+	width: var(--checkbox-size);
 	z-index: var(--z-index-checkbox-2);
 
-	&.round {
-		border-radius: 50%;
+	&:checked {
+		background-color: var(--vscode-checkbox-background);
 	}
 
-	&.round-border {
-		background-color: inherit !important;
-		border: 1px solid var(--foreground);
-		border-radius: 50%;
-		color: var(--foreground) !important;
-	}
-
-	&.square-border {
-		background-color: inherit !important;
-		border: 1px solid var(--foreground);
-		color: var(--foreground) !important;
-	}
-
-	&.rounded-square {
-		border-radius: 20%;
-	}
-
-	&.fill-round {
-		border-radius: 50%;
-
-		&:checked:before {
-			display: none;
-		}
-	}
-
-	&.fill-square {
-		border-radius: 0;
-
-		&:checked:before {
-			display: none;
-		}
-	}
-
-	&.fill-rounded-square {
-		border-radius: 20%;
-
-		&:checked:before {
-			display: none;
-		}
+	&:checked::before {
+		content: '\eab2';
+		display: inline-block;
+		font-family: codicon;
+		font-size: var(--font-size);
+		-webkit-font-smoothing: antialiased;
+		text-align: center;
+		text-decoration: none;
+		text-rendering: auto;
 	}
 
 	&:hover {
-		background-color: var(--checkbox-hover-bg);
-	}
-
-	&:checked {
-		background-color: var(--checkbox-done-bg);
-
-		&:before {
-			content: '\2714 \FE0E';
-			display: inline-block;
-			font-family: 'Segoe UI Symbol', monospace;
-			font-size: 0.7rem;
-			height: $checkbox-size;
-			line-height: $checkbox-size;
-			position: absolute;
-			text-align: center;
-			width: $checkbox-size;
-		}
-
-		&.round-border,
-		&.square-border {
-			&:before {
-				left: -1px;
-				top: -1px;
-			}
-		}
+		opacity: 1;
 	}
 }

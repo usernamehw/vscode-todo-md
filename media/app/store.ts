@@ -47,7 +47,6 @@ export const store = new Store({
 			fontSize: '13px',
 			padding: '0px',
 			customCheckboxEnabled: false,
-			checkboxStyle: 'rounded-square',
 			fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`,
 		},
 		selectedTaskLineNumber: -1,

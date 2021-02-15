@@ -151,8 +151,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.completedStrikeThrough|**`false`**|Whether completed tasks should have a line drawn on them in the webview.|
 |webview.autoShowSuggest|**`true`**|Show autocomplete when typing. (When disabled suggest can be called by <kbd>Ctrl</kbd>+<kbd>Space</kbd>)|
 |webview.showPriority|**`true`**|Controls whether priority is shown in the webview.|
-|webview.customCheckboxEnabled|**`false`**|Whether checkbox is rendered as native input element or a custom styled element.|
-|webview.checkboxStyle|`"rounded-square"`|Controls checkbox style (round, square...).|
+|webview.customCheckboxEnabled|**`true`**|Whether checkbox is rendered as native input element or a custom styled element.|
 |webview.fontSize|`"13px"`|Controls font size in the webview.|
 |webview.padding|`"0px"`|Controls spacing between items in a list.|
 |webview.indentSize|`"1.8em"`|Controls visual indent of nested elements in a webview.|

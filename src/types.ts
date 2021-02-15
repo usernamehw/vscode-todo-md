@@ -253,10 +253,6 @@ export interface ExtensionConfig {
 		 */
 		customCheckboxEnabled: boolean;
 		/**
-		 * Controls custom checkbox style (round, square...).
-		 */
-		checkboxStyle: string;
-		/**
 		 * Controls spacing between items in a list.
 		 */
 		padding: string;

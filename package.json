@@ -98,22 +98,7 @@
 				"todomd.webview.customCheckboxEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Whether checkbox is rendered as native input element or a custom styled element.",
-					"default": false
-				},
-				"todomd.webview.checkboxStyle": {
-					"type": "string",
-					"markdownDescription": "Controls custom checkbox style (round, square...).",
-					"enum": [
-						"round",
-						"square",
-						"round-border",
-						"square-border",
-						"rounded-square",
-						"fill-round",
-						"fill-square",
-						"fill-rounded-square"
-					],
-					"default": "rounded-square"
+					"default": true
 				},
 				"todomd.webview.autoShowSuggest": {
 					"type": "boolean",
@@ -1419,7 +1404,7 @@
 		}
 	},
 	"browserslist": [
-		"electron 11.2"
+		"chrome 87"
 	],
 	"scripts": {
 		"vscode:prepublish": "npm run scss & npm run webview & webpack --mode production --color",

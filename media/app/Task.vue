@@ -14,7 +14,7 @@
                :checked="model.done"
                aria-label="Task completion status"
                class="checkbox"
-               :class="[config.customCheckboxEnabled ? 'custom-checkbox ' + config.checkboxStyle : 'native-checkbox']"
+               :class="[config.customCheckboxEnabled ? 'custom-checkbox ' : 'native-checkbox']"
                @change="toggleDone"><!--
         --><span class="title"
                   v-html="taskTitle"></span><!--
