@@ -106,7 +106,7 @@ export default class Task extends Vue {
 		return cls;
 	}
 	get dueDate() {
-		if (this.model.due?.isDue === undefined) {
+		if (this.model.due?.isDue === undefined || this.model.done) {
 			return undefined;
 		} else {
 			const dueClasses: string[] = ['due-state'];
