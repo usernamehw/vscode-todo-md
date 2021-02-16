@@ -124,7 +124,7 @@ export default class Task extends Vue {
 				}
 				case DueState.overdue: {
 					dueClasses.push('overdue');
-					dueText = `<span class="codicon codicon-history" title="Overdue"></span> <span>${this.model.due?.overdueInDays || ''}</span>`;
+					dueText = `<span class="codicon codicon-history" title="Overdue"></span> <span class="overdue-count">${this.model.due?.overdueInDays || ''}</span>`;
 					break;
 				}
 				case DueState.invalid: {

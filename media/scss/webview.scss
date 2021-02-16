@@ -269,9 +269,14 @@ button,
 	}
 
 	.due-state {
+		align-items: center;
+		display: flex;
 		float: right;
+		font-size: smaller;
+		justify-content: center;
 		margin-right: -3px;
-		padding: 0.05em 0.3em;
+		padding: 0.1em 0.3em;
+		position: relative;
 
 		&.due {
 			background-color: var(--due-bg);
@@ -286,6 +291,10 @@ button,
 		&.invalid {
 			background-color: var(--due-invalid-bg);
 			color: var(--due-invalid-fg);
+		}
+
+		.overdue-count {
+			padding-left: $approxOneSpace;
 		}
 	}
 
