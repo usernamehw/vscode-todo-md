@@ -120,3 +120,19 @@ File uri will open file in default app:
 [Config File](file:///C:config/config.txt)
 [Index HTML](file:///C:config/index.html)
 ```
+
+### Highlight specific tags
+
+From Settings:
+
+```js
+"todomd.webview.tagStyles": {
+	"important": {
+		"backgroundColor": "#ff5151",
+		"color": "#fff",
+		"border": "1px solid #000000"
+	}
+}
+```
+
+![Custom tag style in webview](./img/webview_tag_style.png)
