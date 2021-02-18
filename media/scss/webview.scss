@@ -381,7 +381,7 @@ button,
 	display: inline-block;
 	padding: 0 0.2rem;
 	text-align: center;
-	-webkit-user-select: none;
+	user-select: none;
 	width: 1.3em;
 
 	&:hover {

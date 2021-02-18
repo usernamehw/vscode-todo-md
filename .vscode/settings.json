@@ -1,5 +1,12 @@
 {
 	"typescript.tsc.autoDetect": "off",
+	"search.exclude": {
+		"media/webview.css": true,
+		"media/webview.js": true,
+		"media/webview.js.map": true,
+		"out": true,
+		"dist": true
+	},
 	"eslint.workingDirectories": [
 		"./",
 		"media"
