@@ -258,9 +258,8 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 				// Additional tags ------------
 				if (additionalTags.length !== 0) {
 					parsedLine.value.tags.push(...additionalTags);
-					const additionalTagsString = additionalTags.map(tag => `#${tag}`).join('');
+					const additionalTagsString = ` ${additionalTags.map(tag => `#${tag}`).join('')}`;
 					parsedLine.value.rawText += additionalTagsString;
-					parsedLine.value.title += additionalTagsString;
 				}
 				// Links ----------------------
 				const linksOnThisLine = links.filter(link => link.range.start.line === i && link.target !== undefined);
