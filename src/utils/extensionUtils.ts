@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { TextDocument, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { extensionConfig, extensionState } from '../extension';
-import { openSettingGuiAt } from './vscodeUtils';
+import { extensionConfig, extensionState, EXTENSION_NAME } from '../extension';
+import { updateSetting } from './vscodeUtils';
 
 /**
  * vscode `WorkspaceEdit` allowes changing files that are not even opened.
@@ -13,17 +13,23 @@ export async function applyEdit(wEdit: WorkspaceEdit, document: TextDocument) {
 	return await document.save();
 }
 /**
- * Get active document
+ * Get active document. If none are active try to return default document.
  */
 export async function getActiveDocument() {
-	if (extensionState.activeDocument === undefined) {
-		window.showErrorMessage('No active document');
-		throw new Error('No active document');
+	if (extensionState.activeDocument) {
+		if (extensionState.activeDocument.isClosed) {
+			extensionState.activeDocument = await workspace.openTextDocument(extensionState.activeDocument.uri);
+		}
+		return extensionState.activeDocument;
+	} else {
+		const documentForDefaultFile = await getDocumentForDefaultFile();
+		if (!documentForDefaultFile) {
+			window.showErrorMessage('No active document & no default document');
+			throw Error('No active document & no default document');
+		} else {
+			return documentForDefaultFile;
+		}
 	}
-	if (extensionState.activeDocument.isClosed) {
-		extensionState.activeDocument = await workspace.openTextDocument(extensionState.activeDocument.uri);
-	}
-	return extensionState.activeDocument;
 }
 /**
  * Get Text Document for default file (if specified)
@@ -34,17 +40,28 @@ export async function getDocumentForDefaultFile() {
 	}
 	return await workspace.openTextDocument(Uri.file(extensionConfig.defaultFile));
 }
+async function specifyFile(isArchive: boolean) {
+	const filePaths = await window.showOpenDialog({
+		title: `Pick default${isArchive ? ' archive' : ''} file`,
+	});
+	if (!filePaths) {
+		return undefined;
+	}
+	const filePath = filePaths[0].fsPath;
+	if (!filePath) {
+		return undefined;
+	}
+
+	return updateSetting(`${EXTENSION_NAME}.default${isArchive ? 'Archive' : ''}File`, filePath);
+}
 /**
  * Open Settings GUI at `todomd.defaultFile` item
  */
-export function specifyDefaultFile() {
-	openSettingGuiAt('todomd.defaultFile');
+export async function specifyDefaultFile() {
+	return specifyFile(false);
 }
-/**
- * Open Settings GUI at `todomd.defaultArchiveFile` item
- */
-export function specifyDefaultArchiveFile() {
-	openSettingGuiAt('todomd.defaultArchiveFile');
+export async function specifyDefaultArchiveFile() {
+	return specifyFile(true);
 }
 /**
  * Check if default file path is specified. If not - show notification with button to enter it.

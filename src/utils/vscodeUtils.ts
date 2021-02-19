@@ -1,4 +1,4 @@
-import vscode, { Uri } from 'vscode';
+import vscode, { ConfigurationTarget, Uri, workspace } from 'vscode';
 import { Link } from '../TheTask';
 import { VscodeContext } from '../types';
 
@@ -80,4 +80,11 @@ export function getWordAtPosition(document: vscode.TextDocument, position: vscod
 		return document.getText(wordRange);
 	}
 	return undefined;
+}
+/**
+ * Updates global setting with new value.
+ */
+export async function updateSetting(settingName: string, newValue: unknown) {
+	const settings = workspace.getConfiguration(undefined, null);
+	return settings.update(settingName, newValue, ConfigurationTarget.Global);
 }

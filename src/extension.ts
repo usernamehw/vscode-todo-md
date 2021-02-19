@@ -149,16 +149,17 @@ export async function updateState() {
 		document = await getDocumentForDefaultFile();
 	}
 	if (!document) {
-		extensionState.activeDocument = undefined;
-		extensionState.theRightFileOpened = false;
 		extensionState.tasks = [];
+		extensionState.tasksAsTree = [];
 		extensionState.tags = [];
-		extensionState.contexts = [];
 		extensionState.projects = [];
-		extensionState.commentLines = [];
-		extensionState.projectsForTreeView = [];
+		extensionState.contexts = [];
 		extensionState.tagsForTreeView = [];
+		extensionState.projectsForTreeView = [];
 		extensionState.contextsForTreeView = [];
+		extensionState.commentLines = [];
+		extensionState.theRightFileOpened = false;
+		extensionState.activeDocument = undefined;
 		return;
 	}
 	const parsedDocument = await parseDocument(document);
