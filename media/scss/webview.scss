@@ -12,7 +12,8 @@ html {
 }
 
 $approxOneSpace: 0.25em;
-$tagBackground: #d2e8ff;
+$tagBackground: #d7e2e9;
+$tagForeground: transparentize(darken($tagBackground, 70%), 0.2);
 $projectBackground: #c5ece0;
 $contextBackground: #f7e0ff;
 $darkenPercent: 8%;
@@ -24,7 +25,7 @@ body {
 	--border-darker: #cecece;
 	--foreground: var(--vscode-foreground);
 	--done-task-background: #e9f0d6;
-	--tag-foreground: var(--vscode-foreground);
+	--tag-foreground: #{$tagForeground};
 	--tag-background: #{$tagBackground};
 	--project-background: #{$projectBackground};
 	--project-hover-background: #{darken($projectBackground, $darkenPercent)};
@@ -44,7 +45,7 @@ body {
 	--due-invalid-fg: #7284eb;
 	--due-invalid-bg: #7284eb12;
 
-	--inline-code-bg: rgba(27, 31, 35, 0.06);
+	--inline-code-bg: rgba(27, 31, 35, 0.08);
 
 	--z-index-checkbox-1: 10;
 	--z-index-checkbox-2: 15;
@@ -81,7 +82,7 @@ body.vscode-dark {
 	--overdue-bg: #fc424222;
 	--overdue-fg: #fc4242e1;
 
-	--inline-code-bg: rgba(240, 246, 252, 0.15);
+	--inline-code-bg: rgba(240, 246, 252, 0.2);
 }
 
 table {
@@ -137,6 +138,8 @@ code {
 	color: var(--vscode-editor-foreground);
 	font-family: var(--font-family);
 	padding: 0 0.2em;
+	padding-bottom: 1px;
+	padding-top: 1px;
 }
 
 button,
@@ -325,11 +328,10 @@ button,
 .tag,
 .project,
 .context {
-	border-radius: 3px;
+	border-radius: 0.25em;
 	cursor: pointer;
 	margin-left: $approxOneSpace;
-	padding-left: 4px;
-	padding-right: 4px;
+	padding: 1px 4px;
 	white-space: pre;
 }
 
