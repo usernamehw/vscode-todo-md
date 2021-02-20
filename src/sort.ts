@@ -12,6 +12,7 @@ const enum SortDirection {
  */
 export const enum SortProperty {
 	priority,
+	overdue,
 }
 /**
  * Does not modify the original array
@@ -26,6 +27,16 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 				return 0;
 			} else {
 				return a.priority > b.priority ? 1 : -1;
+			}
+		});
+	} else if (property === SortProperty.overdue) {
+		sortedTasks = tasksCopy.sort((a, b) => {
+			const overdueA = a.due?.overdueInDays || 0;
+			const overdueB = b.due?.overdueInDays || 0;
+			if (overdueA === overdueB) {
+				return 0;
+			} else {
+				return overdueA < overdueB ? 1 : -1;
 			}
 		});
 	}
@@ -45,7 +56,7 @@ export function defaultSortTasks(tasks: TheTask[]) {
 	const dueTasks = tasks.filter(t => t.due?.isDue === DueState.due);
 	const invalidDue = tasks.filter(t => t.due?.isDue === DueState.invalid);
 	const notDueTasks = tasks.filter(t => !t.due?.isDue || !t.due);
-	const sortedOverdueTasks = sortTasks(overdueTasks, SortProperty.priority);
+	const sortedOverdueTasks = sortTasks(sortTasks(overdueTasks, SortProperty.priority), SortProperty.overdue);
 	const sortedDueTasks = sortTasks(dueTasks, SortProperty.priority);
 	const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
 	return [...sortedOverdueTasks, ...sortedDueTasks, ...invalidDue, ...sortedNotDueTasks];
