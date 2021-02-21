@@ -9,8 +9,10 @@
 - [Webview](#webview)
     - [Tasks are rendered as markdown](#tasks-are-rendered-as-markdown)
     - [Webview Hotkeys](#webview-hotkeys)
+    - [Button link](#button-link)
     - [Command Uri](#command-uri)
     - [File Uri](#file-uri)
+    - [Highlight specific tags](#highlight-specific-tags)
 
 <!-- /TOC -->
 
@@ -93,6 +95,14 @@ Key | Description
 <kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> (on a task)|Reveals task in the file
 <kbd>L Mouse Button</kbd> (on tag/project/context)|Set filter to the value of the item
 <kbd>Ctrl</kbd> + <kbd>L Mouse Button</kbd> (on tag/project/context)|Append item value to the filter
+
+### Button link
+
+Just a link styled like a button.
+
+```md
+[btn:Google](https://www.google.com)
+```
 
 ### Command Uri
 
