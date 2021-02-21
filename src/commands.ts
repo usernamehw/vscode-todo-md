@@ -303,7 +303,7 @@ export function registerAllCommands() {
 	commands.registerCommand('todomd.completeTask', async () => {
 		// Show Quick Pick to complete a task
 		const document = await getActiveDocument();
-		const notCompletedTasks = extensionState.tasks.filter(task => !task.done).map(task => TheTask.formatTask(task));
+		const notCompletedTasks = defaultSortTasks(extensionState.tasks.filter(task => !task.done)).map(task => TheTask.formatTask(task));
 		const pickedTask = await window.showQuickPick(notCompletedTasks, {
 			placeHolder: 'Choose a task to complete',
 		});
