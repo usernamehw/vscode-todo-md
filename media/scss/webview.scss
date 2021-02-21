@@ -205,6 +205,10 @@ button,
 		}
 	}
 
+	&.selected {
+		background-color: var(--selected-task-bg);
+	}
+
 	&.nested-lvl-1 {
 		padding-left: var(--indent-size);
 	}
@@ -251,10 +255,6 @@ button,
 
 	&.pri6 {
 		border-left-color: #00cfad;
-	}
-
-	&.selected {
-		background-color: var(--selected-task-bg);
 	}
 
 	.twistie {

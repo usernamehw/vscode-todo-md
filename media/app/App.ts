@@ -110,6 +110,7 @@ export default class App extends Vue {
 		}];
 		Vue.nextTick(() => {
 			this.$refs.autosuggest.setCurrentIndex(0);
+			this.selectFirstTask();
 		});
 		this.updateWebviewCounter(this.filteredSortedTasks.length);
 	}
@@ -169,6 +170,12 @@ export default class App extends Vue {
 		this.$refs.taskContextMenu.close();
 	}
 	// ──────────────────────────────────────────────────────────────────────
+	selectFirstTask() {
+		const firstTask = this.filteredSortedTasks[0];
+		if (firstTask) {
+			selectTaskMutation(firstTask.lineNumber);
+		}
+	}
 	updateWebviewCounter(numberOfTasks: number) {
 		SendMessage.updateWebviewTitle(numberOfTasks);
 	}
@@ -189,6 +196,9 @@ export default class App extends Vue {
 	mounted() {
 		App.focusFilterInput();
 		window.addEventListener('focus', App.focusFilterInput);
+		setTimeout(() => {
+			this.selectFirstTask();
+		}, 100);
 
 		this.$root.$on(VueEvents.openTaskContextMenu, (data: {e: MouseEvent; task: TheTask}) => {
 			this.contextMenuTask = data.task;
