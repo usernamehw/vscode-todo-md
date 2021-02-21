@@ -33,6 +33,7 @@
 	],
 	"activationEvents": [
 		"onStartupFinished",
+		"onCommand:todomd.focusTasksWebviewAndInput",
 		"onView:todomd.tags",
 		"onView:todomd.tasks",
 		"onView:todomd.projects",
