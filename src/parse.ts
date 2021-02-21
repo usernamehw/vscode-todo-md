@@ -273,7 +273,7 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 				// Overdue --------------------
 				if (parsedLine.value.overdue && parsedLine.value.due?.raw) {
 					parsedLine.value.due = new DueDate(parsedLine.value.due.raw, {
-						overdue: parsedLine.value.overdue,
+						overdueStr: parsedLine.value.overdue,
 					});
 				}
 				// Handle nested tasks (find parent task lineNumber)

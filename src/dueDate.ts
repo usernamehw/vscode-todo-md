@@ -30,13 +30,13 @@ export class DueDate {
 	 */
 	overdueInDays?: number;
 
-	constructor(dueString: string, options?: { targetDate?: Date; overdue?: string }) {
+	constructor(dueString: string, options?: { targetDate?: Date; overdueStr?: string }) {
 		this.raw = dueString;
 
-		const result = DueDate.parseDue(dueString, options?.targetDate, options?.overdue);
+		const result = DueDate.parseDue(dueString, options?.targetDate, options?.overdueStr);
 		this.isRecurring = result.isRecurring;
 		this.isDue = result.isDue;
-		this.overdueStr = options?.overdue;
+		this.overdueStr = options?.overdueStr;
 		if (result.isDue === DueState.notDue) {
 			this.closestDueDateInTheFuture = this.calcClosestDueDateInTheFuture();
 		} else if (result.isDue === DueState.due || result.isDue === DueState.overdue) {
