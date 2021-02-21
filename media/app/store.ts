@@ -3,7 +3,8 @@ import Vuex, { Store } from 'vuex';
 import { filterItems } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import { TheTask } from '../../src/TheTask';
-import { DueState, MessageFromWebview } from '../../src/types';
+import { DueState, MessageFromWebview, MessageToWebview } from '../../src/types';
+import App from './App';
 import { SendMessage } from './SendMessage';
 import { findTaskAtLineWebview, flattenDeep, isTaskVisible } from './storeUtils';
 
@@ -194,7 +195,7 @@ function getState(): SavedState {
 }
 
 window.addEventListener('message', event => {
-	const message: MessageFromWebview = event.data; // The json data that the extension sent
+	const message: MessageToWebview = event.data; // The json data that the extension sent
 	switch (message.type) {
 		case 'updateEverything': {
 			store.state.config = message.value.config;
@@ -209,6 +210,10 @@ window.addEventListener('message', event => {
 			document.body.style.setProperty('--padding', message.value.config.padding);
 			document.body.style.setProperty('--priority-left-padding', message.value.config.showPriority ? '3px' : '1px');
 			document.body.style.setProperty('--indent-size', message.value.config.indentSize);
+			break;
+		}
+		case 'focusFilterInput': {
+			App.focusFilterInput();
 			break;
 		}
 	}

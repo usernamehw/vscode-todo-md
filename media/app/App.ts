@@ -120,7 +120,7 @@ export default class App extends Vue {
 	onSelected(e: { item: string }) {
 		if (e) {
 			this.onFilterInputChange(e.item);
-			this.focusFilterInput();
+			App.focusFilterInput();
 		}
 	}
 	/**
@@ -172,10 +172,12 @@ export default class App extends Vue {
 	updateWebviewCounter(numberOfTasks: number) {
 		SendMessage.updateWebviewTitle(numberOfTasks);
 	}
-	focusFilterInput() {
+	static focusFilterInput() {
 		Vue.nextTick(() => {
 			const suggest = document.getElementById('autosuggest__input');
-			suggest.focus();
+			if (suggest) {
+				suggest.focus();
+			}
 		});
 	}
 	scrollIntoView(lineNumber: number) {
@@ -185,15 +187,15 @@ export default class App extends Vue {
 	}
 	// ──────────────────────────────────────────────────────────────────────
 	mounted() {
-		this.focusFilterInput();
-		window.addEventListener('focus', this.focusFilterInput);
+		App.focusFilterInput();
+		window.addEventListener('focus', App.focusFilterInput);
 
 		this.$root.$on(VueEvents.openTaskContextMenu, (data: {e: MouseEvent; task: TheTask}) => {
 			this.contextMenuTask = data.task;
 			this.$refs.taskContextMenu.open(data.e);
 		});
 		this.$root.$on(VueEvents.focusFilterInput, () => {
-			this.focusFilterInput();
+			App.focusFilterInput();
 		});
 
 		window.addEventListener('click', e => {

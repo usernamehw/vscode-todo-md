@@ -4,7 +4,7 @@ import vscode, { commands, TextDocument, ThemeIcon, window, WorkspaceEdit } from
 import { appendTaskToFile, archiveTasks, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
-import { extensionConfig, extensionState, LAST_VISIT_BY_FILE_STORAGE_KEY, updateLastVisitGlobalState, updateState } from './extension';
+import { extensionConfig, extensionState, Global, LAST_VISIT_BY_FILE_STORAGE_KEY, updateLastVisitGlobalState, updateState } from './extension';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
@@ -80,6 +80,10 @@ export function registerAllCommands() {
 		});
 		await applyEdit(edit, activeDocument);
 		updateEverything();
+	});
+	commands.registerCommand('todomd.focusTasksWebviewAndInput', async () => {
+		await commands.executeCommand('todomd.webviewTasks.focus');
+		Global.webviewProvider.focusFilterInput();
 	});
 	commands.registerCommand('todomd.deleteTask', async (treeItem?: TaskTreeItem) => {
 		if (!treeItem) {

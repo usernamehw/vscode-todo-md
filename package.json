@@ -874,6 +874,11 @@
 				"icon": "$(settings-gear)"
 			},
 			{
+				"command": "todomd.focusTasksWebviewAndInput",
+				"title": "Focus Tasks Webview and its filter input",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.collapseAllNestedTasks",
 				"title": "Collapse all nested tasks.",
 				"category": "Todo MD",
@@ -1291,15 +1296,19 @@
 			"commandPalette": [
 				{
 					"command": "todomd.followLink",
-					"when": "never"
+					"when": "false"
 				},
 				{
 					"command": "todomd.hideTask",
-					"when": "never"
+					"when": "false"
 				},
 				{
 					"command": "todomd.deleteTask",
-					"when": "never"
+					"when": "false"
+				},
+				{
+					"command": "todomd.focusTasksWebviewAndInput",
+					"when": "false"
 				},
 				{
 					"command": "todomd.setDueDate",

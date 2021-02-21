@@ -1,7 +1,7 @@
 import vscode, { window } from 'vscode';
 import { decrementCountForTask, goToTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
 import { extensionConfig, extensionState, Global, updateState } from '../extension';
-import { MessageFromWebview } from '../types';
+import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveDocument } from '../utils/extensionUtils';
 import { findTaskAtLineExtension } from '../utils/taskUtils';
 import { followLink } from '../utils/vscodeUtils';
@@ -97,7 +97,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	 */
 	updateEverything() {
 		if (this._view && this._view.visible === true) {
-			this._view.webview.postMessage({
+			this.sendMessageToWebview({
 				type: 'updateEverything',
 				value: {
 					tasksAsTree: extensionState.tasksAsTree,
@@ -108,7 +108,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					activeDocumentOpened: Boolean(extensionState.activeDocument),
 					config: extensionConfig.webview,
 				},
-			} as MessageFromWebview);
+			});
 		}
 	}
 	/**
@@ -118,6 +118,16 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		if (this._view) {
 			this._view.title = `webview (${numberOfTasks})`;
 		}
+	}
+
+	focusFilterInput() {
+		this.sendMessageToWebview({
+			type: 'focusFilterInput',
+		});
+	}
+
+	private sendMessageToWebview(message: MessageToWebview) {
+		this._view?.webview.postMessage(message);
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {

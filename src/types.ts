@@ -1,5 +1,5 @@
 import vscode, { DecorationRenderOptions } from 'vscode';
-import { Priority, TheTask } from './TheTask';
+import { TheTask } from './TheTask';
 /**
  * Object describing items for Tree View Provider
  */
@@ -304,6 +304,9 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 		config: ExtensionConfig['webview'];
 	};
 }
+interface WebviewMessageFocusFilterInput {
+	type: 'focusFilterInput';
+}
 // From webview to extension
 interface WebviewMessageToggleDone extends WebviewMessageBase {
 	type: 'toggleDone';
@@ -341,4 +344,11 @@ interface WebviewMessageOpenLinkFileProtocol extends WebviewMessageBase {
 	type: 'followLink';
 	value: string;
 }
-export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateEverything | WebviewMessageUpdateTitle;
+/**
+ * Messages that can only be sent from webview to extension.
+ */
+export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateTitle;
+/**
+ * Messages that can only be sent from extension to webview.
+ */
+export type MessageToWebview = WebviewMessageFocusFilterInput | WebviewMessageUpdateEverything;
