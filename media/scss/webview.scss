@@ -24,17 +24,17 @@ body {
 	--border-light: #cecece6c;
 	--border-darker: #cecece;
 	--foreground: var(--vscode-foreground);
-	--done-task-background: #e9f0d6;
-	--tag-foreground: #{$tagForeground};
-	--tag-background: #{$tagBackground};
-	--project-background: #{$projectBackground};
-	--project-hover-background: #{darken($projectBackground, $darkenPercent)};
-	--context-background: #{$contextBackground};
-	--context-hover-background: #{darken($contextBackground, $darkenPercent)};
-	--count-background: #0000000c;
-	--count-button-background: #00000014;
-	--count-button-hover-background: #0000002b;
-	--selected-task-background: #d4e9ff;
+	--done-task-bg: #e9f0d6;
+	--tag-fg: #{$tagForeground};
+	--tag-bg: #{$tagBackground};
+	--project-bg: #{$projectBackground};
+	--project-hover-bg: #{darken($projectBackground, $darkenPercent)};
+	--context-bg: #{$contextBackground};
+	--context-hover-bg: #{darken($contextBackground, $darkenPercent)};
+	--count-bg: #0000000c;
+	--count-button-bg: #00000014;
+	--count-button-hover-bg: #0000002b;
+	--selected-task-bg: #e2e2e2;
 
 	--twistie-hover-bg: rgba(0, 0, 0, 0.1);
 
@@ -67,17 +67,17 @@ body {
 body.vscode-dark {
 	--border-light: #ffffff1c;
 	--border-darker: #6d6d6d;
-	--tag-background: #347dd1;
-	--tag-foreground: #eeeeee;
-	--project-background: #29a078;
-	--project-hover-background: #21795b;
-	--context-background: #9347b1;
-	--context-hover-background: #733d8a;
+	--tag-bg: #347dd1;
+	--tag-fg: #eeeeee;
+	--project-bg: #29a078;
+	--project-hover-bg: #21795b;
+	--context-bg: #9347b1;
+	--context-hover-bg: #733d8a;
 	--project-foreground: #eeeeee;
-	--count-background: #ffffff1a;
-	--count-button-background: #ffffff1a;
-	--done-task-background: #99ff8c1a;
-	--selected-task-background: #d4e9ff40;
+	--count-bg: #ffffff1a;
+	--count-button-bg: #ffffff1a;
+	--done-task-bg: #99ff8c1a;
+	--selected-task-bg: #dfdfdf30;
 
 	--overdue-bg: #fc424222;
 	--overdue-fg: #fc4242e1;
@@ -198,7 +198,7 @@ button,
 	}
 
 	&.done {
-		background-color: var(--done-task-background);
+		background-color: var(--done-task-bg);
 
 		&.strike-through > .title {
 			text-decoration: line-through;
@@ -254,7 +254,7 @@ button,
 	}
 
 	&.selected {
-		background-color: var(--selected-task-background);
+		background-color: var(--selected-task-bg);
 	}
 
 	.twistie {
@@ -337,8 +337,8 @@ button,
 }
 
 .tag {
-	background-color: var(--tag-background);
-	color: var(--tag-foreground);
+	background-color: var(--tag-bg);
+	color: var(--tag-fg);
 	margin-left: 3px;
 
 	&:hover {
@@ -347,25 +347,25 @@ button,
 }
 
 .project {
-	background-color: var(--project-background);
+	background-color: var(--project-bg);
 	border-radius: 0;
 	color: var(--project-foreground);
 
 	&:hover {
-		background-color: var(--project-hover-background);
+		background-color: var(--project-hover-bg);
 	}
 }
 
 .context {
-	background-color: var(--context-background);
+	background-color: var(--context-bg);
 
 	&:hover {
-		background-color: var(--context-hover-background);
+		background-color: var(--context-hover-bg);
 	}
 }
 
 .count-container {
-	background-color: var(--count-background);
+	background-color: var(--count-bg);
 	margin-left: $approxOneSpace;
 	white-space: pre;
 }
@@ -388,7 +388,7 @@ button,
 	width: 1.3em;
 
 	&:hover {
-		background-color: var(--count-button-hover-background);
+		background-color: var(--count-button-hover-bg);
 	}
 }
 
