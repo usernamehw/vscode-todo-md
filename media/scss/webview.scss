@@ -40,6 +40,7 @@ body {
 
 	--due-fg: #5faedb;
 	--due-bg: #5faedb12;
+	--not-due-bg: #e9e9e9dd;
 	--overdue-fg: #d3000099;
 	--overdue-bg: #d3000012;
 	--due-invalid-fg: #7284eb;
@@ -81,6 +82,7 @@ body.vscode-dark {
 
 	--overdue-bg: #fc424222;
 	--overdue-fg: #fc4242e1;
+	--not-due-bg: #dadada44;
 
 	--twistie-hover-bg: rgba(255, 255, 255, 0.1);
 	--inline-code-bg: rgba(240, 246, 252, 0.15);
@@ -290,6 +292,10 @@ button,
 			color: var(--due-fg);
 		}
 
+		&.not-due {
+			background-color: var(--not-due-bg);
+		}
+
 		&.overdue {
 			background-color: var(--overdue-bg);
 			color: var(--overdue-fg);
@@ -300,7 +306,8 @@ button,
 			color: var(--due-invalid-fg);
 		}
 
-		.overdue-count {
+		.overdue-count,
+		.days-to-count {
 			padding-left: $approxOneSpace;
 		}
 	}
