@@ -98,6 +98,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `$A` - Priority
 - `>$C` - Priority range (here it matches `$A`, `$B`, `$C`)
 - `$done` - Completed task
+- `$hasDue` - Due date is specified in any way
 - `$due` - Due or Overdue task
 - `$overdue` - Overdue task
 - `$recurring` - Recurring tasks

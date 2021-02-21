@@ -85,6 +85,7 @@ export const store = new Store({
 		autocompleteItems: state => {
 			const filterConstants = [
 				'$due',
+				'$hasDue',
 				'$done',
 				'$overdue',
 				'$recurring',

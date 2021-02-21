@@ -8,6 +8,7 @@ const enum FilterType {
 	contextEqual,
 	projectEqual,
 	priorityEqual,
+	hasDue,
 	due,
 	overdue,
 	recurring,
@@ -97,6 +98,13 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 					filterResult = true;
 				} else {
 					filterResult = false;
+				}
+			} else if (filter.filterType === FilterType.hasDue) {
+				// $hasDue
+				if (task.due) {
+					return true;
+				} else {
+					return false;
 				}
 			} else if (filter.filterType === FilterType.due) {
 				// $due
@@ -210,6 +218,8 @@ function parseFilter(filterStr: string) {
 			case '$': {
 				if (value === 'done') {
 					filter.filterType = FilterType.done;
+				} else if (value === 'hasDue') {
+					filter.filterType = FilterType.hasDue;
 				} else if (value === 'due') {
 					filter.filterType = FilterType.due;
 				} else if (value === 'overdue') {
