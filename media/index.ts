@@ -10,7 +10,7 @@ const app = new Vue({
 /**
  * Show toast notification
  */
-export function showNotification(text: string) {
+export function showToastNotification(text: string) {
 	app.$notify({
 		text,
 	});
