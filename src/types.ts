@@ -275,6 +275,7 @@ export interface ExtensionConfig {
  * This extension context names
  */
 export const enum VscodeContext {
+	isExtensionActivated = 'todomd.isExtensionActivated',
 	isActive = 'todomd:isActive',
 	isDev = 'todomd:isDev',
 	filterActive = 'todomd:filterActive',
