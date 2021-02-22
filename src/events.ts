@@ -11,7 +11,7 @@ import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
 import { setContext } from './utils/vscodeUtils';
 /**
- * Active text editor changes (tab). There is a <s>bug</s>(feature) that event fired twice in rapid succession when you close the tab.
+ * Active text editor changes (tab).
  */
 export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): Promise<void> {
 	if (extensionState.theRightFileOpened) {
@@ -25,9 +25,7 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 	} else {
 		extensionState.activeDocument = await getDocumentForDefaultFile();
 		extensionState.activeDocumentTabSize = extensionConfig.tabSize;
-		setTimeout(() => {
-			updateEverything();
-		}, 15);// Workaround for event fired twice very fast when closing an editor
+		updateEverything();
 	}
 }
 /**
