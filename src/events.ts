@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import throttle from 'lodash/throttle';
 import vscode, { window, workspace } from 'vscode';
 import { updateCompletions } from './completionProviders';
 import { updateEditorDecorations } from './decorations';
@@ -116,11 +117,11 @@ export function deactivateEditorFeatures() {
  * - Update status bar item
  * - Update all tree views (including webview, excluding archived tasks)
  */
-export async function updateEverything(editor?: vscode.TextEditor) {
+export const updateEverything = throttle(async (editor?: vscode.TextEditor) => {
 	await updateState();
 	if (editor) {
 		updateEditorDecorations(editor);
 		statusBar.updateText(extensionState.tasks);
 	}
 	updateAllTreeViews();
-}
+}, 120);
