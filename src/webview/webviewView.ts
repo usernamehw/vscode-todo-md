@@ -1,5 +1,5 @@
 import vscode, { window } from 'vscode';
-import { decrementCountForTask, goToTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
+import { decrementCountForTask, editTaskRawText, goToTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
 import { extensionConfig, extensionState, Global, updateState } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveDocument } from '../utils/extensionUtils';
@@ -33,47 +33,55 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		this.updateEverything();
+		this.sendEverything();
 		this.updateTitle(extensionState.tasksAsTree.length);
 
 		webviewView.webview.onDidReceiveMessage(async (message: MessageFromWebview) => {
 			switch (message.type) {
+				// Needs to update everything
 				case 'toggleDone': {
 					await toggleDoneAtLine(await getActiveDocument(), message.value);
 					await updateState();
-					this.updateEverything();
+					this.sendEverything();
 					break;
 				}
+				case 'toggleTaskCollapse': {
+					await toggleTaskCollapse(await getActiveDocument(), message.value);
+					await updateState();
+					this.sendEverything();
+					break;
+				}
+				case 'incrementCount': {
+					await incrementCountForTask(await getActiveDocument(), message.value, findTaskAtLineExtension(message.value)!);
+					await updateState();
+					this.sendEverything();
+					break;
+				}
+				case 'decrementCount': {
+					await decrementCountForTask(await getActiveDocument(), message.value, findTaskAtLineExtension(message.value)!);
+					await updateState();
+					this.sendEverything();
+					break;
+				}
+				case 'deleteTask': {
+					await tryToDeleteTask(await getActiveDocument(), message.value);
+					await updateState();
+					this.sendEverything();
+					break;
+				}
+				case 'editTaskRawText': {
+					await editTaskRawText(await getActiveDocument(), message.value.lineNumber, message.value.newRawText);
+					await updateState();
+					this.sendEverything();
+					break;
+				}
+				// No need to update everything
 				case 'showNotification': {
 					window.showInformationMessage(message.value);
 					break;
 				}
 				case 'goToTask': {
 					goToTask(message.value);
-					break;
-				}
-				case 'toggleTaskCollapse': {
-					await toggleTaskCollapse(await getActiveDocument(), message.value);
-					await updateState();
-					this.updateEverything();
-					break;
-				}
-				case 'incrementCount': {
-					await incrementCountForTask(await getActiveDocument(), message.value, findTaskAtLineExtension(message.value)!);
-					await updateState();
-					this.updateEverything();
-					break;
-				}
-				case 'decrementCount': {
-					await decrementCountForTask(await getActiveDocument(), message.value, findTaskAtLineExtension(message.value)!);
-					await updateState();
-					this.updateEverything();
-					break;
-				}
-				case 'deleteTask': {
-					await tryToDeleteTask(await getActiveDocument(), message.value);
-					await updateState();
-					this.updateEverything();
 					break;
 				}
 				case 'updateTitle': {
@@ -88,14 +96,14 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		});
 		webviewView.onDidChangeVisibility(e => {
 			if (webviewView.visible === true) {
-				this.updateEverything();
+				this.sendEverything();
 			}
 		});
 	}
 	/**
-	 * Send all the needed data to webview view
+	 * Send all the needed data to the webview view
 	 */
-	updateEverything() {
+	sendEverything() {
 		if (this._view && this._view.visible === true) {
 			this.sendMessageToWebview({
 				type: 'updateEverything',
@@ -159,7 +167,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
  */
 export function updateWebviewView() {
 	if (Global.webviewProvider) {
-		Global.webviewProvider.updateEverything();
+		Global.webviewProvider.sendEverything();
 	}
 }
 

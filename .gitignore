@@ -9,7 +9,6 @@ node_modules
 media/main.js
 media/webview.js
 media/webview.js.map
-media/webview.css
-media/contextMenu.css
+media/*.css
 src/**/*.js
 scripts/generateDecorationSchema.js

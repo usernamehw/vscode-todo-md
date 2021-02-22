@@ -8,8 +8,8 @@ import { updateSetting } from './vscodeUtils';
  *
  * `document.save()` is needed to prevent opening those files after applying the edit.
  */
-export async function applyEdit(wEdit: WorkspaceEdit, document: TextDocument) {
-	await workspace.applyEdit(wEdit);
+export async function applyEdit(edit: WorkspaceEdit, document: TextDocument) {
+	await workspace.applyEdit(edit);
 	return await document.save();
 }
 /**

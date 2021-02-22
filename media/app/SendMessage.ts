@@ -58,4 +58,13 @@ export class SendMessage {
 			value: numberOfTasks,
 		});
 	}
+	static editRawText(lineNumber: number, newRawText: string) {
+		vscodeApi.postMessage({
+			type: 'editTaskRawText',
+			value: {
+				lineNumber,
+				newRawText,
+			},
+		});
+	}
 }

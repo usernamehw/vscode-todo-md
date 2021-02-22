@@ -30,7 +30,9 @@
         <div class="welcome"><a class="btn btn-welcome"
                                 href="command:todomd.specifyDefaultFile">Specify Default File</a></div>
     </div>
+
     <notifications position="bottom right" />
+
     <vue-context ref="taskContextMenu"
                  :closeOnScroll="false">
         <li>
@@ -42,6 +44,20 @@
                @click="deleteTask">Delete</a>
         </li>
     </vue-context>
+
+    <modal :adaptive="true"
+           :focusTrap="true"
+           :shiftY="0.1"
+           :height="'auto'"
+           name="edit-task"
+           @opened="$refs.newTaskText.focus()"
+           @closed="focusFilterInput()">
+        <input ref="newTaskText"
+               v-model="newTaskTitle"
+               class="new-task-text"
+               @keydown.enter="acceptNewTaskTitle"
+               @keydown.stop>
+    </modal>
 </div>
 </template>
 

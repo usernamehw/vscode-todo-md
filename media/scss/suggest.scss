@@ -24,11 +24,6 @@
 	padding: 3px;
 	padding-left: 4px;
 	width: 100%;
-
-	&:focus {
-		border: 1px solid var(--vscode-focusBorder) !important;
-		outline: none !important;
-	}
 }
 
 .autosuggest__results-container {

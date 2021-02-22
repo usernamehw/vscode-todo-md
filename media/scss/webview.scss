@@ -1,5 +1,6 @@
 @import 'suggest.scss';
 @import 'contextMenu.scss';
+@import 'modal.scss';
 
 *,
 *:before,
@@ -115,7 +116,8 @@ a {
 	}
 }
 
-input[type='text'] {
+input[type='text'],
+input:not([type]) {
 	background-color: var(--vscode-input-background);
 	border: 1px solid var(--vscode-input-border);
 	color: var(--vscode-input-foreground);
@@ -128,6 +130,15 @@ input[type='text'] {
 	&::selection {
 		background-color: var(--vscode-selection-background);
 	}
+
+	&:focus {
+		border: 1px solid var(--vscode-focusBorder) !important;
+		outline: none !important;
+	}
+}
+// Rename task input
+.new-task-text {
+	width: 100%;
 }
 
 blockquote,

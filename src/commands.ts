@@ -140,7 +140,7 @@ export function registerAllCommands() {
 			return;
 		}
 		const line = editor.document.lineAt(task.lineNumber);
-		const wEdit = new WorkspaceEdit();
+		const edit = new WorkspaceEdit();
 
 		const tagsAsString = task.tags.map(tag => ` #${tag}`).join('');
 		const projectsAsString = task.projects.map(project => `+${project}`).join(' ');
@@ -148,9 +148,9 @@ export function registerAllCommands() {
 		let newTaskAsString = tagsAsString;
 		newTaskAsString += projectsAsString ? ` ${projectsAsString}` : '';
 		newTaskAsString += contextsAsString ? ` ${contextsAsString}` : '';
-		wEdit.insert(editor.document.uri, new vscode.Position(line.rangeIncludingLineBreak.end.line, line.rangeIncludingLineBreak.end.character), `${newTaskAsString}\n`);
+		edit.insert(editor.document.uri, new vscode.Position(line.rangeIncludingLineBreak.end.line, line.rangeIncludingLineBreak.end.character), `${newTaskAsString}\n`);
 
-		await applyEdit(wEdit, editor.document);
+		await applyEdit(edit, editor.document);
 
 		editor.selection = new vscode.Selection(line.lineNumber + 1, 0, line.lineNumber + 1, 0);
 	});
@@ -280,9 +280,9 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.setDueDateWithArgs', async (document: TextDocument, wordRange: vscode.Range, dueDate: string) => {
 		const lineNumber = wordRange.start.line;
-		const wEdit = new WorkspaceEdit();
-		wEdit.delete(document.uri, wordRange);
-		await applyEdit(wEdit, document);
+		const edit = new WorkspaceEdit();
+		edit.delete(document.uri, wordRange);
+		await applyEdit(edit, document);
 		setDueDate(document, lineNumber, dueDate);
 	});
 	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
@@ -416,16 +416,16 @@ export function registerAllCommands() {
 		openSettingGuiAt('todomd.webview');
 	});
 	commands.registerTextEditorCommand('todomd.toggleComment', editor => {
-		const wEdit = new WorkspaceEdit();
+		const edit = new WorkspaceEdit();
 		const selections = editor.selections;
 		for (const selection of selections) {
 			const start = selection.start.line;
 			const end = selection.end.line;
 			for (let i = start; i <= end; i++) {
-				toggleCommentAtLineWorkspaceEdit(wEdit, editor.document, i);
+				toggleCommentAtLineWorkspaceEdit(edit, editor.document, i);
 			}
 		}
-		applyEdit(wEdit, editor.document);
+		applyEdit(edit, editor.document);
 	});
 }
 

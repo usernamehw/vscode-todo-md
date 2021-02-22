@@ -344,10 +344,17 @@ interface WebviewMessageOpenLinkFileProtocol extends WebviewMessageBase {
 	type: 'followLink';
 	value: string;
 }
+interface WebviewMessageEditTaskRawText extends WebviewMessageBase {
+	type: 'editTaskRawText';
+	value: {
+		lineNumber: number;
+		newRawText: string;
+	};
+}
 /**
  * Messages that can only be sent from webview to extension.
  */
-export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateTitle;
+export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTaskRawText | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateTitle;
 /**
  * Messages that can only be sent from extension to webview.
  */
