@@ -13,11 +13,16 @@ html {
 }
 
 $approxOneSpace: 0.25em;
-$tagBackground: #d7e2e9;
-$tagForeground: transparentize(darken($tagBackground, 70%), 0.2);
-$projectBackground: #c5ece0;
+$tagBackground: #d5e6fc;
+$tagForeground: darken($tagBackground, 70%);
+$tagBorder: darken($tagBackground, 20%);
+$projectBackground: #cbf3e7;
+$projectForeground: darken($projectBackground, 70%);
+$projectBorder: darken($projectBackground, 20%);
 $contextBackground: #f7e0ff;
-$darkenPercent: 8%;
+$contextForeground: darken($contextBackground, 70%);
+$contextBorder: darken($contextBackground, 20%);
+$hoverDarkenPercent: 8%;
 
 body {
 	--line-height: 1.4;
@@ -28,10 +33,15 @@ body {
 	--done-task-bg: #e9f0d6;
 	--tag-fg: #{$tagForeground};
 	--tag-bg: #{$tagBackground};
+	--tag-border: #{$tagBorder};
 	--project-bg: #{$projectBackground};
-	--project-hover-bg: #{darken($projectBackground, $darkenPercent)};
+	--project-fg: #{$projectForeground};
+	--project-border: #{$projectBorder};
+	--project-hover-bg: #{darken($projectBackground, $hoverDarkenPercent)};
 	--context-bg: #{$contextBackground};
-	--context-hover-bg: #{darken($contextBackground, $darkenPercent)};
+	--context-fg: #{$contextForeground};
+	--context-hover-bg: #{darken($contextBackground, $hoverDarkenPercent)};
+	--context-border: #{$contextBorder};
 	--count-bg: #0000000c;
 	--count-button-bg: #00000014;
 	--count-button-hover-bg: #0000002b;
@@ -69,13 +79,9 @@ body {
 body.vscode-dark {
 	--border-light: #ffffff1c;
 	--border-darker: #6d6d6d;
-	--tag-bg: #347dd1;
-	--tag-fg: #eeeeee;
-	--project-bg: #29a078;
-	--project-hover-bg: #21795b;
-	--context-bg: #9347b1;
-	--context-hover-bg: #733d8a;
-	--project-foreground: #eeeeee;
+	--tag-bg: #{darken($tagBackground, 15%)};
+	--project-bg: #{darken($projectBackground, 20%)};
+	--context-bg: #{darken($contextBackground, 10%)};
 	--count-bg: #ffffff1a;
 	--count-button-bg: #ffffff1a;
 	--done-task-bg: #99ff8c1a;
@@ -87,6 +93,13 @@ body.vscode-dark {
 
 	--twistie-hover-bg: rgba(255, 255, 255, 0.1);
 	--inline-code-bg: rgba(240, 246, 252, 0.15);
+
+	.tag,
+	.context,
+	.project {
+		border: none;
+		border-radius: 0.25em;
+	}
 }
 
 table {
@@ -347,15 +360,18 @@ button,
 .tag,
 .project,
 .context {
-	border-radius: 0.25em;
+	border: thin dashed;
+	border-radius: 0.33em;
 	cursor: pointer;
+	font-family: var(--vscode-editor-font-family);
 	margin-left: $approxOneSpace;
-	padding: 1px 4px;
+	padding: 0 4px;
 	white-space: pre;
 }
 
 .tag {
 	background-color: var(--tag-bg);
+	border-color: var(--tag-border);
 	color: var(--tag-fg);
 	margin-left: 3px;
 
@@ -366,8 +382,8 @@ button,
 
 .project {
 	background-color: var(--project-bg);
-	border-radius: 0;
-	color: var(--project-foreground);
+	border-color: var(--project-border);
+	color: var(--project-fg);
 
 	&:hover {
 		background-color: var(--project-hover-bg);
@@ -376,6 +392,8 @@ button,
 
 .context {
 	background-color: var(--context-bg);
+	border-color: var(--context-border);
+	color: var(--context-fg);
 
 	&:hover {
 		background-color: var(--context-hover-bg);
