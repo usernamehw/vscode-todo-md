@@ -3,7 +3,7 @@ import Vuex, { Store } from 'vuex';
 import { filterItems } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import { TheTask } from '../../src/TheTask';
-import { DueState, MessageFromWebview, MessageToWebview } from '../../src/types';
+import { DueState, ExtensionConfig, MessageFromWebview, MessageToWebview } from '../../src/types';
 import App from './App';
 import { SendMessage } from './SendMessage';
 import { findTaskAtLineWebview, flattenDeep, isTaskVisible } from './storeUtils';
@@ -49,7 +49,10 @@ export const store = new Store({
 			padding: '0px',
 			customCheckboxEnabled: false,
 			fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`,
-		},
+			indentSize: '1.8em',
+			tagStyles: {},
+			lineHeight: 1.4,
+		} as ExtensionConfig['webview'],
 		selectedTaskLineNumber: -1,
 	},
 	getters: {
@@ -208,6 +211,7 @@ window.addEventListener('message', event => {
 			store.state.contexts = message.value.contexts;
 			document.body.style.setProperty('--font-size', message.value.config.fontSize);
 			document.body.style.setProperty('--font-family', message.value.config.fontFamily);
+			document.body.style.setProperty('--line-height', String(message.value.config.lineHeight));
 			document.body.style.setProperty('--padding', message.value.config.padding);
 			document.body.style.setProperty('--priority-left-padding', message.value.config.showPriority ? '3px' : '1px');
 			document.body.style.setProperty('--indent-size', message.value.config.indentSize);

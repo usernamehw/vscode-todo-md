@@ -86,9 +86,16 @@
 					"markdownDescription": "Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)",
 					"default": "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'"
 				},
+				"todomd.webview.lineHeight": {
+					"type": "number",
+					"markdownDescription": "Controls line height in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/line-height)",
+					"default": 1.4,
+					"minimum": 1,
+					"maximum": 3
+				},
 				"todomd.webview.padding": {
 					"type": "string",
-					"markdownDescription": "Controls spacing between items in a list. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)",
+					"markdownDescription": "Controls vertical padding. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)",
 					"default": "0px"
 				},
 				"todomd.webview.indentSize": {

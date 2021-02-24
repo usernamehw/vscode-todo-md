@@ -249,6 +249,10 @@ export interface ExtensionConfig {
 		 */
 		fontFamily: string;
 		/**
+		 * Controls line height in the webview.
+		 */
+		lineHeight: number;
+		/**
 		 * Whether checkbox is rendered as native input element or a custom styled element.
 		 */
 		customCheckboxEnabled: boolean;
