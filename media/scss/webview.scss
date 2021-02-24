@@ -18,10 +18,10 @@ $tagForeground: darken($tagBackground, 70%);
 $tagBorder: darken($tagBackground, 20%);
 $projectBackground: #cbf3e7;
 $projectForeground: darken($projectBackground, 70%);
-$projectBorder: darken($projectBackground, 20%);
+$projectBorder: darken($projectBackground, 30%);
 $contextBackground: #f7e0ff;
 $contextForeground: darken($contextBackground, 70%);
-$contextBorder: darken($contextBackground, 20%);
+$contextBorder: darken($contextBackground, 17%);
 $hoverDarkenPercent: 8%;
 
 body {
@@ -98,7 +98,6 @@ body.vscode-dark {
 	.context,
 	.project {
 		border: none;
-		border-radius: 0.25em;
 	}
 }
 
@@ -361,7 +360,7 @@ button,
 .project,
 .context {
 	border: thin dashed;
-	border-radius: 0.33em;
+	border-radius: 0.25em;
 	cursor: pointer;
 	font-family: var(--vscode-editor-font-family);
 	margin-left: $approxOneSpace;
