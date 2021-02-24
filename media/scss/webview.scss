@@ -40,7 +40,7 @@ body {
 	--project-hover-bg: #{darken($projectBackground, $hoverDarkenPercent)};
 	--context-bg: #{$contextBackground};
 	--context-fg: #{$contextForeground};
-	--context-hover-bg: #{darken($contextBackground, $hoverDarkenPercent)};
+	--context-hover-bg: #{darken($contextBackground, 5%)};
 	--context-border: #{$contextBorder};
 	--count-bg: #0000000c;
 	--count-button-bg: #00000014;
