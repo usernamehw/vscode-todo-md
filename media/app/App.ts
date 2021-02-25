@@ -246,7 +246,7 @@ export default class App extends Vue {
 		window.addEventListener('keydown', e => {
 			if (e.key === 'ArrowRight') {
 				SendMessage.toggleTaskCollapse(this.selectedTaskLineNumber);
-			} else if (e.key === 'Delete') {
+			} else if (e.key === 'Delete' && e.shiftKey) {
 				if (this.selectedTaskLineNumber !== -1) {
 					SendMessage.deleteTask(this.selectedTaskLineNumber);
 				}

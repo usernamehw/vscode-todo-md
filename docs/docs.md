@@ -90,7 +90,7 @@ Key | Description
 <kbd>↑</kbd>|Select previous task
 <kbd>→</kbd>|Toggle collapsing of nested tasks
 <kbd>Alt</kbd>+<kbd>D</kbd>|Toggle selected task completion
-<kbd>Delete</kbd>|Delete selected task
+<kbd>Shift+Delete</kbd>|Delete selected task
 <kbd>Ctrl</kbd>+<kbd>Space</kbd>|Open autocomplete (When `todomd.webview.autoShowSuggest` is disabled)
 <kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> (on a task)|Reveals task in the file
 <kbd>L Mouse Button</kbd> (on tag/project/context)|Set filter to the value of the item
