@@ -18,6 +18,8 @@ package-lock.json
 .gitattributes
 
 media/app
+media/*.css
+!media/webview.css
 
 node_modules
 test.md
@@ -25,7 +27,6 @@ demo.md
 LICENSE
 docs
 LICENSE.txt
-proposed-api.md
 **/*.scss
 img/demo.png
 img/webview_demo.png
