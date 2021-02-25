@@ -18,7 +18,7 @@ $tagForeground: darken($tagBackground, 70%);
 $tagBorder: darken($tagBackground, 20%);
 $projectBackground: #cbf3e7;
 $projectForeground: darken($projectBackground, 70%);
-$projectBorder: darken($projectBackground, 30%);
+$projectBorder: darken($projectBackground, 35%);
 $contextBackground: #f7e0ff;
 $contextForeground: darken($contextBackground, 70%);
 $contextBorder: darken($contextBackground, 17%);
@@ -163,8 +163,6 @@ code {
 	color: var(--vscode-editor-foreground);
 	font-family: var(--font-family);
 	padding: 0 0.2em;
-	padding-bottom: 1px;
-	padding-top: 1px;
 }
 
 button,
