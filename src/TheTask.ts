@@ -201,7 +201,11 @@ export class TheTask {
 	/**
 	 * Format task title for notification or modal dialog
 	 */
-	static formatTask(task: TheTask, ignoreDueDate = false): string {
+	static formatTask(task: TheTask, {
+		ignoreDueDate = false,
+	}: {
+		ignoreDueDate?: boolean;
+	} = {}): string {
 		let result = '';
 		if (!ignoreDueDate) {
 			if (task.due?.isDue === DueState.due) {

@@ -76,7 +76,9 @@ export function tasksToTreeItems(tasks: TheTask[]) {
 			continue;
 		}
 		result.push(new TaskTreeItem(
-			TheTask.formatTask(task, true),
+			TheTask.formatTask(task, {
+				ignoreDueDate: true,
+			}),
 			task,
 			{
 				command: `${EXTENSION_NAME}.goToLine`,
