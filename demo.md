@@ -14,6 +14,7 @@ Task with counter {count:2/5}
 
 
 
+# Text #html#css#important
 
 # <kbd>Ctrl</kbd>+<kbd>Enter</kbd>
 # Some text <mark>Important</mark> text text text
