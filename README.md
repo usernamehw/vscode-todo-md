@@ -205,5 +205,7 @@ https://github.com/usernamehw/vscode-todo-md/tree/master/docs/docs.md
 - [#32813 \[theming\] Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
 - [#21611 Add option to always show word based suggestions](https://github.com/microsoft/vscode/issues/21611)
 - [#54285 Contributed webview context menu actions](https://github.com/microsoft/vscode/issues/54285)
+- [#85682 Api for editor insets](https://github.com/microsoft/vscode/issues/85682)
+- [#32856 Inline text adornments break word wrapping](https://github.com/microsoft/vscode/issues/32856)
 - [#25633 [theming] when completing color keys in settings, fill in current value](https://github.com/microsoft/vscode/issues/25633)
 - [#5455 OnClick event on Gutter](https://github.com/microsoft/vscode/issues/5455)
