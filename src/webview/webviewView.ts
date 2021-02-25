@@ -1,5 +1,5 @@
 import vscode, { window } from 'vscode';
-import { decrementCountForTask, editTaskRawText, goToTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
+import { decrementCountForTask, editTaskRawText, revealTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
 import { extensionConfig, extensionState, Global, updateState } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveDocument } from '../utils/extensionUtils';
@@ -81,7 +81,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					break;
 				}
 				case 'goToTask': {
-					goToTask(message.value);
+					revealTask(message.value);
 					break;
 				}
 				case 'updateTitle': {

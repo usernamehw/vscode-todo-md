@@ -33,7 +33,7 @@ export async function setContext(context: VscodeContext, value: any) {
 	return await vscode.commands.executeCommand('setContext', context, value);
 }
 /**
- * Open URL in default browser.
+ * Open URL in default browser. If multiple links then show quick pick.
  */
 export async function followLinks(links: Link[]) {
 	let link: string | undefined = links[0].value;

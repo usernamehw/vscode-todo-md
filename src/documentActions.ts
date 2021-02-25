@@ -283,7 +283,7 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
  *
  * Move cursor, reveal range, highlight the line for a moment
  */
-export async function goToTask(lineNumber: number) {
+export async function revealTask(lineNumber: number) {
 	const document = await getActiveDocument();
 	const editor = await vscode.window.showTextDocument(document);
 	const range = new vscode.Range(lineNumber, 0, lineNumber, 0);

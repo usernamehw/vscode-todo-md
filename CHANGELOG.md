@@ -1,7 +1,7 @@
 ## 2.4.1 `19 Feb 2021`
 
 - ✨ [webview] Tweak some styles
-- 💥 Remove custom checkbox different options and make custom checkbox a default
+- 💥 [webview] Remove custom checkbox different options and make custom checkbox a default
 
 ## 2.4.0 `07 Feb 2021`
 

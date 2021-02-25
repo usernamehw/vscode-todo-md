@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import sample from 'lodash/sample';
 import vscode, { commands, TextDocument, ThemeIcon, window, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTasks, goToTask, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
+import { appendTaskToFile, archiveTasks, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, revealTask, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
 import { extensionConfig, extensionState, Global, LAST_VISIT_BY_FILE_STORAGE_KEY, updateLastVisitGlobalState, updateState } from './extension';
@@ -163,16 +163,7 @@ export function registerAllCommands() {
 		}
 		const sortedTasks = defaultSortTasks(tasks);
 		const task = sortedTasks[0];
-
-		if (task.links.length) {
-			const buttonName = 'Follow link';
-			const shouldFollow = await vscode.window.showInformationMessage(TheTask.formatTask(task), buttonName);
-			if (shouldFollow === buttonName) {
-				followLinks(task.links);
-			}
-		} else {
-			vscode.window.showInformationMessage(TheTask.formatTask(task));
-		}
+		showTaskInNotification(task);
 	});
 	commands.registerCommand('todomd.getFewNextTasks', async () => {
 		await updateState();
@@ -195,7 +186,8 @@ export function registerAllCommands() {
 			vscode.window.showInformationMessage('No tasks');
 			return;
 		}
-		window.showInformationMessage(TheTask.formatTask(sample(tasks)!));
+		const randomTask = sample(tasks)!;
+		showTaskInNotification(randomTask);
 	});
 	commands.registerCommand('todomd.addTaskToDefaultFile', async () => {
 		const isDefaultFileSpecified = await checkDefaultFileAndNotify();
@@ -386,7 +378,7 @@ export function registerAllCommands() {
 		applyEdit(edit, activeDocument);
 	});
 	commands.registerCommand('todomd.goToLine', (lineNumber: number) => {
-		goToTask(lineNumber);
+		revealTask(lineNumber);
 	});
 	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
 		const lastVisit = extensionState.lastVisitByFile[editor.document.uri.toString()];
@@ -428,7 +420,20 @@ export function registerAllCommands() {
 		applyEdit(edit, editor.document);
 	});
 }
-
-
+/**
+ * Show formatted task in notification. Also show button to Follow link if links are present in this task.
+ */
+async function showTaskInNotification(task: TheTask) {
+	const formattedTask = TheTask.formatTask(task);
+	if (task.links.length) {
+		const buttonFollowLink = 'Follow link';
+		const shouldFollow = await vscode.window.showInformationMessage(formattedTask, buttonFollowLink);
+		if (shouldFollow === buttonFollowLink) {
+			followLinks(task.links);
+		}
+	} else {
+		vscode.window.showInformationMessage(formattedTask);
+	}
+}
 
 
