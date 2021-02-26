@@ -25,7 +25,9 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 	} else {
 		extensionState.activeDocument = await getDocumentForDefaultFile();
 		extensionState.activeDocumentTabSize = extensionConfig.tabSize;
-		updateEverything();
+		setTimeout(() => {
+			updateEverything();
+		}, 90);
 	}
 }
 /**
