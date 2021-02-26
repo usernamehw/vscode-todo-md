@@ -1,6 +1,7 @@
 import vscode, { window } from 'vscode';
 import { decrementCountForTask, editTaskRawText, incrementCountForTask, revealTask, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
-import { extensionConfig, extensionState, Global, updateState } from '../extension';
+import { updateEverything } from '../events';
+import { extensionConfig, extensionState, Global } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveDocument } from '../utils/extensionUtils';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
@@ -41,43 +42,43 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				// Needs to update everything
 				case 'toggleDone': {
 					await toggleDoneAtLine(await getActiveDocument(), message.value);
-					await updateState();
+					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'toggleTaskCollapse': {
 					await toggleTaskCollapse(await getActiveDocument(), message.value);
-					await updateState();
+					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'toggleTaskCollapseRecursive': {
 					await toggleTaskCollapseRecursive(await getActiveDocument(), message.value);
-					await updateState();
+					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'incrementCount': {
 					await incrementCountForTask(await getActiveDocument(), message.value, getTaskAtLineExtension(message.value)!);
-					await updateState();
+					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'decrementCount': {
 					await decrementCountForTask(await getActiveDocument(), message.value, getTaskAtLineExtension(message.value)!);
-					await updateState();
+					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'deleteTask': {
 					await tryToDeleteTask(await getActiveDocument(), message.value);
-					await updateState();
+					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'editTaskRawText': {
 					await editTaskRawText(await getActiveDocument(), message.value.lineNumber, message.value.newRawText);
-					await updateState();
+					await updateEverything();
 					this.sendEverything();
 					break;
 				}
