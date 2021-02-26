@@ -1,3 +1,7 @@
+## 2.5.1 `26 Feb 2021`
+
+- 🐛 Active document is wrong after closing file
+
 ## 2.5.0 `26 Feb 2021`
 
 - ✨ [webview] Automatically select first task
