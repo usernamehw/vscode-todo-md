@@ -141,7 +141,7 @@ export default class Task extends Vue {
 		}
 	}
 	get nestedCount() {
-		if (TheTask.hasNestedTasks(this.model) && TheTask.isRoot(this.model)) {
+		if (this.model.subtasks.length !== 0 && this.model.parentTaskLineNumber === undefined) {
 			const allNestedTasks = getAllNestedTasksWebview(this.model);
 			return `<span class="codicon codicon-checklist"></span> <span class="nested-count-number">${allNestedTasks.filter(task => task.done).length}/${allNestedTasks.length}</span>`;
 		} else {

@@ -325,6 +325,7 @@ button,
 
 		&.not-due {
 			background-color: var(--not-due-bg);
+			border: 1px solid #bebebe86;
 		}
 
 		&.overdue {
@@ -361,8 +362,8 @@ button,
 		display: inline-flex;
 		font-family: var(--vscode-editor-font-family);
 		justify-content: center;
-		line-height: calc(var(--font-size) + 0.2em);
 		margin-right: $approxOneSpace;
+		margin-top: 1px;
 		// margin-top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height) - var(--font-size)) / 2));
 		padding: 0 0.3em;
 
