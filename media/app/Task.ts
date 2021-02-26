@@ -25,6 +25,9 @@ export default class Task extends Vue {
 	toggleTaskCollapse = () => {
 		SendMessage.toggleTaskCollapse(this.model.lineNumber);
 	};
+	toggleTaskCollapseRecursive = () => {
+		SendMessage.toggleTaskCollapseRecursive(this.model.lineNumber);
+	};
 	// ──────────────────────────────────────────────────────────────────────
 	openTaskContextMenu(e: MouseEvent, task: TheTask) {
 		selectTaskMutation(task.lineNumber);

@@ -1,5 +1,5 @@
 import vscode, { window } from 'vscode';
-import { decrementCountForTask, editTaskRawText, revealTask, incrementCountForTask, toggleDoneAtLine, toggleTaskCollapse, tryToDeleteTask } from '../documentActions';
+import { decrementCountForTask, editTaskRawText, incrementCountForTask, revealTask, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { extensionConfig, extensionState, Global, updateState } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveDocument } from '../utils/extensionUtils';
@@ -47,6 +47,12 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				}
 				case 'toggleTaskCollapse': {
 					await toggleTaskCollapse(await getActiveDocument(), message.value);
+					await updateState();
+					this.sendEverything();
+					break;
+				}
+				case 'toggleTaskCollapseRecursive': {
+					await toggleTaskCollapseRecursive(await getActiveDocument(), message.value);
 					await updateState();
 					this.sendEverything();
 					break;

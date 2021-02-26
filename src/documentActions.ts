@@ -8,7 +8,7 @@ import { DATE_FORMAT, getDateInISOFormat } from './time/timeUtils';
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { DueState } from './types';
 import { applyEdit, checkArchiveFileAndNotify, getActiveDocument } from './utils/extensionUtils';
-import { findTaskAtLineExtension } from './utils/taskUtils';
+import { findTaskAtLineExtension, forEachTask } from './utils/taskUtils';
 
 // This file contains 2 types of functions
 // 1) Performs an action on the document and returns a Promise
@@ -38,6 +38,32 @@ export async function toggleTaskCollapse(document: TextDocument, lineNumber: num
 	const edit = new WorkspaceEdit();
 	toggleTaskCollapseWorkspaceEdit(edit, document, lineNumber);
 	return applyEdit(edit, document);
+}
+/**
+ * Recursively expand/collapse all nested tasks
+ */
+export async function toggleTaskCollapseRecursive(document: TextDocument, lineNumber: number) {
+	const parentTask = findTaskAtLineExtension(lineNumber);
+	if (!parentTask) {
+		return undefined;
+	}
+	const edit = new WorkspaceEdit();
+
+	if (parentTask.isCollapsed) {
+		forEachTask(task => {
+			if (task.isCollapsed && task.subtasks.length) {
+				toggleTaskCollapseWorkspaceEdit(edit, document, task.lineNumber);
+			}
+		}, parentTask.subtasks);
+	} else {
+		forEachTask(task => {
+			if (!task.isCollapsed && task.subtasks.length) {
+				toggleTaskCollapseWorkspaceEdit(edit, document, task.lineNumber);
+			}
+		}, parentTask.subtasks);
+	}
+	toggleTaskCollapseWorkspaceEdit(edit, document, lineNumber);
+	return await applyEdit(edit, document);
 }
 /**
  * Insert/Replace due date

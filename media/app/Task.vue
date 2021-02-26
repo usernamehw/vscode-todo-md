@@ -9,7 +9,8 @@
         <span v-if="model.subtasks.length"
               class="twistie codicon"
               :class="[model.collapseRange ? 'codicon-chevron-right' : 'codicon-chevron-down']"
-              @click.stop="toggleTaskCollapse"></span><!--
+              @click.stop.exact="toggleTaskCollapse"
+              @click.alt.stop="toggleTaskCollapseRecursive"></span><!--
     --><input type="checkbox"
                :checked="model.done"
                aria-label="Task completion status"

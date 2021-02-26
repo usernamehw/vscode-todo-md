@@ -291,14 +291,16 @@ button,
 	.twistie {
 		cursor: pointer;
 		float: left;
-		height: 16px;
+		height: calc(var(--font-size) + 4px);
 		margin-left: -2px;
 		position: relative;
 		top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height)) - 16px) / 2);
-		width: 16px;// Try to center the element
+		width: calc(var(--font-size) + 4px);
 
 		&::before {
 			border-radius: 3px;
+			font-size: calc(var(--font-size) + 0.15em);
+			padding: 0.1em 0;
 		}
 
 		&:hover::before {
@@ -363,6 +365,8 @@ button,
 		margin-right: $approxOneSpace;
 		// margin-top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height) - var(--font-size)) / 2));
 		padding: 0 0.3em;
+		position: relative;
+		top: 1px;
 
 		.nested-count-number {
 			font-size: calc(var(--font-size) - 1px);

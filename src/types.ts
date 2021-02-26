@@ -321,6 +321,10 @@ interface WebviewMessageToggleCollapse extends WebviewMessageBase {
 	type: 'toggleTaskCollapse';
 	value: number;
 }
+interface WebviewMessageToggleTaskCollapseRecursive extends WebviewMessageBase {
+	type: 'toggleTaskCollapseRecursive';
+	value: number;
+}
 interface WebviewMessageShowNotification extends WebviewMessageBase {
 	type: 'showNotification';
 	value: string;
@@ -359,7 +363,7 @@ interface WebviewMessageEditTaskRawText extends WebviewMessageBase {
 /**
  * Messages that can only be sent from webview to extension.
  */
-export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTaskRawText | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageUpdateTitle;
+export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTaskRawText | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
 /**
  * Messages that can only be sent from extension to webview.
  */

@@ -67,4 +67,10 @@ export class SendMessage {
 			},
 		});
 	}
+	static toggleTaskCollapseRecursive(lineNumber: number) {
+		vscodeApi.postMessage({
+			type: 'toggleTaskCollapseRecursive',
+			value: lineNumber,
+		});
+	}
 }

@@ -96,6 +96,7 @@ Key | Description
 <kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> (on a task)|Reveals task in the file
 <kbd>L Mouse Button</kbd> (on tag/project/context)|Set filter to the value of the item
 <kbd>Ctrl</kbd> + <kbd>L Mouse Button</kbd> (on tag/project/context)|Append item value to the filter
+<kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> on twistie (folding icon)|Collapse/uncollapse all nested tasks
 
 ### Button link
 
