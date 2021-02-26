@@ -1,3 +1,14 @@
+## 2.5.0 `26 Feb 2021`
+
+- ✨ [webview] Automatically select first task
+- ✨ [webview] Show nested tasks count indicator
+- ✨ [webview] <kbd>Alt</kbd>+<kbd>Click</kbd> on twistie(folding icon) to recursively collapse/expand
+- ✨ [webview] Show closest due date for future tasks
+- ✨ [webview] Edit selected task by pressing <kbd>F2</kbd>
+- ✨ [webview] New setting to control `line-height`
+- ✨ New filter `$hasDue` - if due date is specified
+- 💥 [webview] Delete selected task hotkey is <kbd>Shift</kbd> + <kbd>Delete</kbd> now
+
 ## 2.4.1 `19 Feb 2021`
 
 - ✨ [webview] Tweak some styles
