@@ -1,7 +1,7 @@
 import vscode from 'vscode';
 import { Global } from '../extension';
 import { getTaskHover } from './getTaskHover';
-import { findTaskAtLineExtension } from '../utils/taskUtils';
+import { getTaskAtLineExtension } from '../utils/taskUtils';
 
 export function updateHover() {
 	if (Global.hoverDisposable) {
@@ -11,7 +11,7 @@ export function updateHover() {
 		{ scheme: 'file' },
 		{
 			provideHover(document, position, token) {
-				const task = findTaskAtLineExtension(position.line);
+				const task = getTaskAtLineExtension(position.line);
 				if (!task) {
 					return undefined;
 				}

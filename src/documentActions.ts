@@ -8,7 +8,7 @@ import { DATE_FORMAT, getDateInISOFormat } from './time/timeUtils';
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { DueState } from './types';
 import { applyEdit, checkArchiveFileAndNotify, getActiveDocument } from './utils/extensionUtils';
-import { findTaskAtLineExtension, forEachTask } from './utils/taskUtils';
+import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 
 // This file contains 2 types of functions
 // 1) Performs an action on the document and returns a Promise
@@ -16,13 +16,17 @@ import { findTaskAtLineExtension, forEachTask } from './utils/taskUtils';
 
 /**
  * Add `{h}` special tag
- *
- * TODO: only add if the task is not already hidden
  */
 export async function hideTask(document: vscode.TextDocument, lineNumber: number) {
 	const edit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
-	edit.insert(document.uri, line.range.end, ' {h}');
+	const task = getTaskAtLineExtension(lineNumber);
+	if (!task) {
+		return undefined;
+	}
+	if (!task.isHidden) {
+		edit.insert(document.uri, line.range.end, ' {h}');
+	}
 	return applyEdit(edit, document);
 }
 export async function editTaskRawText(document: vscode.TextDocument, lineNumber: number, newRawText: string) {
@@ -43,7 +47,7 @@ export async function toggleTaskCollapse(document: TextDocument, lineNumber: num
  * Recursively expand/collapse all nested tasks
  */
 export async function toggleTaskCollapseRecursive(document: TextDocument, lineNumber: number) {
-	const parentTask = findTaskAtLineExtension(lineNumber);
+	const parentTask = getTaskAtLineExtension(lineNumber);
 	if (!parentTask) {
 		return undefined;
 	}
@@ -71,7 +75,7 @@ export async function toggleTaskCollapseRecursive(document: TextDocument, lineNu
 export async function setDueDate(document: vscode.TextDocument, lineNumber: number, newDueDate: string) {
 	const dueDate = `{due:${newDueDate}}`;
 	const edit = new WorkspaceEdit();
-	const task = findTaskAtLineExtension(lineNumber);
+	const task = getTaskAtLineExtension(lineNumber);
 	if (task?.overdueRange) {
 		edit.delete(document.uri, task.overdueRange);
 	}
@@ -88,7 +92,7 @@ export async function setDueDate(document: vscode.TextDocument, lineNumber: numb
  * Delete the task. Show confirmation dialog if necessary. Modal dialog shows all the tasks that will be deleted.
  */
 export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber: number) {
-	const task = findTaskAtLineExtension(lineNumber);
+	const task = getTaskAtLineExtension(lineNumber);
 	if (!task) {
 		return undefined;
 	}
@@ -104,7 +108,7 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 	}
 
 	for (const ln of taskLineNumbersToDelete) {
-		const taskAtLine = findTaskAtLineExtension(ln);
+		const taskAtLine = getTaskAtLineExtension(ln);
 		if (!taskAtLine) {
 			continue;
 		}
@@ -140,7 +144,7 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
  * Either toggle done or increment count
  */
 export async function toggleDoneOrIncrementCount(document: vscode.TextDocument, lineNumber: number) {
-	const task = findTaskAtLineExtension(lineNumber);
+	const task = getTaskAtLineExtension(lineNumber);
 	if (!task) {
 		return undefined;
 	}
@@ -196,7 +200,7 @@ export async function decrementCountForTask(document: vscode.TextDocument, lineN
  * Increment/Decrement a priority. Create it if the task doesn't have one.
  */
 export async function incrementOrDecrementPriority(document: TextDocument, lineNumber: number, type: 'decrement' | 'increment') {
-	const task = findTaskAtLineExtension(lineNumber);
+	const task = getTaskAtLineExtension(lineNumber);
 	if (!task ||
 			type === 'increment' && task.priority === 'A' ||
 			type === 'decrement' && task.priority === 'Z') {
@@ -226,7 +230,7 @@ async function removeOverdueFromLine(document: vscode.TextDocument, task: TheTas
  */
 export async function toggleDoneAtLine(document: TextDocument, lineNumber: number) {
 	const { firstNonWhitespaceCharacterIndex } = document.lineAt(lineNumber);
-	const task = findTaskAtLineExtension(lineNumber);
+	const task = getTaskAtLineExtension(lineNumber);
 	if (!task) {
 		return;
 	}
@@ -291,7 +295,7 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
 
 	taskLineNumbersToArchive = Array.from(new Set(taskLineNumbersToArchive));
 	for (const lineNumber of taskLineNumbersToArchive) {
-		const task = findTaskAtLineExtension(lineNumber);
+		const task = getTaskAtLineExtension(lineNumber);
 		if (!task) {
 			continue;
 		}
@@ -386,7 +390,7 @@ export async function appendTaskToFile(text: string, filePath: string) {
 // ──────────────────────────────────────────────────────────────────────
 export function toggleTaskCollapseWorkspaceEdit(edit: WorkspaceEdit, document: vscode.TextDocument, lineNumber: number) {
 	const line = document.lineAt(lineNumber);
-	const task = findTaskAtLineExtension(lineNumber);
+	const task = getTaskAtLineExtension(lineNumber);
 	if (task?.collapseRange) {
 		edit.delete(document.uri, task.collapseRange);
 	} else {

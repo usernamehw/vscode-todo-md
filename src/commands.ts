@@ -13,7 +13,7 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { ExtensionState, VscodeContext } from './types';
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveDocument, specifyDefaultFile } from './utils/extensionUtils';
-import { findTaskAtLineExtension, forEachTask } from './utils/taskUtils';
+import { getTaskAtLineExtension, forEachTask } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './utils/vscodeUtils';
 /**
@@ -106,7 +106,7 @@ export function registerAllCommands() {
 		const selectedCompletedTasks = [];
 
 		for (let i = selection.start.line; i <= selection.end.line; i++) {
-			const task = findTaskAtLineExtension(i);
+			const task = getTaskAtLineExtension(i);
 			if (task && task.done) {
 				selectedCompletedTasks.push(task);
 			}
@@ -123,7 +123,7 @@ export function registerAllCommands() {
 		const lineEnd = selection.end.line;
 		const tasks: TheTask[] = [];
 		for (let i = lineStart; i <= lineEnd; i++) {
-			const task = findTaskAtLineExtension(i);
+			const task = getTaskAtLineExtension(i);
 			if (task) {
 				tasks.push(task);
 			}
@@ -135,7 +135,7 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand('todomd.createSimilarTask', async editor => {
 		// Create a task with all the tags, projects and contexts of another task
 		const selection = editor.selection;
-		const task = findTaskAtLineExtension(selection.start.line);
+		const task = getTaskAtLineExtension(selection.start.line);
 		if (!task) {
 			return;
 		}

@@ -3,7 +3,7 @@ import { decrementCountForTask, editTaskRawText, incrementCountForTask, revealTa
 import { extensionConfig, extensionState, Global, updateState } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveDocument } from '../utils/extensionUtils';
-import { findTaskAtLineExtension } from '../utils/taskUtils';
+import { getTaskAtLineExtension } from '../utils/taskUtils';
 import { followLink } from '../utils/vscodeUtils';
 import { getNonce } from './webviewUtils';
 
@@ -58,13 +58,13 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					break;
 				}
 				case 'incrementCount': {
-					await incrementCountForTask(await getActiveDocument(), message.value, findTaskAtLineExtension(message.value)!);
+					await incrementCountForTask(await getActiveDocument(), message.value, getTaskAtLineExtension(message.value)!);
 					await updateState();
 					this.sendEverything();
 					break;
 				}
 				case 'decrementCount': {
-					await decrementCountForTask(await getActiveDocument(), message.value, findTaskAtLineExtension(message.value)!);
+					await decrementCountForTask(await getActiveDocument(), message.value, getTaskAtLineExtension(message.value)!);
 					await updateState();
 					this.sendEverything();
 					break;
