@@ -365,8 +365,6 @@ button,
 		margin-right: $approxOneSpace;
 		// margin-top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height) - var(--font-size)) / 2));
 		padding: 0 0.3em;
-		position: relative;
-		top: 1px;
 
 		.nested-count-number {
 			font-size: calc(var(--font-size) - 1px);
