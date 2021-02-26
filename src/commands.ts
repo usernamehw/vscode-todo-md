@@ -63,7 +63,7 @@ export function registerAllCommands() {
 		const edit = new WorkspaceEdit();
 		const activeDocument = await getActiveDocument();
 		forEachTask(task => {
-			if (task.hasNestedTasks() && !task.isCollapsed) {
+			if (TheTask.hasNestedTasks(task) && !task.isCollapsed) {
 				toggleTaskCollapseWorkspaceEdit(edit, activeDocument, task.lineNumber);
 			}
 		});
@@ -74,7 +74,7 @@ export function registerAllCommands() {
 		const edit = new WorkspaceEdit();
 		const activeDocument = await getActiveDocument();
 		forEachTask(task => {
-			if (task.hasNestedTasks() && task.isCollapsed) {
+			if (TheTask.hasNestedTasks(task) && task.isCollapsed) {
 				toggleTaskCollapseWorkspaceEdit(edit, activeDocument, task.lineNumber);
 			}
 		});

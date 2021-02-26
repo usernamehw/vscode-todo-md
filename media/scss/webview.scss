@@ -46,6 +46,8 @@ body {
 	--count-button-hover-bg: #0000002b;
 	--selected-task-bg: #e2e2e2;
 
+	--nested-count-bg: #f3f1d499;
+
 	--twistie-hover-bg: rgba(0, 0, 0, 0.1);
 
 	--due-fg: #5faedb;
@@ -86,6 +88,9 @@ body.vscode-dark {
 	--done-task-bg: #99ff8c1a;
 	--selected-task-bg: #dfdfdf20;
 
+	--nested-count-bg: #ebe7b5;
+	--nested-count-fg: #111111;
+
 	--overdue-bg: #fc424222;
 	--overdue-fg: #fc4242e1;
 	--not-due-bg: #dadada30;
@@ -97,6 +102,10 @@ body.vscode-dark {
 	.context,
 	.project {
 		border: none;
+	}
+
+	.nested-count {
+		padding: 0 0.2em;
 	}
 }
 
@@ -333,13 +342,32 @@ button,
 	}
 
 	.codicon {
-		font-size: var(--font-size);
+		font-size: calc(var(--font-size) - 1px);
 	}
 
 	&::after {
 		clear: both;
 		content: '';
 		display: table;
+	}
+
+	.nested-count {
+		align-items: center;
+		background-color: var(--nested-count-bg);
+		border: 1px solid #dfd98799;
+		color: var(--nested-count-fg);
+		display: inline-flex;
+		font-family: var(--vscode-editor-font-family);
+		justify-content: center;
+		line-height: calc(var(--font-size) + 0.2em);
+		margin-right: $approxOneSpace;
+		// margin-top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height) - var(--font-size)) / 2));
+		padding: 0 0.3em;
+
+		.nested-count-number {
+			font-size: calc(var(--font-size) - 1px);
+			padding-left: $approxOneSpace;
+		}
 	}
 }
 

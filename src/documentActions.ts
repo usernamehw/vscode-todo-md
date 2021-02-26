@@ -74,7 +74,7 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 
 	const taskLineNumbersToDelete = [lineNumber];
 	if (task.subtasks.length) {
-		taskLineNumbersToDelete.push(...task.getNestedTasksLineNumbers());
+		taskLineNumbersToDelete.push(...TheTask.getNestedTasksLineNumbers(task.subtasks));
 	}
 
 	for (const ln of taskLineNumbersToDelete) {
@@ -259,7 +259,7 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
 		}
 		taskLineNumbersToArchive.push(task.lineNumber);
 		if (task.subtasks.length) {
-			taskLineNumbersToArchive.push(...task.getNestedTasksLineNumbers());
+			taskLineNumbersToArchive.push(...TheTask.getNestedTasksLineNumbers(task.subtasks));
 		}
 	}
 

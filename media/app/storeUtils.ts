@@ -63,3 +63,10 @@ export function flattenDeep<T extends NestedObject>(arr: T[]): T[] {
 	flatten(arr);
 	return flattened;
 }
+/**
+ * Recursive get all nested tasks.
+ */
+export function getAllNestedTasksWebview(task: TheTask) {
+	const allNestedTaksIds = TheTask.getNestedTasksLineNumbers(task.subtasks);
+	return allNestedTaksIds.map(lineNumber => findTaskAtLineWebview(lineNumber)!);
+}

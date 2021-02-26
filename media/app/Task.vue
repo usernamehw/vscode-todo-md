@@ -17,7 +17,10 @@
                :class="[config.customCheckboxEnabled ? 'custom-checkbox ' : 'native-checkbox']"
                @click.stop
                @change="toggleDone"><!--
-        --><span class="title"
+        --><template v-if="nestedCount">
+            <span class="nested-count"
+                  v-html="nestedCount"></span>
+        </template><span class="title"
                   v-html="taskTitle"></span><!--
         --><template v-for="tag of model.tags">
             <span class="tag"

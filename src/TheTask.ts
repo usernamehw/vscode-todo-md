@@ -180,23 +180,23 @@ export class TheTask {
 	/**
 	 * Gets all nested task line numbers (recursive)
 	 */
-	getNestedTasksLineNumbers(tasks = this.subtasks): number[] {
+	static getNestedTasksLineNumbers(tasks: TheTask[]): number[] {
 		const ids = [];
 		for (const task of tasks) {
 			ids.push(task.lineNumber);
 			if (task.subtasks) {
-				ids.push(...this.getNestedTasksLineNumbers(task.subtasks));
+				ids.push(...TheTask.getNestedTasksLineNumbers(task.subtasks));
 			}
 		}
 		return ids;
 	}
-	// TODO: use this helper function
-	isRoot() {
-		return this.parentTaskLineNumber !== undefined;
+
+	static isRoot(task: TheTask) {
+		return task.parentTaskLineNumber === undefined;
 	}
 
-	hasNestedTasks() {
-		return this.subtasks.length !== 0;
+	static hasNestedTasks(task: TheTask) {
+		return task.subtasks.length !== 0;
 	}
 	/**
 	 * Format task title for notification or modal dialog

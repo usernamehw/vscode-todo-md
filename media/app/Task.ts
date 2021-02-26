@@ -6,6 +6,7 @@ import { TheTask } from '../../src/TheTask';
 import { DueState, ExtensionConfig } from '../../src/types';
 import { SendMessage } from './SendMessage';
 import { selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
+import { getAllNestedTasksWebview } from './storeUtils';
 import { VueEvents } from './webviewTypes';
 
 @Component({
@@ -134,6 +135,14 @@ export default class Task extends Vue {
 				}
 			}
 			return `<span class="${dueClasses.join(' ')}">${dueText}</span>`;
+		}
+	}
+	get nestedCount() {
+		if (TheTask.hasNestedTasks(this.model) && TheTask.isRoot(this.model)) {
+			const allNestedTasks = getAllNestedTasksWebview(this.model);
+			return `<span class="codicon codicon-checklist"></span> <span class="nested-count-number">${allNestedTasks.filter(task => task.done).length}/${allNestedTasks.length}</span>`;
+		} else {
+			return undefined;
 		}
 	}
 }
