@@ -6,7 +6,7 @@ import { TheTask } from '../../src/TheTask';
 import { DueState, ExtensionConfig, MessageFromWebview, MessageToWebview } from '../../src/types';
 import App from './App';
 import { SendMessage } from './SendMessage';
-import { findTaskAtLineWebview, flattenDeep, isTaskVisible } from './storeUtils';
+import { getTaskAtLineWebview, flattenDeep, isTaskVisible } from './storeUtils';
 
 Vue.use(Vuex);
 
@@ -127,7 +127,7 @@ export const store = new Store({
 				targetTask = getters.filteredSortedTasks[0];
 			} else {
 				// Selected task exists
-				const selectedTask = findTaskAtLineWebview(state.selectedTaskLineNumber);
+				const selectedTask = getTaskAtLineWebview(state.selectedTaskLineNumber);
 
 				const tasks = getters.flattenedFilteredSortedTasks.filter(task => isTaskVisible(task));
 				if (tasks.length < 2) {
@@ -150,7 +150,7 @@ export const store = new Store({
 				// None selected. Select the first visible task
 				targetTask = getters.flattenedFilteredSortedTasks[getters.flattenedFilteredSortedTasks.length - 1];
 			} else {
-				const selectedTask = findTaskAtLineWebview(state.selectedTaskLineNumber);
+				const selectedTask = getTaskAtLineWebview(state.selectedTaskLineNumber);
 				if (!selectedTask) {
 					return undefined;
 				}

@@ -14,7 +14,7 @@ import { TheTask } from '../../src/TheTask';
 import { ExtensionConfig } from '../../src/types';
 import { SendMessage } from './SendMessage';
 import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
-import { findTaskAtLineWebview } from './storeUtils';
+import { getTaskAtLineWebview } from './storeUtils';
 import TaskComponent from './Task.vue';
 import { VueEvents } from './webviewTypes';
 /**
@@ -185,7 +185,7 @@ export default class App extends Vue {
 	}
 	// ──────────────────────────────────────────────────────────────────────
 	acceptNewTaskTitle() {
-		const selectedTask = findTaskAtLineWebview(this.selectedTaskLineNumber);
+		const selectedTask = getTaskAtLineWebview(this.selectedTaskLineNumber);
 		if (selectedTask) {
 			SendMessage.editRawText(this.selectedTaskLineNumber, this.newTaskTitle);
 		}
@@ -253,12 +253,12 @@ export default class App extends Vue {
 			} else if (e.key === 'Escape') {
 				selectTaskMutation(-1);
 			} else if (e.key === 'd' && e.altKey) {
-				const task = findTaskAtLineWebview(this.selectedTaskLineNumber);
+				const task = getTaskAtLineWebview(this.selectedTaskLineNumber);
 				if (task) {
 					toggleDoneMutation(task);
 				}
 			} else if (e.key === 'F2') {
-				const selectedTask = findTaskAtLineWebview(this.selectedTaskLineNumber);
+				const selectedTask = getTaskAtLineWebview(this.selectedTaskLineNumber);
 				if (selectedTask) {
 					this.newTaskTitle = selectedTask.rawText;
 					this.showModal('edit-task');

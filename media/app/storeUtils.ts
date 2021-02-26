@@ -10,7 +10,7 @@ export function isTaskVisible(task: TheTask): boolean {
 		return true;
 	}
 	for (let currentTask = task; currentTask.parentTaskLineNumber !== undefined;) {
-		const parentTask = findTaskAtLine(currentTask.parentTaskLineNumber, (store.getters as Getters).flattenedFilteredSortedTasks);
+		const parentTask = getTaskAtLine(currentTask.parentTaskLineNumber, (store.getters as Getters).flattenedFilteredSortedTasks);
 		if (!parentTask) {
 			return false;
 		}
@@ -23,13 +23,13 @@ export function isTaskVisible(task: TheTask): boolean {
 	return true;
 }
 
-function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefined {
+function getTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefined {
 	for (const task of tasks) {
 		if (task.lineNumber === lineNumber) {
 			return task;
 		}
 		if (task.subtasks.length) {
-			const foundTask = findTaskAtLine(lineNumber, task.subtasks);
+			const foundTask = getTaskAtLine(lineNumber, task.subtasks);
 			if (foundTask) {
 				return foundTask;
 			}
@@ -38,8 +38,8 @@ function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefin
 	return undefined;
 }
 
-export function findTaskAtLineWebview(lineNumber: number): TheTask | undefined {
-	return findTaskAtLine(lineNumber, store.state.tasksAsTree);
+export function getTaskAtLineWebview(lineNumber: number): TheTask | undefined {
+	return getTaskAtLine(lineNumber, store.state.tasksAsTree);
 }
 
 interface NestedObject {
@@ -68,5 +68,5 @@ export function flattenDeep<T extends NestedObject>(arr: T[]): T[] {
  */
 export function getAllNestedTasksWebview(task: TheTask) {
 	const allNestedTaksIds = TheTask.getNestedTasksLineNumbers(task.subtasks);
-	return allNestedTaksIds.map(lineNumber => findTaskAtLineWebview(lineNumber)!);
+	return allNestedTaksIds.map(lineNumber => getTaskAtLineWebview(lineNumber)!);
 }
