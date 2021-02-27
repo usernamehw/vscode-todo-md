@@ -1,3 +1,8 @@
+## 2.5.2 `27 Feb 2021`
+
+- 🐛 Again, active document is wrong after closing the file
+- ✨ [webview] Option to show notification after task completion
+
 ## 2.5.1 `26 Feb 2021`
 
 - 🐛 Active document is wrong after closing file
