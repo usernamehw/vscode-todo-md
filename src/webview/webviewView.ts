@@ -3,7 +3,7 @@ import { decrementCountForTask, editTaskRawText, incrementCountForTask, revealTa
 import { updateEverything } from '../events';
 import { extensionConfig, extensionState, Global } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
-import { getActiveDocument } from '../utils/extensionUtils';
+import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
 import { followLink } from '../utils/vscodeUtils';
 import { getNonce } from './webviewUtils';
@@ -41,43 +41,43 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 			switch (message.type) {
 				// Needs to update everything
 				case 'toggleDone': {
-					await toggleDoneAtLine(await getActiveDocument(), message.value);
+					await toggleDoneAtLine(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'toggleTaskCollapse': {
-					await toggleTaskCollapse(await getActiveDocument(), message.value);
+					await toggleTaskCollapse(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'toggleTaskCollapseRecursive': {
-					await toggleTaskCollapseRecursive(await getActiveDocument(), message.value);
+					await toggleTaskCollapseRecursive(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'incrementCount': {
-					await incrementCountForTask(await getActiveDocument(), message.value, getTaskAtLineExtension(message.value)!);
+					await incrementCountForTask(await getActiveOrDefaultDocument(), message.value, getTaskAtLineExtension(message.value)!);
 					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'decrementCount': {
-					await decrementCountForTask(await getActiveDocument(), message.value, getTaskAtLineExtension(message.value)!);
+					await decrementCountForTask(await getActiveOrDefaultDocument(), message.value, getTaskAtLineExtension(message.value)!);
 					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'deleteTask': {
-					await tryToDeleteTask(await getActiveDocument(), message.value);
+					await tryToDeleteTask(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();
 					this.sendEverything();
 					break;
 				}
 				case 'editTaskRawText': {
-					await editTaskRawText(await getActiveDocument(), message.value.lineNumber, message.value.newRawText);
+					await editTaskRawText(await getActiveOrDefaultDocument(), message.value.lineNumber, message.value.newRawText);
 					await updateEverything();
 					this.sendEverything();
 					break;

@@ -12,7 +12,7 @@ import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { ExtensionState, VscodeContext } from './types';
-import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveDocument, specifyDefaultFile } from './utils/extensionUtils';
+import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultFile } from './utils/extensionUtils';
 import { getTaskAtLineExtension, forEachTask } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './utils/vscodeUtils';
@@ -26,7 +26,7 @@ export function registerAllCommands() {
 		let lineNumbers: number[] = [];
 		if (treeItem) {
 			lineNumbers.push(treeItem.task.lineNumber);
-			document = await getActiveDocument();
+			document = await getActiveOrDefaultDocument();
 		} else {
 			if (!editor) {
 				return;
@@ -52,7 +52,7 @@ export function registerAllCommands() {
 			return;
 		}
 		const lineNumber = treeItem.task.lineNumber;
-		const document = await getActiveDocument();
+		const document = await getActiveOrDefaultDocument();
 
 		hideTask(document, lineNumber);
 
@@ -61,7 +61,7 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.collapseAllNestedTasks', async () => {
 		const edit = new WorkspaceEdit();
-		const activeDocument = await getActiveDocument();
+		const activeDocument = await getActiveOrDefaultDocument();
 		forEachTask(task => {
 			if (TheTask.hasNestedTasks(task) && !task.isCollapsed) {
 				toggleTaskCollapseWorkspaceEdit(edit, activeDocument, task.lineNumber);
@@ -72,7 +72,7 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.expandAllTasks', async () => {
 		const edit = new WorkspaceEdit();
-		const activeDocument = await getActiveDocument();
+		const activeDocument = await getActiveOrDefaultDocument();
 		forEachTask(task => {
 			if (TheTask.hasNestedTasks(task) && task.isCollapsed) {
 				toggleTaskCollapseWorkspaceEdit(edit, activeDocument, task.lineNumber);
@@ -90,7 +90,7 @@ export function registerAllCommands() {
 			return;
 		}
 		const lineNumber = treeItem.task.lineNumber;
-		const document = await getActiveDocument();
+		const document = await getActiveOrDefaultDocument();
 
 		await tryToDeleteTask(document, lineNumber);
 
@@ -294,7 +294,7 @@ export function registerAllCommands() {
 	commands.registerCommand('todomd.specifyDefaultFile', specifyDefaultFile);
 	commands.registerCommand('todomd.completeTask', async () => {
 		// Show Quick Pick to complete a task
-		const document = await getActiveDocument();
+		const document = await getActiveOrDefaultDocument();
 		const notCompletedTasks = defaultSortTasks(extensionState.tasks.filter(task => !task.done)).map(task => TheTask.formatTask(task));
 		const pickedTask = await window.showQuickPick(notCompletedTasks, {
 			placeHolder: 'Choose a task to complete',
@@ -365,7 +365,7 @@ export function registerAllCommands() {
 		}
 	});
 	commands.registerCommand('todomd.removeAllOverdue', async () => {
-		const activeDocument = await getActiveDocument();
+		const activeDocument = await getActiveOrDefaultDocument();
 		if (!activeDocument) {
 			return;
 		}

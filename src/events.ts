@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import throttle from 'lodash/throttle';
 import vscode, { window, workspace } from 'vscode';
 import { updateCompletions } from './completionProviders';
-import { updateEditorDecorations } from './decorations';
+import { paintEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateHover } from './hover/hoverProvider';
@@ -21,13 +21,21 @@ export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undef
 		extensionState.activeDocument = editor.document;
 		extensionState.activeDocumentTabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : extensionConfig.tabSize;
 		updateEverything(editor);
-		await activateEditorFeatures(editor);
+		activateEditorFeatures(editor);
+		await setContext(VscodeContext.isActive, true);
+
+		const needReset = checkIfNeedResetRecurringTasks(editor.document.uri.toString());
+		if (needReset) {
+			await resetAllRecurringTasks(editor.document, needReset.lastVisit);
+			updateEverything();
+			updateLastVisitGlobalState(editor.document.uri.toString(), new Date());
+		}
 	} else {
 		extensionState.activeDocument = await getDocumentForDefaultFile();
 		extensionState.activeDocumentTabSize = extensionConfig.tabSize;
-		setTimeout(() => {
-			updateEverything();
-		}, 90);
+		extensionState.theRightFileOpened = false;
+		updateEverything();
+		await setContext(VscodeContext.isActive, false);
 	}
 }
 /**
@@ -74,27 +82,18 @@ export function isTheRightFileName(editor: vscode.TextEditor): boolean {
  *
  * For example: completions, status bar text, editor hover.
  */
-export async function activateEditorFeatures(editor: vscode.TextEditor) {
+export function activateEditorFeatures(editor: vscode.TextEditor) {
 	extensionState.theRightFileOpened = true;
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
 	updateHover();
 	statusBar.show();
-	await setContext(VscodeContext.isActive, true);
-
-	const needReset = checkIfNeedResetRecurringTasks(editor.document.uri.toString());
-	if (needReset) {
-		await resetAllRecurringTasks(editor.document, needReset.lastVisit);
-		updateEverything();
-		updateLastVisitGlobalState(editor.document.uri.toString(), new Date());
-	}
 }
 /**
  * When `todo.md` document is closed - all the features except for the Tree Views
  * will be disabled.
  */
 export function deactivateEditorFeatures() {
-	extensionState.theRightFileOpened = false;
 	if (Global.changeTextDocumentDisposable) {
 		Global.changeTextDocumentDisposable.dispose();
 	}
@@ -109,7 +108,6 @@ export function deactivateEditorFeatures() {
 		Global.hoverDisposable.dispose();
 	}
 	statusBar.hide();
-	setContext(VscodeContext.isActive, false);
 }
 /**
  * - Update state (parse the active/default file)
@@ -120,7 +118,7 @@ export function deactivateEditorFeatures() {
 export const updateEverything = throttle(async (editor?: vscode.TextEditor) => {
 	await updateState();
 	if (editor) {
-		updateEditorDecorations(editor);
+		paintEditorDecorations(editor);
 		statusBar.updateText(extensionState.tasks);
 	}
 	updateAllTreeViews();

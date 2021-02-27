@@ -7,7 +7,7 @@ import { Count, TheTask } from './TheTask';
 import { DATE_FORMAT, getDateInISOFormat } from './time/timeUtils';
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { DueState } from './types';
-import { applyEdit, checkArchiveFileAndNotify, getActiveDocument } from './utils/extensionUtils';
+import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 
 // This file contains 2 types of functions
@@ -314,7 +314,7 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
  * Move cursor, reveal range, highlight the line for a moment
  */
 export async function revealTask(lineNumber: number) {
-	const document = await getActiveDocument();
+	const document = await getActiveOrDefaultDocument();
 	const editor = await vscode.window.showTextDocument(document);
 	const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
 	editor.selection = new vscode.Selection(range.start, range.end);

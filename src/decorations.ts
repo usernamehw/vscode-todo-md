@@ -4,7 +4,7 @@ import { DueState } from './types';
 /**
  * Update editor decoration style
  */
-export function updateDecorationStyle(): void {
+export function updateEditorDecorationStyle(): void {
 	Global.completedTaskDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
 		textDecoration: 'line-through rgba(255, 255, 255, 0.35)',
@@ -87,7 +87,7 @@ export function updateDecorationStyle(): void {
 /**
  * Actually update the editor decorations
  */
-export function updateEditorDecorations(editor: TextEditor) {
+export function paintEditorDecorations(editor: TextEditor) {
 	const completedDecorationRanges: Range[] = [];
 	const tagsDecorationRanges: Range[] = [];
 	const priorityADecorationRanges: Range[] = [];

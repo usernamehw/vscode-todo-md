@@ -4,14 +4,14 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import vscode, { ExtensionContext, window, workspace } from 'vscode';
 import { registerAllCommands } from './commands';
-import { updateDecorationStyle } from './decorations';
+import { updateEditorDecorationStyle } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor, updateEverything } from './events';
 import { parseDocument } from './parse';
 import { StatusBar } from './statusBar';
 import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
 import { ExtensionConfig, ExtensionState, VscodeContext } from './types';
-import { getDocumentForDefaultFile } from './utils/extensionUtils';
+import { getActiveDocument, getDocumentForDefaultFile } from './utils/extensionUtils';
 import { setContext } from './utils/vscodeUtils';
 import { TasksWebviewViewProvider } from './webview/webviewView';
 
@@ -89,7 +89,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	const lastVisitByFile = extensionContext.globalState.get<ExtensionState['lastVisitByFile'] | undefined>(LAST_VISIT_BY_FILE_STORAGE_KEY);
 	extensionState.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
-	updateDecorationStyle();
+	updateEditorDecorationStyle();
 	registerAllCommands();
 	createAllTreeViews();
 
@@ -128,7 +128,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as ExtensionConfig;
 
 		disposeEditorDisposables();
-		updateDecorationStyle();
+		updateEditorDecorationStyle();
 		updateEverything();
 		updateIsDevContext();
 	}
@@ -146,7 +146,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
  * Update primary `state` properties, such as `tasks` or `tags`, based on provided document or based on default file
  */
 export async function updateState() {
-	let document = extensionState.activeDocument;
+	let document = await getActiveDocument();
 	if (!document) {
 		document = await getDocumentForDefaultFile();
 	}

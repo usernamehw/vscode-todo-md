@@ -15,12 +15,10 @@ export async function applyEdit(edit: WorkspaceEdit, document: TextDocument) {
 /**
  * Get active document. If none are active try to return default document.
  */
-export async function getActiveDocument() {
-	if (extensionState.activeDocument) {
-		if (extensionState.activeDocument.isClosed) {
-			extensionState.activeDocument = await workspace.openTextDocument(extensionState.activeDocument.uri);
-		}
-		return extensionState.activeDocument;
+export async function getActiveOrDefaultDocument() {
+	const activeDocument = await getActiveDocument();
+	if (activeDocument) {
+		return activeDocument;
 	} else {
 		const documentForDefaultFile = await getDocumentForDefaultFile();
 		if (!documentForDefaultFile) {
@@ -29,6 +27,17 @@ export async function getActiveDocument() {
 		} else {
 			return documentForDefaultFile;
 		}
+	}
+}
+export async function getActiveDocument() {
+	if (extensionState.activeDocument) {
+		if (extensionState.activeDocument.isClosed) {
+			return await workspace.openTextDocument(extensionState.activeDocument.uri);
+		} else {
+			return extensionState.activeDocument;
+		}
+	} else {
+		return undefined;
 	}
 }
 /**

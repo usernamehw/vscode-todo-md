@@ -9,7 +9,7 @@ import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
 import { ItemForProvider, SortTags, VscodeContext } from '../types';
-import { getActiveDocument } from '../utils/extensionUtils';
+import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { setContext } from '../utils/vscodeUtils';
 import { updateWebviewView } from '../webview/webviewView';
 
@@ -55,10 +55,10 @@ export function createAllTreeViews() {
 		showCollapseAll: true,
 	});
 	tasksView.onDidCollapseElement(async event => {
-		toggleTaskCollapse(await getActiveDocument(), (event.element.task as TheTask).lineNumber);
+		toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 	});
 	tasksView.onDidExpandElement(async event => {
-		toggleTaskCollapse(await getActiveDocument(), (event.element.task as TheTask).lineNumber);
+		toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 	});
 
 	archivedView = vscode.window.createTreeView(`${EXTENSION_NAME}.archived`, {
@@ -76,10 +76,10 @@ export function createAllTreeViews() {
 					showCollapseAll: true,
 				});
 				generic1View.onDidCollapseElement(async event => {
-					toggleTaskCollapse(await getActiveDocument(), (event.element.task as TheTask).lineNumber);
+					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 				});
 				generic1View.onDidExpandElement(async event => {
-					toggleTaskCollapse(await getActiveDocument(), (event.element.task as TheTask).lineNumber);
+					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 				});
 				setContext(VscodeContext.generic1FilterExists, true);
 			}
@@ -95,10 +95,10 @@ export function createAllTreeViews() {
 					showCollapseAll: true,
 				});
 				generic2View.onDidCollapseElement(async event => {
-					toggleTaskCollapse(await getActiveDocument(), (event.element.task as TheTask).lineNumber);
+					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 				});
 				generic2View.onDidExpandElement(async event => {
-					toggleTaskCollapse(await getActiveDocument(), (event.element.task as TheTask).lineNumber);
+					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 				});
 				setContext(VscodeContext.generic2FilterExists, true);
 			}
@@ -114,10 +114,10 @@ export function createAllTreeViews() {
 					showCollapseAll: true,
 				});
 				generic3View.onDidCollapseElement(async event => {
-					toggleTaskCollapse(await getActiveDocument(), (event.element.task as TheTask).lineNumber);
+					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 				});
 				generic3View.onDidExpandElement(async event => {
-					toggleTaskCollapse(await getActiveDocument(), (event.element.task as TheTask).lineNumber);
+					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 				});
 				setContext(VscodeContext.generic3FilterExists, true);
 			}
