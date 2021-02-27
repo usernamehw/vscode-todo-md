@@ -76,6 +76,11 @@
 					"markdownDescription": "Controls whether priority is shown in the webview.",
 					"default": true
 				},
+				"todomd.webview.completionNotificationEnabled": {
+					"type": "boolean",
+					"markdownDescription": "When true - show notification after completing a task in a webview.",
+					"default": false
+				},
 				"todomd.webview.fontSize": {
 					"type": "string",
 					"markdownDescription": "Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)",

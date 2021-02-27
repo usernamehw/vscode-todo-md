@@ -153,6 +153,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.autoShowSuggest|**`true`**|Show autocomplete when typing. (When disabled suggest can be called by <kbd>Ctrl</kbd>+<kbd>Space</kbd>)|
 |webview.showPriority|**`true`**|Controls whether priority is shown in the webview.|
 |webview.customCheckboxEnabled|**`true`**|Whether checkbox is rendered as native input element or a custom styled element.|
+|webview.completionNotificationEnabled|**`false`**|When true - show notification after completing a task in a webview.|
 |webview.fontSize|`"13px"`|Controls font size in the webview.|
 |webview.fontFamily|`'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'`|Controls font family in the webview.|
 |webview.lineHeight|**`1.4`**|Controls line height in the webview.|

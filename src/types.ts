@@ -241,8 +241,12 @@ export interface ExtensionConfig {
 		 */
 		showPriority: boolean;
 		/**
-		 * Controls font size in the webview.
+		 * When true - show notification after completing a task.
 		 */
+		completionNotificationEnabled: boolean;
+		/**
+		* Controls font size in the webview.
+		*/
 		fontSize: string;
 		/**
 		 * Controls font family in the webview.

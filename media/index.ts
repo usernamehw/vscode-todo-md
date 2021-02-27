@@ -7,11 +7,18 @@ const app = new Vue({
 	render: h => h(App),
 }).$mount('#app');
 
+type NotificationType = 'error' | 'info' | 'success' | 'warn';
+
 /**
  * Show toast notification
  */
-export function showToastNotification(text: string) {
+export function showToastNotification(text: string, {
+	type = 'info',
+}: {
+	type?: NotificationType;
+} = {}) {
 	app.$notify({
 		text,
+		type,
 	});
 }

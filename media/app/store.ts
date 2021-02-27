@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Vuex, { Store } from 'vuex';
+import { showToastNotification } from '..';
 import { filterItems } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import { TheTask } from '../../src/TheTask';
 import { DueState, ExtensionConfig, MessageFromWebview, MessageToWebview } from '../../src/types';
 import App from './App';
 import { SendMessage } from './SendMessage';
-import { getTaskAtLineWebview, flattenDeep, isTaskVisible } from './storeUtils';
+import { flattenDeep, getTaskAtLineWebview, isTaskVisible } from './storeUtils';
 
 Vue.use(Vuex);
 
@@ -48,6 +49,7 @@ export const store = new Store({
 			fontSize: '13px',
 			padding: '0px',
 			customCheckboxEnabled: false,
+			completionNotificationEnabled: false,
 			fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`,
 			indentSize: '1.8em',
 			tagStyles: {},
@@ -233,6 +235,11 @@ export function updateFilterValueMutation(newValue: string) {
 }
 export function toggleDoneMutation(task: TheTask) {
 	store.commit(Mutation.TOGGLE_DONE, task);
+	if (task.done && store.state.config.completionNotificationEnabled) {
+		showToastNotification(`DONE: ${task.title}`, {
+			type: 'success',
+		});
+	}
 	SendMessage.toggleDone(task.lineNumber);
 }
 export function selectTaskMutation(lineNumber: number) {
