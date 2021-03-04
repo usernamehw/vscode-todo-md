@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import throttle from 'lodash/throttle';
 import vscode, { ExtensionContext, window, workspace } from 'vscode';
 import { registerAllCommands } from './commands';
 import { updateEditorDecorationStyle } from './decorations';
@@ -115,7 +116,12 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	updateArchivedTasks();
 	updateIsDevContext();
 
-	Global.changeActiveTextEditorDisposable = window.onDidChangeActiveTextEditor(onChangeActiveTextEditor);
+	/**
+	 * The event is fired twice quickly when closing an editor, also when swtitching to untitled file ???
+	 */
+	Global.changeActiveTextEditorDisposable = window.onDidChangeActiveTextEditor(throttle(onChangeActiveTextEditor, 20, {
+		leading: false,
+	}));
 
 	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
 		if (!e.affectsConfiguration(EXTENSION_NAME)) {
