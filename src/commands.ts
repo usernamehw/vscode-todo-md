@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import sample from 'lodash/sample';
-import vscode, { commands, TextDocument, ThemeIcon, window, WorkspaceEdit } from 'vscode';
+import vscode, { commands, TextDocument, TextEditor, TextEditorEdit, ThemeIcon, window, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTasks, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, revealTask, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
@@ -13,7 +13,7 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { ExtensionState, VscodeContext } from './types';
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultFile } from './utils/extensionUtils';
-import { getTaskAtLineExtension, forEachTask } from './utils/taskUtils';
+import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './utils/vscodeUtils';
 /**
@@ -114,23 +114,10 @@ export function registerAllCommands() {
 		archiveTasks(selectedCompletedTasks, editor.document);
 	});
 	commands.registerTextEditorCommand('todomd.sortByPriority', (editor, edit) => {
-		const selection = editor.selection;
-		if (selection.isEmpty) {
-			vscode.window.showInformationMessage('Select tasks to sort');
-			return;
-		}
-		const lineStart = selection.start.line;
-		const lineEnd = selection.end.line;
-		const tasks: TheTask[] = [];
-		for (let i = lineStart; i <= lineEnd; i++) {
-			const task = getTaskAtLineExtension(i);
-			if (task) {
-				tasks.push(task);
-			}
-		}
-		const sortedTasks = sortTasks(tasks, SortProperty.priority);
-		const result = sortedTasks.map(t => t.rawText).join('\n');
-		edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
+		sortTasksInEditor(editor, edit, 'priority');
+	});
+	commands.registerTextEditorCommand('todomd.sortByDefault', (editor, edit) => {
+		sortTasksInEditor(editor, edit, 'default');
 	});
 	commands.registerTextEditorCommand('todomd.createSimilarTask', async editor => {
 		// Create a task with all the tags, projects and contexts of another task
@@ -434,6 +421,33 @@ async function showTaskInNotification(task: TheTask) {
 	} else {
 		vscode.window.showInformationMessage(formattedTask);
 	}
+}
+/**
+ * Sort tasks in editor. Default sort is by due date. Same due date sorted by priority.
+ */
+function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortProperty: 'default' | 'priority') {
+	const selection = editor.selection;
+	if (selection.isEmpty) {
+		vscode.window.showInformationMessage('Select tasks to sort');
+		return;
+	}
+	const lineStart = selection.start.line;
+	const lineEnd = selection.end.line;
+	const tasks: TheTask[] = [];
+	for (let i = lineStart; i <= lineEnd; i++) {
+		const task = getTaskAtLineExtension(i);
+		if (task) {
+			tasks.push(task);
+		}
+	}
+	let sortedTasks: TheTask[];
+	if (sortProperty === 'priority') {
+		sortedTasks = sortTasks(tasks, SortProperty.priority);
+	} else {
+		sortedTasks = defaultSortTasks(tasks);
+	}
+	const result = sortedTasks.map(t => t.rawText).join('\n');
+	edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 }
 
 

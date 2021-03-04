@@ -947,6 +947,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.sortByDefault",
+				"title": "Sort by due date & priority (default sort)",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.setDueDate",
 				"title": "Set due date",
 				"category": "Todo MD"
