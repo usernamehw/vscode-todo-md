@@ -203,6 +203,7 @@ https://github.com/usernamehw/vscode-todo-md/tree/master/docs/docs.md
 
 ## Please upvote the following upstream vscode issues:
 
+- [#116141 Allow TreeItem's to have optional checkboxes](https://github.com/microsoft/vscode/issues/116141)
 - [#32813 \[theming\] Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
 - [#21611 Add option to always show word based suggestions](https://github.com/microsoft/vscode/issues/21611)
 - [#54285 Contributed webview context menu actions](https://github.com/microsoft/vscode/issues/54285)
