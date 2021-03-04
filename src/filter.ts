@@ -158,7 +158,9 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 	});
 	return filteredTasks;
 }
-
+/**
+ * Determine which type of filter this is and if it has negation or range (<,>).
+ */
 function parseFilter(filterStr: string) {
 	const filters: Filter[] = [];
 	const titleRegex = /(-)?"(.+?)"/;

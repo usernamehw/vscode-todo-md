@@ -11,10 +11,6 @@ interface TaskReturn extends ParseLineReturn {
 	lineType: 'task';
 	value: TheTask;
 }
-interface SpecialCommentReturn extends ParseLineReturn {
-	lineType: 'specialComment';
-	value: string[];
-}
 interface CommentReturn extends ParseLineReturn {
 	lineType: 'comment';
 }
@@ -24,7 +20,7 @@ interface EmptyLineReturn extends ParseLineReturn {
 /**
  * Main parsing function. 1 Line - 1 Task.
  */
-export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineReturn | SpecialCommentReturn | TaskReturn {
+export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineReturn | TaskReturn {
 	let line = textLine.text.trim();
 	if (!line.length) {
 		return {
@@ -36,18 +32,6 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 	if (line.startsWith('# ')) {
 		return {
 			lineType: 'comment',
-		};
-	} else if (line.startsWith('## ')) {
-		const tags = [];
-		const tempLine = line.slice(3).trim().split(' ');
-		for (const word of tempLine) {
-			if (word.startsWith('#')) {
-				tags.push(...word.split('#').filter(tag => tag.length));
-			}
-		}
-		return {
-			lineType: 'specialComment',
-			value: tags,
 		};
 	}
 
@@ -231,12 +215,11 @@ interface ParsedDocument {
  * Some features require knowledge beyond 1 line.
  * Parsing links, for example, is taken from vscode api that runs on a document. This function maps it to each line.
  *
- * Also other things, like nested tasks...
+ * Also things that require information about other lines, like nested task needs to find a parent task.
  */
 export async function parseDocument(document: vscode.TextDocument): Promise<ParsedDocument> {
 	const tasks: TheTask[] = [];
 	const commentLines: Range[] = [];
-	let additionalTags: string[] = [];
 
 	const links = await vscode.commands.executeCommand<vscode.DocumentLink[]>('vscode.executeLinkProvider', document.uri) ?? [];
 
@@ -246,21 +229,9 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 			case 'empty': continue;
 			case 'comment': {
 				commentLines.push(new Range(i, 0, i, 0));
-				additionalTags = [];
-				continue;
-			}
-			case 'specialComment': {
-				commentLines.push(new Range(i, 0, i, 0));
-				additionalTags = parsedLine.value;
 				continue;
 			}
 			default: {
-				// Additional tags ------------
-				if (additionalTags.length !== 0) {
-					parsedLine.value.tags.push(...additionalTags);
-					const additionalTagsString = ` ${additionalTags.map(tag => `#${tag}`).join('')}`;
-					parsedLine.value.rawText += additionalTagsString;
-				}
 				// Links ----------------------
 				const linksOnThisLine = links.filter(link => link.range.start.line === i && link.target !== undefined);
 				if (linksOnThisLine.length !== 0) {

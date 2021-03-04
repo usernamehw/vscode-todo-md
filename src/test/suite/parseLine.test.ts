@@ -12,7 +12,7 @@ const editor = vscode.window.activeTextEditor!;
 function getTaskAt(n: number): TheTask | undefined {
 	const textLine = editor.document.lineAt(n);
 	const task = parseLine(textLine);
-	if (task.lineType === 'empty' || task.lineType === 'comment' || task.lineType === 'specialComment') {
+	if (task.lineType === 'empty' || task.lineType === 'comment') {
 		return undefined;
 	}
 	return task.value;
