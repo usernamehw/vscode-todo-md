@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { dateDiff, dayOfTheWeek, isValidDate } from './time/timeUtils';
+import { dateDiff, dateWithoutTime, dayOfTheWeek, isValidDate } from './time/timeUtils';
 import { DueState } from './types';
 /**
  * Should handle most of the due date functions
@@ -68,8 +68,7 @@ export class DueDate {
 		if (this.overdueStr) {
 			return dayjs().diff(this.overdueStr, 'day');
 		} else {
-			const now = new Date();
-			const nowWithoutTime = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+			const nowWithoutTime = dateWithoutTime(new Date());
 			return dayjs(nowWithoutTime).diff(dayjs(this.raw), 'day');
 		}
 	}
@@ -231,7 +230,7 @@ export class DueDate {
 			const interval = match[1] ? +match[1] : 1;
 			const unit = match[2];
 			if (unit === 'd') {
-				const diffInDays = dayjs(targetDate).diff(dueDateStart, 'day');
+				const diffInDays = dayjs(dateWithoutTime(targetDate)).diff(dueDateStart, 'day');
 				if (diffInDays % interval === 0) {
 					return DueState.due;
 				}

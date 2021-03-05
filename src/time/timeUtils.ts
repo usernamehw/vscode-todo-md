@@ -114,3 +114,9 @@ export function isValidDate(year: number, month: number, date: number): boolean 
 	const jsDate = new Date(year, month, date);
 	return year === jsDate.getFullYear() && month === jsDate.getMonth() && date === jsDate.getDate();
 }
+/**
+ * Get date with Hours/Minuses/Seconds/Milliseconds set to 0.
+ */
+export function dateWithoutTime(date: Date) {
+	return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}

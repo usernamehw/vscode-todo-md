@@ -4,7 +4,7 @@ import { DueDate } from './dueDate';
 import { extensionConfig } from './extension';
 import { parseDocument } from './parse';
 import { Count, TheTask } from './TheTask';
-import { DATE_FORMAT, getDateInISOFormat } from './time/timeUtils';
+import { dateWithoutTime, DATE_FORMAT, getDateInISOFormat } from './time/timeUtils';
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { DueState } from './types';
 import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument } from './utils/extensionUtils';
@@ -340,7 +340,7 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 	const edit = new WorkspaceEdit();
 	const tasks = (await parseDocument(document)).tasks;
 	const now = new Date();
-	const nowWithoutTime = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+	const nowWithoutTime = dateWithoutTime(now);
 
 	for (const task of tasks) {
 		if (task.due?.isRecurring) {
@@ -350,7 +350,7 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 				removeCompletionDateWorkspaceEdit(edit, document.uri, task);
 			} else {
 				if (!task.overdue && !dayjs().isSame(lastVisit, 'day')) {
-					const lastVisitWithoutTime = new Date(lastVisit.getFullYear(), lastVisit.getMonth(), lastVisit.getDate());
+					const lastVisitWithoutTime = dateWithoutTime(lastVisit);
 					const daysSinceLastVisit = dayjs(nowWithoutTime).diff(lastVisitWithoutTime, 'day');
 					for (let i = daysSinceLastVisit; i > 0; i--) {
 						const date = dayjs().subtract(i, 'day');
