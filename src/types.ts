@@ -243,7 +243,7 @@ export interface ExtensionConfig {
 		/**
 		 * When true - show notification after completing a task.
 		 */
-		completionNotificationEnabled: boolean;
+		notificationsEnabled: boolean;
 		/**
 		* Controls font size in the webview.
 		*/

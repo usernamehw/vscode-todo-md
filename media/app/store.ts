@@ -49,7 +49,7 @@ export const store = new Store({
 			fontSize: '13px',
 			padding: '0px',
 			customCheckboxEnabled: false,
-			completionNotificationEnabled: false,
+			notificationsEnabled: false,
 			fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`,
 			indentSize: '1.8em',
 			tagStyles: {},
@@ -235,7 +235,7 @@ export function updateFilterValueMutation(newValue: string) {
 }
 export function toggleDoneMutation(task: TheTask) {
 	store.commit(Mutation.TOGGLE_DONE, task);
-	if (task.done && store.state.config.completionNotificationEnabled) {
+	if (task.done && store.state.config.notificationsEnabled) {
 		showToastNotification(`DONE: ${task.title}`, {
 			type: 'success',
 		});

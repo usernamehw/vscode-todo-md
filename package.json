@@ -82,6 +82,12 @@
 				"todomd.webview.completionNotificationEnabled": {
 					"type": "boolean",
 					"markdownDescription": "When true - show notification after completing a task in a webview.",
+					"default": false,
+					"markdownDeprecationMessage": "Deprecated: Use `#todomd.webview.notificationsEnabled#`"
+				},
+				"todomd.webview.notificationsEnabled": {
+					"type": "boolean",
+					"markdownDescription": "When true - show notification after some actions (like task completion) in a webview.",
 					"default": false
 				},
 				"todomd.webview.fontSize": {

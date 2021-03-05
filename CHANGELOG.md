@@ -1,3 +1,9 @@
+## 2.5.3 `05 Mar 2021`
+
+- 🐛 Again, active document is wrong, but this time after switching to Untitled file...
+- ✨ [editor] Add default sort (by due date)
+- 💥 Rename webview config `webview.completionNotificationEnabled` to `webview.notificationsEnabled`
+
 ## 2.5.2 `27 Feb 2021`
 
 - 🐛 Again, active document is wrong after closing the file
