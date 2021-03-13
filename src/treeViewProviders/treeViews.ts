@@ -3,12 +3,13 @@ import { toggleTaskCollapse } from '../documentActions';
 import { extensionConfig, extensionState, EXTENSION_NAME } from '../extension';
 import { filterItems } from '../filter';
 import { parseDocument } from '../parse';
+import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
 import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
-import { ItemForProvider, SortTags, VscodeContext } from '../types';
+import { DueState, ItemForProvider, SortTags, VscodeContext } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { setContext } from '../utils/vscodeUtils';
 import { updateWebviewView } from '../webview/webviewView';
@@ -17,6 +18,7 @@ export const tagProvider = new TagProvider([]);
 export const projectProvider = new ProjectProvider([]);
 export const contextProvider = new ContextProvider([]);
 export const taskProvider = new TaskProvider([]);
+export const dueProvider = new TaskProvider([]);
 export const archivedProvider = new TaskProvider([]);
 
 const generic1Provider = new TaskProvider([]);
@@ -27,6 +29,7 @@ let tagsView: vscode.TreeView<any>;
 let projectView: vscode.TreeView<any>;
 let contextView: vscode.TreeView<any>;
 export let tasksView: vscode.TreeView<any>;
+let dueView: vscode.TreeView<any>;
 let archivedView: vscode.TreeView<any>;
 let generic1View: vscode.TreeView<any>;
 let generic2View: vscode.TreeView<any>;
@@ -47,6 +50,11 @@ export function createAllTreeViews() {
 
 	contextView = vscode.window.createTreeView(`${EXTENSION_NAME}.contexts`, {
 		treeDataProvider: contextProvider,
+		showCollapseAll: true,
+	});
+
+	dueView = vscode.window.createTreeView(`${EXTENSION_NAME}.due`, {
+		treeDataProvider: dueProvider,
 		showCollapseAll: true,
 	});
 
@@ -136,6 +144,10 @@ export function updateAllTreeViews(): void {
 	setViewTitle(tagsView, 'tags', extensionState.tagsForTreeView.length);
 
 	updateTasksTreeView();
+
+	const dueTasks = extensionState.tasksAsTree.filter(task => task.due?.isDue === DueState.due || task.due?.isDue === DueState.overdue);
+	dueProvider.refresh(defaultSortTasks(dueTasks));
+	setViewTitle(dueView, 'due', dueTasks.length);
 
 	projectProvider.refresh(extensionState.projectsForTreeView);
 	setViewTitle(projectView, 'projects', extensionState.projectsForTreeView.length);
