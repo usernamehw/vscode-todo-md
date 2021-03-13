@@ -89,10 +89,8 @@ describe('Priority', () => {
 	});
 });
 describe('Completed state', () => {
-	it('7 With symbol', () => {
-		const task = getTaskAt(7)!;
-		expect(task.done).to.equal(true);
-	});
+	// it('7 Vacant', () => {
+	// });
 	it('8 With completion date', () => {
 		const task = getTaskAt(8)!;
 		expect(task.done).to.equal(true);
