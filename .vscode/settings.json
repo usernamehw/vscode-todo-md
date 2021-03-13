@@ -18,7 +18,6 @@
 			"stylelint-csstree-validator",
 			"stylelint-declaration-block-no-ignored-properties",
 			"stylelint-declaration-use-variable",
-			"stylelint-images",
 			"stylelint-no-unsupported-browser-features",
 			"stylelint-order",
 			"stylelint-scss"
@@ -159,8 +158,6 @@
 					"ignoreValues": ["transparent", "inherit", "none"]
 				}
 			]], // TODO: add some
-			"images/broken": true,
-			"images/prefer-data-uri": null,//256
 			"plugin/no-unsupported-browser-features": [true, {
 				 "severity": "warning",
 			}],
