@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import vscode, { ThemeColor, ThemeIcon } from 'vscode';
 import { EXTENSION_NAME } from '../extension';
 import { getTaskHover } from '../hover/getTaskHover';
@@ -18,11 +17,13 @@ export class TaskTreeItem extends vscode.TreeItem {
 			this.contextValue = 'link';
 		}
 		if (task.subtasks.length) {
-			this.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+			if (task.isCollapsed) {
+				this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+			} else {
+				this.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+			}
 		}
-		if (task.isCollapsed) {
-			this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-		}
+
 		if (task.done) {
 			this.iconPath = new ThemeIcon('pass', new ThemeColor('todomd.treeViewCompletedTaskIcon'));
 		}
