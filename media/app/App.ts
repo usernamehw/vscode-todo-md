@@ -1,7 +1,6 @@
 import fuzzysort from 'fuzzysort';
 import debounce from 'lodash/debounce';
 import marked from 'marked';
-// import VTooltip from 'v-tooltip';
 import Vue from 'vue';
 // @ts-ignore
 import VueAutosuggest from 'vue-autosuggest';
@@ -36,10 +35,6 @@ marked.Renderer.prototype.link = (href, title = '', text) => {
 
 Vue.use(VueAutosuggest);
 Vue.use(VueNotifications);
-// Vue.use(VTooltip, {
-// 	defaultDelay: { show: 500, hide: 200 },
-// 	autoHide: false,
-// });
 Vue.use(VModal);
 Vue.component('task', TaskComponent);// needs to be global for recursive rendering
 

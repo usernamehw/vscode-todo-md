@@ -65,9 +65,6 @@ export default class Task extends Vue {
 		}
 		return undefined;
 	}
-	// getTooltipText() {
-	// 	return this.model.rawText;
-	// }
 	// ──────────────────────────────────────────────────────────────────────
 	/**
 	 * Task title (either markdown or text)
