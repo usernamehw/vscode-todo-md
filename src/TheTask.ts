@@ -52,6 +52,10 @@ export class TheTask {
 	 */
 	indentLvl: number;
 	/**
+	 * Indent (spaces or tabs) saved as string.
+	 */
+	indent?: string;
+	/**
 	 * Parent task line number (id) task is non-root.
 	 */
 	parentTaskLineNumber: number | undefined;
@@ -76,6 +80,14 @@ export class TheTask {
 	 */
 	due?: DueDate;
 	/**
+	 * Completion date as string (can contain time).
+	 */
+	completionDate?: string;
+	/**
+	 * Creation date as string (can contain time).
+	 */
+	creationDate?: string;
+	/**
 	 * Parsed links in the task
 	 */
 	links: Link[];
@@ -83,10 +95,6 @@ export class TheTask {
 	 * Special tag `{count:1/2}`. Used for tasks that require multiple iterations.
 	 */
 	count?: Count;
-	/**
-	 * Special tag `{t:2020-05-20}`. Used for hiding item from Tree View up to a certain date.
-	 */
-	threshold?: string;
 	/**
 	 * Priority `(A)`
 	 */
@@ -153,12 +161,14 @@ export class TheTask {
 		this.done = init.done ?? false;
 		this.tags = init.tags ?? [];
 		this.projects = init.projects ?? [];
-		this.priority = init.priority ?? 'G';
+		this.priority = init.priority ?? TheTask.defaultTaskPriority;
+		this.completionDate = init.completionDate;
+		this.creationDate = init.creationDate;
+		this.indent = init.indent;
 		this.links = init.links ?? [];
 		this.due = init.due;
 		this.dueRange = init.dueRange;
 		this.count = init.count;
-		this.threshold = init.threshold;
 		this.isHidden = init.isHidden;
 		this.isCollapsed = init.isCollapsed;
 		/**
@@ -222,4 +232,5 @@ export class TheTask {
 		}
 		return result;
 	}
+	static defaultTaskPriority: Priority = 'G';
 }

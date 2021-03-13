@@ -127,10 +127,8 @@ describe('Special tags {}', () => {
 		expect(task.count?.current).to.equal(1);
 		expect(task.count?.needed).to.equal(2);
 	});
-	it('11 Threshold', () => {
-		const task = getTaskAt(11)!;
-		expect(task.threshold).to.equal('2020-05-02');
-	});
+	// it('11 Vacant', () => {
+	// });
 	it('12 Hidden', () => {
 		const task = getTaskAt(12)!;
 		expect(task.isHidden === true).to.be.ok;

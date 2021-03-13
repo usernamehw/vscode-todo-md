@@ -2,6 +2,7 @@ import vscode, { Range } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionConfig, extensionState } from './extension';
 import { Count, Priority, TheTask } from './TheTask';
+import { taskToString } from './utils/extensionUtils';
 
 interface ParseLineReturn {
 	lineType: string;
@@ -35,11 +36,15 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 		};
 	}
 
+	let indent: string | undefined;
+	if (textLine.firstNonWhitespaceCharacterIndex !== 0) {
+		indent = textLine.text.slice(0, textLine.firstNonWhitespaceCharacterIndex);
+	}
 	const indentLvl = Math.floor(textLine.firstNonWhitespaceCharacterIndex / extensionState.activeDocumentTabSize);
 
 	/** Offset of the current word (Used to calculate ranges for decorations) */
 	let index = textLine.firstNonWhitespaceCharacterIndex;
-
+	// TODO: remove done symbol parsing ` x`
 	let done = line.startsWith(extensionConfig.doneSymbol);
 	if (done) {
 		line = line.replace(extensionConfig.doneSymbol, '');
@@ -61,7 +66,8 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 	const tagsDelimiterRanges: Range[] = [];
 	const tagsRange: Range[] = [];
 	let count: Count | undefined;
-	let threshold: string | undefined;
+	let completionDate: string | undefined;
+	let creationDate: string | undefined;
 	let overdue: string | undefined;
 	let isHidden: boolean | undefined;
 	let isCollapsed: boolean | undefined;
@@ -78,28 +84,32 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 					text.push(word);
 					break;
 				}
-				const [specialTag, value = ''] = word.slice(1, -1).split(':');
+				const firstColonIndex = word.indexOf(':');
+				const specialTag = word.slice(1, firstColonIndex);
+				const specialTagValue = word.slice(firstColonIndex + 1, -1);
 				const range = new Range(lineNumber, index, lineNumber, index + word.length);
 				if (specialTag === 'due') {
-					if (value.length) {
-						due = new DueDate(value);
+					if (specialTagValue.length) {
+						due = new DueDate(specialTagValue);
 						dueRange = range;
 					}
 				} else if (specialTag === 'overdue') {
-					overdue = value;
+					overdue = specialTagValue;
 					overdueRange = range;
 				} else if (specialTag === 'cr') {
+					creationDate = specialTagValue;
 					specialTagRanges.push(range);
 				} else if (specialTag === 'cm') {
 					// Presence of completion date indicates that the task is done
 					done = true;
+					completionDate = specialTagValue;
 					completionDateRange = range;
 					specialTagRanges.push(range);
 				} else if (specialTag === 'count') {
-					if (value === undefined) {
+					if (specialTagValue === undefined) {
 						break;
 					}
-					const [current, needed] = value.split('/');
+					const [current, needed] = specialTagValue.split('/');
 					const currentValue = parseInt(current, 10);
 					const neededValue = parseInt(needed, 10);
 					if (!Number.isFinite(currentValue) || !Number.isFinite(neededValue)) {
@@ -114,9 +124,6 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 						current: currentValue,
 						needed: neededValue,
 					};
-				} else if (specialTag === 't') {
-					threshold = value;
-					specialTagRanges.push(range);
 				} else if (specialTag === 'h') {
 					isHidden = true;
 					specialTagRanges.push(range);
@@ -177,6 +184,7 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 	return {
 		lineType: 'task',
 		value: new TheTask({
+			indent,
 			tags,
 			rawText,
 			tagsDelimiterRanges,
@@ -185,6 +193,8 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 			projectRanges,
 			done,
 			priority,
+			completionDate,
+			creationDate,
 			priorityRange,
 			specialTagRanges,
 			due,
@@ -193,7 +203,6 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 			collapseRange,
 			completionDateRange,
 			count,
-			threshold,
 			overdue,
 			isHidden,
 			isCollapsed,

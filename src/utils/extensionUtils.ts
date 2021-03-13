@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { TextDocument, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { extensionConfig, extensionState, EXTENSION_NAME } from '../extension';
+import { TheTask } from '../TheTask';
 import { updateSetting } from './vscodeUtils';
 
 /**
@@ -119,4 +120,58 @@ export async function checkArchiveFileAndNotify(): Promise<boolean> {
 			return true;
 		}
 	}
+}
+/**
+ * Convert extension object to use as text. It can be different from original string since the order is fixed.
+ * TODO: write tests.
+ */
+export function taskToString(task: TheTask) {
+	const result = [];
+	if (task.priority && task.priority !== TheTask.defaultTaskPriority) {
+		result.push(`(${task.priority})`);
+	}
+	if (task.title.length) {
+		result.push(task.title);
+	}
+	if (task.tags.length) {
+		result.push(task.tags.map(tag => `#${tag}`).join(''));
+	}
+	if (task.projects.length) {
+		result.push(task.projects.map(project => `+${project}`).join(''));
+	}
+	if (task.contexts.length) {
+		result.push(task.contexts.map(context => `@${context}`).join(''));
+	}
+	if (task.due) {
+		result.push(`{${SpecialTagName.due}:${task.due.raw}}`);
+	}
+	if (task.overdue) {
+		result.push(`{${SpecialTagName.overdue}:${task.overdue}}`);
+	}
+	if (task.creationDate) {
+		result.push(`{${SpecialTagName.creationDate}:${task.creationDate}}`);
+	}
+	if (task.completionDate) {
+		result.push(`{${SpecialTagName.completionDate}:${task.completionDate}}`);
+	}
+	if (task.count) {
+		result.push(`{${SpecialTagName.count}:${task.count.current}/${task.count.needed}}`);
+	}
+	if (task.isCollapsed) {
+		result.push(`{${SpecialTagName.collapsed}}`);
+	}
+	if (task.isHidden) {
+		result.push(`{${SpecialTagName.hidden}}`);
+	}
+	return (task.indent ? task.indent : '') + result.join(' ');
+}
+
+export const enum SpecialTagName {
+	due = 'due',
+	overdue = 'overdue',
+	completionDate = 'cm',
+	creationDate = 'cr',
+	hidden = 'h',
+	collapsed = 'c',
+	count = 'count',
 }

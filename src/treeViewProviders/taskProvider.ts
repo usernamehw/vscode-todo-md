@@ -72,9 +72,7 @@ export function tasksToTreeItems(tasks: TheTask[]) {
 		if (task.isHidden) {
 			continue;
 		}
-		if (task.threshold && dayjs().isAfter(new Date(task.threshold), 'date')) {
-			continue;
-		}
+
 		result.push(new TaskTreeItem(
 			TheTask.formatTask(task, {
 				ignoreDueDate: true,

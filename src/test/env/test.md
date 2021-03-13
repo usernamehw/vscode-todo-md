@@ -9,7 +9,7 @@ x 7 Completed task
 8 Completed task with completion date {cm:2020-05-02}
 9 No project No context No special no done x 5+5 email@something.mail {somestuff:value} notag#some + @ # {}
 10 Count {count:1/2} text
-11 Threshold {t:2020-05-02}
+11 
 12 Hidden {h}
 13 Links https://www.google.com text https://github.com/
 14 Overdue {due:ed} {overdue:2020-05-10}
