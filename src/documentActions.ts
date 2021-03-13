@@ -229,7 +229,6 @@ async function removeOverdueFromLine(document: vscode.TextDocument, task: TheTas
  * Toggle task completion. Handle what to insert/delete.
  */
 export async function toggleDoneAtLine(document: TextDocument, lineNumber: number) {
-	const { firstNonWhitespaceCharacterIndex } = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);
 	if (!task) {
 		return;
@@ -240,19 +239,9 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	const line = document.lineAt(lineNumber);
 	const edit = new WorkspaceEdit();
 	if (task.done) {
-		if (!extensionConfig.addCompletionDate) {
-			if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
-				edit.delete(document.uri, new vscode.Range(lineNumber, firstNonWhitespaceCharacterIndex, lineNumber, firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
-			}
-		} else {
-			removeCompletionDateWorkspaceEdit(edit, document.uri, task);
-		}
+		removeCompletionDateWorkspaceEdit(edit, document.uri, task);
 	} else {
-		if (extensionConfig.addCompletionDate) {
-			insertCompletionDateWorkspaceEdit(edit, document.uri, line);
-		} else {
-			edit.insert(document.uri, new vscode.Position(lineNumber, firstNonWhitespaceCharacterIndex), extensionConfig.doneSymbol);
-		}
+		insertCompletionDateWorkspaceEdit(edit, document.uri, line);
 	}
 	await applyEdit(edit, document);
 
@@ -346,7 +335,6 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 		if (task.due?.isRecurring) {
 			const line = document.lineAt(task.lineNumber);
 			if (task.done) {
-				removeDoneSymbolWorkspaceEdit(edit, document.uri, line);
 				removeCompletionDateWorkspaceEdit(edit, document.uri, task);
 			} else {
 				if (!task.overdue && !dayjs().isSame(lastVisit, 'day')) {
@@ -407,11 +395,6 @@ export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: 
 }
 export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, line: TextLine) {
 	edit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), extensionConfig.completionDateIncludeTime)}}`);
-}
-export function removeDoneSymbolWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, line: vscode.TextLine) {
-	if (line.text.trim().startsWith(extensionConfig.doneSymbol)) {
-		edit.delete(uri, new vscode.Range(line.lineNumber, line.firstNonWhitespaceCharacterIndex, line.lineNumber, line.firstNonWhitespaceCharacterIndex + extensionConfig.doneSymbol.length));
-	}
 }
 export function removeCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: vscode.Uri, task: TheTask) {
 	if (task.completionDateRange) {

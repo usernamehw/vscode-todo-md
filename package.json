@@ -177,11 +177,6 @@
 					"markdownDescription": "Choose files that extension will operate on. By default activated on 2 files (todo.md & todo.archive.md). This format is called `Glob`. Examples:\n\nActivate on any (.txt) file - `**/*.txt`.\n\nActivate only on single file (todo.txt) - `**/todo.txt`\n\nActivate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`",
 					"default": "**/{todo,todo.archive}.md"
 				},
-				"todomd.doneSymbol": {
-					"type": "string",
-					"default": "x ",
-					"markdownDescription": "Controls string sequence that indicates that the task is complete (at the start of the line) when `#todomd.addCompletionDate#` is `false`."
-				},
 				"todomd.getNextNumberOfTasks": {
 					"type": "number",
 					"default": 5,
@@ -225,11 +220,6 @@
 				"todomd.statusBarCounterEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Controls visibility of status bar task progress item `1/3 33%`",
-					"default": true
-				},
-				"todomd.addCompletionDate": {
-					"type": "boolean",
-					"markdownDescription": "When completing a task add completion date to it: `{cm:2020-04-30}` instead of `#todomd.doneSymbol#`",
 					"default": true
 				},
 				"todomd.addCreationDate": {

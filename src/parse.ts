@@ -22,7 +22,7 @@ interface EmptyLineReturn extends ParseLineReturn {
  * Main parsing function. 1 Line - 1 Task.
  */
 export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineReturn | TaskReturn {
-	let line = textLine.text.trim();
+	const line = textLine.text.trim();
 	if (!line.length) {
 		return {
 			lineType: 'empty',
@@ -44,15 +44,9 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 
 	/** Offset of the current word (Used to calculate ranges for decorations) */
 	let index = textLine.firstNonWhitespaceCharacterIndex;
-	// TODO: remove done symbol parsing ` x`
-	let done = line.startsWith(extensionConfig.doneSymbol);
-	if (done) {
-		line = line.replace(extensionConfig.doneSymbol, '');
-		index += extensionConfig.doneSymbol.length;
-	}
-
 	const words = line.split(' ');
 
+	let done = false;
 	const rawText = textLine.text;
 	const contexts = [];
 	const contextRanges: Range[] = [];

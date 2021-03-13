@@ -129,10 +129,6 @@ export interface ExtensionConfig {
 	 */
 	addCreationDate: boolean;
 	/**
-	 * When completing a task add completion date to it: `{cm:2020-04-30}` instead of `#todomd.doneSymbol#`
-	 */
-	addCompletionDate: boolean;
-	/**
 	 * When completing a task add date and time: `{cm:2020-04-30T09:11:17}`
 	 */
 	completionDateIncludeTime: boolean;
@@ -156,10 +152,6 @@ export interface ExtensionConfig {
 	 * Controls tags Tree View sorting.
 	 */
 	sortTagsView: SortTags;
-	/**
-	 * Controls string sequence that indicates that the task is complete (at the start of the line) when `#todomd.addCompletionDate#` is `false`.
-	 */
-	doneSymbol: string;
 	/**
 	 * Choose files that extension will operate on (Glob).
 	 */
