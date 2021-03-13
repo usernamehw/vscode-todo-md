@@ -38,6 +38,7 @@
 		"onCommand:todomd.getNextTask",
 		"onCommand:todomd.getFewNextTasks",
 		"onView:todomd.tags",
+		"onView:todomd.due",
 		"onView:todomd.tasks",
 		"onView:todomd.projects",
 		"onView:todomd.contexts",
