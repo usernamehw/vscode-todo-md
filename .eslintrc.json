@@ -208,7 +208,7 @@
 				"no-alert": 0,
 				"curly": 1,
 				"no-var": 1,
-				"no-undef": 1,
+				"no-undef": 0,
 				"no-cond-assign": 1,
 				"no-constant-condition": 1,
 				"no-dupe-keys": 1,

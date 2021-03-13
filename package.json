@@ -1496,6 +1496,7 @@
 		"fuzzysort": "^1.1.4",
 		"lodash": "^4.17.21",
 		"marked": "^2.0.0",
+		"v-tooltip": "^2.1.2",
 		"vue": "^2.6.12",
 		"vue-autosuggest": "^2.2.0",
 		"vue-context": "^6.0.0",
