@@ -32,7 +32,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onStartupFinished",
+		"*",
 		"onCommand:todomd.focusTasksWebviewAndInput",
 		"onCommand:todomd.completeTask",
 		"onCommand:todomd.getNextTask",
