@@ -1,9 +1,16 @@
+import { TheTask } from '../../src/TheTask';
 import { vscodeApi } from './store';
 
 /**
  * Send message from Webview to Extension
  */
 export class SendMessage {
+	static editTask(task: TheTask) {
+		vscodeApi.postMessage({
+			type: 'editTask',
+			value: task,
+		});
+	}
 	static toggleDone(lineNumber: number) {
 		vscodeApi.postMessage({
 			type: 'toggleDone',

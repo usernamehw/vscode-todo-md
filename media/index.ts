@@ -1,6 +1,7 @@
+import { store } from './app/store';
+// If store is not on top - webpak build breaks 💥💥💥
 import Vue from 'vue';
 import App from './app/App.vue';
-import { store } from './app/store';
 
 Vue.config.productionTip = false;
 Vue.config.devtools = false;

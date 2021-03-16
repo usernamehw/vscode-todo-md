@@ -18,6 +18,7 @@
             <div v-html="fuzzyHighlight(suggestion.item)"></div>
         </div>
     </vue-autosuggest>
+    <!-- :class="{'task-details-visible': taskDetailsVisible}" -->
     <div v-if="filteredSortedTasks && filteredSortedTasks.length"
          class="task-list"
          @scroll.passive="onTaskListScroll">
@@ -30,6 +31,8 @@
         <div class="welcome"><a class="btn btn-welcome"
                                 href="command:todomd.specifyDefaultFile">Specify Default File</a></div>
     </div>
+
+    <!-- <TaskDetails v-if="taskDetailsVisible" /> -->
 
     <notifications position="bottom right" />
 

@@ -23,10 +23,13 @@ $contextBackground: #f7e0ff;
 $contextForeground: darken($contextBackground, 70%);
 $contextBorder: darken($contextBackground, 17%);
 $hoverDarkenPercent: 8%;
+$taskDetailsHeight: 10rem;
 
 body {
+	--border-low-contrast: #cecece6c;
+	--border-high-contrast: #bebebe;
+
 	--list-item-left-padding: 3px;
-	--border-light: #cecece6c;
 	--border-darker: #cecece;
 	--foreground: var(--vscode-foreground);
 	--done-task-bg: #e9f0d6;
@@ -69,6 +72,7 @@ body {
 	--z-index-checkbox-1: 10;
 	--z-index-checkbox-2: 15;
 	--z-index-filter-input: 999;
+	--z-index-task-details: 1000;// TODO: variables to SASS variables to have autocomplete
 	// ──────────────────────────────────────────────────────────────────────
 	backface-visibility: hidden;
 	font-family: Arial, Helvetica, sans-serif;
@@ -84,7 +88,7 @@ body {
 }
 
 body.vscode-dark {
-	--border-light: #ffffff1c;
+	--border-low-contrast: #ffffff1c;
 	--border-darker: #6d6d6d;
 	--tag-bg: #{darken($tagBackground, 15%)};
 	--project-bg: #{darken($projectBackground, 20%)};
@@ -227,11 +231,15 @@ button,
 	height: calc(100vh - 4px - 4px - 24px);
 	line-height: var(--line-height);
 	overflow-y: auto;
+
+	&.task-details-visible {
+		height: calc(100vh - 4px - 4px - 24px - #{$taskDetailsHeight});
+	}
 }
 
 .list-item {
 	border-left: var(--priority-left-padding) solid transparent;
-	box-shadow: 0 1px 0 0 var(--border-light);
+	box-shadow: 0 1px 0 0 var(--border-low-contrast);
 	padding: var(--padding) var(--list-item-left-padding);
 	word-wrap: break-word;
 
@@ -471,11 +479,11 @@ button,
 }
 
 .decrement-count {
-	border-right: 1px solid var(--border-light);
+	border-right: 1px solid var(--border-low-contrast);
 }
 
 .increment-count {
-	border-left: 1px solid var(--border-light);
+	border-left: 1px solid var(--border-low-contrast);
 }
 
 .hidden {
@@ -517,5 +525,35 @@ button,
 		text-align: center;
 		text-decoration: none;
 		text-rendering: auto;
+	}
+}
+
+.task-details {
+	background-color: var(--vscode-sideBar-background);
+	border-top: 1px solid var(--border-high-contrast);
+	box-shadow: inset 0 0 100vw $taskDetailsHeight rgba(0, 0, 0, 0.05);
+	height: $taskDetailsHeight;
+	overflow-x: hidden;
+	padding: 0.3em 0.5em;
+	z-index: var(--z-index-task-details);
+
+	.task-title {
+		background-color: var(--vscode-input-background);
+		border: 1px solid var(--border-high-contrast);
+		font-family: var(--vscode-editor-font-family);
+		font-size: 13px;
+		line-height: 1.4;
+		overflow-y: hidden;
+		padding: 3px;
+		width: 100%;
+
+		&::selection {
+			background-color: var(--vscode-selection-background);
+		}
+
+		&:focus {
+			border: 1px solid var(--vscode-focusBorder) !important;
+			outline: none !important;
+		}
 	}
 }

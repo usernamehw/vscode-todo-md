@@ -229,6 +229,10 @@ export interface ExtensionConfig {
 		 */
 		completedStrikeThrough: boolean;
 		/**
+		 * When true - show box on the bottom of the webview with selected task details.
+		 */
+		showTaskDetails: boolean;
+		/**
 		 * Controls whether priority is shown in the webview.
 		 */
 		showPriority: boolean;
@@ -342,7 +346,7 @@ interface WebviewMessageDeleteTask extends WebviewMessageBase {
 	value: number;
 }
 interface WebviewMessageUpdateTitle extends WebviewMessageBase {
-	type: 'updateTitle';
+	type: 'updateTitle';// TODO: rename updateWebviewTitle
 	value: number;
 }
 interface WebviewMessageOpenLinkFileProtocol extends WebviewMessageBase {
@@ -356,10 +360,14 @@ interface WebviewMessageEditTaskRawText extends WebviewMessageBase {
 		newRawText: string;
 	};
 }
+interface WebviewMessageEditTask extends WebviewMessageBase {
+	type: 'editTask';
+	value: TheTask;
+}
 /**
  * Messages that can only be sent from webview to extension.
  */
-export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTaskRawText | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
+export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
 /**
  * Messages that can only be sent from extension to webview.
  */

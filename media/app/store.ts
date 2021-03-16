@@ -50,6 +50,7 @@ export const store = new Store({
 			padding: '0px',
 			customCheckboxEnabled: false,
 			notificationsEnabled: false,
+			showTaskDetails: false,
 			fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`,
 			indentSize: '1.8em',
 			tagStyles: {},

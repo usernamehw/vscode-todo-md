@@ -86,6 +86,11 @@
 					"default": false,
 					"markdownDeprecationMessage": "Deprecated: Use `#todomd.webview.notificationsEnabled#`"
 				},
+				"todomd.webview.showTaskDetails": {
+					"type": "boolean",
+					"markdownDescription": "⚠ DON'T USE IT. When true - show box on the bottom of the webview that shows selected task details.",
+					"default": false
+				},
 				"todomd.webview.notificationsEnabled": {
 					"type": "boolean",
 					"markdownDescription": "When true - show notification after some actions (like task completion) in a webview.",

@@ -1,8 +1,7 @@
 import vscode, { Range } from 'vscode';
 import { DueDate } from './dueDate';
-import { extensionConfig, extensionState } from './extension';
+import { extensionState } from './extension';
 import { Count, Priority, TheTask } from './TheTask';
-import { taskToString } from './utils/extensionUtils';
 
 interface ParseLineReturn {
 	lineType: string;

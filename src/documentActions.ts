@@ -7,13 +7,20 @@ import { Count, TheTask } from './TheTask';
 import { dateWithoutTime, DATE_FORMAT, getDateInISOFormat } from './time/timeUtils';
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { DueState } from './types';
-import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument } from './utils/extensionUtils';
+import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, taskToString } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 
 // This file contains 2 types of functions
 // 1) Performs an action on the document and returns a Promise
 // 2) Has a `WorkspaceEdit` suffix that accepts an edit and returns it without applying
 
+export async function editTask(document: vscode.TextDocument, task: TheTask) {
+	const edit = new WorkspaceEdit();
+	const newTaskAsText = taskToString(task);
+	const line = document.lineAt(task.lineNumber);
+	edit.replace(document.uri, line.range, newTaskAsText);
+	return applyEdit(edit, document);
+}
 /**
  * Add `{h}` special tag
  */
