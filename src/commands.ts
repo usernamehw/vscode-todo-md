@@ -15,7 +15,7 @@ import { ExtensionState, VscodeContext } from './types';
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultFile } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
-import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext } from './utils/vscodeUtils';
+import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext, updateSetting } from './utils/vscodeUtils';
 /**
  * Register all commands. Names should match **"commands"** in `package.json`
  */
@@ -393,6 +393,9 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
 		openSettingGuiAt('todomd.webview');
+	});
+	commands.registerCommand('todomd.webview.toggleShowRecurringUpcoming', () => {
+		updateSetting('todomd.webview.showRecurringUpcoming', !extensionConfig.webview.showRecurringUpcoming);
 	});
 	commands.registerTextEditorCommand('todomd.toggleComment', editor => {
 		const edit = new WorkspaceEdit();

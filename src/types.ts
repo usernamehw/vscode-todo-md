@@ -219,7 +219,7 @@ export interface ExtensionConfig {
 		/**
 		 * Whether recurring not due tasks are shown or not in the webview.
 		 */
-		showRecurringNotDue: boolean;
+		showRecurringUpcoming: boolean;
 		/**
 		 * Whether recurring completed tasks are shown or not in the webview.
 		 */

@@ -43,7 +43,7 @@ export const store = new Store({
 			autoShowSuggest: true,
 			showCompleted: true,
 			showRecurringCompleted: true,
-			showRecurringNotDue: true,
+			showRecurringUpcoming: true,
 			completedStrikeThrough: false,
 			showPriority: true,
 			fontSize: '13px',
@@ -73,7 +73,7 @@ export const store = new Store({
 					}
 				});
 			}
-			if (!state.config.showRecurringNotDue) {
+			if (!state.config.showRecurringUpcoming) {
 				filteredTasks = filteredTasks.filter(task => {
 					if (task.due?.isRecurring && task.due.isDue === DueState.notDue) {
 						return false;
