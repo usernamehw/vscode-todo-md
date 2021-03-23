@@ -66,6 +66,7 @@ body {
 
 	--due-invalid-fg: #7284eb;
 	--due-invalid-bg: #7284eb12;
+	--due-invalid-border: #7284eb;
 
 	--inline-code-bg: rgba(27, 31, 35, 0.08);
 
@@ -358,7 +359,10 @@ button,
 
 		&.invalid {
 			background-color: var(--due-invalid-bg);
+			border: 1px solid var(--due-invalid-border);
 			color: var(--due-invalid-fg);
+			padding-bottom: 0.15em;
+			padding-top: 0.15em;
 		}
 
 		.overdue-count,

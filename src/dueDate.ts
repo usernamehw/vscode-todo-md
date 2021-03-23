@@ -22,6 +22,10 @@ export class DueDate {
 	 */
 	closestDueDateInTheFuture: string;
 	/**
+	 * Days until this task is due.
+	 */
+	daysUntilDue = 0;
+	/**
 	 * Overdue date when the task was first time missed to complete.
 	 */
 	overdueStr?: string;
@@ -38,7 +42,9 @@ export class DueDate {
 		this.isDue = result.isDue;
 		this.overdueStr = options?.overdueStr;
 		if (result.isDue === DueState.notDue) {
-			this.closestDueDateInTheFuture = this.calcClosestDueDateInTheFuture();
+			const closest = this.calcClosestDueDateInTheFuture();
+			this.closestDueDateInTheFuture = closest.closestString;
+			this.daysUntilDue = closest.daysUntil;
 		} else if (result.isDue === DueState.due || result.isDue === DueState.overdue) {
 			this.closestDueDateInTheFuture = `${dayOfTheWeek(dayjs())} [today]`;
 		} else {
@@ -56,10 +62,16 @@ export class DueDate {
 			const date = dayjs().add(i, 'day');
 			const { isDue } = DueDate.parseDue(this.raw, date.toDate());
 			if (isDue) {
-				return `${dayOfTheWeek(date)} [${dateDiff(date)}]`;
+				return {
+					closestString: `${dayOfTheWeek(date)} [${dateDiff(date)}]`,
+					daysUntil: i,
+				};
 			}
 		}
-		return 'More than 100 days';
+		return {
+			closestString: 'More than 100 days',
+			daysUntil: 100,
+		};
 	}
 	/**
 	 * Get diff (in days) between today and overdue date

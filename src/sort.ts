@@ -12,10 +12,13 @@ const enum SortDirection {
  */
 export const enum SortProperty {
 	priority,
+	notDue,
 	overdue,
 }
 /**
- * Does not modify the original array
+ * Does not modify the original array.
+ *
+ * TODO: add secondary sorting property to this function?
  */
 export function sortTasks(tasks: TheTask[], property: SortProperty, direction = SortDirection.DESC): TheTask[] {
 	const tasksCopy = tasks.slice();
@@ -39,10 +42,22 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 				return overdueA < overdueB ? 1 : -1;
 			}
 		});
+	} else if (property === SortProperty.notDue) {
+		sortedTasks = tasksCopy.sort((a, b) => {
+			const untilA = a.due?.daysUntilDue || 0;
+			const untilB = b.due?.daysUntilDue || 0;
+			if (untilA === untilB) {
+				return 0;
+			} else {
+				return untilA > untilB ? 1 : -1;
+			}
+		});
 	}
+
 	if (direction === SortDirection.ASC) {
 		return sortedTasks.reverse();
 	}
+
 	return sortedTasks;
 }
 
@@ -55,9 +70,14 @@ export function defaultSortTasks(tasks: TheTask[]) {
 	const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.overdue);
 	const dueTasks = tasks.filter(t => t.due?.isDue === DueState.due);
 	const invalidDue = tasks.filter(t => t.due?.isDue === DueState.invalid);
-	const notDueTasks = tasks.filter(t => !t.due?.isDue || !t.due);
-	const sortedOverdueTasks = sortTasks(sortTasks(overdueTasks, SortProperty.priority), SortProperty.overdue);
-	const sortedDueTasks = sortTasks(dueTasks, SortProperty.priority);
-	const sortedNotDueTasks = sortTasks(notDueTasks, SortProperty.priority);
-	return [...sortedOverdueTasks, ...sortedDueTasks, ...invalidDue, ...sortedNotDueTasks];
+	const dueSpecifiedButNotDue = tasks.filter(t => t.due?.isDue === DueState.notDue);
+	const dueNotSpecified = tasks.filter(t => !t.due);
+
+	return [
+		...invalidDue,
+		...sortTasks(overdueTasks, SortProperty.overdue),
+		...sortTasks(dueTasks, SortProperty.priority),
+		...sortTasks(dueSpecifiedButNotDue, SortProperty.notDue),
+		...sortTasks(dueNotSpecified, SortProperty.priority),
+	];
 }
