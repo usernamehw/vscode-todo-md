@@ -257,6 +257,7 @@ button,
 	border-left: var(--priority-left-padding) solid transparent;
 	box-shadow: 0 1px 0 0 var(--border-low-contrast);
 	padding: var(--padding) var(--list-item-left-padding);
+	position: relative;
 	word-wrap: break-word;
 
 	&:hover {
@@ -324,13 +325,14 @@ button,
 	}
 
 	.twistie {
+		--twistie-size: calc(var(--font-size) + 4px);
 		cursor: pointer;
 		float: left;
-		height: calc(var(--font-size) + 4px);
+		height: var(--twistie-size);
 		margin-left: -2px;
 		position: relative;
-		top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height)) - 16px) / 2);
-		width: calc(var(--font-size) + 4px);
+		top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height)) - var(--twistie-size)) / 2);
+		width: var(--twistie-size);
 
 		&::before {
 			border-radius: 3px;
@@ -401,6 +403,7 @@ button,
 		background-color: var(--nested-count-bg);
 		border: 1px solid #dfd98799;
 		color: var(--nested-count-fg);
+		cursor: default;
 		display: inline-flex;
 		font-family: var(--vscode-editor-font-family);
 		justify-content: center;
@@ -528,6 +531,7 @@ button,
 	position: relative;
 	right: 0;
 	top: 2px;
+	// top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height)) - var(--checkbox-size)) / 2);
 	width: var(--checkbox-size);
 	z-index: var(--z-index-checkbox-2);
 

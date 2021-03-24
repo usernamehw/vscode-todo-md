@@ -108,7 +108,7 @@
 				},
 				"todomd.webview.lineHeight": {
 					"type": "number",
-					"markdownDescription": "Controls line height in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/line-height)",
+					"markdownDescription": "Controls line height in the webview.",
 					"default": 1.4,
 					"minimum": 1,
 					"maximum": 3
