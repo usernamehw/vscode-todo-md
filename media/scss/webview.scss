@@ -28,30 +28,38 @@ $taskDetailsHeight: 10rem;
 body {
 	--border-low-contrast: #cecece6c;
 	--border-high-contrast: #bebebe;
+	--border-darker: #cecece;
 
 	--list-item-left-padding: 3px;
-	--border-darker: #cecece;
+
 	--foreground: var(--vscode-foreground);
+
 	--done-task-bg: #e9f0d6;
+	--selected-task-bg: #e2e2e2;
+
+	--twistie-hover-bg: rgba(0, 0, 0, 0.07);
+	--checkbox-hover-bg: rgba(0, 0, 0, 0.07);
+
 	--tag-fg: #{$tagForeground};
 	--tag-bg: #{$tagBackground};
 	--tag-border: #{$tagBorder};
+
 	--project-bg: #{$projectBackground};
 	--project-fg: #{$projectForeground};
 	--project-border: #{$projectBorder};
 	--project-hover-bg: #{darken($projectBackground, $hoverDarkenPercent)};
+
 	--context-bg: #{$contextBackground};
 	--context-fg: #{$contextForeground};
 	--context-hover-bg: #{darken($contextBackground, 5%)};
 	--context-border: #{$contextBorder};
+
 	--count-bg: #0000000c;
 	--count-button-bg: #00000014;
 	--count-button-hover-bg: #0000002b;
-	--selected-task-bg: #e2e2e2;
 
 	--nested-count-bg: #f3f1d499;
 
-	--twistie-hover-bg: rgba(0, 0, 0, 0.1);
 
 	--due-fg: #5faedb;
 	--due-bg: #5faedb12;
@@ -91,12 +99,18 @@ body {
 body.vscode-dark {
 	--border-low-contrast: #ffffff1c;
 	--border-darker: #6d6d6d;
+
+	--done-task-bg: #99ff8c1a;
+
 	--tag-bg: #{darken($tagBackground, 15%)};
+
 	--project-bg: #{darken($projectBackground, 20%)};
+
 	--context-bg: #{darken($contextBackground, 10%)};
+
 	--count-bg: #ffffff1a;
 	--count-button-bg: #ffffff1a;
-	--done-task-bg: #99ff8c1a;
+
 	--selected-task-bg: #92929250;
 
 	--nested-count-bg: #ebe7b5;
@@ -112,6 +126,7 @@ body.vscode-dark {
 	--not-due-border: #bebebe29;
 
 	--twistie-hover-bg: rgba(255, 255, 255, 0.1);
+	--checkbox-hover-bg: rgba(255, 255, 255, 0.1);
 	--inline-code-bg: rgba(240, 246, 252, 0.15);
 
 	.tag,
@@ -529,6 +544,10 @@ button,
 		text-align: center;
 		text-decoration: none;
 		text-rendering: auto;
+	}
+
+	&:hover {
+		box-shadow: inset 0 0 var(--checkbox-size) var(--checkbox-size) var(--checkbox-hover-bg);
 	}
 }
 
