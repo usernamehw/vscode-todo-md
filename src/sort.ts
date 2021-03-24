@@ -17,8 +17,6 @@ export const enum SortProperty {
 }
 /**
  * Does not modify the original array.
- *
- * TODO: add secondary sorting property to this function?
  */
 export function sortTasks(tasks: TheTask[], property: SortProperty, direction = SortDirection.DESC): TheTask[] {
 	const tasksCopy = tasks.slice();
@@ -62,11 +60,13 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 }
 
 /**
- * Sort tasks by groups in this order: Overdue => Due => Not due;
+ * Sort tasks by groups in this order: Invalid => Overdue => Due => Has due, but not due => No due specified;
  *
  * With secondary sort by priority.
  */
 export function defaultSortTasks(tasks: TheTask[]) {
+	tasks = sortTasks(tasks, SortProperty.priority);
+
 	const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.overdue);
 	const dueTasks = tasks.filter(t => t.due?.isDue === DueState.due);
 	const invalidDue = tasks.filter(t => t.due?.isDue === DueState.invalid);
@@ -76,8 +76,8 @@ export function defaultSortTasks(tasks: TheTask[]) {
 	return [
 		...invalidDue,
 		...sortTasks(overdueTasks, SortProperty.overdue),
-		...sortTasks(dueTasks, SortProperty.priority),
+		...dueTasks,
 		...sortTasks(dueSpecifiedButNotDue, SortProperty.notDue),
-		...sortTasks(dueNotSpecified, SortProperty.priority),
+		...dueNotSpecified,
 	];
 }
