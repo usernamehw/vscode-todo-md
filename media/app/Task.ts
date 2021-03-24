@@ -118,7 +118,7 @@ export default class Task extends Vue {
 			switch (this.model.due.isDue) {
 				case DueState.notDue: {
 					dueClasses.push('not-due');
-					dueText = `<span class="codicon codicon-milestone" title="Not due."></span> <span class="days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
+					dueText = `<span class="codicon codicon-milestone" title="Not due."></span><span class="days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
 					break;
 				}
 				case DueState.due: {
@@ -128,12 +128,12 @@ export default class Task extends Vue {
 				}
 				case DueState.overdue: {
 					dueClasses.push('overdue');
-					dueText = `<span class="codicon codicon-history" title="Overdue"></span> <span class="overdue-count">${this.model.due?.overdueInDays || ''}</span>`;
+					dueText = `<span class="codicon codicon-history" title="Overdue"></span><span class="overdue-count">${this.model.due?.overdueInDays || ''}</span>`;
 					break;
 				}
 				case DueState.invalid: {
 					dueClasses.push('invalid');
-					dueText = '<span class="codicon codicon-error" title="Due date is Invalid"></span>';
+					dueText = '<span class="codicon codicon-error" title="Due date is Invalid"></span><span class="days-to-count">Invalid</span>';
 					break;
 				}
 			}

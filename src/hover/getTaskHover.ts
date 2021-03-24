@@ -37,6 +37,7 @@ export function getTaskHover(task: TheTask) {
 		} else if (task.due?.isDue === DueState.invalid) {
 			dueColor = '#7284eb';
 			codicon = '$(error)';
+			overdueNumberOfDays = 'Invalid';
 		}
 		due = ` <span style="color:${dueColor || 'inherit'};">${codicon} ${overdueNumberOfDays}</span>&nbsp;`;
 		if (task.due?.isDue === DueState.notDue) {
