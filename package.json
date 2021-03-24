@@ -1306,12 +1306,6 @@
 					"group": "inline"
 				}
 			],
-			"editor/context": [
-				{
-					"command": "todomd.archiveSelectedCompletedTasks",
-					"when": "todomd:isActive"
-				}
-			],
 			"commandPalette": [
 				{
 					"command": "todomd.followLink",
