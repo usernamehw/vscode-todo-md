@@ -17,6 +17,17 @@
 	z-index: 1000000;
 }
 
+.v-context .icon {
+	display: inline-block;
+	min-width: 1.5em;
+	padding-right: 0.25em;
+
+	&.codicon-go-to-file {
+		left: -2px;
+		position: relative;
+	}
+}
+
 .v-context > li,
 .v-context ul > li {
 	margin: 0;
@@ -29,11 +40,10 @@
 	background-color: transparent;
 	border: 0;
 	color: var(--vscode-menu-foreground);
-	display: block;
 	display: flex;
 	height: 1.8rem;
 	margin: 0;
-	padding: 0.5rem 1rem;
+	padding: 0.5rem;
 	text-decoration: none;
 	white-space: nowrap;
 }

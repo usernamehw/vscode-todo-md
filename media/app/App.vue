@@ -40,11 +40,11 @@
                  :closeOnScroll="false">
         <li>
             <a href="#"
-               @click="revealTask">Reveal</a>
+               @click="revealTask"><span class="icon codicon codicon-go-to-file"></span>Reveal</a>
         </li>
         <li>
             <a href="#"
-               @click="deleteTask">Delete</a>
+               @click="deleteTask"><span class="icon codicon codicon-trash"></span>Delete</a>
         </li>
     </vue-context>
 
