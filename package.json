@@ -60,6 +60,11 @@
 					"markdownDescription": "Whether completed tasks are shown or not in the webview.",
 					"default": true
 				},
+				"todomd.webview.scrollbarOverflow": {
+					"type": "boolean",
+					"markdownDescription": "If `true` - show transparent scrollbar on top of items.",
+					"default": false
+				},
 				"todomd.webview.completedStrikeThrough": {
 					"type": "boolean",
 					"markdownDescription": "Whether completed tasks should have a line drawn on them in the webview.",

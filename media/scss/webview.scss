@@ -246,7 +246,7 @@ button,
 	font-family: var(--font-family);
 	height: calc(100vh - 4px - 4px - 24px);
 	line-height: var(--line-height);
-	overflow-y: auto;
+	overflow-y: var(--list-scrollbar-value);
 
 	&.task-details-visible {
 		height: calc(100vh - 4px - 4px - 24px - #{$taskDetailsHeight});
@@ -351,7 +351,6 @@ button,
 		float: right;
 		font-size: smaller;
 		justify-content: center;
-		margin-right: -3px;
 		padding: 0 0.3em;
 		position: relative;
 		top: 2px;

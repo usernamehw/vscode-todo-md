@@ -212,12 +212,14 @@ window.addEventListener('message', event => {
 			store.state.tags = message.value.tags;
 			store.state.projects = message.value.projects;
 			store.state.contexts = message.value.contexts;
-			document.body.style.setProperty('--font-size', message.value.config.fontSize);
-			document.body.style.setProperty('--font-family', message.value.config.fontFamily);
-			document.body.style.setProperty('--line-height', String(message.value.config.lineHeight));
-			document.body.style.setProperty('--padding', message.value.config.padding);
-			document.body.style.setProperty('--priority-left-padding', message.value.config.showPriority ? '3px' : '1px');
-			document.body.style.setProperty('--indent-size', message.value.config.indentSize);
+			const bodyStyle = document.body.style;
+			bodyStyle.setProperty('--font-size', message.value.config.fontSize);
+			bodyStyle.setProperty('--font-family', message.value.config.fontFamily);
+			bodyStyle.setProperty('--line-height', String(message.value.config.lineHeight));
+			bodyStyle.setProperty('--padding', message.value.config.padding);
+			bodyStyle.setProperty('--priority-left-padding', message.value.config.showPriority ? '3px' : '1px');
+			bodyStyle.setProperty('--indent-size', message.value.config.indentSize);
+			bodyStyle.setProperty('--list-scrollbar-value', message.value.config.scrollbarOverflow ? 'overlay' : 'auto');
 			break;
 		}
 		case 'focusFilterInput': {

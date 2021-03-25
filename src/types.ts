@@ -213,6 +213,10 @@ export interface ExtensionConfig {
 		 */
 		autoShowSuggest: boolean;
 		/**
+		 * If `true` - show transparent scrollbar on top of items.
+		 */
+		scrollbarOverflow: boolean;
+		/**
 		 * Whether completed tasks are shown or not in the webview.
 		 */
 		showCompleted: boolean;
