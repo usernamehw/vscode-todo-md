@@ -216,46 +216,7 @@ export function registerAllCommands() {
 		return await appendTaskToFile(`${creationDate}${text}`, filePath);
 	}
 	commands.registerTextEditorCommand('todomd.setDueDate', editor => {
-		const line = editor.selection.active.line;
-		const inputBox = window.createInputBox();
-		let value: string | undefined = '+0';
-		inputBox.value = value;
-		inputBox.title = 'Set due date';
-		const docsButtonName = 'Documentation';
-		inputBox.onDidTriggerButton(e => {
-			if (e.tooltip === docsButtonName) {
-				followLink('https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate');
-			}
-		});
-		inputBox.buttons = [{
-			iconPath: new ThemeIcon('question'),
-			tooltip: docsButtonName,
-		}];
-		inputBox.prompt = inputOffset(new DueDate(helpCreateDueDate(value)!).closestDueDateInTheFuture);
-		inputBox.show();
-
-		inputBox.onDidChangeValue((e: string) => {
-			value = e;
-			const newDueDate = helpCreateDueDate(value);
-			if (!newDueDate) {
-				inputBox.prompt = inputOffset('❌');
-				return;
-			}
-			inputBox.prompt = inputOffset(new DueDate(newDueDate).closestDueDateInTheFuture);
-		});
-
-		inputBox.onDidAccept(() => {
-			if (!value) {
-				return;
-			}
-			const newDueDate = helpCreateDueDate(value);
-
-			if (newDueDate) {
-				setDueDate(editor.document, line, newDueDate);
-				inputBox.hide();
-				inputBox.dispose();
-			}
-		});
+		openSetDueDateInputbox(editor.document, editor.selection.active.line);
 	});
 	commands.registerCommand('todomd.setDueDateWithArgs', async (document: TextDocument, wordRange: vscode.Range, dueDate: string) => {
 		const lineNumber = wordRange.start.line;
@@ -453,4 +414,45 @@ function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortPropert
 	edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 }
 
+export function openSetDueDateInputbox(document: vscode.TextDocument, lineNumber: number) {
+	const inputBox = window.createInputBox();
+	let value: string | undefined = '+0';
+	inputBox.value = value;
+	inputBox.title = 'Set due date';
+	const docsButtonName = 'Documentation';
+	inputBox.onDidTriggerButton(e => {
+		if (e.tooltip === docsButtonName) {
+			followLink('https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate');
+		}
+	});
+	inputBox.buttons = [{
+		iconPath: new ThemeIcon('question'),
+		tooltip: docsButtonName,
+	}];
+	inputBox.prompt = inputOffset(new DueDate(helpCreateDueDate(value)!).closestDueDateInTheFuture);
+	inputBox.show();
 
+	inputBox.onDidChangeValue((e: string) => {
+		value = e;
+		const newDueDate = helpCreateDueDate(value);
+		if (!newDueDate) {
+			inputBox.prompt = inputOffset('❌');
+			return;
+		}
+		inputBox.prompt = inputOffset(new DueDate(newDueDate).closestDueDateInTheFuture);
+	});
+
+	inputBox.onDidAccept(async () => {
+		if (!value) {
+			return;
+		}
+		const newDueDate = helpCreateDueDate(value);
+
+		if (newDueDate) {
+			await setDueDate(document, lineNumber, newDueDate);
+			inputBox.hide();
+			inputBox.dispose();
+			updateEverything();
+		}
+	});
+}

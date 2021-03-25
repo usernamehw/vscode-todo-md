@@ -41,6 +41,12 @@ export class SendMessage {
 			value: lineNumber,
 		});
 	}
+	static setDueDate(lineNumber: number) {
+		vscodeApi.postMessage({
+			type: 'setDueDate',
+			value: lineNumber,
+		});
+	}
 	static toggleTaskCollapse(lineNumber: number) {
 		vscodeApi.postMessage({
 			type: 'toggleTaskCollapse',

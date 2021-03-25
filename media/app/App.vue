@@ -44,6 +44,10 @@
         </li>
         <li>
             <a href="#"
+               @click="setDueDate"><span class="icon codicon codicon-milestone"></span>Set due date</a>
+        </li>
+        <li>
+            <a href="#"
                @click="deleteTask"><span class="icon codicon codicon-trash"></span>Delete</a>
         </li>
     </vue-context>

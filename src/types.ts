@@ -364,10 +364,14 @@ interface WebviewMessageEditTask extends WebviewMessageBase {
 	type: 'editTask';
 	value: TheTask;
 }
+interface WebviewMessageSetDueDate extends WebviewMessageBase {
+	type: 'setDueDate';
+	value: number;
+}
 /**
  * Messages that can only be sent from webview to extension.
  */
-export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
+export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenLinkFileProtocol | WebviewMessageSetDueDate | WebviewMessageShowNotification | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
 /**
  * Messages that can only be sent from extension to webview.
  */
