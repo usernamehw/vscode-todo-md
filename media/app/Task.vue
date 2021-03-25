@@ -6,6 +6,9 @@
          @click.alt="revealTask"
          @click.exact="selectThisTask"
          @contextmenu.prevent.stop="openTaskContextMenu($event, model)">
+        <template v-if="dueDate">
+            <span v-html="dueDate"></span>
+        </template>
         <span v-if="model.subtasks.length"
               class="twistie codicon"
               :class="[model.collapseRange ? 'codicon-chevron-right' : 'codicon-chevron-down']"
@@ -47,9 +50,6 @@
             <button class="increment-count"
                     @click.stop="incrementCount">+</button>
         </span>
-        <template v-if="dueDate">
-            <span v-html="dueDate"></span>
-        </template>
     </div>
     <div v-if="model.subtasks.length && !model.collapseRange">
         <task v-for="model in model.subtasks"
