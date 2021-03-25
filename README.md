@@ -1,3 +1,11 @@
+# Todo MD
+
+[![Version](https://vsmarketplacebadge.apphb.com/version-short/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
+[![Rating](https://vsmarketplacebadge.apphb.com/installs-short/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
+[![Rating](https://vsmarketplacebadge.apphb.com/trending-monthly/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
+[![The MIT License](https://flat.badgen.net/badge/license/MIT/orange)](http://opensource.org/licenses/MIT)
+
 ## ❗ Extension does NOT conform to the [todo.txt](https://github.com/todotxt/todo.txt) spec.
 
 ![demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/img/demo.png)
