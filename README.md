@@ -120,6 +120,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `todomd.sortByPriority` - Sort selected lines by priority
 - `todomd.createSimilarTask` - Create similar task (same tags, projects, contexts).
 - `todomd.setDueDate` - Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate)
+- `todomd.focusTasksWebviewAndInput` - Focus tasks webview and its main (filter) input element.
 
 
 ## Settings (prefix `todomd.`)
