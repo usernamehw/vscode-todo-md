@@ -1292,22 +1292,22 @@
 			"view/item/context": [
 				{
 					"command": "todomd.hideTask",
-					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/",
+					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/",
 					"group": "3_action"
 				},
 				{
 					"command": "todomd.deleteTask",
-					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/",
+					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/",
 					"group": "7_danger"
 				},
 				{
 					"command": "todomd.followLink",
-					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/ && viewItem == link",
+					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/ && viewItem == link",
 					"group": "2_navigation"
 				},
 				{
 					"command": "todomd.toggleDone",
-					"when": "view =~ /todomd.(tasks|generic1|generic2|generic3)/",
+					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/",
 					"group": "inline"
 				}
 			],
