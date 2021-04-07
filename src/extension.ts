@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -19,6 +20,7 @@ import { TasksWebviewViewProvider } from './webview/webviewView';
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
 dayjs.extend(isoWeek);
+dayjs.extend(duration);
 dayjs.Ls.en.weekStart = 1;
 /**
  * Things extension keeps a global reference to and uses extensively throughout the extension

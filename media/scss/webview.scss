@@ -78,6 +78,9 @@ body {
 
 	--inline-code-bg: rgba(27, 31, 35, 0.08);
 
+	--duration-animation-color1: #ee7f0020;
+	--duration-animation-color2: #028dd820;
+
 	--z-index-checkbox-1: 10;
 	--z-index-checkbox-2: 15;
 	--z-index-filter-input: 999;
@@ -128,6 +131,9 @@ body.vscode-dark {
 	--twistie-hover-bg: rgba(255, 255, 255, 0.1);
 	--checkbox-hover-bg: rgba(255, 255, 255, 0.1);
 	--inline-code-bg: rgba(240, 246, 252, 0.15);
+
+	--duration-animation-color1: #ee7f0040;
+	--duration-animation-color2: #028dd840;
 
 	.tag,
 	.context,
@@ -269,6 +275,14 @@ button,
 
 		&.strike-through > .title {
 			text-decoration: line-through;
+		}
+
+		.duration {
+			animation: none;
+			background-image: none;
+			border: 1px solid var(--border-darker);
+			padding-bottom: 0;
+			padding-top: 0;
 		}
 	}
 
@@ -430,6 +444,34 @@ button,
 	transform: scale(1.11);
 }
 
+.duration {
+	align-items: center;
+	animation: AnimateBackground 5s ease infinite;
+	background-image: linear-gradient(270deg, var(--duration-animation-color1), var(--duration-animation-color2));
+	background-size: 400% 400%;
+	display: inline-flex;
+	font-size: calc(var(--font-size) - 1px);
+	justify-content: center;
+	margin-right: $approxOneSpace;
+	margin-top: 1px;
+	padding: 1px 0.25em;
+}
+
+@keyframes AnimateBackground {
+	// https://www.gradient-animator.com
+	0% {
+		background-position: 0% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
 .tag,
 .project,
 .context {
@@ -441,6 +483,7 @@ button,
 	padding: 0 4px;
 	white-space: pre;
 }
+
 
 .tag {
 	background-color: var(--tag-bg);

@@ -1,5 +1,6 @@
 import { MarkdownString } from 'vscode';
 import { TheTask } from '../TheTask';
+import { durationTo } from '../time/timeUtils';
 import { DueState } from '../types';
 /**
  * Transform task to show it in Tree View or Editor hover as markdown
@@ -46,6 +47,10 @@ export function getTaskHover(task: TheTask) {
 	}
 
 	markdown.appendMarkdown(`${task.title}${count}${due}\n\n`);
+
+	if (task.start) {
+		markdown.appendMarkdown(`<span>$(watch) ${durationTo(task, false)}</span>\n\n`);
+	}
 
 	for (const tag of task.tags) {
 		markdown.appendMarkdown(`<span style="color:#fff;background-color:#029cdf;">&nbsp;#${tag}&nbsp;</span>&nbsp;`);

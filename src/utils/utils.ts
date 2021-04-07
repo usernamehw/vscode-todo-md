@@ -15,3 +15,9 @@ export function fancyNumber(n: number): string {
 		.map(digit => digitMap[Number(digit)])
 		.join('');
 }
+/**
+ * Add `s` suffix depending if there are more than 1 thing.
+ */
+// export function pluralize(n: number) {
+// 	return n === 1 ? '' : 's';
+// }

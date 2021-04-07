@@ -168,6 +168,11 @@
 					"markdownDescription": "Absolute path to file that all archived tasks will be moved to",
 					"default": ""
 				},
+				"todomd.durationIncludeSeconds": {
+					"type": "boolean",
+					"markdownDescription": "When enabled - duration (editor, hover) includes seconds.",
+					"default": false
+				},
 				"todomd.autoArchiveTasks": {
 					"type": "boolean",
 					"markdownDescription": "When enabled - will move tasks to archive file (on completion).",
@@ -979,7 +984,12 @@
 			},
 			{
 				"command": "todomd.archiveSelectedCompletedTasks",
-				"title": "🗃 Archive selected completed Tasks",
+				"title": "Archive selected completed Tasks",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.startTask",
+				"title": "Start task time tracking.",
 				"category": "Todo MD"
 			},
 			{
@@ -1354,6 +1364,10 @@
 				},
 				{
 					"command": "todomd.createSimilarTask",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.startTask",
 					"when": "todomd:isActive"
 				},
 				{

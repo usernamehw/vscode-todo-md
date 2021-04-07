@@ -38,15 +38,19 @@
 
     <vue-context ref="taskContextMenu"
                  :closeOnScroll="false">
-        <li>
+        <li title="Start time tracking.">
+            <a href="#"
+               @click="startTask"><span class="icon codicon codicon-play-circle"></span>Start</a>
+        </li>
+        <li title="Show task in the file.">
             <a href="#"
                @click="revealTask"><span class="icon codicon codicon-go-to-file"></span>Reveal</a>
         </li>
-        <li>
+        <li title="Open helper Quick Pick to choose the due date.">
             <a href="#"
                @click="setDueDate"><span class="icon codicon codicon-milestone"></span>Set due date</a>
         </li>
-        <li>
+        <li title="Open delete task dialog.">
             <a href="#"
                @click="deleteTask"><span class="icon codicon codicon-trash"></span>Delete</a>
         </li>

@@ -1,6 +1,6 @@
 import vscode, { window } from 'vscode';
 import { openSetDueDateInputbox } from '../commands';
-import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
+import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTask, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
 import { extensionConfig, extensionState, Global } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
@@ -58,6 +58,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				}
 				case 'setDueDate': {
 					openSetDueDateInputbox(await getActiveOrDefaultDocument(), message.value);
+					break;
+				}
+				case 'startTask': {
+					await startTask(await getActiveOrDefaultDocument(), message.value);
 					break;
 				}
 				case 'toggleTaskCollapseRecursive': {

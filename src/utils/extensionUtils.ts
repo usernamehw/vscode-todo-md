@@ -143,34 +143,42 @@ export function taskToString(task: TheTask) {
 		result.push(task.contexts.map(context => `@${context}`).join(''));
 	}
 	if (task.due) {
-		result.push(`{${SpecialTagName.due}:${task.due.raw}}`);
+		result.push(specialTag(SpecialTagName.due, task.due.raw));
 	}
 	if (task.overdue) {
-		result.push(`{${SpecialTagName.overdue}:${task.overdue}}`);
+		result.push(specialTag(SpecialTagName.overdue, task.overdue));
 	}
 	if (task.creationDate) {
-		result.push(`{${SpecialTagName.creationDate}:${task.creationDate}}`);
+		result.push(specialTag(SpecialTagName.creationDate, task.creationDate));
 	}
 	if (task.completionDate) {
-		result.push(`{${SpecialTagName.completionDate}:${task.completionDate}}`);
+		result.push(specialTag(SpecialTagName.completionDate, task.completionDate));
 	}
 	if (task.count) {
-		result.push(`{${SpecialTagName.count}:${task.count.current}/${task.count.needed}}`);
+		result.push(specialTag(SpecialTagName.count, `${task.count.current}/${task.count.needed}`));
 	}
 	if (task.isCollapsed) {
-		result.push(`{${SpecialTagName.collapsed}}`);
+		result.push(specialTag(SpecialTagName.collapsed));
 	}
 	if (task.isHidden) {
-		result.push(`{${SpecialTagName.hidden}}`);
+		result.push(specialTag(SpecialTagName.hidden));
 	}
 	return (task.indent ? task.indent : '') + result.join(' ');
 }
 
+/**
+ * Helper function. Construct special tag with some autocomplete.
+ */
+export function specialTag(tag: SpecialTagName, value?: string) {
+	return `{${tag}${value ? `:${value}` : ''}}`;
+}
 export const enum SpecialTagName {
 	due = 'due',
 	overdue = 'overdue',
 	completionDate = 'cm',
 	creationDate = 'cr',
+	started = 'start',
+	duration = 'duration',
 	hidden = 'h',
 	collapsed = 'c',
 	count = 'count',

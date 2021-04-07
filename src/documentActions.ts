@@ -4,10 +4,10 @@ import { DueDate } from './dueDate';
 import { extensionConfig } from './extension';
 import { parseDocument } from './parse';
 import { Count, TheTask } from './TheTask';
-import { dateWithoutTime, DATE_FORMAT, getDateInISOFormat } from './time/timeUtils';
+import { dateWithoutTime, DATE_FORMAT, durationTo, getDateInISOFormat } from './time/timeUtils';
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { DueState } from './types';
-import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, taskToString } from './utils/extensionUtils';
+import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, specialTag, SpecialTagName, taskToString } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 
 // This file contains 2 types of functions
@@ -96,6 +96,24 @@ export async function setDueDate(document: vscode.TextDocument, lineNumber: numb
 	return await applyEdit(edit, document);
 }
 /**
+ * Start time tracking (task duration). Triggered manually by user.
+ */
+export async function startTask(document: vscode.TextDocument, lineNumber: number) {
+	const edit = new WorkspaceEdit();
+	const line = document.lineAt(lineNumber);
+	const task = getTaskAtLineExtension(lineNumber);
+	if (!task) {
+		return undefined;
+	}
+	const newStartDate = specialTag(SpecialTagName.started, getDateInISOFormat(undefined, true));
+	if (task.startRange) {
+		edit.replace(document.uri, task.startRange, newStartDate);
+	} else {
+		edit.insert(document.uri, line.range.end, ` ${newStartDate}`);
+	}
+	return await applyEdit(edit, document);
+}
+/**
  * Delete the task. Show confirmation dialog if necessary. Modal dialog shows all the tasks that will be deleted.
  */
 export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber: number) {
@@ -176,7 +194,7 @@ export async function incrementCountForTask(document: vscode.TextDocument, lineN
 	if (count.current !== count.needed) {
 		newValue = count.current + 1;
 		if (newValue === count.needed) {
-			insertCompletionDateWorkspaceEdit(edit, document.uri, line);
+			insertCompletionDateWorkspaceEdit(edit, document, line, task);
 			removeOverdueWorkspaceEdit(edit, document.uri, task);
 		}
 		setCountCurrentValueWorkspaceEdit(edit, document.uri, count, String(newValue));
@@ -247,8 +265,9 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	const edit = new WorkspaceEdit();
 	if (task.done) {
 		removeCompletionDateWorkspaceEdit(edit, document.uri, task);
+		removeDurationWorkspaceEdit(edit, document.uri, task);
 	} else {
-		insertCompletionDateWorkspaceEdit(edit, document.uri, line);
+		insertCompletionDateWorkspaceEdit(edit, document, line, task);
 	}
 	await applyEdit(edit, document);
 
@@ -400,12 +419,37 @@ export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: 
 		edit.delete(uri, task.overdueRange);
 	}
 }
-export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, line: TextLine) {
-	edit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {cm:${getDateInISOFormat(new Date(), extensionConfig.completionDateIncludeTime)}}`);
+export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, line: TextLine, task: TheTask, forceIncludeTime = false) {
+	const newCompletionDate = specialTag(SpecialTagName.completionDate, getDateInISOFormat(new Date(), forceIncludeTime || extensionConfig.completionDateIncludeTime));
+	if (task.completionDateRange) {
+		edit.replace(document.uri, task.completionDateRange, newCompletionDate);
+	} else {
+		edit.insert(document.uri, new vscode.Position(line.lineNumber, line.range.end.character), ` ${newCompletionDate}`);
+	}
+	if (task.start) {
+		insertDurationWorkspaceEdit(edit, document, line, task);
+	}
+}
+export function insertDurationWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, line: TextLine, task: TheTask) {
+	if (!task.start) {
+		return;
+	}
+
+	const newDurationDate = specialTag(SpecialTagName.duration, durationTo(task, true, extensionConfig.durationIncludeSeconds));
+	if (task.durationRange) {
+		edit.replace(document.uri, task.durationRange, newDurationDate);
+	} else {
+		edit.insert(document.uri, line.range.end, ` ${newDurationDate}`);
+	}
 }
 export function removeCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: vscode.Uri, task: TheTask) {
 	if (task.completionDateRange) {
 		edit.delete(uri, task.completionDateRange);
+	}
+}
+export function removeDurationWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
+	if (task.durationRange) {
+		edit.delete(uri, task.durationRange);
 	}
 }
 export function archiveTaskWorkspaceEdit(edit: WorkspaceEdit, archiveFileEdit: WorkspaceEdit, archiveDocument: TextDocument, uri: vscode.Uri, line: vscode.TextLine, shouldDelete: boolean) {

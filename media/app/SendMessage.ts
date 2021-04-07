@@ -23,6 +23,12 @@ export class SendMessage {
 			value: lineNumber,
 		});
 	}
+	static startTask(lineNumber: number) {
+		vscodeApi.postMessage({
+			type: 'startTask',
+			value: lineNumber,
+		});
+	}
 	static incrementCount(lineNumber: number) {
 		vscodeApi.postMessage({
 			type: 'incrementCount',

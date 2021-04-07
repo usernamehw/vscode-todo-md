@@ -2,6 +2,7 @@ import vscode, { Range } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionState } from './extension';
 import { Count, Priority, TheTask } from './TheTask';
+import { SpecialTagName } from './utils/extensionUtils';
 
 interface ParseLineReturn {
 	lineType: string;
@@ -61,6 +62,10 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 	let count: Count | undefined;
 	let completionDate: string | undefined;
 	let creationDate: string | undefined;
+	let start: string | undefined;
+	let startRange: Range | undefined;
+	let duration: string | undefined;
+	let durationRange: Range | undefined;
 	let overdue: string | undefined;
 	let isHidden: boolean | undefined;
 	let isCollapsed: boolean | undefined;
@@ -81,24 +86,24 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 				const specialTag = word.slice(1, firstColonIndex);
 				const specialTagValue = word.slice(firstColonIndex + 1, -1);
 				const range = new Range(lineNumber, index, lineNumber, index + word.length);
-				if (specialTag === 'due') {
+				if (specialTag === SpecialTagName.due) {
 					if (specialTagValue.length) {
 						due = new DueDate(specialTagValue);
 						dueRange = range;
 					}
-				} else if (specialTag === 'overdue') {
+				} else if (specialTag === SpecialTagName.overdue) {
 					overdue = specialTagValue;
 					overdueRange = range;
-				} else if (specialTag === 'cr') {
+				} else if (specialTag === SpecialTagName.creationDate) {
 					creationDate = specialTagValue;
 					specialTagRanges.push(range);
-				} else if (specialTag === 'cm') {
+				} else if (specialTag === SpecialTagName.completionDate) {
 					// Presence of completion date indicates that the task is done
 					done = true;
 					completionDate = specialTagValue;
 					completionDateRange = range;
 					specialTagRanges.push(range);
-				} else if (specialTag === 'count') {
+				} else if (specialTag === SpecialTagName.count) {
 					if (specialTagValue === undefined) {
 						break;
 					}
@@ -117,12 +122,20 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 						current: currentValue,
 						needed: neededValue,
 					};
-				} else if (specialTag === 'h') {
+				} else if (specialTag === SpecialTagName.hidden) {
 					isHidden = true;
 					specialTagRanges.push(range);
-				} else if (specialTag === 'c') {
+				} else if (specialTag === SpecialTagName.collapsed) {
 					isCollapsed = true;
 					collapseRange = range;
+					specialTagRanges.push(range);
+				} else if (specialTag === SpecialTagName.started) {
+					start = specialTagValue;
+					startRange = range;
+					specialTagRanges.push(range);
+				} else if (specialTag === SpecialTagName.duration) {
+					duration = specialTagValue;
+					durationRange = range;
 					specialTagRanges.push(range);
 				} else {
 					text.push(word);
@@ -186,6 +199,10 @@ export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineR
 			projectRanges,
 			done,
 			priority,
+			start,
+			startRange,
+			duration,
+			durationRange,
 			completionDate,
 			creationDate,
 			priorityRange,

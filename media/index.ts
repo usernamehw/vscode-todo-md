@@ -3,6 +3,18 @@ import { store } from './app/store';
 import Vue from 'vue';
 import App from './app/App.vue';
 
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import isBetween from 'dayjs/plugin/isBetween';
+import isoWeek from 'dayjs/plugin/isoWeek';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(isBetween);
+dayjs.extend(relativeTime);
+dayjs.extend(isoWeek);
+dayjs.extend(duration);
+dayjs.Ls.en.weekStart = 1;
+
 Vue.config.productionTip = false;
 Vue.config.devtools = false;
 

@@ -1,4 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
+import { TheTask } from '../TheTask';
 
 export const ONE_MINUTE_IN_MS = 60000;
 export const ONE_HOUR_IN_MS = 3600000;
@@ -119,4 +120,54 @@ export function isValidDate(year: number, month: number, date: number): boolean 
  */
 export function dateWithoutTime(date: Date) {
 	return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+/**
+ * Calculate and format date duration.
+ */
+export function durationTo(task: TheTask, formatForEditor = true, includeSeconds = false) {
+	if (!task.start) {
+		return '';
+	}
+	const durationToDate = task.completionDate ? new Date(task.completionDate) : new Date();
+	const duration = dayjs.duration(durationToDate.valueOf() - new Date(task.start).valueOf());
+	let includedDatePartsFormat = '';
+	let includedTimePartsFormat = '';
+	const years = duration.years();
+	const months = duration.months();
+	const days = duration.days();
+	const hours = duration.hours();
+	const minutes = duration.minutes();
+	const seconds = duration.seconds();
+
+	const yearFormat = `YYYY[y]`;
+	const monthFormat = `M[m]`;
+	const dateFormat = `D[d]`;
+	const dateTimeDelimiter = formatForEditor ? '_' : ' ';
+	const yearMonthDateDelimiter = formatForEditor ? '-' : '';
+	const hourFormat = `H[h]`;
+	const minuteFormat = `m[m]`;
+	const secondFormat = seconds && includeSeconds ? `s[s]` : '';
+
+	if (years === 0 && months === 0 && days === 0) {
+		includedDatePartsFormat = '';
+	} else if (years === 0 && months === 0 && days !== 0) {
+		includedDatePartsFormat = `${dateFormat}${dateTimeDelimiter}`;
+	} else if (years === 0 && months !== 0) {
+		includedDatePartsFormat = `${monthFormat}${yearMonthDateDelimiter}${dateFormat}${dateTimeDelimiter}`;
+	} else if (years !== 0) {
+		includedDatePartsFormat = `${yearFormat}${yearMonthDateDelimiter}${monthFormat}${yearMonthDateDelimiter}${dateFormat}${dateTimeDelimiter}`;
+	}
+
+	if (hours === 0) {
+		if (minutes === 0) {
+			includedTimePartsFormat = '[1m]';
+		} else {
+			includedTimePartsFormat = minuteFormat;
+		}
+	} else {
+		includedTimePartsFormat = hourFormat + minuteFormat;
+	}
+
+	return duration.format(includedDatePartsFormat + includedTimePartsFormat + secondFormat);
 }

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import sample from 'lodash/sample';
 import vscode, { commands, TextDocument, TextEditor, TextEditorEdit, ThemeIcon, window, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTasks, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, revealTask, setDueDate, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
+import { appendTaskToFile, archiveTasks, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, revealTask, setDueDate, startTask, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
 import { extensionConfig, extensionState, Global, LAST_VISIT_BY_FILE_STORAGE_KEY, updateLastVisitGlobalState, updateState } from './extension';
@@ -112,6 +112,10 @@ export function registerAllCommands() {
 			}
 		}
 		archiveTasks(selectedCompletedTasks, editor.document);
+	});
+	commands.registerTextEditorCommand('todomd.startTask', editor => {
+		const lineNumber = editor.selection.start.line;
+		startTask(editor.document, lineNumber);
 	});
 	commands.registerTextEditorCommand('todomd.sortByPriority', (editor, edit) => {
 		sortTasksInEditor(editor, edit, 'priority');

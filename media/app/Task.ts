@@ -3,6 +3,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
+import { durationTo } from '../../src/time/timeUtils';
 import { DueState, ExtensionConfig } from '../../src/types';
 import { SendMessage } from './SendMessage';
 import { selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
@@ -21,6 +22,9 @@ export default class Task extends Vue {
 	config!: ExtensionConfig['webview'];
 	filterInputValue!: string;
 	selectedTaskLineNumber!: number;
+
+	duration = this.model.start ? durationTo(this.model, false, false) : '';
+	durationTimerId: any;
 
 	toggleTaskCollapse = () => {
 		SendMessage.toggleTaskCollapse(this.model.lineNumber);
@@ -147,5 +151,16 @@ export default class Task extends Vue {
 		} else {
 			return undefined;
 		}
+	}
+
+	mounted() {
+		if (this.model.start && !this.model.completionDate) {
+			this.durationTimerId = setInterval(() => {
+				this.duration = durationTo(this.model, false, true);
+			}, 1000);
+		}
+	}
+	beforeUnmount() {
+		clearInterval(this.durationTimerId);
 	}
 }

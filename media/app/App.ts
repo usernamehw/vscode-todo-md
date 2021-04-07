@@ -186,6 +186,9 @@ export default class App extends Vue {
 	revealTask() {
 		SendMessage.revealTask(this.contextMenuTask.lineNumber);
 	}
+	startTask() {
+		SendMessage.startTask(this.contextMenuTask.lineNumber);
+	}
 	setDueDate() {
 		SendMessage.setDueDate(this.contextMenuTask.lineNumber);
 	}

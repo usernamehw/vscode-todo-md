@@ -112,6 +112,14 @@ export class TheTask {
 	 */
 	overdue?: string;
 	/**
+	 * Tracking of task time. Defines when the task was manually started by user. Date as string.
+	 */
+	start?: string;
+	/**
+	 * Time tracking of task. Duration as string.
+	 */
+	duration?: string;
+	/**
 	 * Context ranges needed for editor decorations
 	 */
 	contextRanges: Range[];
@@ -144,6 +152,14 @@ export class TheTask {
 	 */
 	overdueRange?: Range;
 	/**
+	 * Start range.
+	 */
+	startRange?: Range;
+	/**
+	 * Duration range.
+	 */
+	durationRange?: Range;
+	/**
 	 * Completion special tag
 	 */
 	completionDateRange?: Range;
@@ -167,7 +183,11 @@ export class TheTask {
 		this.indent = init.indent;
 		this.links = init.links ?? [];
 		this.due = init.due;
+		this.start = init.start;
+		this.startRange = init.startRange;
 		this.dueRange = init.dueRange;
+		this.duration = init.duration;
+		this.durationRange = init.durationRange;
 		this.count = init.count;
 		this.isHidden = init.isHidden;
 		this.isCollapsed = init.isCollapsed;
