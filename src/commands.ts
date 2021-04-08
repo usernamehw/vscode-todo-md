@@ -113,9 +113,21 @@ export function registerAllCommands() {
 		}
 		archiveTasks(selectedCompletedTasks, editor.document);
 	});
-	commands.registerTextEditorCommand('todomd.startTask', editor => {
-		const lineNumber = editor.selection.start.line;
-		startTask(editor.document, lineNumber);
+	commands.registerCommand('todomd.startTask', async (taskTreeItem?: TaskTreeItem) => {
+		let lineNumber: number;
+		let document: TextDocument;
+		if (taskTreeItem) {
+			lineNumber = taskTreeItem.task.lineNumber;
+			document = await getActiveOrDefaultDocument();
+		} else {
+			const editor = window.activeTextEditor;
+			if (!editor) {
+				return;
+			}
+			lineNumber = editor.selection.start.line;
+			document = editor.document;
+		}
+		startTask(document, lineNumber);
 	});
 	commands.registerTextEditorCommand('todomd.sortByPriority', (editor, edit) => {
 		sortTasksInEditor(editor, edit, 'priority');

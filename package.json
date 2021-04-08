@@ -942,7 +942,7 @@
 			},
 			{
 				"command": "todomd.deleteTask",
-				"title": "❌ Delete the Task",
+				"title": "Delete the Task",
 				"category": "Todo MD"
 			},
 			{
@@ -989,7 +989,7 @@
 			},
 			{
 				"command": "todomd.startTask",
-				"title": "Start task time tracking.",
+				"title": "Start",
 				"category": "Todo MD"
 			},
 			{
@@ -1300,6 +1300,11 @@
 				}
 			],
 			"view/item/context": [
+				{
+					"command": "todomd.startTask",
+					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/",
+					"group": "1_action"
+				},
 				{
 					"command": "todomd.hideTask",
 					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/",
