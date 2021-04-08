@@ -144,7 +144,7 @@ export function durationTo(task: TheTask, formatForEditor = true, includeSeconds
 	const monthFormat = `M[m]`;
 	const dateFormat = `D[d]`;
 	const dateTimeDelimiter = formatForEditor ? '_' : ' ';
-	const yearMonthDateDelimiter = formatForEditor ? '-' : '';
+	const yearMonthDateDelimiter = formatForEditor ? '-' : ' ';
 	const hourFormat = `H[h]`;
 	const minuteFormat = `m[m]`;
 	const secondFormat = seconds && includeSeconds ? `s[s]` : '';
@@ -160,7 +160,7 @@ export function durationTo(task: TheTask, formatForEditor = true, includeSeconds
 	}
 
 	if (hours === 0) {
-		if (minutes === 0) {
+		if (minutes === 0 && !includeSeconds) {
 			includedTimePartsFormat = '[1m]';
 		} else {
 			includedTimePartsFormat = minuteFormat;
