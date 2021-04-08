@@ -191,6 +191,7 @@ export async function incrementCountForTask(document: vscode.TextDocument, lineN
 		return Promise.resolve(undefined);
 	}
 	let newValue = 0;
+	// TODO: this function must call toggleDoneAtLine() !!!
 	if (count.current !== count.needed) {
 		newValue = count.current + 1;
 		if (newValue === count.needed) {
@@ -266,6 +267,7 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	if (task.done) {
 		removeCompletionDateWorkspaceEdit(edit, document.uri, task);
 		removeDurationWorkspaceEdit(edit, document.uri, task);
+		removeStartWorkspaceEdit(edit, document.uri, task);
 	} else {
 		insertCompletionDateWorkspaceEdit(edit, document, line, task);
 	}
@@ -450,6 +452,11 @@ export function removeCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: vsco
 export function removeDurationWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
 	if (task.durationRange) {
 		edit.delete(uri, task.durationRange);
+	}
+}
+export function removeStartWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
+	if (task.startRange) {
+		edit.delete(uri, task.startRange);
 	}
 }
 export function archiveTaskWorkspaceEdit(edit: WorkspaceEdit, archiveFileEdit: WorkspaceEdit, archiveDocument: TextDocument, uri: vscode.Uri, line: vscode.TextLine, shouldDelete: boolean) {
