@@ -1,3 +1,14 @@
+## 2.6.0 `08 Apr 2021`
+
+- 💥 Remove `{t}` special tag
+- 💥 Remove `doneSymbol`, `addCompletionDate` settings
+- 💥 Rename `showRecurringNotDue` to `showRecurringUpcoming`
+- ✨ [Due Tree View] Use default sorting (by due)
+- ✨ [webview, Tree View] add `Start` context menu (track how much time it took)
+- ✨ [webview] Sort upcoming (non due) tasks by due
+- ✨ [webview] Tasks have second sorting by priority (first by due)
+- ✨ [webview] Add Set Due date context menu
+
 ## 2.5.3 `05 Mar 2021`
 
 - 🐛 Again, active document is wrong, but this time after switching to Untitled file...
