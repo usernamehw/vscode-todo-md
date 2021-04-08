@@ -449,6 +449,7 @@ button,
 	animation: AnimateBackground 5s ease infinite;
 	background-image: linear-gradient(270deg, var(--duration-animation-color1), var(--duration-animation-color2));
 	background-size: 400% 400%;
+	cursor: default;
 	display: inline-flex;
 	font-size: calc(var(--font-size) - 1px);
 	justify-content: center;

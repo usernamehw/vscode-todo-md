@@ -62,6 +62,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				}
 				case 'startTask': {
 					await startTask(await getActiveOrDefaultDocument(), message.value);
+					await updateEverything();
 					break;
 				}
 				case 'toggleTaskCollapseRecursive': {

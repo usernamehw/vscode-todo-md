@@ -149,14 +149,14 @@ export function durationTo(task: TheTask, formatForEditor = true, includeSeconds
 	const minuteFormat = `m[m]`;
 	const secondFormat = includeSeconds ? `s[s]` : '';
 
-	if (years !== 0) {
-		datePartsFormat.unshift(yearFormat);
+	if (days !== 0) {
+		datePartsFormat.unshift(daysFormat);
 	}
 	if (months !== 0) {
 		datePartsFormat.unshift(monthFormat);
 	}
-	if (days !== 0) {
-		datePartsFormat.unshift(daysFormat);
+	if (years !== 0) {
+		datePartsFormat.unshift(yearFormat);
 	}
 
 	if (seconds !== 0) {
