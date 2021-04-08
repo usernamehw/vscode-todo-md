@@ -23,7 +23,7 @@ export default class Task extends Vue {
 	filterInputValue!: string;
 	selectedTaskLineNumber!: number;
 
-	duration = this.model.start ? durationTo(this.model, false, !this.model.done) : '';
+	duration = this.model.start ? durationTo(this.model, false, !this.model.done) : '';// TODO: respect `durationIncludeSeconds`
 	durationTimerId: any;
 
 	toggleTaskCollapse = () => {

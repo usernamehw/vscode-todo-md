@@ -147,27 +147,30 @@ export function durationTo(task: TheTask, formatForEditor = true, includeSeconds
 	const yearMonthDateDelimiter = formatForEditor ? '-' : ' ';
 	const hourFormat = `H[h]`;
 	const minuteFormat = `m[m]`;
-	const secondFormat = seconds && includeSeconds ? `s[s]` : '';
+	const secondFormat = includeSeconds ? `s[s]` : '';
 
 	if (years === 0 && months === 0 && days === 0) {
 		includedDatePartsFormat = '';
 	} else if (years === 0 && months === 0 && days !== 0) {
-		includedDatePartsFormat = `${dateFormat}${dateTimeDelimiter}`;
+		includedDatePartsFormat = dateFormat;
 	} else if (years === 0 && months !== 0) {
-		includedDatePartsFormat = `${monthFormat}${yearMonthDateDelimiter}${dateFormat}${dateTimeDelimiter}`;
+		includedDatePartsFormat = `${monthFormat}${yearMonthDateDelimiter}${dateFormat}`;
 	} else if (years !== 0) {
-		includedDatePartsFormat = `${yearFormat}${yearMonthDateDelimiter}${monthFormat}${yearMonthDateDelimiter}${dateFormat}${dateTimeDelimiter}`;
+		includedDatePartsFormat = `${yearFormat}${yearMonthDateDelimiter}${monthFormat}${yearMonthDateDelimiter}${dateFormat}`;
 	}
 
-	if (hours === 0) {
-		if (minutes === 0 && !includeSeconds) {
-			includedTimePartsFormat = '[1m]';
-		} else {
-			includedTimePartsFormat = minuteFormat;
-		}
-	} else {
-		includedTimePartsFormat = hourFormat + minuteFormat;
+	if (seconds !== 0) {
+		includedTimePartsFormat = secondFormat;
+	}
+	if (minutes !== 0) {
+		includedTimePartsFormat = minuteFormat + includedTimePartsFormat;
+	}
+	if (hours !== 0) {
+		includedTimePartsFormat = hourFormat + includedTimePartsFormat;
+	}
+	if (hours === 0 && minutes === 0 && !includeSeconds) {
+		includedTimePartsFormat = '[<1m]';
 	}
 
-	return duration.format(includedDatePartsFormat + includedTimePartsFormat + secondFormat);
+	return duration.format((includedDatePartsFormat.length ? includedDatePartsFormat + dateTimeDelimiter : '') + includedTimePartsFormat);
 }

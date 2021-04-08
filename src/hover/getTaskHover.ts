@@ -1,4 +1,5 @@
 import { MarkdownString } from 'vscode';
+import { extensionConfig } from '../extension';
 import { TheTask } from '../TheTask';
 import { durationTo } from '../time/timeUtils';
 import { DueState } from '../types';
@@ -49,7 +50,7 @@ export function getTaskHover(task: TheTask) {
 	markdown.appendMarkdown(`${task.title}${count}${due}\n\n`);
 
 	if (task.start) {
-		markdown.appendMarkdown(`<span>$(watch) ${durationTo(task, false)}</span>\n\n`);
+		markdown.appendMarkdown(`<span>$(watch) ${durationTo(task, false, extensionConfig.durationIncludeSeconds)}</span>\n\n`);
 	}
 
 	for (const tag of task.tags) {
