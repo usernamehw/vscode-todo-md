@@ -4,7 +4,6 @@
 [![Rating](https://vsmarketplacebadge.apphb.com/installs-short/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
 [![Rating](https://vsmarketplacebadge.apphb.com/rating-short/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
 [![Rating](https://vsmarketplacebadge.apphb.com/trending-monthly/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
-[![The MIT License](https://flat.badgen.net/badge/license/MIT/orange)](http://opensource.org/licenses/MIT)
 
 ## ❗ Extension does NOT conform to the [todo.txt](https://github.com/todotxt/todo.txt) spec.
 
@@ -61,6 +60,8 @@ tag | description | example
 `h`|(hidden) Task is not visible in Tree Views|`{h}`
 `c`|(collapsed) State of folding in Tree View or webview for nested tasks|`{c}`
 `count`|Instead of completing the task increases count by 1. When the number matches the goal - the task is considered completed|`{count:0/3}`
+`start`|Datetime when task was started|`{start:2021-04-08T16:17:15}`
+`duration`|After completing task with `{start}` tag - calculate task duration|`{duration:1h2m}`
 
 <!--
 - ❌ id (UUID)
@@ -120,6 +121,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 
 - `todomd.toggleDone` <kbd>Alt</kbd>+<kbd>D</kbd> - Toggle Done (Completion)
 - `todomd.toggleComment` - Toggle comment. (Not binded by default). You can bind it only for active file: **{"key": "ctrl+/","command": "todomd.toggleComment","when": "editorFocus && todomd:isActive"},** in keybindings.json.
+- `todomd.startTask` - Start task (when completed adds `{duration}` tag)
 - `todomd.incrementPriority` - Increment priority.
 - `todomd.decrementPriority` - Decrement priority.
 - `todomd.getNextTask` - Get due task from main file. If none are due - get one with the highest priority.

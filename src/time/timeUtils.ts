@@ -131,8 +131,8 @@ export function durationTo(task: TheTask, formatForEditor = true, includeSeconds
 	}
 	const durationToDate = task.completionDate ? new Date(task.completionDate) : new Date();
 	const duration = dayjs.duration(durationToDate.valueOf() - new Date(task.start).valueOf());
-	let includedDatePartsFormat = '';
-	let includedTimePartsFormat = '';
+	const datePartsFormat = [];
+	const timePartsFormat = [];
 	const years = duration.years();
 	const months = duration.months();
 	const days = duration.days();
@@ -142,35 +142,42 @@ export function durationTo(task: TheTask, formatForEditor = true, includeSeconds
 
 	const yearFormat = `YYYY[y]`;
 	const monthFormat = `M[m]`;
-	const dateFormat = `D[d]`;
+	const daysFormat = `D[d]`;
 	const dateTimeDelimiter = formatForEditor ? '_' : ' ';
 	const yearMonthDateDelimiter = formatForEditor ? '-' : ' ';
 	const hourFormat = `H[h]`;
 	const minuteFormat = `m[m]`;
 	const secondFormat = includeSeconds ? `s[s]` : '';
 
-	if (years === 0 && months === 0 && days === 0) {
-		includedDatePartsFormat = '';
-	} else if (years === 0 && months === 0 && days !== 0) {
-		includedDatePartsFormat = dateFormat;
-	} else if (years === 0 && months !== 0) {
-		includedDatePartsFormat = `${monthFormat}${yearMonthDateDelimiter}${dateFormat}`;
-	} else if (years !== 0) {
-		includedDatePartsFormat = `${yearFormat}${yearMonthDateDelimiter}${monthFormat}${yearMonthDateDelimiter}${dateFormat}`;
+	if (years !== 0) {
+		datePartsFormat.unshift(yearFormat);
+	}
+	if (months !== 0) {
+		datePartsFormat.unshift(monthFormat);
+	}
+	if (days !== 0) {
+		datePartsFormat.unshift(daysFormat);
 	}
 
 	if (seconds !== 0) {
-		includedTimePartsFormat = secondFormat;
+		timePartsFormat.unshift(secondFormat);
 	}
 	if (minutes !== 0) {
-		includedTimePartsFormat = minuteFormat + includedTimePartsFormat;
+		timePartsFormat.unshift(minuteFormat);
 	}
 	if (hours !== 0) {
-		includedTimePartsFormat = hourFormat + includedTimePartsFormat;
-	}
-	if (hours === 0 && minutes === 0 && !includeSeconds) {
-		includedTimePartsFormat = '[<1m]';
+		timePartsFormat.unshift(hourFormat);
 	}
 
-	return duration.format((includedDatePartsFormat.length ? includedDatePartsFormat + dateTimeDelimiter : '') + includedTimePartsFormat);
+	const durationFormat = (datePartsFormat.length ? datePartsFormat.join(yearMonthDateDelimiter) + dateTimeDelimiter : '') + timePartsFormat.join('');
+
+	if (durationFormat.length === 0) {
+		if (includeSeconds) {
+			return '0s';
+		} else {
+			return '<1m';
+		}
+	}
+
+	return duration.format(durationFormat);
 }
