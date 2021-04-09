@@ -88,3 +88,24 @@ export async function updateSetting(settingName: string, newValue: unknown) {
 	const settings = workspace.getConfiguration(undefined, null);
 	return settings.update(settingName, newValue, ConfigurationTarget.Global);
 }
+/**
+ * Toggle global setting (cycle through passed values).
+ */
+export async function toggleGlobalSetting(settingName: string, values: unknown[]) {
+	const settings = workspace.getConfiguration(undefined, null);
+	const currentSettingValue = settings.get(settingName);
+
+	if (values.length === 1) {
+		return settings.update(settingName, values[0], ConfigurationTarget.Global);
+	} else {
+		const next = getNextOrFirstElement(values, currentSettingValue);
+		return settings.update(settingName, next, ConfigurationTarget.Global);
+	}
+}
+/**
+ * Get next item from array. If at the end - return first element.
+ */
+function getNextOrFirstElement<T>(arr: T[], target: any): T {
+	const idx = arr.findIndex(el => el === target);
+	return idx === arr.length - 1 ? arr[0] : arr[idx + 1];
+}

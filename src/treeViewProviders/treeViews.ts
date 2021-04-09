@@ -9,7 +9,7 @@ import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
-import { DueState, ItemForProvider, SortTags, VscodeContext } from '../types';
+import { DueState, ItemForProvider, TreeItemSortType, VscodeContext } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { setContext } from '../utils/vscodeUtils';
 import { updateWebviewView } from '../webview/webviewView';
@@ -205,7 +205,7 @@ export interface ParsedItems {
 	tags: string[];
 	contexts: string[];
 	projects: string[];
-	sortedTagsForProvider: ItemForProvider[];
+	tagsForProvider: ItemForProvider[];
 	projectsForProvider: ItemForProvider[];
 	contextsForProvider: ItemForProvider[];
 }
@@ -253,12 +253,6 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 			tasks: tagMap[key],
 		});
 	}
-	let sortedTagsForProvider: ItemForProvider[];
-	if (extensionConfig.sortTagsView === SortTags.alphabetic) {
-		sortedTagsForProvider = tagsForProvider.sort((a, b) => a.title.localeCompare(b.title));
-	} else {
-		sortedTagsForProvider = tagsForProvider.sort((a, b) => b.tasks.length - a.tasks.length);
-	}
 
 	const projectsForProvider: ItemForProvider[] = [];
 	for (const key in projectMap) {
@@ -274,14 +268,29 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 			tasks: contextMap[key],
 		});
 	}
+
+	sortItemsForProvider(tagsForProvider, extensionConfig.sortTagsView);
+	sortItemsForProvider(projectsForProvider, extensionConfig.sortProjectsView);
+	sortItemsForProvider(contextsForProvider, extensionConfig.sortContextsView);
+
 	return {
 		contextsForProvider,
 		projectsForProvider,
-		sortedTagsForProvider,
+		tagsForProvider,
 		tags: Object.keys(tagMap),
 		projects: Object.keys(projectMap),
 		contexts: Object.keys(contextMap),
 	};
+}
+/**
+ * Sort future Tree items. (Only first level).
+ */
+function sortItemsForProvider(items: ItemForProvider[], sortType: TreeItemSortType) {
+	if (sortType === TreeItemSortType.alphabetic) {
+		items.sort((a, b) => a.title.localeCompare(b.title));
+	} else {
+		items.sort((a, b) => b.tasks.length - a.tasks.length);
+	}
 }
 
 /**

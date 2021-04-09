@@ -91,9 +91,9 @@ export const enum DueState {
 /**
  * tags Tree View sorting options
  */
-export enum SortTags {
+export const enum TreeItemSortType {
 	alphabetic = 'alphabetic',
-	frequency = 'frequency',
+	count = 'count',
 }
 /**
  * Advanced decorations allowing to change any available editor decoration options (borders, outline, background, foreground, before, after...)
@@ -151,7 +151,15 @@ export interface ExtensionConfig {
 	/**
 	 * Controls tags Tree View sorting.
 	 */
-	sortTagsView: SortTags;
+	sortTagsView: TreeItemSortType;
+	/**
+	 * Controls projects Tree View sorting.
+	 */
+	sortProjectsView: TreeItemSortType;
+	/**
+	 * Controls contexts Tree View sorting.
+	 */
+	sortContextsView: TreeItemSortType;
 	/**
 	 * Choose files that extension will operate on (Glob).
 	 */

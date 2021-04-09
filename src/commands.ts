@@ -11,11 +11,11 @@ import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
-import { ExtensionState, VscodeContext } from './types';
+import { ExtensionState, TreeItemSortType, VscodeContext } from './types';
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultFile } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
-import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext, updateSetting } from './utils/vscodeUtils';
+import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext, toggleGlobalSetting, updateSetting } from './utils/vscodeUtils';
 /**
  * Register all commands. Names should match **"commands"** in `package.json`
  */
@@ -385,6 +385,16 @@ export function registerAllCommands() {
 			}
 		}
 		applyEdit(edit, editor.document);
+	});
+	// ──────────────────────────────────────────────────────────────────────
+	commands.registerCommand('todomd.toggleTagsTreeViewSorting', () => {
+		toggleGlobalSetting('todomd.sortTagsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
+	});
+	commands.registerCommand('todomd.toggleProjectsTreeViewSorting', () => {
+		toggleGlobalSetting('todomd.sortProjectsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
+	});
+	commands.registerCommand('todomd.toggleContextsTreeViewSorting', () => {
+		toggleGlobalSetting('todomd.sortContextsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
 	});
 }
 /**

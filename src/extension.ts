@@ -179,7 +179,7 @@ export async function updateState() {
 	extensionState.commentLines = parsedDocument.commentLines;
 
 	const treeItems = groupAndSortTreeItems(extensionState.tasksAsTree);
-	extensionState.tagsForTreeView = treeItems.sortedTagsForProvider;
+	extensionState.tagsForTreeView = treeItems.tagsForProvider;
 	extensionState.projectsForTreeView = treeItems.projectsForProvider;
 	extensionState.contextsForTreeView = treeItems.contextsForProvider;
 	extensionState.tags = treeItems.tags;

@@ -204,10 +204,28 @@
 					"type": "string",
 					"enum": [
 						"alphabetic",
-						"frequency"
+						"count"
 					],
-					"default": "frequency",
+					"default": "alphabetic",
 					"description": "Controls tags Tree View sorting."
+				},
+				"todomd.sortProjectsView": {
+					"type": "string",
+					"enum": [
+						"alphabetic",
+						"count"
+					],
+					"default": "alphabetic",
+					"description": "Controls projects Tree View sorting."
+				},
+				"todomd.sortContextsView": {
+					"type": "string",
+					"enum": [
+						"alphabetic",
+						"count"
+					],
+					"default": "alphabetic",
+					"description": "Controls contexts Tree View sorting."
 				},
 				"todomd.tags": {
 					"type": "array",
@@ -891,6 +909,24 @@
 		},
 		"commands": [
 			{
+				"command": "todomd.toggleTagsTreeViewSorting",
+				"title": "Toggle Tags Tree View Sorting",
+				"category": "Todo MD",
+				"icon": "$(ungroup-by-ref-type)"
+			},
+			{
+				"command": "todomd.toggleProjectsTreeViewSorting",
+				"title": "Toggle Projects Tree View Sorting",
+				"category": "Todo MD",
+				"icon": "$(ungroup-by-ref-type)"
+			},
+			{
+				"command": "todomd.toggleContextsTreeViewSorting",
+				"title": "Toggle Contexts Tree View Sorting",
+				"category": "Todo MD",
+				"icon": "$(ungroup-by-ref-type)"
+			},
+			{
 				"command": "todomd.showWebviewSettings",
 				"title": "Show Webview Settings",
 				"category": "Todo MD",
@@ -1297,6 +1333,21 @@
 					"alt": "todomd.expandAllTasks",
 					"when": "view == todomd.webviewTasks",
 					"group": "navigation@9"
+				},
+				{
+					"command": "todomd.toggleTagsTreeViewSorting",
+					"when": "view == todomd.tags",
+					"group": "navigation@9"
+				},
+				{
+					"command": "todomd.toggleProjectsTreeViewSorting",
+					"when": "view == todomd.projects",
+					"group": "navigation@9"
+				},
+				{
+					"command": "todomd.toggleContextsTreeViewSorting",
+					"when": "view == todomd.contexts",
+					"group": "navigation@9"
 				}
 			],
 			"view/item/context": [
@@ -1337,6 +1388,18 @@
 				},
 				{
 					"command": "todomd.deleteTask",
+					"when": "false"
+				},
+				{
+					"command": "todomd.toggleTagsTreeViewSorting",
+					"when": "false"
+				},
+				{
+					"command": "todomd.toggleProjectsTreeViewSorting",
+					"when": "false"
+				},
+				{
+					"command": "todomd.toggleContextsTreeViewSorting",
 					"when": "false"
 				},
 				{

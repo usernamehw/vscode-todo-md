@@ -150,7 +150,9 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |projects|`[]`|Projects added to autocomplete.|
 |contexts|`[]`|Contexts added to autocomplete.|
 |tags|`[]`|Tags added to autocomplete.|
-|sortTagsView|`"frequency"`|Controls tags Tree View sorting.|
+|sortTagsView|`"alphabetic"`|Controls tags Tree View sorting.|
+|sortProjectsView|`"alphabetic"`|Controls projects Tree View sorting.|
+|sortContextsView|`"alphabetic"`|Controls contexts Tree View sorting.|
 |treeViews|`[...]`|Tree Views that have predefined filters (3 max).|
 |savedFilters|`[...]`|Filters that you can pick when applying a filter.|
 |tabSize|**`4`**|Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).|
