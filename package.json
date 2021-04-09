@@ -1052,7 +1052,7 @@
 			},
 			{
 				"command": "todomd.followLink",
-				"title": "↗️ Follow link",
+				"title": "Follow link",
 				"category": "Todo MD"
 			},
 			{
