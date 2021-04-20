@@ -16,6 +16,7 @@
 	"bugs": {
 		"url": "https://github.com/usernamehw/vscode-todo-md/issues"
 	},
+	"qna": false,
 	"keywords": [
 		"todotxt",
 		"todo",

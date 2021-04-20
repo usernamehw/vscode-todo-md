@@ -364,6 +364,8 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
 			const line = document.lineAt(task.lineNumber);
 			if (task.done) {
 				removeCompletionDateWorkspaceEdit(edit, document.uri, task);
+				removeStartWorkspaceEdit(edit, document.uri, task);
+				removeDurationWorkspaceEdit(edit, document.uri, task);
 			} else {
 				if (!task.overdue && !dayjs().isSame(lastVisit, 'day')) {
 					const lastVisitWithoutTime = dateWithoutTime(lastVisit);
