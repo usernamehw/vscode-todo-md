@@ -11,6 +11,7 @@ import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
 import { DueState, ItemForProvider, TreeItemSortType, VscodeContext } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
+import { forEachTask } from '../utils/taskUtils';
 import { setContext } from '../utils/vscodeUtils';
 import { updateWebviewView } from '../webview/webviewView';
 
@@ -219,8 +220,7 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 	const tagMap: TempTitleLineNumberMap = {};
 	const projectMap: TempTitleLineNumberMap = {};
 	const contextMap: TempTitleLineNumberMap = {};
-	for (const task of tasks) {
-		// Tags grouping
+	forEachTask(task => {
 		for (const tag of task.tags) {
 			if (!tagMap[tag]) {
 				tagMap[tag] = [];
@@ -245,7 +245,7 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 				contextMap[context].push(task);
 			}
 		}
-	}
+	});
 	const tagsForProvider: ItemForProvider[] = [];
 	for (const key in tagMap) {
 		tagsForProvider.push({
