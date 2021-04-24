@@ -47,11 +47,9 @@ body {
 	--project-bg: #{$projectBackground};
 	--project-fg: #{$projectForeground};
 	--project-border: #{$projectBorder};
-	--project-hover-bg: #{darken($projectBackground, $hoverDarkenPercent)};
 
 	--context-bg: #{$contextBackground};
 	--context-fg: #{$contextForeground};
-	--context-hover-bg: #{darken($contextBackground, 5%)};
 	--context-border: #{$contextBorder};
 
 	--count-bg: #0000000c;
@@ -483,6 +481,10 @@ button,
 	margin-left: $approxOneSpace;
 	padding: 0 4px;
 	white-space: pre;
+
+	&:hover {
+		filter: brightness(95%);
+	}
 }
 
 
@@ -491,30 +493,18 @@ button,
 	border-color: var(--tag-border);
 	color: var(--tag-fg);
 	margin-left: 3px;
-
-	&:hover {
-		filter: brightness(95%);
-	}
 }
 
 .project {
 	background-color: var(--project-bg);
 	border-color: var(--project-border);
 	color: var(--project-fg);
-
-	&:hover {
-		background-color: var(--project-hover-bg);
-	}
 }
 
 .context {
 	background-color: var(--context-bg);
 	border-color: var(--context-border);
 	color: var(--context-fg);
-
-	&:hover {
-		background-color: var(--context-hover-bg);
-	}
 }
 
 .count-container {
