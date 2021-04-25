@@ -1,8 +1,7 @@
 import debounce from 'lodash/debounce';
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Watch } from 'vue-property-decorator';
 import { mapState } from 'vuex';
-import { TheTask } from '../../../src/TheTask';
 import { ExtensionConfig } from '../../../src/types';
 import { SendMessage } from '../SendMessage';
 import { getTaskAtLineWebview } from '../storeUtils';
@@ -17,42 +16,18 @@ export default class TaskDetails extends Vue {
 	config!: ExtensionConfig['webview'];
 	selectedTaskLineNumber!: number;
 
-
-	selectedModifiedTask: TheTask | undefined;
+	inputValue = '';
 
 	$refs!: {
 		detailsTaskTitle: HTMLTextAreaElement;
 	};
 
-	get selectedTaskForDetails(): TheTask {
-		let selectedTask: TheTask;
-		if (this.selectedTaskLineNumber !== -1) {
-			selectedTask = getTaskAtLineWebview(this.selectedTaskLineNumber)!;
-		} else {
-			// this.editSelectedTask.cancel();
-			// @ts-ignore
-			selectedTask = {};
-			this.selectedModifiedTask = undefined;
-		}
-		return selectedTask;
+	updateInputValueBasedOnSelectedTask() {
+		this.inputValue = getTaskAtLineWebview(this.selectedTaskLineNumber)?.rawText || '';
 	}
 
 	onTaskTitleChange(event: Event) {
-		const text: string = (event.target as any).value;
-		let modifiedOrSelected;
-		if (this.selectedModifiedTask) {
-			modifiedOrSelected = this.selectedModifiedTask;
-		} else {
-			const selectedTask = getTaskAtLineWebview(this.selectedTaskLineNumber);
-			if (!selectedTask) {
-				return;
-			}
-			modifiedOrSelected = selectedTask;
-		}
-		this.selectedModifiedTask = {
-			...modifiedOrSelected,
-			title: text.replace(/\n/g, ' '),
-		};
+		this.inputValue = (event.target as HTMLTextAreaElement).value;
 		this.resizeTaskTitleTextarea();
 		this.editSelectedTask();
 	}
@@ -62,18 +37,27 @@ export default class TaskDetails extends Vue {
 	resizeTaskTitleTextarea() {
 		setTimeout(() => {
 			this.$refs.detailsTaskTitle.style.height = 'auto';
-			const height = [42, 41].includes(this.$refs.detailsTaskTitle.scrollHeight) ? parseInt(this.config.fontSize, 10) * this.config.lineHeight + 6 : this.$refs.detailsTaskTitle.scrollHeight;
-			this.$refs.detailsTaskTitle.style.height = `${height}px`;
+			this.$refs.detailsTaskTitle.style.height = `${this.$refs.detailsTaskTitle.scrollHeight}px`;
 		}, 0);
 	}
 	editSelectedTask = debounce(function() {
 		// @ts-ignore
-		SendMessage.editTask(this.selectedModifiedTask);
+		if (this.inputValue) {
+			// @ts-ignore
+			SendMessage.editRawText(this.selectedTaskLineNumber, this.inputValue);
+		}
 	}, 500);
 
+	@Watch('selectedTaskLineNumber')
+	selectedTaskChanged() {
+		this.updateInputValueBasedOnSelectedTask();
+		this.resizeTaskTitleTextarea();
+	}
+
 	mounted() {
-		// setTimeout(() => {
-		// 	this.resizeTaskTitleTextarea();
-		// }, 100);
+		this.updateInputValueBasedOnSelectedTask();
+		setTimeout(() => {
+			this.resizeTaskTitleTextarea();
+		}, 100);
 	}
 }

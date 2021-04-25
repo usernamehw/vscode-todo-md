@@ -18,9 +18,9 @@
             <div v-html="fuzzyHighlight(suggestion.item)"></div>
         </div>
     </vue-autosuggest>
-    <!-- :class="{'task-details-visible': taskDetailsVisible}" -->
     <div v-if="filteredSortedTasks && filteredSortedTasks.length"
          class="task-list"
+         :class="{'task-details-visible': taskDetailsVisible}"
          @scroll.passive="onTaskListScroll">
         <task v-for="task in filteredSortedTasks"
               :key="task.lineNumber + task.rawText"
@@ -32,7 +32,7 @@
                                 href="command:todomd.specifyDefaultFile">Specify Default File</a></div>
     </div>
 
-    <!-- <TaskDetails v-if="taskDetailsVisible" /> -->
+    <TaskDetails v-if="taskDetailsVisible" />
 
     <notifications position="bottom right" />
 

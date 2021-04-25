@@ -94,7 +94,7 @@
 				},
 				"todomd.webview.showTaskDetails": {
 					"type": "boolean",
-					"markdownDescription": "⚠ DON'T USE IT. When true - show box on the bottom of the webview that shows selected task details.",
+					"markdownDescription": "EXPERIMENTAL. When true - show box on the bottom of the webview that shows selected task details.",
 					"default": false
 				},
 				"todomd.webview.notificationsEnabled": {

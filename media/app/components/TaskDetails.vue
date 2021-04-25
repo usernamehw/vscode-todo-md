@@ -2,7 +2,7 @@
 <div class="task-details">
     <textarea ref="detailsTaskTitle"
               class="task-title"
-              @input="onTaskTitleChange">{{ selectedTaskForDetails.title }}</textarea>
+              @input="onTaskTitleChange">{{ inputValue }}</textarea>
 </div>
 </template>
 

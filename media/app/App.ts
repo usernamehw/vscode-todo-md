@@ -12,7 +12,6 @@ import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { ExtensionConfig } from '../../src/types';
-// import TaskDetailsComponent from './components/TaskDetails.vue';
 import { SendMessage } from './SendMessage';
 import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
 import { getTaskAtLineWebview } from './storeUtils';
@@ -44,7 +43,7 @@ export type ModalName = 'edit-task';
 @Component({
 	components: {
 		VueContext,
-		// TaskDetails: TaskDetailsComponent,
+		TaskDetails: async () => import('./components/TaskDetails.vue'),
 	},
 	computed: {
 		...mapState(['tasksAsTree', 'filterInputValue', 'config', 'defaultFileSpecified', 'activeDocumentOpened', 'selectedTaskLineNumber']),
@@ -82,9 +81,9 @@ export default class App extends Vue {
 
 	showNotification = SendMessage.showNotification;
 
-	// get taskDetailsVisible() {
-	// 	return this.config.showTaskDetails && this.selectedTaskLineNumber !== -1;
-	// }
+	get taskDetailsVisible() {
+		return this.config.showTaskDetails && this.selectedTaskLineNumber !== -1;
+	}
 
 	$refs!: {
 		autosuggest: any;
