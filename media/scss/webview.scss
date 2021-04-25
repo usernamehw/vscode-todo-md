@@ -183,7 +183,7 @@ input:not([type]) {
 	padding-left: 4px;
 
 	&::selection {
-		background-color: var(--vscode-selection-background);
+		background-color: var(--vscode-editor-selectionBackground);
 	}
 
 	&:focus {
@@ -602,6 +602,7 @@ button,
 	.task-title {
 		background-color: var(--vscode-input-background);
 		border: 1px solid var(--border-high-contrast);
+		color: var(--vscode-input-foreground);
 		font-family: var(--vscode-editor-font-family);
 		font-size: 13px;
 		line-height: 1.4;
@@ -610,7 +611,7 @@ button,
 		width: 100%;
 
 		&::selection {
-			background-color: var(--vscode-selection-background);
+			background-color: var(--vscode-editor-selectionBackground, #accef7);
 		}
 
 		&:focus {
