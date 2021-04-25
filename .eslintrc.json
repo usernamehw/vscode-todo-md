@@ -90,7 +90,7 @@
 				"vue/require-render-return": 1,
 				"vue/require-component-is": 1,
 				"vue/no-unused-vars": 1,
-				"vue/no-textarea-mustache": 1,
+				"vue/no-textarea-mustache": 0,
 				"vue/no-template-key": 1,
 				"vue/no-side-effects-in-computed-properties": 1,
 				"vue/no-shared-component-data": 1,
