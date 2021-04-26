@@ -253,6 +253,10 @@ export interface ExtensionConfig {
 		 */
 		showPriority: boolean;
 		/**
+		 * Controls whether checkbox is shown in the webview.
+		 */
+		showCheckbox: boolean;
+		/**
 		 * When true - show notification after completing a task.
 		 */
 		notificationsEnabled: boolean;

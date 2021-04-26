@@ -46,6 +46,7 @@ export const store = new Store({
 			showRecurringUpcoming: true,
 			completedStrikeThrough: false,
 			showPriority: true,
+			showCheckbox: true,
 			fontSize: '13px',
 			padding: '0px',
 			customCheckboxEnabled: false,

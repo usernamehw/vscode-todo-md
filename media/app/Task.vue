@@ -14,7 +14,8 @@
               :class="[model.collapseRange ? 'codicon-chevron-right' : 'codicon-chevron-down']"
               @click.stop.exact="toggleTaskCollapse"
               @click.alt.stop="toggleTaskCollapseRecursive"></span><!--
-    --><input type="checkbox"
+    --><input v-if="config.showCheckbox"
+               type="checkbox"
                :checked="model.done"
                aria-label="Task completion status"
                class="checkbox"

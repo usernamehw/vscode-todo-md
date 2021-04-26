@@ -86,6 +86,11 @@
 					"markdownDescription": "Controls whether priority is shown in the webview.",
 					"default": true
 				},
+				"todomd.webview.showCheckbox": {
+					"type": "boolean",
+					"markdownDescription": "Controls whether checkbox is shown in the webview.",
+					"default": true
+				},
 				"todomd.webview.completionNotificationEnabled": {
 					"type": "boolean",
 					"markdownDescription": "When true - show notification after completing a task in a webview.",
