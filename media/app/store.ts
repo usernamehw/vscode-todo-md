@@ -240,7 +240,7 @@ export function updateFilterValueMutation(newValue: string) {
 export function toggleDoneMutation(task: TheTask) {
 	store.commit(Mutation.TOGGLE_DONE, task);
 	if (task.done && store.state.config.notificationsEnabled) {
-		showToastNotification(`DONE: ${task.title}`, {
+		showToastNotification(`${task.title}`, {
 			type: 'success',
 		});
 	}
