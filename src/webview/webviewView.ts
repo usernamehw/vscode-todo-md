@@ -99,7 +99,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					revealTask(message.value);
 					break;
 				}
-				case 'updateTitle': {
+				case 'updateWebviewTitle': {
 					this.updateTitle(message.value);
 					break;
 				}

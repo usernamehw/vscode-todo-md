@@ -366,7 +366,7 @@ interface WebviewMessageDeleteTask extends WebviewMessageBase {
 	value: number;
 }
 interface WebviewMessageUpdateTitle extends WebviewMessageBase {
-	type: 'updateTitle';// TODO: rename updateWebviewTitle
+	type: 'updateWebviewTitle';
 	value: number;
 }
 interface WebviewMessageOpenLinkFileProtocol extends WebviewMessageBase {

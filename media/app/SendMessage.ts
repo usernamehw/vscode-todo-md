@@ -1,4 +1,3 @@
-import { TheTask } from '../../src/TheTask';
 import { vscodeApi } from './store';
 
 /**
@@ -67,7 +66,7 @@ export class SendMessage {
 	}
 	static updateWebviewTitle(numberOfTasks: number) {
 		vscodeApi.postMessage({
-			type: 'updateTitle',
+			type: 'updateWebviewTitle',
 			value: numberOfTasks,
 		});
 	}
