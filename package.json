@@ -1025,11 +1025,6 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.archiveSelectedCompletedTasks",
-				"title": "Archive selected completed Tasks",
-				"category": "Todo MD"
-			},
-			{
 				"command": "todomd.startTask",
 				"title": "Start",
 				"category": "Todo MD"
@@ -1430,10 +1425,6 @@
 				},
 				{
 					"command": "todomd.archiveCompletedTasks",
-					"when": "todomd:isActive"
-				},
-				{
-					"command": "todomd.archiveSelectedCompletedTasks",
 					"when": "todomd:isActive"
 				},
 				{

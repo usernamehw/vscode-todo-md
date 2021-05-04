@@ -98,20 +98,22 @@ export function registerAllCommands() {
 		updateAllTreeViews();
 	});
 	commands.registerTextEditorCommand(CommandIds.archiveCompletedTasks, editor => {
-		const completedTasks = extensionState.tasks.filter(t => t.done);
-		archiveTasks(completedTasks, editor.document);
-	});
-	commands.registerTextEditorCommand(CommandIds.archiveSelectedCompletedTasks, editor => {
 		const selection = editor.selection;
-		const selectedCompletedTasks = [];
-
-		for (let i = selection.start.line; i <= selection.end.line; i++) {
-			const task = getTaskAtLineExtension(i);
-			if (task && task.done) {
-				selectedCompletedTasks.push(task);
+		if (selection.isEmpty) {
+			// Archive all completed tasks
+			const completedTasks = extensionState.tasks.filter(t => t.done);
+			archiveTasks(completedTasks, editor.document);
+		} else {
+			// Archive only selected completed tasks
+			const selectedCompletedTasks = [];
+			for (let i = selection.start.line; i <= selection.end.line; i++) {
+				const task = getTaskAtLineExtension(i);
+				if (task && task.done) {
+					selectedCompletedTasks.push(task);
+				}
 			}
+			archiveTasks(selectedCompletedTasks, editor.document);
 		}
-		archiveTasks(selectedCompletedTasks, editor.document);
 	});
 	commands.registerCommand(CommandIds.startTask, async (taskTreeItem?: TaskTreeItem) => {
 		let lineNumber: number;
@@ -417,12 +419,12 @@ async function showTaskInNotification(task: TheTask) {
  */
 function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortProperty: 'default' | 'priority') {
 	const selection = editor.selection;
+	let lineStart = selection.start.line;
+	let lineEnd = selection.end.line;
 	if (selection.isEmpty) {
-		vscode.window.showInformationMessage('Select tasks to sort');
-		return;
+		lineStart = 0;
+		lineEnd = editor.document.lineCount - 1;
 	}
-	const lineStart = selection.start.line;
-	const lineEnd = selection.end.line;
 	const tasks: TheTask[] = [];
 	for (let i = lineStart; i <= lineEnd; i++) {
 		const task = getTaskAtLineExtension(i);
