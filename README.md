@@ -202,12 +202,6 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 
 </details>
 
-## Recommended settings
-
-```js
-"window.dialogStyle": "custom",
-```
-
 ## More Documentation
 
 https://github.com/usernamehw/vscode-todo-md/tree/master/docs/docs.md
