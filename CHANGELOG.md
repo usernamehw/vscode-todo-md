@@ -1,3 +1,10 @@
+## 2.6.1 `04 May 2021`
+
+- ✨ [Tree View] Sort tags/projects/contexts alphabetically (1st level); Add icon to toggle sorting (alphabetic, count)
+- ✨ [webview] Setting to hide the checkbox
+- 🐛 Autocomplete should take items even from nested tasks
+- 💥 Remove `archiveSelectedCompletedTasks` command; sort and archive commands now use selected lines or entire document if no lines are selected.
+
 ## 2.6.0 `08 Apr 2021`
 
 - 💥 Remove `{t}` special tag
