@@ -1035,7 +1035,7 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.openDefaultArvhiveFile",
+				"command": "todomd.openDefaultArchiveFile",
 				"title": "Open default archive file",
 				"category": "Todo MD"
 			},

@@ -11,7 +11,7 @@ import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
-import { ExtensionState, TreeItemSortType, VscodeContext } from './types';
+import { CommandIds, ExtensionState, TreeItemSortType, VscodeContext } from './types';
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultFile } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
@@ -20,7 +20,7 @@ import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileIn
  * Register all commands. Names should match **"commands"** in `package.json`
  */
 export function registerAllCommands() {
-	commands.registerCommand('todomd.toggleDone', async (treeItem?: TaskTreeItem) => {
+	commands.registerCommand(CommandIds.toggleDone, async (treeItem?: TaskTreeItem) => {
 		const editor = window.activeTextEditor;
 		let document: vscode.TextDocument;
 		let lineNumbers: number[] = [];
@@ -47,7 +47,7 @@ export function registerAllCommands() {
 		await updateState();
 		updateAllTreeViews();
 	});
-	commands.registerCommand('todomd.hideTask', async (treeItem?: TaskTreeItem) => {
+	commands.registerCommand(CommandIds.hideTask, async (treeItem?: TaskTreeItem) => {
 		if (!treeItem) {
 			return;
 		}
@@ -59,7 +59,7 @@ export function registerAllCommands() {
 		await updateState();
 		updateAllTreeViews();
 	});
-	commands.registerCommand('todomd.collapseAllNestedTasks', async () => {
+	commands.registerCommand(CommandIds.collapseAllNestedTasks, async () => {
 		const edit = new WorkspaceEdit();
 		const activeDocument = await getActiveOrDefaultDocument();
 		forEachTask(task => {
@@ -70,7 +70,7 @@ export function registerAllCommands() {
 		await applyEdit(edit, activeDocument);
 		updateEverything();
 	});
-	commands.registerCommand('todomd.expandAllTasks', async () => {
+	commands.registerCommand(CommandIds.expandAllTasks, async () => {
 		const edit = new WorkspaceEdit();
 		const activeDocument = await getActiveOrDefaultDocument();
 		forEachTask(task => {
@@ -81,11 +81,11 @@ export function registerAllCommands() {
 		await applyEdit(edit, activeDocument);
 		updateEverything();
 	});
-	commands.registerCommand('todomd.focusTasksWebviewAndInput', async () => {
+	commands.registerCommand(CommandIds.focusTasksWebviewAndInput, async () => {
 		await commands.executeCommand('todomd.webviewTasks.focus');
 		Global.webviewProvider.focusFilterInput();
 	});
-	commands.registerCommand('todomd.deleteTask', async (treeItem?: TaskTreeItem) => {
+	commands.registerCommand(CommandIds.deleteTask, async (treeItem?: TaskTreeItem) => {
 		if (!treeItem) {
 			return;
 		}
@@ -97,11 +97,11 @@ export function registerAllCommands() {
 		await updateState();
 		updateAllTreeViews();
 	});
-	commands.registerTextEditorCommand('todomd.archiveCompletedTasks', editor => {
+	commands.registerTextEditorCommand(CommandIds.archiveCompletedTasks, editor => {
 		const completedTasks = extensionState.tasks.filter(t => t.done);
 		archiveTasks(completedTasks, editor.document);
 	});
-	commands.registerTextEditorCommand('todomd.archiveSelectedCompletedTasks', editor => {
+	commands.registerTextEditorCommand(CommandIds.archiveSelectedCompletedTasks, editor => {
 		const selection = editor.selection;
 		const selectedCompletedTasks = [];
 
@@ -113,7 +113,7 @@ export function registerAllCommands() {
 		}
 		archiveTasks(selectedCompletedTasks, editor.document);
 	});
-	commands.registerCommand('todomd.startTask', async (taskTreeItem?: TaskTreeItem) => {
+	commands.registerCommand(CommandIds.startTask, async (taskTreeItem?: TaskTreeItem) => {
 		let lineNumber: number;
 		let document: TextDocument;
 		if (taskTreeItem) {
@@ -129,13 +129,13 @@ export function registerAllCommands() {
 		}
 		startTask(document, lineNumber);
 	});
-	commands.registerTextEditorCommand('todomd.sortByPriority', (editor, edit) => {
+	commands.registerTextEditorCommand(CommandIds.sortByPriority, (editor, edit) => {
 		sortTasksInEditor(editor, edit, 'priority');
 	});
-	commands.registerTextEditorCommand('todomd.sortByDefault', (editor, edit) => {
+	commands.registerTextEditorCommand(CommandIds.sortByDefault, (editor, edit) => {
 		sortTasksInEditor(editor, edit, 'default');
 	});
-	commands.registerTextEditorCommand('todomd.createSimilarTask', async editor => {
+	commands.registerTextEditorCommand(CommandIds.createSimilarTask, async editor => {
 		// Create a task with all the tags, projects and contexts of another task
 		const selection = editor.selection;
 		const task = getTaskAtLineExtension(selection.start.line);
@@ -157,7 +157,7 @@ export function registerAllCommands() {
 
 		editor.selection = new vscode.Selection(line.lineNumber + 1, 0, line.lineNumber + 1, 0);
 	});
-	commands.registerCommand('todomd.getNextTask', async () => {
+	commands.registerCommand(CommandIds.getNextTask, async () => {
 		await updateState();
 		const tasks = extensionState.tasks.filter(t => !t.done);
 		if (!tasks.length) {
@@ -168,7 +168,7 @@ export function registerAllCommands() {
 		const task = sortedTasks[0];
 		showTaskInNotification(task);
 	});
-	commands.registerCommand('todomd.getFewNextTasks', async () => {
+	commands.registerCommand(CommandIds.getFewNextTasks, async () => {
 		await updateState();
 		const tasks = extensionState.tasks.filter(t => !t.done);
 		if (!tasks.length) {
@@ -182,7 +182,7 @@ export function registerAllCommands() {
 			modal: true,
 		});
 	});
-	commands.registerCommand('todomd.getRandomTask', async () => {
+	commands.registerCommand(CommandIds.getRandomTask, async () => {
 		await updateState();
 		const tasks = extensionState.tasks.filter(t => !t.done);
 		if (!tasks.length) {
@@ -192,7 +192,7 @@ export function registerAllCommands() {
 		const randomTask = sample(tasks)!;
 		showTaskInNotification(randomTask);
 	});
-	commands.registerCommand('todomd.addTaskToDefaultFile', async () => {
+	commands.registerCommand(CommandIds.addTaskToDefaultFile, async () => {
 		const isDefaultFileSpecified = await checkDefaultFileAndNotify();
 		if (!isDefaultFileSpecified) {
 			return;
@@ -207,7 +207,7 @@ export function registerAllCommands() {
 		await updateState();
 		updateAllTreeViews();
 	});
-	commands.registerCommand('todomd.addTaskToActiveFile', async () => {
+	commands.registerCommand(CommandIds.addTaskToActiveFile, async () => {
 		const activeFilePath = extensionState.activeDocument?.uri.fsPath;
 		if (!activeFilePath) {
 			return;
@@ -222,41 +222,32 @@ export function registerAllCommands() {
 		await updateState();
 		updateAllTreeViews();
 	});
-	/**
-	 * Append task to the file.
-	 *
-	 * Optionally adds creation date if user configured `addCreationDate`.
-	 */
-	async function addTaskToFile(text: string, filePath: string) {
-		const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
-		return await appendTaskToFile(`${creationDate}${text}`, filePath);
-	}
-	commands.registerTextEditorCommand('todomd.setDueDate', editor => {
+	commands.registerTextEditorCommand(CommandIds.setDueDate, editor => {
 		openSetDueDateInputbox(editor.document, editor.selection.active.line);
 	});
-	commands.registerCommand('todomd.setDueDateWithArgs', async (document: TextDocument, wordRange: vscode.Range, dueDate: string) => {
+	commands.registerCommand(CommandIds.setDueDateWithArgs, async (document: TextDocument, wordRange: vscode.Range, dueDate: string) => {
 		const lineNumber = wordRange.start.line;
 		const edit = new WorkspaceEdit();
 		edit.delete(document.uri, wordRange);
 		await applyEdit(edit, document);
 		setDueDate(document, lineNumber, dueDate);
 	});
-	commands.registerCommand('todomd.openDefaultArvhiveFile', async () => {
+	commands.registerCommand(CommandIds.openDefaultArchiveFile, async () => {
 		const isDefaultArchiveFileSpecified = await checkArchiveFileAndNotify();
 		if (!isDefaultArchiveFileSpecified) {
 			return;
 		}
 		openFileInEditor(extensionConfig.defaultArchiveFile);
 	});
-	commands.registerCommand('todomd.openDefaultFile', async () => {
+	commands.registerCommand(CommandIds.openDefaultFile, async () => {
 		const isDefaultFileSpecified = await checkDefaultFileAndNotify();
 		if (!isDefaultFileSpecified) {
 			return;
 		}
 		openFileInEditor(extensionConfig.defaultFile);
 	});
-	commands.registerCommand('todomd.specifyDefaultFile', specifyDefaultFile);
-	commands.registerCommand('todomd.completeTask', async () => {
+	commands.registerCommand(CommandIds.specifyDefaultFile, specifyDefaultFile);
+	commands.registerCommand(CommandIds.completeTask, async () => {
 		// Show Quick Pick to complete a task
 		const document = await getActiveOrDefaultDocument();
 		const notCompletedTasks = defaultSortTasks(extensionState.tasks.filter(task => !task.done)).map(task => TheTask.formatTask(task));
@@ -278,7 +269,7 @@ export function registerAllCommands() {
 		await updateState();
 		updateAllTreeViews();
 	});
-	commands.registerTextEditorCommand('todomd.filter', editor => {
+	commands.registerTextEditorCommand(CommandIds.filter, editor => {
 		const quickPick = window.createQuickPick();
 		quickPick.items = extensionConfig.savedFilters.map(filter => ({
 			label: filter.title,
@@ -310,25 +301,25 @@ export function registerAllCommands() {
 			updateTasksTreeView();
 		});
 	});
-	commands.registerCommand('todomd.clearFilter', editor => {
+	commands.registerCommand(CommandIds.clearFilter, editor => {
 		tasksView.description = undefined;
 		setContext(VscodeContext.filterActive, false);
 		extensionState.taskTreeViewFilterValue = '';
 		updateTasksTreeView();
 	});
-	commands.registerCommand('todomd.clearGlobalState', () => {
+	commands.registerCommand(CommandIds.clearGlobalState, () => {
 	// @ts-ignore No API
 		extensionState.extensionContext.globalState._value = {};
 		extensionState.extensionContext.globalState.update('hack', 'toClear');// Is this required to clear state?
 	});
-	commands.registerCommand('todomd.showGlobalState', () => {
+	commands.registerCommand(CommandIds.showGlobalState, () => {
 		// @ts-ignore
 		const lastVisitByFile: ExtensionState['lastVisitByFile'] = extensionState.extensionContext.globalState.get(LAST_VISIT_BY_FILE_STORAGE_KEY);
 		for (const key in lastVisitByFile) {
 			console.log(key, new Date(lastVisitByFile[key]), dayjs().to(lastVisitByFile[key]));// TODO: show in output / untitled
 		}
 	});
-	commands.registerCommand('todomd.removeAllOverdue', async () => {
+	commands.registerCommand(CommandIds.removeAllOverdue, async () => {
 		const activeDocument = await getActiveOrDefaultDocument();
 		if (!activeDocument) {
 			return;
@@ -341,17 +332,17 @@ export function registerAllCommands() {
 		});
 		applyEdit(edit, activeDocument);
 	});
-	commands.registerCommand('todomd.goToLine', (lineNumber: number) => {
+	commands.registerCommand(CommandIds.goToLine, (lineNumber: number) => {
 		revealTask(lineNumber);
 	});
-	commands.registerTextEditorCommand('todomd.resetAllRecurringTasks', editor => {
+	commands.registerTextEditorCommand(CommandIds.resetAllRecurringTasks, editor => {
 		const lastVisit = extensionState.lastVisitByFile[editor.document.uri.toString()];
 		resetAllRecurringTasks(editor.document, lastVisit);
 	});
-	commands.registerCommand('todomd.followLink', (treeItem: TaskTreeItem) => {
+	commands.registerCommand(CommandIds.followLink, (treeItem: TaskTreeItem) => {
 		followLinks(treeItem.task.links);
 	});
-	commands.registerTextEditorCommand('todomd.setLastVisit', async editor => {
+	commands.registerTextEditorCommand(CommandIds.setLastVisit, async editor => {
 		const numberOfHours = Number(await vscode.window.showInputBox({
 			prompt: 'Number of Hours ago',
 		}));
@@ -360,21 +351,21 @@ export function registerAllCommands() {
 		}
 		updateLastVisitGlobalState(editor.document.uri.toString(), dayjs().subtract(numberOfHours, 'hour').toDate());
 	});
-	commands.registerTextEditorCommand('todomd.incrementPriority', editor => {
+	commands.registerTextEditorCommand(CommandIds.incrementPriority, editor => {
 		const lineNumber = editor.selection.active.line;
 		incrementOrDecrementPriority(editor.document, lineNumber, 'increment');
 	});
-	commands.registerTextEditorCommand('todomd.decrementPriority', editor => {
+	commands.registerTextEditorCommand(CommandIds.decrementPriority, editor => {
 		const lineNumber = editor.selection.active.line;
 		incrementOrDecrementPriority(editor.document, lineNumber, 'decrement');
 	});
-	commands.registerCommand('todomd.showWebviewSettings', (treeItem: TaskTreeItem) => {
+	commands.registerCommand(CommandIds.showWebviewSettings, (treeItem: TaskTreeItem) => {
 		openSettingGuiAt('todomd.webview');
 	});
-	commands.registerCommand('todomd.webview.toggleShowRecurringUpcoming', () => {
+	commands.registerCommand(CommandIds.webviewToggleShowRecurringUpcoming, () => {
 		updateSetting('todomd.webview.showRecurringUpcoming', !extensionConfig.webview.showRecurringUpcoming);
 	});
-	commands.registerTextEditorCommand('todomd.toggleComment', editor => {
+	commands.registerTextEditorCommand(CommandIds.toggleComment, editor => {
 		const edit = new WorkspaceEdit();
 		const selections = editor.selections;
 		for (const selection of selections) {
@@ -387,15 +378,24 @@ export function registerAllCommands() {
 		applyEdit(edit, editor.document);
 	});
 	// ──────────────────────────────────────────────────────────────────────
-	commands.registerCommand('todomd.toggleTagsTreeViewSorting', () => {
+	commands.registerCommand(CommandIds.toggleTagsTreeViewSorting, () => {
 		toggleGlobalSetting('todomd.sortTagsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
 	});
-	commands.registerCommand('todomd.toggleProjectsTreeViewSorting', () => {
+	commands.registerCommand(CommandIds.toggleProjectsTreeViewSorting, () => {
 		toggleGlobalSetting('todomd.sortProjectsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
 	});
-	commands.registerCommand('todomd.toggleContextsTreeViewSorting', () => {
+	commands.registerCommand(CommandIds.toggleContextsTreeViewSorting, () => {
 		toggleGlobalSetting('todomd.sortContextsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
 	});
+}
+/**
+ * Append task to the file.
+ *
+ * Optionally adds creation date if user configured `addCreationDate`.
+ */
+async function addTaskToFile(text: string, filePath: string) {
+	const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
+	return await appendTaskToFile(`${creationDate}${text}`, filePath);
 }
 /**
  * Show formatted task in notification. Also show button to Follow link if links are present in this task.
