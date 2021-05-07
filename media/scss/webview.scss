@@ -104,11 +104,14 @@ body.vscode-dark {
 
 	--done-task-bg: #99ff8c1a;
 
-	--tag-bg: #{darken($tagBackground, 15%)};
+	--tag-bg: #{darken($tagBackground, 10%)};
+	--tag-fg: #000000;
 
 	--project-bg: #{darken($projectBackground, 20%)};
+	--project-fg: #000000;
 
 	--context-bg: #{darken($contextBackground, 10%)};
+	--context-fg: #000000;
 
 	--count-bg: #ffffff1a;
 	--count-button-bg: #ffffff1a;
@@ -116,7 +119,7 @@ body.vscode-dark {
 	--selected-task-bg: #92929250;
 
 	--nested-count-bg: #ebe7b5;
-	--nested-count-fg: #111111;
+	--nested-count-fg: #000000;
 
 	--due-border: #5faedb40;
 
