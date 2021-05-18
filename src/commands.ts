@@ -379,6 +379,16 @@ export function registerAllCommands() {
 		}
 		applyEdit(edit, editor.document);
 	});
+	// ──── Dev ─────────────────────────────────────────────────────────────
+	commands.registerTextEditorCommand(CommandIds.replaceWithToday, editor => {
+		const wordRange = editor.document.getWordRangeAtPosition(editor.selection.active, /\d{4}-\d{2}-\d{2}/);
+		if (!wordRange) {
+			return;
+		}
+		editor.edit(builder => {
+			builder.replace(wordRange, getDateInISOFormat());
+		});
+	});
 	// ──────────────────────────────────────────────────────────────────────
 	commands.registerCommand(CommandIds.toggleTagsTreeViewSorting, () => {
 		toggleGlobalSetting('todomd.sortTagsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);

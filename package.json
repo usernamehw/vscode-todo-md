@@ -1106,6 +1106,11 @@
 				"command": "todomd.removeAllOverdue",
 				"title": "DEV: Remove all overdue tags.",
 				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.dev.replaceDateWithToday",
+				"title": "DEV: Replace date with today.",
+				"category": "Todo MD"
 			}
 		],
 		"keybindings": [
@@ -1449,6 +1454,10 @@
 				},
 				{
 					"command": "todomd.removeAllOverdue",
+					"when": "todomd:isDev"
+				},
+				{
+					"command": "todomd.dev.replaceDateWithToday",
 					"when": "todomd:isDev"
 				}
 			]

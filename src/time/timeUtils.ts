@@ -19,6 +19,8 @@ export const monthRegexp = /^(Jan|January|Feb|February|Mar|March|Apr|April|May|J
  * Example: `2020-04-21` or `2020-04-30T09:11:17`
  *
  * Uses local time.
+ *
+ * @param includeTime Default is **false**
  */
 export function getDateInISOFormat(date: Date | Dayjs = new Date(), includeTime = false): string {
 	const format = includeTime ? DATE_TIME_FORMAT : DATE_FORMAT;
