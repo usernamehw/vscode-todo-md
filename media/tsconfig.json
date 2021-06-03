@@ -6,6 +6,8 @@
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
+		"forceConsistentCasingInFileNames": true,
+		"removeComments": true,
 		"strict": true,
 		"lib": [
 			"ES2015",
