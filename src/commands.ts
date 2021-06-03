@@ -312,7 +312,7 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandIds.clearGlobalState, () => {
 	// @ts-ignore No API
 		extensionState.extensionContext.globalState._value = {};
-		extensionState.extensionContext.globalState.update('hack', 'toClear');// Is this required to clear state?
+		extensionState.extensionContext.globalState.update('hack', 'toClear');// TODO: Is this required to clear state?
 	});
 	commands.registerCommand(CommandIds.showGlobalState, () => {
 		const lastVisitByFile = extensionState.extensionContext.globalState.get(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY) as ExtensionState['lastVisitByFile'];

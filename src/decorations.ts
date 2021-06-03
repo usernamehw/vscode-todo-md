@@ -112,8 +112,7 @@ export function paintEditorDecorations(editor: TextEditor) {
 		}
 		if (task.tagsRange) {
 			tagsDecorationRanges.push(...task.tagsRange);
-			// @ts-ignore If `tagsRange` exists - `tagsDelimiterRanges` also exists
-			tagsDelimiterDecorationRanges.push(...task.tagsDelimiterRanges);
+			tagsDelimiterDecorationRanges.push(...task.tagsDelimiterRanges!);// if `tagsRange` exists - `tagsDelimiterRanges` also exists
 		}
 		if (task.priorityRange) {
 			switch (task.priority) {
