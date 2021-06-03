@@ -45,10 +45,25 @@ export const extensionState: ExtensionState = {
 };
 
 
-export const EXTENSION_NAME = 'todomd';
-export const LAST_VISIT_BY_FILE_STORAGE_KEY = 'LAST_VISIT_BY_FILE_STORAGE_KEY';
+export const enum Constants {
+	EXTENSION_NAME = 'todomd',
+	LAST_VISIT_BY_FILE_STORAGE_KEY = 'LAST_VISIT_BY_FILE_STORAGE_KEY',
 
-export let extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as ExtensionConfig;
+	tagsTreeViewId = 'todomd.tags',
+	projectsTreeViewId = 'todomd.projects',
+	contextsTreeViewId = 'todomd.contexts',
+	dueTreeViewId = 'todomd.due',
+	tasksTreeViewId = 'todomd.tasks',
+	archivedTreeViewId = 'todomd.archived',
+	generic1TreeViewId = 'todomd.generic1',
+	generic2TreeViewId = 'todomd.generic2',
+	generic3TreeViewId = 'todomd.generic3',
+
+	defaultFileSetting = 'todomd.defaultFile',
+	defaultArchiveFileSetting = 'todomd.defaultArchiveFile',
+}
+
+export let extensionConfig = workspace.getConfiguration(Constants.EXTENSION_NAME) as any as ExtensionConfig;
 export const statusBar = new StatusBar();
 /**
  * Global vscode variables
@@ -89,7 +104,7 @@ export class Global {
 
 export async function activate(extensionContext: vscode.ExtensionContext) {
 	extensionState.extensionContext = extensionContext;
-	const lastVisitByFile = extensionContext.globalState.get<ExtensionState['lastVisitByFile'] | undefined>(LAST_VISIT_BY_FILE_STORAGE_KEY);
+	const lastVisitByFile = extensionContext.globalState.get<ExtensionState['lastVisitByFile'] | undefined>(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY);
 	extensionState.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
 	updateEditorDecorationStyle();
@@ -126,14 +141,14 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 	}));
 
 	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
-		if (!e.affectsConfiguration(EXTENSION_NAME)) {
+		if (!e.affectsConfiguration(Constants.EXTENSION_NAME)) {
 			return;
 		}
 		updateConfig();
 	}
 
 	function updateConfig(): void {
-		extensionConfig = workspace.getConfiguration(EXTENSION_NAME) as any as ExtensionConfig;
+		extensionConfig = workspace.getConfiguration(Constants.EXTENSION_NAME) as any as ExtensionConfig;
 
 		disposeEditorDisposables();
 		updateEditorDecorationStyle();
@@ -217,7 +232,7 @@ function disposeEditorDisposables(): void {
  */
 export async function updateLastVisitGlobalState(stringUri: string, date: Date) {
 	extensionState.lastVisitByFile[stringUri] = date;
-	await extensionState.extensionContext.globalState.update(LAST_VISIT_BY_FILE_STORAGE_KEY, extensionState.lastVisitByFile);
+	await extensionState.extensionContext.globalState.update(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY, extensionState.lastVisitByFile);
 }
 
 export function deactivate(): void {

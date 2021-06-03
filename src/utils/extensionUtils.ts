@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { TextDocument, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { extensionConfig, extensionState, EXTENSION_NAME } from '../extension';
+import { Constants, extensionConfig, extensionState } from '../extension';
 import { TheTask } from '../TheTask';
 import { updateSetting } from './vscodeUtils';
 
@@ -62,7 +62,8 @@ async function specifyFile(isArchive: boolean) {
 		return undefined;
 	}
 
-	return updateSetting(`${EXTENSION_NAME}.default${isArchive ? 'Archive' : ''}File`, filePath);
+	const settingName = isArchive ? Constants.defaultArchiveFileSetting : Constants.defaultFileSetting;
+	return updateSetting(settingName, filePath);
 }
 /**
  * Open Settings GUI at `todomd.defaultFile` item

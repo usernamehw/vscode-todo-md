@@ -4,7 +4,7 @@ import vscode, { commands, TextDocument, TextEditor, TextEditorEdit, ThemeIcon, 
 import { appendTaskToFile, archiveTasks, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, revealTask, setDueDate, startTask, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
-import { extensionConfig, extensionState, Global, LAST_VISIT_BY_FILE_STORAGE_KEY, updateLastVisitGlobalState, updateState } from './extension';
+import { Constants, extensionConfig, extensionState, Global, updateLastVisitGlobalState, updateState } from './extension';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
@@ -315,8 +315,7 @@ export function registerAllCommands() {
 		extensionState.extensionContext.globalState.update('hack', 'toClear');// Is this required to clear state?
 	});
 	commands.registerCommand(CommandIds.showGlobalState, () => {
-		// @ts-ignore
-		const lastVisitByFile: ExtensionState['lastVisitByFile'] = extensionState.extensionContext.globalState.get(LAST_VISIT_BY_FILE_STORAGE_KEY);
+		const lastVisitByFile = extensionState.extensionContext.globalState.get(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY) as ExtensionState['lastVisitByFile'];
 		for (const key in lastVisitByFile) {
 			console.log(key, new Date(lastVisitByFile[key]), dayjs().to(lastVisitByFile[key]));// TODO: show in output / untitled
 		}
