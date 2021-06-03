@@ -431,6 +431,7 @@ export const enum CommandIds {
 	showGlobalState = 'todomd.showGlobalState',
 	removeAllOverdue = 'todomd.removeAllOverdue',
 	goToLine = 'todomd.goToLine',
+	goToLineInArchived = 'todomd.goToLineInArchived',
 	resetAllRecurringTasks = 'todomd.resetAllRecurringTasks',
 	followLink = 'todomd.followLink',
 	setLastVisit = 'todomd.setLastVisit',

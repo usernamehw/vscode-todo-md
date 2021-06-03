@@ -1,7 +1,7 @@
 import vscode, { ThemeColor, ThemeIcon } from 'vscode';
-import { EXTENSION_NAME } from '../extension';
 import { getTaskHover } from '../hover/getTaskHover';
 import { TheTask } from '../TheTask';
+import { CommandIds } from '../types';
 
 export class TaskTreeItem extends vscode.TreeItem {
 	collapsibleState = vscode.TreeItemCollapsibleState.None;
@@ -40,6 +40,7 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 
 	constructor(
 		private tasks: TheTask[],
+		private readonly isArchived = false,
 	) { }
 
 	refresh(newTasks: TheTask[]): void {
@@ -55,19 +56,19 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 		if (element) {
 			const subtasks = element.task.subtasks;
 			if (subtasks.length) {
-				return tasksToTreeItems(subtasks);
+				return tasksToTreeItems(subtasks, this.isArchived);
 			} else {
 				return [];
 			}
 		} else {
-			return tasksToTreeItems(this.tasks);
+			return tasksToTreeItems(this.tasks, this.isArchived);
 		}
 	}
 }
 /**
  * Transform tasks to be able to use in a Tree View
  */
-export function tasksToTreeItems(tasks: TheTask[]) {
+export function tasksToTreeItems(tasks: TheTask[], isArchived = false) {
 	const result = [];
 	for (const task of tasks) {
 		if (task.isHidden) {
@@ -80,7 +81,7 @@ export function tasksToTreeItems(tasks: TheTask[]) {
 			}),
 			task,
 			{
-				command: `${EXTENSION_NAME}.goToLine`,
+				command: isArchived ? CommandIds.goToLineInArchived : CommandIds.goToLine,
 				title: 'Go To Line',
 				arguments: [task.lineNumber],
 			},

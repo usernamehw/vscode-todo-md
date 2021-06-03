@@ -10,7 +10,7 @@ import { TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
-import { tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
+import { getArchivedDocument, tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { CommandIds, ExtensionState, TreeItemSortType, VscodeContext } from './types';
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultFile } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
@@ -336,6 +336,9 @@ export function registerAllCommands() {
 	});
 	commands.registerCommand(CommandIds.goToLine, (lineNumber: number) => {
 		revealTask(lineNumber);
+	});
+	commands.registerCommand(CommandIds.goToLineInArchived, async (lineNumber: number) => {
+		revealTask(lineNumber, await getArchivedDocument());
 	});
 	commands.registerTextEditorCommand(CommandIds.resetAllRecurringTasks, editor => {
 		const lastVisit = extensionState.lastVisitByFile[editor.document.uri.toString()];

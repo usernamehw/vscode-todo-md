@@ -20,7 +20,7 @@ export const projectProvider = new ProjectProvider([]);
 export const contextProvider = new ContextProvider([]);
 export const taskProvider = new TaskProvider([]);
 export const dueProvider = new TaskProvider([]);
-export const archivedProvider = new TaskProvider([]);
+export const archivedProvider = new TaskProvider([], true);
 
 const generic1Provider = new TaskProvider([]);
 const generic2Provider = new TaskProvider([]);
@@ -300,8 +300,12 @@ export async function updateArchivedTasks() {
 	if (!extensionConfig.defaultArchiveFile) {
 		return;
 	}
-	const archivedDocument = await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultArchiveFile));
+	const archivedDocument = await getArchivedDocument();
 	const parsedArchiveTasks = await parseDocument(archivedDocument);
 	extensionState.archivedTasks = parsedArchiveTasks.tasks;
 	updateArchivedTasksTreeView();
+}
+
+export async function getArchivedDocument() {
+	return await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultArchiveFile));
 }
