@@ -6,12 +6,12 @@ import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 // @ts-ignore
 import VueContext from 'vue-context';
-import VModal from 'vue-js-modal';
 import VueNotifications from 'vue-notification';
 import { Component } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { ExtensionConfig } from '../../src/types';
+import type TaskDetails from './components/TaskDetails';
 import { SendMessage } from './SendMessage';
 import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
 import { getTaskAtLineWebview } from './storeUtils';
@@ -35,10 +35,7 @@ marked.Renderer.prototype.link = (href, title = '', text) => {
 
 Vue.use(VueAutosuggest);
 Vue.use(VueNotifications);
-Vue.use(VModal);
 Vue.component('task', TaskComponent);// needs to be global for recursive rendering
-
-export type ModalName = 'edit-task';
 
 @Component({
 	components: {
@@ -81,14 +78,17 @@ export default class App extends Vue {
 
 	showNotification = SendMessage.showNotification;
 
+	taskDetailsManuallyTriggered = false;
+
 	get taskDetailsVisible() {
-		return this.config.showTaskDetails && this.selectedTaskLineNumber !== -1;
+		return (this.config.showTaskDetails || this.taskDetailsManuallyTriggered) && this.selectedTaskLineNumber !== -1;
 	}
 
 	$refs!: {
 		autosuggest: any;
 		taskContextMenu: any;
 		newTaskText: HTMLInputElement;
+		taskDetails: TaskDetails;
 	};
 	// ──────────────────────────────────────────────────────────────────────
 	/**
@@ -195,13 +195,6 @@ export default class App extends Vue {
 		this.$refs.taskContextMenu.close();
 	}
 	// ──────────────────────────────────────────────────────────────────────
-	acceptNewTaskTitle() {
-		const selectedTask = getTaskAtLineWebview(this.selectedTaskLineNumber);
-		if (selectedTask) {
-			SendMessage.editRawText(this.selectedTaskLineNumber, this.newTaskTitle);
-		}
-		this.hideModal('edit-task');
-	}
 	selectFirstTask() {
 		const firstTask = this.filteredSortedTasks[0];
 		if (firstTask) {
@@ -224,12 +217,6 @@ export default class App extends Vue {
 		const element = document.getElementById(`ln${lineNumber}`);
 		// @ts-ignore https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded
 		element.scrollIntoViewIfNeeded(false);
-	}
-	showModal(modalName: ModalName) {
-		this.$modal.show(modalName);
-	}
-	hideModal(modalName: ModalName) {
-		this.$modal.hide(modalName);
 	}
 	// ──────────────────────────────────────────────────────────────────────
 	mounted() {
@@ -263,17 +250,18 @@ export default class App extends Vue {
 				}
 			} else if (e.key === 'Escape') {
 				selectTaskMutation(-1);
+				this.taskDetailsManuallyTriggered = false;
+				this.focusFilterInput();
 			} else if (e.key === 'd' && e.altKey) {
 				const task = getTaskAtLineWebview(this.selectedTaskLineNumber);
 				if (task) {
 					toggleDoneMutation(task);
 				}
 			} else if (e.key === 'F2') {
-				const selectedTask = getTaskAtLineWebview(this.selectedTaskLineNumber);
-				if (selectedTask) {
-					this.newTaskTitle = selectedTask.rawText;
-					this.showModal('edit-task');
-				}
+				this.taskDetailsManuallyTriggered = true;
+				setTimeout(() => {
+					this.$refs.taskDetails.$refs.detailsTaskTitle.focus();
+				}, 100);
 			}
 		});
 	}
