@@ -67,7 +67,7 @@ export default class App extends Vue {
 	 */
 	newTaskTitle = '';
 
-	contextMenuTask: TheTask;
+	contextMenuTask!: TheTask;
 
 	filteredSuggestions: {
 		data: string[];
@@ -95,7 +95,7 @@ export default class App extends Vue {
 	 * Highlight filter matches for single autocomplete item
 	 */
 	fuzzyHighlight(value: string) {
-		return fuzzysort.highlight(fuzzysort.single(this.filterInputValue, value), '<mark>', '</mark>');
+		return fuzzysort.highlight(fuzzysort.single(this.filterInputValue, value) || undefined, '<mark>', '</mark>');
 	}
 	/**
 	 * Open autocomplete on Ctrl+Space
