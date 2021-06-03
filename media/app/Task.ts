@@ -122,7 +122,7 @@ export default class Task extends Vue {
 			switch (this.model.due.isDue) {
 				case DueState.notDue: {
 					dueClasses.push('not-due');
-					dueText = `<span class="codicon codicon-milestone" title="Not due."></span><span class="days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
+					dueText = `<span class="codicon codicon-milestone"></span><span title="In ${this.model.due.daysUntilDue} days" class="days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
 					break;
 				}
 				case DueState.due: {
