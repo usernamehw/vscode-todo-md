@@ -90,8 +90,9 @@ export const store = new Store({
 		},
 		flattenedFilteredSortedTasks: (state, getters) => flattenDeep(getters.filteredSortedTasks),
 		autocompleteItems: state => {
-			const filterConstants = [
+			const filterConstants = [// TODO: constants should be in const enum
 				'$due',
+				'$started',
 				'$hasDue',
 				'$done',
 				'$overdue',

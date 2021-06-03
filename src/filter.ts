@@ -13,6 +13,7 @@ const enum FilterType {
 	overdue,
 	recurring,
 	done,
+	started,
 	noTag,
 	noProject,
 	noContext,
@@ -95,6 +96,13 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 			} else if (filter.filterType === FilterType.done) {
 				// $done
 				if (task.done) {
+					filterResult = true;
+				} else {
+					filterResult = false;
+				}
+			} else if (filter.filterType === FilterType.started) {
+				// $started
+				if (task.startRange && !task.durationRange) {
 					filterResult = true;
 				} else {
 					filterResult = false;
@@ -220,6 +228,8 @@ function parseFilter(filterStr: string) {
 			case '$': {
 				if (value === 'done') {
 					filter.filterType = FilterType.done;
+				} else if (value === 'started') {
+					filter.filterType = FilterType.started;
 				} else if (value === 'hasDue') {
 					filter.filterType = FilterType.hasDue;
 				} else if (value === 'due') {
