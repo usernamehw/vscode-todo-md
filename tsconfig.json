@@ -14,7 +14,6 @@
 		"sourceMap": true,
 		"rootDir": "src",
 		"strict": true,
-		"alwaysStrict": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"removeComments": true,

@@ -15,7 +15,7 @@ import { CommandIds, ExtensionState, TreeItemSortType, VscodeContext } from './t
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultFile } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
-import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openSettingGuiAt, setContext, toggleGlobalSetting, updateSetting } from './utils/vscodeUtils';
+import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openInUntitled, openSettingGuiAt, setContext, toggleGlobalSetting, updateSetting } from './utils/vscodeUtils';
 /**
  * Register all commands. Names should match **"commands"** in `package.json`
  */
@@ -310,15 +310,16 @@ export function registerAllCommands() {
 		updateTasksTreeView();
 	});
 	commands.registerCommand(CommandIds.clearGlobalState, () => {
-	// @ts-ignore No API
-		extensionState.extensionContext.globalState._value = {};
-		extensionState.extensionContext.globalState.update('hack', 'toClear');// TODO: Is this required to clear state?
+		(extensionState.extensionContext.globalState as any)._value = {};
+		extensionState.extensionContext.globalState.update('hack', 'toClear');// Required to clear state
 	});
 	commands.registerCommand(CommandIds.showGlobalState, () => {
 		const lastVisitByFile = extensionState.extensionContext.globalState.get(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY) as ExtensionState['lastVisitByFile'];
+		let str = '';
 		for (const key in lastVisitByFile) {
-			console.log(key, new Date(lastVisitByFile[key]), dayjs().to(lastVisitByFile[key]));// TODO: show in output / untitled
+			str += `${new Date(lastVisitByFile[key])} | ${dayjs().to(lastVisitByFile[key])} | ${key}\n` ;
 		}
+		openInUntitled(str);
 	});
 	commands.registerCommand(CommandIds.removeAllOverdue, async () => {
 		const activeDocument = await getActiveOrDefaultDocument();
