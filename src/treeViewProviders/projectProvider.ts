@@ -37,15 +37,15 @@ export class ProjectProvider implements vscode.TreeDataProvider<ProjectTreeItem 
 		if (!element) {
 			return this.projects.map(project => new ProjectTreeItem(`${project.title} [${project.tasks.length}]`, project.tasks));
 		}
+		let tasksToTransform: TheTask[] = [];
 		if (element instanceof ProjectTreeItem) {
-			return tasksToTreeItems(element.tasks);
+			tasksToTransform = element.tasks;
 		} else {
 			const subtasks = element.task.subtasks;
 			if (subtasks.length) {
-				return tasksToTreeItems(subtasks);
-			} else {
-				return [];
+				return tasksToTreeItems(subtasks, true);
 			}
 		}
+		return tasksToTreeItems(tasksToTransform);
 	}
 }

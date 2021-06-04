@@ -37,15 +37,15 @@ export class ContextProvider implements vscode.TreeDataProvider<ContextTreeItem 
 		if (!element) {
 			return this.contexts.map(context => new ContextTreeItem(`${context.title} [${context.tasks.length}]`, context.tasks));
 		}
+		let tasksToTransform: TheTask[] = [];
 		if (element instanceof ContextTreeItem) {
-			return tasksToTreeItems(element.tasks);
+			tasksToTransform = element.tasks;
 		} else {
 			const subtasks = element.task.subtasks;
 			if (subtasks.length) {
-				return tasksToTreeItems(subtasks);
-			} else {
-				return [];
+				return tasksToTreeItems(subtasks, true);
 			}
 		}
+		return tasksToTreeItems(tasksToTransform);
 	}
 }

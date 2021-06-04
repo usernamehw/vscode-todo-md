@@ -233,6 +233,19 @@
 					"default": "alphabetic",
 					"description": "Controls contexts Tree View sorting."
 				},
+				"todomd.sortNestedTasks": {
+					"type": "string",
+					"enum": [
+						"default",
+						"none"
+					],
+					"enumDescriptions": [
+						"Default sorting (due)",
+						"No sorting"
+					],
+					"default": "default",
+					"description": "Controls nested tasks sorting in Tree Views."
+				},
 				"todomd.tags": {
 					"type": "array",
 					"items": {

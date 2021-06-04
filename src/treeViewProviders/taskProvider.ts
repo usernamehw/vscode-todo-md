@@ -1,7 +1,9 @@
 import vscode, { ThemeColor, ThemeIcon } from 'vscode';
+import { extensionConfig } from '../extension';
 import { getTaskHover } from '../hover/getTaskHover';
+import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
-import { CommandIds } from '../types';
+import { CommandIds, SortNestedTasks } from '../types';
 
 export class TaskTreeItem extends vscode.TreeItem {
 	collapsibleState = vscode.TreeItemCollapsibleState.None;
@@ -53,22 +55,25 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 	}
 
 	getChildren(element: TaskTreeItem | undefined): TaskTreeItem[] {
+		let tasksToTransform: TheTask[] = [];
 		if (element) {
 			const subtasks = element.task.subtasks;
 			if (subtasks.length) {
-				return tasksToTreeItems(subtasks, this.isArchived);
-			} else {
-				return [];
+				return tasksToTreeItems(subtasks, true, this.isArchived);
 			}
 		} else {
-			return tasksToTreeItems(this.tasks, this.isArchived);
+			tasksToTransform = this.tasks;
 		}
+		return tasksToTreeItems(tasksToTransform, false, this.isArchived);
 	}
 }
 /**
  * Transform tasks to be able to use in a Tree View
  */
-export function tasksToTreeItems(tasks: TheTask[], isArchived = false) {
+export function tasksToTreeItems(tasks: TheTask[], tryToApplySort = false, isArchived = false) {
+	if (tryToApplySort && extensionConfig.sortNestedTasks === SortNestedTasks.default) {
+		tasks = defaultSortTasks(tasks);
+	}
 	const result = [];
 	for (const task of tasks) {
 		if (task.isHidden) {

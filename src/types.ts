@@ -95,6 +95,10 @@ export const enum TreeItemSortType {
 	alphabetic = 'alphabetic',
 	count = 'count',
 }
+export const enum SortNestedTasks {
+	default = 'default',
+	none = 'none',
+}
 /**
  * Advanced decorations allowing to change any available editor decoration options (borders, outline, background, foreground, before, after...)
  *
@@ -160,6 +164,10 @@ export interface ExtensionConfig {
 	 * Controls contexts Tree View sorting.
 	 */
 	sortContextsView: TreeItemSortType;
+	/**
+	 * Controls task sorting in tags/projects/contexts Tree Views.
+	 */
+	sortNestedTasks: SortNestedTasks;
 	/**
 	 * Choose files that extension will operate on (Glob).
 	 */

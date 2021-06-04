@@ -37,15 +37,15 @@ export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | TaskTr
 		if (!element) {
 			return this.tags.map(tag => new TagTreeItem(`${tag.title} [${tag.tasks.length}]`, tag.tasks));
 		}
+		let tasksToTransform: TheTask[] = [];
 		if (element instanceof TagTreeItem) {
-			return tasksToTreeItems(element.tasks);
+			tasksToTransform = element.tasks;
 		} else {
 			const subtasks = element.task.subtasks;
 			if (subtasks.length) {
-				return tasksToTreeItems(subtasks);
-			} else {
-				return [];
+				return tasksToTreeItems(subtasks, true);
 			}
 		}
+		return tasksToTreeItems(tasksToTransform);
 	}
 }
