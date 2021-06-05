@@ -451,5 +451,7 @@ export const enum CommandIds {
 	toggleTagsTreeViewSorting = 'todomd.toggleTagsTreeViewSorting',
 	toggleProjectsTreeViewSorting = 'todomd.toggleProjectsTreeViewSorting',
 	toggleContextsTreeViewSorting = 'todomd.toggleContextsTreeViewSorting',
+	sortTaskParts = 'todomd.sortTaskParts',
+	// ──── Dev ───────────────────────────────────────────────────
 	replaceWithToday = 'todomd.dev.replaceDateWithToday',
 }

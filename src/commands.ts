@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import sample from 'lodash/sample';
 import vscode, { commands, TextDocument, TextEditor, TextEditorEdit, ThemeIcon, window, WorkspaceEdit } from 'vscode';
-import { appendTaskToFile, archiveTasks, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, revealTask, setDueDate, startTask, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
+import { appendTaskToFile, archiveTasks, editTaskWorkspaceEdit, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, revealTask, setDueDate, startTask, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
 import { Constants, extensionConfig, extensionState, Global, updateLastVisitGlobalState, updateState } from './extension';
@@ -382,6 +382,15 @@ export function registerAllCommands() {
 		}
 		applyEdit(edit, editor.document);
 	});
+	commands.registerCommand(CommandIds.toggleTagsTreeViewSorting, () => {
+		toggleGlobalSetting('todomd.sortTagsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
+	});
+	commands.registerCommand(CommandIds.toggleProjectsTreeViewSorting, () => {
+		toggleGlobalSetting('todomd.sortProjectsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
+	});
+	commands.registerCommand(CommandIds.toggleContextsTreeViewSorting, () => {
+		toggleGlobalSetting('todomd.sortContextsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
+	});
 	// ──── Dev ─────────────────────────────────────────────────────────────
 	commands.registerTextEditorCommand(CommandIds.replaceWithToday, editor => {
 		const wordRange = editor.document.getWordRangeAtPosition(editor.selection.active, /\d{4}-\d{2}-\d{2}/);
@@ -393,15 +402,19 @@ export function registerAllCommands() {
 		});
 	});
 	// ──────────────────────────────────────────────────────────────────────
-	commands.registerCommand(CommandIds.toggleTagsTreeViewSorting, () => {
-		toggleGlobalSetting('todomd.sortTagsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
+	commands.registerTextEditorCommand(CommandIds.sortTaskParts, async editor => {
+		const lineNumbers = getSelectedLineNumbers(editor);
+		const edit = new WorkspaceEdit();
+		for (const ln of lineNumbers) {
+			const task = getTaskAtLineExtension(ln);
+			if (!task) {
+				continue;
+			}
+			editTaskWorkspaceEdit(edit, editor.document, task);
+		}
+		await applyEdit(edit, editor.document);
 	});
-	commands.registerCommand(CommandIds.toggleProjectsTreeViewSorting, () => {
-		toggleGlobalSetting('todomd.sortProjectsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
-	});
-	commands.registerCommand(CommandIds.toggleContextsTreeViewSorting, () => {
-		toggleGlobalSetting('todomd.sortContextsView', [TreeItemSortType.alphabetic, TreeItemSortType.count]);
-	});
+	// ────────────────────────────────────────────────────────────
 }
 /**
  * Append task to the file.
@@ -426,6 +439,15 @@ async function showTaskInNotification(task: TheTask) {
 	} else {
 		vscode.window.showInformationMessage(formattedTask);
 	}
+}
+function getSelectedLineNumbers(editor: TextEditor): number[] {
+	const lineNumbers: number[] = [];
+	for (const selection of editor.selections) {
+		for (let i = selection.start.line; i <= selection.end.line; i++) {
+			lineNumbers.push(i);
+		}
+	}
+	return Array.from(new Set(lineNumbers));// leave only unique line numbers
 }
 /**
  * Sort tasks in editor. Default sort is by due date. Same due date sorted by priority.

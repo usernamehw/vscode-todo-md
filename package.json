@@ -1106,6 +1106,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.sortTaskParts",
+				"title": "Sort Task Parts",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.setLastVisit",
 				"title": "DEV: Set last visit",
 				"category": "Todo MD"

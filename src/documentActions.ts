@@ -487,3 +487,8 @@ export function toggleCommentAtLineWorkspaceEdit(edit: WorkspaceEdit, document: 
 		edit.insert(document.uri, new vscode.Position(lineNumber, 0), '# ');
 	}
 }
+export function editTaskWorkspaceEdit(edit: WorkspaceEdit, document: vscode.TextDocument, task: TheTask) {
+	const newTaskAsText = taskToString(task);
+	const line = document.lineAt(task.lineNumber);
+	edit.replace(document.uri, line.range, newTaskAsText);
+}
