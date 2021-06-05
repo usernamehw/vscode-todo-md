@@ -31,12 +31,7 @@ export function registerAllCommands() {
 			if (!editor) {
 				return;
 			}
-			for (const selection of editor.selections) {
-				for (let i = selection.start.line; i <= selection.end.line; i++) {
-					lineNumbers.push(i);
-				}
-			}
-			lineNumbers = Array.from(new Set(lineNumbers));// leave only unique line numbers
+			lineNumbers = getSelectedLineNumbers(editor);
 			document = editor.document;
 		}
 
