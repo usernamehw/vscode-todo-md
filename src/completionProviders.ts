@@ -28,7 +28,6 @@ export function updateCompletions(): void {
 				const tags = Array.from(new Set(extensionState.tags.concat(extensionConfig.tags)));
 				for (const tag of tags) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
-					tagCompletion.commitCharacters = ['#'];
 					tagCompletions.push(tagCompletion);
 				}
 
@@ -49,7 +48,6 @@ export function updateCompletions(): void {
 				const projects = Array.from(new Set(extensionState.projects.concat(extensionConfig.projects)));
 				for (const tag of projects) {
 					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
-					tagCompletion.commitCharacters = ['+'];
 					projectCompletions.push(tagCompletion);
 				}
 
@@ -70,7 +68,6 @@ export function updateCompletions(): void {
 				const contexts = Array.from(new Set(extensionState.contexts.concat(extensionConfig.contexts)));
 				for (const context of contexts) {
 					const contextCompletion = new vscode.CompletionItem(context, vscode.CompletionItemKind.Field);
-					contextCompletion.commitCharacters = ['@'];
 					contextCompletions.push(contextCompletion);
 				}
 
