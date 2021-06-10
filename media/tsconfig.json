@@ -7,13 +7,8 @@
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
 		"forceConsistentCasingInFileNames": true,
-		"removeComments": true,
 		"strict": true,
 		"lib": [
-			"ES2015",
-			"ES2016",
-			"ES2017",
-			"ES2018",
 			"ES2019",
 			"DOM"
 		],
