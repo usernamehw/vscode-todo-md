@@ -1,3 +1,11 @@
+## 2.6.2 `12 Jun 2021`
+
+- 🐛 [webview] Fix codicons not loading in **1.57.0**
+- ✨ [webview] <kbd>F2</kbd> Opens task details instead of a modal dialog
+- 🐛 [Tree View] Fix reveal in file for archived tree view
+- ✨ [Tree View] Sort nested tasks
+- ✨ [editor] Sort task parts inside one line `todomd.sortTaskParts`
+
 ## 2.6.1 `04 May 2021`
 
 - ✨ [Tree View] Sort tags/projects/contexts alphabetically (1st level); Add icon to toggle sorting (alphabetic, count)
