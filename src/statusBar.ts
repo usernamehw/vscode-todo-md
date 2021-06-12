@@ -9,7 +9,8 @@ export class StatusBar {
 	private readonly statusBarItem: StatusBarItem;
 
 	constructor() {
-		this.statusBarItem = window.createStatusBarItem(1, -20000);
+		this.statusBarItem = window.createStatusBarItem('Todo MD: Counter', 1, -20000);
+		this.statusBarItem.name = 'Todo MD: Counter';
 	}
 
 	show() {
