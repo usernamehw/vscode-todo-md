@@ -6,6 +6,7 @@
 - [Set due date helper function `todomd.setDueDate`](#set-due-date-helper-function-todomdsetduedate)
     - [Syntax](#syntax)
     - [Set due date with autocomplete](#set-due-date-with-autocomplete)
+- [Advanced editor decorations](#advanced-editor-decorations)
 - [Webview](#webview)
     - [Tasks are rendered as markdown](#tasks-are-rendered-as-markdown)
     - [Webview Hotkeys](#webview-hotkeys)
@@ -64,6 +65,38 @@ It's also possible to set due date by typing `$` at the end of the word of the f
 
 ```
 +10$
+```
+
+## Advanced editor decorations
+
+It's possible to tweak some of the editor decorations with `todomd.decorations` setting.
+
+Examples:
+
+Use background for priority:
+
+```js
+"todomd.decorations": {
+	"priorityAForeground": {
+		"color": "inherit",
+		"backgroundColor": "#fe7474",
+		"borderRadius": "5px",
+	},
+}
+```
+
+Use background for completed task:
+
+```js
+"todomd.decorations": {
+	"completedTask": {
+		"backgroundColor": "#35c92720",
+		"textDecoration": "none",
+		"light": {
+			"textDecoration": "none"
+		}
+	},
+}
 ```
 
 ## Webview
