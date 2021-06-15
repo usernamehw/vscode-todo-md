@@ -6,7 +6,7 @@ import { extensionConfig, extensionState, Global } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
-import { followLink } from '../utils/vscodeUtils';
+import { openFileInEditorByPath } from '../utils/vscodeUtils';
 import { getNonce } from './webviewUtils';
 
 export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
@@ -103,8 +103,8 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 					this.updateTitle(message.value);
 					break;
 				}
-				case 'followLink': {
-					followLink(message.value);
+				case 'openFileByPath': {
+					openFileInEditorByPath(message.value);
 					break;
 				}
 			}

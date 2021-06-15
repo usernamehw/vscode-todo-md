@@ -51,6 +51,9 @@ export async function followLinks(links: Link[]) {
 export async function followLink(linkString: string) {
 	return await vscode.env.openExternal(Uri.parse(linkString));
 }
+export async function openFileInEditorByPath(path: string) {
+	await openFileInEditor(Uri.parse(path).fsPath);
+}
 /**
  * Open vscode Settings GUI with input value set to the specified value.
  */
