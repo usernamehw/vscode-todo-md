@@ -144,6 +144,11 @@
 					"markdownDescription": "Show autocomplete when typing. (When disabled suggest can be called by `Ctrl`+`Space`)",
 					"default": true
 				},
+				"todomd.webview.customCSSPath": {
+					"type": "string",
+					"markdownDescription": "Absolute path to custom CSS for the webview.",
+					"default": ""
+				},
 				"todomd.webview.tagStyles": {
 					"type": "object",
 					"markdownDescription": "Set different color for any tag in a webview.",

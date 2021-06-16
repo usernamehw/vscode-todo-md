@@ -1,4 +1,5 @@
-import vscode, { window } from 'vscode';
+import path from 'path';
+import vscode, { Uri, window } from 'vscode';
 import { openSetDueDateInputbox } from '../commands';
 import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTask, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
@@ -25,12 +26,18 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 	) {
 		this._view = webviewView;
 
+		const localResourceRoots = [
+			this._extensionUri,
+		];
+
+		if (extensionConfig.webview.customCSSPath) {
+			localResourceRoots.push(Uri.file(path.dirname(extensionConfig.webview.customCSSPath)));
+		}
+
 		webviewView.webview.options = {
 			enableScripts: true,
 			enableCommandUris: true,
-			localResourceRoots: [
-				this._extensionUri,
-			],
+			localResourceRoots,
 		};
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
@@ -159,6 +166,8 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		const codiconCSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'codicon.css'));
 		const nonce = getNonce();// Use a nonce to only allow a specific script to be run.
 
+		const userCSSLink = extensionConfig.webview.customCSSPath ? `<link href="${webview.asWebviewUri(Uri.file(extensionConfig.webview.customCSSPath))}" rel="stylesheet">` : '';
+
 		return `<!DOCTYPE html>
 			<html lang="en">
 			<head>
@@ -167,6 +176,7 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
 				<link href="${codiconCSSUri}" rel="stylesheet" />
 				<link href="${CSSUri}" rel="stylesheet">
+				${userCSSLink}
 				<title>Tasks</title>
 			</head>
 			<body>

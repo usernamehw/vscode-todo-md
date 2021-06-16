@@ -172,6 +172,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.padding|`"0px"`|Controls vertical padding.|
 |webview.indentSize|`"1.8em"`|Controls visual indent of nested elements in a webview.|
 |webview.tagStyles|**`{}`**|Set different color for any tag in a webview. `"todomd.webview.tagStyles": { "inbox": { "color": "#000", "backgroundColor": "#00b7ff" } }`|
+|webview.customCSSPath|`""`|Absolute path to custom CSS for the webview.|
 
 </details>
 

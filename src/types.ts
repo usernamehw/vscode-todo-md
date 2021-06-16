@@ -301,6 +301,10 @@ export interface ExtensionConfig {
 				backgroundColor: string;
 			};
 		};
+		/**
+		 * Absolute path to custom CSS for the webview.
+		 */
+		customCSSPath: string;
 	};
 }
 /**
