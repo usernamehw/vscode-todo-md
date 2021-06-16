@@ -119,29 +119,34 @@ export default class Task extends Vue {
 		} else {
 			const dueClasses: string[] = ['due-state'];
 			let dueText = '';
+			let dueTitle = '';
 			switch (this.model.due.isDue) {
 				case DueState.notDue: {
 					dueClasses.push('not-due');
-					dueText = `<span class="codicon codicon-milestone"></span><span title="In ${this.model.due.daysUntilDue} days" class="days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
+					dueText = `<span class="codicon codicon-milestone"></span><span class="days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
+					dueTitle = `In ${this.model.due.daysUntilDue} days`;
 					break;
 				}
 				case DueState.due: {
 					dueClasses.push('due');
-					dueText = '<span class="codicon codicon-history" title="Due Today"></span>';
+					dueText = '<span class="codicon codicon-history"></span>';
+					dueTitle = `Due Today`;
 					break;
 				}
 				case DueState.overdue: {
 					dueClasses.push('overdue');
-					dueText = `<span class="codicon codicon-history" title="Overdue"></span><span class="overdue-count">${this.model.due?.overdueInDays || ''}</span>`;
+					dueText = `<span class="codicon codicon-history"></span><span class="overdue-count">${this.model.due?.overdueInDays || ''}</span>`;
+					dueTitle = `Overdue by ${this.model.due?.overdueInDays || '?'} days`;
 					break;
 				}
 				case DueState.invalid: {
 					dueClasses.push('invalid');
-					dueText = '<span class="codicon codicon-error" title="Due date is Invalid"></span><span class="days-to-count">Invalid</span>';
+					dueText = '<span class="codicon codicon-error"></span><span class="days-to-count">Invalid</span>';
+					dueTitle = 'Due date is Invalid';
 					break;
 				}
 			}
-			return `<span class="${dueClasses.join(' ')}">${dueText}</span>`;
+			return `<span class="${dueClasses.join(' ')}" title="${dueTitle} \n\n ${this.model.due.raw}">${dueText}</span>`;
 		}
 	}
 	get nestedCount() {
