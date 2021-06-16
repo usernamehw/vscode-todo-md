@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
-import vscode from 'vscode';
+import vscode, { CompletionItemKind, Range } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionConfig, extensionState, Global } from './extension';
 import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
+import { specialTagDescription, SpecialTagName } from './utils/extensionUtils';
 import { getWordAtPosition, getWordRangeAtPosition } from './utils/vscodeUtils';
 /**
  * Update editor autocomplete/suggest
@@ -81,6 +82,7 @@ export function updateCompletions(): void {
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 				const general = [];
+				// TODO: add documentation properties
 				const today = new vscode.CompletionItem('TODAY', vscode.CompletionItemKind.Constant);
 				today.insertText = getDateInISOFormat(new Date());
 				const setDueDateToday = new vscode.CompletionItem('SET_DUE_TODAY', vscode.CompletionItemKind.Constant);
@@ -94,6 +96,39 @@ export function updateCompletions(): void {
 			},
 		},
 		'',
+	);
+	Global.specialTagsAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+		{ scheme: 'file' },
+		{
+			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+				const charBeforeCursor = document.getText(new Range(position.line, position.character - 1, position.line, position.character));
+				if (charBeforeCursor !== '{') {
+					return undefined;
+				}
+				const specialTags = [
+					SpecialTagName.collapsed,
+					SpecialTagName.completionDate,
+					SpecialTagName.count,
+					SpecialTagName.creationDate,
+					SpecialTagName.due,
+					SpecialTagName.duration,
+					SpecialTagName.hidden,
+					SpecialTagName.overdue,
+					SpecialTagName.started,
+				];
+
+				const specialTagCompletionItems = [];
+
+				for (const specialTag of specialTags) {
+					const completionItem = new vscode.CompletionItem(specialTag, CompletionItemKind.Field);
+					completionItem.detail = specialTagDescription[specialTag];
+					specialTagCompletionItems.push(completionItem);
+				}
+
+				return specialTagCompletionItems;
+			},
+		},
+		'{',
 	);
 	Global.setDueDateAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
 		{ scheme: 'file' },

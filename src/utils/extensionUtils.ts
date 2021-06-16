@@ -184,3 +184,15 @@ export const enum SpecialTagName {
 	collapsed = 'c',
 	count = 'count',
 }
+
+export const specialTagDescription = {
+	[SpecialTagName.due]: 'due',
+	[SpecialTagName.overdue]: 'overdue',
+	[SpecialTagName.completionDate]: 'completionDate',
+	[SpecialTagName.creationDate]: 'creationDate',
+	[SpecialTagName.started]: 'started',
+	[SpecialTagName.duration]: 'duration',
+	[SpecialTagName.hidden]: 'hidden',
+	[SpecialTagName.collapsed]: 'collapsed',
+	[SpecialTagName.count]: 'count',
+} as const;
