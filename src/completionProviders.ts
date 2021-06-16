@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import vscode, { CompletionItemKind, Range } from 'vscode';
+import { CompletionItem, CompletionItemKind, languages, Position, Range, TextDocument } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionConfig, extensionState, Global } from './extension';
 import { helpCreateDueDate } from './time/setDueDateHelper';
@@ -17,10 +17,10 @@ export function updateCompletions(): void {
 		Global.generalAutocompleteDisposable.dispose();
 	}
 
-	Global.tagAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.tagAutocompleteDisposable = languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
-			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+			provideCompletionItems(document: TextDocument, position: Position) {
 				const wordAtCursor = getWordAtPosition(document, position);
 				if (!wordAtCursor || !wordAtCursor.startsWith('#')) {
 					return undefined;
@@ -28,7 +28,7 @@ export function updateCompletions(): void {
 				const tagCompletions = [];
 				const tags = Array.from(new Set(extensionState.tags.concat(extensionConfig.tags)));
 				for (const tag of tags) {
-					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
+					const tagCompletion = new CompletionItem(tag, CompletionItemKind.Field);
 					tagCompletions.push(tagCompletion);
 				}
 
@@ -37,10 +37,10 @@ export function updateCompletions(): void {
 		},
 		'#',
 	);
-	Global.projectAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.projectAutocompleteDisposable = languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
-			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+			provideCompletionItems(document: TextDocument, position: Position) {
 				const wordAtCursor = getWordAtPosition(document, position);
 				if (!wordAtCursor || !wordAtCursor.startsWith('+')) {
 					return undefined;
@@ -48,7 +48,7 @@ export function updateCompletions(): void {
 				const projectCompletions = [];
 				const projects = Array.from(new Set(extensionState.projects.concat(extensionConfig.projects)));
 				for (const tag of projects) {
-					const tagCompletion = new vscode.CompletionItem(tag, vscode.CompletionItemKind.Field);
+					const tagCompletion = new CompletionItem(tag, CompletionItemKind.Field);
 					projectCompletions.push(tagCompletion);
 				}
 
@@ -57,10 +57,10 @@ export function updateCompletions(): void {
 		},
 		'+',
 	);
-	Global.contextAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.contextAutocompleteDisposable = languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
-			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+			provideCompletionItems(document: TextDocument, position: Position) {
 				const wordAtCursor = getWordAtPosition(document, position);
 				if (!wordAtCursor || !wordAtCursor.startsWith('@')) {
 					return undefined;
@@ -68,7 +68,7 @@ export function updateCompletions(): void {
 				const contextCompletions = [];
 				const contexts = Array.from(new Set(extensionState.contexts.concat(extensionConfig.contexts)));
 				for (const context of contexts) {
-					const contextCompletion = new vscode.CompletionItem(context, vscode.CompletionItemKind.Field);
+					const contextCompletion = new CompletionItem(context, CompletionItemKind.Field);
 					contextCompletions.push(contextCompletion);
 				}
 
@@ -77,19 +77,19 @@ export function updateCompletions(): void {
 		},
 		'@',
 	);
-	Global.generalAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.generalAutocompleteDisposable = languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
-			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+			provideCompletionItems(document: TextDocument, position: Position) {
 				const general = [];
 				// TODO: add documentation properties
-				const today = new vscode.CompletionItem('TODAY', vscode.CompletionItemKind.Constant);
+				const today = new CompletionItem('TODAY', CompletionItemKind.Constant);
 				today.insertText = getDateInISOFormat(new Date());
-				const setDueDateToday = new vscode.CompletionItem('SET_DUE_TODAY', vscode.CompletionItemKind.Constant);
+				const setDueDateToday = new CompletionItem('SET_DUE_TODAY', CompletionItemKind.Constant);
 				setDueDateToday.insertText = `{due:${getDateInISOFormat(new Date())}}`;
-				const setDueDateTomorrow = new vscode.CompletionItem('SET_DUE_TOMORROW', vscode.CompletionItemKind.Constant);
+				const setDueDateTomorrow = new CompletionItem('SET_DUE_TOMORROW', CompletionItemKind.Constant);
 				setDueDateTomorrow.insertText = `{due:${getDateInISOFormat(dayjs().add(1, 'day'))}}`;
-				const setDueDateYesterday = new vscode.CompletionItem('SET_DUE_YESTERDAY', vscode.CompletionItemKind.Constant);
+				const setDueDateYesterday = new CompletionItem('SET_DUE_YESTERDAY', CompletionItemKind.Constant);
 				setDueDateYesterday.insertText = `{due:${getDateInISOFormat(dayjs().subtract(1, 'day'))}}`;
 				general.push(today, setDueDateToday, setDueDateTomorrow, setDueDateYesterday);
 				return general;
@@ -97,10 +97,10 @@ export function updateCompletions(): void {
 		},
 		'',
 	);
-	Global.specialTagsAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.specialTagsAutocompleteDisposable = languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
-			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+			provideCompletionItems(document: TextDocument, position: Position) {
 				const charBeforeCursor = document.getText(new Range(position.line, position.character - 1, position.line, position.character));
 				if (charBeforeCursor !== '{') {
 					return undefined;
@@ -120,7 +120,7 @@ export function updateCompletions(): void {
 				const specialTagCompletionItems = [];
 
 				for (const specialTag of specialTags) {
-					const completionItem = new vscode.CompletionItem(specialTag, CompletionItemKind.Field);
+					const completionItem = new CompletionItem(specialTag, CompletionItemKind.Field);
 					completionItem.detail = specialTagDescription[specialTag];
 					specialTagCompletionItems.push(completionItem);
 				}
@@ -130,10 +130,10 @@ export function updateCompletions(): void {
 		},
 		'{',
 	);
-	Global.setDueDateAutocompleteDisposable = vscode.languages.registerCompletionItemProvider(
+	Global.setDueDateAutocompleteDisposable = languages.registerCompletionItemProvider(
 		{ scheme: 'file' },
 		{
-			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+			provideCompletionItems(document: TextDocument, position: Position) {
 				const wordRange = getWordRangeAtPosition(document, position);
 				const wordAtCursor = getWordAtPosition(document, position);
 				if (!wordAtCursor) {
@@ -145,7 +145,7 @@ export function updateCompletions(): void {
 					if (!dueDate) {
 						return [];
 					}
-					const completionItem = new vscode.CompletionItem(new DueDate(dueDate).closestDueDateInTheFuture, vscode.CompletionItemKind.Constant);
+					const completionItem = new CompletionItem(new DueDate(dueDate).closestDueDateInTheFuture, CompletionItemKind.Constant);
 					completionItem.insertText = '';
 					completionItem.filterText = wordAtCursor;
 					completionItem.command = {
