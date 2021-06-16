@@ -160,11 +160,10 @@ https://code.visualstudio.com/api/extension-guides/command#command-uris
 
 ### File Uri
 
-File uri will open file in default app:
+File scheme will open file in VSCode:
 
 ```md
 [Config File](file:///C:config/config.txt)
-[Index HTML](file:///C:config/index.html)
 ```
 
 ### Highlight specific tags
