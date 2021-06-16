@@ -9,34 +9,42 @@ import { updateHover } from './hover/hoverProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
+import { sleep } from './utils/utils';
 import { setContext } from './utils/vscodeUtils';
+
+let changeActiveEditorEventInProgress = false;
 /**
  * Active text editor changes (tab).
  */
 export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): Promise<void> {
+	if (changeActiveEditorEventInProgress) {
+		await sleep(50);
+	}
+	changeActiveEditorEventInProgress = true;
 	if (extensionState.theRightFileOpened) {
 		deactivateEditorFeatures();
 	}
 	if (editor && isTheRightFileName(editor)) {
 		extensionState.activeDocument = editor.document;
 		extensionState.activeDocumentTabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : extensionConfig.tabSize;
-		updateEverything(editor);
+		await updateEverything(editor);
 		activateEditorFeatures(editor);
 		await setContext(VscodeContext.isActive, true);
 
 		const needReset = checkIfNeedResetRecurringTasks(editor.document.uri.toString());
 		if (needReset) {
 			await resetAllRecurringTasks(editor.document, needReset.lastVisit);
-			updateEverything();
-			updateLastVisitGlobalState(editor.document.uri.toString(), new Date());
+			await updateEverything();
+			await updateLastVisitGlobalState(editor.document.uri.toString(), new Date());
 		}
 	} else {
 		extensionState.activeDocument = await getDocumentForDefaultFile();
 		extensionState.activeDocumentTabSize = extensionConfig.tabSize;
 		extensionState.theRightFileOpened = false;
-		updateEverything();
+		await updateEverything();
 		await setContext(VscodeContext.isActive, false);
 	}
+	changeActiveEditorEventInProgress = false;
 }
 /**
  * Only run reset all recurring tasks when needed (first open file in a day)

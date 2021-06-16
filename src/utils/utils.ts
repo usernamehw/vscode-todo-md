@@ -21,3 +21,10 @@ export function fancyNumber(n: number): string {
 // export function pluralize(n: number) {
 // 	return n === 1 ? '' : 's';
 // }
+
+/**
+ * Await specified amount of ms
+ */
+export async function sleep(ms: number) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
