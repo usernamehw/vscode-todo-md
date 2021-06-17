@@ -304,3 +304,247 @@ export async function parseDocument(document: vscode.TextDocument): Promise<Pars
 		commentLines,
 	};
 }
+
+
+interface ParsedWordText {
+	type: 'text';
+	value: string;
+}
+interface ParsedWordPriority {
+	type: 'priority';
+	range: Range;
+	value: Priority;
+}
+interface ParsedWordProject {
+	type: 'project';
+	range: Range;
+	value: string;
+}
+interface ParsedWordContext {
+	type: 'context';
+	range: Range;
+	value: string;
+}
+interface ParsedWordTags {
+	type: 'tags';
+	ranges: Range[];
+	delimiterRange: Range[];
+	value: string[];
+}
+interface ParsedWordDue {
+	type: 'due';
+	range: Range;
+	value: DueDate;
+}
+interface ParsedWordOverdue {
+	type: 'overdue';
+	range: Range;
+	value: string;
+}
+interface ParsedWordCreationDate {
+	type: 'creationDate';
+	range: Range;
+	value: string;
+}
+interface ParsedWordCompletionDate {
+	type: 'completionDate';
+	range: Range;
+	value: string;
+	done: boolean;
+}
+interface ParsedWordCount {
+	type: 'count';
+	range: Range;
+	current: number;
+	needed: number;
+	done: boolean;
+}
+interface ParsedWordHidden {
+	type: 'hidden';
+	range: Range;
+	isHidden: boolean;
+}
+interface ParsedWordCollapsed {
+	type: 'collapsed';
+	range: Range;
+	isCollapsed: boolean;
+}
+interface ParsedWordStart {
+	type: 'start';
+	range: Range;
+	value: string;
+}
+interface ParsedWordDuration {
+	type: 'duration';
+	range: Range;
+	value: string;
+}
+
+type ParsedWord = ParsedWordCollapsed | ParsedWordCompletionDate | ParsedWordContext | ParsedWordCount | ParsedWordCreationDate | ParsedWordDue | ParsedWordDuration | ParsedWordHidden | ParsedWordOverdue | ParsedWordPriority | ParsedWordProject | ParsedWordStart | ParsedWordTags | ParsedWordText;
+// TODO: duplicated code with `parseLine`
+export function parseWord(word: string, lineNumber: number, index: number): ParsedWord {
+	if (word.length === 1) {
+		return {
+			type: 'text',
+			value: word,
+		};
+	}
+	switch (word[0]) {
+		case '{': {
+			if (word[word.length - 1] !== '}') {
+				return {
+					type: 'text',
+					value: word,
+				};
+			}
+			const firstColonIndex = word.indexOf(':');
+			const specialTag = word.slice(1, firstColonIndex);
+			const specialTagValue = word.slice(firstColonIndex + 1, -1);
+			const range = new Range(lineNumber, index, lineNumber, index + word.length);
+			if (specialTag === SpecialTagName.due) {
+				if (specialTagValue.length) {
+					return {
+						type: 'due',
+						value: new DueDate(specialTagValue),
+						range,
+					};
+				}
+			} else if (specialTag === SpecialTagName.overdue) {
+				return {
+					type: 'overdue',
+					value: specialTagValue,
+					range,
+				};
+			} else if (specialTag === SpecialTagName.creationDate) {
+				return {
+					type: 'creationDate',
+					value: specialTagValue,
+					range,
+				};
+				// specialTagRanges.push(range);
+			} else if (specialTag === SpecialTagName.completionDate) {
+				// Presence of completion date indicates that the task is done
+				return {
+					type: 'completionDate',
+					done: true,
+					value: specialTagValue,
+					range,
+				};
+				// specialTagRanges.push(range);
+			} else if (specialTag === SpecialTagName.count) {
+				if (specialTagValue === undefined) {
+					break;
+				}
+				const [current, needed] = specialTagValue.split('/');
+				const currentValue = parseInt(current, 10);
+				const neededValue = parseInt(needed, 10);
+				if (!Number.isFinite(currentValue) || !Number.isFinite(neededValue)) {
+					break;
+				}
+				let done = false;
+				if (currentValue === neededValue) {
+					done = true;
+				}
+				return {
+					type: 'count',
+					done,
+					current: currentValue,
+					needed: neededValue,
+					range,
+				};
+				// specialTagRanges.push(range);
+			} else if (specialTag === SpecialTagName.hidden) {
+				return {
+					type: 'hidden',
+					isHidden: true,
+					range,
+				};
+				// specialTagRanges.push(range);
+			} else if (specialTag === SpecialTagName.collapsed) {
+				return {
+					type: 'collapsed',
+					isCollapsed: true,
+					range,
+				};
+				// specialTagRanges.push(range);
+			} else if (specialTag === SpecialTagName.started) {
+				return {
+					type: 'start',
+					value: specialTagValue,
+					range,
+				};
+				// specialTagRanges.push(range);
+			} else if (specialTag === SpecialTagName.duration) {
+				return {
+					type: 'duration',
+					value: specialTagValue,
+					range,
+				};
+				// specialTagRanges.push(range);
+			} else {
+				return {
+					type: 'text',
+					value: word,
+				};
+			}
+			break;
+		}
+		case '#': {
+			const tempTags = word.split('#').filter(tag => tag.length);
+			let temp = index;
+			const tags = [];
+			const tagsRanges = [];
+			const delimiterRanges = [];
+			for (const tag of tempTags) {
+				delimiterRanges.push(new Range(lineNumber, temp, lineNumber, temp + 1));
+				tagsRanges.push(new Range(lineNumber, temp + 1, lineNumber, temp + 1 + tag.length));
+				temp += tag.length + 1;
+				tags.push(tag);
+			}
+			return {
+				type: 'tags',
+				delimiterRange: delimiterRanges,
+				ranges: tagsRanges,
+				value: tags,
+			};
+		}
+		case '@': {
+			return {
+				type: 'context',
+				value: word.slice(1),
+				range: new Range(lineNumber, index, lineNumber, index + word.length),
+			};
+		}
+		case '+': {
+			return {
+				type: 'project',
+				value: word.slice(1),
+				range: new Range(lineNumber, index, lineNumber, index + word.length),
+			};
+		}
+		case '(': {
+			if (/^\([A-Z]\)$/.test(word)) {
+				return {
+					type: 'priority',
+					value: word[1] as Priority,
+					range: new Range(lineNumber, index, lineNumber, index + word.length),
+				};
+			} else {
+				return {
+					type: 'text',
+					value: word,
+				};
+			}
+		}
+		default: {
+			return {
+				type: 'text',
+				value: word,
+			};
+		}
+	}
+	return {
+		type: 'text',
+		value: word,
+	};
+}

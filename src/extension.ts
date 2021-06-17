@@ -79,7 +79,7 @@ export class Global {
 	static setDueDateAutocompleteDisposable: vscode.Disposable;
 
 	static hoverDisposable: vscode.Disposable;
-
+	static documentHighlightsDisposable: vscode.Disposable;
 	static changeTextDocumentDisposable: vscode.Disposable;
 	static changeActiveTextEditorDisposable: vscode.Disposable;
 
@@ -246,5 +246,6 @@ export function deactivate(): void {
 	Global.setDueDateAutocompleteDisposable.dispose();
 	Global.changeTextDocumentDisposable.dispose();
 	Global.hoverDisposable.dispose();
+	Global.documentHighlightsDisposable.dispose();
 	Global.changeActiveTextEditorDisposable.dispose();
 }

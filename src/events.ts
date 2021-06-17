@@ -4,6 +4,7 @@ import vscode, { window, workspace } from 'vscode';
 import { updateCompletions } from './completionProviders';
 import { paintEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
+import { updateDocumentHighlights } from './documentHighlights';
 import { extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateHover } from './hover/hoverProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
@@ -94,6 +95,7 @@ export function activateEditorFeatures(editor: vscode.TextEditor) {
 	extensionState.theRightFileOpened = true;
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
+	updateDocumentHighlights();
 	updateHover();
 	statusBar.show();
 }
@@ -113,6 +115,7 @@ export function deactivateEditorFeatures() {
 		Global.specialTagsAutocompleteDisposable.dispose();
 		Global.setDueDateAutocompleteDisposable.dispose();
 	}
+	Global.documentHighlightsDisposable?.dispose();
 	if (Global.hoverDisposable) {
 		Global.hoverDisposable.dispose();
 	}
@@ -131,4 +134,4 @@ export const updateEverything = throttle(async (editor?: vscode.TextEditor) => {
 		statusBar.updateText(extensionState.tasks);
 	}
 	updateAllTreeViews();
-}, 120);
+}, 150);
