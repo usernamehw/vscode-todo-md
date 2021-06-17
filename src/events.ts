@@ -7,6 +7,7 @@ import { resetAllRecurringTasks } from './documentActions';
 import { updateDocumentHighlights } from './documentHighlights';
 import { extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateHover } from './hover/hoverProvider';
+import { updateRenameProvider } from './renameProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
@@ -96,6 +97,7 @@ export function activateEditorFeatures(editor: TextEditor) {
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
 	updateDocumentHighlights();
+	updateRenameProvider();
 	updateHover();
 	statusBar.show();
 }
@@ -116,6 +118,7 @@ export function deactivateEditorFeatures() {
 		Global.setDueDateAutocompleteDisposable.dispose();
 	}
 	Global.documentHighlightsDisposable?.dispose();
+	Global.renameProviderDisposable?.dispose();
 	if (Global.hoverDisposable) {
 		Global.hoverDisposable.dispose();
 	}

@@ -315,17 +315,17 @@ interface ParsedWordPriority {
 	range: Range;
 	value: Priority;
 }
-interface ParsedWordProject {
+export interface ParsedWordProject {
 	type: 'project';
 	range: Range;
 	value: string;
 }
-interface ParsedWordContext {
+export interface ParsedWordContext {
 	type: 'context';
 	range: Range;
 	value: string;
 }
-interface ParsedWordTags {
+export interface ParsedWordTags {
 	type: 'tags';
 	ranges: Range[];
 	delimiterRange: Range[];
