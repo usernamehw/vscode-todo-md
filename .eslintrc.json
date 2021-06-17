@@ -124,7 +124,7 @@
 					"default": "array"
 				}],
 				"@typescript-eslint/await-thenable": 0,
-				"@typescript-eslint/no-confusing-void-expression": 1,
+				"@typescript-eslint/no-confusing-void-expression": 0,
 				"@typescript-eslint/ban-ts-ignore": 0,
 				"@typescript-eslint/explicit-module-boundary-types": 0,
 				"@typescript-eslint/ban-types": 1,
