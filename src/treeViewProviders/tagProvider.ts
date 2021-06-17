@@ -1,10 +1,10 @@
-import vscode from 'vscode';
+import { Event, EventEmitter, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { TheTask } from '../TheTask';
 import { ItemForProvider } from '../types';
 import { tasksToTreeItems, TaskTreeItem } from './taskProvider';
 
-export class TagTreeItem extends vscode.TreeItem {
-	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+export class TagTreeItem extends TreeItem {
+	readonly collapsibleState = TreeItemCollapsibleState.Collapsed;
 
 	constructor(
 		readonly label: string,
@@ -16,9 +16,9 @@ export class TagTreeItem extends vscode.TreeItem {
 	contextValue = 'tag';
 }
 
-export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | TaskTreeItem> {
-	private readonly _onDidChangeTreeData: vscode.EventEmitter<TagTreeItem | undefined> = new vscode.EventEmitter<TagTreeItem | undefined>();
-	readonly onDidChangeTreeData: vscode.Event<TagTreeItem | undefined> = this._onDidChangeTreeData.event;
+export class TagProvider implements TreeDataProvider<TagTreeItem | TaskTreeItem> {
+	private readonly _onDidChangeTreeData: EventEmitter<TagTreeItem | undefined> = new EventEmitter<TagTreeItem | undefined>();
+	readonly onDidChangeTreeData: Event<TagTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
 		private tags: ItemForProvider[],
@@ -29,7 +29,7 @@ export class TagProvider implements vscode.TreeDataProvider<TagTreeItem | TaskTr
 		this._onDidChangeTreeData.fire(undefined);
 	}
 
-	getTreeItem(element: TagTreeItem | TaskTreeItem): vscode.TreeItem {
+	getTreeItem(element: TagTreeItem | TaskTreeItem): TreeItem {
 		return element;
 	}
 

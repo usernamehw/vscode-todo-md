@@ -1,4 +1,4 @@
-import vscode, { DecorationRenderOptions } from 'vscode';
+import { DecorationRenderOptions, ExtensionContext, Range, TextDocument } from 'vscode';
 import { TheTask } from './TheTask';
 /**
  * Object describing items for Tree View Provider
@@ -56,7 +56,7 @@ export interface ExtensionState {
 	/**
 	 * Comment line ranges
 	 */
-	commentLines: vscode.Range[];
+	commentLines: Range[];
 	/**
 	 * If active text editor matches `activatePattern` config
 	 */
@@ -68,12 +68,12 @@ export interface ExtensionState {
 	/**
 	 * Reference to extension context for access beyond the `activate()` function
 	 */
-	extensionContext: vscode.ExtensionContext;
+	extensionContext: ExtensionContext;
 	/**
 	 * Reference to active document.
 	 * TODO: use `getActiveDocument()` everywhere
 	 */
-	activeDocument: vscode.TextDocument | undefined;
+	activeDocument: TextDocument | undefined;
 	/**
 	 * Used in parsing of nested tasks.
 	 */

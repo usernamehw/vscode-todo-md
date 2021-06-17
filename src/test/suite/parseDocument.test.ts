@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 import { before, describe, it } from 'mocha';
-import vscode from 'vscode';
+import { window } from 'vscode';
 import { parseDocument } from '../../parse';
 import { TheTask } from '../../TheTask';
 import { DueState } from '../../types';
 import { headerDelimiter } from './testUtils';
 
-const editor = vscode.window.activeTextEditor!;
+const editor = window.activeTextEditor!;
 
 describe(`${headerDelimiter('parse document')}`, () => {
 	let tasks: TheTask[] = [];

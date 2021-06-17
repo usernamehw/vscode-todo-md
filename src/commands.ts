@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import sample from 'lodash/sample';
-import vscode, { commands, TextDocument, TextEditor, TextEditorEdit, ThemeIcon, window, WorkspaceEdit } from 'vscode';
+import { commands, Position, QuickPickItem, Range, Selection, TextDocument, TextEditor, TextEditorEdit, ThemeIcon, window, WorkspaceEdit } from 'vscode';
 import { appendTaskToFile, archiveTasks, editTaskWorkspaceEdit, hideTask, incrementCountForTask, incrementOrDecrementPriority, removeOverdueWorkspaceEdit, resetAllRecurringTasks, revealTask, setDueDate, startTask, toggleCommentAtLineWorkspaceEdit, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleTaskCollapseWorkspaceEdit, tryToDeleteTask } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
@@ -22,7 +22,7 @@ import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileIn
 export function registerAllCommands() {
 	commands.registerCommand(CommandIds.toggleDone, async (treeItem?: TaskTreeItem) => {
 		const editor = window.activeTextEditor;
-		let document: vscode.TextDocument;
+		let document: TextDocument;
 		let lineNumbers: number[] = [];
 		if (treeItem) {
 			lineNumbers.push(treeItem.task.lineNumber);
@@ -148,17 +148,17 @@ export function registerAllCommands() {
 		let newTaskAsString = tagsAsString;
 		newTaskAsString += projectsAsString ? ` ${projectsAsString}` : '';
 		newTaskAsString += contextsAsString ? ` ${contextsAsString}` : '';
-		edit.insert(editor.document.uri, new vscode.Position(line.rangeIncludingLineBreak.end.line, line.rangeIncludingLineBreak.end.character), `${newTaskAsString}\n`);
+		edit.insert(editor.document.uri, new Position(line.rangeIncludingLineBreak.end.line, line.rangeIncludingLineBreak.end.character), `${newTaskAsString}\n`);
 
 		await applyEdit(edit, editor.document);
 
-		editor.selection = new vscode.Selection(line.lineNumber + 1, 0, line.lineNumber + 1, 0);
+		editor.selection = new Selection(line.lineNumber + 1, 0, line.lineNumber + 1, 0);
 	});
 	commands.registerCommand(CommandIds.getNextTask, async () => {
 		await updateState();
 		const tasks = extensionState.tasks.filter(t => !t.done);
 		if (!tasks.length) {
-			vscode.window.showInformationMessage('No tasks');
+			window.showInformationMessage('No tasks');
 			return;
 		}
 		const sortedTasks = defaultSortTasks(tasks);
@@ -169,13 +169,13 @@ export function registerAllCommands() {
 		await updateState();
 		const tasks = extensionState.tasks.filter(t => !t.done);
 		if (!tasks.length) {
-			vscode.window.showInformationMessage('No tasks');
+			window.showInformationMessage('No tasks');
 			return;
 		}
 		const sortedTasks = defaultSortTasks(tasks)
 			.slice(0, extensionConfig.getNextNumberOfTasks);
 
-		vscode.window.showInformationMessage(sortedTasks.map((task, i) => `${fancyNumber(i + 1)} ${TheTask.formatTask(task)}`).join('\n'), {
+		window.showInformationMessage(sortedTasks.map((task, i) => `${fancyNumber(i + 1)} ${TheTask.formatTask(task)}`).join('\n'), {
 			modal: true,
 		});
 	});
@@ -183,7 +183,7 @@ export function registerAllCommands() {
 		await updateState();
 		const tasks = extensionState.tasks.filter(t => !t.done);
 		if (!tasks.length) {
-			vscode.window.showInformationMessage('No tasks');
+			window.showInformationMessage('No tasks');
 			return;
 		}
 		const randomTask = sample(tasks)!;
@@ -222,7 +222,7 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandIds.setDueDate, editor => {
 		openSetDueDateInputbox(editor.document, editor.selection.active.line);
 	});
-	commands.registerCommand(CommandIds.setDueDateWithArgs, async (document: TextDocument, wordRange: vscode.Range, dueDate: string) => {
+	commands.registerCommand(CommandIds.setDueDateWithArgs, async (document: TextDocument, wordRange: Range, dueDate: string) => {
 		const lineNumber = wordRange.start.line;
 		const edit = new WorkspaceEdit();
 		edit.delete(document.uri, wordRange);
@@ -270,7 +270,7 @@ export function registerAllCommands() {
 		const quickPick = window.createQuickPick();
 		quickPick.items = extensionConfig.savedFilters.map(filter => ({
 			label: filter.title,
-		}) as vscode.QuickPickItem);
+		}) as QuickPickItem);
 		let value: string | undefined;
 		let selected: string | undefined;
 		quickPick.onDidChangeValue(e => {
@@ -343,7 +343,7 @@ export function registerAllCommands() {
 		followLinks(treeItem.task.links);
 	});
 	commands.registerTextEditorCommand(CommandIds.setLastVisit, async editor => {
-		const numberOfHours = Number(await vscode.window.showInputBox({
+		const numberOfHours = Number(await window.showInputBox({
 			prompt: 'Number of Hours ago',
 		}));
 		if (!numberOfHours) {
@@ -427,12 +427,12 @@ async function showTaskInNotification(task: TheTask) {
 	const formattedTask = TheTask.formatTask(task);
 	if (task.links.length) {
 		const buttonFollowLink = 'Follow link';
-		const shouldFollow = await vscode.window.showInformationMessage(formattedTask, buttonFollowLink);
+		const shouldFollow = await window.showInformationMessage(formattedTask, buttonFollowLink);
 		if (shouldFollow === buttonFollowLink) {
 			followLinks(task.links);
 		}
 	} else {
-		vscode.window.showInformationMessage(formattedTask);
+		window.showInformationMessage(formattedTask);
 	}
 }
 function getSelectedLineNumbers(editor: TextEditor): number[] {
@@ -472,7 +472,7 @@ function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortPropert
 	edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 }
 
-export function openSetDueDateInputbox(document: vscode.TextDocument, lineNumber: number) {
+export function openSetDueDateInputbox(document: TextDocument, lineNumber: number) {
 	const inputBox = window.createInputBox();
 	let value: string | undefined = '+0';
 	inputBox.value = value;

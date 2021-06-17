@@ -1,5 +1,5 @@
 import path from 'path';
-import vscode, { Uri, window } from 'vscode';
+import { CancellationToken, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
 import { openSetDueDateInputbox } from '../commands';
 import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTask, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
@@ -10,19 +10,19 @@ import { getTaskAtLineExtension } from '../utils/taskUtils';
 import { openFileInEditorByPath } from '../utils/vscodeUtils';
 import { getNonce } from './webviewUtils';
 
-export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
+export class TasksWebviewViewProvider implements WebviewViewProvider {
 	public static readonly viewType = 'todomd.webviewTasks';
 
-	private _view?: vscode.WebviewView;
+	private _view?: WebviewView;
 
 	constructor(
-		private readonly _extensionUri: vscode.Uri,
+		private readonly _extensionUri: Uri,
 	) { }
 
 	public resolveWebviewView(
-		webviewView: vscode.WebviewView,
-		context: vscode.WebviewViewResolveContext,
-		_token: vscode.CancellationToken,
+		webviewView: WebviewView,
+		context: WebviewViewResolveContext,
+		_token: CancellationToken,
 	) {
 		this._view = webviewView;
 
@@ -160,10 +160,10 @@ export class TasksWebviewViewProvider implements vscode.WebviewViewProvider {
 		this._view?.webview.postMessage(message);
 	}
 
-	private _getHtmlForWebview(webview: vscode.Webview) {
-		const JSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.js'));
-		const CSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'webview.css'));
-		const codiconCSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vendor', 'codicon.css'));
+	private _getHtmlForWebview(webview: Webview) {
+		const JSUri = webview.asWebviewUri(Uri.joinPath(this._extensionUri, 'media', 'webview.js'));
+		const CSSUri = webview.asWebviewUri(Uri.joinPath(this._extensionUri, 'media', 'webview.css'));
+		const codiconCSSUri = webview.asWebviewUri(Uri.joinPath(this._extensionUri, 'media', 'vendor', 'codicon.css'));
 		const nonce = getNonce();// Use a nonce to only allow a specific script to be run.
 
 		const userCSSLink = extensionConfig.webview.customCSSPath ? `<link href="${webview.asWebviewUri(Uri.file(extensionConfig.webview.customCSSPath))}" rel="stylesheet">` : '';

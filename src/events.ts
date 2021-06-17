@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import throttle from 'lodash/throttle';
-import vscode, { window, workspace } from 'vscode';
+import { languages, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
 import { updateCompletions } from './completionProviders';
 import { paintEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
@@ -17,7 +17,7 @@ let changeActiveEditorEventInProgress = false;
 /**
  * Active text editor changes (tab).
  */
-export async function onChangeActiveTextEditor(editor: vscode.TextEditor | undefined): Promise<void> {
+export async function onChangeActiveTextEditor(editor: TextEditor | undefined): Promise<void> {
 	if (changeActiveEditorEventInProgress) {
 		await sleep(50);
 	}
@@ -72,7 +72,7 @@ export function checkIfNeedResetRecurringTasks(filePath: string): {lastVisit: Da
 /**
  * Called when active text document changes (typing in it, for instance)
  */
-export function onChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
+export function onChangeTextDocument(e: TextDocumentChangeEvent): void {
 	const activeTextEditor = window.activeTextEditor;
 	if (activeTextEditor && extensionState.theRightFileOpened) {
 		updateEverything(activeTextEditor);
@@ -81,8 +81,8 @@ export function onChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
 /**
  * Match Uri of editor against a glob specified by user.
  */
-export function isTheRightFileName(editor: vscode.TextEditor): boolean {
-	return vscode.languages.match({
+export function isTheRightFileName(editor: TextEditor): boolean {
+	return languages.match({
 		pattern: extensionConfig.activatePattern,
 	},	editor.document) !== 0;
 }
@@ -91,7 +91,7 @@ export function isTheRightFileName(editor: vscode.TextEditor): boolean {
  *
  * For example: completions, status bar text, editor hover.
  */
-export function activateEditorFeatures(editor: vscode.TextEditor) {
+export function activateEditorFeatures(editor: TextEditor) {
 	extensionState.theRightFileOpened = true;
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
@@ -127,7 +127,7 @@ export function deactivateEditorFeatures() {
  * - Update status bar item
  * - Update all tree views (including webview, excluding archived tasks)
  */
-export const updateEverything = throttle(async (editor?: vscode.TextEditor) => {
+export const updateEverything = throttle(async (editor?: TextEditor) => {
 	await updateState();
 	if (editor) {
 		paintEditorDecorations(editor);

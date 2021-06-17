@@ -1,4 +1,4 @@
-import vscode, { TreeView, workspace } from 'vscode';
+import { TreeView, Uri, window, workspace } from 'vscode';
 import { toggleTaskCollapse } from '../documentActions';
 import { Constants, extensionConfig, extensionState } from '../extension';
 import { filterItems } from '../filter';
@@ -26,40 +26,40 @@ const generic1Provider = new TaskProvider([]);
 const generic2Provider = new TaskProvider([]);
 const generic3Provider = new TaskProvider([]);
 
-let tagsView: vscode.TreeView<any>;
-let projectView: vscode.TreeView<any>;
-let contextView: vscode.TreeView<any>;
-export let tasksView: vscode.TreeView<any>;
-let dueView: vscode.TreeView<any>;
-let archivedView: vscode.TreeView<any>;
-let generic1View: vscode.TreeView<any>;
-let generic2View: vscode.TreeView<any>;
-let generic3View: vscode.TreeView<any>;
+let tagsView: TreeView<any>;
+let projectView: TreeView<any>;
+let contextView: TreeView<any>;
+export let tasksView: TreeView<any>;
+let dueView: TreeView<any>;
+let archivedView: TreeView<any>;
+let generic1View: TreeView<any>;
+let generic2View: TreeView<any>;
+let generic3View: TreeView<any>;
 /**
  * Create all Tree Views
  */
 export function createAllTreeViews() {
-	tagsView = vscode.window.createTreeView(Constants.tagsTreeViewId, {
+	tagsView = window.createTreeView(Constants.tagsTreeViewId, {
 		treeDataProvider: tagProvider,
 		showCollapseAll: true,
 	});
 
-	projectView = vscode.window.createTreeView(Constants.projectsTreeViewId, {
+	projectView = window.createTreeView(Constants.projectsTreeViewId, {
 		treeDataProvider: projectProvider,
 		showCollapseAll: true,
 	});
 
-	contextView = vscode.window.createTreeView(Constants.contextsTreeViewId, {
+	contextView = window.createTreeView(Constants.contextsTreeViewId, {
 		treeDataProvider: contextProvider,
 		showCollapseAll: true,
 	});
 
-	dueView = vscode.window.createTreeView(Constants.dueTreeViewId, {
+	dueView = window.createTreeView(Constants.dueTreeViewId, {
 		treeDataProvider: dueProvider,
 		showCollapseAll: true,
 	});
 
-	tasksView = vscode.window.createTreeView(Constants.tasksTreeViewId, {
+	tasksView = window.createTreeView(Constants.tasksTreeViewId, {
 		treeDataProvider: taskProvider,
 		showCollapseAll: true,
 	});
@@ -70,7 +70,7 @@ export function createAllTreeViews() {
 		toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 	});
 
-	archivedView = vscode.window.createTreeView(Constants.archivedTreeViewId, {
+	archivedView = window.createTreeView(Constants.archivedTreeViewId, {
 		treeDataProvider: archivedProvider,
 	});
 
@@ -78,9 +78,9 @@ export function createAllTreeViews() {
 		const generic1 = extensionConfig.treeViews[0];
 		if (generic1) {
 			if (typeof generic1.filter !== 'string' || typeof generic1.title !== 'string') {
-				vscode.window.showWarningMessage('Tree View must have filter and title and they must be strings.');
+				window.showWarningMessage('Tree View must have filter and title and they must be strings.');
 			} else {
-				generic1View = vscode.window.createTreeView(Constants.generic1TreeViewId, {
+				generic1View = window.createTreeView(Constants.generic1TreeViewId, {
 					treeDataProvider: generic1Provider,
 					showCollapseAll: true,
 				});
@@ -97,9 +97,9 @@ export function createAllTreeViews() {
 		const generic2 = extensionConfig.treeViews[1];
 		if (generic2) {
 			if (typeof generic2.filter !== 'string' || typeof generic2.title !== 'string') {
-				vscode.window.showWarningMessage('Tree View must have filter and title and they must be strings.');
+				window.showWarningMessage('Tree View must have filter and title and they must be strings.');
 			} else {
-				generic2View = vscode.window.createTreeView(Constants.generic2TreeViewId, {
+				generic2View = window.createTreeView(Constants.generic2TreeViewId, {
 					treeDataProvider: generic2Provider,
 					showCollapseAll: true,
 				});
@@ -116,9 +116,9 @@ export function createAllTreeViews() {
 		const generic3 = extensionConfig.treeViews[2];
 		if (generic3) {
 			if (typeof generic3.filter !== 'string' || typeof generic3.title !== 'string') {
-				vscode.window.showWarningMessage('Tree View must have filter and title and they must be strings.');
+				window.showWarningMessage('Tree View must have filter and title and they must be strings.');
 			} else {
-				generic3View = vscode.window.createTreeView(Constants.generic3TreeViewId, {
+				generic3View = window.createTreeView(Constants.generic3TreeViewId, {
 					treeDataProvider: generic3Provider,
 					showCollapseAll: true,
 				});
@@ -307,5 +307,5 @@ export async function updateArchivedTasks() {
 }
 
 export async function getArchivedDocument() {
-	return await workspace.openTextDocument(vscode.Uri.file(extensionConfig.defaultArchiveFile));
+	return await workspace.openTextDocument(Uri.file(extensionConfig.defaultArchiveFile));
 }

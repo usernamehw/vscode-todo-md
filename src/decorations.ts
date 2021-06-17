@@ -1,4 +1,4 @@
-import vscode, { Range, TextEditor, window } from 'vscode';
+import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
 import { extensionConfig, extensionState, Global } from './extension';
 import { DueState } from './types';
 /**
@@ -14,73 +14,73 @@ export function updateEditorDecorationStyle(): void {
 		...extensionConfig.decorations.completedTask,
 	});
 	Global.commentDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.commentForeground'),
+		color: new ThemeColor('todomd.commentForeground'),
 		isWholeLine: true,
 		...extensionConfig.decorations.comment,
 	});
 	Global.priorityADecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priorityAForeground'),
+		color: new ThemeColor('todomd.priorityAForeground'),
 		...extensionConfig.decorations.priorityAForeground,
 	});
 	Global.priorityBDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priorityBForeground'),
+		color: new ThemeColor('todomd.priorityBForeground'),
 		...extensionConfig.decorations.priorityBForeground,
 	});
 	Global.priorityCDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priorityCForeground'),
+		color: new ThemeColor('todomd.priorityCForeground'),
 		...extensionConfig.decorations.priorityCForeground,
 	});
 	Global.priorityDDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priorityDForeground'),
+		color: new ThemeColor('todomd.priorityDForeground'),
 		...extensionConfig.decorations.priorityDForeground,
 	});
 	Global.priorityEDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priorityEForeground'),
+		color: new ThemeColor('todomd.priorityEForeground'),
 		...extensionConfig.decorations.priorityEForeground,
 	});
 	Global.priorityFDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.priorityFForeground'),
+		color: new ThemeColor('todomd.priorityFForeground'),
 		...extensionConfig.decorations.priorityFForeground,
 	});
 	Global.tagsDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.tagForeground'),
+		color: new ThemeColor('todomd.tagForeground'),
 	});
 	Global.specialTagDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.specialTagForeground'),
+		color: new ThemeColor('todomd.specialTagForeground'),
 	});
 	Global.tagsDelimiterDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.tagDelimiterForeground'),
+		color: new ThemeColor('todomd.tagDelimiterForeground'),
 	});
 	Global.projectDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.projectForeground'),
+		color: new ThemeColor('todomd.projectForeground'),
 		...extensionConfig.decorations.project,
 	});
 	Global.contextDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.contextForeground'),
+		color: new ThemeColor('todomd.contextForeground'),
 		...extensionConfig.decorations.context,
 	});
 	Global.notDueDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.notDueForeground'),
+		color: new ThemeColor('todomd.notDueForeground'),
 		...extensionConfig.decorations.notDue,
 	});
 	Global.dueDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.dueForeground'),
+		color: new ThemeColor('todomd.dueForeground'),
 		...extensionConfig.decorations.due,
 	});
 	Global.overdueDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.overdueForeground'),
+		color: new ThemeColor('todomd.overdueForeground'),
 		...extensionConfig.decorations.overdue,
 	});
 	Global.invalidDueDateDecorationType = window.createTextEditorDecorationType({
-		color: new vscode.ThemeColor('todomd.invalidDueDateForeground'),
-		backgroundColor: new vscode.ThemeColor('todomd.invalidDueDateBackground'),
+		color: new ThemeColor('todomd.invalidDueDateForeground'),
+		backgroundColor: new ThemeColor('todomd.invalidDueDateBackground'),
 		...extensionConfig.decorations.invalidDue,
 	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		after: {
-			color: new vscode.ThemeColor('todomd.closestDueDateForeground'),
+			color: new ThemeColor('todomd.closestDueDateForeground'),
 			margin: '1ch',
-			backgroundColor: new vscode.ThemeColor('todomd.closestDueDateBackground'),
+			backgroundColor: new ThemeColor('todomd.closestDueDateBackground'),
 		},
 	});
 }
@@ -104,11 +104,11 @@ export function paintEditorDecorations(editor: TextEditor) {
 	const dueDecorationRanges: Range[] = [];
 	const overdueDecorationRanges: Range[] = [];
 	const invalidDueDateDecorationRanges: Range[] = [];
-	const closestDueDateDecorationOptions: vscode.DecorationOptions[] = [];
+	const closestDueDateDecorationOptions: DecorationOptions[] = [];
 
 	for (const task of extensionState.tasks) {
 		if (task.done) {
-			completedDecorationRanges.push(new vscode.Range(task.lineNumber, 0, task.lineNumber, 0));
+			completedDecorationRanges.push(new Range(task.lineNumber, 0, task.lineNumber, 0));
 		}
 		if (task.tagsRange) {
 			tagsDecorationRanges.push(...task.tagsRange);
@@ -150,7 +150,7 @@ export function paintEditorDecorations(editor: TextEditor) {
 			}
 			if (due.isDue === DueState.notDue && due.closestDueDateInTheFuture) {
 				closestDueDateDecorationOptions.push({
-					range: new vscode.Range(dueRange.end.line, dueRange.end.character - 1, dueRange.end.line, dueRange.end.character - 1),
+					range: new Range(dueRange.end.line, dueRange.end.character - 1, dueRange.end.line, dueRange.end.character - 1),
 					renderOptions: {
 						after: {
 							contentText: due.closestDueDateInTheFuture,

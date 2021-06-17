@@ -1,18 +1,18 @@
-import vscode, { ThemeColor, ThemeIcon } from 'vscode';
+import { Command, Event, EventEmitter, ThemeColor, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { extensionConfig } from '../extension';
 import { getTaskHover } from '../hover/getTaskHover';
 import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
 import { CommandIds, SortNestedTasks } from '../types';
 
-export class TaskTreeItem extends vscode.TreeItem {
-	collapsibleState = vscode.TreeItemCollapsibleState.None;
+export class TaskTreeItem extends TreeItem {
+	collapsibleState = TreeItemCollapsibleState.None;
 	contextValue = 'task';
 
 	constructor(
 		readonly label: string,
 		readonly task: TheTask,
-		readonly command: vscode.Command,
+		readonly command: Command,
 	) {
 		super(label);
 		if (task.links.length) {
@@ -20,9 +20,9 @@ export class TaskTreeItem extends vscode.TreeItem {
 		}
 		if (task.subtasks.length) {
 			if (task.isCollapsed) {
-				this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+				this.collapsibleState = TreeItemCollapsibleState.Collapsed;
 			} else {
-				this.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+				this.collapsibleState = TreeItemCollapsibleState.Expanded;
 			}
 		}
 
@@ -36,9 +36,9 @@ export class TaskTreeItem extends vscode.TreeItem {
 	}
 }
 
-export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
-	private readonly _onDidChangeTreeData: vscode.EventEmitter<TaskTreeItem | undefined> = new vscode.EventEmitter<TaskTreeItem | undefined>();
-	readonly onDidChangeTreeData: vscode.Event<TaskTreeItem | undefined> = this._onDidChangeTreeData.event;
+export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
+	private readonly _onDidChangeTreeData: EventEmitter<TaskTreeItem | undefined> = new EventEmitter<TaskTreeItem | undefined>();
+	readonly onDidChangeTreeData: Event<TaskTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
 		private tasks: TheTask[],
@@ -50,7 +50,7 @@ export class TaskProvider implements vscode.TreeDataProvider<TaskTreeItem> {
 		this._onDidChangeTreeData.fire(undefined);
 	}
 
-	getTreeItem(element: TaskTreeItem): vscode.TreeItem {
+	getTreeItem(element: TaskTreeItem): TreeItem {
 		return element;
 	}
 

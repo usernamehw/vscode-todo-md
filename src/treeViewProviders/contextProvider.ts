@@ -1,10 +1,10 @@
-import vscode from 'vscode';
+import { Event, EventEmitter, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { TheTask } from '../TheTask';
 import { ItemForProvider } from '../types';
 import { tasksToTreeItems, TaskTreeItem } from './taskProvider';
 
-export class ContextTreeItem extends vscode.TreeItem {
-	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+export class ContextTreeItem extends TreeItem {
+	readonly collapsibleState = TreeItemCollapsibleState.Collapsed;
 
 	constructor(
 		readonly label: string,
@@ -16,9 +16,9 @@ export class ContextTreeItem extends vscode.TreeItem {
 	contextValue = 'project';
 }
 
-export class ContextProvider implements vscode.TreeDataProvider<ContextTreeItem | TaskTreeItem> {
-	private readonly _onDidChangeTreeData: vscode.EventEmitter<ContextTreeItem | undefined> = new vscode.EventEmitter<ContextTreeItem | undefined>();
-	readonly onDidChangeTreeData: vscode.Event<ContextTreeItem | undefined> = this._onDidChangeTreeData.event;
+export class ContextProvider implements TreeDataProvider<ContextTreeItem | TaskTreeItem> {
+	private readonly _onDidChangeTreeData: EventEmitter<ContextTreeItem | undefined> = new EventEmitter<ContextTreeItem | undefined>();
+	readonly onDidChangeTreeData: Event<ContextTreeItem | undefined> = this._onDidChangeTreeData.event;
 
 	constructor(
 		private contexts: ItemForProvider[],
@@ -29,7 +29,7 @@ export class ContextProvider implements vscode.TreeDataProvider<ContextTreeItem 
 		this._onDidChangeTreeData.fire(undefined);
 	}
 
-	getTreeItem(element: ContextTreeItem | TaskTreeItem): vscode.TreeItem {
+	getTreeItem(element: ContextTreeItem | TaskTreeItem): TreeItem {
 		return element;
 	}
 

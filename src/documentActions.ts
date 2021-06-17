@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import vscode, { TextDocument, TextLine, Uri, WorkspaceEdit } from 'vscode';
+import { Position, Range, Selection, TextDocument, TextEditorRevealType, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionConfig } from './extension';
 import { parseDocument } from './parse';
@@ -14,7 +14,7 @@ import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 // 1) Performs an action on the document and returns a Promise
 // 2) Has a `WorkspaceEdit` suffix that accepts an edit and returns it without applying
 
-export async function editTask(document: vscode.TextDocument, task: TheTask) {
+export async function editTask(document: TextDocument, task: TheTask) {
 	const edit = new WorkspaceEdit();
 	const newTaskAsText = taskToString(task);
 	const line = document.lineAt(task.lineNumber);
@@ -24,7 +24,7 @@ export async function editTask(document: vscode.TextDocument, task: TheTask) {
 /**
  * Add `{h}` special tag
  */
-export async function hideTask(document: vscode.TextDocument, lineNumber: number) {
+export async function hideTask(document: TextDocument, lineNumber: number) {
 	const edit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);
@@ -36,7 +36,7 @@ export async function hideTask(document: vscode.TextDocument, lineNumber: number
 	}
 	return applyEdit(edit, document);
 }
-export async function editTaskRawText(document: vscode.TextDocument, lineNumber: number, newRawText: string) {
+export async function editTaskRawText(document: TextDocument, lineNumber: number, newRawText: string) {
 	const edit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
 	edit.replace(document.uri, line.range, newRawText);
@@ -79,7 +79,7 @@ export async function toggleTaskCollapseRecursive(document: TextDocument, lineNu
 /**
  * Insert/Replace due date
  */
-export async function setDueDate(document: vscode.TextDocument, lineNumber: number, newDueDate: string) {
+export async function setDueDate(document: TextDocument, lineNumber: number, newDueDate: string) {
 	const dueDate = `{due:${newDueDate}}`;
 	const edit = new WorkspaceEdit();
 	const task = getTaskAtLineExtension(lineNumber);
@@ -98,7 +98,7 @@ export async function setDueDate(document: vscode.TextDocument, lineNumber: numb
 /**
  * Start time tracking (task duration). Triggered manually by user.
  */
-export async function startTask(document: vscode.TextDocument, lineNumber: number) {
+export async function startTask(document: TextDocument, lineNumber: number) {
 	const edit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);
@@ -116,7 +116,7 @@ export async function startTask(document: vscode.TextDocument, lineNumber: numbe
 /**
  * Delete the task. Show confirmation dialog if necessary. Modal dialog shows all the tasks that will be deleted.
  */
-export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber: number) {
+export async function tryToDeleteTask(document: TextDocument, lineNumber: number) {
 	const task = getTaskAtLineExtension(lineNumber);
 	if (!task) {
 		return undefined;
@@ -151,7 +151,7 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 
 	if (showConfirmationDialog) {
 		const confirmBtnName = 'Delete';
-		const button = await vscode.window.showWarningMessage(`${numberOfTasksToBeDeleted}\n${deletedTasksAsText}`, {
+		const button = await window.showWarningMessage(`${numberOfTasksToBeDeleted}\n${deletedTasksAsText}`, {
 			modal: true,
 		}, confirmBtnName);
 		if (button !== confirmBtnName) {
@@ -168,7 +168,7 @@ export async function tryToDeleteTask(document: vscode.TextDocument, lineNumber:
 /**
  * Either toggle done or increment count
  */
-export async function toggleDoneOrIncrementCount(document: vscode.TextDocument, lineNumber: number) {
+export async function toggleDoneOrIncrementCount(document: TextDocument, lineNumber: number) {
 	const task = getTaskAtLineExtension(lineNumber);
 	if (!task) {
 		return undefined;
@@ -183,7 +183,7 @@ export async function toggleDoneOrIncrementCount(document: vscode.TextDocument, 
 /**
  * Increment count special tag. If already max `3/3` then set it to `0/3`
  */
-export async function incrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
+export async function incrementCountForTask(document: TextDocument, lineNumber: number, task: TheTask) {
 	const line = document.lineAt(lineNumber);
 	const edit = new WorkspaceEdit();
 	const count = task.count;
@@ -208,7 +208,7 @@ export async function incrementCountForTask(document: vscode.TextDocument, lineN
 /**
  * Decrement count special tag. If alredy min `0/3` then do nothing.
  */
-export async function decrementCountForTask(document: vscode.TextDocument, lineNumber: number, task: TheTask) {
+export async function decrementCountForTask(document: TextDocument, lineNumber: number, task: TheTask) {
 	const edit = new WorkspaceEdit();
 	const count = task.count;
 	if (!count) {
@@ -239,14 +239,14 @@ export async function incrementOrDecrementPriority(document: TextDocument, lineN
 		edit.replace(document.uri, task.priorityRange, `(${newPriority})`);
 	} else {
 		// No priority, create one
-		edit.insert(document.uri, new vscode.Position(lineNumber, 0), `(${newPriority}) `);
+		edit.insert(document.uri, new Position(lineNumber, 0), `(${newPriority}) `);
 	}
 	return applyEdit(edit, document);
 }
 /**
  * Remove overdue special tag
  */
-async function removeOverdueFromLine(document: vscode.TextDocument, task: TheTask) {
+async function removeOverdueFromLine(document: TextDocument, task: TheTask) {
 	const edit = new WorkspaceEdit();
 	removeOverdueWorkspaceEdit(edit, document.uri, task);
 	return applyEdit(edit, document);
@@ -291,8 +291,8 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
 
 	const fileEdit = new WorkspaceEdit();
 	const archiveFileEdit = new WorkspaceEdit();
-	const archiveFileUri = vscode.Uri.file(extensionConfig.defaultArchiveFile);
-	const archiveDocument = await vscode.workspace.openTextDocument(archiveFileUri);
+	const archiveFileUri = Uri.file(extensionConfig.defaultArchiveFile);
+	const archiveDocument = await workspace.openTextDocument(archiveFileUri);
 	let taskLineNumbersToArchive = [];
 
 	for (const task of tasks) {
@@ -332,12 +332,12 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
  */
 export async function revealTask(lineNumber: number, document?: TextDocument) {
 	const documentToReveal = document ?? await getActiveOrDefaultDocument();
-	const editor = await vscode.window.showTextDocument(documentToReveal);
-	const range = new vscode.Range(lineNumber, 0, lineNumber, 0);
-	editor.selection = new vscode.Selection(range.start, range.end);
-	editor.revealRange(range, vscode.TextEditorRevealType.Default);
+	const editor = await window.showTextDocument(documentToReveal);
+	const range = new Range(lineNumber, 0, lineNumber, 0);
+	editor.selection = new Selection(range.start, range.end);
+	editor.revealRange(range, TextEditorRevealType.Default);
 	// Highlight for a short time revealed range
-	const lineHighlightDecorationType = vscode.window.createTextEditorDecorationType({
+	const lineHighlightDecorationType = window.createTextEditorDecorationType({
 		backgroundColor: '#ffa30468',
 		isWholeLine: true,
 	});
@@ -350,7 +350,7 @@ export async function revealTask(lineNumber: number, document?: TextDocument) {
  * Recurring tasks completion state should reset every day.
  * This function goes through all tasks in a document and resets their completion/count, adds `{overdue}` tag when needed
  */
-export async function resetAllRecurringTasks(document: vscode.TextDocument, lastVisit: Date | string = new Date()) {
+export async function resetAllRecurringTasks(document: TextDocument, lastVisit: Date | string = new Date()) {
 	if (typeof lastVisit === 'string') {
 		lastVisit = new Date(lastVisit);
 	}
@@ -395,8 +395,8 @@ export async function resetAllRecurringTasks(document: vscode.TextDocument, last
  * Insert line break `\n` and some text to the file
  */
 export async function appendTaskToFile(text: string, filePath: string) {
-	const uri = vscode.Uri.file(filePath);
-	const document = await vscode.workspace.openTextDocument(uri);
+	const uri = Uri.file(filePath);
+	const document = await workspace.openTextDocument(uri);
 	const edit = new WorkspaceEdit();
 	const eofPosition = document.lineAt(document.lineCount - 1).rangeIncludingLineBreak.end;
 	edit.insert(uri, eofPosition, `\n${text}`);
@@ -406,7 +406,7 @@ export async function appendTaskToFile(text: string, filePath: string) {
 // ──────────────────────────────────────────────────────────────────────
 // ──────────────────────────────────────────────────────────────────────
 // ──────────────────────────────────────────────────────────────────────
-export function toggleTaskCollapseWorkspaceEdit(edit: WorkspaceEdit, document: vscode.TextDocument, lineNumber: number) {
+export function toggleTaskCollapseWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
 	const line = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);
 	if (task?.collapseRange) {
@@ -415,7 +415,7 @@ export function toggleTaskCollapseWorkspaceEdit(edit: WorkspaceEdit, document: v
 		edit.insert(document.uri, line.range.end, ' {c}');
 	}
 }
-export function deleteTaskWorkspaceEdit(edit: WorkspaceEdit, document: vscode.TextDocument, lineNumber: number) {
+export function deleteTaskWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
 	edit.delete(document.uri, document.lineAt(lineNumber).rangeIncludingLineBreak);
 }
 export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
@@ -428,7 +428,7 @@ export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document:
 	if (task.completionDateRange) {
 		edit.replace(document.uri, task.completionDateRange, newCompletionDate);
 	} else {
-		edit.insert(document.uri, new vscode.Position(line.lineNumber, line.range.end.character), ` ${newCompletionDate}`);
+		edit.insert(document.uri, new Position(line.lineNumber, line.range.end.character), ` ${newCompletionDate}`);
 	}
 	if (task.start) {
 		insertDurationWorkspaceEdit(edit, document, line, task);
@@ -446,7 +446,7 @@ export function insertDurationWorkspaceEdit(edit: WorkspaceEdit, document: TextD
 		edit.insert(document.uri, line.range.end, ` ${newDurationDate}`);
 	}
 }
-export function removeCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: vscode.Uri, task: TheTask) {
+export function removeCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
 	if (task.completionDateRange) {
 		edit.delete(uri, task.completionDateRange);
 	}
@@ -461,18 +461,18 @@ export function removeStartWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: Th
 		edit.delete(uri, task.startRange);
 	}
 }
-export function archiveTaskWorkspaceEdit(edit: WorkspaceEdit, archiveFileEdit: WorkspaceEdit, archiveDocument: TextDocument, uri: vscode.Uri, line: vscode.TextLine, shouldDelete: boolean) {
+export function archiveTaskWorkspaceEdit(edit: WorkspaceEdit, archiveFileEdit: WorkspaceEdit, archiveDocument: TextDocument, uri: Uri, line: TextLine, shouldDelete: boolean) {
 	appendTaskToFileWorkspaceEdit(archiveFileEdit, archiveDocument, line.text);// Add task to archive file
 	if (shouldDelete) {
 		edit.delete(uri, line.rangeIncludingLineBreak);// Delete task from active file
 	}
 }
-function addOverdueSpecialTagWorkspaceEdit(edit: WorkspaceEdit, uri: vscode.Uri, line: vscode.TextLine, overdueDateString: string) {
-	edit.insert(uri, new vscode.Position(line.lineNumber, line.range.end.character), ` {overdue:${overdueDateString}}`);
+function addOverdueSpecialTagWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, line: TextLine, overdueDateString: string) {
+	edit.insert(uri, new Position(line.lineNumber, line.range.end.character), ` {overdue:${overdueDateString}}`);
 }
 export function setCountCurrentValueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, count: Count, value: string) {
 	const charIndexWithOffset = count.range.start.character + 'count:'.length + 1;
-	const currentRange = new vscode.Range(count.range.start.line, charIndexWithOffset, count.range.start.line, charIndexWithOffset + String(count.current).length);
+	const currentRange = new Range(count.range.start.line, charIndexWithOffset, count.range.start.line, charIndexWithOffset + String(count.current).length);
 	edit.replace(uri, currentRange, String(value));
 }
 function appendTaskToFileWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, text: string) {
@@ -482,12 +482,12 @@ function appendTaskToFileWorkspaceEdit(edit: WorkspaceEdit, document: TextDocume
 export function toggleCommentAtLineWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
 	const line = document.lineAt(lineNumber);
 	if (line.text.startsWith('# ')) {
-		edit.delete(document.uri, new vscode.Range(lineNumber, 0, lineNumber, 2));
+		edit.delete(document.uri, new Range(lineNumber, 0, lineNumber, 2));
 	} else {
-		edit.insert(document.uri, new vscode.Position(lineNumber, 0), '# ');
+		edit.insert(document.uri, new Position(lineNumber, 0), '# ');
 	}
 }
-export function editTaskWorkspaceEdit(edit: WorkspaceEdit, document: vscode.TextDocument, task: TheTask) {
+export function editTaskWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, task: TheTask) {
 	const newTaskAsText = taskToString(task);
 	const line = document.lineAt(task.lineNumber);
 	edit.replace(document.uri, line.range, newTaskAsText);

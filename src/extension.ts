@@ -4,7 +4,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import throttle from 'lodash/throttle';
-import vscode, { ExtensionContext, window, workspace } from 'vscode';
+import { ConfigurationChangeEvent, Disposable, ExtensionContext, TextEditorDecorationType, window, workspace } from 'vscode';
 import { registerAllCommands } from './commands';
 import { updateEditorDecorationStyle } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
@@ -71,39 +71,39 @@ export const statusBar = new StatusBar();
 export class Global {
 	static webviewProvider: TasksWebviewViewProvider;
 
-	static tagAutocompleteDisposable: vscode.Disposable;
-	static projectAutocompleteDisposable: vscode.Disposable;
-	static contextAutocompleteDisposable: vscode.Disposable;
-	static generalAutocompleteDisposable: vscode.Disposable;
-	static specialTagsAutocompleteDisposable: vscode.Disposable;
-	static setDueDateAutocompleteDisposable: vscode.Disposable;
+	static tagAutocompleteDisposable: Disposable;
+	static projectAutocompleteDisposable: Disposable;
+	static contextAutocompleteDisposable: Disposable;
+	static generalAutocompleteDisposable: Disposable;
+	static specialTagsAutocompleteDisposable: Disposable;
+	static setDueDateAutocompleteDisposable: Disposable;
 
-	static hoverDisposable: vscode.Disposable;
-	static documentHighlightsDisposable: vscode.Disposable;
-	static changeTextDocumentDisposable: vscode.Disposable;
-	static changeActiveTextEditorDisposable: vscode.Disposable;
+	static hoverDisposable: Disposable;
+	static documentHighlightsDisposable: Disposable;
+	static changeTextDocumentDisposable: Disposable;
+	static changeActiveTextEditorDisposable: Disposable;
 
-	static completedTaskDecorationType: vscode.TextEditorDecorationType;
-	static commentDecorationType: vscode.TextEditorDecorationType;
-	static priorityADecorationType: vscode.TextEditorDecorationType;
-	static priorityBDecorationType: vscode.TextEditorDecorationType;
-	static priorityCDecorationType: vscode.TextEditorDecorationType;
-	static priorityDDecorationType: vscode.TextEditorDecorationType;
-	static priorityEDecorationType: vscode.TextEditorDecorationType;
-	static priorityFDecorationType: vscode.TextEditorDecorationType;
-	static tagsDecorationType: vscode.TextEditorDecorationType;
-	static specialTagDecorationType: vscode.TextEditorDecorationType;
-	static tagsDelimiterDecorationType: vscode.TextEditorDecorationType;
-	static projectDecorationType: vscode.TextEditorDecorationType;
-	static contextDecorationType: vscode.TextEditorDecorationType;
-	static notDueDecorationType: vscode.TextEditorDecorationType;
-	static dueDecorationType: vscode.TextEditorDecorationType;
-	static overdueDecorationType: vscode.TextEditorDecorationType;
-	static invalidDueDateDecorationType: vscode.TextEditorDecorationType;
-	static closestDueDateDecorationType: vscode.TextEditorDecorationType;
+	static completedTaskDecorationType: TextEditorDecorationType;
+	static commentDecorationType: TextEditorDecorationType;
+	static priorityADecorationType: TextEditorDecorationType;
+	static priorityBDecorationType: TextEditorDecorationType;
+	static priorityCDecorationType: TextEditorDecorationType;
+	static priorityDDecorationType: TextEditorDecorationType;
+	static priorityEDecorationType: TextEditorDecorationType;
+	static priorityFDecorationType: TextEditorDecorationType;
+	static tagsDecorationType: TextEditorDecorationType;
+	static specialTagDecorationType: TextEditorDecorationType;
+	static tagsDelimiterDecorationType: TextEditorDecorationType;
+	static projectDecorationType: TextEditorDecorationType;
+	static contextDecorationType: TextEditorDecorationType;
+	static notDueDecorationType: TextEditorDecorationType;
+	static dueDecorationType: TextEditorDecorationType;
+	static overdueDecorationType: TextEditorDecorationType;
+	static invalidDueDateDecorationType: TextEditorDecorationType;
+	static closestDueDateDecorationType: TextEditorDecorationType;
 }
 
-export async function activate(extensionContext: vscode.ExtensionContext) {
+export async function activate(extensionContext: ExtensionContext) {
 	extensionState.extensionContext = extensionContext;
 	const lastVisitByFile = extensionContext.globalState.get<ExtensionState['lastVisitByFile'] | undefined>(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY);
 	extensionState.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
@@ -127,7 +127,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 
 	Global.webviewProvider = new TasksWebviewViewProvider(extensionState.extensionContext.extensionUri);
 	extensionState.extensionContext.subscriptions.push(
-		vscode.window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, Global.webviewProvider),
+		window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, Global.webviewProvider),
 	);
 
 	updateAllTreeViews();
@@ -141,7 +141,7 @@ export async function activate(extensionContext: vscode.ExtensionContext) {
 		leading: false,
 	}));
 
-	function onConfigChange(e: vscode.ConfigurationChangeEvent): void {
+	function onConfigChange(e: ConfigurationChangeEvent): void {
 		if (!e.affectsConfiguration(Constants.EXTENSION_NAME)) {
 			return;
 		}

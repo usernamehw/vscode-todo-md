@@ -1,4 +1,4 @@
-import vscode, { Range } from 'vscode';
+import { commands, DocumentLink, Range, TextDocument, TextLine } from 'vscode';
 import { DueDate } from './dueDate';
 import { extensionState } from './extension';
 import { Count, Priority, TheTask } from './TheTask';
@@ -21,7 +21,7 @@ interface EmptyLineReturn extends ParseLineReturn {
 /**
  * Main parsing function. 1 Line - 1 Task.
  */
-export function parseLine(textLine: vscode.TextLine): CommentReturn | EmptyLineReturn | TaskReturn {
+export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn | TaskReturn {
 	const line = textLine.text.trim();
 	if (!line.length) {
 		return {
@@ -236,11 +236,11 @@ interface ParsedDocument {
  *
  * Also things that require information about other lines, like nested task needs to find a parent task.
  */
-export async function parseDocument(document: vscode.TextDocument): Promise<ParsedDocument> {
+export async function parseDocument(document: TextDocument): Promise<ParsedDocument> {
 	const tasks: TheTask[] = [];
 	const commentLines: Range[] = [];
 
-	const links = await vscode.commands.executeCommand<vscode.DocumentLink[]>('vscode.executeLinkProvider', document.uri) ?? [];
+	const links = await commands.executeCommand<DocumentLink[]>('vscode.executeLinkProvider', document.uri) ?? [];
 
 	for (let i = 0; i < document.lineCount; i++) {
 		const parsedLine = parseLine(document.lineAt(i));

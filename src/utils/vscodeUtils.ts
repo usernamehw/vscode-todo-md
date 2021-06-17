@@ -1,4 +1,4 @@
-import vscode, { ConfigurationTarget, Uri, workspace } from 'vscode';
+import { commands, ConfigurationTarget, env, Position, Range, TextDocument, Uri, window, workspace } from 'vscode';
 import { Link } from '../TheTask';
 import { VscodeContext } from '../types';
 
@@ -6,31 +6,31 @@ import { VscodeContext } from '../types';
  * Create new untitled file with provided content and language;
  */
 export async function openInUntitled(content: string, language?: string): Promise<void> {
-	const document = await vscode.workspace.openTextDocument({
+	const document = await workspace.openTextDocument({
 		language,
 		content,
 	});
-	vscode.window.showTextDocument(document);
+	window.showTextDocument(document);
 }
 /**
  * Open file by absolute path in the editor(tab).
  */
 export async function openFileInEditor(path: string) {
-	const document = await vscode.workspace.openTextDocument(path);
-	vscode.window.showTextDocument(document);
+	const document = await workspace.openTextDocument(path);
+	window.showTextDocument(document);
 }
 /**
  * Given only start and end lines - get the full Range with characters.
  */
-export function getFullRangeFromLines(document: vscode.TextDocument, lineStart: number, lineEnd: number): vscode.Range {
+export function getFullRangeFromLines(document: TextDocument, lineStart: number, lineEnd: number): Range {
 	const lineAtTheEnd = document.lineAt(lineEnd);
-	return new vscode.Range(lineStart, 0, lineEnd, lineAtTheEnd.range.end.character);
+	return new Range(lineStart, 0, lineEnd, lineAtTheEnd.range.end.character);
 }
 /**
  * Set vscode context.
  */
 export async function setContext(context: VscodeContext, value: any) {
-	return await vscode.commands.executeCommand('setContext', context, value);
+	return await commands.executeCommand('setContext', context, value);
 }
 /**
  * Open URL in default browser. If multiple links then show quick pick.
@@ -38,7 +38,7 @@ export async function setContext(context: VscodeContext, value: any) {
 export async function followLinks(links: Link[]) {
 	let link: string | undefined = links[0].value;
 	if (links.length > 1) {
-		link = await vscode.window.showQuickPick(links.map(l => l.value));
+		link = await window.showQuickPick(links.map(l => l.value));
 		if (!link) {
 			return;
 		}
@@ -49,7 +49,7 @@ export async function followLinks(links: Link[]) {
  * Opens a link externally using the default application.
  */
 export async function followLink(linkString: string) {
-	return await vscode.env.openExternal(Uri.parse(linkString));
+	return await env.openExternal(Uri.parse(linkString));
 }
 export async function openFileInEditorByPath(path: string) {
 	await openFileInEditor(Uri.parse(path).fsPath);
@@ -58,7 +58,7 @@ export async function openFileInEditorByPath(path: string) {
  * Open vscode Settings GUI with input value set to the specified value.
  */
 export function openSettingGuiAt(settingName: string) {
-	vscode.commands.executeCommand('workbench.action.openSettings', settingName);
+	commands.executeCommand('workbench.action.openSettings', settingName);
 }
 /**
  * Vscode input has a noisy propmt.
@@ -71,13 +71,13 @@ export function inputOffset(text: string): string {
 /**
  * Get word range, but using regexp defining word as a thing surrounded by spaces
  */
-export function getWordRangeAtPosition(document: vscode.TextDocument, position: vscode.Position) {
+export function getWordRangeAtPosition(document: TextDocument, position: Position) {
 	return document.getWordRangeAtPosition(position, /\S+/);
 }
 /**
  * Get a word at position (word delimiter is a whitespace)
  */
-export function getWordAtPosition(document: vscode.TextDocument, position: vscode.Position) {
+export function getWordAtPosition(document: TextDocument, position: Position) {
 	const wordRange = getWordRangeAtPosition(document, position);
 	if (wordRange) {
 		return document.getText(wordRange);

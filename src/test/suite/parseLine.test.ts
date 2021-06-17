@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import vscode, { Range } from 'vscode';
+import { Range, window } from 'vscode';
 import { parseLine } from '../../parse';
 import { TheTask } from '../../TheTask';
 import { headerDelimiter } from './testUtils';
 
-const editor = vscode.window.activeTextEditor!;
+const editor = window.activeTextEditor!;
 /**
  * Helper function to get the task excluding empty lines and comments
  */

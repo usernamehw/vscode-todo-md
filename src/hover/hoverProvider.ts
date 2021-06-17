@@ -1,13 +1,13 @@
-import vscode from 'vscode';
+import { Hover, languages } from 'vscode';
 import { Global } from '../extension';
-import { getTaskHover } from './getTaskHover';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
+import { getTaskHover } from './getTaskHover';
 
 export function updateHover() {
 	if (Global.hoverDisposable) {
 		Global.hoverDisposable.dispose();
 	}
-	Global.hoverDisposable = vscode.languages.registerHoverProvider(
+	Global.hoverDisposable = languages.registerHoverProvider(
 		{ scheme: 'file' },
 		{
 			provideHover(document, position, token) {
@@ -15,7 +15,7 @@ export function updateHover() {
 				if (!task) {
 					return undefined;
 				}
-				return new vscode.Hover(getTaskHover(task));
+				return new Hover(getTaskHover(task));
 			},
 		},
 	);
