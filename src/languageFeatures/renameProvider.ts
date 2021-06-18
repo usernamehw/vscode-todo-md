@@ -56,7 +56,10 @@ export function updateRenameProvider() {
 				if (parsedWord.type !== 'tags' && parsedWord.type !== 'project' && parsedWord.type !== 'context') {
 					return Promise.reject('You cannot rename this element');
 				}
-				return undefined;
+				return {
+					range,
+					placeholder: word.slice(1),
+				};
 			},
 		},
 	);
