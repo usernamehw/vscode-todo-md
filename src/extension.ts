@@ -81,6 +81,7 @@ export class Global {
 	static hoverDisposable: Disposable;
 	static documentHighlightsDisposable: Disposable;
 	static renameProviderDisposable: Disposable;
+	static referenceProviderDisposable: Disposable;
 	static changeTextDocumentDisposable: Disposable;
 	static changeActiveTextEditorDisposable: Disposable;
 
@@ -249,5 +250,6 @@ export function deactivate(): void {
 	Global.hoverDisposable.dispose();
 	Global.documentHighlightsDisposable.dispose();
 	Global.renameProviderDisposable.dispose();
+	Global.referenceProviderDisposable.dispose();
 	Global.changeActiveTextEditorDisposable.dispose();
 }

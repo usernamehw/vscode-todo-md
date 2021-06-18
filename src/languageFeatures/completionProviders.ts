@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import { CompletionItem, CompletionItemKind, languages, Position, Range, TextDocument } from 'vscode';
-import { DueDate } from './dueDate';
-import { extensionConfig, extensionState, Global } from './extension';
-import { helpCreateDueDate } from './time/setDueDateHelper';
-import { getDateInISOFormat } from './time/timeUtils';
-import { specialTagDescription, SpecialTagName } from './utils/extensionUtils';
-import { getWordAtPosition, getWordRangeAtPosition } from './utils/vscodeUtils';
+import { DueDate } from '../dueDate';
+import { extensionConfig, extensionState, Global } from '../extension';
+import { helpCreateDueDate } from '../time/setDueDateHelper';
+import { getDateInISOFormat } from '../time/timeUtils';
+import { specialTagDescription, SpecialTagName } from '../utils/extensionUtils';
+import { getWordAtPosition, getWordRangeAtPosition } from '../utils/vscodeUtils';
 /**
  * Update editor autocomplete/suggest
  */

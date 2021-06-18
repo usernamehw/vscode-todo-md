@@ -1,8 +1,8 @@
 import { DocumentHighlight, DocumentHighlightKind, languages, Range } from 'vscode';
-import { Global } from './extension';
-import { parseWord } from './parse';
+import { Global } from '../extension';
+import { parseWord } from '../parse';
 import { getAllContextRangesInDocument, getAllProjectRangesInDocument, getAllTagRangesInDocument } from './renameProvider';
-import { getWordRangeAtPosition } from './utils/vscodeUtils';
+import { getWordRangeAtPosition } from '../utils/vscodeUtils';
 
 export function updateDocumentHighlights() {
 	Global.documentHighlightsDisposable?.dispose();

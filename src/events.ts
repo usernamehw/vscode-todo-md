@@ -1,18 +1,19 @@
 import dayjs from 'dayjs';
 import throttle from 'lodash/throttle';
 import { languages, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
-import { updateCompletions } from './completionProviders';
+import { updateCompletions } from './languageFeatures/completionProviders';
 import { paintEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
-import { updateDocumentHighlights } from './documentHighlights';
+import { updateDocumentHighlights } from './languageFeatures/documentHighlights';
 import { extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateHover } from './hover/hoverProvider';
-import { updateRenameProvider } from './renameProvider';
+import { updateRenameProvider } from './languageFeatures/renameProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
 import { sleep } from './utils/utils';
 import { setContext } from './utils/vscodeUtils';
+import { updateReferenceProvider } from './languageFeatures/referenceProvider';
 
 let changeActiveEditorEventInProgress = false;
 /**
@@ -98,6 +99,7 @@ export function activateEditorFeatures(editor: TextEditor) {
 	updateCompletions();
 	updateDocumentHighlights();
 	updateRenameProvider();
+	updateReferenceProvider();
 	updateHover();
 	statusBar.show();
 }
@@ -106,9 +108,7 @@ export function activateEditorFeatures(editor: TextEditor) {
  * will be disabled.
  */
 export function deactivateEditorFeatures() {
-	if (Global.changeTextDocumentDisposable) {
-		Global.changeTextDocumentDisposable.dispose();
-	}
+	Global.changeTextDocumentDisposable?.dispose();
 	if (Global.contextAutocompleteDisposable) {
 		Global.contextAutocompleteDisposable.dispose();
 		Global.tagAutocompleteDisposable.dispose();
@@ -119,9 +119,8 @@ export function deactivateEditorFeatures() {
 	}
 	Global.documentHighlightsDisposable?.dispose();
 	Global.renameProviderDisposable?.dispose();
-	if (Global.hoverDisposable) {
-		Global.hoverDisposable.dispose();
-	}
+	Global.referenceProviderDisposable?.dispose();
+	Global.hoverDisposable?.dispose();
 	statusBar.hide();
 }
 /**

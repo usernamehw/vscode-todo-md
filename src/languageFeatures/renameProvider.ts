@@ -1,8 +1,8 @@
 import { languages, Position, Range, WorkspaceEdit } from 'vscode';
-import { Global } from './extension';
-import { ParsedWordContext, ParsedWordProject, ParsedWordTags, parseWord } from './parse';
-import { forEachTask } from './utils/taskUtils';
-import { getWordRangeAtPosition } from './utils/vscodeUtils';
+import { Global } from '../extension';
+import { ParsedWordContext, ParsedWordProject, ParsedWordTags, parseWord } from '../parse';
+import { forEachTask } from '../utils/taskUtils';
+import { getWordRangeAtPosition } from '../utils/vscodeUtils';
 
 export function updateRenameProvider() {
 	Global.renameProviderDisposable?.dispose();
