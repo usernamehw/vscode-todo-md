@@ -29,6 +29,7 @@ export function updateCompletions(): void {
 				const tags = Array.from(new Set(extensionState.tags.concat(extensionConfig.tags)));
 				for (const tag of tags) {
 					const tagCompletion = new CompletionItem(tag, CompletionItemKind.Field);
+					tagCompletion.insertText = `${tag} `;
 					tagCompletions.push(tagCompletion);
 				}
 
@@ -47,9 +48,10 @@ export function updateCompletions(): void {
 				}
 				const projectCompletions = [];
 				const projects = Array.from(new Set(extensionState.projects.concat(extensionConfig.projects)));
-				for (const tag of projects) {
-					const tagCompletion = new CompletionItem(tag, CompletionItemKind.Field);
-					projectCompletions.push(tagCompletion);
+				for (const project of projects) {
+					const projectCompletion = new CompletionItem(project, CompletionItemKind.Field);
+					projectCompletion.insertText = `${project} `;
+					projectCompletions.push(projectCompletion);
 				}
 
 				return projectCompletions;
@@ -69,6 +71,7 @@ export function updateCompletions(): void {
 				const contexts = Array.from(new Set(extensionState.contexts.concat(extensionConfig.contexts)));
 				for (const context of contexts) {
 					const contextCompletion = new CompletionItem(context, CompletionItemKind.Field);
+					contextCompletion.insertText = `${context} `;
 					contextCompletions.push(contextCompletion);
 				}
 
