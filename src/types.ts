@@ -436,6 +436,7 @@ export const enum CommandIds {
 	openDefaultArchiveFile = 'todomd.openDefaultArchiveFile',
 	openDefaultFile = 'todomd.openDefaultFile',
 	specifyDefaultFile = 'todomd.specifyDefaultFile',
+	specifyDefaultArchiveFile = 'todomd.specifyDefaultArchiveFile',
 	completeTask = 'todomd.completeTask',
 	filter = 'todomd.filter',
 	clearFilter = 'todomd.clearFilter',

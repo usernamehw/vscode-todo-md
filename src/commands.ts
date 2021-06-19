@@ -12,7 +12,7 @@ import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { getArchivedDocument, tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { CommandIds, ExtensionState, TreeItemSortType, VscodeContext } from './types';
-import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultFile } from './utils/extensionUtils';
+import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultArchiveFile, specifyDefaultFile } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openInUntitled, openSettingGuiAt, setContext, toggleGlobalSetting, updateSetting } from './utils/vscodeUtils';
@@ -244,6 +244,7 @@ export function registerAllCommands() {
 		openFileInEditor(extensionConfig.defaultFile);
 	});
 	commands.registerCommand(CommandIds.specifyDefaultFile, specifyDefaultFile);
+	commands.registerCommand(CommandIds.specifyDefaultArchiveFile, specifyDefaultArchiveFile);
 	commands.registerCommand(CommandIds.completeTask, async () => {
 		// Show Quick Pick to complete a task
 		const document = await getActiveOrDefaultDocument();

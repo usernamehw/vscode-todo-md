@@ -171,12 +171,12 @@
 				},
 				"todomd.defaultFile": {
 					"type": "string",
-					"markdownDescription": "Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`",
+					"markdownDescription": "Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`.\n\n[**Pick default file**](command:todomd.specifyDefaultFile)",
 					"default": ""
 				},
 				"todomd.defaultArchiveFile": {
 					"type": "string",
-					"markdownDescription": "Absolute path to file that all archived tasks will be moved to",
+					"markdownDescription": "Absolute path to file that all archived tasks will be moved to. \n\n[**Pick archive file**](command:todomd.specifyDefaultArchiveFile)",
 					"default": ""
 				},
 				"todomd.durationIncludeSeconds": {
