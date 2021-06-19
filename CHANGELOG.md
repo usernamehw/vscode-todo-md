@@ -1,3 +1,12 @@
+## 2.7.0 `19 Jun 2021`
+
+- ✨ [editor] Document highlight provider for tag/project/context
+- ✨ [editor] Rename provider for tag/project/context
+- ✨ [editor] Reference provider for tag/project/context
+- ✨ [editor] Add special tag autocomplete
+- ✨ [editor] Add whitespace after autocomplete for tag/project/context
+- ✨ [webview] Setting to add custom css to webview `webview.customCSSPath`
+
 ## 2.6.2 `12 Jun 2021`
 
 - 🐛 [webview] Fix codicons not loading in **1.57.0**
