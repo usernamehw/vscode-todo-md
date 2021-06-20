@@ -27,7 +27,8 @@
 		"tasks",
 		"gtd",
 		"markdown",
-		"plaintext"
+		"plaintext",
+		"todomd"
 	],
 	"categories": [
 		"Other"
