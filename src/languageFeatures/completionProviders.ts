@@ -15,6 +15,7 @@ export function updateCompletions(): void {
 		Global.projectAutocompleteDisposable.dispose();
 		Global.contextAutocompleteDisposable.dispose();
 		Global.generalAutocompleteDisposable.dispose();
+		Global.specialTagsAutocompleteDisposable.dispose();
 	}
 
 	Global.tagAutocompleteDisposable = languages.registerCompletionItemProvider(
@@ -84,7 +85,6 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
-				const general = [];
 				// TODO: add documentation properties
 				const today = new CompletionItem('TODAY', CompletionItemKind.Constant);
 				today.insertText = getDateInISOFormat(new Date());
@@ -94,8 +94,12 @@ export function updateCompletions(): void {
 				setDueDateTomorrow.insertText = `{due:${getDateInISOFormat(dayjs().add(1, 'day'))}}`;
 				const setDueDateYesterday = new CompletionItem('SET_DUE_YESTERDAY', CompletionItemKind.Constant);
 				setDueDateYesterday.insertText = `{due:${getDateInISOFormat(dayjs().subtract(1, 'day'))}}`;
-				general.push(today, setDueDateToday, setDueDateTomorrow, setDueDateYesterday);
-				return general;
+				return [
+					today,
+					setDueDateToday,
+					setDueDateTomorrow,
+					setDueDateYesterday,
+				];
 			},
 		},
 		'',
@@ -104,7 +108,7 @@ export function updateCompletions(): void {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
-				const charBeforeCursor = document.getText(new Range(position.line, position.character - 1, position.line, position.character));
+				const charBeforeCursor = document.getText(new Range(position.line, position.character === 0 ? 0 : position.character - 1, position.line, position.character));
 				if (charBeforeCursor !== '{') {
 					return undefined;
 				}
