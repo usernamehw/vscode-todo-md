@@ -69,10 +69,10 @@ async function specifyFile(isArchive: boolean) {
  * Open Settings GUI at `todomd.defaultFile` item
  */
 export async function specifyDefaultFile() {
-	return specifyFile(false);
+	return await specifyFile(false);
 }
 export async function specifyDefaultArchiveFile() {
-	return specifyFile(true);
+	return await specifyFile(true);
 }
 /**
  * Check if default file path is specified. If not - show notification with button to enter it.

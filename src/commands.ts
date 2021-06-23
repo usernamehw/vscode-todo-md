@@ -243,8 +243,14 @@ export function registerAllCommands() {
 		}
 		openFileInEditor(extensionConfig.defaultFile);
 	});
-	commands.registerCommand(CommandIds.specifyDefaultFile, specifyDefaultFile);
-	commands.registerCommand(CommandIds.specifyDefaultArchiveFile, specifyDefaultArchiveFile);
+	commands.registerCommand(CommandIds.specifyDefaultFile, async () => {
+		await specifyDefaultFile();
+		await commands.executeCommand('list.focusDown');// Workaround for https://github.com/microsoft/vscode/issues/126782
+	});
+	commands.registerCommand(CommandIds.specifyDefaultArchiveFile, async () => {
+		await specifyDefaultArchiveFile();
+		await commands.executeCommand('list.focusDown');
+	});
 	commands.registerCommand(CommandIds.completeTask, async () => {
 		// Show Quick Pick to complete a task
 		const document = await getActiveOrDefaultDocument();
