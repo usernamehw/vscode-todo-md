@@ -5,7 +5,7 @@ import { updateCompletions } from './languageFeatures/completionProviders';
 import { paintEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { updateDocumentHighlights } from './languageFeatures/documentHighlights';
-import { extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
+import { Constants, extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateHover } from './hover/hoverProvider';
 import { updateRenameProvider } from './languageFeatures/renameProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
@@ -136,4 +136,4 @@ export const updateEverything = throttle(async (editor?: TextEditor) => {
 		statusBar.updateText(extensionState.tasks);
 	}
 	updateAllTreeViews();
-}, 150);
+}, Constants.THROTTLE_EVERYTHING);

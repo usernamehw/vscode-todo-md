@@ -61,6 +61,8 @@ export const enum Constants {
 
 	defaultFileSetting = 'todomd.defaultFile',
 	defaultArchiveFileSetting = 'todomd.defaultArchiveFile',
+
+	THROTTLE_EVERYTHING = 120,
 }
 
 export let extensionConfig = workspace.getConfiguration(Constants.EXTENSION_NAME) as any as ExtensionConfig;
