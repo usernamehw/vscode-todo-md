@@ -1,9 +1,8 @@
 # Todo MD
 
 [![Version](https://vsmarketplacebadge.apphb.com/version-short/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
-[![Rating](https://vsmarketplacebadge.apphb.com/installs-short/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
 [![Rating](https://vsmarketplacebadge.apphb.com/rating-short/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
-[![Rating](https://vsmarketplacebadge.apphb.com/trending-monthly/usernamehw.todo-md.svg)](https://marketplace.visualstudio.com/items?itemName=usernamehw.todo-md)
 
 ## ❗ Extension does NOT conform to the [todo.txt](https://github.com/todotxt/todo.txt) spec.
 

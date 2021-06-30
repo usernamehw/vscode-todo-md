@@ -205,6 +205,7 @@
 					"functions": "always-multiline",
 					"enums": "always"
 				}],
+				"no-bitwise": 1,
 				"no-alert": 0,
 				"curly": 1,
 				"no-var": 1,
