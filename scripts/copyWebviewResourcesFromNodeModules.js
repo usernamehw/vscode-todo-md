@@ -1,6 +1,12 @@
 const fs = require('fs');
 const { exec } = require('child_process');
 
+const vendorPath = './media/vendor';
+
+if (!fs.existsSync(vendorPath)) {
+	fs.mkdirSync(vendorPath);
+}
+
 fs.unlink('./media/vendor/codicon.css', (err) => {
 	if (err) {
 		console.error(err);

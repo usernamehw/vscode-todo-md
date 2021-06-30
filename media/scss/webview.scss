@@ -1,12 +1,8 @@
-@import 'suggest.scss';
-@import 'contextMenu.scss';
-@import 'modal.scss';
+@use 'box_sizing';
+@use 'suggest.scss';
+@use 'context_menu.scss';
+@use 'modal.scss';
 
-*,
-*:before,
-*:after {
-	box-sizing: border-box;
-}
 
 html {
 	overflow-y: hidden;

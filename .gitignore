@@ -8,7 +8,7 @@ node_modules
 
 media/main.js
 media/webview.js
-media/webview.js.map
+media/*.map
 media/*.css
 src/**/*.js
 scripts/generateDecorationSchema.js
