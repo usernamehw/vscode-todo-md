@@ -9,7 +9,7 @@ import { getWordAtPosition, getWordRangeAtPosition } from '../utils/vscodeUtils'
 /**
  * Update editor autocomplete/suggest
  */
-export function updateCompletions(): void {
+export function updateCompletions() {
 	if (Global.tagAutocompleteDisposable) {
 		Global.tagAutocompleteDisposable.dispose();
 		Global.projectAutocompleteDisposable.dispose();

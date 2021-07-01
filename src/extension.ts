@@ -8,7 +8,7 @@ import { ConfigurationChangeEvent, Disposable, ExtensionContext, TextEditorDecor
 import { registerAllCommands } from './commands';
 import { updateEditorDecorationStyle } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
-import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor, updateEverything } from './events';
+import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor } from './events';
 import { parseDocument } from './parse';
 import { StatusBar } from './statusBar';
 import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
@@ -145,7 +145,7 @@ export async function activate(extensionContext: ExtensionContext) {
 		leading: false,
 	}));
 
-	function onConfigChange(e: ConfigurationChangeEvent): void {
+	function onConfigChange(e: ConfigurationChangeEvent) {
 		if (!e.affectsConfiguration(Constants.EXTENSION_NAME)) {
 			return;
 		}
@@ -206,7 +206,7 @@ export async function updateState() {
 	extensionState.projects = treeItems.projects;
 	extensionState.contexts = treeItems.contexts;
 }
-function disposeEditorDisposables(): void {
+function disposeEditorDisposables() {
 	if (Global.completedTaskDecorationType) {
 		// if one set - that means that all decorations are set
 		Global.completedTaskDecorationType.dispose();
@@ -240,7 +240,7 @@ export async function updateLastVisitGlobalState(stringUri: string, date: Date) 
 	await extensionState.extensionContext.globalState.update(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY, extensionState.lastVisitByFile);
 }
 
-export function deactivate(): void {
+export function deactivate() {
 	disposeEditorDisposables();
 	Global.tagAutocompleteDisposable.dispose();
 	Global.projectAutocompleteDisposable.dispose();

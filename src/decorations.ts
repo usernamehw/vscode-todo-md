@@ -4,7 +4,7 @@ import { DueState } from './types';
 /**
  * Update editor decoration style
  */
-export function updateEditorDecorationStyle(): void {
+export function updateEditorDecorationStyle() {
 	Global.completedTaskDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
 		textDecoration: 'line-through rgba(255, 255, 255, 0.35)',

@@ -45,7 +45,7 @@ export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
 		private readonly isArchived = false,
 	) { }
 
-	refresh(newTasks: TheTask[]): void {
+	refresh(newTasks: TheTask[]) {
 		this.tasks = newTasks;
 		this._onDidChangeTreeData.fire(undefined);
 	}

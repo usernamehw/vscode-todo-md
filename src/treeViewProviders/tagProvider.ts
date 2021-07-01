@@ -24,7 +24,7 @@ export class TagProvider implements TreeDataProvider<TagTreeItem | TaskTreeItem>
 		private tags: ItemForProvider[],
 	) { }
 
-	refresh(newTags: ItemForProvider[]): void {
+	refresh(newTags: ItemForProvider[]) {
 		this.tags = newTags;
 		this._onDidChangeTreeData.fire(undefined);
 	}

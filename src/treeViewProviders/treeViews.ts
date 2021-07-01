@@ -140,7 +140,7 @@ export function createAllTreeViews() {
 /**
  * Update all tree views (excluding archived tasks)
  */
-export function updateAllTreeViews(): void {
+export function updateAllTreeViews() {
 	tagProvider.refresh(extensionState.tagsForTreeView);
 	setViewTitle(tagsView, 'tags', extensionState.tagsForTreeView.length);
 

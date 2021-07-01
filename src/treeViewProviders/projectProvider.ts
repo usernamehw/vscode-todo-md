@@ -24,7 +24,7 @@ export class ProjectProvider implements TreeDataProvider<ProjectTreeItem | TaskT
 		private projects: ItemForProvider[],
 	) { }
 
-	refresh(newProjects: ItemForProvider[]): void {
+	refresh(newProjects: ItemForProvider[]) {
 		this.projects = newProjects;
 		this._onDidChangeTreeData.fire(undefined);
 	}

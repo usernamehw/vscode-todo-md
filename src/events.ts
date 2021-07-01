@@ -1,19 +1,19 @@
 import dayjs from 'dayjs';
 import throttle from 'lodash/throttle';
 import { languages, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
-import { updateCompletions } from './languageFeatures/completionProviders';
 import { paintEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
-import { updateDocumentHighlights } from './languageFeatures/documentHighlights';
 import { Constants, extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateHover } from './hover/hoverProvider';
+import { updateCompletions } from './languageFeatures/completionProviders';
+import { updateDocumentHighlights } from './languageFeatures/documentHighlights';
+import { updateReferenceProvider } from './languageFeatures/referenceProvider';
 import { updateRenameProvider } from './languageFeatures/renameProvider';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
 import { sleep } from './utils/utils';
 import { setContext } from './utils/vscodeUtils';
-import { updateReferenceProvider } from './languageFeatures/referenceProvider';
 
 let changeActiveEditorEventInProgress = false;
 /**
@@ -74,7 +74,7 @@ export function checkIfNeedResetRecurringTasks(filePath: string): {lastVisit: Da
 /**
  * Called when active text document changes (typing in it, for instance)
  */
-export function onChangeTextDocument(e: TextDocumentChangeEvent): void {
+export function onChangeTextDocument(e: TextDocumentChangeEvent) {
 	const activeTextEditor = window.activeTextEditor;
 	if (activeTextEditor && extensionState.theRightFileOpened) {
 		updateEverything(activeTextEditor);

@@ -24,7 +24,7 @@ export class ContextProvider implements TreeDataProvider<ContextTreeItem | TaskT
 		private contexts: ItemForProvider[],
 	) { }
 
-	refresh(newContexts: ItemForProvider[]): void {
+	refresh(newContexts: ItemForProvider[]) {
 		this.contexts = newContexts;
 		this._onDidChangeTreeData.fire(undefined);
 	}
