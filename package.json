@@ -36,19 +36,11 @@
 	"activationEvents": [
 		"*",
 		"onCommand:todomd.focusTasksWebviewAndInput",
+		"onCommand:todomd.toggleDone",
 		"onCommand:todomd.completeTask",
 		"onCommand:todomd.getNextTask",
 		"onCommand:todomd.getFewNextTasks",
-		"onView:todomd.tags",
-		"onView:todomd.due",
-		"onView:todomd.tasks",
-		"onView:todomd.projects",
-		"onView:todomd.contexts",
-		"onView:todomd.archived",
-		"onView:todomd.generic1",
-		"onView:todomd.generic2",
-		"onView:todomd.generic3",
-		"onView:todomd.webviewTasks"
+		"onCommand:todomd.addTaskToDefaultFile"
 	],
 	"main": "./dist/extension",
 	"preview": true,
