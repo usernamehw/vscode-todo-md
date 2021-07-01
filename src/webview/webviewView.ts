@@ -7,7 +7,7 @@ import { extensionConfig, extensionState, Global } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
-import { openFileInEditorByPath } from '../utils/vscodeUtils';
+import { followLink, openFileInEditorByPath } from '../utils/vscodeUtils';
 import { getNonce } from './webviewUtils';
 
 export class TasksWebviewViewProvider implements WebviewViewProvider {
@@ -112,6 +112,10 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 				}
 				case 'openFileByPath': {
 					openFileInEditorByPath(message.value);
+					break;
+				}
+				case 'openInDefaultApp': {
+					followLink(message.value);
 					break;
 				}
 			}

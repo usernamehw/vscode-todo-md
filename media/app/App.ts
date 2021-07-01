@@ -236,8 +236,12 @@ export default class App extends Vue {
 
 		window.addEventListener('click', e => {
 			const link = (e.target as HTMLElement).closest('a');
-			if (link && link.href.startsWith('file:///')) {
-				SendMessage.openInEditor(link.href);
+			if (link) {
+				if (link.href.startsWith('file:///')) {
+					SendMessage.openInEditor(link.href);
+				} else if (link.href.startsWith('app:///')) {
+					SendMessage.openInDefaultApp(link.href.slice(7));
+				}
 			}
 		});
 

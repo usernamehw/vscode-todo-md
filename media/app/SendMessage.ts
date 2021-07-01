@@ -58,6 +58,12 @@ export class SendMessage {
 			value: path,
 		});
 	}
+	static openInDefaultApp(path: string) {
+		vscodeApi.postMessage({
+			type: 'openInDefaultApp',
+			value: path,
+		});
+	}
 	static showNotification(text: string) {
 		vscodeApi.postMessage({
 			type: 'showNotification',

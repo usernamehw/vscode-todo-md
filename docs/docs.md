@@ -13,6 +13,7 @@
     - [Button link](#button-link)
     - [Command Uri](#command-uri)
     - [File Uri](#file-uri)
+    - [App Uri](#app-uri)
     - [Highlight specific tags](#highlight-specific-tags)
 
 <!-- /TOC -->
@@ -164,6 +165,14 @@ File scheme will open file in VSCode:
 
 ```md
 [Config File](file:///C:config/config.txt)
+```
+
+### App Uri
+
+App scheme will open file in default app:
+
+```md
+[Open image preview](app:///C:/temp/img.png)
 ```
 
 ### Highlight specific tags

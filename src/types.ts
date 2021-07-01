@@ -385,6 +385,10 @@ interface WebviewMessageOpenFileByPath extends WebviewMessageBase {
 	type: 'openFileByPath';
 	value: string;
 }
+interface WebviewMessageOpenFileInDefaultApp extends WebviewMessageBase {
+	type: 'openInDefaultApp';
+	value: string;
+}
 interface WebviewMessageEditTaskRawText extends WebviewMessageBase {
 	type: 'editTaskRawText';
 	value: {
@@ -407,7 +411,7 @@ interface WebviewMessageStartTask extends WebviewMessageBase {
 /**
  * Messages that can only be sent from webview to extension.
  */
-export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenFileByPath | WebviewMessageSetDueDate | WebviewMessageShowNotification | WebviewMessageStartTask | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
+export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageOpenFileByPath | WebviewMessageOpenFileInDefaultApp | WebviewMessageSetDueDate | WebviewMessageShowNotification | WebviewMessageStartTask | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
 /**
  * Messages that can only be sent from extension to webview.
  */
