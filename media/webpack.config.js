@@ -1,11 +1,9 @@
 // @ts-check
 
 const path = require('path');
-
-const webpack = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader')
 
 const tsLoader = {
 	test: /\.ts$/,
@@ -66,13 +64,16 @@ module.exports = (env, options) => {
 			],
 		},
 		plugins: [
+			// @ts-ignore
 			new VueLoaderPlugin(),
+			// @ts-ignore
 			new FriendlyErrorsWebpackPlugin(),
 		],
 	};
 
 	if (options.mode === 'production') {
 		// Prod
+		// @ts-ignore
 		config.optimization = {
 			minimize: true,
 			minimizer: [
@@ -92,7 +93,6 @@ module.exports = (env, options) => {
 		}
 	} else {
 		// Dev
-		// config.module.rules[0] = tsLoader;
 	}
 
 	return config;
