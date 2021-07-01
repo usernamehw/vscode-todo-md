@@ -119,8 +119,8 @@
 				},
 				"todomd.webview.padding": {
 					"type": "string",
-					"markdownDescription": "Controls vertical padding. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)",
-					"default": "0px"
+					"markdownDescription": "Controls top & bottom padding. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)",
+					"default": "1px"
 				},
 				"todomd.webview.indentSize": {
 					"type": "string",
