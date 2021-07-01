@@ -104,6 +104,9 @@ export class DueDate {
 			isRecurring,
 		};
 	}
+	/**
+	 * Determines what kind of due date it is and returns an object with info.
+	 */
 	private static parseDueDate(due: string, targetDate: Date): DueReturn {
 		if (due === 'today') {
 			return {

@@ -18,6 +18,9 @@ const enum FilterType {
 	noProject,
 	noContext,
 }
+/**
+ * When the filter has `>` or `<` symbols.
+ */
 const enum FilterMoreLess {
 	none,
 	more,

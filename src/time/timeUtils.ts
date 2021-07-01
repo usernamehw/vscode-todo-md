@@ -9,8 +9,9 @@ export const ONE_WEEK_IN_MS = 604800000;
 export const DATE_FORMAT = 'YYYY-MM-DD';
 export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = `${DATE_FORMAT}T${TIME_FORMAT}`;
-
+/** Matches short & long week day `sun` or `sunday`. Case-insensitive. */
 export const dayOfTheWeekRegexp = /^(sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday)$/i;
+/** Matches short & long month `jan` or `january`. Case-insensitive */
 export const monthRegexp = /^(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)$/i;
 
 /**

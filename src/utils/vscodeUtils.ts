@@ -51,6 +51,9 @@ export async function followLinks(links: Link[]) {
 export async function followLink(linkString: string) {
 	return await env.openExternal(Uri.parse(linkString));
 }
+/**
+ * Open file in vscode.
+ */
 export async function openFileInEditorByPath(path: string) {
 	await openFileInEditor(Uri.parse(path).fsPath);
 }

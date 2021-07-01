@@ -7,11 +7,6 @@ import { getWordRangeAtPosition } from '../utils/vscodeUtils';
 export function updateDocumentHighlights() {
 	Global.documentHighlightsDisposable?.dispose();
 
-	// let sep = '`~!@#$%^&*()-=+[{]}\\|;:\'",.<>/?';
-	// languages.setLanguageConfiguration('markdown', {
-	// 	wordPattern: /\S+/g,
-	// });
-
 	Global.documentHighlightsDisposable = languages.registerDocumentHighlightProvider(
 		{
 			scheme: 'file',

@@ -68,7 +68,7 @@ export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
 	}
 }
 /**
- * Transform tasks to be able to use in a Tree View
+ * Transform tasks to be able to use in a Tree View. All nested tasks also included.
  */
 export function tasksToTreeItems(tasks: TheTask[], tryToApplySort = false, isArchived = false) {
 	if (tryToApplySort && extensionConfig.sortNestedTasks === SortNestedTasks.default) {

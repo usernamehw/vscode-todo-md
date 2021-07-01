@@ -29,7 +29,7 @@ export function getTaskAtLineExtension(lineNumber: number) {
 }
 
 /**
- * Execute callback function for every task.
+ * Execute callback function for every task nested included (recursive).
  */
 export function forEachTask(f: (task: TheTask)=> void, tasks = extensionState.tasksAsTree) {
 	for (const task of tasks) {

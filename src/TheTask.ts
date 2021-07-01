@@ -221,9 +221,9 @@ export class TheTask {
 		return ids;
 	}
 
-	static isRoot(task: TheTask) {
-		return task.parentTaskLineNumber === undefined;
-	}
+	// static isRoot(task: TheTask) {
+	// 	return task.parentTaskLineNumber === undefined;
+	// }
 
 	static hasNestedTasks(task: TheTask) {
 		return task.subtasks.length !== 0;

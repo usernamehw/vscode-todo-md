@@ -87,7 +87,7 @@ export function updateEditorDecorationStyle() {
 /**
  * Actually update the editor decorations
  */
-export function paintEditorDecorations(editor: TextEditor) {
+export function doUpdateEditorDecorations(editor: TextEditor) {
 	const completedDecorationRanges: Range[] = [];
 	const tagsDecorationRanges: Range[] = [];
 	const priorityADecorationRanges: Range[] = [];

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import throttle from 'lodash/throttle';
 import { languages, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
-import { paintEditorDecorations } from './decorations';
+import { doUpdateEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { Constants, extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateHover } from './hover/hoverProvider';
@@ -18,6 +18,8 @@ import { setContext } from './utils/vscodeUtils';
 let changeActiveEditorEventInProgress = false;
 /**
  * Active text editor changes (tab).
+ *
+ * This event can be fired multiple times very quickly 5-20ms interval.
  */
 export async function onChangeActiveTextEditor(editor: TextEditor | undefined): Promise<void> {
 	if (changeActiveEditorEventInProgress) {
@@ -132,7 +134,7 @@ export function deactivateEditorFeatures() {
 export const updateEverything = throttle(async (editor?: TextEditor) => {
 	await updateState();
 	if (editor) {
-		paintEditorDecorations(editor);
+		doUpdateEditorDecorations(editor);
 		statusBar.updateText(extensionState.tasks);
 	}
 	updateAllTreeViews();

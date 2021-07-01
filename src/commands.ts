@@ -481,7 +481,9 @@ function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortPropert
 	const result = sortedTasks.map(t => t.rawText).join('\n');
 	edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 }
-
+/**
+ * Open vscode input box that aids in creating of due date.
+ */
 export function openSetDueDateInputbox(document: TextDocument, lineNumber: number) {
 	const inputBox = window.createInputBox();
 	let value: string | undefined = '+0';

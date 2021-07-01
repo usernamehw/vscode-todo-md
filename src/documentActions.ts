@@ -11,9 +11,15 @@ import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, speci
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 
 // This file contains 2 types of functions
-// 1) Performs an action on the document and returns a Promise
-// 2) Has a `WorkspaceEdit` suffix that accepts an edit and returns it without applying
+// 1) Performs an action on the document and applies an edit (saves the document)
+// 2) Has a `WorkspaceEdit` suffix that accepts an edit and performs actions(insert/replace/delete) without applying
 
+// ────────────────────────────────────────────────────────────
+// ──── Apply Edit ────────────────────────────────────────────
+// ────────────────────────────────────────────────────────────
+/**
+ * Replace entire line range with new text. (text is take from task transformed to string).
+ */
 export async function editTask(document: TextDocument, task: TheTask) {
 	const edit = new WorkspaceEdit();
 	const newTaskAsText = taskToString(task);
@@ -36,6 +42,9 @@ export async function hideTask(document: TextDocument, lineNumber: number) {
 	}
 	return applyEdit(edit, document);
 }
+/**
+ * Replace entire line range with new text.
+ */
 export async function editTaskRawText(document: TextDocument, lineNumber: number, newRawText: string) {
 	const edit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
@@ -402,10 +411,9 @@ export async function appendTaskToFile(text: string, filePath: string) {
 	edit.insert(uri, eofPosition, `\n${text}`);
 	return applyEdit(edit, document);
 }
-
-// ──────────────────────────────────────────────────────────────────────
-// ──────────────────────────────────────────────────────────────────────
-// ──────────────────────────────────────────────────────────────────────
+// ────────────────────────────────────────────────────────────
+// ──── Do not apply edit ─────────────────────────────────────
+// ────────────────────────────────────────────────────────────
 export function toggleTaskCollapseWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
 	const line = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);

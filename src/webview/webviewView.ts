@@ -47,7 +47,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 
 		webviewView.webview.onDidReceiveMessage(async (message: MessageFromWebview) => {
 			switch (message.type) {
-				// Needs to update everything
+				// ──── Needs to update everything ────────────────────────────
 				case 'toggleDone': {
 					await toggleDoneAtLine(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();
@@ -61,10 +61,6 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 				case 'editTask': {
 					await editTask(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();
-					break;
-				}
-				case 'setDueDate': {
-					openSetDueDateInputbox(await getActiveOrDefaultDocument(), message.value);
 					break;
 				}
 				case 'startTask': {
@@ -97,7 +93,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					await updateEverything();
 					break;
 				}
-				// No need to update everything
+				// ──── No need to update everything ──────────────────────────
 				case 'showNotification': {
 					window.showInformationMessage(message.value);
 					break;
@@ -118,8 +114,15 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					followLink(message.value);
 					break;
 				}
+				case 'setDueDate': {
+					openSetDueDateInputbox(await getActiveOrDefaultDocument(), message.value);
+					break;
+				}
 			}
 		});
+		/**
+		 * Update webview on it's visibility change (only when it becomes visible).
+		 */
 		webviewView.onDidChangeVisibility(e => {
 			if (webviewView.visible === true) {
 				this.sendEverything();
@@ -146,24 +149,30 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 		}
 	}
 	/**
-	 * Update webview title (counter)
+	 * Update webview title (counter).
 	 */
 	updateTitle(numberOfTasks: number) {
 		if (this._view) {
 			this._view.title = `webview (${numberOfTasks})`;
 		}
 	}
-
+	/**
+	 * Focus main input in webview.
+	 */
 	focusFilterInput() {
 		this.sendMessageToWebview({
 			type: 'focusFilterInput',
 		});
 	}
-
+	/**
+	 * Send message. js objects that will be serialized to json.
+	 */
 	private sendMessageToWebview(message: MessageToWebview) {
 		this._view?.webview.postMessage(message);
 	}
-
+	/**
+	 * Generate html template for webview.
+	 */
 	private _getHtmlForWebview(webview: Webview) {
 		const JSUri = webview.asWebviewUri(Uri.joinPath(this._extensionUri, 'media', 'webview.js'));
 		const CSSUri = webview.asWebviewUri(Uri.joinPath(this._extensionUri, 'media', 'webview.css'));

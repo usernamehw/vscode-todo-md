@@ -201,7 +201,9 @@ export function updateArchivedTasksTreeView() {
 function setViewTitle(view: TreeView<any>, title: string, counter: number, filterValue = '') {
 	view.title = `${title} (${counter}) ${filterValue}`;
 }
-
+/**
+ * Tags/Projects/Contexts grouped and sorted for Tree Views.
+ */
 export interface ParsedItems {
 	tags: string[];
 	contexts: string[];
@@ -305,7 +307,9 @@ export async function updateArchivedTasks() {
 	extensionState.archivedTasks = parsedArchiveTasks.tasks;
 	updateArchivedTasksTreeView();
 }
-
+/**
+ * Open and return `TextDocument` for archived file.
+ */
 export async function getArchivedDocument() {
 	return await workspace.openTextDocument(Uri.file(extensionConfig.defaultArchiveFile));
 }

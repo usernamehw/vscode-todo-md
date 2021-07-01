@@ -416,7 +416,9 @@ export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDe
  * Messages that can only be sent from extension to webview.
  */
 export type MessageToWebview = WebviewMessageFocusFilterInput | WebviewMessageUpdateEverything;
-
+/**
+ * All commands contributed by this extension.
+ */
 export const enum CommandIds {
 	toggleDone = 'todomd.toggleDone',
 	hideTask = 'todomd.hideTask',

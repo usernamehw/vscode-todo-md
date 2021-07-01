@@ -2,8 +2,12 @@ import dayjs from 'dayjs';
 import { DATE_FORMAT, dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek, monthStringToMonthIndex } from './timeUtils';
 
 /**
- * - Returns undefined for invalid input
- * - Returns string version of due date for valid input
+ * Create a due date relative to today. For instance:
+ *
+ * `+10` => in 10 days
+ * `Sun` => Closest future Sunday
+ *
+ * - Returns `undefined` for invalid input. TODO: maybe just return empty string?
  */
 export function helpCreateDueDate(str: string, targetNow = new Date()): string | undefined {
 	if (str === '+') {

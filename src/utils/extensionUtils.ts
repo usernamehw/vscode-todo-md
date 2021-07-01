@@ -30,6 +30,9 @@ export async function getActiveOrDefaultDocument() {
 		}
 	}
 }
+/**
+ * Open and return `TextDocument`.
+ */
 export async function getActiveDocument() {
 	if (extensionState.activeDocument) {
 		if (extensionState.activeDocument.isClosed) {
@@ -173,6 +176,9 @@ export function taskToString(task: TheTask) {
 export function specialTag(tag: SpecialTagName, value?: string) {
 	return `{${tag}${value ? `:${value}` : ''}}`;
 }
+/**
+ * All special tags as strings.
+ */
 export const enum SpecialTagName {
 	due = 'due',
 	overdue = 'overdue',
@@ -184,7 +190,9 @@ export const enum SpecialTagName {
 	collapsed = 'c',
 	count = 'count',
 }
-
+/**
+ * Very short special tag description for autocomplete widget.
+ */
 export const specialTagDescription = {
 	[SpecialTagName.due]: 'due',
 	[SpecialTagName.overdue]: 'overdue',
