@@ -152,12 +152,12 @@ export async function activate(extensionContext: ExtensionContext) {
 		updateConfig();
 	}
 
-	function updateConfig(): void {
+	function updateConfig() {
 		extensionConfig = workspace.getConfiguration(Constants.EXTENSION_NAME) as any as ExtensionConfig;
 
 		disposeEditorDisposables();
 		updateEditorDecorationStyle();
-		updateEverything();
+		onChangeActiveTextEditor(window.activeTextEditor);
 		updateIsDevContext();
 	}
 	function updateIsDevContext() {
