@@ -85,7 +85,6 @@ export function updateCompletions() {
 		{ scheme: 'file' },
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
-				// TODO: add documentation properties
 				const today = new CompletionItem('TODAY', CompletionItemKind.Constant);
 				today.insertText = getDateInISOFormat(new Date());
 				const setDueDateToday = new CompletionItem('SET_DUE_TODAY', CompletionItemKind.Constant);

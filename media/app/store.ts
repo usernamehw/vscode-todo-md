@@ -134,6 +134,10 @@ export const store = new Store({
 				// Selected task exists
 				const selectedTask = getTaskAtLineWebview(state.selectedTaskLineNumber);
 
+				if (!selectedTask) {
+					return undefined;
+				}
+
 				const tasks = getters.flattenedFilteredSortedTasks.filter(task => isTaskVisible(task));
 				if (tasks.length < 2) {
 					return undefined;
