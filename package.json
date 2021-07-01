@@ -1491,11 +1491,13 @@
 			"todomd": [
 				{
 					"id": "todomd.tags",
-					"name": "Tags"
+					"name": "Tags",
+					"visibility": "collapsed"
 				},
 				{
 					"id": "todomd.due",
-					"name": "Due"
+					"name": "Due",
+					"visibility": "collapsed"
 				},
 				{
 					"id": "todomd.tasks",
@@ -1503,15 +1505,18 @@
 				},
 				{
 					"id": "todomd.projects",
-					"name": "Projects"
+					"name": "Projects",
+					"visibility": "collapsed"
 				},
 				{
 					"id": "todomd.contexts",
-					"name": "Contexts"
+					"name": "Contexts",
+					"visibility": "collapsed"
 				},
 				{
 					"id": "todomd.archived",
-					"name": "Archived"
+					"name": "Archived",
+					"visibility": "collapsed"
 				},
 				{
 					"id": "todomd.generic1",
