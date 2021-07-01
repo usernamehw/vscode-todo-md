@@ -455,6 +455,7 @@ export const enum CommandIds {
 	incrementPriority = 'todomd.incrementPriority',
 	decrementPriority = 'todomd.decrementPriority',
 	showWebviewSettings = 'todomd.showWebviewSettings',
+	showDefaultFileSetting = 'todomd.showDefaultFileSetting',
 	webviewToggleShowRecurringUpcoming = 'todomd.webview.toggleShowRecurringUpcoming',
 	toggleComment = 'todomd.toggleComment',
 	toggleTagsTreeViewSorting = 'todomd.toggleTagsTreeViewSorting',

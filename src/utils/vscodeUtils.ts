@@ -57,7 +57,7 @@ export async function openFileInEditorByPath(path: string) {
 /**
  * Open vscode Settings GUI with input value set to the specified value.
  */
-export function openSettingGuiAt(settingName: string) {
+export function openSettingsGuiAt(settingName: string) {
 	commands.executeCommand('workbench.action.openSettings', settingName);
 }
 /**

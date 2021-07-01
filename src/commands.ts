@@ -15,7 +15,7 @@ import { CommandIds, ExtensionState, TreeItemSortType, VscodeContext } from './t
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultArchiveFile, specifyDefaultFile } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { fancyNumber } from './utils/utils';
-import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openInUntitled, openSettingGuiAt, setContext, toggleGlobalSetting, updateSetting } from './utils/vscodeUtils';
+import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openInUntitled, openSettingsGuiAt, setContext, toggleGlobalSetting, updateSetting } from './utils/vscodeUtils';
 /**
  * Register all commands. Names should match **"commands"** in `package.json`
  */
@@ -367,7 +367,10 @@ export function registerAllCommands() {
 		incrementOrDecrementPriority(editor.document, lineNumber, 'decrement');
 	});
 	commands.registerCommand(CommandIds.showWebviewSettings, (treeItem: TaskTreeItem) => {
-		openSettingGuiAt('todomd.webview');
+		openSettingsGuiAt('todomd.webview');
+	});
+	commands.registerCommand(CommandIds.showDefaultFileSetting, (treeItem: TaskTreeItem) => {
+		openSettingsGuiAt(Constants.defaultFileSetting);
 	});
 	commands.registerCommand(CommandIds.webviewToggleShowRecurringUpcoming, () => {
 		updateSetting('todomd.webview.showRecurringUpcoming', !extensionConfig.webview.showRecurringUpcoming);
