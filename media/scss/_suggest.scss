@@ -76,7 +76,11 @@
 .autosuggest__results-item:focus,
 .autosuggest__results-item--highlighted {
 	background-color: var(--vscode-editorSuggestWidget-selectedBackground) !important;
-	color: var(--vscode-editorSuggestWidget-foreground) !important;
+	color: var(--vscode-editorSuggestWidget-selectedForeground) !important;
+
+	mark {
+		color: var(--vscode-editorSuggestWidget-focusHighlightForeground) !important;
+	}
 }
 
 .autosuggest__results-item:hover {
