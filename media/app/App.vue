@@ -20,16 +20,17 @@
     </vue-autosuggest>
     <div v-if="filteredSortedTasks && filteredSortedTasks.length"
          class="task-list"
-         :class="{'task-details-visible': taskDetailsVisible}"
+         :class="{'task-list--details-visible': taskDetailsVisible}"
          @scroll.passive="onTaskListScroll">
         <task v-for="task in filteredSortedTasks"
               :key="task.lineNumber + task.rawText"
               :model="task" />
     </div>
-    <div v-if="!defaultFileSpecified && !activeDocumentOpened">
-        <p class="welcome-text">Default file path is not specified.</p>
-        <div class="welcome"><a class="btn btn-welcome"
-                                href="command:todomd.showDefaultFileSetting">Specify Default File</a></div>
+    <div v-if="!defaultFileSpecified && !activeDocumentOpened"
+         class="welcome">
+        <p class="welcome__text">Default file path is not specified.</p>
+        <div><a class="btn btn--welcome"
+                href="command:todomd.showDefaultFileSetting">Specify Default File</a></div>
     </div>
 
     <TaskDetails v-if="taskDetailsVisible"

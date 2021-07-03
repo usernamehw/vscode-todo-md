@@ -12,20 +12,6 @@
 	z-index: var(--z-index-filter-input);
 }
 
-#autosuggest__input {
-	background-color: var(--vscode-input-background);
-	border: 1px solid var(--vscode-input-border);
-	color: var(--vscode-input-foreground);
-	display: block;
-	font-family: Consolas, monospace;
-	font-size: 13px;
-	height: 24px;
-	outline: none !important;
-	padding: 3px;
-	padding-left: 4px;
-	width: 100%;
-}
-
 .autosuggest__results-container {
 	background-color: var(--vscode-sideBar-background) !important;
 	color: var(--vscode-editorSuggestWidget-foreground) !important;
@@ -86,4 +72,27 @@
 .autosuggest__results-item:hover {
 	background-color: var(--vscode-list-hoverBackground) !important;
 	color: var(--vscode-editorSuggestWidget-foreground) !important;
+}
+
+#autosuggest__input {
+	background-color: var(--vscode-input-background);
+	border: 1px solid var(--vscode-input-border);
+	color: var(--vscode-input-foreground);
+	display: block;
+	font-family: var(--vscode-editor-font-family);
+	font-size: 13px;
+	height: 24px;
+	outline: none !important;
+	padding: 3px;
+	padding-left: 4px;
+	width: 100%;
+
+	&::selection {
+		background-color: var(--vscode-editor-selectionBackground);
+	}
+
+	&:focus {
+		border: 1px solid var(--vscode-focusBorder) !important;
+		outline: none !important;
+	}
 }

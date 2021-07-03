@@ -23,14 +23,12 @@ import { VueEvents } from './webviewTypes';
 marked.Renderer.prototype.paragraph = text => `${text}`;
 
 marked.Renderer.prototype.link = (href, title = '', text) => {
-	let style = '';
-	let role = '';
+	let classes = '';
 	if (text.startsWith('btn:')) {
-		style = 'btn btn-link';
+		classes = 'btn btn--link';
 		text = text.replace(/^btn:/, '');
-		role = 'role="button"';
 	}
-	return `<a href="${href}" title="${href}" class="${style}" ${role}>${text}</a>`;
+	return `<a href="${href}" title="${href}" class="${classes}">${text}</a>`;
 };
 
 Vue.use(VueAutosuggest);

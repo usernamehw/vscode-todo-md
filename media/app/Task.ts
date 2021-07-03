@@ -77,71 +77,69 @@ export default class Task extends Vue {
 		return this.model.title.trim().length !== 0 ? marked(this.model.title) : this.model.title;
 	}
 	/**
-	 * Computed classes assigned to task-list-item element
+	 * Computed classes assigned to `task` element
 	 */
 	get classes() {
-		const cls: {
-			[className: string]: boolean;
-		} = {};
-		cls.done = this.model.done;
+		const classMap: Record<string, boolean> = {};
+		classMap['task--done'] = this.model.done;
 		if (this.model.parentTaskLineNumber !== undefined) {
-			cls[`nested-lvl-${this.model.indentLvl}`] = true;
+			classMap[`task--nested-lvl-${this.model.indentLvl}`] = true;
 		}
 		if (this.config.showPriority) {
 			switch (this.model.priority) {
-				case 'A': cls.pri1 = true; break;
-				case 'B': cls.pri2 = true; break;
-				case 'C': cls.pri3 = true; break;
-				case 'D': cls.pri4 = true; break;
-				case 'E': cls.pri5 = true; break;
-				case 'F': cls.pri6 = true; break;
+				case 'A': classMap['task--priA'] = true; break;
+				case 'B': classMap['task--priB'] = true; break;
+				case 'C': classMap['task--priC'] = true; break;
+				case 'D': classMap['task--priD'] = true; break;
+				case 'E': classMap['task--priE'] = true; break;
+				case 'F': classMap['task--priF'] = true; break;
 			}
 		}
 		if (this.model.due) {
 			switch (this.model.due.isDue) {
-				case DueState.notDue: cls.notDue = true;break;
-				case DueState.due: cls.due = true;break;
-				case DueState.overdue: cls.overdue = true;break;
-				case DueState.invalid: cls.invalid = true;break;
+				case DueState.notDue: classMap.notDue = true;break;
+				case DueState.due: classMap.due = true;break;
+				case DueState.overdue: classMap.overdue = true;break;
+				case DueState.invalid: classMap.invalid = true;break;
 			}
 		}
 		if (this.config.completedStrikeThrough) {
-			cls['strike-through'] = true;
+			classMap['task--strike-through'] = true;
 		}
 		if (this.selectedTaskLineNumber === this.model.lineNumber) {
-			cls.selected = true;
+			classMap['task--selected'] = true;
 		}
-		return cls;
+		return classMap;
 	}
 	get dueDate() {
 		if (this.model.due?.isDue === undefined || this.model.done) {
 			return undefined;
 		} else {
-			const dueClasses: string[] = ['due-state'];
+			const dueClasses: string[] = ['task__due-state'];
 			let dueText = '';
 			let dueTitle = '';
 			switch (this.model.due.isDue) {
 				case DueState.notDue: {
-					dueClasses.push('not-due');
-					dueText = `<span class="codicon codicon-milestone"></span><span class="days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
+					dueClasses.push('task__due-state--not-due');
+					dueText = `<span class="codicon codicon-milestone"></span><span class="task__days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
 					dueTitle = `In ${this.model.due.daysUntilDue} days`;
 					break;
 				}
 				case DueState.due: {
-					dueClasses.push('due');
+					dueClasses.push('task__due-state--due');
 					dueText = '<span class="codicon codicon-history"></span>';
 					dueTitle = `Due Today`;
 					break;
 				}
 				case DueState.overdue: {
-					dueClasses.push('overdue');
-					dueText = `<span class="codicon codicon-history"></span><span class="overdue-count">${this.model.due?.overdueInDays || ''}</span>`;
+					dueClasses.push('task__due-state--overdue');
+					dueText = `<span class="codicon codicon-history"></span><span class="task__overdue-count">${this.model.due?.overdueInDays || ''}</span>`;
 					dueTitle = `Overdue by ${this.model.due?.overdueInDays || '?'} days`;
 					break;
 				}
 				case DueState.invalid: {
-					dueClasses.push('invalid');
-					dueText = '<span class="codicon codicon-error"></span><span class="days-to-count">Invalid</span>';
+					dueClasses.push('task__due-state--invalid');
+					dueText = '<span class="codicon codicon-error"></span><span class="task__days-to-count">Invalid</span>';
 					dueTitle = 'Due date is Invalid';
 					break;
 				}
@@ -152,7 +150,7 @@ export default class Task extends Vue {
 	get nestedCount() {
 		if (this.model.subtasks.length !== 0 && this.model.parentTaskLineNumber === undefined) {
 			const allNestedTasks = getAllNestedTasksWebview(this.model);
-			return `<span class="nested-count-number" title="Nested tasks count">${allNestedTasks.filter(task => task.done).length}/${allNestedTasks.length}</span>`;
+			return `<span class="task__nested-count-number" title="Nested tasks count">${allNestedTasks.filter(task => task.done).length}/${allNestedTasks.length}</span>`;
 		} else {
 			return undefined;
 		}

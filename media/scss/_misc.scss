@@ -1,0 +1,24 @@
+table {
+	border-collapse: collapse;
+	margin-bottom: 0.3rem;
+	margin-top: 0.3rem;
+}
+
+td,
+th {
+	border: 1px solid var(--border-darker);
+	padding: 0.2rem;
+}
+
+blockquote,
+ul {
+	margin: 0;
+}
+
+code {
+	background-color: var(--inline-code-bg);
+	border-radius: 3px;
+	color: var(--vscode-editor-foreground);
+	font-family: var(--font-family);
+	padding: 0 0.2em;
+}

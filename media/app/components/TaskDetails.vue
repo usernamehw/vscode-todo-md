@@ -1,8 +1,8 @@
 <template>
-<div class="task-details">
+<div class="details">
     <textarea ref="detailsTaskTitle"
               rows="1"
-              class="task-title"
+              class="details__input"
               @input="onTaskTitleChange">{{ inputValue }}</textarea>
 </div>
 </template>
