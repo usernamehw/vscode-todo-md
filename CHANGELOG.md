@@ -1,3 +1,9 @@
+## 2.7.1 `03 Jul 2021`
+
+- 🐛 Trigger active editor event on settings change to update the state
+- ✨ Collapse Tree Views on first extension install
+- 🔨 [webview] Refactor CSS
+
 ## 2.7.0 `19 Jun 2021`
 
 - ✨ [editor] Document highlight provider for tag/project/context
