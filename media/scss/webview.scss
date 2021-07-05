@@ -446,6 +446,7 @@ a {
 	&__decrement-count,
 	&__increment-count {
 		background-color: inherit;
+		border: 1px solid transparent;
 		color: var(--vscode-foreground);
 		cursor: pointer;
 		display: inline-block;
