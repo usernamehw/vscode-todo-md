@@ -25,6 +25,9 @@ export async function onChangeActiveTextEditor(editor: TextEditor | undefined): 
 	if (changeActiveEditorEventInProgress) {
 		await sleep(50);
 	}
+	if (changeActiveEditorEventInProgress) {
+		await sleep(200);
+	}
 	changeActiveEditorEventInProgress = true;
 	if (extensionState.theRightFileOpened) {
 		deactivateEditorFeatures();
