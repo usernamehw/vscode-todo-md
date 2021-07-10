@@ -133,6 +133,10 @@ export interface ExtensionConfig {
 	 */
 	addCreationDate: boolean;
 	/**
+	 * Whether to include date when completing a task: `{cm}` vs `{cm:2020-04-30}`
+	 */
+	completionDateIncludeDate: boolean;
+	/**
 	 * When completing a task add date and time: `{cm:2020-04-30T09:11:17}`
 	 */
 	completionDateIncludeTime: boolean;

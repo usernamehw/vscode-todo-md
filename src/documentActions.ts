@@ -432,7 +432,8 @@ export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: 
 	}
 }
 export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, line: TextLine, task: TheTask, forceIncludeTime = false) {
-	const newCompletionDate = specialTag(SpecialTagName.completionDate, getDateInISOFormat(new Date(), forceIncludeTime || extensionConfig.completionDateIncludeTime));
+	const dateInIso = getDateInISOFormat(new Date(), forceIncludeTime || extensionConfig.completionDateIncludeTime);
+	const newCompletionDate = specialTag(SpecialTagName.completionDate, extensionConfig.completionDateIncludeDate ? dateInIso : undefined);
 	if (task.completionDateRange) {
 		edit.replace(document.uri, task.completionDateRange, newCompletionDate);
 	} else {
