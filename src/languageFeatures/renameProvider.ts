@@ -46,21 +46,21 @@ export function updateRenameProvider() {
 				}
 				return undefined;
 			},
-			async prepareRename(document, position) {
-				const range = getWordRangeAtPosition(document, position);
-				if (!range) {
-					return undefined;
-				}
-				const word = document.getText(range);
-				const parsedWord = parseWord(word, position.line, range.start.character);
-				if (parsedWord.type !== 'tags' && parsedWord.type !== 'project' && parsedWord.type !== 'context') {
-					return Promise.reject('You cannot rename this element');
-				}
-				return {
-					range,
-					placeholder: word.slice(1),
-				};
-			},
+			// async prepareRename(document, position) {// Not worth it
+			// 	const range = getWordRangeAtPosition(document, position);
+			// 	if (!range) {
+			// 		return undefined;
+			// 	}
+			// 	const word = document.getText(range);
+			// 	const parsedWord = parseWord(word, position.line, range.start.character);
+			// 	if (parsedWord.type !== 'tags' && parsedWord.type !== 'project' && parsedWord.type !== 'context') {
+			// 		return Promise.reject('You cannot rename this element');
+			// 	}
+			// 	return {
+			// 		range,
+			// 		placeholder: word.slice(1),
+			// 	};
+			// },
 		},
 	);
 }
