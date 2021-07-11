@@ -4,15 +4,17 @@ import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import throttle from 'lodash/throttle';
-import { ConfigurationChangeEvent, Disposable, ExtensionContext, TextEditorDecorationType, window, workspace } from 'vscode';
+import { ConfigurationChangeEvent, Disposable, ExtensionContext, Range, TextDocument, TextEditorDecorationType, window, workspace } from 'vscode';
 import { registerAllCommands } from './commands';
 import { updateEditorDecorationStyle } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor } from './events';
 import { parseDocument } from './parse';
 import { StatusBar } from './statusBar';
+import { TheTask } from './TheTask';
 import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
-import { ExtensionConfig, ExtensionState, VscodeContext } from './types';
+import { ExtensionConfig, ItemForProvider, VscodeContext } from './types';
+import { updateUserSuggestItems } from './userSuggestItems';
 import { getActiveDocument, getDocumentForDefaultFile } from './utils/extensionUtils';
 import { setContext } from './utils/vscodeUtils';
 import { TasksWebviewViewProvider } from './webview/webviewView';
@@ -25,24 +27,43 @@ dayjs.Ls.en.weekStart = 1;
 /**
  * Things extension keeps a global reference to and uses extensively
  */
-export const extensionState: ExtensionState = {
-	tasks: [],
-	tasksAsTree: [],
-	tags: [],
-	projects: [],
-	contexts: [],
-	tagsForTreeView: [],
-	projectsForTreeView: [],
-	contextsForTreeView: [],
-	archivedTasks: [],
-	commentLines: [],
-	theRightFileOpened: false,
-	lastVisitByFile: {},
-	taskTreeViewFilterValue: '',
-	extensionContext: {} as any as ExtensionContext,
-	activeDocument: undefined,
-	activeDocumentTabSize: 4,
-};
+export abstract class extensionState {
+	/** All tasks (not as tree) */
+	static tasks: TheTask[] = [];
+	/** Tasks in a tree format (`task.subtasks` contains nested items) */
+	static tasksAsTree: TheTask[] = [];
+	/** All archived tasks */
+	static archivedTasks: TheTask[] = [];
+	/** All tags */
+	static tags: string[] = [];
+	/** All projects */
+	static projects: string[] = [];
+	/** All contexts */
+	static contexts: string[] = [];
+	static suggestTags: Record<string, string> = {};
+	static suggestProjects: Record<string, string> = {};
+	static suggestContexts: Record<string, string> = {};
+	/** Tags sorted and grouped for tags Tree View */
+	static tagsForTreeView: ItemForProvider[] = [];
+	/** Projects sorted and grouped for projects Tree View */
+	static projectsForTreeView: ItemForProvider[] = [];
+	/** Contexts sorted and grouped for contexts Tree View */
+	static contextsForTreeView: ItemForProvider[] = [];
+	/** Comment line ranges */
+	static commentLines: Range[] = [];
+	/** If active text editor matches `activatePattern` config */
+	static theRightFileOpened = false;
+	/** Last time file was opened (for resetting completion of recurring tasks) */
+	static lastVisitByFile: Record<string, Date> = {};
+	/** Current filter value of tasks Tree View */
+	static taskTreeViewFilterValue = '';
+	/** Reference to the extension context for access beyond the `activate()` function */
+	static extensionContext = {} as any as ExtensionContext;
+	/** Reference to active document. */
+	static activeDocument: TextDocument | undefined = undefined;
+	/** Used in parsing of nested tasks. */
+	static activeDocumentTabSize = 4;
+}
 
 
 export const enum Constants {
@@ -68,7 +89,7 @@ export const enum Constants {
 export let extensionConfig = workspace.getConfiguration(Constants.EXTENSION_NAME) as any as ExtensionConfig;
 export const statusBar = new StatusBar();
 /**
- * Global vscode variables
+ * Global vscode variables (mostly disposables)
  */
 export class Global {
 	static webviewProvider: TasksWebviewViewProvider;
@@ -109,10 +130,11 @@ export class Global {
 
 export async function activate(extensionContext: ExtensionContext) {
 	extensionState.extensionContext = extensionContext;
-	const lastVisitByFile = extensionContext.globalState.get<ExtensionState['lastVisitByFile'] | undefined>(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY);
+	const lastVisitByFile = extensionContext.globalState.get<typeof extensionState['lastVisitByFile'] | undefined>(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY);
 	extensionState.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
 	updateEditorDecorationStyle();
+	updateUserSuggestItems();
 	registerAllCommands();
 	createAllTreeViews();
 
@@ -157,6 +179,7 @@ export async function activate(extensionContext: ExtensionContext) {
 
 		disposeEditorDisposables();
 		updateEditorDecorationStyle();
+		updateUserSuggestItems();
 		onChangeActiveTextEditor(window.activeTextEditor);
 		updateIsDevContext();
 	}

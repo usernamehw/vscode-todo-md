@@ -9,6 +9,7 @@ import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { DueState } from './types';
 import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, specialTag, SpecialTagName, taskToString } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
+import { unique } from './utils/utils';
 
 // This file contains 2 types of functions
 // 1) Performs an action on the document and applies an edit (saves the document)
@@ -319,7 +320,7 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
 		}
 	}
 
-	taskLineNumbersToArchive = Array.from(new Set(taskLineNumbersToArchive));
+	taskLineNumbersToArchive = unique(taskLineNumbersToArchive);
 	for (const lineNumber of taskLineNumbersToArchive) {
 		const task = getTaskAtLineExtension(lineNumber);
 		if (!task) {

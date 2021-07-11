@@ -11,10 +11,10 @@ import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
 import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { getArchivedDocument, tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
-import { CommandIds, ExtensionState, TreeItemSortType, VscodeContext } from './types';
+import { CommandIds, TreeItemSortType, VscodeContext } from './types';
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultArchiveFile, specifyDefaultFile } from './utils/extensionUtils';
 import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
-import { fancyNumber } from './utils/utils';
+import { fancyNumber, unique } from './utils/utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openInUntitled, openSettingsGuiAt, setContext, toggleGlobalSetting, updateSetting } from './utils/vscodeUtils';
 /**
  * Register all commands. Names should match **"commands"** in `package.json`
@@ -316,7 +316,7 @@ export function registerAllCommands() {
 		extensionState.extensionContext.globalState.update('hack', 'toClear');// Required to clear state
 	});
 	commands.registerCommand(CommandIds.showGlobalState, () => {
-		const lastVisitByFile = extensionState.extensionContext.globalState.get(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY) as ExtensionState['lastVisitByFile'];
+		const lastVisitByFile = extensionState.extensionContext.globalState.get(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY) as typeof extensionState['lastVisitByFile'];
 		let str = '';
 		for (const key in lastVisitByFile) {
 			str += `${new Date(lastVisitByFile[key])} | ${dayjs().to(lastVisitByFile[key])} | ${key}\n` ;
@@ -452,7 +452,7 @@ function getSelectedLineNumbers(editor: TextEditor): number[] {
 			lineNumbers.push(i);
 		}
 	}
-	return Array.from(new Set(lineNumbers));// leave only unique line numbers
+	return unique(lineNumbers);
 }
 /**
  * Sort tasks in editor. Default sort is by due date. Same due date sorted by priority.

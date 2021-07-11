@@ -28,3 +28,9 @@ export function fancyNumber(n: number): string {
 export async function sleep(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
+/**
+ * Keep only unique items in array. Works only with primitives;
+ */
+export function unique<T extends boolean | number | string>(arr: T[]): T[] {
+	return Array.from(new Set(arr));
+}

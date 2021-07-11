@@ -8,78 +8,6 @@ export interface ItemForProvider {
 	tasks: TheTask[];
 }
 /**
- * Things extension keeps a global reference to and uses extensively throughout the extension
- */
-export interface ExtensionState {
-	/**
-	 * All tasks (not as tree)
-	 */
-	tasks: TheTask[];
-	/**
-	 * Tasks in a tree format (`task.subtasks` contains nested items)
-	 */
-	tasksAsTree: TheTask[];
-	/**
-	 * All archived tasks
-	 */
-	archivedTasks: TheTask[];
-	/**
-	 * All tags
-	 */
-	tags: string[];
-	/**
-	 * All projects
-	 */
-	projects: string[];
-	/**
-	 * All contexts
-	 */
-	contexts: string[];
-	/**
-	 * Last time file was opened (for resetting completion of recurring tasks)
-	 */
-	lastVisitByFile: {
-		[filePath: string]: Date;
-	};
-	/**
-	 * Tags sorted and grouped for tags Tree View
-	 */
-	tagsForTreeView: ItemForProvider[];
-	/**
-	 * Projects sorted and grouped for projects Tree View
-	 */
-	projectsForTreeView: ItemForProvider[];
-	/**
-	 * Contexts sorted and grouped for contexts Tree View
-	 */
-	contextsForTreeView: ItemForProvider[];
-	/**
-	 * Comment line ranges
-	 */
-	commentLines: Range[];
-	/**
-	 * If active text editor matches `activatePattern` config
-	 */
-	theRightFileOpened: boolean;
-	/**
-	 * Current filter value of tasks Tree View
-	 */
-	taskTreeViewFilterValue: string;
-	/**
-	 * Reference to extension context for access beyond the `activate()` function
-	 */
-	extensionContext: ExtensionContext;
-	/**
-	 * Reference to active document.
-	 * TODO: use `getActiveDocument()` everywhere
-	 */
-	activeDocument: TextDocument | undefined;
-	/**
-	 * Used in parsing of nested tasks.
-	 */
-	activeDocumentTabSize: number;
-}
-/**
  * Due date possible values
  */
 export const enum DueState {
@@ -181,17 +109,9 @@ export interface ExtensionConfig {
 	 */
 	durationIncludeSeconds: boolean;
 	/**
-	 * Tags added to autocomplete.
+	 * Add items to autocomplete and optional description on hover.
 	 */
-	tags: string[];
-	/**
-	 * Projects added to autocomplete.
-	 */
-	projects: string[];
-	/**
-	 * Contexts added to autocomplete.
-	 */
-	contexts: string[];
+	suggestItems: Record<string, string>;
 	/**
 	 * Advanced decorations allowing to change any available editor decoration options (borders, outline, background, foreground, before, after...)
 	 */

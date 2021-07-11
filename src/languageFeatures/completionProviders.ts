@@ -5,6 +5,7 @@ import { extensionConfig, extensionState, Global } from '../extension';
 import { helpCreateDueDate } from '../time/setDueDateHelper';
 import { getDateInISOFormat } from '../time/timeUtils';
 import { specialTagDescription, SpecialTagName } from '../utils/extensionUtils';
+import { unique } from '../utils/utils';
 import { getWordAtPosition, getWordRangeAtPosition } from '../utils/vscodeUtils';
 /**
  * Update editor autocomplete/suggest
@@ -27,7 +28,7 @@ export function updateCompletions() {
 					return undefined;
 				}
 				const tagCompletions = [];
-				const tags = Array.from(new Set(extensionState.tags.concat(extensionConfig.tags)));
+				const tags = unique(extensionState.tags.concat(Object.keys(extensionState.suggestTags)));
 				for (const tag of tags) {
 					const tagCompletion = new CompletionItem(tag, CompletionItemKind.Field);
 					tagCompletion.insertText = `${tag} `;
@@ -48,7 +49,7 @@ export function updateCompletions() {
 					return undefined;
 				}
 				const projectCompletions = [];
-				const projects = Array.from(new Set(extensionState.projects.concat(extensionConfig.projects)));
+				const projects = unique(extensionState.projects.concat(Object.keys(extensionState.suggestProjects)));
 				for (const project of projects) {
 					const projectCompletion = new CompletionItem(project, CompletionItemKind.Field);
 					projectCompletion.insertText = `${project} `;
@@ -69,7 +70,7 @@ export function updateCompletions() {
 					return undefined;
 				}
 				const contextCompletions = [];
-				const contexts = Array.from(new Set(extensionState.contexts.concat(extensionConfig.contexts)));
+				const contexts = unique(extensionState.contexts.concat(Object.keys(extensionState.suggestContexts)));
 				for (const context of contexts) {
 					const contextCompletion = new CompletionItem(context, CompletionItemKind.Field);
 					contextCompletion.insertText = `${context} `;

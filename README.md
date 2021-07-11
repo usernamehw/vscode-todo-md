@@ -147,9 +147,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |getNextNumberOfTasks|**`5`**|Number of tasks returned by `getFewNextTasks` command.|
 |autoArchiveTasks|**`false`**|When enabled - will move tasks to archive file (on completion)|
 |statusBarCounterEnabled|**`true`**|Controls visibility of status bar task progress item `1/3 33%`|
-|projects|`[]`|Projects added to autocomplete.|
-|contexts|`[]`|Contexts added to autocomplete.|
-|tags|`[]`|Tags added to autocomplete.|
+|suggestItems|{}|This extension will only autocomplete tags/projects/contexts located in **1** file. This setting allows you to add items and their description(markdown) to autocomplete in all files (where extension is active). Examples: `#tag`, `+project`, `@context`.|
 |sortTagsView|`"alphabetic"`|Controls tags Tree View sorting.|
 |sortProjectsView|`"alphabetic"`|Controls projects Tree View sorting.|
 |sortContextsView|`"alphabetic"`|Controls contexts Tree View sorting.|

@@ -244,29 +244,25 @@
 					"default": "default",
 					"description": "Controls nested tasks sorting in Tree Views."
 				},
-				"todomd.tags": {
-					"type": "array",
-					"items": {
-						"type": "string"
+				"todomd.suggestItems": {
+					"type": "object",
+					"markdownDescription": "This extension will only autocomplete tags/projects/contexts located in **1** file. This setting allows you to add items and their description(markdown) to autocomplete in all files (where extension is active). Examples: `#tag`, `+project`, `@context`.",
+					"patternProperties": {
+						"^#": {
+							"type": "string",
+							"description": "IT IS YOUR TAG."
+						},
+						"^\\+": {
+							"type": "string",
+							"description": "IT IS YOUR PROJECT."
+						},
+						"^@": {
+							"type": "string",
+							"description": "IT IS YOUR CONTEXT."
+						}
 					},
-					"description": "Tags added to autocomplete.",
-					"default": []
-				},
-				"todomd.projects": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					},
-					"description": "Projects added to autocomplete.",
-					"default": []
-				},
-				"todomd.contexts": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					},
-					"description": "Contexts added to autocomplete.",
-					"default": []
+					"additionalProperties": false,
+					"default": {}
 				},
 				"todomd.statusBarCounterEnabled": {
 					"type": "boolean",
