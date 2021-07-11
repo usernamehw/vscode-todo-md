@@ -250,15 +250,15 @@
 					"patternProperties": {
 						"^#": {
 							"type": "string",
-							"description": "IT IS YOUR TAG."
+							"description": "Tag"
 						},
 						"^\\+": {
 							"type": "string",
-							"description": "IT IS YOUR PROJECT."
+							"description": "Project"
 						},
 						"^@": {
 							"type": "string",
-							"description": "IT IS YOUR CONTEXT."
+							"description": "Context"
 						}
 					},
 					"additionalProperties": false,
