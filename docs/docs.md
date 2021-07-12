@@ -78,27 +78,30 @@ Use background for priority:
 
 ```js
 "todomd.decorations": {
-	"priorityAForeground": {
-		"color": "inherit",
-		"backgroundColor": "#fe7474",
-		"borderRadius": "5px",
-	},
+    "priorityAForeground": {
+        "color": "inherit",
+        "backgroundColor": "#fe7474",
+        "borderRadius": "5px",
+    },
 }
 ```
 
-Use background for completed task:
+Use background and gutter icon for completed task:
 
 ```js
-"todomd.decorations": {
-	"completedTask": {
-		"backgroundColor": "#35c92720",
-		"textDecoration": "none",
-		"light": {
-			"textDecoration": "none"
-		}
-	},
-}
+"completedTask": {
+    "backgroundColor": "#80e73c10",
+    "overviewRulerColor": "#80e73caa",
+    "gutterIconPath": "C:/icons/check.png",
+    "gutterIconSize": "20px",
+    "textDecoration": "none;",
+    "light": {
+        "textDecoration": "none;",
+    }
+},
 ```
+
+![completed_task_gif](./img/completed_task_decoration.gif)
 
 ## Webview
 
@@ -181,11 +184,11 @@ From Settings:
 
 ```js
 "todomd.webview.tagStyles": {
-	"important": {
-		"backgroundColor": "#ff5151",
-		"color": "#fff",
-		"border": "1px solid #000000"
-	}
+    "important": {
+        "backgroundColor": "#ff5151",
+        "color": "#fff",
+        "border": "1px solid #000000"
+    }
 }
 ```
 
