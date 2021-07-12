@@ -190,8 +190,6 @@ export async function activate(extensionContext: ExtensionContext) {
 	}
 
 	extensionContext.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));
-
-	setContext(VscodeContext.isExtensionActivated, true);
 }
 /**
  * Update primary `state` properties, such as `tasks` or `tags`, based on provided document or based on default file
