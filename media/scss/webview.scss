@@ -27,6 +27,8 @@ body {
 	--border-high-contrast: #bebebe;
 	--border-darker: #cecece;
 
+	--task-hover-bg: rgba(0, 0, 0, 0.07);
+
 	--task-left-padding: 3px;
 	--twistie-size: calc(var(--font-size) + 4px);
 
@@ -99,6 +101,8 @@ body.vscode-dark {
 	--border-low-contrast: #ffffff1c;
 	--border-high-contrast: #949494;
 	--border-darker: #6d6d6d;
+
+	--task-hover-bg: rgba(255, 255, 255, 0.1);
 
 	--done-task-bg: #99ff8c1a;
 
@@ -207,7 +211,7 @@ a {
 	word-wrap: break-word;
 
 	&:hover {
-		background-color: var(--vscode-list-hoverBackground);
+		box-shadow: inset 0 0 2000px 0 var(--task-hover-bg);
 	}
 
 	&--done {
@@ -395,7 +399,6 @@ a {
 		font-family: var(--vscode-editor-font-family);
 		justify-content: center;
 		margin-right: $approxOneSpace;
-		margin-top: 1px;
 		// margin-top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height) - var(--font-size)) / 2));
 		padding: 0 0.3em;
 
