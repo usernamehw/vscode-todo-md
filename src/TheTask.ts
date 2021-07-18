@@ -1,6 +1,6 @@
 import type { Range } from 'vscode';
 import { DueDate } from './dueDate';
-import { DueState, OptionalExceptFor } from './types';
+import { OptionalExceptFor } from './types';
 /**
  * All possible values for task priority
  */
@@ -207,19 +207,6 @@ export class TheTask {
 		this.collapseRange = init.collapseRange;
 		this.completionDateRange = init.completionDateRange;
 	}
-	/**
-	 * Gets all nested task line numbers (recursive)
-	 */
-	static getNestedTasksLineNumbers(tasks: TheTask[]): number[] {
-		const ids = [];
-		for (const task of tasks) {
-			ids.push(task.lineNumber);
-			if (task.subtasks) {
-				ids.push(...TheTask.getNestedTasksLineNumbers(task.subtasks));
-			}
-		}
-		return ids;
-	}
 
 	// static isRoot(task: TheTask) {
 	// 	return task.parentTaskLineNumber === undefined;
@@ -228,29 +215,6 @@ export class TheTask {
 	static hasNestedTasks(task: TheTask) {
 		return task.subtasks.length !== 0;
 	}
-	/**
-	 * Format task title for notification or modal dialog
-	 */
-	static formatTask(task: TheTask, {
-		ignoreDueDate = false,
-	}: {
-		ignoreDueDate?: boolean;
-	} = {}): string {
-		let result = '';
-		if (!ignoreDueDate) {
-			if (task.due?.isDue === DueState.due) {
-				result += '🟩 ';
-			} else if (task.due?.isDue === DueState.overdue) {
-				result += '🟥 ';
-			} else if (task.due?.isDue === DueState.invalid) {
-				result += '🟪 ';
-			}
-		}
-		result += task.title;
-		if (task.count) {
-			result += ` ${task.count.current}/${task.count.needed}`;
-		}
-		return result;
-	}
+
 	static defaultTaskPriority: Priority = 'G';
 }

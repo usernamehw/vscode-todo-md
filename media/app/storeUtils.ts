@@ -1,4 +1,4 @@
-import { TheTask } from '../../src/TheTask';
+import type { TheTask } from '../../src/TheTask';
 import { Getters, store } from './store';
 /**
  * Return `true` when task is not collapsed
@@ -67,6 +67,21 @@ export function flattenDeep<T extends NestedObject>(arr: T[]): T[] {
  * Recursive get all nested tasks.
  */
 export function getAllNestedTasksWebview(task: TheTask) {
-	const allNestedTaksIds = TheTask.getNestedTasksLineNumbers(task.subtasks);
+	const allNestedTaksIds = getNestedTasksLineNumbers(task.subtasks);
 	return allNestedTaksIds.map(lineNumber => getTaskAtLineWebview(lineNumber)!);
+}
+
+/**
+ * TODO: duplicated from extension.
+ * Gets all nested task line numbers (recursive)
+ */
+export function getNestedTasksLineNumbers(tasks: TheTask[]): number[] {
+	const ids = [];
+	for (const task of tasks) {
+		ids.push(task.lineNumber);
+		if (task.subtasks) {
+			ids.push(...getNestedTasksLineNumbers(task.subtasks));
+		}
+	}
+	return ids;
 }

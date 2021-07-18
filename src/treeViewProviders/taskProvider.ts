@@ -4,6 +4,7 @@ import { getTaskHover } from '../hover/getTaskHover';
 import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
 import { CommandIds, SortNestedTasks } from '../types';
+import { formatTask } from '../utils/taskUtils';
 
 export class TaskTreeItem extends TreeItem {
 	collapsibleState = TreeItemCollapsibleState.None;
@@ -83,8 +84,8 @@ export function tasksToTreeItems(tasks: TheTask[], tryToApplySort = false, isArc
 		}
 
 		result.push(new TaskTreeItem(
-			TheTask.formatTask(task, {
-				ignoreDueDate: true,
+			formatTask(task, {
+				ignoreDueDate: false,
 			}),
 			task,
 			{

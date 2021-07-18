@@ -13,7 +13,7 @@ import { TaskTreeItem } from './treeViewProviders/taskProvider';
 import { getArchivedDocument, tasksView, updateAllTreeViews, updateTasksTreeView } from './treeViewProviders/treeViews';
 import { CommandIds, TreeItemSortType, VscodeContext } from './types';
 import { applyEdit, checkArchiveFileAndNotify, checkDefaultFileAndNotify, getActiveOrDefaultDocument, specifyDefaultArchiveFile, specifyDefaultFile } from './utils/extensionUtils';
-import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
+import { forEachTask, formatTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { fancyNumber, unique } from './utils/utils';
 import { followLink, followLinks, getFullRangeFromLines, inputOffset, openFileInEditor, openInUntitled, openSettingsGuiAt, setContext, toggleGlobalSetting, updateSetting } from './utils/vscodeUtils';
 /**
@@ -175,7 +175,7 @@ export function registerAllCommands() {
 		const sortedTasks = defaultSortTasks(tasks)
 			.slice(0, extensionConfig.getNextNumberOfTasks);
 
-		window.showInformationMessage(sortedTasks.map((task, i) => `${fancyNumber(i + 1)} ${TheTask.formatTask(task)}`).join('\n'), {
+		window.showInformationMessage(sortedTasks.map((task, i) => `${fancyNumber(i + 1)} ${formatTask(task)}`).join('\n'), {
 			modal: true,
 		});
 	});
@@ -254,14 +254,14 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandIds.completeTask, async () => {
 		// Show Quick Pick to complete a task
 		const document = await getActiveOrDefaultDocument();
-		const notCompletedTasks = defaultSortTasks(extensionState.tasks.filter(task => !task.done)).map(task => TheTask.formatTask(task));
+		const notCompletedTasks = defaultSortTasks(extensionState.tasks.filter(task => !task.done)).map(task => formatTask(task));
 		const pickedTask = await window.showQuickPick(notCompletedTasks, {
 			placeHolder: 'Choose a task to complete',
 		});
 		if (!pickedTask) {
 			return;
 		}
-		const task = extensionState.tasks.find(t => TheTask.formatTask(t) === pickedTask);
+		const task = extensionState.tasks.find(t => formatTask(t) === pickedTask);
 		if (!task) {
 			return;
 		}
@@ -434,7 +434,7 @@ async function addTaskToFile(text: string, filePath: string) {
  * Show formatted task in notification. Also show button to Follow link if links are present in this task.
  */
 async function showTaskInNotification(task: TheTask) {
-	const formattedTask = TheTask.formatTask(task);
+	const formattedTask = formatTask(task);
 	if (task.links.length) {
 		const buttonFollowLink = 'Follow link';
 		const shouldFollow = await window.showInformationMessage(formattedTask, buttonFollowLink);

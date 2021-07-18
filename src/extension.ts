@@ -86,7 +86,7 @@ export const enum Constants {
 	THROTTLE_EVERYTHING = 120,
 }
 
-export let extensionConfig = workspace.getConfiguration(Constants.EXTENSION_NAME) as any as ExtensionConfig;
+export let extensionConfig = workspace.getConfiguration().get(Constants.EXTENSION_NAME) as ExtensionConfig;
 export const statusBar = new StatusBar();
 /**
  * Global vscode variables (mostly disposables)
@@ -175,7 +175,7 @@ export async function activate(extensionContext: ExtensionContext) {
 	}
 
 	function updateConfig() {
-		extensionConfig = workspace.getConfiguration(Constants.EXTENSION_NAME) as any as ExtensionConfig;
+		extensionConfig = workspace.getConfiguration().get(Constants.EXTENSION_NAME) as ExtensionConfig;
 
 		disposeEditorDisposables();
 		updateEditorDecorationStyle();

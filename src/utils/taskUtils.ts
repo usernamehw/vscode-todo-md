@@ -1,5 +1,6 @@
-import { extensionState } from '../extension';
-import { TheTask } from '../TheTask';
+import { extensionConfig, extensionState } from '../extension';
+import type { TheTask } from '../TheTask';
+import { DueState } from '../types';
 
 /**
  * Get task at line (might be nested)
@@ -38,4 +39,46 @@ export function forEachTask(f: (task: TheTask)=> void, tasks = extensionState.ta
 			forEachTask(f, task.subtasks);
 		}
 	}
+}
+
+/**
+ * Gets all nested task line numbers (recursive)
+ */
+export function getNestedTasksLineNumbers(tasks: TheTask[]): number[] {
+	const ids = [];
+	for (const task of tasks) {
+		ids.push(task.lineNumber);
+		if (task.subtasks) {
+			ids.push(...getNestedTasksLineNumbers(task.subtasks));
+		}
+	}
+	return ids;
+}
+
+/**
+ * Format task title for notification or modal dialog
+ */
+export function formatTask(task: TheTask, {
+	ignoreDueDate = false,
+}: {
+	ignoreDueDate?: boolean;
+} = {}): string {
+	let result = '';
+	if (!ignoreDueDate) {
+		if (task.due?.isDue === DueState.due) {
+			result += extensionConfig.labelDueSymbol;
+		} else if (task.due?.isDue === DueState.overdue) {
+			result += extensionConfig.labelOverdueSymbol;
+		} else if (task.due?.isDue === DueState.invalid) {
+			result += extensionConfig.labelInvalidDueSymbol;
+		}
+	}
+	result += task.title;
+	if (task.count) {
+		result += ` ${task.count.current}/${task.count.needed}`;
+	}
+	if (result.length === 0) {
+		return task.rawText;
+	}
+	return result;
 }

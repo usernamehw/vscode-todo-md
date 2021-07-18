@@ -338,6 +338,21 @@
 					"markdownDescription": "Add more tree views with predefined filters.",
 					"default": []
 				},
+				"todomd.labelDueSymbol": {
+					"type": "string",
+					"markdownDescription": "Prefix for task that is due in labels (tree view, notification, modal, quick pick).",
+					"default": "📘 "
+				},
+				"todomd.labelOverdueSymbol": {
+					"type": "string",
+					"markdownDescription": "Prefix for task that is overdue in labels (tree view, notification, modal, quick pick).",
+					"default": "📕 "
+				},
+				"todomd.labelInvalidDueSymbol": {
+					"type": "string",
+					"markdownDescription": "Prefix for task that has invalid due date in labels (tree view, notification, modal, quick pick).",
+					"default": "🟣 "
+				},
 				"todomd.decorations": {
 					"type": "object",
 					"description": "Advanced decoration tweaking.",

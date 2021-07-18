@@ -8,7 +8,7 @@ import { dateWithoutTime, DATE_FORMAT, durationTo, getDateInISOFormat } from './
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { DueState } from './types';
 import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, specialTag, SpecialTagName, taskToString } from './utils/extensionUtils';
-import { forEachTask, getTaskAtLineExtension } from './utils/taskUtils';
+import { forEachTask, getNestedTasksLineNumbers, getTaskAtLineExtension } from './utils/taskUtils';
 import { unique } from './utils/utils';
 
 // This file contains 2 types of functions
@@ -139,7 +139,7 @@ export async function tryToDeleteTask(document: TextDocument, lineNumber: number
 
 	const taskLineNumbersToDelete = [lineNumber];
 	if (task.subtasks.length) {
-		taskLineNumbersToDelete.push(...TheTask.getNestedTasksLineNumbers(task.subtasks));
+		taskLineNumbersToDelete.push(...getNestedTasksLineNumbers(task.subtasks));
 	}
 
 	for (const ln of taskLineNumbersToDelete) {
@@ -316,7 +316,7 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
 		}
 		taskLineNumbersToArchive.push(task.lineNumber);
 		if (task.subtasks.length) {
-			taskLineNumbersToArchive.push(...TheTask.getNestedTasksLineNumbers(task.subtasks));
+			taskLineNumbersToArchive.push(...getNestedTasksLineNumbers(task.subtasks));
 		}
 	}
 

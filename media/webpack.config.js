@@ -12,7 +12,7 @@ const tsLoader = {
 		loader: 'ts-loader',
 		options: {
 			configFile: 'media/tsconfig.json',
-			transpileOnly: true,
+			transpileOnly: false,
 			appendTsSuffixTo: [/\.vue$/],
 		},
 	}],

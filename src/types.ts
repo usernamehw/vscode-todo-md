@@ -1,4 +1,4 @@
-import { DecorationRenderOptions, ExtensionContext, Range, TextDocument } from 'vscode';
+import { DecorationRenderOptions } from 'vscode';
 import { TheTask } from './TheTask';
 /**
  * Object describing items for Tree View Provider
@@ -148,6 +148,18 @@ export interface ExtensionConfig {
 	 * Number of tasks returned by `getFewNextTasks` command.
 	 */
 	getNextNumberOfTasks: number;
+	/**
+	 * Prefix for task that is due in labels (tree view, notification, modal, quick pick).
+	 */
+	labelDueSymbol: string;
+	/**
+	 * Prefix for task that is overdue in labels (tree view, notification, modal, quick pick).
+	 */
+	labelOverdueSymbol: string;
+	/**
+	 * Prefix for task that has invalid due date in labels (tree view, notification, modal, quick pick).
+	 */
+	labelInvalidDueSymbol: string;
 	/**
 	 * Options only applied to webview
 	 */
