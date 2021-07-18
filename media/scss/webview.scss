@@ -119,11 +119,13 @@ body.vscode-dark {
 	--nested-count-bg: #ebe7b5;
 	--nested-count-fg: #000000;
 
-	--due-border: #5faedb40;
+	--due-fg: #5faedb;
+	--due-bg: #5faedb16;
+	--due-border: #5faedb90;
 
-	--overdue-bg: #fc424222;
-	--overdue-fg: #ff6868ec;
-	--overdue-border: #ff686840;
+	--overdue-fg: #ff6868;
+	--overdue-bg: #fc424216;
+	--overdue-border: #ff686890;
 
 	--not-due-bg: #dadada30;
 	--not-due-border: #bebebe29;
@@ -345,6 +347,10 @@ a {
 		padding: 0 0.3em;
 		position: relative;
 		top: 2px;
+
+		.vscode-dark & {
+			border-style: dashed !important;
+		}
 
 		&--due {
 			background-color: var(--due-bg);
