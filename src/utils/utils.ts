@@ -16,6 +16,36 @@ export function fancyNumber(n: number): string {
 		.join('');
 }
 /**
+ * Replace english letters with their bold `utf-8` variant (hack).
+ */
+export function fancyLetterBold(str: string) {
+	const enum Unicode {
+		lowercaseLetterA = 65,
+		lowercaseLetterZ = 90,
+		uppercaseLetterA = 97,
+		uppercaseLetterZ = 122,
+
+		lowercaseBoldLetterA = 120276,
+		uppercaseBoldLetterA = 120302,
+	}
+	let result = '';
+	for (const letter of str) {
+		const codePoint = letter.codePointAt(0);
+		if (!codePoint) {
+			continue;
+		}
+		if (codePoint >= Unicode.lowercaseLetterA && codePoint <= Unicode.lowercaseLetterZ) {
+			result += String.fromCodePoint(codePoint + Unicode.lowercaseBoldLetterA - Unicode.lowercaseLetterA);
+		} else if (codePoint >= Unicode.uppercaseLetterA && codePoint <= Unicode.uppercaseLetterZ) {
+			result += String.fromCodePoint(codePoint + Unicode.uppercaseBoldLetterA - Unicode.uppercaseLetterA);
+		} else {
+			result += letter;
+		}
+	}
+	return result;
+}
+
+/**
  * Add `s` suffix depending if there are more than 1 thing.
  */
 // export function pluralize(n: number) {

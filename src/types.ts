@@ -161,6 +161,10 @@ export interface ExtensionConfig {
 	 */
 	labelInvalidDueSymbol: string;
 	/**
+	 * "Show tags in labels (tree view, notification, modal, quick pick).",
+	 */
+	labelShowTag: boolean;
+	/**
 	 * Options only applied to webview
 	 */
 	webview: {

@@ -1,6 +1,7 @@
 import { extensionConfig, extensionState } from '../extension';
 import type { TheTask } from '../TheTask';
 import { DueState } from '../types';
+import { fancyLetterBold } from './utils';
 
 /**
  * Get task at line (might be nested)
@@ -76,6 +77,13 @@ export function formatTask(task: TheTask, {
 	result += task.title;
 	if (task.count) {
 		result += ` ${task.count.current}/${task.count.needed}`;
+	}
+	if (extensionConfig.labelShowTag) {
+		if (task.tags.length) {
+			for (const tag of task.tags) {
+				result += ` #${fancyLetterBold(tag)}`;
+			}
+		}
 	}
 	if (result.length === 0) {
 		return task.rawText;
