@@ -1,3 +1,10 @@
+## 2.8.0 `22 Jul 2021`
+
+- 💥 Merge 3 autocomplete settings into 1 , show markdown description defined by user. #32
+- ✨ Add setting `todomd.completionDateIncludeDate`
+- ✨ Show tags in labels. Setting `todomd.labelShowTag`
+- ✨ Show due prefix in labels. Settings: `todomd.labelDueSymbol`, `todomd.labelOverdueSymbol`, `todomd.labelInvalidDueSymbol`
+
 ## 2.7.1 `03 Jul 2021`
 
 - 🐛 Trigger active editor event on settings change to update the state
