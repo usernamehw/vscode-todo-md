@@ -78,11 +78,9 @@ export function formatTask(task: TheTask, {
 	if (task.count) {
 		result += ` ${task.count.current}/${task.count.needed}`;
 	}
-	if (extensionConfig.labelShowTag) {
-		if (task.tags.length) {
-			for (const tag of task.tags) {
-				result += ` #${fancyLetterBold(tag)}`;
-			}
+	if (extensionConfig.labelShowTag && task.tags.length) {
+		for (const tag of task.tags) {
+			result += ` #${fancyLetterBold(tag)}`;
 		}
 	}
 	if (result.length === 0) {
