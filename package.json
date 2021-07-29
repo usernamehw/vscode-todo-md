@@ -1568,15 +1568,15 @@
 		"chrome 89"
 	],
 	"scripts": {
+		"watch": "concurrently -r \"npm:watch:*\"",
 		"vscode:prepublish": "npm run scss & npm run webview & webpack --mode production --color",
 		"postinstall": "node scripts/copyWebviewResourcesFromNodeModules.js",
-		"watch": "concurrently \"npm run watchExtension\" \"npm run watchWebview\" \"npm run watchScss\"",
-		"watchExtension": "webpack --mode development --watch --stats minimal",
+		"watch:extension": "webpack --mode development --watch --stats minimal",
 		"scss": "sass --style=compressed media/scss:media",
-		"watchScss": "sass --watch media/scss:media",
+		"watch:scss": "sass --watch media/scss:media",
 		"copyAndCompressVendorCss": "sass --style=compressed --no-source-map node_modules/vscode-codicons/dist/codicon.css:media/vendor/codicon.css",
 		"webview": "webpack --mode production --config media/webpack.config.js",
-		"watchWebview": "webpack --watch --stats minimal --mode development --config media/webpack.config.js",
+		"watch:webview": "webpack --watch --stats minimal --mode development --config media/webpack.config.js",
 		"watchTest": "tsc -watch -p ./",
 		"test": "node ./dist/test/runTest.js",
 		"generateDecorationSchema": "tsc scripts\\generateDecorationSchema.ts && node scripts\\generateDecorationSchema.js"

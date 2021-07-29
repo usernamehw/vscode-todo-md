@@ -3,6 +3,7 @@
 		"dbaeumer.vscode-eslint",
 		"editorconfig.editorconfig",
 		"stylelint.vscode-stylelint",
-		"octref.vetur"
+		"octref.vetur",
+		"connor4312.css-theme-completions"
 	]
 }
