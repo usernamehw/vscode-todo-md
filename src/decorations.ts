@@ -7,9 +7,9 @@ import { DueState } from './types';
 export function updateEditorDecorationStyle() {
 	Global.completedTaskDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
-		textDecoration: 'line-through rgba(255, 255, 255, 0.35)',
+		textDecoration: extensionConfig.completedStrikeThrough ? 'line-through rgba(255, 255, 255, 0.35)' : undefined,
 		light: {
-			textDecoration: 'line-through rgba(0, 0, 0, 0.25)',
+			textDecoration: extensionConfig.completedStrikeThrough ? 'line-through rgba(0, 0, 0, 0.25)' : undefined,
 		},
 		...extensionConfig.decorations.completedTask,
 	});

@@ -155,6 +155,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |treeViews|`[...]`|Tree Views that have predefined filters (3 max).|
 |savedFilters|`[...]`|Filters that you can pick when applying a filter.|
 |tabSize|**`4`**|Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).|
+|completedStrikeThrough|**`true`**|Show strike-through text decoration for completed tasks in editor.|
 |decorations|`{...}`|Advanced decoration properties for editor decorations.|
 |webview.showCompleted|**`true`**|Whether completed tasks are shown or not in the webview.|
 |webview.showRecurringCompleted|**`true`**|Whether recurring completed tasks are shown or not in the webview.|

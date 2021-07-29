@@ -165,6 +165,10 @@ export interface ExtensionConfig {
 	 */
 	labelShowTag: boolean;
 	/**
+	 * Show strike-through text decoration for completed tasks in editor.
+	 */
+	completedStrikeThrough: boolean;
+	/**
 	 * Options only applied to webview
 	 */
 	webview: {

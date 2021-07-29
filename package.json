@@ -358,6 +358,11 @@
 					"markdownDescription": "Show tags in labels (tree view, notification, modal, quick pick).",
 					"default": true
 				},
+				"todomd.completedStrikeThrough": {
+					"type": "boolean",
+					"markdownDescription": "Show strike-through text decoration for completed tasks in editor.",
+					"default": true
+				},
 				"todomd.decorations": {
 					"type": "object",
 					"description": "Advanced decoration tweaking.",
