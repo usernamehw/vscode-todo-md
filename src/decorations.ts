@@ -72,7 +72,7 @@ export function updateEditorDecorationStyle() {
 		after: {
 			color: new ThemeColor('todomd.overdueForeground'),
 			border: '1px dashed',
-			textDecoration: 'none;margin-left:0.5ch;padding:1px 0.5ch;',
+			textDecoration: 'none;margin-left:0.5ch;text-align:center;padding:1px 0.5ch;',
 		},
 		...extensionConfig.decorations.overdue,
 	});
@@ -150,7 +150,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 					range: dueRange,
 					renderOptions: {
 						after: {
-							contentText: String(due.overdueInDays || ''),
+							contentText: `${due.overdueInDays}d`,
 						},
 					},
 				});
