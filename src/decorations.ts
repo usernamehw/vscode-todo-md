@@ -69,6 +69,11 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.overdueDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.overdueForeground'),
+		after: {
+			color: new ThemeColor('todomd.overdueForeground'),
+			border: '1px dashed',
+			textDecoration: 'none;margin-left:0.5ch;padding:1px 0.5ch;',
+		},
 		...extensionConfig.decorations.overdue,
 	});
 	Global.invalidDueDateDecorationType = window.createTextEditorDecorationType({
@@ -102,7 +107,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	const contextDecorationRanges: Range[] = [];
 	const notDueDecorationRanges: Range[] = [];
 	const dueDecorationRanges: Range[] = [];
-	const overdueDecorationRanges: Range[] = [];
+	const overdueDecorationOptions: DecorationOptions[] = [];
 	const invalidDueDateDecorationRanges: Range[] = [];
 	const closestDueDateDecorationOptions: DecorationOptions[] = [];
 
@@ -141,7 +146,14 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 			} else if (due.isDue === DueState.notDue) {
 				notDueDecorationRanges.push(dueRange);
 			} else if (due.isDue === DueState.overdue) {
-				overdueDecorationRanges.push(dueRange);
+				overdueDecorationOptions.push({
+					range: dueRange,
+					renderOptions: {
+						after: {
+							contentText: String(due.overdueInDays || ''),
+						},
+					},
+				});
 				if (task.overdueRange) {
 					specialtagDecorationRanges.push(task.overdueRange);
 				}
@@ -175,7 +187,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(Global.contextDecorationType, contextDecorationRanges);
 	editor.setDecorations(Global.notDueDecorationType, notDueDecorationRanges);
 	editor.setDecorations(Global.dueDecorationType, dueDecorationRanges);
-	editor.setDecorations(Global.overdueDecorationType, overdueDecorationRanges);
+	editor.setDecorations(Global.overdueDecorationType, overdueDecorationOptions);
 	editor.setDecorations(Global.invalidDueDateDecorationType, invalidDueDateDecorationRanges);
 	editor.setDecorations(Global.closestDueDateDecorationType, closestDueDateDecorationOptions);
 	editor.setDecorations(Global.commentDecorationType, extensionState.commentLines);
