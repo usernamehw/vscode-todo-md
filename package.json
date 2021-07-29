@@ -1312,24 +1312,6 @@
 				"description": "Due date that is either has an invalid format `2020-05` or an invalid date `2020-12-35`"
 			},
 			{
-				"id": "todomd.closestDueDateBackground",
-				"defaults": {
-					"light": "#00000005",
-					"dark": "#00000005",
-					"highContrast": "#00000005"
-				},
-				"description": "Decoration that shows when the task will be due. Example: `Tue [in 9 days]`"
-			},
-			{
-				"id": "todomd.closestDueDateForeground",
-				"defaults": {
-					"light": "#88888899",
-					"dark": "#88888899",
-					"highContrast": "#88888899"
-				},
-				"description": "Decoration that shows when the task will be due. Example: `Tue [in 9 days]`"
-			},
-			{
 				"id": "todomd.treeViewCompletedTaskIcon",
 				"defaults": {
 					"light": "#7cc54b",

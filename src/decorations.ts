@@ -67,12 +67,13 @@ export function updateEditorDecorationStyle() {
 		color: new ThemeColor('todomd.dueForeground'),
 		...extensionConfig.decorations.due,
 	});
+	const duePadding = '0.5ch';
 	Global.overdueDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.overdueForeground'),
 		after: {
 			color: new ThemeColor('todomd.overdueForeground'),
 			border: '1px dashed',
-			textDecoration: 'none;margin-left:0.5ch;text-align:center;padding:1px 0.5ch;',
+			textDecoration: `;margin-left:${duePadding};text-align:center;padding:1px ${duePadding};`,
 		},
 		...extensionConfig.decorations.overdue,
 	});
@@ -83,9 +84,9 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		after: {
-			color: new ThemeColor('todomd.closestDueDateForeground'),
-			margin: '1ch',
-			backgroundColor: new ThemeColor('todomd.closestDueDateBackground'),
+			border: '1px dashed',
+			color: new ThemeColor('todomd.specialTagForeground'),
+			textDecoration: `;margin-left:${duePadding};text-align:center;padding:1px ${duePadding};`,
 		},
 	});
 }
@@ -162,10 +163,10 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 			}
 			if (due.isDue === DueState.notDue && due.closestDueDateInTheFuture) {
 				closestDueDateDecorationOptions.push({
-					range: new Range(dueRange.end.line, dueRange.end.character - 1, dueRange.end.line, dueRange.end.character - 1),
+					range: dueRange,
 					renderOptions: {
 						after: {
-							contentText: due.closestDueDateInTheFuture,
+							contentText: `+${due.daysUntilDue}d`,
 						},
 					},
 				});
