@@ -117,8 +117,9 @@ export class Global {
 	static priorityEDecorationType: TextEditorDecorationType;
 	static priorityFDecorationType: TextEditorDecorationType;
 	static tagsDecorationType: TextEditorDecorationType;
-	static specialTagDecorationType: TextEditorDecorationType;
+	static tagWithDelimiterDecorationType: TextEditorDecorationType;
 	static tagsDelimiterDecorationType: TextEditorDecorationType;
+	static specialTagDecorationType: TextEditorDecorationType;
 	static projectDecorationType: TextEditorDecorationType;
 	static contextDecorationType: TextEditorDecorationType;
 	static notDueDecorationType: TextEditorDecorationType;
@@ -126,6 +127,8 @@ export class Global {
 	static overdueDecorationType: TextEditorDecorationType;
 	static invalidDueDateDecorationType: TextEditorDecorationType;
 	static closestDueDateDecorationType: TextEditorDecorationType;
+
+	static userSpecifiedAdvancedTagDecorations: boolean;
 }
 
 export async function activate(extensionContext: ExtensionContext) {
@@ -239,8 +242,9 @@ function disposeEditorDisposables() {
 		Global.priorityEDecorationType.dispose();
 		Global.priorityFDecorationType.dispose();
 		Global.tagsDecorationType.dispose();
-		Global.specialTagDecorationType.dispose();
+		Global.tagWithDelimiterDecorationType.dispose();
 		Global.tagsDelimiterDecorationType.dispose();
+		Global.specialTagDecorationType.dispose();
 		Global.projectDecorationType.dispose();
 		Global.contextDecorationType.dispose();
 		Global.notDueDecorationType.dispose();

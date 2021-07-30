@@ -370,6 +370,7 @@
 						"enum": [
 							"project",
 							"context",
+							"tag",
 							"comment",
 							"notDue",
 							"due",
@@ -387,6 +388,7 @@
 					"default": {
 						"project": {},
 						"context": {},
+						"tag": {},
 						"comment": {},
 						"notDue": {},
 						"due": {},
@@ -401,7 +403,7 @@
 						"completedTask": {}
 					},
 					"patternProperties": {
-						"^(project|context|comment|notDue|due|overdue|invalidDue|priorityAForeground|priorityBForeground|priorityCForeground|priorityDForeground|priorityEForeground|priorityFForeground|completedTask)$": {
+						"^(project|context|tag|comment|notDue|due|overdue|invalidDue|priorityAForeground|priorityBForeground|priorityCForeground|priorityDForeground|priorityEForeground|priorityFForeground|completedTask)$": {
 							"type": "object",
 							"properties": {
 								"isWholeLine": {

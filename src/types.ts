@@ -35,6 +35,7 @@ export const enum SortNestedTasks {
 const enum AdvancedDecorations {
 	project = 'project',
 	context = 'context',
+	tag = 'tag',
 	comment = 'comment',
 	notDue = 'notDue',
 	due = 'due',

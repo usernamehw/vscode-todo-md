@@ -64,3 +64,9 @@ export async function sleep(ms: number) {
 export function unique<T extends boolean | number | string>(arr: T[]): T[] {
 	return Array.from(new Set(arr));
 }
+/**
+ * Check if the object doesn't have any keys
+ */
+export function isEmptyObject(obj: any) {
+	return Object.keys(obj).length === 0;
+}

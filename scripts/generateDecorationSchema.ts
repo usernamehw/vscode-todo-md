@@ -60,6 +60,7 @@ function generateSchema() {
 	const supportedAdvancedColors = [
 		"project",
 		"context",
+		"tag",
 		"comment",
 		"notDue",
 		"due",

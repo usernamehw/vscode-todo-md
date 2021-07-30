@@ -1,10 +1,12 @@
 import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
 import { extensionConfig, extensionState, Global } from './extension';
 import { DueState } from './types';
+import { isEmptyObject } from './utils/utils';
 /**
  * Update editor decoration style
  */
 export function updateEditorDecorationStyle() {
+	Global.userSpecifiedAdvancedTagDecorations = !isEmptyObject(extensionConfig.decorations.tag);
 	Global.completedTaskDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
 		textDecoration: extensionConfig.completedStrikeThrough ? 'line-through rgba(255, 255, 255, 0.35)' : undefined,
@@ -44,12 +46,17 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagForeground'),
+		...extensionConfig.decorations.tag,
 	});
-	Global.specialTagDecorationType = window.createTextEditorDecorationType({
-		color: new ThemeColor('todomd.specialTagForeground'),
+	Global.tagWithDelimiterDecorationType = window.createTextEditorDecorationType({
+		color: new ThemeColor('todomd.tagForeground'),
+		...extensionConfig.decorations.tag,
 	});
 	Global.tagsDelimiterDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagDelimiterForeground'),
+	});
+	Global.specialTagDecorationType = window.createTextEditorDecorationType({
+		color: new ThemeColor('todomd.specialTagForeground'),
 	});
 	Global.projectDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.projectForeground'),
@@ -103,6 +110,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	const priorityEDecorationRanges: Range[] = [];
 	const priorityFDecorationRanges: Range[] = [];
 	const tagsDelimiterDecorationRanges: Range[] = [];
+	const tagWithDelimiterDecorationRanges: Range[] = [];
 	const specialtagDecorationRanges: Range[] = [];
 	const projectDecorationRanges: Range[] = [];
 	const contextDecorationRanges: Range[] = [];
@@ -117,8 +125,13 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 			completedDecorationRanges.push(new Range(task.lineNumber, 0, task.lineNumber, 0));
 		}
 		if (task.tagsRange) {
-			tagsDecorationRanges.push(...task.tagsRange);
-			tagsDelimiterDecorationRanges.push(...task.tagsDelimiterRanges!);// if `tagsRange` exists - `tagsDelimiterRanges` also exists
+			if (!Global.userSpecifiedAdvancedTagDecorations) {
+				tagsDecorationRanges.push(...task.tagsRange);
+				tagsDelimiterDecorationRanges.push(...task.tagsDelimiterRanges!);// if `tagsRange` exists - `tagsDelimiterRanges` also exists
+			} else {
+				// User has advanced decorations. Include tag symbol in decoration range.
+				tagWithDelimiterDecorationRanges.push(...task.tagsRange.map(range => new Range(range.start.line, range.start.character - 1, range.end.line, range.end.character)));
+			}
 		}
 		if (task.priorityRange) {
 			switch (task.priority) {
@@ -176,6 +189,8 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 
 	editor.setDecorations(Global.completedTaskDecorationType, completedDecorationRanges);
 	editor.setDecorations(Global.tagsDecorationType, tagsDecorationRanges);
+	editor.setDecorations(Global.tagWithDelimiterDecorationType, tagWithDelimiterDecorationRanges);
+	editor.setDecorations(Global.tagsDelimiterDecorationType, tagsDelimiterDecorationRanges);
 	editor.setDecorations(Global.specialTagDecorationType, specialtagDecorationRanges);
 	editor.setDecorations(Global.priorityADecorationType, priorityADecorationRanges);
 	editor.setDecorations(Global.priorityBDecorationType, priorityBDecorationRanges);
@@ -183,7 +198,6 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(Global.priorityDDecorationType, priorityDDecorationRanges);
 	editor.setDecorations(Global.priorityEDecorationType, priorityEDecorationRanges);
 	editor.setDecorations(Global.priorityFDecorationType, priorityFDecorationRanges);
-	editor.setDecorations(Global.tagsDelimiterDecorationType, tagsDelimiterDecorationRanges);
 	editor.setDecorations(Global.projectDecorationType, projectDecorationRanges);
 	editor.setDecorations(Global.contextDecorationType, contextDecorationRanges);
 	editor.setDecorations(Global.notDueDecorationType, notDueDecorationRanges);
