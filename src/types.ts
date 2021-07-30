@@ -162,9 +162,9 @@ export interface ExtensionConfig {
 	 */
 	labelInvalidDueSymbol: string;
 	/**
-	 * "Show tags in labels (tree view, notification, modal, quick pick).",
+	 * Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).
 	 */
-	labelShowTag: boolean;
+	labelShowItems: boolean;
 	/**
 	 * Show strike-through text decoration for completed tasks in editor.
 	 */

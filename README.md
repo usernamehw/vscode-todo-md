@@ -146,6 +146,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |confirmTaskDelete|`"always"`|Show confirmation when deleting task from Tree View or Webview.|
 |getNextNumberOfTasks|**`5`**|Number of tasks returned by `getFewNextTasks` command.|
 |autoArchiveTasks|**`false`**|When enabled - will move tasks to archive file (on completion)|
+|labelShowItems|**`true`**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|
 |statusBarCounterEnabled|**`true`**|Controls visibility of status bar task progress item `1/3 33%`|
 |suggestItems|{}|This extension will only autocomplete tags/projects/contexts located in **1** file. This setting allows you to add items and their description(markdown) to autocomplete in all files (where extension is active). Examples: `#tag`, `+project`, `@context`.|
 |sortTagsView|`"alphabetic"`|Controls tags Tree View sorting.|
