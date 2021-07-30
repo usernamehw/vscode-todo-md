@@ -17,8 +17,9 @@ ul {
 
 code {
 	background-color: var(--inline-code-bg);
+	border: 1px solid var(--inline-code-border);
 	border-radius: 3px;
 	color: var(--vscode-editor-foreground);
 	font-family: var(--font-family);
-	padding: 0 0.2em;
+	padding: 0 0.3em;
 }

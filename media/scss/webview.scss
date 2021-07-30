@@ -74,7 +74,8 @@ body {
 	--due-invalid-bg: #7284eb12;
 	--due-invalid-border: #7284eb;
 
-	--inline-code-bg: rgba(27, 31, 35, 0.08);
+	--inline-code-bg: rgba(27, 31, 35, 0.03);
+	--inline-code-border: rgba(0, 0, 0, 0.1);
 
 	--duration-animation-color1: #ee7f0020;
 	--duration-animation-color2: #028dd820;
@@ -136,7 +137,9 @@ body.vscode-dark {
 
 	--twistie-hover-bg: rgba(255, 255, 255, 0.1);
 	--checkbox-hover-bg: rgba(255, 255, 255, 0.1);
-	--inline-code-bg: rgba(240, 246, 252, 0.15);
+
+	--inline-code-bg: rgba(240, 246, 252, 0.07);
+	--inline-code-border: rgba(240, 246, 252, 0.14);
 
 	--duration-animation-color1: #ee7f0040;
 	--duration-animation-color2: #028dd840;
