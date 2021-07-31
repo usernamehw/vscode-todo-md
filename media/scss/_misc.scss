@@ -20,6 +20,8 @@ code {
 	border: 1px solid var(--inline-code-border);
 	border-radius: 3px;
 	color: var(--vscode-editor-foreground);
-	font-family: var(--font-family);
+	font-family: var(--vscode-editor-font-family);
+	letter-spacing: 0.5px;
+	// font-size: calc(var(--font-size) - 1px);
 	padding: 0 0.3em;
 }
