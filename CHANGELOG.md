@@ -1,3 +1,13 @@
+## 2.8.1 `31 Jul 2021`
+
+- 💥 Remove colors `closestDueDateForeground` & `closestDueDateBackground`
+- ✨ Show overdue in days in editor decoration
+- ✨ Change style for closest due date editor decoration
+- ✨ Add setting to disable strike-through decoration in editor for completed tasks `todomd.completedStrikeThrough`
+- ✨ Allow advanced decorations for tags
+- ✨ Add projects & contexts to labels (`todomd.labelShowItems` setting)
+- ✨ Complete task command - add 2 buttons (follow link & reveal task)
+
 ## 2.8.0 `22 Jul 2021`
 
 - 💥 Merge 3 autocomplete settings into 1 , show markdown description defined by user. #32
