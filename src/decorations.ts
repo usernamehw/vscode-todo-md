@@ -74,13 +74,17 @@ export function updateEditorDecorationStyle() {
 		color: new ThemeColor('todomd.dueForeground'),
 		...extensionConfig.decorations.due,
 	});
-	const duePadding = '0.5ch';
+	const enum DueDecorations {
+		padding = '0 0.5ch',
+		margin = '0.5ch',
+		border = 'thin dashed',
+	}
 	Global.overdueDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.overdueForeground'),
 		after: {
 			color: new ThemeColor('todomd.overdueForeground'),
-			border: '1px dashed',
-			textDecoration: `;margin-left:${duePadding};text-align:center;padding:1px ${duePadding};`,
+			border: DueDecorations.border,
+			textDecoration: `;margin-left:${DueDecorations.margin};text-align:center;padding:${DueDecorations.padding};`,
 		},
 		...extensionConfig.decorations.overdue,
 	});
@@ -91,9 +95,9 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		after: {
-			border: '1px dashed',
+			border: DueDecorations.border,
 			color: new ThemeColor('todomd.specialTagForeground'),
-			textDecoration: `;margin-left:${duePadding};text-align:center;padding:1px ${duePadding};`,
+			textDecoration: `;margin-left:${DueDecorations.margin};text-align:center;padding:${DueDecorations.padding};`,
 		},
 	});
 }

@@ -254,24 +254,62 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandIds.completeTask, async () => {
 		// Show Quick Pick to complete a task
 		const document = await getActiveOrDefaultDocument();
-		const notCompletedTasks = defaultSortTasks(extensionState.tasks.filter(task => !task.done)).map(task => formatTask(task));
-		const pickedTask = await window.showQuickPick(notCompletedTasks, {
-			placeHolder: 'Choose a task to complete',
+		// TODO: should this be tree?
+		const notCompletedTasks = defaultSortTasks(extensionState.tasks.filter(task => !task.done)).map(task => ({
+			label: formatTask(task),
+			ln: task.lineNumber,
+		}));
+		const qp = window.createQuickPick();
+		qp.title = 'Complete a task';
+		qp.placeholder = 'Choose a task to complete';
+		qp.items = notCompletedTasks;
+		const enum Buttons {
+			followLinkBtn = 'Follow link',
+			revealTaskBtn = 'Reveal task',
+		}
+		qp.buttons = [
+			{
+				iconPath: new ThemeIcon('link-external'),
+				tooltip: Buttons.followLinkBtn,
+			},
+			{
+				iconPath: new ThemeIcon('go-to-file'),
+				tooltip: Buttons.revealTaskBtn,
+			},
+		];
+		let activeQuickPickItem: typeof notCompletedTasks[0];
+		qp.onDidChangeActive(e => {
+			// @ts-ignore
+			activeQuickPickItem = e[0];
 		});
-		if (!pickedTask) {
-			return;
-		}
-		const task = extensionState.tasks.find(t => formatTask(t) === pickedTask);
-		if (!task) {
-			return;
-		}
-		if (task.count) {
-			await incrementCountForTask(document, task.lineNumber, task);
-		} else {
-			await toggleDoneAtLine(document, task.lineNumber);
-		}
-		await updateState();
-		updateAllTreeViews();
+		qp.onDidTriggerButton(e => {
+			const task = getTaskAtLineExtension(activeQuickPickItem.ln);
+			if (!task) {
+				return;
+			}
+			if (e.tooltip === Buttons.followLinkBtn) {
+				followLinks(task.links);
+			} else if (e.tooltip === Buttons.revealTaskBtn) {
+				revealTask(task.lineNumber);
+			}
+			qp.hide();
+			qp.dispose();
+		});
+		qp.onDidAccept(async e => {
+			const task = getTaskAtLineExtension(activeQuickPickItem.ln);
+			if (!task) {
+				return;
+			}
+			if (task.count) {
+				await incrementCountForTask(document, task.lineNumber, task);
+			} else {
+				await toggleDoneAtLine(document, task.lineNumber);
+			}
+			await updateState();
+			updateAllTreeViews();
+			qp.dispose();
+		});
+		qp.show();
 	});
 	commands.registerTextEditorCommand(CommandIds.filter, editor => {
 		const quickPick = window.createQuickPick();
