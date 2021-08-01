@@ -127,6 +127,7 @@ export class Global {
 	static overdueDecorationType: TextEditorDecorationType;
 	static invalidDueDateDecorationType: TextEditorDecorationType;
 	static closestDueDateDecorationType: TextEditorDecorationType;
+	static nestedTasksCountDecorationType: TextEditorDecorationType;
 
 	static userSpecifiedAdvancedTagDecorations: boolean;
 }
@@ -252,6 +253,7 @@ function disposeEditorDisposables() {
 		Global.overdueDecorationType.dispose();
 		Global.invalidDueDateDecorationType.dispose();
 		Global.closestDueDateDecorationType.dispose();
+		Global.nestedTasksCountDecorationType.dispose();
 	}
 	if (Global.changeTextDocumentDisposable) {
 		Global.changeTextDocumentDisposable.dispose();

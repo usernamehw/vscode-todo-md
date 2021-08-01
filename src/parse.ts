@@ -251,7 +251,7 @@ export async function parseDocument(document: TextDocument): Promise<ParsedDocum
 				continue;
 			}
 			default: {
-				// Links ----------------------
+				// ──── Links ─────────────────────────────────────────────────
 				const linksOnThisLine = links.filter(link => link.range.start.line === i && link.target !== undefined);
 				if (linksOnThisLine.length !== 0) {
 					parsedLine.value.links = linksOnThisLine.map(link => ({
@@ -260,13 +260,13 @@ export async function parseDocument(document: TextDocument): Promise<ParsedDocum
 						scheme: link.target!.scheme,
 					}));
 				}
-				// Overdue --------------------
+				// ──── Overdue ───────────────────────────────────────────────
 				if (parsedLine.value.overdue && parsedLine.value.due?.raw) {
 					parsedLine.value.due = new DueDate(parsedLine.value.due.raw, {
 						overdueStr: parsedLine.value.overdue,
 					});
 				}
-				// Handle nested tasks (find parent task lineNumber)
+				// ──── Handle nested tasks (find parent task lineNumber) ─────
 				if (parsedLine.value.indentLvl) {
 					for (let j = tasks.length - 1; j >= 0; j--) {
 						if (tasks[j].indentLvl < parsedLine.value.indentLvl) {

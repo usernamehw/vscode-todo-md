@@ -1,6 +1,7 @@
 import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
 import { extensionConfig, extensionState, Global } from './extension';
 import { DueState } from './types';
+import { forEachTask } from './utils/taskUtils';
 import { isEmptyObject } from './utils/utils';
 /**
  * Update editor decoration style
@@ -77,7 +78,7 @@ export function updateEditorDecorationStyle() {
 	const enum DueDecorations {
 		padding = '0 0.5ch',
 		margin = '0.5ch',
-		border = 'thin dashed',
+		border = '1px dashed',
 	}
 	Global.overdueDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.overdueForeground'),
@@ -97,6 +98,16 @@ export function updateEditorDecorationStyle() {
 		after: {
 			border: DueDecorations.border,
 			color: new ThemeColor('todomd.specialTagForeground'),
+			textDecoration: `;margin-left:${DueDecorations.margin};text-align:center;padding:${DueDecorations.padding};`,
+		},
+	});
+	Global.nestedTasksCountDecorationType = window.createTextEditorDecorationType({
+		isWholeLine: true,
+		after: {
+			backgroundColor: new ThemeColor('todomd.nestedTasksCountBackground'),
+			color: new ThemeColor('todomd.nestedTasksCountForeground'),
+			border: '1px solid',
+			borderColor: new ThemeColor('todomd.nestedTasksCountBorder'),
 			textDecoration: `;margin-left:${DueDecorations.margin};text-align:center;padding:${DueDecorations.padding};`,
 		},
 	});
@@ -123,10 +134,13 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	const overdueDecorationOptions: DecorationOptions[] = [];
 	const invalidDueDateDecorationRanges: Range[] = [];
 	const closestDueDateDecorationOptions: DecorationOptions[] = [];
+	const nestedTasksDecorationOptions: DecorationOptions[] = [];
 
-	for (const task of extensionState.tasks) {
+	forEachTask(task => {
+		// When decoration have `isWholeLine` range can be empty / wouldn't matter
+		const emptyRange = new Range(task.lineNumber, 0, task.lineNumber, 0);
 		if (task.done) {
-			completedDecorationRanges.push(new Range(task.lineNumber, 0, task.lineNumber, 0));
+			completedDecorationRanges.push(emptyRange);
 		}
 		if (task.tagsRange) {
 			if (!Global.userSpecifiedAdvancedTagDecorations) {
@@ -189,7 +203,25 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 				});
 			}
 		}
-	}
+		if (task.subtasks.length) {
+			let numberOfSubtasks = 0;
+			let numberOfCompletedSubtasks = 0;
+			forEachTask(subtask => {
+				numberOfSubtasks++;
+				if (subtask.done) {
+					numberOfCompletedSubtasks++;
+				}
+			}, task.subtasks);
+			nestedTasksDecorationOptions.push({
+				range: emptyRange,
+				renderOptions: {
+					after: {
+						contentText: `${numberOfCompletedSubtasks}/${numberOfSubtasks}`,
+					},
+				},
+			});
+		}
+	});
 
 	editor.setDecorations(Global.completedTaskDecorationType, completedDecorationRanges);
 	editor.setDecorations(Global.tagsDecorationType, tagsDecorationRanges);
@@ -209,5 +241,6 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(Global.overdueDecorationType, overdueDecorationOptions);
 	editor.setDecorations(Global.invalidDueDateDecorationType, invalidDueDateDecorationRanges);
 	editor.setDecorations(Global.closestDueDateDecorationType, closestDueDateDecorationOptions);
+	editor.setDecorations(Global.nestedTasksCountDecorationType, nestedTasksDecorationOptions);
 	editor.setDecorations(Global.commentDecorationType, extensionState.commentLines);
 }

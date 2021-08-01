@@ -1319,6 +1319,33 @@
 				"description": "Due date that is either has an invalid format `2020-05` or an invalid date `2020-12-35`"
 			},
 			{
+				"id": "todomd.nestedTasksCountBackground",
+				"defaults": {
+					"light": "#f3f1d499",
+					"dark": "#e0d971",
+					"highContrast": "#e0d971"
+				},
+				"description": "Nested tasks counter editor decoration background."
+			},
+			{
+				"id": "todomd.nestedTasksCountForeground",
+				"defaults": {
+					"light": "#000000",
+					"dark": "#000000",
+					"highContrast": "#000000"
+				},
+				"description": "Nested tasks counter editor decoration foreground."
+			},
+			{
+				"id": "todomd.nestedTasksCountBorder",
+				"defaults": {
+					"light": "#dfd98799",
+					"dark": "#fff0",
+					"highContrast": "#fff0"
+				},
+				"description": "Nested tasks counter editor decoration border."
+			},
+			{
 				"id": "todomd.treeViewCompletedTaskIcon",
 				"defaults": {
 					"light": "#7cc54b",

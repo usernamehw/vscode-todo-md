@@ -198,6 +198,9 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 - `todomd.priorityDForeground`
 - `todomd.priorityEForeground`
 - `todomd.priorityFForeground`
+- `todomd.nestedTasksCountBackground`
+- `todomd.nestedTasksCountForeground`
+- `todomd.nestedTasksCountBorder`
 - `todomd.treeViewCompletedTaskIcon`
 
 </details>
