@@ -197,6 +197,7 @@ a {
 	font-family: var(--font-family);
 	height: calc(100vh - 4px - 4px - 24px);
 	line-height: var(--line-height);
+	overflow-x: hidden;
 	overflow-y: var(--list-scrollbar-value);
 
 	&--details-visible {
@@ -351,6 +352,7 @@ a {
 		float: right;
 		font-size: smaller;
 		justify-content: center;
+		margin-left: $approxOneSpace;
 		padding: 0 0.3em;
 		position: relative;
 		top: 2px;
