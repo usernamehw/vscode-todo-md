@@ -1321,7 +1321,7 @@
 			{
 				"id": "todomd.nestedTasksCountBackground",
 				"defaults": {
-					"light": "#f3f1d499",
+					"light": "#f7f3c099",
 					"dark": "#e0d971",
 					"highContrast": "#e0d971"
 				},
@@ -1339,7 +1339,7 @@
 			{
 				"id": "todomd.nestedTasksCountBorder",
 				"defaults": {
-					"light": "#dfd98799",
+					"light": "#dfd987bd",
 					"dark": "#fff0",
 					"highContrast": "#fff0"
 				},

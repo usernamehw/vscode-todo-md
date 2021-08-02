@@ -115,3 +115,19 @@ function getNextOrFirstElement<T>(arr: T[], target: any): T {
 	const idx = arr.findIndex(el => el === target);
 	return idx === arr.length - 1 ? arr[0] : arr[idx + 1];
 }
+/**
+ * Transform inline svg to {@link Uri}
+ */
+export function svgToUri(svg: string): Uri {
+	return Uri.parse(`data:image/svg+xml;utf8,${svg}`);
+}
+/**
+ * Calculate editor line height (in px).
+ */
+export function getEditorLineHeight(): number {
+	const config = workspace.getConfiguration();
+	const fontSize = config.get<number>('editor.fontSize')!;
+	const lineHeightVscode = config.get<number>('editor.lineHeight')!;
+	const lineHeight = lineHeightVscode <= 8 ? fontSize * lineHeightVscode : lineHeightVscode;
+	return Math.round(lineHeight);
+}

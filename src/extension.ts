@@ -16,7 +16,7 @@ import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateAr
 import { ExtensionConfig, ItemForProvider, VscodeContext } from './types';
 import { updateUserSuggestItems } from './userSuggestItems';
 import { getActiveDocument, getDocumentForDefaultFile } from './utils/extensionUtils';
-import { setContext } from './utils/vscodeUtils';
+import { getEditorLineHeight, setContext } from './utils/vscodeUtils';
 import { TasksWebviewViewProvider } from './webview/webviewView';
 
 dayjs.extend(isBetween);
@@ -63,6 +63,8 @@ export abstract class extensionState {
 	static activeDocument: TextDocument | undefined = undefined;
 	/** Used in parsing of nested tasks. */
 	static activeDocumentTabSize = 4;
+	/** Editor line height (in px) */
+	static editorLineHeight = 20;
 }
 
 
@@ -128,6 +130,7 @@ export class Global {
 	static invalidDueDateDecorationType: TextEditorDecorationType;
 	static closestDueDateDecorationType: TextEditorDecorationType;
 	static nestedTasksCountDecorationType: TextEditorDecorationType;
+	static nestedTasksPieDecorationType: TextEditorDecorationType;
 
 	static userSpecifiedAdvancedTagDecorations: boolean;
 }
@@ -137,6 +140,7 @@ export async function activate(extensionContext: ExtensionContext) {
 	const lastVisitByFile = extensionContext.globalState.get<typeof extensionState['lastVisitByFile'] | undefined>(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY);
 	extensionState.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
+	extensionState.editorLineHeight = getEditorLineHeight();
 	updateEditorDecorationStyle();
 	updateUserSuggestItems();
 	registerAllCommands();
@@ -182,6 +186,7 @@ export async function activate(extensionContext: ExtensionContext) {
 		extensionConfig = workspace.getConfiguration().get(Constants.EXTENSION_NAME) as ExtensionConfig;
 
 		disposeEditorDisposables();
+		extensionState.editorLineHeight = getEditorLineHeight();
 		updateEditorDecorationStyle();
 		updateUserSuggestItems();
 		onChangeActiveTextEditor(window.activeTextEditor);
@@ -254,6 +259,7 @@ function disposeEditorDisposables() {
 		Global.invalidDueDateDecorationType.dispose();
 		Global.closestDueDateDecorationType.dispose();
 		Global.nestedTasksCountDecorationType.dispose();
+		Global.nestedTasksPieDecorationType.dispose();
 	}
 	if (Global.changeTextDocumentDisposable) {
 		Global.changeTextDocumentDisposable.dispose();

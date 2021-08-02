@@ -3,6 +3,7 @@ import { extensionConfig, extensionState, Global } from './extension';
 import { DueState } from './types';
 import { forEachTask } from './utils/taskUtils';
 import { isEmptyObject } from './utils/utils';
+import { svgToUri } from './utils/vscodeUtils';
 /**
  * Update editor decoration style
  */
@@ -108,7 +109,17 @@ export function updateEditorDecorationStyle() {
 			color: new ThemeColor('todomd.nestedTasksCountForeground'),
 			border: '1px solid',
 			borderColor: new ThemeColor('todomd.nestedTasksCountBorder'),
-			textDecoration: `;margin-left:${DueDecorations.margin};text-align:center;padding:${DueDecorations.padding};`,
+			margin: `0 0 0 ${DueDecorations.margin}`,
+			textDecoration: `;text-align:center;padding:${DueDecorations.padding};position:relative;`,
+		},
+	});
+	Global.nestedTasksPieDecorationType = window.createTextEditorDecorationType({
+		isWholeLine: true,
+		after: {
+			width: `${extensionState.editorLineHeight}px`,
+			height: `${extensionState.editorLineHeight}px`,
+			margin: `0 0 0 ${DueDecorations.margin}`,
+			textDecoration: `;vertical-align:middle;position:relative;top:-1px;`,
 		},
 	});
 }
@@ -135,6 +146,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	const invalidDueDateDecorationRanges: Range[] = [];
 	const closestDueDateDecorationOptions: DecorationOptions[] = [];
 	const nestedTasksDecorationOptions: DecorationOptions[] = [];
+	const nestedTasksPieOptions: DecorationOptions[] = [];
 
 	forEachTask(task => {
 		// When decoration have `isWholeLine` range can be empty / wouldn't matter
@@ -220,6 +232,14 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 					},
 				},
 			});
+			nestedTasksPieOptions.push({
+				range: emptyRange,
+				renderOptions: {
+					after: {
+						contentIconPath: svgToUri(createPieProgressSvg(extensionState.editorLineHeight, numberOfCompletedSubtasks, numberOfSubtasks)),
+					},
+				},
+			});
 		}
 	});
 
@@ -242,5 +262,24 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(Global.invalidDueDateDecorationType, invalidDueDateDecorationRanges);
 	editor.setDecorations(Global.closestDueDateDecorationType, closestDueDateDecorationOptions);
 	editor.setDecorations(Global.nestedTasksCountDecorationType, nestedTasksDecorationOptions);
+	editor.setDecorations(Global.nestedTasksPieDecorationType, nestedTasksPieOptions);
 	editor.setDecorations(Global.commentDecorationType, extensionState.commentLines);
+}
+
+/**
+ * Create round svg in a shape of a pie diagram.
+ */
+function createPieProgressSvg(size: number, done: number, all: number) {
+	const enum Svg {
+		width = 20,
+	}
+	const targetPercentage = done / all * 100;
+	const circleBg = `%23${'#c6cdd3'.slice(1)}`;
+	const pieBg = `%23${'#0077AA'.slice(1)}`;
+
+	let svgStr = `<svg xmlns="http://www.w3.org/2000/svg" height="${size}" width="${size}" viewBox="0 0 ${Svg.width} ${Svg.width}">`;
+	svgStr += `<circle r="10" cx="10" cy="10" fill="${circleBg}" />`;
+	svgStr += `<circle r="5" cx="10" cy="10" fill="transparent" stroke="${pieBg}" stroke-width="10" stroke-dasharray="calc(${targetPercentage} * 31.4 / 100) 31.4" transform="rotate(-90) translate(-20)" />`;
+	svgStr += '</svg>';
+	return svgStr;
 }
