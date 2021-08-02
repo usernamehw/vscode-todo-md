@@ -1,3 +1,7 @@
+## 2.8.2 `02 Aug 2021`
+
+- ✨ Show nested count in editor decoration #33
+
 ## 2.8.1 `31 Jul 2021`
 
 - 💥 Remove colors `closestDueDateForeground` & `closestDueDateBackground`
