@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import { dateDiff, dateWithoutTime, dayOfTheWeek, isValidDate } from './time/timeUtils';
 import { DueState } from './types';
+
+export type DueType = 'invalid' | 'normalDate' | 'recurringWithDate' | 'recurringWithoutStartingDate';
 /**
  * Should handle most of the due date functions
  */
@@ -9,29 +11,19 @@ export class DueDate {
 	private static readonly dueRecurringRegexp = /^(ed|sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday)$/i;
 	/** Unmodified value of due date */
 	raw: string;
-	/**
-	 * If this due date is recurring or not
-	 */
+	/** Due type (normal or recurring, recurring with or without a starting date) */
+	type: DueType;
+	/** If this due date is recurring or not */
 	isRecurring = false;
-	/**
-	 * Due state. Can be: due, notDue, overdue, invalid.
-	 */
+	/** Due state. Can be: due, notDue, overdue, invalid */
 	isDue = DueState.notDue;
-	/**
-	 * Closest due date (assigned only when the task is not due today)
-	 */
+	/** Closest due date (assigned only when the task is not due today) */
 	closestDueDateInTheFuture: string;
-	/**
-	 * Days until this task is due.
-	 */
+	/** Days until this task is due */
 	daysUntilDue = 0;
-	/**
-	 * Overdue date when the task was first time missed to complete.
-	 */
+	/** Overdue date when the task was first time missed to complete. */
 	overdueStr?: string;
-	/**
-	 * Number of days that task is overdue
-	 */
+	/** Number of days that task is overdue */
 	overdueInDays?: number;
 
 	constructor(dueString: string, options?: { targetDate?: Date; overdueStr?: string }) {
@@ -40,6 +32,7 @@ export class DueDate {
 		const result = DueDate.parseDue(dueString, options?.targetDate, options?.overdueStr);
 		this.isRecurring = result.isRecurring;
 		this.isDue = result.isDue;
+		this.type = result.dueType;
 		this.overdueStr = options?.overdueStr;
 		if (result.isDue === DueState.notDue) {
 			const closest = this.calcClosestDueDateInTheFuture();
@@ -58,6 +51,13 @@ export class DueDate {
 	 * When the next time the task is going to be due.
 	 */
 	private calcClosestDueDateInTheFuture() {
+		if (this.type === 'normalDate') {
+			const date = dayjs(this.raw);
+			return {
+				closestString: dateDiff(date),
+				daysUntil: dayjs(date).diff(dayjs(), 'day'),
+			};
+		}
 		for (let i = 1; i < 100; i++) {
 			const date = dayjs().add(i, 'day');
 			const { isDue } = DueDate.parseDue(this.raw, date.toDate());
@@ -98,10 +98,12 @@ export class DueDate {
 		const isDue = hasInvalid ? DueState.invalid :
 			hasOverdue ? DueState.overdue :
 				hasDue ? DueState.due : DueState.notDue;
+		const dueType = result[0].dueType;
 
 		return {
 			isDue,
 			isRecurring,
+			dueType,
 		};
 	}
 	/**
@@ -112,10 +114,13 @@ export class DueDate {
 			return {
 				isRecurring: false,
 				isDue: DueState.due,
+				dueType: 'recurringWithoutStartingDate',
 			};
 		}
 		let isRecurring = false;
 		let isDue = DueState.notDue;
+		let dueType: DueType;
+
 		const dueWithDateMatch = DueDate.dueWithDateRegexp.exec(due);
 		if (dueWithDateMatch) {
 			const year = Number(dueWithDateMatch[1]);
@@ -128,6 +133,7 @@ export class DueDate {
 			if (!isDueDateValid) {
 				return {
 					isRecurring: Boolean(dueRecurringPart),
+					dueType: 'invalid',
 					isDue: DueState.invalid,
 				};
 			}
@@ -135,22 +141,27 @@ export class DueDate {
 			if (!dueRecurringPart) {
 				isDue = DueDate.isDueExactDate(dateObject, targetDate);
 				isRecurring = false;
+				dueType = 'normalDate';
 			} else {
-				isRecurring = true;
 				isDue = DueDate.isDueWithDate(dueRecurringPart, dateObject, targetDate);
+				isRecurring = true;
+				dueType = 'recurringWithDate';
 			}
 		} else {
 			// Due date without starting date
 			if (DueDate.dueRecurringRegexp.test(due)) {
-				isRecurring = true;
 				isDue = DueDate.isDueToday(due, targetDate);
+				isRecurring = true;
+				dueType = 'recurringWithoutStartingDate';
 			} else {
 				isDue = DueState.invalid;
+				dueType = 'invalid';
 			}
 		}
 		return {
 			isDue,
 			isRecurring,
+			dueType,
 		};
 	}
 	/**
@@ -259,5 +270,6 @@ export class DueDate {
 interface DueReturn {
 	isRecurring: boolean;
 	isDue: DueState;
+	dueType: DueType;
 	// isRange: boolean;
 }

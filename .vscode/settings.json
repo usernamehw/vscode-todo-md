@@ -5,7 +5,8 @@
 		"media/webview.js": true,
 		"media/webview.js.map": true,
 		"out": true,
-		"dist": true
+		"dist": true,
+		"media/vendor": true,
 	},
 	"eslint.workingDirectories": [
 		"./",
