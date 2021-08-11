@@ -6,6 +6,7 @@ import { TheTask } from '../TheTask';
 import { CommandIds, SortNestedTasks } from '../types';
 import { formatTask } from '../utils/taskUtils';
 
+
 export class TaskTreeItem extends TreeItem {
 	collapsibleState = TreeItemCollapsibleState.None;
 	contextValue = 'task';
@@ -33,10 +34,6 @@ export class TaskTreeItem extends TreeItem {
 			// this.iconPath = new ThemeIcon('circle-large-outline');// TODO: maybe
 		}
 	}
-	// @ts-ignore
-	get tooltip() {
-		return getTaskHover(this.task);
-	}
 }
 
 export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
@@ -51,6 +48,13 @@ export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
 	refresh(newTasks: TheTask[]) {
 		this.tasks = newTasks;
 		this._onDidChangeTreeData.fire(undefined);
+	}
+	/**
+	 * Resolve `tooltip` only on hover
+	 */
+	resolveTreeItem(item: TaskTreeItem, el: TaskTreeItem) {
+		el.tooltip = getTaskHover(el.task);
+		return el;
 	}
 
 	getTreeItem(element: TaskTreeItem): TreeItem {
