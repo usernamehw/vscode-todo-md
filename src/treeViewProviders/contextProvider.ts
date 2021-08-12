@@ -1,4 +1,5 @@
 import { Event, EventEmitter, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
+import { getTaskHover } from '../hover/getTaskHover';
 import { TheTask } from '../TheTask';
 import { ItemForProvider } from '../types';
 import { tasksToTreeItems, TaskTreeItem } from './taskProvider';
@@ -27,6 +28,16 @@ export class ContextProvider implements TreeDataProvider<ContextTreeItem | TaskT
 	refresh(newContexts: ItemForProvider[]) {
 		this.contexts = newContexts;
 		this._onDidChangeTreeData.fire(undefined);
+	}
+	/**
+	 * Resolve `tooltip` only on hover
+	 */
+	resolveTreeItem(item: ContextTreeItem | TaskTreeItem, el: ContextTreeItem | TaskTreeItem) {
+		if (el instanceof TaskTreeItem) {
+			el.tooltip = getTaskHover(el.task);
+			return el;
+		}
+		return undefined;
 	}
 
 	getTreeItem(element: ContextTreeItem | TaskTreeItem): TreeItem {
