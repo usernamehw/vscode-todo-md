@@ -264,6 +264,18 @@
 					"additionalProperties": false,
 					"default": {}
 				},
+				"todomd.progressBackground": {
+					"type": "string",
+					"markdownDescription": "Editor decoration for nested tasks progress (pie chart) background.",
+					"format": "color",
+					"default": "#c6cdd3"
+				},
+				"todomd.progressForeground": {
+					"type": "string",
+					"markdownDescription": "Editor decoration for nested tasks progress (pie chart) foreground.",
+					"format": "color",
+					"default": "#0077AA"
+				},
 				"todomd.statusBarCounterEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Controls visibility of status bar task progress item `1/3 33%`",

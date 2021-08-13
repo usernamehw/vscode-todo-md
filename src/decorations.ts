@@ -275,8 +275,8 @@ function createPieProgressSvg(size: number, done: number, all: number) {
 		width = 20,
 	}
 	const targetPercentage = done / all * 100;
-	const circleBg = `%23${'#c6cdd3'.slice(1)}`;
-	const pieBg = `%23${'#0077AA'.slice(1)}`;
+	const circleBg = `%23${extensionConfig.progressBackground.slice(1)}`;
+	const pieBg = `%23${extensionConfig.progressForeground.slice(1)}`;
 
 	let svgStr = `<svg xmlns="http://www.w3.org/2000/svg" height="${size}" width="${size}" viewBox="0 0 ${Svg.width} ${Svg.width}">`;
 	svgStr += `<circle r="10" cx="10" cy="10" fill="${circleBg}" />`;
