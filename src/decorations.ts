@@ -20,6 +20,7 @@ export function updateEditorDecorationStyle() {
 	Global.commentDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.commentForeground'),
 		isWholeLine: true,
+		fontWeight: 'normal',
 		...extensionConfig.decorations.comment,
 	});
 	Global.priorityADecorationType = window.createTextEditorDecorationType({
