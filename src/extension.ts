@@ -156,7 +156,9 @@ export async function activate(extensionContext: ExtensionContext) {
 		}
 	}
 
-	onChangeActiveTextEditor(window.activeTextEditor);// Trigger on change event at activation
+	setTimeout(() => {
+		onChangeActiveTextEditor(window.activeTextEditor);// Trigger on change event at activation
+	});
 	await updateState();
 
 	Global.webviewProvider = new TasksWebviewViewProvider(extensionState.extensionContext.extensionUri);
