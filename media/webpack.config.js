@@ -2,7 +2,7 @@
 
 const path = require('path');
 const TerserPlugin = require("terser-webpack-plugin");
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('@soda/friendly-errors-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader')
 
 const tsLoader = {

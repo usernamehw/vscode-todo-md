@@ -1,4 +1,4 @@
-import marked from 'marked';
+import { marked } from 'marked';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { mapState } from 'vuex';

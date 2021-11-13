@@ -1,6 +1,6 @@
 import fuzzysort from 'fuzzysort';
 import debounce from 'lodash/debounce';
-import marked from 'marked';
+import { marked } from 'marked';
 import Vue from 'vue';
 // @ts-ignore
 import VueAutosuggest from 'vue-autosuggest';

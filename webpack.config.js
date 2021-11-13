@@ -4,7 +4,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('@soda/friendly-errors-webpack-plugin');
 
 module.exports = (env, options) => {
 	/** @type {import('webpack').Configuration}*/
