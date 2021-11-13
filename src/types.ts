@@ -170,6 +170,10 @@ export interface ExtensionConfig {
 	 */
 	labelShowItems: boolean;
 	/**
+	 * Show projects/tags/contexts in labels in **BOLD**.
+	 */
+	useBoldTextInLabels: boolean;
+	/**
 	 * Show strike-through text decoration for completed tasks in editor.
 	 */
 	completedStrikeThrough: boolean;

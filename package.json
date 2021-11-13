@@ -370,6 +370,11 @@
 					"markdownDescription": "Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).",
 					"default": true
 				},
+				"todomd.useBoldTextInLabels": {
+					"type": "boolean",
+					"markdownDescription": "Show projects/tags/contexts in labels in **BOLD**.",
+					"default": true
+				},
 				"todomd.completedStrikeThrough": {
 					"type": "boolean",
 					"markdownDescription": "Show strike-through text decoration for completed tasks in editor.",
