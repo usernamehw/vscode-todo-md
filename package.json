@@ -1652,7 +1652,7 @@
 		"vscode-codicons": "0.0.17",
 		"vscode-test": "^1.6.1",
 		"vue-class-component": "^7.2.6",
-		"vue-loader": "^15.9.7",
+		"vue-loader": "^15.9.8",
 		"vue-property-decorator": "^9.1.2",
 		"vue-template-compiler": "^2.6.14",
 		"webpack": "^5.64.0",
