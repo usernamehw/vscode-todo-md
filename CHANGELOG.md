@@ -1,3 +1,9 @@
+## 2.9.0 `14 Nov 2021`
+
+- ✨ Keep order of projects/tags/contexts in labels + webview #36
+- ✨ Add setting to disable bold projects/tags/contexts in labels #37
+- ✨ Add option to hide pie chart [b269ec57](https://github.com/usernamehw/vscode-todo-md/commit/b269ec574fa4d3248e75a85e282a660f89256534)
+
 ## 2.8.2 `02 Aug 2021`
 
 - ✨ Show nested count in editor decoration #33
