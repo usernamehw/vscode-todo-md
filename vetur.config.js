@@ -15,7 +15,7 @@ module.exports = {
 			// **required**
 			// Where is your project?
 			// It is relative to `vetur.config.js`.
-			root: './media/app',
+			root: './app',
 			// **optional** default: `'package.json'`
 			// Where is `package.json` in the project?
 			// We use it to determine the version of vue.
@@ -24,7 +24,7 @@ module.exports = {
 			// **optional**
 			// Where is TypeScript config file in the project?
 			// It is relative to root property.
-			tsconfig: './media/tsconfig.json',
+			tsconfig: './tsconfig.json',
 		}
 	]
 }
