@@ -5,6 +5,7 @@ import { mapState } from 'vuex';
 import { TheTask } from '../../src/TheTask';
 import { durationTo } from '../../src/time/timeUtils';
 import { DueState, ExtensionConfig } from '../../src/types';
+import TaskTitleComponent from './components/TaskTitle';
 import { SendMessage } from './SendMessage';
 import { selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
 import { getAllNestedTasksWebview } from './storeUtils';
@@ -13,6 +14,9 @@ import { VueEvents } from './webviewTypes';
 @Component({
 	computed: {
 		...mapState(['config', 'filterInputValue', 'selectedTaskLineNumber']),
+	},
+	components: {
+		TaskTitle: TaskTitleComponent,
 	},
 })
 export default class Task extends Vue {

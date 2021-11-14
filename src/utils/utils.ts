@@ -1,4 +1,3 @@
-import { extensionConfig } from '../extension';
 
 /**
  * @param a small number
@@ -21,10 +20,6 @@ export function fancyNumber(n: number): string {
  * Replace english letters with their bold `utf-8` variant (hack).
  */
 export function fancyLetterBold(str: string) {
-	if (!extensionConfig.useBoldTextInLabels) {
-		return str;
-	}
-
 	const enum Unicode {
 		lowercaseLetterA = 65,
 		lowercaseLetterZ = 90,

@@ -35,7 +35,7 @@ interface Filter {
 /**
  * Take tasks and a filter string and return filtered tasks.
  */
-export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
+export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 	if (filterStr.length === 0) {
 		return tasks;
 	}
@@ -172,7 +172,7 @@ export function filterItems(tasks: TheTask[], filterStr: string): TheTask[] {
 /**
  * Determine which type of filter this is and if it has negation or range (<,>).
  */
-function parseFilter(filterStr: string) {
+function parseFilter(filterStr = '') {
 	const filters: Filter[] = [];
 	const titleRegex = /(-)?"(.+?)"/;
 	const titleMatch = titleRegex.exec(filterStr);

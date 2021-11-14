@@ -28,26 +28,10 @@
         </template><template v-if="duration">
             <span class="task__duration"
                   title="Duration (time since started)"><span class="icon codicon codicon-watch"></span> {{ duration }}</span>
-            </template><span class="task__title"
-                  v-html="taskTitle"></span><!--
-        --><template v-for="tag of model.tags">
-            <span class="task__tag"
-                  :style="styleForTag(tag)"
-                  @click.exact.stop="updateFilterValue('#' + tag)"
-				  @click.ctrl.stop="updateFilterValue('#' + tag, true)">{{ tag }}</span>
-        </template><!--
-        --><template v-for="project of model.projects">
-            <span class="task__project"
-                  @click.exact.stop="updateFilterValue('+' + project)"
-                  @click.ctrl.stop="updateFilterValue('+' + project, true)">{{ project }}</span>
-        </template><!--
-        --><template v-for="context of model.contexts">
-            <span class="task__context"
-                  @click.exact.stop="updateFilterValue('@' + context)"
-                  @click.ctrl.stop="updateFilterValue('@' + context, true)">{{ context }}</span>
-        </template><!--
+            </template>
+        <TaskTitle :stuff="model.title" /><!--
         --><span v-if="model.count"
-              class="task__count-container">
+                 class="task__count-container">
             <button class="task__decrement-count"
                     @click.stop="decrementCount">-</button>
             <span class="task__count">{{ model.count.current }} / {{ model.count.needed }}</span>

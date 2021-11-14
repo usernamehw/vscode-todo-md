@@ -151,24 +151,23 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 					temp += tag.length + 1;
 					tags.push(tag);
 				}
+				text.push(word);
 				break;
 			}
 			case '@': {
 				if (word.length !== 1) {
 					contexts.push(word.slice(1));
 					contextRanges.push(new Range(lineNumber, index, lineNumber, index + word.length));
-				} else {
-					text.push(word);
 				}
+				text.push(word);
 				break;
 			}
 			case '+': {
 				if (word.length !== 1) {
 					projects.push(word.slice(1));
 					projectRanges.push(new Range(lineNumber, index, lineNumber, index + word.length));
-				} else {
-					text.push(word);
 				}
+				text.push(word);
 				break;
 			}
 			case '(': {

@@ -74,23 +74,34 @@ export function formatTask(task: TheTask, {
 			result += extensionConfig.labelInvalidDueSymbol;
 		}
 	}
-	result += task.title;
+	result += makeBoldTagProjectContext(task.title);
 	if (task.count) {
 		result += ` ${task.count.current}/${task.count.needed}`;
-	}
-	if (extensionConfig.labelShowItems) {
-		for (const project of task.projects) {
-			result += ` +${fancyLetterBold(project)}`;
-		}
-		for (const tag of task.tags) {
-			result += ` #${fancyLetterBold(tag)}`;
-		}
-		for (const context of task.contexts) {
-			result += ` @${fancyLetterBold(context)}`;
-		}
 	}
 	if (result.length === 0) {
 		return task.rawText;
 	}
 	return result;
+}
+
+export function makeBoldTagProjectContext(taskTitle: string): string {
+	if (extensionConfig.useBoldTextInLabels) {
+		const words = taskTitle.split(' ');
+
+		const resultWords = [];
+		for (const word of words) {
+			if (
+				word.length > 1 &&
+				(word[0] === '#' || word[0] === '+' || word[0] === '@')
+			) {
+				resultWords.push(fancyLetterBold(word));
+			} else {
+				resultWords.push(word);
+			}
+		}
+
+		return resultWords.join(' ');
+	} else {
+		return taskTitle;
+	}
 }
