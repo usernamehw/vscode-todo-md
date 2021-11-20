@@ -1,4 +1,3 @@
-import { marked } from 'marked';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { mapState } from 'vuex';
@@ -7,7 +6,7 @@ import { durationTo } from '../../src/time/timeUtils';
 import { DueState, ExtensionConfig } from '../../src/types';
 import TaskTitleComponent from './components/TaskTitle';
 import { SendMessage } from './SendMessage';
-import { selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
+import { selectTaskMutation, toggleDoneMutation } from './store';
 import { getAllNestedTasksWebview } from './storeUtils';
 import { VueEvents } from './webviewTypes';
 
@@ -53,33 +52,13 @@ export default class Task extends Vue {
 	revealTask() {
 		SendMessage.revealTask(this.model.lineNumber);
 	}
-	updateFilterValue(newValue: string, append = false) {
-		if (append) {
-			updateFilterValueMutation(`${this.filterInputValue} ${newValue}`);
-		} else {
-			updateFilterValueMutation(newValue);
-		}
-		this.$root.$emit(VueEvents.focusFilterInput);
-	}
 	incrementCount() {
 		SendMessage.incrementCount(this.model.lineNumber);
 	}
 	decrementCount() {
 		SendMessage.decrementCount(this.model.lineNumber);
 	}
-	styleForTag(tag: string) {
-		if (tag in this.config.tagStyles) {
-			return this.config.tagStyles[tag];
-		}
-		return undefined;
-	}
 	// ──────────────────────────────────────────────────────────────────────
-	/**
-	 * Task title (either markdown or text)
-	 */
-	get taskTitle() {
-		return this.model.title.trim().length !== 0 ? marked(this.model.title) : this.model.title;
-	}
 	/**
 	 * Computed classes assigned to `task` element
 	 */

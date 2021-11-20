@@ -31,7 +31,13 @@ export default class TaskTitle extends Vue {
 		}
 		this.$root.$emit(VueEvents.focusFilterInput);
 	}
-
+	styleForTag(tag: string) {
+		if (tag in this.config.tagStyles) {
+			return this.config.tagStyles[tag];
+		}
+		return undefined;
+	}
+	// ──────────────────────────────────────────────────────────────────────
 	render(h: CreateElement) {
 		const returnEl = h('span', {}, []);
 		const words = this.stuff.split(' ');
@@ -51,8 +57,14 @@ export default class TaskTitle extends Vue {
 					},
 				}));
 
+				let style;
+				if (word[0] === '#') {
+					style = this.styleForTag(word.slice(1));
+				}
+
 				returnEl.children?.push(h('span', {
 					class: word[0] === '#' ? 'task__tag' : word[0] === '+' ? 'task__project' : 'task__context',
+					style,
 					domProps: {
 						innerText: word,
 					},
