@@ -42,12 +42,16 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		this.sendEverything();
+		// this.sendEverything();
 		this.updateTitle(extensionState.tasksAsTree.length);
 
 		webviewView.webview.onDidReceiveMessage(async (message: MessageFromWebview) => {
 			switch (message.type) {
 				// ──── Needs to update everything ────────────────────────────
+				case 'webviewLoaded': {
+					this.sendEverything();
+					break;
+				}
 				case 'toggleDone': {
 					await toggleDoneAtLine(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();

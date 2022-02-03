@@ -218,6 +218,8 @@ export default class App extends Vue {
 	}
 	// ──────────────────────────────────────────────────────────────────────
 	mounted() {
+		SendMessage.webviewLoaded();
+
 		App.focusFilterInput();
 		window.addEventListener('focus', App.focusFilterInput);
 		setTimeout(() => {

@@ -50,7 +50,9 @@
 				"vue/name-property-casing": [1, "PascalCase"],
 				"vue/mustache-interpolation-spacing": [1, "always"],
 				"vue/max-attributes-per-line": [1, {
-					"singleline": 1,
+					"singleline": {
+						"max": 1
+					},
 					"multiline": {
 						"max": 1,
 						"allowFirstLine": true

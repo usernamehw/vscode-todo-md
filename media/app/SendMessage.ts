@@ -91,4 +91,10 @@ export class SendMessage {
 			value: lineNumber,
 		});
 	}
+	static webviewLoaded() {
+		vscodeApi.postMessage({
+			type: 'webviewLoaded',
+			value: true,
+		});
+	}
 }
