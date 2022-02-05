@@ -235,6 +235,7 @@ export default class App extends Vue {
 		});
 
 		window.addEventListener('click', e => {
+			// TODO: This logic should be in Extension/followLink()
 			const link = (e.target as HTMLElement).closest('a');
 			if (link) {
 				if (link.href.startsWith('file:///')) {

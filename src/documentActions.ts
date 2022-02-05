@@ -31,7 +31,7 @@ export async function editTask(document: TextDocument, task: TheTask) {
 /**
  * Add `{h}` special tag
  */
-export async function hideTask(document: TextDocument, lineNumber: number) {
+export async function hideTaskAtLine(document: TextDocument, lineNumber: number) {
 	const edit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);
@@ -89,7 +89,7 @@ export async function toggleTaskCollapseRecursive(document: TextDocument, lineNu
 /**
  * Insert/Replace due date
  */
-export async function setDueDate(document: TextDocument, lineNumber: number, newDueDate: string) {
+export async function setDueDateAtLine(document: TextDocument, lineNumber: number, newDueDate: string) {
 	const dueDate = `{due:${newDueDate}}`;
 	const edit = new WorkspaceEdit();
 	const task = getTaskAtLineExtension(lineNumber);
@@ -108,7 +108,7 @@ export async function setDueDate(document: TextDocument, lineNumber: number, new
 /**
  * Start time tracking (task duration). Triggered manually by user.
  */
-export async function startTask(document: TextDocument, lineNumber: number) {
+export async function startTaskAtLine(document: TextDocument, lineNumber: number) {
 	const edit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);
