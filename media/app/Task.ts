@@ -45,6 +45,7 @@ export default class Task extends Vue {
 	}
 	selectThisTask() {
 		selectTaskMutation(this.model.lineNumber);
+		this.$root.$emit(VueEvents.focusFilterInput);
 	}
 	toggleDone() {
 		toggleDoneMutation(this.model);
