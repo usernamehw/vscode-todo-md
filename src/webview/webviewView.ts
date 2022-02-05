@@ -42,9 +42,6 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		// this.sendEverything();
-		this.updateTitle(extensionState.tasksAsTree.length);
-
 		webviewView.webview.onDidReceiveMessage(async (message: MessageFromWebview) => {
 			switch (message.type) {
 				// ──── Needs to update everything ────────────────────────────
@@ -150,6 +147,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					config: extensionConfig.webview,
 				},
 			});
+			this.updateTitle(extensionState.tasksAsTree.length);
 		}
 	}
 	/**
