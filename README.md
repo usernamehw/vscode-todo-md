@@ -121,6 +121,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `todomd.toggleDone` <kbd>Alt</kbd>+<kbd>D</kbd> - Toggle Done (Completion)
 - `todomd.toggleComment` - Toggle comment. (Not binded by default). You can bind it only for active file: **{"key": "ctrl+/","command": "todomd.toggleComment","when": "editorFocus && todomd:isActive"},** in keybindings.json.
 - `todomd.startTask` - Start task (when completed adds `{duration}` tag)
+- `todomd.completeTask` - Pick and complete a task.
 - `todomd.incrementPriority` - Increment priority.
 - `todomd.decrementPriority` - Decrement priority.
 - `todomd.getNextTask` - Get due task from main file. If none are due - get one with the highest priority.

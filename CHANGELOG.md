@@ -1,3 +1,9 @@
+## 2.9.1 `06 Feb 2022`
+
+- ✨ Use inline buttons in `todomd.completeTask` command
+- 🐛 Update initial webview content only after its loaded
+- 🐛 fix `todomd.webview.tagStyles` setting
+
 ## 2.9.0 `14 Nov 2021`
 
 - ✨ Keep order of projects/tags/contexts in labels + webview #36
