@@ -1,4 +1,4 @@
-import { ThemeIcon, window } from 'vscode';
+import { QuickInputButton, ThemeIcon, window } from 'vscode';
 import { incrementCountForTask, revealTask, toggleDoneAtLine } from '../documentActions';
 import { extensionState, updateState } from '../extension';
 import { defaultSortTasks } from '../sort';
@@ -18,34 +18,38 @@ export async function completeTask() {
 	const qp = window.createQuickPick();
 	qp.title = 'Complete a task';
 	qp.placeholder = 'Choose a task to complete';
-	qp.items = notCompletedTasks;
-	const enum Buttons {
-		followLinkBtn = 'Follow link',
-		revealTaskBtn = 'Reveal task',
-	}
-	qp.buttons = [
-		{
-			iconPath: new ThemeIcon('link-external'),
-			tooltip: Buttons.followLinkBtn,
-		},
-		{
-			iconPath: new ThemeIcon('go-to-file'),
-			tooltip: Buttons.revealTaskBtn,
-		},
-	];
+
+	const revealTaskInlineButton: QuickInputButton = {
+		iconPath: new ThemeIcon('go-to-file'),
+		tooltip: 'Reveal task',
+	};
+	const followLinkInlineButton: QuickInputButton = {
+		iconPath: new ThemeIcon('link-external'),
+		tooltip: 'Follow link',
+	};
+
+	qp.items = notCompletedTasks.map(item => ({
+		...item,
+		buttons: [
+			revealTaskInlineButton,
+			followLinkInlineButton,
+		],
+	}));
+
 	let activeQuickPickItem: typeof notCompletedTasks[0];
 	qp.onDidChangeActive(e => {
 		// @ts-ignore
 		activeQuickPickItem = e[0];
 	});
-	qp.onDidTriggerButton(e => {
-		const task = getTaskAtLineExtension(activeQuickPickItem.ln);
+	qp.onDidTriggerItemButton(e => {
+		// @ts-ignore
+		const task = getTaskAtLineExtension(e.item.ln);
 		if (!task) {
 			return;
 		}
-		if (e.tooltip === Buttons.followLinkBtn) {
+		if (e.button.tooltip === followLinkInlineButton.tooltip) {
 			followLinks(task.links);
-		} else if (e.tooltip === Buttons.revealTaskBtn) {
+		} else if (e.button.tooltip === revealTaskInlineButton.tooltip) {
 			revealTask(task.lineNumber);
 		}
 		qp.hide();
