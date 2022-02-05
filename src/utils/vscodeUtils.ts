@@ -49,10 +49,17 @@ export async function followLinks(links: Link[]) {
  * Opens a link externally using the default application.
  */
 export async function followLink(linkString: string) {
-	return await env.openExternal(Uri.parse(linkString));
+	if (linkString.startsWith('file:///')) {
+		return await openFileInEditorByPath(linkString);
+	} else if (linkString.startsWith('app:///')) {
+		return await env.openExternal(Uri.parse(linkString.slice(7)));
+	} else {
+		return await env.openExternal(Uri.parse(linkString));
+	}
 }
 /**
  * Open file in vscode.
+ * TODO: what's the difference between openFileInEditor & this one?
  */
 export async function openFileInEditorByPath(path: string) {
 	await openFileInEditor(Uri.parse(path).fsPath);

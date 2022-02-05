@@ -28,7 +28,7 @@ marked.Renderer.prototype.link = (href, title = '', text) => {
 		classes = 'btn btn--link';
 		text = text.replace(/^btn:/, '');
 	}
-	return `<a href="${href}" title="${href}" class="${classes}">${text}</a>`;
+	return `<a data-href="${href}" href="javascript:void(0);" title="${href}" class="${classes}">${text}</a>`;
 };
 
 Vue.use(VueAutosuggest);
@@ -235,14 +235,9 @@ export default class App extends Vue {
 		});
 
 		window.addEventListener('click', e => {
-			// TODO: This logic should be in Extension/followLink()
 			const link = (e.target as HTMLElement).closest('a');
-			if (link) {
-				if (link.href.startsWith('file:///')) {
-					SendMessage.openInEditor(link.href);
-				} else if (link.href.startsWith('app:///')) {
-					SendMessage.openInDefaultApp(link.href.slice(7));
-				}
+			if (link && link.dataset.href) {
+				SendMessage.followLink(link.dataset.href);
 			}
 		});
 

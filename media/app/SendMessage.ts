@@ -52,16 +52,10 @@ export class SendMessage {
 			value: lineNumber,
 		});
 	}
-	static openInEditor(path: string) {
+	static followLink(text: string) {
 		vscodeApi.postMessage({
-			type: 'openFileByPath',
-			value: path,
-		});
-	}
-	static openInDefaultApp(path: string) {
-		vscodeApi.postMessage({
-			type: 'openInDefaultApp',
-			value: path,
+			type: 'followLink',
+			value: text,
 		});
 	}
 	static showNotification(text: string) {

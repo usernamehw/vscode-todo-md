@@ -107,11 +107,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					this.updateTitle(message.value);
 					break;
 				}
-				case 'openFileByPath': {
-					openFileInEditorByPath(message.value);
-					break;
-				}
-				case 'openInDefaultApp': {
+				case 'followLink': {
 					followLink(message.value);
 					break;
 				}
