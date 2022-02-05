@@ -4,13 +4,13 @@ module.exports = {
 	// override vscode settings part
 	// Notice: It only affects the settings used by Vetur.
 	settings: {
-		"vetur.useWorkspaceDependencies": true,
-		"vetur.experimental.templateInterpolationService": true
+		'vetur.useWorkspaceDependencies': false,
+		'vetur.experimental.templateInterpolationService': true,
 	},
 	// **optional** default: `[{ root: './' }]`
 	// support monorepos
 	projects: [
-		"./media",
+		'./media',
 		{
 			// **required**
 			// Where is your project?
@@ -25,6 +25,6 @@ module.exports = {
 			// Where is TypeScript config file in the project?
 			// It is relative to root property.
 			tsconfig: './tsconfig.json',
-		}
-	]
-}
+		},
+	],
+};

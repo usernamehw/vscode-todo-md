@@ -6,7 +6,7 @@
 		"browser": true
 	},
 	"parserOptions": {
-		"ecmaVersion": 2018,
+		"ecmaVersion": 2019,
 		"sourceType": "module",
 		"project": "./tsconfig.json"
 	},
@@ -20,8 +20,9 @@
 		{
 			"files": ["*.vue"],
 			"parserOptions": {
-				"parser": "babel-eslint",
-				"ecmaVersion": 2018,
+				"parser": "@babel/eslint-parser",
+				"ecmaVersion": 2019,
+				"requireConfigFile": false,
 				"sourceType": "module"
 			},
 			"extends": [
