@@ -77,7 +77,7 @@ export function defaultSortTasks(tasks: TheTask[]) {
 		...invalidDue,
 		...sortTasks(overdueTasks, SortProperty.overdue),
 		...dueTasks,
-		...sortTasks(dueSpecifiedButNotDue, SortProperty.notDue),
 		...dueNotSpecified,
+		...sortTasks(dueSpecifiedButNotDue, SortProperty.notDue),
 	];
 }
