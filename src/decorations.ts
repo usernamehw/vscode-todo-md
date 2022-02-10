@@ -25,26 +25,32 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.priorityADecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityAForeground'),
+		fontWeight: 'bold',
 		...extensionConfig.decorations.priorityAForeground,
 	});
 	Global.priorityBDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityBForeground'),
+		fontWeight: 'bold',
 		...extensionConfig.decorations.priorityBForeground,
 	});
 	Global.priorityCDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityCForeground'),
+		fontWeight: 'bold',
 		...extensionConfig.decorations.priorityCForeground,
 	});
 	Global.priorityDDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityDForeground'),
+		fontWeight: 'bold',
 		...extensionConfig.decorations.priorityDForeground,
 	});
 	Global.priorityEDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityEForeground'),
+		fontWeight: 'bold',
 		...extensionConfig.decorations.priorityEForeground,
 	});
 	Global.priorityFDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityFForeground'),
+		fontWeight: 'bold',
 		...extensionConfig.decorations.priorityFForeground,
 	});
 	Global.tagsDecorationType = window.createTextEditorDecorationType({
