@@ -33,7 +33,6 @@ import { showGlobalState } from './commands/showGlobalState';
 import { showWebviewSettings } from './commands/showWebviewSettings';
 import { sortByDefault } from './commands/sortByDefault';
 import { sortByPriority } from './commands/sortByPriority';
-import { sortTaskParts } from './commands/sortTaskParts';
 import { specifyDefaultArchiveFileCommand } from './commands/specifyDefaultArchiveFile';
 import { specifyDefaultFileCommand } from './commands/specifyDefaultFile';
 import { startTask } from './commands/startTask';
@@ -99,7 +98,6 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandIds.toggleComment, toggleComment);
 	commands.registerTextEditorCommand(CommandIds.filter, filter);
 	commands.registerTextEditorCommand(CommandIds.replaceWithToday, replaceWithToday);
-	commands.registerTextEditorCommand(CommandIds.sortTaskParts, sortTaskParts);
 	commands.registerTextEditorCommand(CommandIds.sortByPriority, sortByPriority);
 	commands.registerTextEditorCommand(CommandIds.sortByDefault, sortByDefault);
 	commands.registerTextEditorCommand(CommandIds.createSimilarTask, createSimilarTask);
