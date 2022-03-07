@@ -238,15 +238,15 @@ interface ParsedDocument {
 export async function parseDocument(document: TextDocument): Promise<ParsedDocument> {
 	const tasks: TheTask[] = [];
 	const commentLines: Range[] = [];
+	let startLine = 0;
 
 	const links = await commands.executeCommand<DocumentLink[]>('vscode.executeLinkProvider', document.uri) ?? [];
-	
-    // Ignore markdown yaml frontmatter
-	let regex = /^---(?:.|\r|\n)*^---/m;
-	let match = regex.exec(document.getText());
-	let startLine = 0;
-	if (match) {
-		startLine = match[0].split(/\r\n|\r|\n/).length;
+
+	// Ignore markdown yaml frontmatter
+	const frontMatterHeaderRegex = /^---(?:.|\r|\n)*^---/m;
+	const frontMatterHeaderMatch = frontMatterHeaderRegex.exec(document.getText());
+	if (frontMatterHeaderMatch) {
+		startLine = frontMatterHeaderMatch[0]?.split(/\r\n|\r|\n/).length || 0;
 	}
 
 	for (let i = startLine; i < document.lineCount; i++) {
