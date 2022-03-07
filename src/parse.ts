@@ -240,8 +240,16 @@ export async function parseDocument(document: TextDocument): Promise<ParsedDocum
 	const commentLines: Range[] = [];
 
 	const links = await commands.executeCommand<DocumentLink[]>('vscode.executeLinkProvider', document.uri) ?? [];
+	
+    // Ignore markdown yaml frontmatter
+	let regex = /^---(?:.|\r|\n)*^---/m;
+	let match = regex.exec(document.getText());
+	let startLine = 0;
+	if (match) {
+		startLine = match[0].split(/\r\n|\r|\n/).length;
+	}
 
-	for (let i = 0; i < document.lineCount; i++) {
+	for (let i = startLine; i < document.lineCount; i++) {
 		const parsedLine = parseLine(document.lineAt(i));
 		switch (parsedLine.lineType) {
 			case 'empty': continue;
