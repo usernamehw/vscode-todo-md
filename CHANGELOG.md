@@ -1,3 +1,10 @@
+## 2.9.2 `10 Mar 2022`
+
+- ✨ Ignore yaml frontmatter header
+- ✨ Use bold font weight for priority decoration
+- ✨ Sort not due tasks above tasks without due date
+- 💥 remove `sortTaskParts` command
+
 ## 2.9.1 `06 Feb 2022`
 
 - ✨ Use inline buttons in `todomd.completeTask` command
