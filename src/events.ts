@@ -134,7 +134,7 @@ export function deactivateEditorFeatures() {
  */
 export const updateEverything = throttle(async (editor?: TextEditor) => {
 	await updateState();
-	if (editor) {
+	if (editor && isTheRightFileName(editor)) {
 		doUpdateEditorDecorations(editor);
 		statusBar.updateText(extensionState.tasks);
 	}
