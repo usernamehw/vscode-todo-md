@@ -7,6 +7,7 @@ import { getDateInISOFormat } from '../time/timeUtils';
 import { specialTagDescription, SpecialTagName } from '../utils/extensionUtils';
 import { unique } from '../utils/utils';
 import { getWordAtPosition, getWordRangeAtPosition } from '../utils/vscodeUtils';
+import { getTodoMdFileDocumentSelector } from './languageFeatures';
 /**
  * Update editor autocomplete/suggest
  */
@@ -18,7 +19,7 @@ export function updateCompletions() {
 	Global.specialTagsAutocompleteDisposable?.dispose();
 
 	Global.tagAutocompleteDisposable = languages.registerCompletionItemProvider(
-		{ scheme: 'file' },
+		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
 				const wordAtCursor = getWordAtPosition(document, position);
@@ -39,7 +40,7 @@ export function updateCompletions() {
 		'#',
 	);
 	Global.projectAutocompleteDisposable = languages.registerCompletionItemProvider(
-		{ scheme: 'file' },
+		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
 				const wordAtCursor = getWordAtPosition(document, position);
@@ -60,7 +61,7 @@ export function updateCompletions() {
 		'+',
 	);
 	Global.contextAutocompleteDisposable = languages.registerCompletionItemProvider(
-		{ scheme: 'file' },
+		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
 				const wordAtCursor = getWordAtPosition(document, position);
@@ -81,7 +82,7 @@ export function updateCompletions() {
 		'@',
 	);
 	Global.generalAutocompleteDisposable = languages.registerCompletionItemProvider(
-		{ scheme: 'file' },
+		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
 				const today = new CompletionItem('TODAY', CompletionItemKind.Constant);
@@ -103,7 +104,7 @@ export function updateCompletions() {
 		'',
 	);
 	Global.specialTagsAutocompleteDisposable = languages.registerCompletionItemProvider(
-		{ scheme: 'file' },
+		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
 				const charBeforeCursor = document.getText(new Range(position.line, position.character === 0 ? 0 : position.character - 1, position.line, position.character));
@@ -136,7 +137,7 @@ export function updateCompletions() {
 		'{',
 	);
 	Global.setDueDateAutocompleteDisposable = languages.registerCompletionItemProvider(
-		{ scheme: 'file' },
+		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
 				const wordRange = getWordRangeAtPosition(document, position);

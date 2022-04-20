@@ -2,15 +2,14 @@ import { languages, Location, Range } from 'vscode';
 import { Global } from '../extension';
 import { parseWord } from '../parse';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
+import { getTodoMdFileDocumentSelector } from './languageFeatures';
 import { getAllContextRangesInDocument, getAllProjectRangesInDocument, getAllTagRangesInDocument } from './renameProvider';
 
 export function updateReferenceProvider() {
 	Global.referenceProviderDisposable?.dispose();
 
 	Global.referenceProviderDisposable = languages.registerReferenceProvider(
-		{
-			scheme: 'file',
-		},
+		getTodoMdFileDocumentSelector(),
 		{
 			provideReferences(document, position, context) {
 				const range = getWordRangeAtPosition(document, position);

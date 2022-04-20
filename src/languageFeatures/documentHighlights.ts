@@ -1,16 +1,15 @@
 import { DocumentHighlight, DocumentHighlightKind, languages, Range } from 'vscode';
-import { Global } from '../extension';
+import { extensionConfig, Global } from '../extension';
 import { parseWord } from '../parse';
-import { getAllContextRangesInDocument, getAllProjectRangesInDocument, getAllTagRangesInDocument } from './renameProvider';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
+import { getTodoMdFileDocumentSelector } from './languageFeatures';
+import { getAllContextRangesInDocument, getAllProjectRangesInDocument, getAllTagRangesInDocument } from './renameProvider';
 
 export function updateDocumentHighlights() {
 	Global.documentHighlightsDisposable?.dispose();
 
 	Global.documentHighlightsDisposable = languages.registerDocumentHighlightProvider(
-		{
-			scheme: 'file',
-		},
+		getTodoMdFileDocumentSelector(),
 		{
 			provideDocumentHighlights(document, position) {
 				const wordRange = getWordRangeAtPosition(document, position);

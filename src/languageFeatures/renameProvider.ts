@@ -3,14 +3,13 @@ import { Global } from '../extension';
 import { ParsedWordContext, ParsedWordProject, ParsedWordTags, parseWord } from '../parse';
 import { forEachTask } from '../utils/taskUtils';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
+import { getTodoMdFileDocumentSelector } from './languageFeatures';
 
 export function updateRenameProvider() {
 	Global.renameProviderDisposable?.dispose();
 
 	Global.renameProviderDisposable = languages.registerRenameProvider(
-		{
-			scheme: 'file',
-		},
+		getTodoMdFileDocumentSelector(),
 		{
 			provideRenameEdits(document, position, newName) {
 				const range = getWordRangeAtPosition(document, position);

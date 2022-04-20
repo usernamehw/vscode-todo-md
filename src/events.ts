@@ -4,7 +4,7 @@ import { languages, TextDocumentChangeEvent, TextEditor, window, workspace } fro
 import { doUpdateEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { Constants, extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
-import { updateHover } from './hover/hoverProvider';
+import { updateHover } from './languageFeatures/hoverProvider';
 import { updateCompletions } from './languageFeatures/completionProviders';
 import { updateDocumentHighlights } from './languageFeatures/documentHighlights';
 import { updateReferenceProvider } from './languageFeatures/referenceProvider';

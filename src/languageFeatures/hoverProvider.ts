@@ -1,16 +1,16 @@
 import { Hover, languages, MarkdownString } from 'vscode';
 import { extensionState, Global } from '../extension';
+import { getTodoMdFileDocumentSelector } from './languageFeatures';
 import { parseWord } from '../parse';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
 import { getTaskHover } from './getTaskHover';
 
 export function updateHover() {
-	if (Global.hoverDisposable) {
-		Global.hoverDisposable.dispose();
-	}
+	Global.hoverDisposable?.dispose();
+
 	Global.hoverDisposable = languages.registerHoverProvider(
-		{ scheme: 'file' },
+		getTodoMdFileDocumentSelector(),
 		{
 			provideHover(document, position, token) {
 				const task = getTaskAtLineExtension(position.line);

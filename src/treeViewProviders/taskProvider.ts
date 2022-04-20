@@ -1,6 +1,6 @@
 import { Command, Event, EventEmitter, ThemeColor, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { extensionConfig } from '../extension';
-import { getTaskHover } from '../hover/getTaskHover';
+import { getTaskHover } from '../languageFeatures/getTaskHover';
 import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
 import { CommandIds, SortNestedTasks } from '../types';
