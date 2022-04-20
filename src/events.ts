@@ -114,14 +114,12 @@ export function activateEditorFeatures(editor: TextEditor) {
  */
 export function deactivateEditorFeatures() {
 	Global.changeTextDocumentDisposable?.dispose();
-	if (Global.contextAutocompleteDisposable) {
-		Global.contextAutocompleteDisposable.dispose();
-		Global.tagAutocompleteDisposable.dispose();
-		Global.projectAutocompleteDisposable.dispose();
-		Global.generalAutocompleteDisposable.dispose();
-		Global.specialTagsAutocompleteDisposable.dispose();
-		Global.setDueDateAutocompleteDisposable.dispose();
-	}
+	Global.contextAutocompleteDisposable?.dispose();
+	Global.tagAutocompleteDisposable?.dispose();
+	Global.projectAutocompleteDisposable?.dispose();
+	Global.generalAutocompleteDisposable?.dispose();
+	Global.specialTagsAutocompleteDisposable?.dispose();
+	Global.setDueDateAutocompleteDisposable?.dispose();
 	Global.documentHighlightsDisposable?.dispose();
 	Global.renameProviderDisposable?.dispose();
 	Global.referenceProviderDisposable?.dispose();

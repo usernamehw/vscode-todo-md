@@ -11,13 +11,11 @@ import { getWordAtPosition, getWordRangeAtPosition } from '../utils/vscodeUtils'
  * Update editor autocomplete/suggest
  */
 export function updateCompletions() {
-	if (Global.tagAutocompleteDisposable) {
-		Global.tagAutocompleteDisposable.dispose();
-		Global.projectAutocompleteDisposable.dispose();
-		Global.contextAutocompleteDisposable.dispose();
-		Global.generalAutocompleteDisposable.dispose();
-		Global.specialTagsAutocompleteDisposable.dispose();
-	}
+	Global.tagAutocompleteDisposable?.dispose();
+	Global.projectAutocompleteDisposable?.dispose();
+	Global.contextAutocompleteDisposable?.dispose();
+	Global.generalAutocompleteDisposable?.dispose();
+	Global.specialTagsAutocompleteDisposable?.dispose();
 
 	Global.tagAutocompleteDisposable = languages.registerCompletionItemProvider(
 		{ scheme: 'file' },

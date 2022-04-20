@@ -239,33 +239,28 @@ export async function updateState() {
 	extensionState.contexts = treeItems.contexts;
 }
 function disposeEditorDisposables() {
-	if (Global.completedTaskDecorationType) {
-		// if one set - that means that all decorations are set
-		Global.completedTaskDecorationType.dispose();
-		Global.commentDecorationType.dispose();
-		Global.priorityADecorationType.dispose();
-		Global.priorityBDecorationType.dispose();
-		Global.priorityCDecorationType.dispose();
-		Global.priorityDDecorationType.dispose();
-		Global.priorityEDecorationType.dispose();
-		Global.priorityFDecorationType.dispose();
-		Global.tagsDecorationType.dispose();
-		Global.tagWithDelimiterDecorationType.dispose();
-		Global.tagsDelimiterDecorationType.dispose();
-		Global.specialTagDecorationType.dispose();
-		Global.projectDecorationType.dispose();
-		Global.contextDecorationType.dispose();
-		Global.notDueDecorationType.dispose();
-		Global.dueDecorationType.dispose();
-		Global.overdueDecorationType.dispose();
-		Global.invalidDueDateDecorationType.dispose();
-		Global.closestDueDateDecorationType.dispose();
-		Global.nestedTasksCountDecorationType.dispose();
-		Global.nestedTasksPieDecorationType.dispose();
-	}
-	if (Global.changeTextDocumentDisposable) {
-		Global.changeTextDocumentDisposable.dispose();
-	}
+	Global.completedTaskDecorationType?.dispose();
+	Global.commentDecorationType?.dispose();
+	Global.priorityADecorationType?.dispose();
+	Global.priorityBDecorationType?.dispose();
+	Global.priorityCDecorationType?.dispose();
+	Global.priorityDDecorationType?.dispose();
+	Global.priorityEDecorationType?.dispose();
+	Global.priorityFDecorationType?.dispose();
+	Global.tagsDecorationType?.dispose();
+	Global.tagWithDelimiterDecorationType?.dispose();
+	Global.tagsDelimiterDecorationType?.dispose();
+	Global.specialTagDecorationType?.dispose();
+	Global.projectDecorationType?.dispose();
+	Global.contextDecorationType?.dispose();
+	Global.notDueDecorationType?.dispose();
+	Global.dueDecorationType?.dispose();
+	Global.overdueDecorationType?.dispose();
+	Global.invalidDueDateDecorationType?.dispose();
+	Global.closestDueDateDecorationType?.dispose();
+	Global.nestedTasksCountDecorationType?.dispose();
+	Global.nestedTasksPieDecorationType?.dispose();
+	Global.changeTextDocumentDisposable?.dispose();
 }
 /**
  * Update global storage value of last visit by file
@@ -277,16 +272,16 @@ export async function updateLastVisitGlobalState(stringUri: string, date: Date) 
 
 export function deactivate() {
 	disposeEditorDisposables();
-	Global.tagAutocompleteDisposable.dispose();
-	Global.projectAutocompleteDisposable.dispose();
-	Global.contextAutocompleteDisposable.dispose();
-	Global.generalAutocompleteDisposable.dispose();
-	Global.specialTagsAutocompleteDisposable.dispose();
-	Global.setDueDateAutocompleteDisposable.dispose();
-	Global.changeTextDocumentDisposable.dispose();
-	Global.hoverDisposable.dispose();
-	Global.documentHighlightsDisposable.dispose();
-	Global.renameProviderDisposable.dispose();
-	Global.referenceProviderDisposable.dispose();
-	Global.changeActiveTextEditorDisposable.dispose();
+	Global.tagAutocompleteDisposable?.dispose();
+	Global.projectAutocompleteDisposable?.dispose();
+	Global.contextAutocompleteDisposable?.dispose();
+	Global.generalAutocompleteDisposable?.dispose();
+	Global.specialTagsAutocompleteDisposable?.dispose();
+	Global.setDueDateAutocompleteDisposable?.dispose();
+	Global.changeTextDocumentDisposable?.dispose();
+	Global.hoverDisposable?.dispose();
+	Global.documentHighlightsDisposable?.dispose();
+	Global.renameProviderDisposable?.dispose();
+	Global.referenceProviderDisposable?.dispose();
+	Global.changeActiveTextEditorDisposable?.dispose();
 }
