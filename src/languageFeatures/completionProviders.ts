@@ -93,12 +93,29 @@ export function updateCompletions() {
 				setDueDateTomorrow.insertText = `{due:${getDateInISOFormat(dayjs().add(1, 'day'))}}`;
 				const setDueDateYesterday = new CompletionItem('SET_DUE_YESTERDAY', CompletionItemKind.Constant);
 				setDueDateYesterday.insertText = `{due:${getDateInISOFormat(dayjs().subtract(1, 'day'))}}`;
+				const setDueDateThisWeek = new CompletionItem('SET_DUE_THISWEEK', CompletionItemKind.Constant);
+				setDueDateThisWeek.insertText = `{due:${getDateInISOFormat(dayjs().day(5))}}`;
+				const setDueDateNextWeek = new CompletionItem('SET_DUE_NEXTWEEK', CompletionItemKind.Constant);
+				setDueDateNextWeek.insertText = `{due:${getDateInISOFormat(dayjs().day(5).add(7, 'day'))}}`;
+
+				let toreturn = [];
+				var i:number;
+				for (i=1;i<=7;i++) {
+					const date_obj = dayjs().add(i,'day');
+					const day_of_week = date_obj.format('ddd').toUpperCase();
+					const setDueX = new CompletionItem(`SET_DUE_${day_of_week}`, CompletionItemKind.Constant);
+					setDueX.insertText = `{due:${getDateInISOFormat(date_obj)}}`;
+					toreturn.push(setDueX);
+				}
+
 				return [
 					today,
 					setDueDateToday,
 					setDueDateTomorrow,
 					setDueDateYesterday,
-				];
+					setDueDateThisWeek,
+					setDueDateNextWeek
+				].concat(toreturn)  ;
 			},
 		},
 		'',
