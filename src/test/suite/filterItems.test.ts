@@ -1,12 +1,11 @@
-import { expect } from 'chai';
+import { assert } from 'chai';
 import { describe, it } from 'mocha';
 import { filterItems } from '../../filter';
 import { TaskInit, TheTask } from '../../TheTask';
 import { DueState } from '../../types';
 import { headerDelimiter } from './testUtils';
 
-type Init = Partial<TaskInit>;
-function newTask(task: Init) {
+function newTask(task: Partial<TaskInit>) {
 	// @ts-ignore
 	return new TheTask(task);
 }
@@ -79,94 +78,84 @@ describe(`${headerDelimiter('filter')}Filter tags`, () => {
 	it('One tag', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask];
 		const filtered = filterItems(items, '#html');
-		expect(filtered).to.have.length(2);
-		expect(filtered).to.have.same.members([threeTagsTask, oneTagHtmlTask]);
+		assert.deepEqual(filtered, [threeTagsTask, oneTagHtmlTask]);
 	});
 	it('Multiple tags `#html #js`', () => {
 		const items = [justTextTask, threeTagsTask];
 		const filtered = filterItems(items, '#html #js');
-		expect(filtered).to.have.length(1);
-		expect(filtered).to.have.same.members([threeTagsTask]);
+		assert.deepEqual(filtered, [threeTagsTask]);
 	});
 	it('Multiple tags without space `#html#js`', () => {
 		const items = [justTextTask, threeTagsTask];
 		const filtered = filterItems(items, '#html#js');
-		expect(filtered).to.have.same.members([threeTagsTask]);
 		const filtered2 = filterItems(items, '#js#html');
-		expect(filtered2).to.have.same.members([threeTagsTask]);
+		assert.deepEqual(filtered, [threeTagsTask]);
+		assert.deepEqual(filtered2, [threeTagsTask]);
 	});
 });
 describe('Filter contexts', () => {
 	it('One context', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask, multipleContextTask, oneContextTask];
 		const filtered = filterItems(items, '@work');
-		expect(filtered).to.have.length(1);
-		expect(filtered).to.have.same.members([multipleContextTask]);
+		assert.deepEqual(filtered, [multipleContextTask]);
 	});
 	it('Multiple contexts', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask, multipleContextTask, oneContextTask];
 		const filtered = filterItems(items, '@home @work');
-		expect(filtered).to.have.length(1);
-		expect(filtered).to.have.same.members([multipleContextTask]);
+		assert.deepEqual(filtered, [multipleContextTask]);
 	});
 });
 describe('Filter projects', () => {
 	it('One project', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask, multipleContextTask, oneContextTask, oneProjectTask, multipleProjectTask];
 		const filtered = filterItems(items, '+one');
-		expect(filtered).to.have.length(2);
-		expect(filtered).to.have.same.members([multipleProjectTask, oneProjectTask]);
+		assert.deepEqual(filtered, [oneProjectTask, multipleProjectTask]);
 	});
 	it('Multiple projects', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask, multipleContextTask, oneContextTask, oneProjectTask, multipleProjectTask];
 		const filtered = filterItems(items, '+one +two');
-		expect(filtered).to.have.length(1);
-		expect(filtered).to.have.same.members([multipleProjectTask]);
+		assert.deepEqual(filtered, [multipleProjectTask]);
 	});
 });
 describe('Filter $done', () => {
 	it('$done', () => {
 		const items = [doneTask, notDoneTask];
 		const filtered = filterItems(items, '$done');
-		expect(filtered).to.have.length(1);
-		expect(filtered).to.have.same.members([doneTask]);
+		assert.deepEqual(filtered, [doneTask]);
 	});
 	it('-$done', () => {
 		const items = [doneTask, notDoneTask];
 		const filtered = filterItems(items, '-$done');
-		expect(filtered).to.have.length(1);
-		expect(filtered).to.have.same.members([notDoneTask]);
+		assert.deepEqual(filtered, [notDoneTask]);
 	});
 });
 describe('Filter $due', () => {
 	it('$due', () => {
 		const items = [dueTask, notDueTask, overdueTask];
 		const filtered = filterItems(items, '$due');
-		expect(filtered).to.have.length(2);
-		expect(filtered).to.have.same.members([dueTask, overdueTask]);
+		assert.deepEqual(filtered, [dueTask, overdueTask]);
 	});
 	it('$overdue', () => {
 		const items = [dueTask, notDueTask, overdueTask];
 		const filtered = filterItems(items, '$overdue');
-		expect(filtered).to.have.length(1);
-		expect(filtered).to.have.same.members([overdueTask]);
+		assert.deepEqual(filtered, [overdueTask]);
 	});
 });
 describe('Filter $C priority', () => {
 	it('$C', () => {
 		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
 		const filtered = filterItems(items, '$C');
-		expect(filtered).to.have.same.members([priorityCTask]);
+		assert.deepEqual(filtered, [priorityCTask]);
 	});
 	it('>$C Priority C or higher', () => {
 		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
 		const filtered = filterItems(items, '>$C');
-		expect(filtered).to.have.same.members([priorityCTask, priorityATask]);
+		assert.deepEqual(filtered, [priorityATask, priorityCTask]);
 	});
 	it('<$C Priority C or lower', () => {
 		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
 		const filtered = filterItems(items, '<$C');
-		expect(filtered).to.have.same.members([priorityCTask, priorityETask, priorityZTask]);
+		assert.deepEqual(filtered, [priorityCTask, priorityETask, priorityZTask]);
 	});
 });
 
@@ -181,6 +170,6 @@ describe('Filter "title"', () => {
 		});
 		const items = [needleInTheTag, needleInTheTitle];
 		const filtered = filterItems(items, '"needle"');
-		expect(filtered).to.have.same.members([needleInTheTitle]);
+		assert.deepEqual(filtered, [needleInTheTitle]);
 	});
 });

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { assert } from 'chai';
 import dayjs from 'dayjs';
 import _ from 'lodash';
 import { describe, it } from 'mocha';
@@ -23,11 +23,11 @@ const $1jan2018mondayDueDate = new DueDate('2018-01-01', {
 });
 
 describe(`${headerDelimiter('due date')}Not recurring`, () => {
-	it('Simple date format `2018-01-01`', () => {
-		expect($1jan2018mondayDueDate.isDue === DueState.due).to.be.ok;
+	it('Simple date format `2018-01-01` is due at that date.', () => {
+		assert.equal($1jan2018mondayDueDate.isDue, DueState.due);
 	});
 	it('`2018-01-01` is not recurring', () => {
-		expect($1jan2018mondayDueDate.isRecurring === false).to.be.ok;
+		assert.isFalse($1jan2018mondayDueDate.isRecurring);
 	});
 });
 
@@ -36,93 +36,86 @@ describe('♻ Recurring', () => {
 		const ed = new DueDate('ed', {
 			targetDate: addDays($1jan2018monday, _.random(-100, 100)),
 		});
-		expect(ed.isDue === DueState.due).to.be.ok;
+		assert.equal(ed.isDue, DueState.due);
 	});
 	it('`monday` is recurring', () => {
-		expect(new DueDate('monday').isRecurring === true).to.be.ok;
+		assert.isTrue(new DueDate('monday').isRecurring);
 	});
 	it('Week days like `Monday` are case insensitive', () => {
 		const mondayDueDate = new DueDate('Monday');
-		expect(mondayDueDate.isDue !== DueState.invalid).to.be.ok;
-		expect(mondayDueDate.isRecurring === true).to.be.ok;
+		assert.notEqual(mondayDueDate.isDue, DueState.invalid);
+		assert.isTrue(mondayDueDate.isRecurring);
 	});
 	it('monday', () => {
-		expect(new DueDate('monday', { targetDate: $1jan2018monday }).isDue === DueState.due, 'monday').to.be.ok;
-		expect(new DueDate('mon', { targetDate: $1jan2018monday }).isDue === DueState.due, 'mon').to.be.ok;
+		assert.equal(new DueDate('monday', { targetDate: $1jan2018monday }).isDue, DueState.due, 'monday');
+		assert.equal(new DueDate('mon', { targetDate: $1jan2018monday }).isDue, DueState.due, 'mon');
 	});
 	it('monday is not due on any other day', () => {
-		expect(new DueDate('monday', { targetDate: $2jan2018tuesday }).isDue === DueState.notDue, 'monday').to.be.ok;
-		expect(new DueDate('monday', { targetDate: $3jan2018wednesday }).isDue === DueState.notDue, 'monday').to.be.ok;
-		expect(new DueDate('monday', { targetDate: $4jan2018thursday }).isDue === DueState.notDue, 'monday').to.be.ok;
-		expect(new DueDate('monday', { targetDate: $5jan2018friday }).isDue === DueState.notDue, 'monday').to.be.ok;
-		expect(new DueDate('monday', { targetDate: $6jan2018saturday }).isDue === DueState.notDue, 'monday').to.be.ok;
-		expect(new DueDate('monday', { targetDate: $7jan2018sunday }).isDue === DueState.notDue, 'monday').to.be.ok;
+		assert.equal(new DueDate('monday', { targetDate: $2jan2018tuesday }).isDue, DueState.notDue, 'tuesday');
+		assert.equal(new DueDate('monday', { targetDate: $3jan2018wednesday }).isDue, DueState.notDue, 'wednesday');
+		assert.equal(new DueDate('monday', { targetDate: $4jan2018thursday }).isDue, DueState.notDue, 'thursday');
+		assert.equal(new DueDate('monday', { targetDate: $5jan2018friday }).isDue, DueState.notDue, 'friday');
+		assert.equal(new DueDate('monday', { targetDate: $6jan2018saturday }).isDue, DueState.notDue, 'saturday');
+		assert.equal(new DueDate('monday', { targetDate: $7jan2018sunday }).isDue, DueState.notDue, 'sunday');
 	});
 	it('tuesday', () => {
-		expect(new DueDate('tuesday', { targetDate: $2jan2018tuesday }).isDue === DueState.due, 'tuesday').to.be.ok;
-		expect(new DueDate('tue', { targetDate: $2jan2018tuesday }).isDue === DueState.due, 'tue').to.be.ok;
+		assert.equal(new DueDate('tuesday', { targetDate: $2jan2018tuesday }).isDue, DueState.due, 'tuesday');
+		assert.equal(new DueDate('tue', { targetDate: $2jan2018tuesday }).isDue, DueState.due, 'tue');
 	});
 	it('wednesday', () => {
-		expect(new DueDate('wednesday', { targetDate: $3jan2018wednesday }).isDue === DueState.due, 'wednesday').to.be.ok;
-		expect(new DueDate('wed', { targetDate: $3jan2018wednesday }).isDue === DueState.due, 'wed').to.be.ok;
+		assert.equal(new DueDate('wednesday', { targetDate: $3jan2018wednesday }).isDue, DueState.due, 'wednesday');
+		assert.equal(new DueDate('wed', { targetDate: $3jan2018wednesday }).isDue, DueState.due, 'wed');
 	});
 	it('thursday', () => {
-		expect(new DueDate('thursday', { targetDate: $4jan2018thursday }).isDue === DueState.due, 'thursday').to.be.ok;
-		expect(new DueDate('thu', { targetDate: $4jan2018thursday }).isDue === DueState.due, 'thu').to.be.ok;
+		assert.equal(new DueDate('thursday', { targetDate: $4jan2018thursday }).isDue, DueState.due, 'thursday');
+		assert.equal(new DueDate('thu', { targetDate: $4jan2018thursday }).isDue, DueState.due, 'thu');
 	});
 	it('friday', () => {
-		expect(new DueDate('friday', { targetDate: $5jan2018friday }).isDue === DueState.due, 'friday').to.be.ok;
-		expect(new DueDate('fri', { targetDate: $5jan2018friday }).isDue === DueState.due, 'fri').to.be.ok;
+		assert.equal(new DueDate('friday', { targetDate: $5jan2018friday }).isDue, DueState.due, 'friday');
+		assert.equal(new DueDate('fri', { targetDate: $5jan2018friday }).isDue, DueState.due, 'fri');
 	});
 	it('saturday', () => {
-		expect(new DueDate('saturday', { targetDate: $6jan2018saturday }).isDue === DueState.due, 'saturday').to.be.ok;
-		expect(new DueDate('sat', { targetDate: $6jan2018saturday }).isDue === DueState.due, 'sat').to.be.ok;
+		assert.equal(new DueDate('saturday', { targetDate: $6jan2018saturday }).isDue, DueState.due, 'saturday');
+		assert.equal(new DueDate('sat', { targetDate: $6jan2018saturday }).isDue, DueState.due, 'sat');
 	});
 	it('sunday', () => {
-		expect(new DueDate('sunday', { targetDate: $7jan2018sunday }).isDue === DueState.due, 'sunday').to.be.ok;
-		expect(new DueDate('sun', { targetDate: $7jan2018sunday }).isDue === DueState.due, 'sun').to.be.ok;
+		assert.equal(new DueDate('sunday', { targetDate: $7jan2018sunday }).isDue, DueState.due, 'sunday');
+		assert.equal(new DueDate('sun', { targetDate: $7jan2018sunday }).isDue, DueState.due, 'sun');
 	});
 });
 
 describe('♻ Recurring with starting date', () => {
 	const dueString = '2018-01-01|e2d';
+
 	it(`${dueString} is due on the same day`, () => {
-		expect(new DueDate(dueString, {
-			targetDate: new Date(2018, 0, 1),
-		}).isDue === DueState.due).to.be.ok;
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 0, 1) }).isDue, DueState.due);
 	});
 	it(`${dueString} is not due on the next day`, () => {
-		const dueDate = new DueDate(dueString, {
-			targetDate: new Date(2018, 0, 2),
-		});
-		expect(dueDate.isDue === DueState.notDue, dueDate.isDue.toString()).to.be.ok;
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 0, 2) }).isDue, DueState.notDue);
 	});
 	it(`${dueString} is due in 2 days`, () => {
-		const dueDate = new DueDate(dueString, {
-			targetDate: new Date(2018, 0, 3),
-		});
-		expect(dueDate.isDue === DueState.due, dueDate.isDue.toString()).to.be.ok;
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 0, 3) }).isDue, DueState.due);
 	});
 });
 
 describe('Comma delimited `,`', () => {
 	it('`mon,sun`', () => {
-		expect(new DueDate('mon,sun', { targetDate: $1jan2018monday }).isDue === DueState.due).to.be.ok;
-		expect(new DueDate('mon,sun', { targetDate: $7jan2018sunday }).isDue === DueState.due).to.be.ok;
-		expect(new DueDate('mon,sun', { targetDate: $2jan2018tuesday }).isDue === DueState.notDue).to.be.ok;
-		expect(new DueDate('mon,sun', { targetDate: $3jan2018wednesday }).isDue === DueState.notDue).to.be.ok;
-		expect(new DueDate('mon,sun', { targetDate: $4jan2018thursday }).isDue === DueState.notDue).to.be.ok;
-		expect(new DueDate('mon,sun', { targetDate: $5jan2018friday }).isDue === DueState.notDue).to.be.ok;
-		expect(new DueDate('mon,sun', { targetDate: $6jan2018saturday }).isDue === DueState.notDue).to.be.ok;
+		assert.equal(new DueDate('mon,sun', { targetDate: $1jan2018monday }).isDue, DueState.due);
+		assert.equal(new DueDate('mon,sun', { targetDate: $7jan2018sunday }).isDue, DueState.due);
+		assert.equal(new DueDate('mon,sun', { targetDate: $2jan2018tuesday }).isDue, DueState.notDue);
+		assert.equal(new DueDate('mon,sun', { targetDate: $3jan2018wednesday }).isDue, DueState.notDue);
+		assert.equal(new DueDate('mon,sun', { targetDate: $4jan2018thursday }).isDue, DueState.notDue);
+		assert.equal(new DueDate('mon,sun', { targetDate: $5jan2018friday }).isDue, DueState.notDue);
+		assert.equal(new DueDate('mon,sun', { targetDate: $6jan2018saturday }).isDue, DueState.notDue);
 	});
 });
 
 describe('🚫 Invalid due date', () => {
 	it('Due date should have `invalid` state', () => {
-		expect(new DueDate('2020').isDue === DueState.invalid, '2020').to.be.ok;
-		expect(new DueDate('2020-05-2').isDue === DueState.invalid, '2020-05-2').to.be.ok;
-		expect(new DueDate('2020-07-31|e14').isDue === DueState.invalid, '2020-07-31|e14').to.be.ok;
-		expect(new DueDate('2020-07-35').isDue === DueState.invalid, '2020-07-35').to.be.ok;
+		assert.equal(new DueDate('2020').isDue, DueState.invalid, '2020');
+		assert.equal(new DueDate('2020-05-2').isDue, DueState.invalid, '2020-05-2');
+		assert.equal(new DueDate('2020-07-31|e14').isDue, DueState.invalid, '2020-07-31|e14');
+		assert.equal(new DueDate('2020-07-35').isDue, DueState.invalid, '2020-07-35');
 	});
 });
 

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { assert } from 'chai';
 import { before, describe, it } from 'mocha';
 import { window } from 'vscode';
 import { parseDocument } from '../../parse';
@@ -17,26 +17,26 @@ describe(`${headerDelimiter('parse document')}`, () => {
 	});
 	it('13 Multiple links', () => {
 		const links = tasks[12].links;
-		expect(links).to.have.length(2);
-		expect(links[0].value === 'https://www.google.com/').to.be.ok;
-		expect(links[1].value === 'https://github.com/').to.be.ok;
+		assert.lengthOf(links, 2);
+		assert.equal(links[0].value, 'https://www.google.com/');
+		assert.equal(links[1].value, 'https://github.com/');
 	});
 	it('13 Multiple links ranges', () => {
 		const links = tasks[12].links;
-		expect(links[0].characterRange).have.same.members([9, 31]);
-		expect(links[1].characterRange).have.same.members([37, 56]);
+		assert.deepEqual(links[0].characterRange, [9, 31]);
+		assert.deepEqual(links[1].characterRange, [37, 56]);
 	});
 	it('14 Special tag `{overdue}`', () => {
-		expect(tasks[13].due?.isDue === DueState.overdue).to.be.ok;
+		assert.equal(tasks[13].due?.isDue, DueState.overdue);
 	});
 	it('16,17,18,19 Nested tasks', () => {
 		const at16 = tasks[15]!;
 		const at17 = tasks[15]!.subtasks[0];
-		expect(at16.subtasks.length === 2).to.be.ok;
-		expect(at17.subtasks.length === 1).to.be.ok;
+		assert.lengthOf(at16.subtasks, 2);
+		assert.lengthOf(at17.subtasks, 1);
 
-		expect(at16.subtasks.map(task => task.title)).to.have.same.members(['17 Nested 1lvl', '19 Nested 1lvl']);
-		expect(at17.subtasks.map(task => task.title)).to.have.same.members(['18 Nested 2lvl']);
+		assert.deepEqual(at16.subtasks.map(task => task.title), ['17 Nested 1lvl', '19 Nested 1lvl']);
+		assert.deepEqual(at17.subtasks.map(task => task.title), ['18 Nested 2lvl']);
 	});
 });
 
