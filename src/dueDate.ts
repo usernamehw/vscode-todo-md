@@ -55,7 +55,7 @@ export class DueDate {
 			const date = dayjs(this.raw);
 			return {
 				closestString: dateDiff(date),
-				daysUntil: dayjs(date).diff(dayjs(), 'day'),
+				daysUntil: dayjs(date).diff(dayjs(), 'day') + 1,
 			};
 		}
 		for (let i = 1; i < 100; i++) {
