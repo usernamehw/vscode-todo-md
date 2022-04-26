@@ -135,8 +135,6 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 
 ## Settings (prefix `todomd.`)
 
-<details><summary>Settings list</summary>
-
 |Name|Default|Description|
 | --- | --- |--- |
 |activatePattern|`"**/{todo,todo.archive}.md"`|Choose files that extension will operate on. By default activated on 2 files (`todo.md` & `todo.archive.md`). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
@@ -150,6 +148,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |labelShowItems|**`true`**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|
 |statusBarCounterEnabled|**`true`**|Controls visibility of status bar task progress item `1/3 33%`|
 |suggestItems|{}|This extension will only autocomplete tags/projects/contexts located in **1** file. This setting allows you to add items and their description(markdown) to autocomplete in all files (where extension is active). Examples: `#tag`, `+project`, `@context`.|
+|tagCounterBadgeEnabled|**`true`**|Shows small badge to show a number of times the tag is present in the active document.|
 |sortTagsView|`"alphabetic"`|Controls tags Tree View sorting.|
 |sortProjectsView|`"alphabetic"`|Controls projects Tree View sorting.|
 |sortContextsView|`"alphabetic"`|Controls contexts Tree View sorting.|
@@ -175,11 +174,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.tagStyles|**`{}`**|Set different color for any tag in a webview. `"todomd.webview.tagStyles": { "inbox": { "color": "#000", "backgroundColor": "#00b7ff" } }`|
 |webview.customCSSPath|`""`|Absolute path to custom CSS for the webview.|
 
-</details>
-
 ## Colors
-
-<details><summary>Colors list</summary>
 
 Can be specified in `settings.json` (**`workbench.colorCustomizations`** section)
 
@@ -203,8 +198,6 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 - `todomd.nestedTasksCountForeground`
 - `todomd.nestedTasksCountBorder`
 - `todomd.treeViewCompletedTaskIcon`
-
-</details>
 
 ## More Documentation
 

@@ -264,6 +264,11 @@
 					"additionalProperties": false,
 					"default": {}
 				},
+				"todomd.tagCounterBadgeEnabled": {
+					"type": "boolean",
+					"markdownDescription": "Shows small badge to show a number of times the tag is present in the active document.",
+					"default": true
+				},
 				"todomd.progressBackground": {
 					"type": "string",
 					"markdownDescription": "Editor decoration for nested tasks progress (pie chart) background.",

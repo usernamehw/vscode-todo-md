@@ -113,9 +113,17 @@ export interface ExtensionConfig {
 	 * Add items to autocomplete and optional description on hover.
 	 */
 	suggestItems: Record<string, string>;
-	/** Editor decoration for nested tasks progress (pie chart) background. */
+	/**
+	 * Shows small badge to show a number of times the tag is present in the active document.
+	 */
+	tagCounterBadgeEnabled: boolean;
+	/**
+	 * Editor decoration for nested tasks progress (pie chart) background.
+	 */
 	progressBackground: string;
-	/** Editor decoration for nested tasks progress (pie chart) foreground. */
+	/**
+	 * Editor decoration for nested tasks progress (pie chart) foreground.
+	 */
 	progressForeground: string;
 	/**
 	 * Advanced decorations allowing to change any available editor decoration options (borders, outline, background, foreground, before, after...)

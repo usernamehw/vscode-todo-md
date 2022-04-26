@@ -4,7 +4,8 @@
 (B) Task with tags #important#new
 (C) Task with context @home
 (D) Task with due date {due:2020-10-30}
-(E) Completed task {cm:2020-05-12}
+(E) Completed task {cm}
+(F) Future task {due:2023-12-16}
 Task with link https://www.google.com
 Task with counter {count:2/5}
 

@@ -53,8 +53,21 @@ export function updateEditorDecorationStyle() {
 		fontWeight: 'bold',
 		...extensionConfig.decorations.priorityFForeground,
 	});
+	const tagCounterBadgeDecoration = ';position:absolute;display:inline-flex;align-items:center;padding:0px 1px;border-radius:2px;font-size:9px;top:-10%;height:50%;';
+	const tagCounterBadgeDecorationLight = 'background-color:rgba(0,0,0,0.06);color:#111;';
+	const tagCounterBadgeDecorationDark = 'background-color:rgba(255,255,255,0.12);color:#eee;';
 	Global.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagForeground'),
+		light: {
+			after: {
+				textDecoration: extensionConfig.tagCounterBadgeEnabled ? `${tagCounterBadgeDecoration}${tagCounterBadgeDecorationLight}` : undefined,
+			},
+		},
+		dark: {
+			after: {
+				textDecoration: extensionConfig.tagCounterBadgeEnabled ? `${tagCounterBadgeDecoration}${tagCounterBadgeDecorationDark}` : undefined,
+			},
+		},
 		...extensionConfig.decorations.tag,
 	});
 	Global.tagWithDelimiterDecorationType = window.createTextEditorDecorationType({
@@ -135,7 +148,7 @@ export function updateEditorDecorationStyle() {
  */
 export function doUpdateEditorDecorations(editor: TextEditor) {
 	const completedDecorationRanges: Range[] = [];
-	const tagsDecorationRanges: Range[] = [];
+	const tagsDecorationOptions: DecorationOptions[] = [];
 	const priorityADecorationRanges: Range[] = [];
 	const priorityBDecorationRanges: Range[] = [];
 	const priorityCDecorationRanges: Range[] = [];
@@ -157,13 +170,26 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 
 	forEachTask(task => {
 		// When decoration have `isWholeLine` range can be empty / wouldn't matter
-		const emptyRange = new Range(task.lineNumber, 0, task.lineNumber, 0);
+		const emptyRange = new Range(task.lineNumber, 0, task.lineNumber, 0);// TODO: move outside?
 		if (task.done) {
 			completedDecorationRanges.push(emptyRange);
 		}
 		if (task.tagsRange) {
 			if (!Global.userSpecifiedAdvancedTagDecorations) {
-				tagsDecorationRanges.push(...task.tagsRange);
+				for (let i = 0; i < task.tags.length; i++) {
+					let contentText: string | undefined = undefined;
+					if (extensionConfig.tagCounterBadgeEnabled) {
+						contentText = String(extensionState.tagsForTreeView.find(tag => tag.title === task.tags[i])?.tasks.length || '');
+					}
+					tagsDecorationOptions.push({
+						range: task.tagsRange[i],
+						renderOptions: {
+							after: {
+								contentText,
+							},
+						},
+					});
+				}
 				tagsDelimiterDecorationRanges.push(...task.tagsDelimiterRanges!);// if `tagsRange` exists - `tagsDelimiterRanges` also exists
 			} else {
 				// User has advanced decorations. Include tag symbol in decoration range.
@@ -251,7 +277,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	});
 
 	editor.setDecorations(Global.completedTaskDecorationType, completedDecorationRanges);
-	editor.setDecorations(Global.tagsDecorationType, tagsDecorationRanges);
+	editor.setDecorations(Global.tagsDecorationType, tagsDecorationOptions);
 	editor.setDecorations(Global.tagWithDelimiterDecorationType, tagWithDelimiterDecorationRanges);
 	editor.setDecorations(Global.tagsDelimiterDecorationType, tagsDelimiterDecorationRanges);
 	editor.setDecorations(Global.specialTagDecorationType, specialtagDecorationRanges);
