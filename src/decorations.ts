@@ -1,5 +1,7 @@
+import dayjs from 'dayjs';
 import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
 import { extensionConfig, extensionState, Global } from './extension';
+import { weekdayNamesShort } from './time/timeUtils';
 import { DueState } from './types';
 import { forEachTask } from './utils/taskUtils';
 import { isEmptyObject } from './utils/utils';
@@ -242,7 +244,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 					range: dueRange,
 					renderOptions: {
 						after: {
-							contentText: `+${due.daysUntilDue}d`,
+							contentText: `+${due.daysUntilDue}d${extensionConfig.closestDueDateIncludeWeekday ? ` ${weekdayNamesShort[dayjs().add(due.daysUntilDue, 'day').get('day')]}` : ''} `,
 						},
 					},
 				});

@@ -13,6 +13,7 @@ export const DATE_TIME_FORMAT = `${DATE_FORMAT}T${TIME_FORMAT}`;
 export const dayOfTheWeekRegexp = /^(sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday)$/i;
 /** Matches short & long month `jan` or `january`. Case-insensitive */
 export const monthRegexp = /^(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)$/i;
+export const weekdayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 /**
  * Get date or datetime ISO 8601

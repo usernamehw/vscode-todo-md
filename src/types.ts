@@ -187,6 +187,10 @@ export interface ExtensionConfig {
 	 */
 	useBoldTextInLabels: boolean;
 	/**
+	 * When enabled - editor decoration that shows number of days to the due date adds the weekday name.
+	 */
+	closestDueDateIncludeWeekday: boolean;
+	/**
 	 * Show strike-through text decoration for completed tasks in editor.
 	 */
 	completedStrikeThrough: boolean;

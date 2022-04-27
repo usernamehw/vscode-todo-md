@@ -157,7 +157,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (50)
+## Settings (51)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -202,6 +202,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |completionDateIncludeDate|**true**|Whether to include date when completing a task: `{cm}` vs `{cm:2020-04-30}`|
 |completionDateIncludeTime|**false**|When completing a task add date and time: `{cm:2020-04-30T09:11:17}`|
 |creationDateIncludeTime|**false**|When creating a task add date and time: `{cr:2020-04-30T09:11:17}`|
+|closestDueDateIncludeWeekday|**false**|When enabled - editor decoration that shows number of days to the due date adds the weekday name.|
 |isDev|**false**|For emulating dev mode. Most likely of no use to anyone, except the extension author.|
 |tabSize|**4**|Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).|
 |savedFilters|\[\]|Filters that you can pick when applying a filter.|
@@ -212,7 +213,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |labelShowItems|**true**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|
 |useBoldTextInLabels|**true**|Show projects/tags/contexts in labels in **BOLD**.|
 |completedStrikeThrough|**true**|Show strike-through text decoration for completed tasks in editor.|
-|decorations|{...}|Advanced decoration tweaking. https://github.com/usernamehw/vscode-todo-md/issues/4|
+|decorations|\{"project":\{\},"context":\{\},"tag":\{\},"comment":\{\},"notDue":\{\},"due":\{\},"overdue":\{\},"invalidDue":\{\},"priorityAForeground":\{\},"priorityBForeground":\{\},"priorityCForeground":\{\},"priorityDForeground":\{\},"priorityEForeground":\{\},"priorityFForeground":\{\},"completedTask":\{\}\}|Advanced decoration tweaking. https://github.com/usernamehw/vscode-todo-md/issues/4|
 <!-- SETTINGS_END -->
 
 ## Colors
