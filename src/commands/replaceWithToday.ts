@@ -1,12 +1,19 @@
 import { TextEditor } from 'vscode';
 import { getDateInISOFormat } from '../time/timeUtils';
+import { getTaskAtLineExtension } from '../utils/taskUtils';
 
-export function replaceWithToday(editor: TextEditor) {
-	const wordRange = editor.document.getWordRangeAtPosition(editor.selection.active, /\d{4}-\d{2}-\d{2}/);
-	if (!wordRange) {
+export function replaceWithToday(editor: TextEditor): void {
+	const task = getTaskAtLineExtension(editor.selection.active.line);
+	if (!task) {
 		return;
 	}
+
+	const dueText = editor.document.getText(task.dueRange);
+	if (!task.dueRange || !dueText) {
+		return;
+	}
+
 	editor.edit(builder => {
-		builder.replace(wordRange, getDateInISOFormat());
+		builder.replace(task.dueRange!, dueText.replace(/\d{4}-\d{2}-\d{2}/, getDateInISOFormat()));
 	});
 }
