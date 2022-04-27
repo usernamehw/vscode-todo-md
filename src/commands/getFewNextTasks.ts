@@ -1,5 +1,5 @@
 import { window } from 'vscode';
-import { extensionConfig, extensionState, updateState } from '../extension';
+import { $config, $state, updateState } from '../extension';
 import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
 import { formatTask } from '../utils/taskUtils';
@@ -8,7 +8,7 @@ import { fancyNumber } from '../utils/utils';
 export async function getFewNextTasksCommand() {
 	await updateState();
 
-	const tasks = getNextFewTasks().slice(0, extensionConfig.getNextNumberOfTasks);
+	const tasks = getNextFewTasks().slice(0, $config.getNextNumberOfTasks);
 
 	if (!tasks.length) {
 		window.showInformationMessage('No tasks');
@@ -21,6 +21,6 @@ export async function getFewNextTasksCommand() {
 }
 
 export function getNextFewTasks(): TheTask[] {
-	const tasks = extensionState.tasks.filter(t => !t.done);
+	const tasks = $state.tasks.filter(t => !t.done);
 	return defaultSortTasks(tasks);
 }

@@ -1,5 +1,5 @@
 import { QuickPickItem, TextEditor, window } from 'vscode';
-import { extensionConfig, extensionState } from '../extension';
+import { $config, $state } from '../extension';
 import { tasksView, updateTasksTreeView } from '../treeViewProviders/treeViews';
 import { VscodeContext } from '../types';
 import { setContext } from '../utils/vscodeUtils';
@@ -7,7 +7,7 @@ import { setContext } from '../utils/vscodeUtils';
 // TODO: rename
 export function filter(editor: TextEditor) {
 	const quickPick = window.createQuickPick();
-	quickPick.items = extensionConfig.savedFilters.map(fl => ({
+	quickPick.items = $config.savedFilters.map(fl => ({
 		label: fl.title,
 	}) as QuickPickItem);
 	let value: string | undefined;
@@ -22,7 +22,7 @@ export function filter(editor: TextEditor) {
 	quickPick.onDidAccept(() => {
 		let filterStr;
 		if (selected) {
-			filterStr = extensionConfig.savedFilters.find(fl => fl.title === selected)?.filter;
+			filterStr = $config.savedFilters.find(fl => fl.title === selected)?.filter;
 		} else {
 			filterStr = value;
 		}
@@ -33,7 +33,7 @@ export function filter(editor: TextEditor) {
 		}
 		tasksView.description = filterStr;
 		setContext(VscodeContext.filterActive, true);
-		extensionState.taskTreeViewFilterValue = filterStr;
+		$state.taskTreeViewFilterValue = filterStr;
 		updateTasksTreeView();
 	});
 }

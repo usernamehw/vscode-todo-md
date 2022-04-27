@@ -3,7 +3,7 @@ import throttle from 'lodash/throttle';
 import { languages, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
 import { doUpdateEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
-import { Constants, extensionConfig, extensionState, Global, counterStatusBar, updateLastVisitGlobalState, updateState, mainStatusBar } from './extension';
+import { Constants, $config, $state, Global, counterStatusBar, updateLastVisitGlobalState, updateState, mainStatusBar } from './extension';
 import { updateHover } from './languageFeatures/hoverProvider';
 import { updateCompletions } from './languageFeatures/completionProviders';
 import { updateDocumentHighlights } from './languageFeatures/documentHighlights';
@@ -30,12 +30,12 @@ export async function onChangeActiveTextEditor(editor: TextEditor | undefined): 
 		await sleep(200);
 	}
 	changeActiveEditorEventInProgress = true;
-	if (extensionState.theRightFileOpened) {
+	if ($state.theRightFileOpened) {
 		deactivateEditorFeatures();
 	}
 	if (editor && isTheRightFileName(editor)) {
-		extensionState.activeDocument = editor.document;
-		extensionState.activeDocumentTabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : extensionConfig.tabSize;
+		$state.activeDocument = editor.document;
+		$state.activeDocumentTabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : $config.tabSize;
 		await updateEverything(editor);
 		activateEditorFeatures(editor);
 		await setContext(VscodeContext.isActive, true);
@@ -47,9 +47,9 @@ export async function onChangeActiveTextEditor(editor: TextEditor | undefined): 
 			await updateLastVisitGlobalState(editor.document.uri.toString(), new Date());
 		}
 	} else {
-		extensionState.activeDocument = await getDocumentForDefaultFile();
-		extensionState.activeDocumentTabSize = extensionConfig.tabSize;
-		extensionState.theRightFileOpened = false;
+		$state.activeDocument = await getDocumentForDefaultFile();
+		$state.activeDocumentTabSize = $config.tabSize;
+		$state.theRightFileOpened = false;
 		await updateEverything();
 		await setContext(VscodeContext.isActive, false);
 	}
@@ -59,7 +59,7 @@ export async function onChangeActiveTextEditor(editor: TextEditor | undefined): 
  * Only run reset all recurring tasks when needed (first open file in a day)
  */
 export function checkIfNeedResetRecurringTasks(filePath: string): {lastVisit: Date} | undefined {
-	const lastVisitForFile = extensionState.lastVisitByFile[filePath];
+	const lastVisitForFile = $state.lastVisitByFile[filePath];
 	if (lastVisitForFile) {
 		if (!dayjs().isSame(lastVisitForFile, 'day')) {
 			// First time this file opened this day => reset
@@ -82,7 +82,7 @@ export function checkIfNeedResetRecurringTasks(filePath: string): {lastVisit: Da
  */
 export function onChangeTextDocument(e: TextDocumentChangeEvent) {
 	const activeTextEditor = window.activeTextEditor;
-	if (activeTextEditor && extensionState.theRightFileOpened) {
+	if (activeTextEditor && $state.theRightFileOpened) {
 		updateEverything(activeTextEditor);
 	}
 }
@@ -91,7 +91,7 @@ export function onChangeTextDocument(e: TextDocumentChangeEvent) {
  */
 export function isTheRightFileName(editor: TextEditor): boolean {
 	return languages.match({
-		pattern: extensionConfig.activatePattern,
+		pattern: $config.activatePattern,
 	},	editor.document) !== 0;
 }
 /**
@@ -100,7 +100,7 @@ export function isTheRightFileName(editor: TextEditor): boolean {
  * For example: completions, status bar text, editor hover.
  */
 export function activateEditorFeatures(editor: TextEditor) {
-	extensionState.theRightFileOpened = true;
+	$state.theRightFileOpened = true;
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	updateCompletions();
 	updateDocumentHighlights();
@@ -137,7 +137,7 @@ export const updateEverything = throttle(async (editor?: TextEditor) => {
 	await updateState();
 	if (editor && isTheRightFileName(editor)) {
 		doUpdateEditorDecorations(editor);
-		counterStatusBar.update(extensionState.tasks);
+		counterStatusBar.update($state.tasks);
 	}
 	mainStatusBar.update(getNextFewTasks());
 	updateAllTreeViews();

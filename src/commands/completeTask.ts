@@ -1,6 +1,6 @@
 import { QuickInputButton, ThemeIcon, window } from 'vscode';
 import { incrementCountForTask, revealTask, toggleDoneAtLine } from '../documentActions';
-import { extensionState, updateState } from '../extension';
+import { $state, updateState } from '../extension';
 import { defaultSortTasks } from '../sort';
 import { updateAllTreeViews } from '../treeViewProviders/treeViews';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
@@ -11,7 +11,7 @@ export async function completeTask() {
 	// Show Quick Pick to complete a task
 	const document = await getActiveOrDefaultDocument();
 	// TODO: should this be tree?
-	const notCompletedTasks = defaultSortTasks(extensionState.tasks.filter(task => !task.done)).map(task => ({
+	const notCompletedTasks = defaultSortTasks($state.tasks.filter(task => !task.done)).map(task => ({
 		label: formatTask(task),
 		ln: task.lineNumber,
 	}));

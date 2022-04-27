@@ -1,5 +1,5 @@
 import { DocumentSelector } from 'vscode';
-import { extensionConfig } from '../extension';
+import { $config } from '../extension';
 
 /**
  * Return selector targeting files this extension activates on
@@ -8,6 +8,6 @@ import { extensionConfig } from '../extension';
 export function getTodoMdFileDocumentSelector(): DocumentSelector {
 	return {
 		scheme: 'file',
-		pattern: extensionConfig.activatePattern,
+		pattern: $config.activatePattern,
 	};
 }

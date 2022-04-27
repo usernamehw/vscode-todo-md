@@ -1,10 +1,10 @@
 import { window } from 'vscode';
 import { addTaskToFile } from '../commands';
-import { extensionState, updateState } from '../extension';
+import { $state, updateState } from '../extension';
 import { updateAllTreeViews } from '../treeViewProviders/treeViews';
 
 export async function addTaskToActiveFile() {
-	const activeFilePath = extensionState.activeDocument?.uri.fsPath;
+	const activeFilePath = $state.activeDocument?.uri.fsPath;
 	if (!activeFilePath) {
 		return;
 	}

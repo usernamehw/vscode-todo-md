@@ -1,4 +1,4 @@
-import { extensionConfig } from '../extension';
+import { $config } from '../extension';
 import { checkDefaultFileAndNotify } from '../utils/extensionUtils';
 import { openFileInEditor } from '../utils/vscodeUtils';
 
@@ -7,5 +7,5 @@ export async function openDefaultFile() {
 	if (!isDefaultFileSpecified) {
 		return;
 	}
-	openFileInEditor(extensionConfig.defaultFile);
+	openFileInEditor($config.defaultFile);
 }

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { CompletionItem, CompletionItemKind, languages, Position, Range, TextDocument } from 'vscode';
 import { DueDate } from '../dueDate';
-import { extensionConfig, extensionState, Global } from '../extension';
+import { $config, $state, Global } from '../extension';
 import { helpCreateDueDate } from '../time/setDueDateHelper';
 import { getDateInISOFormat } from '../time/timeUtils';
 import { specialTagDescription, SpecialTagName } from '../utils/extensionUtils';
@@ -27,7 +27,7 @@ export function updateCompletions() {
 					return undefined;
 				}
 				const tagCompletions = [];
-				const tags = unique(extensionState.tags.concat(Object.keys(extensionState.suggestTags)));
+				const tags = unique($state.tags.concat(Object.keys($state.suggestTags)));
 				for (const tag of tags) {
 					const tagCompletion = new CompletionItem(tag, CompletionItemKind.Field);
 					tagCompletion.insertText = `${tag} `;
@@ -48,7 +48,7 @@ export function updateCompletions() {
 					return undefined;
 				}
 				const projectCompletions = [];
-				const projects = unique(extensionState.projects.concat(Object.keys(extensionState.suggestProjects)));
+				const projects = unique($state.projects.concat(Object.keys($state.suggestProjects)));
 				for (const project of projects) {
 					const projectCompletion = new CompletionItem(project, CompletionItemKind.Field);
 					projectCompletion.insertText = `${project} `;
@@ -69,7 +69,7 @@ export function updateCompletions() {
 					return undefined;
 				}
 				const contextCompletions = [];
-				const contexts = unique(extensionState.contexts.concat(Object.keys(extensionState.suggestContexts)));
+				const contexts = unique($state.contexts.concat(Object.keys($state.suggestContexts)));
 				for (const context of contexts) {
 					const contextCompletion = new CompletionItem(context, CompletionItemKind.Field);
 					contextCompletion.insertText = `${context} `;

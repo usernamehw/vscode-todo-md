@@ -1,5 +1,5 @@
 import { Hover, languages, MarkdownString } from 'vscode';
-import { extensionState, Global } from '../extension';
+import { $state, Global } from '../extension';
 import { getTodoMdFileDocumentSelector } from './languageFeatures';
 import { parseWord } from '../parse';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
@@ -24,12 +24,12 @@ export function updateHover() {
 				if (range) {
 					const parsedWord = parseWord(word, position.line, range.start.character);
 					if (parsedWord.type === 'project') {
-						if (extensionState.suggestProjects[parsedWord.value]) {
-							hoveredWordUserDescription.appendMarkdown(extensionState.suggestProjects[parsedWord.value]);
+						if ($state.suggestProjects[parsedWord.value]) {
+							hoveredWordUserDescription.appendMarkdown($state.suggestProjects[parsedWord.value]);
 						}
 					} else if (parsedWord.type === 'context') {
-						if (extensionState.suggestContexts[parsedWord.value]) {
-							hoveredWordUserDescription.appendMarkdown(extensionState.suggestContexts[parsedWord.value]);
+						if ($state.suggestContexts[parsedWord.value]) {
+							hoveredWordUserDescription.appendMarkdown($state.suggestContexts[parsedWord.value]);
 						}
 					} else if (parsedWord.type === 'tags') {
 						let index = 0;
@@ -42,8 +42,8 @@ export function updateHover() {
 						}
 						const tagName = parsedWord.value[index];
 
-						if (extensionState.suggestTags[tagName]) {
-							hoveredWordUserDescription.appendMarkdown(extensionState.suggestTags[tagName]);
+						if ($state.suggestTags[tagName]) {
+							hoveredWordUserDescription.appendMarkdown($state.suggestTags[tagName]);
 						}
 					}
 				}

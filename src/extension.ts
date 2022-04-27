@@ -27,7 +27,7 @@ dayjs.Ls.en.weekStart = 1;
 /**
  * Things extension keeps a global reference to and uses extensively
  */
-export abstract class extensionState {
+export abstract class $state {
 	/** All tasks (not as tree) */
 	static tasks: TheTask[] = [];
 	/** Tasks in a tree format (`task.subtasks` contains nested items) */
@@ -90,7 +90,7 @@ export const enum Constants {
 	THROTTLE_EVERYTHING = 120,
 }
 
-export let extensionConfig = workspace.getConfiguration().get(Constants.extensionSettingsPrefix) as ExtensionConfig;
+export let $config = workspace.getConfiguration().get(Constants.extensionSettingsPrefix) as ExtensionConfig;
 export const counterStatusBar = new CounterStatusBar();
 export const mainStatusBar = new MainStatusBar();
 mainStatusBar.show();
@@ -140,11 +140,11 @@ export class Global {
 }
 
 export async function activate(extensionContext: ExtensionContext) {
-	extensionState.extensionContext = extensionContext;
-	const lastVisitByFile = extensionContext.globalState.get<typeof extensionState['lastVisitByFile'] | undefined>(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY);
-	extensionState.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
+	$state.extensionContext = extensionContext;
+	const lastVisitByFile = extensionContext.globalState.get<typeof $state['lastVisitByFile'] | undefined>(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY);
+	$state.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
-	extensionState.editorLineHeight = getEditorLineHeight();
+	$state.editorLineHeight = getEditorLineHeight();
 	updateEditorDecorationStyle();
 	updateUserSuggestItems();
 	registerAllCommands();
@@ -165,8 +165,8 @@ export async function activate(extensionContext: ExtensionContext) {
 	});
 	await updateState();
 
-	Global.webviewProvider = new TasksWebviewViewProvider(extensionState.extensionContext.extensionUri);
-	extensionState.extensionContext.subscriptions.push(
+	Global.webviewProvider = new TasksWebviewViewProvider($state.extensionContext.extensionUri);
+	$state.extensionContext.subscriptions.push(
 		window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, Global.webviewProvider),
 	);
 
@@ -189,10 +189,10 @@ export async function activate(extensionContext: ExtensionContext) {
 	}
 
 	function updateConfig() {
-		extensionConfig = workspace.getConfiguration().get(Constants.extensionSettingsPrefix) as ExtensionConfig;
+		$config = workspace.getConfiguration().get(Constants.extensionSettingsPrefix) as ExtensionConfig;
 
 		disposeEditorDisposables();
-		extensionState.editorLineHeight = getEditorLineHeight();
+		$state.editorLineHeight = getEditorLineHeight();
 		updateEditorDecorationStyle();
 		updateUserSuggestItems();
 		mainStatusBar.show();
@@ -200,7 +200,7 @@ export async function activate(extensionContext: ExtensionContext) {
 		updateIsDevContext();
 	}
 	function updateIsDevContext() {
-		if (process.env.NODE_ENV === 'development' || extensionConfig.isDev) {
+		if (process.env.NODE_ENV === 'development' || $config.isDev) {
 			setContext(VscodeContext.isDev, true);
 		}
 	}
@@ -216,32 +216,32 @@ export async function updateState() {
 		document = await getDocumentForDefaultFile();
 	}
 	if (!document) {
-		extensionState.tasks = [];
-		extensionState.tasksAsTree = [];
-		extensionState.tags = [];
-		extensionState.projects = [];
-		extensionState.contexts = [];
-		extensionState.tagsForTreeView = [];
-		extensionState.projectsForTreeView = [];
-		extensionState.contextsForTreeView = [];
-		extensionState.commentLines = [];
-		extensionState.theRightFileOpened = false;
-		extensionState.activeDocument = undefined;
+		$state.tasks = [];
+		$state.tasksAsTree = [];
+		$state.tags = [];
+		$state.projects = [];
+		$state.contexts = [];
+		$state.tagsForTreeView = [];
+		$state.projectsForTreeView = [];
+		$state.contextsForTreeView = [];
+		$state.commentLines = [];
+		$state.theRightFileOpened = false;
+		$state.activeDocument = undefined;
 		return;
 	}
 	const parsedDocument = await parseDocument(document);
 
-	extensionState.tasks = parsedDocument.tasks;
-	extensionState.tasksAsTree = parsedDocument.tasksAsTree;
-	extensionState.commentLines = parsedDocument.commentLines;
+	$state.tasks = parsedDocument.tasks;
+	$state.tasksAsTree = parsedDocument.tasksAsTree;
+	$state.commentLines = parsedDocument.commentLines;
 
-	const treeItems = groupAndSortTreeItems(extensionState.tasksAsTree);
-	extensionState.tagsForTreeView = treeItems.tagsForProvider;
-	extensionState.projectsForTreeView = treeItems.projectsForProvider;
-	extensionState.contextsForTreeView = treeItems.contextsForProvider;
-	extensionState.tags = treeItems.tags;
-	extensionState.projects = treeItems.projects;
-	extensionState.contexts = treeItems.contexts;
+	const treeItems = groupAndSortTreeItems($state.tasksAsTree);
+	$state.tagsForTreeView = treeItems.tagsForProvider;
+	$state.projectsForTreeView = treeItems.projectsForProvider;
+	$state.contextsForTreeView = treeItems.contextsForProvider;
+	$state.tags = treeItems.tags;
+	$state.projects = treeItems.projects;
+	$state.contexts = treeItems.contexts;
 }
 function disposeEditorDisposables() {
 	Global.completedTaskDecorationType?.dispose();
@@ -271,8 +271,8 @@ function disposeEditorDisposables() {
  * Update global storage value of last visit by file
  */
 export async function updateLastVisitGlobalState(stringUri: string, date: Date) {
-	extensionState.lastVisitByFile[stringUri] = date;
-	await extensionState.extensionContext.globalState.update(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY, extensionState.lastVisitByFile);
+	$state.lastVisitByFile[stringUri] = date;
+	await $state.extensionContext.globalState.update(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY, $state.lastVisitByFile);
 }
 
 export function deactivate() {

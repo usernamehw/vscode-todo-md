@@ -1,6 +1,6 @@
-import { extensionState } from '../extension';
+import { $state } from '../extension';
 
 export function clearGlobalState() {
-	(extensionState.extensionContext.globalState as any)._value = {};
-	extensionState.extensionContext.globalState.update('hack', 'toClear');// Required to clear state
+	($state.extensionContext.globalState as any)._value = {};
+	$state.extensionContext.globalState.update('hack', 'toClear');// Required to clear state
 }

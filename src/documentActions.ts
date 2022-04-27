@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { Position, Range, Selection, TextDocument, TextEditorRevealType, TextLine, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { DueDate } from './dueDate';
-import { extensionConfig } from './extension';
+import { $config } from './extension';
 import { parseDocument } from './parse';
 import { Count, TheTask } from './TheTask';
 import { dateWithoutTime, DATE_FORMAT, durationTo, getDateInISOFormat } from './time/timeUtils';
@@ -151,9 +151,9 @@ export async function tryToDeleteTask(document: TextDocument, lineNumber: number
 	}
 	numberOfTasksToBeDeleted = `❗ [ ${taskLineNumbersToDelete.length} ] task${taskLineNumbersToDelete.length > 1 ? 's' : ''} will be deleted.`;
 
-	if (extensionConfig.confirmTaskDelete === 'always') {
+	if ($config.confirmTaskDelete === 'always') {
 		showConfirmationDialog = true;
-	} else if (extensionConfig.confirmTaskDelete === 'hasNestedTasks') {
+	} else if ($config.confirmTaskDelete === 'hasNestedTasks') {
 		if (task.subtasks.length) {
 			showConfirmationDialog = true;
 		}
@@ -283,7 +283,7 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	}
 	await applyEdit(edit, document);
 
-	if (extensionConfig.autoArchiveTasks) {
+	if ($config.autoArchiveTasks) {
 		await archiveTasks([task], document);
 	}
 }
@@ -301,7 +301,7 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
 
 	const fileEdit = new WorkspaceEdit();
 	const archiveFileEdit = new WorkspaceEdit();
-	const archiveFileUri = Uri.file(extensionConfig.defaultArchiveFile);
+	const archiveFileUri = Uri.file($config.defaultArchiveFile);
 	const archiveDocument = await workspace.openTextDocument(archiveFileUri);
 	let taskLineNumbersToArchive = [];
 
@@ -433,8 +433,8 @@ export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: 
 	}
 }
 export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, line: TextLine, task: TheTask, forceIncludeTime = false) {
-	const dateInIso = getDateInISOFormat(new Date(), forceIncludeTime || extensionConfig.completionDateIncludeTime);
-	const newCompletionDate = specialTag(SpecialTagName.completionDate, extensionConfig.completionDateIncludeDate ? dateInIso : undefined);
+	const dateInIso = getDateInISOFormat(new Date(), forceIncludeTime || $config.completionDateIncludeTime);
+	const newCompletionDate = specialTag(SpecialTagName.completionDate, $config.completionDateIncludeDate ? dateInIso : undefined);
 	if (task.completionDateRange) {
 		edit.replace(document.uri, task.completionDateRange, newCompletionDate);
 	} else {
@@ -449,7 +449,7 @@ export function insertDurationWorkspaceEdit(edit: WorkspaceEdit, document: TextD
 		return;
 	}
 
-	const newDurationDate = specialTag(SpecialTagName.duration, durationTo(task, true, extensionConfig.durationIncludeSeconds));
+	const newDurationDate = specialTag(SpecialTagName.duration, durationTo(task, true, $config.durationIncludeSeconds));
 	if (task.durationRange) {
 		edit.replace(document.uri, task.durationRange, newDurationDate);
 	} else {

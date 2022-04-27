@@ -1,5 +1,5 @@
 import { MarkdownString, StatusBarAlignment, StatusBarItem, window } from 'vscode';
-import { Constants, extensionConfig } from './extension';
+import { Constants, $config } from './extension';
 import { TheTask } from './TheTask';
 import { formatTask } from './utils/taskUtils';
 import { percentage } from './utils/utils';
@@ -32,7 +32,7 @@ export class CounterStatusBar extends StatusBar {
 	}
 
 	show() {
-		if (extensionConfig.statusBarCounterEnabled) {
+		if ($config.statusBarCounterEnabled) {
 			this.statusBarItem.show();
 		} else {
 			this.statusBarItem.hide();
@@ -57,7 +57,7 @@ export class MainStatusBar extends StatusBar {
 	}
 
 	show() {
-		if (extensionConfig.statusBarMainEnabled) {
+		if ($config.statusBarMainEnabled) {
 			this.statusBarItem.show();
 		} else {
 			this.statusBarItem.hide();
@@ -65,7 +65,7 @@ export class MainStatusBar extends StatusBar {
 	}
 
 	update(fewNextTasks: TheTask[]) {
-		if (!extensionConfig.statusBarCounterEnabled) {
+		if (!$config.statusBarCounterEnabled) {
 			return;
 		}
 		const firstTaskFormatted = formatTask(fewNextTasks[0]);

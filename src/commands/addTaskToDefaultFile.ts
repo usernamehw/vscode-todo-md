@@ -1,6 +1,6 @@
 import { window } from 'vscode';
 import { addTaskToFile } from '../commands';
-import { extensionConfig, updateState } from '../extension';
+import { $config, updateState } from '../extension';
 import { updateAllTreeViews } from '../treeViewProviders/treeViews';
 import { checkDefaultFileAndNotify } from '../utils/extensionUtils';
 
@@ -15,7 +15,7 @@ export async function addTaskToDefaultFile() {
 	if (!text) {
 		return;
 	}
-	await addTaskToFile(text, extensionConfig.defaultFile);
+	await addTaskToFile(text, $config.defaultFile);
 	await updateState();
 	updateAllTreeViews();
 }

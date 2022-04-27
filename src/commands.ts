@@ -45,7 +45,7 @@ import { webviewToggleShowRecurringUpcoming } from './commands/webviewToggleShow
 import { appendTaskToFile, setDueDateAtLine } from './documentActions';
 import { DueDate } from './dueDate';
 import { updateEverything } from './events';
-import { extensionConfig } from './extension';
+import { $config } from './extension';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { TheTask } from './TheTask';
 import { helpCreateDueDate } from './time/setDueDateHelper';
@@ -110,7 +110,7 @@ export function registerAllCommands() {
  * Optionally adds creation date if user configured `addCreationDate`.
  */
 export async function addTaskToFile(text: string, filePath: string) {
-	const creationDate = extensionConfig.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), extensionConfig.creationDateIncludeTime)}} ` : '';
+	const creationDate = $config.addCreationDate ? `{cr:${getDateInISOFormat(new Date(), $config.creationDateIncludeTime)}} ` : '';
 	return await appendTaskToFile(`${creationDate}${text}`, filePath);
 }
 /**

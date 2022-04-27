@@ -1,5 +1,5 @@
 import { Command, Event, EventEmitter, ThemeColor, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
-import { extensionConfig } from '../extension';
+import { $config } from '../extension';
 import { getTaskHover } from '../languageFeatures/getTaskHover';
 import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
@@ -78,7 +78,7 @@ export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
  * Transform tasks to be able to use in a Tree View. All nested tasks also included.
  */
 export function tasksToTreeItems(tasks: TheTask[], tryToApplySort = false, isArchived = false) {
-	if (tryToApplySort && extensionConfig.sortNestedTasks === SortNestedTasks.default) {
+	if (tryToApplySort && $config.sortNestedTasks === SortNestedTasks.default) {
 		tasks = defaultSortTasks(tasks);
 	}
 	const result = [];

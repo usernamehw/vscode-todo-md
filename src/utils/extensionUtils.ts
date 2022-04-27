@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { TextDocument, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { Constants, extensionConfig, extensionState } from '../extension';
+import { Constants, $config, $state } from '../extension';
 import { TheTask } from '../TheTask';
 import { updateSetting } from './vscodeUtils';
 
@@ -34,11 +34,11 @@ export async function getActiveOrDefaultDocument() {
  * Open and return `TextDocument`.
  */
 export async function getActiveDocument() {
-	if (extensionState.activeDocument) {
-		if (extensionState.activeDocument.isClosed) {
-			return await workspace.openTextDocument(extensionState.activeDocument.uri);
+	if ($state.activeDocument) {
+		if ($state.activeDocument.isClosed) {
+			return await workspace.openTextDocument($state.activeDocument.uri);
 		} else {
-			return extensionState.activeDocument;
+			return $state.activeDocument;
 		}
 	} else {
 		return undefined;
@@ -48,10 +48,10 @@ export async function getActiveDocument() {
  * Get Text Document for default file (if specified)
  */
 export async function getDocumentForDefaultFile() {
-	if (!extensionConfig.defaultFile) {
+	if (!$config.defaultFile) {
 		return undefined;
 	}
-	return await workspace.openTextDocument(Uri.file(extensionConfig.defaultFile));
+	return await workspace.openTextDocument(Uri.file($config.defaultFile));
 }
 async function specifyFile(isArchive: boolean) {
 	const filePaths = await window.showOpenDialog({
@@ -82,14 +82,14 @@ export async function specifyDefaultArchiveFile() {
  */
 export async function checkDefaultFileAndNotify(): Promise<boolean> {
 	const specify = 'Specify';
-	if (!extensionConfig.defaultFile) {
+	if (!$config.defaultFile) {
 		const shouldSpecify = await window.showWarningMessage('Default file is not specified.', specify);
 		if (shouldSpecify === specify) {
 			specifyDefaultFile();
 		}
 		return false;
 	} else {
-		const exists = fs.existsSync(extensionConfig.defaultFile);
+		const exists = fs.existsSync($config.defaultFile);
 		if (!exists) {
 			const shouldSpecify = await window.showErrorMessage('Default file does not exist.', specify);
 			if (shouldSpecify === specify) {
@@ -106,14 +106,14 @@ export async function checkDefaultFileAndNotify(): Promise<boolean> {
  */
 export async function checkArchiveFileAndNotify(): Promise<boolean> {
 	const specify = 'Specify';
-	if (!extensionConfig.defaultArchiveFile) {
+	if (!$config.defaultArchiveFile) {
 		const shouldSpecify = await window.showWarningMessage('Default archive file is not specified.', specify);
 		if (shouldSpecify === specify) {
 			specifyDefaultArchiveFile();
 		}
 		return false;
 	} else {
-		const exists = fs.existsSync(extensionConfig.defaultArchiveFile);
+		const exists = fs.existsSync($config.defaultArchiveFile);
 		if (!exists) {
 			const shouldSpecify = await window.showErrorMessage('Specified default archive file does not exist.', specify);
 			if (shouldSpecify === specify) {

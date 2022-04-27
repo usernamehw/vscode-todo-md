@@ -1,6 +1,6 @@
 import { commands, DocumentLink, Range, TextDocument, TextLine } from 'vscode';
 import { DueDate } from './dueDate';
-import { extensionState } from './extension';
+import { $state } from './extension';
 import { Count, Priority, TheTask } from './TheTask';
 import { SpecialTagName } from './utils/extensionUtils';
 
@@ -40,7 +40,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 	if (textLine.firstNonWhitespaceCharacterIndex !== 0) {
 		indent = textLine.text.slice(0, textLine.firstNonWhitespaceCharacterIndex);
 	}
-	const indentLvl = Math.floor(textLine.firstNonWhitespaceCharacterIndex / extensionState.activeDocumentTabSize);
+	const indentLvl = Math.floor(textLine.firstNonWhitespaceCharacterIndex / $state.activeDocumentTabSize);
 
 	/** Offset of the current word (Used to calculate ranges for decorations) */
 	let index = textLine.firstNonWhitespaceCharacterIndex;

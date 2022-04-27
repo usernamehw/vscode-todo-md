@@ -3,7 +3,7 @@ import { CancellationToken, Uri, Webview, WebviewView, WebviewViewProvider, Webv
 import { openSetDueDateInputbox } from '../commands';
 import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTaskAtLine, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
-import { extensionConfig, extensionState, Global } from '../extension';
+import { $config, $state, Global } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
@@ -30,8 +30,8 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 			this._extensionUri,
 		];
 
-		if (extensionConfig.webview.customCSSPath) {
-			localResourceRoots.push(Uri.file(path.dirname(extensionConfig.webview.customCSSPath)));
+		if ($config.webview.customCSSPath) {
+			localResourceRoots.push(Uri.file(path.dirname($config.webview.customCSSPath)));
 		}
 
 		webviewView.webview.options = {
@@ -134,16 +134,16 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 			this.sendMessageToWebview({
 				type: 'updateEverything',
 				value: {
-					tasksAsTree: extensionState.tasksAsTree,
-					tags: extensionState.tags,
-					projects: extensionState.projects,
-					contexts: extensionState.contexts,
-					defaultFileSpecified: Boolean(extensionConfig.defaultFile),
-					activeDocumentOpened: Boolean(extensionState.activeDocument),
-					config: extensionConfig.webview,
+					tasksAsTree: $state.tasksAsTree,
+					tags: $state.tags,
+					projects: $state.projects,
+					contexts: $state.contexts,
+					defaultFileSpecified: Boolean($config.defaultFile),
+					activeDocumentOpened: Boolean($state.activeDocument),
+					config: $config.webview,
 				},
 			});
-			this.updateTitle(extensionState.tasksAsTree.length);
+			this.updateTitle($state.tasksAsTree.length);
 		}
 	}
 	/**
@@ -177,7 +177,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 		const codiconCSSUri = webview.asWebviewUri(Uri.joinPath(this._extensionUri, 'media', 'vendor', 'codicon.css'));
 		const nonce = getNonce();// Use a nonce to only allow a specific script to be run.
 
-		const userCSSLink = extensionConfig.webview.customCSSPath ? `<link href="${webview.asWebviewUri(Uri.file(extensionConfig.webview.customCSSPath))}" rel="stylesheet">` : '';
+		const userCSSLink = $config.webview.customCSSPath ? `<link href="${webview.asWebviewUri(Uri.file($config.webview.customCSSPath))}" rel="stylesheet">` : '';
 
 		return `<!DOCTYPE html>
 			<html lang="en">

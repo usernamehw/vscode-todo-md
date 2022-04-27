@@ -1,6 +1,6 @@
 import { TreeView, Uri, window, workspace } from 'vscode';
 import { toggleTaskCollapse } from '../documentActions';
-import { Constants, extensionConfig, extensionState } from '../extension';
+import { Constants, $config, $state } from '../extension';
 import { filterItems } from '../filter';
 import { parseDocument } from '../parse';
 import { defaultSortTasks } from '../sort';
@@ -74,8 +74,8 @@ export function createAllTreeViews() {
 		treeDataProvider: archivedProvider,
 	});
 
-	if (extensionConfig.treeViews.length) {
-		const generic1 = extensionConfig.treeViews[0];
+	if ($config.treeViews.length) {
+		const generic1 = $config.treeViews[0];
 		if (generic1) {
 			if (typeof generic1.filter !== 'string' || typeof generic1.title !== 'string') {
 				window.showWarningMessage('Tree View must have filter and title and they must be strings.');
@@ -94,7 +94,7 @@ export function createAllTreeViews() {
 			}
 		}
 
-		const generic2 = extensionConfig.treeViews[1];
+		const generic2 = $config.treeViews[1];
 		if (generic2) {
 			if (typeof generic2.filter !== 'string' || typeof generic2.title !== 'string') {
 				window.showWarningMessage('Tree View must have filter and title and they must be strings.');
@@ -113,7 +113,7 @@ export function createAllTreeViews() {
 			}
 		}
 
-		const generic3 = extensionConfig.treeViews[2];
+		const generic3 = $config.treeViews[2];
 		if (generic3) {
 			if (typeof generic3.filter !== 'string' || typeof generic3.title !== 'string') {
 				window.showWarningMessage('Tree View must have filter and title and they must be strings.');
@@ -141,35 +141,35 @@ export function createAllTreeViews() {
  * Update all tree views (excluding archived tasks)
  */
 export function updateAllTreeViews() {
-	tagProvider.refresh(extensionState.tagsForTreeView);
-	setViewTitle(tagsView, 'tags', extensionState.tagsForTreeView.length);
+	tagProvider.refresh($state.tagsForTreeView);
+	setViewTitle(tagsView, 'tags', $state.tagsForTreeView.length);
 
 	updateTasksTreeView();
 
-	const dueTasks = extensionState.tasksAsTree.filter(task => task.due?.isDue === DueState.due || task.due?.isDue === DueState.overdue);
+	const dueTasks = $state.tasksAsTree.filter(task => task.due?.isDue === DueState.due || task.due?.isDue === DueState.overdue);
 	dueProvider.refresh(defaultSortTasks(dueTasks));
 	setViewTitle(dueView, 'due', dueTasks.length);
 
-	projectProvider.refresh(extensionState.projectsForTreeView);
-	setViewTitle(projectView, 'projects', extensionState.projectsForTreeView.length);
+	projectProvider.refresh($state.projectsForTreeView);
+	setViewTitle(projectView, 'projects', $state.projectsForTreeView.length);
 
-	contextProvider.refresh(extensionState.contextsForTreeView);
-	setViewTitle(contextView, 'contexts', extensionState.contextsForTreeView.length);
+	contextProvider.refresh($state.contextsForTreeView);
+	setViewTitle(contextView, 'contexts', $state.contextsForTreeView.length);
 
 	if (generic1View) {
-		const filteredTasks = filterItems(extensionState.tasksAsTree, extensionConfig.treeViews[0].filter);
+		const filteredTasks = filterItems($state.tasksAsTree, $config.treeViews[0].filter);
 		generic1Provider.refresh(filteredTasks);
-		setViewTitle(generic1View, extensionConfig.treeViews[0].title, filteredTasks.length);
+		setViewTitle(generic1View, $config.treeViews[0].title, filteredTasks.length);
 	}
 	if (generic2View) {
-		const filteredTasks = filterItems(extensionState.tasksAsTree, extensionConfig.treeViews[1].filter);
+		const filteredTasks = filterItems($state.tasksAsTree, $config.treeViews[1].filter);
 		generic2Provider.refresh(filteredTasks);
-		setViewTitle(generic2View, extensionConfig.treeViews[1].title, filteredTasks.length);
+		setViewTitle(generic2View, $config.treeViews[1].title, filteredTasks.length);
 	}
 	if (generic3View) {
-		const filteredTasks = filterItems(extensionState.tasksAsTree, extensionConfig.treeViews[2].filter);
+		const filteredTasks = filterItems($state.tasksAsTree, $config.treeViews[2].filter);
 		generic3Provider.refresh(filteredTasks);
-		setViewTitle(generic3View, extensionConfig.treeViews[2].title, filteredTasks.length);
+		setViewTitle(generic3View, $config.treeViews[2].title, filteredTasks.length);
 	}
 	// ──────────────────────────────────────────────────────────────────────
 	updateWebviewView();
@@ -179,10 +179,10 @@ export function updateAllTreeViews() {
  */
 export function updateTasksTreeView() {
 	let tasksForProvider;
-	if (extensionState.taskTreeViewFilterValue) {
-		tasksForProvider = filterItems(extensionState.tasksAsTree, extensionState.taskTreeViewFilterValue);
+	if ($state.taskTreeViewFilterValue) {
+		tasksForProvider = filterItems($state.tasksAsTree, $state.taskTreeViewFilterValue);
 	} else {
-		tasksForProvider = extensionState.tasksAsTree;
+		tasksForProvider = $state.tasksAsTree;
 	}
 	taskProvider.refresh(tasksForProvider);
 	setViewTitle(tasksView, 'tasks', tasksForProvider.length);
@@ -191,7 +191,7 @@ export function updateTasksTreeView() {
  * Update archived Tasks Tree View (since it's only changing on archiving of the task, which is rare)
  */
 export function updateArchivedTasksTreeView() {
-	const archivedTasks = extensionState.archivedTasks;
+	const archivedTasks = $state.archivedTasks;
 	archivedProvider.refresh(archivedTasks);
 	setViewTitle(archivedView, 'archived', archivedTasks.length);
 }
@@ -271,9 +271,9 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
 		});
 	}
 
-	sortItemsForProvider(tagsForProvider, extensionConfig.sortTagsView);
-	sortItemsForProvider(projectsForProvider, extensionConfig.sortProjectsView);
-	sortItemsForProvider(contextsForProvider, extensionConfig.sortContextsView);
+	sortItemsForProvider(tagsForProvider, $config.sortTagsView);
+	sortItemsForProvider(projectsForProvider, $config.sortProjectsView);
+	sortItemsForProvider(contextsForProvider, $config.sortContextsView);
 
 	return {
 		contextsForProvider,
@@ -299,17 +299,17 @@ function sortItemsForProvider(items: ItemForProvider[], sortType: TreeItemSortTy
  * Updates state and Tree View for archived tasks
  */
 export async function updateArchivedTasks() {
-	if (!extensionConfig.defaultArchiveFile) {
+	if (!$config.defaultArchiveFile) {
 		return;
 	}
 	const archivedDocument = await getArchivedDocument();
 	const parsedArchiveTasks = await parseDocument(archivedDocument);
-	extensionState.archivedTasks = parsedArchiveTasks.tasks;
+	$state.archivedTasks = parsedArchiveTasks.tasks;
 	updateArchivedTasksTreeView();
 }
 /**
  * Open and return `TextDocument` for archived file.
  */
 export async function getArchivedDocument() {
-	return await workspace.openTextDocument(Uri.file(extensionConfig.defaultArchiveFile));
+	return await workspace.openTextDocument(Uri.file($config.defaultArchiveFile));
 }

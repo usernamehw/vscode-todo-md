@@ -1,5 +1,5 @@
 import { DocumentHighlight, DocumentHighlightKind, languages, Range } from 'vscode';
-import { extensionConfig, Global } from '../extension';
+import { $config, Global } from '../extension';
 import { parseWord } from '../parse';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
 import { getTodoMdFileDocumentSelector } from './languageFeatures';

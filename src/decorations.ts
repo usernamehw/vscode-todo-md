@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
-import { extensionConfig, extensionState, Global } from './extension';
+import { $config, $state, Global } from './extension';
 import { weekdayNamesShort } from './time/timeUtils';
 import { DueState } from './types';
 import { forEachTask } from './utils/taskUtils';
@@ -10,50 +10,50 @@ import { svgToUri } from './utils/vscodeUtils';
  * Update editor decoration style
  */
 export function updateEditorDecorationStyle() {
-	Global.userSpecifiedAdvancedTagDecorations = !isEmptyObject(extensionConfig.decorations.tag);
+	Global.userSpecifiedAdvancedTagDecorations = !isEmptyObject($config.decorations.tag);
 	Global.completedTaskDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
-		textDecoration: extensionConfig.completedStrikeThrough ? 'line-through rgba(255, 255, 255, 0.35)' : undefined,
+		textDecoration: $config.completedStrikeThrough ? 'line-through rgba(255, 255, 255, 0.35)' : undefined,
 		light: {
-			textDecoration: extensionConfig.completedStrikeThrough ? 'line-through rgba(0, 0, 0, 0.25)' : undefined,
+			textDecoration: $config.completedStrikeThrough ? 'line-through rgba(0, 0, 0, 0.25)' : undefined,
 		},
-		...extensionConfig.decorations.completedTask,
+		...$config.decorations.completedTask,
 	});
 	Global.commentDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.commentForeground'),
 		isWholeLine: true,
 		fontWeight: 'normal',
-		...extensionConfig.decorations.comment,
+		...$config.decorations.comment,
 	});
 	Global.priorityADecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityAForeground'),
 		fontWeight: 'bold',
-		...extensionConfig.decorations.priorityAForeground,
+		...$config.decorations.priorityAForeground,
 	});
 	Global.priorityBDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityBForeground'),
 		fontWeight: 'bold',
-		...extensionConfig.decorations.priorityBForeground,
+		...$config.decorations.priorityBForeground,
 	});
 	Global.priorityCDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityCForeground'),
 		fontWeight: 'bold',
-		...extensionConfig.decorations.priorityCForeground,
+		...$config.decorations.priorityCForeground,
 	});
 	Global.priorityDDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityDForeground'),
 		fontWeight: 'bold',
-		...extensionConfig.decorations.priorityDForeground,
+		...$config.decorations.priorityDForeground,
 	});
 	Global.priorityEDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityEForeground'),
 		fontWeight: 'bold',
-		...extensionConfig.decorations.priorityEForeground,
+		...$config.decorations.priorityEForeground,
 	});
 	Global.priorityFDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityFForeground'),
 		fontWeight: 'bold',
-		...extensionConfig.decorations.priorityFForeground,
+		...$config.decorations.priorityFForeground,
 	});
 	const tagCounterBadgeDecoration = ';position:absolute;display:inline-flex;align-items:center;padding:0px 1px;border-radius:2px;font-size:9px;top:-10%;height:50%;';
 	const tagCounterBadgeDecorationLight = 'background-color:rgba(0,0,0,0.06);color:#111;';
@@ -62,19 +62,19 @@ export function updateEditorDecorationStyle() {
 		color: new ThemeColor('todomd.tagForeground'),
 		light: {
 			after: {
-				textDecoration: extensionConfig.tagCounterBadgeEnabled ? `${tagCounterBadgeDecoration}${tagCounterBadgeDecorationLight}` : undefined,
+				textDecoration: $config.tagCounterBadgeEnabled ? `${tagCounterBadgeDecoration}${tagCounterBadgeDecorationLight}` : undefined,
 			},
 		},
 		dark: {
 			after: {
-				textDecoration: extensionConfig.tagCounterBadgeEnabled ? `${tagCounterBadgeDecoration}${tagCounterBadgeDecorationDark}` : undefined,
+				textDecoration: $config.tagCounterBadgeEnabled ? `${tagCounterBadgeDecoration}${tagCounterBadgeDecorationDark}` : undefined,
 			},
 		},
-		...extensionConfig.decorations.tag,
+		...$config.decorations.tag,
 	});
 	Global.tagWithDelimiterDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagForeground'),
-		...extensionConfig.decorations.tag,
+		...$config.decorations.tag,
 	});
 	Global.tagsDelimiterDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagDelimiterForeground'),
@@ -84,19 +84,19 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.projectDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.projectForeground'),
-		...extensionConfig.decorations.project,
+		...$config.decorations.project,
 	});
 	Global.contextDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.contextForeground'),
-		...extensionConfig.decorations.context,
+		...$config.decorations.context,
 	});
 	Global.notDueDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.notDueForeground'),
-		...extensionConfig.decorations.notDue,
+		...$config.decorations.notDue,
 	});
 	Global.dueDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.dueForeground'),
-		...extensionConfig.decorations.due,
+		...$config.decorations.due,
 	});
 	const enum DueDecorations {
 		padding = '0 0.5ch',
@@ -110,12 +110,12 @@ export function updateEditorDecorationStyle() {
 			border: DueDecorations.border,
 			textDecoration: `;margin-left:${DueDecorations.margin};text-align:center;padding:${DueDecorations.padding};`,
 		},
-		...extensionConfig.decorations.overdue,
+		...$config.decorations.overdue,
 	});
 	Global.invalidDueDateDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.invalidDueDateForeground'),
 		backgroundColor: new ThemeColor('todomd.invalidDueDateBackground'),
-		...extensionConfig.decorations.invalidDue,
+		...$config.decorations.invalidDue,
 	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		after: {
@@ -138,8 +138,8 @@ export function updateEditorDecorationStyle() {
 	Global.nestedTasksPieDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
 		after: {
-			width: `${extensionState.editorLineHeight}px`,
-			height: `${extensionState.editorLineHeight}px`,
+			width: `${$state.editorLineHeight}px`,
+			height: `${$state.editorLineHeight}px`,
 			margin: `0 0 0 ${DueDecorations.margin}`,
 			textDecoration: `;vertical-align:middle;position:relative;top:-1px;`,
 		},
@@ -180,8 +180,8 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 			if (!Global.userSpecifiedAdvancedTagDecorations) {
 				for (let i = 0; i < task.tags.length; i++) {
 					let contentText: string | undefined = undefined;
-					if (extensionConfig.tagCounterBadgeEnabled) {
-						contentText = String(extensionState.tagsForTreeView.find(tag => tag.title === task.tags[i])?.tasks.length || '');
+					if ($config.tagCounterBadgeEnabled) {
+						contentText = String($state.tagsForTreeView.find(tag => tag.title === task.tags[i])?.tasks.length || '');
 					}
 					tagsDecorationOptions.push({
 						range: task.tagsRange[i],
@@ -244,7 +244,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 					range: dueRange,
 					renderOptions: {
 						after: {
-							contentText: `+${due.daysUntilDue}d${extensionConfig.closestDueDateIncludeWeekday ? ` ${weekdayNamesShort[dayjs().add(due.daysUntilDue, 'day').get('day')]}` : ''} `,
+							contentText: `+${due.daysUntilDue}d${$config.closestDueDateIncludeWeekday ? ` ${weekdayNamesShort[dayjs().add(due.daysUntilDue, 'day').get('day')]}` : ''} `,
 						},
 					},
 				});
@@ -271,7 +271,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 				range: emptyRange,
 				renderOptions: {
 					after: {
-						contentIconPath: svgToUri(createPieProgressSvg(extensionState.editorLineHeight, numberOfCompletedSubtasks, numberOfSubtasks)),
+						contentIconPath: svgToUri(createPieProgressSvg($state.editorLineHeight, numberOfCompletedSubtasks, numberOfSubtasks)),
 					},
 				},
 			});
@@ -298,7 +298,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(Global.closestDueDateDecorationType, closestDueDateDecorationOptions);
 	editor.setDecorations(Global.nestedTasksCountDecorationType, nestedTasksDecorationOptions);
 	editor.setDecorations(Global.nestedTasksPieDecorationType, nestedTasksPieOptions);
-	editor.setDecorations(Global.commentDecorationType, extensionState.commentLines);
+	editor.setDecorations(Global.commentDecorationType, $state.commentLines);
 }
 
 /**
@@ -309,8 +309,8 @@ function createPieProgressSvg(size: number, done: number, all: number) {
 		width = 20,
 	}
 	const targetPercentage = done / all * 100;
-	const circleBg = `%23${extensionConfig.progressBackground.slice(1)}`;
-	const pieBg = `%23${extensionConfig.progressForeground.slice(1)}`;
+	const circleBg = `%23${$config.progressBackground.slice(1)}`;
+	const pieBg = `%23${$config.progressForeground.slice(1)}`;
 
 	let svgStr = `<svg xmlns="http://www.w3.org/2000/svg" height="${size}" width="${size}" viewBox="0 0 ${Svg.width} ${Svg.width}">`;
 	svgStr += `<circle r="10" cx="10" cy="10" fill="${circleBg}" />`;

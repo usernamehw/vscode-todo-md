@@ -1,4 +1,4 @@
-import { extensionConfig, extensionState } from '../extension';
+import { $config, $state } from '../extension';
 import type { TheTask } from '../TheTask';
 import { DueState } from '../types';
 import { fancyLetterBold } from './utils';
@@ -27,13 +27,13 @@ function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefin
  * Suffix `Webview` means it gets task from the webview side
  */
 export function getTaskAtLineExtension(lineNumber: number) {
-	return findTaskAtLine(lineNumber, extensionState.tasksAsTree);
+	return findTaskAtLine(lineNumber, $state.tasksAsTree);
 }
 
 /**
  * Execute callback function for every task nested included (recursive).
  */
-export function forEachTask(f: (task: TheTask)=> void, tasks = extensionState.tasksAsTree) {
+export function forEachTask(f: (task: TheTask)=> void, tasks = $state.tasksAsTree) {
 	for (const task of tasks) {
 		f(task);
 		if (task.subtasks.length) {
@@ -67,11 +67,11 @@ export function formatTask(task: TheTask, {
 	let result = '';
 	if (!ignoreDueDate) {
 		if (task.due?.isDue === DueState.due) {
-			result += extensionConfig.labelDueSymbol;
+			result += $config.labelDueSymbol;
 		} else if (task.due?.isDue === DueState.overdue) {
-			result += extensionConfig.labelOverdueSymbol;
+			result += $config.labelOverdueSymbol;
 		} else if (task.due?.isDue === DueState.invalid) {
-			result += extensionConfig.labelInvalidDueSymbol;
+			result += $config.labelInvalidDueSymbol;
 		}
 	}
 	result += makeBoldTagProjectContext(task.title);
@@ -85,7 +85,7 @@ export function formatTask(task: TheTask, {
 }
 
 export function makeBoldTagProjectContext(taskTitle: string): string {
-	if (extensionConfig.useBoldTextInLabels) {
+	if ($config.useBoldTextInLabels) {
 		const words = taskTitle.split(' ');
 
 		const resultWords = [];

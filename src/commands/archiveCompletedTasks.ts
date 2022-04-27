@@ -1,6 +1,6 @@
 import { TextEditor } from 'vscode';
 import { archiveTasks } from '../documentActions';
-import { extensionState } from '../extension';
+import { $state } from '../extension';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
 
 export function archiveCompletedTasks(editor: TextEditor) {
@@ -8,7 +8,7 @@ export function archiveCompletedTasks(editor: TextEditor) {
 	if (selection.isEmpty) {
 		// Archive all completed tasks
 		// TODO: should there be a function `getCompletedTasks()`?
-		const completedTasks = extensionState.tasks.filter(t => t.done);
+		const completedTasks = $state.tasks.filter(t => t.done);
 		archiveTasks(completedTasks, editor.document);
 	} else {
 		// Archive only selected completed tasks
