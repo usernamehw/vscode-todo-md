@@ -69,7 +69,7 @@ export abstract class extensionState {
 
 
 export const enum Constants {
-	EXTENSION_NAME = 'todomd',
+	extensionSettingsPrefix = 'todomd',
 	LAST_VISIT_BY_FILE_STORAGE_KEY = 'LAST_VISIT_BY_FILE_STORAGE_KEY',
 
 	tagsTreeViewId = 'todomd.tags',
@@ -90,7 +90,7 @@ export const enum Constants {
 	THROTTLE_EVERYTHING = 120,
 }
 
-export let extensionConfig = workspace.getConfiguration().get(Constants.EXTENSION_NAME) as ExtensionConfig;
+export let extensionConfig = workspace.getConfiguration().get(Constants.extensionSettingsPrefix) as ExtensionConfig;
 export const counterStatusBar = new CounterStatusBar();
 export const mainStatusBar = new MainStatusBar();
 mainStatusBar.show();
@@ -182,19 +182,20 @@ export async function activate(extensionContext: ExtensionContext) {
 	}));
 
 	function onConfigChange(e: ConfigurationChangeEvent) {
-		if (!e.affectsConfiguration(Constants.EXTENSION_NAME)) {
+		if (!e.affectsConfiguration(Constants.extensionSettingsPrefix)) {
 			return;
 		}
 		updateConfig();
 	}
 
 	function updateConfig() {
-		extensionConfig = workspace.getConfiguration().get(Constants.EXTENSION_NAME) as ExtensionConfig;
+		extensionConfig = workspace.getConfiguration().get(Constants.extensionSettingsPrefix) as ExtensionConfig;
 
 		disposeEditorDisposables();
 		extensionState.editorLineHeight = getEditorLineHeight();
 		updateEditorDecorationStyle();
 		updateUserSuggestItems();
+		mainStatusBar.show();
 		onChangeActiveTextEditor(window.activeTextEditor);
 		updateIsDevContext();
 	}

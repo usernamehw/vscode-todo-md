@@ -34,6 +34,8 @@ export class CounterStatusBar extends StatusBar {
 	show() {
 		if (extensionConfig.statusBarCounterEnabled) {
 			this.statusBarItem.show();
+		} else {
+			this.statusBarItem.hide();
 		}
 	}
 
@@ -57,10 +59,15 @@ export class MainStatusBar extends StatusBar {
 	show() {
 		if (extensionConfig.statusBarMainEnabled) {
 			this.statusBarItem.show();
+		} else {
+			this.statusBarItem.hide();
 		}
 	}
 
 	update(fewNextTasks: TheTask[]) {
+		if (!extensionConfig.statusBarCounterEnabled) {
+			return;
+		}
 		const firstTaskFormatted = formatTask(fewNextTasks[0]);
 		this.updateText(firstTaskFormatted);
 		const markdown = new MarkdownString(undefined, true);
