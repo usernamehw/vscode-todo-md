@@ -117,7 +117,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`
 
 <!-- COMMANDS_START -->
-## Commands (37)
+## Commands (33)
 
 |Command|Description|
 |-|-|
@@ -152,12 +152,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.getRandomTask|Todo MD: Get random task|
 |todomd.filter|Todo MD: Filter|
 |todomd.clearFilter|Todo MD: Clear Filter|
-|todomd.clearGlobalState|Todo MD: Clear global state|
 |todomd.resetAllRecurringTasks|Todo MD: Reset all Recurring tasks|
 |todomd.followLink|Todo MD: Follow link|
-|todomd.setLastVisit|Todo MD: DEV: Set last visit|
-|todomd.showGlobalState|Todo MD: DEV: Show Global State|
-|todomd.removeAllOverdue|Todo MD: DEV: Remove all overdue tags.|
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->

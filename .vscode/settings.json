@@ -209,6 +209,10 @@
 	},
 	"contributions.settings.moveOutPrefix": true,
 	"contributions.commands.excludeById": [
-		"todomd.dev.replaceDateWithToday"
+		"todomd.dev.setLastVisit",
+		"todomd.dev.clearGlobalState",
+		"todomd.dev.showGlobalState",
+		"todomd.dev.removeAllOverdue",
+		"todomd.dev.replaceDateWithToday",
 	]
 }

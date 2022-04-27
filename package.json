@@ -1155,11 +1155,6 @@
 				"icon": "$(clear-all)"
 			},
 			{
-				"command": "todomd.clearGlobalState",
-				"title": "Clear global state",
-				"category": "Todo MD"
-			},
-			{
 				"command": "todomd.resetAllRecurringTasks",
 				"title": "Reset all Recurring tasks",
 				"category": "Todo MD"
@@ -1170,17 +1165,22 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.setLastVisit",
+				"command": "todomd.dev.clearGlobalState",
+				"title": "DEV: Clear global state",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.dev.setLastVisit",
 				"title": "DEV: Set last visit",
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.showGlobalState",
+				"command": "todomd.dev.showGlobalState",
 				"title": "DEV: Show Global State",
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.removeAllOverdue",
+				"command": "todomd.dev.removeAllOverdue",
 				"title": "DEV: Remove all overdue tags.",
 				"category": "Todo MD"
 			},
@@ -1532,19 +1532,19 @@
 					"when": "todomd:isActive"
 				},
 				{
-					"command": "todomd.setLastVisit",
+					"command": "todomd.dev.setLastVisit",
 					"when": "todomd:isDev"
 				},
 				{
-					"command": "todomd.clearGlobalState",
+					"command": "todomd.dev.clearGlobalState",
 					"when": "todomd:isDev"
 				},
 				{
-					"command": "todomd.showGlobalState",
+					"command": "todomd.dev.showGlobalState",
 					"when": "todomd:isDev"
 				},
 				{
-					"command": "todomd.removeAllOverdue",
+					"command": "todomd.dev.removeAllOverdue",
 					"when": "todomd:isDev"
 				},
 				{
