@@ -4,6 +4,7 @@
 		"editorconfig.editorconfig",
 		"stylelint.vscode-stylelint",
 		"octref.vetur",
-		"connor4312.css-theme-completions"
+		"connor4312.css-theme-completions",
+		"usernamehw.contributions"
 	]
 }

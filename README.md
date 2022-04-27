@@ -116,88 +116,140 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `"TEXT_TO_SEARCH"` - Search only in task title (not in special entities, like tag or project)
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`
 
-## Commands
+<!-- COMMANDS_START -->
+## Commands (37)
 
-- `todomd.toggleDone` <kbd>Alt</kbd>+<kbd>D</kbd> - Toggle Done (Completion)
-- `todomd.toggleComment` - Toggle comment. (Not binded by default). You can bind it only for active file: **{"key": "ctrl+/","command": "todomd.toggleComment","when": "editorFocus && todomd:isActive"},** in keybindings.json.
-- `todomd.startTask` - Start task (when completed adds `{duration}` tag)
-- `todomd.completeTask` - Pick and complete a task.
-- `todomd.incrementPriority` - Increment priority.
-- `todomd.decrementPriority` - Decrement priority.
-- `todomd.getNextTask` - Get due task from main file. If none are due - get one with the highest priority.
-- `todomd.getFewNextTasks` - Get several tasks. Due tasks are on top.
-- `todomd.getRandomTask` - Get random not completed task.
-- `todomd.sortByPriority` - Sort selected lines by priority
-- `todomd.createSimilarTask` - Create similar task (same tags, projects, contexts).
-- `todomd.setDueDate` - Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate)
-- `todomd.focusTasksWebviewAndInput` - Focus tasks webview and its main (filter) input element.
+|Command|Description|
+|-|-|
+|todomd.toggleComment|Todo MD: Toggle comment. (Not binded by default). You can bind it only for active file: **{"key": "ctrl+/","command": "todomd.toggleComment","when": "editorFocus && todomd:isActive"}** in keybindings.json.|
+|todomd.toggleTagsTreeViewSorting|Todo MD: Toggle Tags Tree View Sorting|
+|todomd.toggleProjectsTreeViewSorting|Todo MD: Toggle Projects Tree View Sorting|
+|todomd.toggleContextsTreeViewSorting|Todo MD: Toggle Contexts Tree View Sorting|
+|todomd.showWebviewSettings|Todo MD: Show Webview Settings|
+|todomd.webview.toggleShowRecurringUpcoming|Todo MD: Toggle setting to show recurring upcoming tasks in webview.|
+|todomd.focusTasksWebviewAndInput|Todo MD: Focus Tasks Webview and its filter input|
+|todomd.collapseAllNestedTasks|Todo MD: Collapse all nested tasks.|
+|todomd.expandAllTasks|Todo MD: Expand all tasks.|
+|todomd.incrementPriority|Todo MD: Increment priority|
+|todomd.decrementPriority|Todo MD: Decrement priority|
+|todomd.toggleDone|Todo MD: <kbd>Alt</kbd>+<kbd>D</kbd> - Toggle Done (Completion)|
+|todomd.hideTask|Todo MD: Hide the Task|
+|todomd.deleteTask|Todo MD: Delete the Task|
+|todomd.addTaskToDefaultFile|Todo MD: Add a Task to DEFAULT file|
+|todomd.addTaskToActiveFile|Todo MD: Add a Task to ACTIVE file|
+|todomd.sortByPriority|Todo MD: Sort by priority|
+|todomd.sortByDefault|Todo MD: Sort by due date & priority (default sort)|
+|todomd.setDueDate|Todo MD: Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate)|
+|todomd.setDate|Todo MD: Set date|
+|todomd.archiveCompletedTasks|Todo MD: Archive completed Tasks|
+|todomd.startTask|Todo MD: Start task (when completed adds `{duration}` tag)|
+|todomd.openDefaultArchiveFile|Todo MD: Open default archive file|
+|todomd.openDefaultFile|Todo MD: Open default file|
+|todomd.createSimilarTask|Todo MD: Create similar task (same tags, projects, contexts).|
+|todomd.completeTask|Todo MD: Complete a Task|
+|todomd.getNextTask|Todo MD: Get due task from main file. If none are due - get one with the highest priority.|
+|todomd.getFewNextTasks|Todo MD: Get several tasks. Due tasks are on top.|
+|todomd.getRandomTask|Todo MD: Get random task|
+|todomd.filter|Todo MD: Filter|
+|todomd.clearFilter|Todo MD: Clear Filter|
+|todomd.clearGlobalState|Todo MD: Clear global state|
+|todomd.resetAllRecurringTasks|Todo MD: Reset all Recurring tasks|
+|todomd.followLink|Todo MD: Follow link|
+|todomd.setLastVisit|Todo MD: DEV: Set last visit|
+|todomd.showGlobalState|Todo MD: DEV: Show Global State|
+|todomd.removeAllOverdue|Todo MD: DEV: Remove all overdue tags.|
+<!-- COMMANDS_END -->
 
+<!-- SETTINGS_START -->
+## Settings (50)
 
-## Settings (prefix `todomd.`)
+> **Todo MD** extension settings start with `todomd.`
 
-|Name|Default|Description|
-| --- | --- |--- |
-|activatePattern|`"**/{todo,todo.archive}.md"`|Choose files that extension will operate on. By default activated on 2 files (`todo.md` & `todo.archive.md`). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
-|completionDateIncludeDate|**`true`**|Whether to include date when completing a task: `{cm}` vs `{cm:2020-04-30}`|
-|completionDateIncludeTime|**`false`**|Includes date and time to completion date: `{cm:2020-04-30T09:11:17}`|
-|addCreationDate|**`false`**|When creating a task add creation date to it: `{cr:2020-04-30}`|
-|creationDateIncludeTime|**`false`**|When `addCreationDate` setting enabled, includes date and time: `{cr:2020-04-30T09:11:17}`|
-|confirmTaskDelete|`"always"`|Show confirmation when deleting task from Tree View or Webview.|
-|getNextNumberOfTasks|**`5`**|Number of tasks returned by `getFewNextTasks` command.|
-|autoArchiveTasks|**`false`**|When enabled - will move tasks to archive file (on completion)|
-|labelShowItems|**`true`**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|
-|statusBarCounterEnabled|**`true`**|Controls visibility of status bar task progress item `1/3 33%`|
-|suggestItems|{}|This extension will only autocomplete tags/projects/contexts located in **1** file. This setting allows you to add items and their description(markdown) to autocomplete in all files (where extension is active). Examples: `#tag`, `+project`, `@context`.|
-|tagCounterBadgeEnabled|**`true`**|Shows small badge to show a number of times the tag is present in the active document.|
-|sortTagsView|`"alphabetic"`|Controls tags Tree View sorting.|
-|sortProjectsView|`"alphabetic"`|Controls projects Tree View sorting.|
-|sortContextsView|`"alphabetic"`|Controls contexts Tree View sorting.|
-|sortNestedTasks|`"default"`|Controls nested tasks sorting in Tree Views.|
-|treeViews|`[...]`|Tree Views that have predefined filters (3 max).|
-|savedFilters|`[...]`|Filters that you can pick when applying a filter.|
-|tabSize|**`4`**|Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).|
-|completedStrikeThrough|**`true`**|Show strike-through text decoration for completed tasks in editor.|
-|decorations|`{...}`|Advanced decoration properties for editor decorations.|
-|webview.showCompleted|**`true`**|Whether completed tasks are shown or not in the webview.|
-|webview.showRecurringCompleted|**`true`**|Whether recurring completed tasks are shown or not in the webview.|
-|webview.showRecurringUpcoming|**`true`**|Whether recurring upcoming(not due) tasks are shown or not in the webview.|
-|webview.completedStrikeThrough|**`false`**|Whether completed tasks should have a line drawn on them in the webview.|
-|webview.autoShowSuggest|**`true`**|Show autocomplete when typing. (When disabled suggest can be called by <kbd>Ctrl</kbd>+<kbd>Space</kbd>)|
-|webview.showPriority|**`true`**|Controls whether priority is shown in the webview.|
-|webview.customCheckboxEnabled|**`true`**|Whether checkbox is rendered as native input element or a custom styled element.|
-|webview.notificationsEnabled|**`false`**|When true - show notification after some actions (like task completion) in a webview.|
-|webview.fontSize|`"13px"`|Controls font size in the webview.|
-|webview.fontFamily|`'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'`|Controls font family in the webview.|
-|webview.lineHeight|**`1.4`**|Controls line height in the webview.|
-|webview.padding|`"0px"`|Controls vertical padding.|
-|webview.indentSize|`"1.8em"`|Controls visual indent of nested elements in a webview.|
-|webview.tagStyles|**`{}`**|Set different color for any tag in a webview. `"todomd.webview.tagStyles": { "inbox": { "color": "#000", "backgroundColor": "#00b7ff" } }`|
-|webview.customCSSPath|`""`|Absolute path to custom CSS for the webview.|
+|Setting|Default|Description|
+|-|-|-|
+|webview.showCompleted|**true**|Whether completed tasks are shown or not in the webview.|
+|webview.scrollbarOverflow|**false**|If `true` - show transparent scrollbar on top of items.|
+|webview.completedStrikeThrough|**false**|Whether completed tasks should have a line drawn on them in the webview.|
+|webview.showRecurringCompleted|**true**|Whether recurring completed tasks are shown or not in the webview.|
+|webview.showRecurringUpcoming|**true**|Whether recurring upcoming (not due) tasks are shown or not in the webview.|
+|webview.showPriority|**true**|Controls whether priority is shown in the webview.|
+|webview.showCheckbox|**true**|Controls whether checkbox is shown in the webview.|
+|webview.showTaskDetails|**false**|EXPERIMENTAL. When true - show box on the bottom of the webview that shows selected task details.|
+|webview.notificationsEnabled|**false**|When true - show notification after some actions (like task completion) in a webview.|
+|webview.fontSize|"14px"|Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)|
+|webview.fontFamily|"'Segoe&nbsp;UI',&nbsp;Tahoma,&nbsp;Geneva,&nbsp;Verdana,&nbsp;sans\-serif,&nbsp;'Apple&nbsp;Color&nbsp;Emoji',&nbsp;'Segoe&nbsp;UI&nbsp;Emoji',&nbsp;'Noto&nbsp;Color&nbsp;Emoji'"|Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)|
+|webview.lineHeight|**1.4**|Controls line height in the webview.|
+|webview.padding|"1px"|Controls top & bottom padding. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)|
+|webview.indentSize|"1.8em"|Controls visual indent of nested elements in a webview.|
+|webview.customCheckboxEnabled|**true**|Whether checkbox is rendered as native input element or a custom styled element.|
+|webview.autoShowSuggest|**true**|Show autocomplete when typing. (When disabled suggest can be called by `Ctrl`+`Space`)|
+|webview.customCSSPath|""|Absolute path to custom CSS for the webview.|
+|webview.tagStyles|\{\}|Set different color for any tag in a webview.|
+|defaultFile|""|Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`.<br>[**Pick default file**](command:todomd.specifyDefaultFile)|
+|defaultArchiveFile|""|Absolute path to file that all archived tasks will be moved to. <br>[**Pick archive file**](command:todomd.specifyDefaultArchiveFile)|
+|durationIncludeSeconds|**false**|When enabled - duration (editor, hover) includes seconds.|
+|autoArchiveTasks|**false**|When enabled - will move tasks to archive file (on completion).|
+|confirmTaskDelete|"always"|Show confirmation when deleting task from Tree View or Webview.|
+|activatePattern|"\*\*/\{todo,todo.archive\}.md"|Choose files that extension will operate on. By default activated on 2 files (todo.md & todo.archive.md). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
+|getNextNumberOfTasks|**5**|Number of tasks returned by `getFewNextTasks` command.|
+|sortTagsView|"alphabetic"|Controls tags Tree View sorting.|
+|sortProjectsView|"alphabetic"|Controls projects Tree View sorting.|
+|sortContextsView|"alphabetic"|Controls contexts Tree View sorting.|
+|sortNestedTasks|"default"|Controls nested tasks sorting in Tree Views.|
+|suggestItems|\{\}|This extension will only autocomplete tags/projects/contexts located in **1** file. This setting allows you to add items and their description(markdown) to autocomplete in all files (where extension is active). Examples: `#tag`, `+project`, `@context`.|
+|tagCounterBadgeEnabled|**true**|Shows small badge to show a number of times the tag is present in the active document.|
+|progressBackground|"\#c6cdd3"|Editor decoration for nested tasks progress (pie chart) background.|
+|progressForeground|"\#0077AA"|Editor decoration for nested tasks progress (pie chart) foreground.|
+|statusBarMainEnabled|**false**|Controls visibility of status bar that shows next tasks to complete.|
+|statusBarCounterEnabled|**true**|Controls visibility of status bar task progress item `1/3 33%`|
+|addCreationDate|**false**|When creating a task add creation date to it: `{cr:2020-04-30}`|
+|completionDateIncludeDate|**true**|Whether to include date when completing a task: `{cm}` vs `{cm:2020-04-30}`|
+|completionDateIncludeTime|**false**|When completing a task add date and time: `{cm:2020-04-30T09:11:17}`|
+|creationDateIncludeTime|**false**|When creating a task add date and time: `{cr:2020-04-30T09:11:17}`|
+|isDev|**false**|For emulating dev mode. Most likely of no use to anyone, except the extension author.|
+|tabSize|**4**|Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).|
+|savedFilters|\[\]|Filters that you can pick when applying a filter.|
+|treeViews|\[\]|Add more tree views with predefined filters.|
+|labelDueSymbol|"📘&nbsp;"|Prefix for task that is due in labels (tree view, notification, modal, quick pick).|
+|labelOverdueSymbol|"📕&nbsp;"|Prefix for task that is overdue in labels (tree view, notification, modal, quick pick).|
+|labelInvalidDueSymbol|"🟣&nbsp;"|Prefix for task that has invalid due date in labels (tree view, notification, modal, quick pick).|
+|labelShowItems|**true**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|
+|useBoldTextInLabels|**true**|Show projects/tags/contexts in labels in **BOLD**.|
+|completedStrikeThrough|**true**|Show strike-through text decoration for completed tasks in editor.|
+|decorations|\{"project":\{\},"context":\{\},"tag":\{\},"comment":\{\},"notDue":\{\},"due":\{\},"overdue":\{\},"invalidDue":\{\},"priorityAForeground":\{\},"priorityBForeground":\{\},"priorityCForeground":\{\},"priorityDForeground":\{\},"priorityEForeground":\{\},"priorityFForeground":\{\},"completedTask":\{\}\}|Advanced decoration tweaking. https://github.com/usernamehw/vscode-todo-md/issues/4|
+<!-- SETTINGS_END -->
 
 ## Colors
 
-Can be specified in `settings.json` (**`workbench.colorCustomizations`** section)
+<!-- COLORS_START -->
+## Colors (21)
 
-- `todomd.tagForeground`
-- `todomd.contextForeground`
-- `todomd.projectForeground`
-- `todomd.invalidDueDateForeground`
-- `todomd.invalidDueDateBackground`
-- `todomd.notDueForeground`
-- `todomd.dueForeground`
-- `todomd.overdueForeground`
-- `todomd.tagDelimiterForeground`
-- `todomd.commentForeground`
-- `todomd.priorityAForeground`
-- `todomd.priorityBForeground`
-- `todomd.priorityCForeground`
-- `todomd.priorityDForeground`
-- `todomd.priorityEForeground`
-- `todomd.priorityFForeground`
-- `todomd.nestedTasksCountBackground`
-- `todomd.nestedTasksCountForeground`
-- `todomd.nestedTasksCountBorder`
-- `todomd.treeViewCompletedTaskIcon`
+|Color|Dark|Light|HC|Description|
+|-|-|-|-|-|
+|todomd.commentForeground|`#b4b4b4`|`#b4b4b4`|`#b4b4b4`|Color of comments `# Comment`|
+|todomd.priorityAForeground|`#ec4f47`|`#ec4f47`|`#ec4f47`|`(A)`|
+|todomd.priorityBForeground|`#fd9f9a`|`#fd9f9a`|`#fd9f9a`|`(B)`|
+|todomd.priorityCForeground|`#ffb039`|`#ffb648`|`#ffb648`|`(C)`|
+|todomd.priorityDForeground|`#e2cb00`|`#f1d900`|`#f1d900`|`(D)`|
+|todomd.priorityEForeground|`#97c500`|`#ace000`|`#ace000`|`(E)`|
+|todomd.priorityFForeground|`#00cfad`|`#00cfad`|`#00cfad`|`(F)`|
+|todomd.tagForeground|`#1abaff`|`#029cdf`|`#1abaff`|Tag color `#Tag`|
+|todomd.contextForeground|`#7284eb`|`#7284eb`|`#7284eb`|Context color `@Context`|
+|todomd.specialTagForeground|`#7e8081`|`#7e8081`|`#7e8081`|Color of special tags `{h}`|
+|todomd.tagDelimiterForeground|`#b4b4b4`|`#9ba6b1`|`#b4b4b4`|Color of the `#` symbol between tags|
+|todomd.projectForeground|`#36cc9a`|`#36cc9a`|`#36cc9a`|Project color `+Project`|
+|todomd.notDueForeground|`#afafaf`|`#7e8081`|`#afafaf`|Not due|
+|todomd.dueForeground|`#5faedb`|`#5faedb`|`#5faedb`|Due|
+|todomd.overdueForeground|`#f64f4f`|`#d44343`|`#f64f4f`|Overdue|
+|todomd.invalidDueDateForeground|`#ffffff`|`#ffffff`|`#ffffff`|Due date that is either has an invalid format `2020-05` or an invalid date `2020-12-35`|
+|todomd.invalidDueDateBackground|`#7284eb`|`#7284eb`|`#7284eb`|Due date that is either has an invalid format `2020-05` or an invalid date `2020-12-35`|
+|todomd.nestedTasksCountBackground|`#e0d971`|`#f7f3c099`|`#e0d971`|Nested tasks counter editor decoration background.|
+|todomd.nestedTasksCountForeground|`#000000`|`#000000`|`#000000`|Nested tasks counter editor decoration foreground.|
+|todomd.nestedTasksCountBorder|`#fff0`|`#dfd987bd`|`#fff0`|Nested tasks counter editor decoration border.|
+|todomd.treeViewCompletedTaskIcon|`#7cc54b`|`#7cc54b`|`#7cc54b`|Color of completed task icon in Tree View.|
+<!-- COLORS_END -->
+
+Can be specified in `settings.json` (**`workbench.colorCustomizations`** section)
 
 ## More Documentation
 

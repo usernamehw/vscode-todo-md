@@ -207,4 +207,8 @@
 			"value-no-vendor-prefix": null
 		}
 	},
+	"contributions.settings.moveOutPrefix": true,
+	"contributions.commands.excludeById": [
+		"todomd.dev.replaceDateWithToday"
+	]
 }

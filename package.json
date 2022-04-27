@@ -392,7 +392,7 @@
 				},
 				"todomd.decorations": {
 					"type": "object",
-					"description": "Advanced decoration tweaking.",
+					"markdownDescription": "Advanced decoration tweaking. https://github.com/usernamehw/vscode-todo-md/issues/4",
 					"propertyNames": {
 						"enum": [
 							"project",
@@ -981,6 +981,12 @@
 		},
 		"commands": [
 			{
+				"command": "todomd.toggleComment",
+				"title": "Toggle Comment",
+				"description": "Toggle comment. (Not binded by default). You can bind it only for active file: **{\"key\": \"ctrl+/\",\"command\": \"todomd.toggleComment\",\"when\": \"editorFocus && todomd:isActive\"}** in keybindings.json.",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.toggleTagsTreeViewSorting",
 				"title": "Toggle Tags Tree View Sorting",
 				"category": "Todo MD",
@@ -1040,6 +1046,7 @@
 			{
 				"command": "todomd.toggleDone",
 				"title": "Toggle completion",
+				"description": "<kbd>Alt</kbd>+<kbd>D</kbd> - Toggle Done (Completion)",
 				"category": "Todo MD",
 				"icon": "$(check)"
 			},
@@ -1077,6 +1084,7 @@
 			},
 			{
 				"command": "todomd.setDueDate",
+				"description": "Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate)",
 				"title": "Set due date",
 				"category": "Todo MD"
 			},
@@ -1092,6 +1100,7 @@
 			},
 			{
 				"command": "todomd.startTask",
+				"description": "Start task (when completed adds `{duration}` tag)",
 				"title": "Start",
 				"category": "Todo MD"
 			},
@@ -1118,11 +1127,13 @@
 			},
 			{
 				"command": "todomd.getNextTask",
+				"description": "Get due task from main file. If none are due - get one with the highest priority.",
 				"title": "Get 1 next task",
 				"category": "Todo MD"
 			},
 			{
 				"command": "todomd.getFewNextTasks",
+				"description": "Get several tasks. Due tasks are on top.",
 				"title": "Get a few next tasks.",
 				"category": "Todo MD"
 			},
@@ -1509,10 +1520,15 @@
 				},
 				{
 					"command": "todomd.createSimilarTask",
+					"description": "Create similar task (same tags, projects, contexts).",
 					"when": "todomd:isActive"
 				},
 				{
 					"command": "todomd.startTask",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.toggleComment",
 					"when": "todomd:isActive"
 				},
 				{
