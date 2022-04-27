@@ -76,7 +76,7 @@ export function formatTask(task: TheTask, {
 	}
 	result += makeBoldTagProjectContext(task.title);
 	if (task.count) {
-		result += ` ${task.count.current}/${task.count.needed}`;
+		result += ` [${task.count.current}/${task.count.needed}]`;
 	}
 	if (result.length === 0) {
 		return task.rawText;
