@@ -177,7 +177,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.showTaskDetails|**false**|EXPERIMENTAL. When true - show box on the bottom of the webview that shows selected task details.|
 |webview.notificationsEnabled|**false**|When true - show notification after some actions (like task completion) in a webview.|
 |webview.fontSize|"14px"|Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)|
-|webview.fontFamily|"'Segoe&nbsp;UI',&nbsp;Tahoma,&nbsp;Geneva,&nbsp;Verdana,&nbsp;sans\-serif,&nbsp;'Apple&nbsp;Color&nbsp;Emoji',&nbsp;'Segoe&nbsp;UI&nbsp;Emoji',&nbsp;'Noto&nbsp;Color&nbsp;Emoji'"|Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)|
+|webview.fontFamily|"'Segoe UI', Tahoma, Geneva, Verdana, sans\-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'"|Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)|
 |webview.lineHeight|**1.4**|Controls line height in the webview.|
 |webview.padding|"1px"|Controls top & bottom padding. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)|
 |webview.indentSize|"1.8em"|Controls visual indent of nested elements in a webview.|
@@ -216,7 +216,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |labelShowItems|**true**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|
 |useBoldTextInLabels|**true**|Show projects/tags/contexts in labels in **BOLD**.|
 |completedStrikeThrough|**true**|Show strike-through text decoration for completed tasks in editor.|
-|decorations|\{"project":\{\},"context":\{\},"tag":\{\},"comment":\{\},"notDue":\{\},"due":\{\},"overdue":\{\},"invalidDue":\{\},"priorityAForeground":\{\},"priorityBForeground":\{\},"priorityCForeground":\{\},"priorityDForeground":\{\},"priorityEForeground":\{\},"priorityFForeground":\{\},"completedTask":\{\}\}|Advanced decoration tweaking. https://github.com/usernamehw/vscode-todo-md/issues/4|
+|decorations|{...}|Advanced decoration tweaking. https://github.com/usernamehw/vscode-todo-md/issues/4|
 <!-- SETTINGS_END -->
 
 ## Colors
