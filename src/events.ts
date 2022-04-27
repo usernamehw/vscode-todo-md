@@ -3,7 +3,7 @@ import throttle from 'lodash/throttle';
 import { languages, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
 import { doUpdateEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
-import { Constants, extensionConfig, extensionState, Global, statusBar, updateLastVisitGlobalState, updateState } from './extension';
+import { Constants, extensionConfig, extensionState, Global, counterStatusBar, updateLastVisitGlobalState, updateState, mainStatusBar } from './extension';
 import { updateHover } from './languageFeatures/hoverProvider';
 import { updateCompletions } from './languageFeatures/completionProviders';
 import { updateDocumentHighlights } from './languageFeatures/documentHighlights';
@@ -14,6 +14,7 @@ import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
 import { sleep } from './utils/utils';
 import { setContext } from './utils/vscodeUtils';
+import { getNextFewTasks } from './commands/getFewNextTasks';
 
 let changeActiveEditorEventInProgress = false;
 /**
@@ -106,7 +107,7 @@ export function activateEditorFeatures(editor: TextEditor) {
 	updateRenameProvider();
 	updateReferenceProvider();
 	updateHover();
-	statusBar.show();
+	counterStatusBar.show();
 }
 /**
  * When `todo.md` document is closed - all the features except for the Tree Views
@@ -124,7 +125,7 @@ export function deactivateEditorFeatures() {
 	Global.renameProviderDisposable?.dispose();
 	Global.referenceProviderDisposable?.dispose();
 	Global.hoverDisposable?.dispose();
-	statusBar.hide();
+	counterStatusBar.hide();
 }
 /**
  * - Update state (parse the active/default file)
@@ -136,7 +137,8 @@ export const updateEverything = throttle(async (editor?: TextEditor) => {
 	await updateState();
 	if (editor && isTheRightFileName(editor)) {
 		doUpdateEditorDecorations(editor);
-		statusBar.updateText(extensionState.tasks);
+		counterStatusBar.update(extensionState.tasks);
 	}
+	mainStatusBar.update(getNextFewTasks());
 	updateAllTreeViews();
 }, Constants.THROTTLE_EVERYTHING);

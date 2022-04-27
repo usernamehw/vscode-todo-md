@@ -1,5 +1,6 @@
 import { DecorationRenderOptions } from 'vscode';
 import { TheTask } from './TheTask';
+
 /**
  * Object describing items for Tree View Provider
  */
@@ -85,6 +86,10 @@ export interface ExtensionConfig {
 	 * Controls visibility of status bar task progress item `1/3 33%`
 	 */
 	statusBarCounterEnabled: boolean;
+	/**
+	 * Controls visibility of status bar that shows next tasks to complete.
+	 */
+	statusBarMainEnabled: boolean;
 	/**
 	 * Controls tags Tree View sorting.
 	 */

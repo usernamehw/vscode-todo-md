@@ -13,7 +13,7 @@ import { expandAllNestedTasks } from './commands/expandAllNestedTasks';
 import { filter } from './commands/filter';
 import { focusTasksWebviewAndInput } from './commands/focusTasksWebviewAndInput';
 import { followLinkCommand } from './commands/followLinkCommand';
-import { getFewNextTasks } from './commands/getFewNextTasks';
+import { getFewNextTasksCommand } from './commands/getFewNextTasks';
 import { getNextTask } from './commands/getNextTask';
 import { getRandomTask } from './commands/getRandomTask';
 import { goToLine } from './commands/goToLine';
@@ -67,7 +67,7 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandIds.deleteTask, deleteTask);
 	commands.registerCommand(CommandIds.startTask, startTask);
 	commands.registerCommand(CommandIds.getNextTask, getNextTask);
-	commands.registerCommand(CommandIds.getFewNextTasks, getFewNextTasks);
+	commands.registerCommand(CommandIds.getFewNextTasks, getFewNextTasksCommand);
 	commands.registerCommand(CommandIds.getRandomTask, getRandomTask);
 	commands.registerCommand(CommandIds.addTaskToDefaultFile, addTaskToDefaultFile);
 	commands.registerCommand(CommandIds.addTaskToActiveFile, addTaskToActiveFile);
@@ -189,7 +189,7 @@ export function openSetDueDateInputbox(document: TextDocument, lineNumber: numbe
 		value = e;
 		const newDueDate = helpCreateDueDate(value);
 		if (!newDueDate) {
-			inputBox.prompt = inputOffset('❌');
+			inputBox.prompt = inputOffset('❌ Invalid');
 			return;
 		}
 		inputBox.prompt = inputOffset(new DueDate(newDueDate).closestDueDateInTheFuture);

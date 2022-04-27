@@ -1,7 +1,7 @@
 
 # comment
 (A) Task with project +Project
-(B) Task with tags #important#new
+(B) Task with tags #important #new
 (C) Task with context @home
 (D) Task with due date {due:2020-10-30}
 (E) Completed task {cm}

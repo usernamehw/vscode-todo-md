@@ -10,7 +10,7 @@ import { updateEditorDecorationStyle } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor } from './events';
 import { parseDocument } from './parse';
-import { StatusBar } from './statusBar';
+import { CounterStatusBar, MainStatusBar } from './statusBar';
 import { TheTask } from './TheTask';
 import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
 import { ExtensionConfig, ItemForProvider, VscodeContext } from './types';
@@ -85,11 +85,15 @@ export const enum Constants {
 	defaultFileSetting = 'todomd.defaultFile',
 	defaultArchiveFileSetting = 'todomd.defaultArchiveFile',
 
+	extensionMenuPrefix = 'Todo MD:',
+
 	THROTTLE_EVERYTHING = 120,
 }
 
 export let extensionConfig = workspace.getConfiguration().get(Constants.EXTENSION_NAME) as ExtensionConfig;
-export const statusBar = new StatusBar();
+export const counterStatusBar = new CounterStatusBar();
+export const mainStatusBar = new MainStatusBar();
+mainStatusBar.show();
 /**
  * Global vscode variables (mostly disposables)
  */
