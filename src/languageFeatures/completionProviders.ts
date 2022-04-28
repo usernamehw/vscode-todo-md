@@ -90,13 +90,13 @@ export function updateCompletions() {
 				today.insertText = getDateInISOFormat(new Date());
 
 				const setDueDateToday = new CompletionItem('SET_DUE_TODAY', CompletionItemKind.Constant);
-				setDueDateToday.insertText = `{due:${getDateInISOFormat(new Date())}}`;
+				setDueDateToday.insertText = helpCreateSpecialTag(SpecialTagName.due, getDateInISOFormat(new Date()));
 
 				const setDueDateTomorrow = new CompletionItem('SET_DUE_TOMORROW', CompletionItemKind.Constant);
-				setDueDateTomorrow.insertText = `{due:${getDateInISOFormat(dayjs().add(1, 'day'))}}`;
+				setDueDateTomorrow.insertText = helpCreateSpecialTag(SpecialTagName.due, getDateInISOFormat(dayjs().add(1, 'day')));
 
 				const setDueDateYesterday = new CompletionItem('SET_DUE_YESTERDAY', CompletionItemKind.Constant);
-				setDueDateYesterday.insertText = `{due:${getDateInISOFormat(dayjs().subtract(1, 'day'))}}`;
+				setDueDateYesterday.insertText = helpCreateSpecialTag(SpecialTagName.due, getDateInISOFormat(dayjs().subtract(1, 'day')));
 
 				const setDueDateThisWeek = new CompletionItem('SET_DUE_THIS_WEEK', CompletionItemKind.Constant);
 				setDueDateThisWeek.insertText = helpCreateSpecialTag(SpecialTagName.due, helpCreateDueDate('this week'));
