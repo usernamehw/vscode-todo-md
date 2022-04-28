@@ -6,7 +6,7 @@ import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 export async function startTask(taskTreeItem?: TaskTreeItem) {
 	let lineNumber: number;
 	let document: TextDocument;
-	if (taskTreeItem) {
+	if (taskTreeItem instanceof TaskTreeItem) {
 		lineNumber = taskTreeItem.task.lineNumber;
 		document = await getActiveOrDefaultDocument();
 	} else {

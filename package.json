@@ -1493,6 +1493,39 @@
 					"group": "inline"
 				}
 			],
+			"todomd.toggleDone": [
+				{
+					"command": "todomd.sortByDefault",
+					"group": "0@0"
+				},
+				{
+					"command": "todomd.sortByPriority",
+					"group": "0@1"
+				},
+				{
+					"command": "todomd.setDueDate",
+					"group": "1@0"
+				},
+				{
+					"command": "todomd.startTask",
+					"group": "2@0"
+				},
+				{
+					"command": "todomd.incrementPriority",
+					"group": "3@0"
+				},
+				{
+					"command": "todomd.decrementPriority",
+					"group": "3@1"
+				}
+			],
+			"editor/context": [
+				{
+					"submenu": "todomd.toggleDone",
+					"group": "navigation",
+					"when": "todomd:isActive"
+				}
+			],
 			"commandPalette": [
 				{
 					"command": "todomd.followLink",
@@ -1577,6 +1610,12 @@
 				}
 			]
 		},
+		"submenus": [
+			{
+				"id": "todomd.toggleDone",
+				"label": "Todo MD"
+			}
+		],
 		"viewsContainers": {
 			"activitybar": [
 				{
