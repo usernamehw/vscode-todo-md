@@ -1,4 +1,4 @@
-import { commands, TextDocument, TextEditor, TextEditorEdit, ThemeIcon, window } from 'vscode';
+import { commands, TextEditor, TextEditorEdit, window } from 'vscode';
 import { addTaskToActiveFile } from './commands/addTaskToActiveFile';
 import { addTaskToDefaultFile } from './commands/addTaskToDefaultFile';
 import { archiveCompletedTasks } from './commands/archiveCompletedTasks';
@@ -42,67 +42,114 @@ import { toggleDone } from './commands/toggleDone';
 import { toggleProjectsTreeViewSorting } from './commands/toggleProjectsTreeViewSorting';
 import { toggleTagsTreeViewSorting } from './commands/toggleTagsTreeViewSorting';
 import { webviewToggleShowRecurringUpcoming } from './commands/webviewToggleShowRecurringUpcoming';
-import { appendTaskToFile, setDueDateAtLine } from './documentActions';
-import { DueDate } from './dueDate';
-import { updateEverything } from './events';
+import { appendTaskToFile } from './documentActions';
 import { $config } from './extension';
 import { defaultSortTasks, SortProperty, sortTasks } from './sort';
 import { TheTask } from './TheTask';
-import { helpCreateDueDate } from './time/setDueDateHelper';
 import { getDateInISOFormat } from './time/timeUtils';
-import { CommandIds } from './types';
 import { formatTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { unique } from './utils/utils';
-import { followLink, followLinks, getFullRangeFromLines, inputOffset } from './utils/vscodeUtils';
+import { followLinks, getFullRangeFromLines } from './utils/vscodeUtils';
+
+/**
+ * All commands contributed by this extension.
+ */
+export const enum CommandId {
+	ToggleDone = 'todomd.toggleDone',
+	HideTask = 'todomd.hideTask',
+	CollapseAllNestedTasks = 'todomd.collapseAllNestedTasks',
+	ExpandAllTasks = 'todomd.expandAllTasks',
+	FocusTasksWebviewAndInput = 'todomd.focusTasksWebviewAndInput',
+	DeleteTask = 'todomd.deleteTask',
+	ArchiveCompletedTasks = 'todomd.archiveCompletedTasks',
+	ArchiveSelectedCompletedTasks = 'todomd.archiveSelectedCompletedTasks',
+	StartTask = 'todomd.startTask',
+	SortByPriority = 'todomd.sortByPriority',
+	SortByDefault = 'todomd.sortByDefault',
+	CreateSimilarTask = 'todomd.createSimilarTask',
+	GetNextTask = 'todomd.getNextTask',
+	GetFewNextTasks = 'todomd.getFewNextTasks',
+	GetRandomTask = 'todomd.getRandomTask',
+	AddTaskToDefaultFile = 'todomd.addTaskToDefaultFile',
+	AddTaskToActiveFile = 'todomd.addTaskToActiveFile',
+	SetDueDate = 'todomd.setDueDate',
+	SetDueDateWithArgs = 'todomd.setDueDateWithArgs',
+	OpenDefaultArchiveFile = 'todomd.openDefaultArchiveFile',
+	OpenDefaultFile = 'todomd.openDefaultFile',
+	SpecifyDefaultFile = 'todomd.specifyDefaultFile',
+	SpecifyDefaultArchiveFile = 'todomd.specifyDefaultArchiveFile',
+	CompleteTask = 'todomd.completeTask',
+	Filter = 'todomd.filter',
+	ClearFilter = 'todomd.clearFilter',
+	GoToLine = 'todomd.goToLine',
+	GoToLineInArchived = 'todomd.goToLineInArchived',
+	ResetAllRecurringTasks = 'todomd.resetAllRecurringTasks',
+	FollowLink = 'todomd.followLink',
+	IncrementPriority = 'todomd.incrementPriority',
+	DecrementPriority = 'todomd.decrementPriority',
+	ShowWebviewSettings = 'todomd.showWebviewSettings',
+	ShowDefaultFileSetting = 'todomd.showDefaultFileSetting',
+	WebviewToggleShowRecurringUpcoming = 'todomd.webview.toggleShowRecurringUpcoming',
+	ToggleComment = 'todomd.toggleComment',
+	ToggleTagsTreeViewSorting = 'todomd.toggleTagsTreeViewSorting',
+	ToggleProjectsTreeViewSorting = 'todomd.toggleProjectsTreeViewSorting',
+	ToggleContextsTreeViewSorting = 'todomd.toggleContextsTreeViewSorting',
+	// ──── Dev ───────────────────────────────────────────────────
+	SetLastVisit = 'todomd.dev.setLastVisit',
+	ClearGlobalState = 'todomd.dev.clearGlobalState',
+	ShowGlobalState = 'todomd.dev.showGlobalState',
+	RemoveAllOverdue = 'todomd.dev.removeAllOverdue',
+	ReplaceWithToday = 'todomd.dev.replaceDateWithToday',
+}
 
 /**
  * Register all commands. Names should match **"commands"** in `package.json`
  */
 export function registerAllCommands() {
-	commands.registerCommand(CommandIds.toggleDone, toggleDone);
-	commands.registerCommand(CommandIds.hideTask, hideTask);
-	commands.registerCommand(CommandIds.collapseAllNestedTasks, collapseAllNestedTasks);
-	commands.registerCommand(CommandIds.expandAllTasks, expandAllNestedTasks);
-	commands.registerCommand(CommandIds.focusTasksWebviewAndInput, focusTasksWebviewAndInput);
-	commands.registerCommand(CommandIds.deleteTask, deleteTask);
-	commands.registerCommand(CommandIds.startTask, startTask);
-	commands.registerCommand(CommandIds.getNextTask, getNextTask);
-	commands.registerCommand(CommandIds.getFewNextTasks, getFewNextTasksCommand);
-	commands.registerCommand(CommandIds.getRandomTask, getRandomTask);
-	commands.registerCommand(CommandIds.addTaskToDefaultFile, addTaskToDefaultFile);
-	commands.registerCommand(CommandIds.addTaskToActiveFile, addTaskToActiveFile);
-	commands.registerCommand(CommandIds.setDueDateWithArgs, setDueDateWithArgs);
-	commands.registerCommand(CommandIds.openDefaultArchiveFile, openDefaultArchiveFile);
-	commands.registerCommand(CommandIds.openDefaultFile, openDefaultFile);
-	commands.registerCommand(CommandIds.specifyDefaultFile, specifyDefaultFileCommand);
-	commands.registerCommand(CommandIds.specifyDefaultArchiveFile, specifyDefaultArchiveFileCommand);
-	commands.registerCommand(CommandIds.completeTask, completeTask);
-	commands.registerCommand(CommandIds.clearFilter, clearFilter);
-	commands.registerCommand(CommandIds.clearGlobalState, clearGlobalState);
-	commands.registerCommand(CommandIds.showGlobalState, showGlobalState);
-	commands.registerCommand(CommandIds.removeAllOverdue, removeAllOverdue);
-	commands.registerCommand(CommandIds.goToLine, goToLine);
-	commands.registerCommand(CommandIds.goToLineInArchived, goToLineInArchived);
-	commands.registerCommand(CommandIds.followLink, followLinkCommand);
-	commands.registerCommand(CommandIds.showWebviewSettings, showWebviewSettings);
-	commands.registerCommand(CommandIds.showDefaultFileSetting, showDefaultFileSetting);
-	commands.registerCommand(CommandIds.webviewToggleShowRecurringUpcoming, webviewToggleShowRecurringUpcoming);
-	commands.registerCommand(CommandIds.toggleTagsTreeViewSorting, toggleTagsTreeViewSorting);
-	commands.registerCommand(CommandIds.toggleProjectsTreeViewSorting, toggleProjectsTreeViewSorting);
-	commands.registerCommand(CommandIds.toggleContextsTreeViewSorting, toggleContextsTreeViewSorting);
+	commands.registerCommand(CommandId.ToggleDone, toggleDone);
+	commands.registerCommand(CommandId.HideTask, hideTask);
+	commands.registerCommand(CommandId.CollapseAllNestedTasks, collapseAllNestedTasks);
+	commands.registerCommand(CommandId.ExpandAllTasks, expandAllNestedTasks);
+	commands.registerCommand(CommandId.FocusTasksWebviewAndInput, focusTasksWebviewAndInput);
+	commands.registerCommand(CommandId.DeleteTask, deleteTask);
+	commands.registerCommand(CommandId.StartTask, startTask);
+	commands.registerCommand(CommandId.GetNextTask, getNextTask);
+	commands.registerCommand(CommandId.GetFewNextTasks, getFewNextTasksCommand);
+	commands.registerCommand(CommandId.GetRandomTask, getRandomTask);
+	commands.registerCommand(CommandId.AddTaskToDefaultFile, addTaskToDefaultFile);
+	commands.registerCommand(CommandId.AddTaskToActiveFile, addTaskToActiveFile);
+	commands.registerCommand(CommandId.SetDueDateWithArgs, setDueDateWithArgs);
+	commands.registerCommand(CommandId.OpenDefaultArchiveFile, openDefaultArchiveFile);
+	commands.registerCommand(CommandId.OpenDefaultFile, openDefaultFile);
+	commands.registerCommand(CommandId.SpecifyDefaultFile, specifyDefaultFileCommand);
+	commands.registerCommand(CommandId.SpecifyDefaultArchiveFile, specifyDefaultArchiveFileCommand);
+	commands.registerCommand(CommandId.CompleteTask, completeTask);
+	commands.registerCommand(CommandId.ClearFilter, clearFilter);
+	commands.registerCommand(CommandId.ClearGlobalState, clearGlobalState);
+	commands.registerCommand(CommandId.ShowGlobalState, showGlobalState);
+	commands.registerCommand(CommandId.RemoveAllOverdue, removeAllOverdue);
+	commands.registerCommand(CommandId.GoToLine, goToLine);
+	commands.registerCommand(CommandId.GoToLineInArchived, goToLineInArchived);
+	commands.registerCommand(CommandId.FollowLink, followLinkCommand);
+	commands.registerCommand(CommandId.ShowWebviewSettings, showWebviewSettings);
+	commands.registerCommand(CommandId.ShowDefaultFileSetting, showDefaultFileSetting);
+	commands.registerCommand(CommandId.WebviewToggleShowRecurringUpcoming, webviewToggleShowRecurringUpcoming);
+	commands.registerCommand(CommandId.ToggleTagsTreeViewSorting, toggleTagsTreeViewSorting);
+	commands.registerCommand(CommandId.ToggleProjectsTreeViewSorting, toggleProjectsTreeViewSorting);
+	commands.registerCommand(CommandId.ToggleContextsTreeViewSorting, toggleContextsTreeViewSorting);
 	// ────────────────────────────────────────────────────────────
-	commands.registerTextEditorCommand(CommandIds.setLastVisit, setLastVisit);
-	commands.registerTextEditorCommand(CommandIds.incrementPriority, incrementPriority);
-	commands.registerTextEditorCommand(CommandIds.resetAllRecurringTasks, resetAllRecurringTasksCommand);
-	commands.registerTextEditorCommand(CommandIds.decrementPriority, decrementPriority);
-	commands.registerTextEditorCommand(CommandIds.toggleComment, toggleComment);
-	commands.registerTextEditorCommand(CommandIds.filter, filter);
-	commands.registerTextEditorCommand(CommandIds.replaceWithToday, replaceWithToday);
-	commands.registerTextEditorCommand(CommandIds.sortByPriority, sortByPriority);
-	commands.registerTextEditorCommand(CommandIds.sortByDefault, sortByDefault);
-	commands.registerTextEditorCommand(CommandIds.createSimilarTask, createSimilarTask);
-	commands.registerTextEditorCommand(CommandIds.archiveCompletedTasks, archiveCompletedTasks);
-	commands.registerTextEditorCommand(CommandIds.setDueDate, setDueDate);
+	commands.registerTextEditorCommand(CommandId.SetLastVisit, setLastVisit);
+	commands.registerTextEditorCommand(CommandId.IncrementPriority, incrementPriority);
+	commands.registerTextEditorCommand(CommandId.ResetAllRecurringTasks, resetAllRecurringTasksCommand);
+	commands.registerTextEditorCommand(CommandId.DecrementPriority, decrementPriority);
+	commands.registerTextEditorCommand(CommandId.ToggleComment, toggleComment);
+	commands.registerTextEditorCommand(CommandId.Filter, filter);
+	commands.registerTextEditorCommand(CommandId.ReplaceWithToday, replaceWithToday);
+	commands.registerTextEditorCommand(CommandId.SortByPriority, sortByPriority);
+	commands.registerTextEditorCommand(CommandId.SortByDefault, sortByDefault);
+	commands.registerTextEditorCommand(CommandId.CreateSimilarTask, createSimilarTask);
+	commands.registerTextEditorCommand(CommandId.ArchiveCompletedTasks, archiveCompletedTasks);
+	commands.registerTextEditorCommand(CommandId.SetDueDate, setDueDate);
 }
 /**
  * Append task to the file.
@@ -160,7 +207,7 @@ export function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sort
 	}
 	let sortedTasks: TheTask[];
 	if (sortProperty === 'priority') {
-		sortedTasks = sortTasks(tasks, SortProperty.priority);
+		sortedTasks = sortTasks(tasks, SortProperty.Priority);
 	} else {
 		sortedTasks = defaultSortTasks(tasks);
 	}

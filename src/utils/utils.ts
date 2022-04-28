@@ -21,13 +21,13 @@ export function fancyNumber(n: number): string {
  */
 export function fancyLetterBold(str: string) {
 	const enum Unicode {
-		lowercaseLetterA = 65,
-		lowercaseLetterZ = 90,
-		uppercaseLetterA = 97,
-		uppercaseLetterZ = 122,
+		LowercaseLetterA = 65,
+		LowercaseLetterZ = 90,
+		UppercaseLetterA = 97,
+		UppercaseLetterZ = 122,
 
-		lowercaseBoldLetterA = 120276,
-		uppercaseBoldLetterA = 120302,
+		LowercaseBoldLetterA = 120276,
+		UppercaseBoldLetterA = 120302,
 	}
 	let result = '';
 	for (const letter of str) {
@@ -35,10 +35,10 @@ export function fancyLetterBold(str: string) {
 		if (!codePoint) {
 			continue;
 		}
-		if (codePoint >= Unicode.lowercaseLetterA && codePoint <= Unicode.lowercaseLetterZ) {
-			result += String.fromCodePoint(codePoint + Unicode.lowercaseBoldLetterA - Unicode.lowercaseLetterA);
-		} else if (codePoint >= Unicode.uppercaseLetterA && codePoint <= Unicode.uppercaseLetterZ) {
-			result += String.fromCodePoint(codePoint + Unicode.uppercaseBoldLetterA - Unicode.uppercaseLetterA);
+		if (codePoint >= Unicode.LowercaseLetterA && codePoint <= Unicode.LowercaseLetterZ) {
+			result += String.fromCodePoint(codePoint + Unicode.LowercaseBoldLetterA - Unicode.LowercaseLetterA);
+		} else if (codePoint >= Unicode.UppercaseLetterA && codePoint <= Unicode.UppercaseLetterZ) {
+			result += String.fromCodePoint(codePoint + Unicode.UppercaseBoldLetterA - Unicode.UppercaseLetterA);
 		} else {
 			result += letter;
 		}

@@ -27,7 +27,7 @@ describe(`${headerDelimiter('parse document')}`, () => {
 		assert.deepEqual(links[1].characterRange, [37, 56]);
 	});
 	it('14 Special tag `{overdue}`', () => {
-		assert.equal(tasks[13].due?.isDue, DueState.overdue);
+		assert.equal(tasks[13].due?.isDue, DueState.Overdue);
 	});
 	it('16,17,18,19 Nested tasks', () => {
 		const at16 = tasks[15]!;

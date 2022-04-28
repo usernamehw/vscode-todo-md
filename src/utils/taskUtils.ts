@@ -66,11 +66,11 @@ export function formatTask(task: TheTask, {
 } = {}): string {
 	let result = '';
 	if (!ignoreDueDate) {
-		if (task.due?.isDue === DueState.due) {
+		if (task.due?.isDue === DueState.Due) {
 			result += $config.labelDueSymbol;
-		} else if (task.due?.isDue === DueState.overdue) {
+		} else if (task.due?.isDue === DueState.Overdue) {
 			result += $config.labelOverdueSymbol;
-		} else if (task.due?.isDue === DueState.invalid) {
+		} else if (task.due?.isDue === DueState.Invalid) {
 			result += $config.labelInvalidDueSymbol;
 		}
 	}

@@ -12,21 +12,21 @@ export interface ItemForProvider {
  * Due date possible values
  */
 export const enum DueState {
-	notDue,
-	due,
-	overdue,
-	invalid,
+	NotDue,
+	Due,
+	Overdue,
+	Invalid,
 }
 /**
  * tags Tree View sorting options
  */
 export const enum TreeItemSortType {
-	alphabetic = 'alphabetic',
-	count = 'count',
+	Alphabetic = 'alphabetic',
+	Count = 'count',
 }
 export const enum SortNestedTasks {
-	default = 'default',
-	none = 'none',
+	Default = 'default',
+	None = 'none',
 }
 /**
  * Advanced decorations allowing to change any available editor decoration options (borders, outline, background, foreground, before, after...)
@@ -34,21 +34,21 @@ export const enum SortNestedTasks {
  * https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions
  */
 const enum AdvancedDecorations {
-	project = 'project',
-	context = 'context',
-	tag = 'tag',
-	comment = 'comment',
-	notDue = 'notDue',
-	due = 'due',
-	overdue = 'overdue',
-	invalidDue = 'invalidDue',
-	priorityAForeground = 'priorityAForeground',
-	priorityBForeground = 'priorityBForeground',
-	priorityCForeground = 'priorityCForeground',
-	priorityDForeground = 'priorityDForeground',
-	priorityEForeground = 'priorityEForeground',
-	priorityFForeground = 'priorityFForeground',
-	completedTask = 'completedTask',
+	Project = 'project',
+	Context = 'context',
+	Tag = 'tag',
+	Comment = 'comment',
+	NotDue = 'notDue',
+	Due = 'due',
+	Overdue = 'overdue',
+	InvalidDue = 'invalidDue',
+	PriorityAForeground = 'priorityAForeground',
+	PriorityBForeground = 'priorityBForeground',
+	PriorityCForeground = 'priorityCForeground',
+	PriorityDForeground = 'priorityDForeground',
+	PriorityEForeground = 'priorityEForeground',
+	PriorityFForeground = 'priorityFForeground',
+	CompletedTask = 'completedTask',
 }
 /**
  * Extension options available to user. Names should match **"configuration"** object properties in `package.json` file.
@@ -289,12 +289,12 @@ export interface ExtensionConfig {
  * This extension context names
  */
 export const enum VscodeContext {
-	isActive = 'todomd:isActive',
-	isDev = 'todomd:isDev',
-	filterActive = 'todomd:filterActive',
-	generic1FilterExists = 'todomd:generic1FilterExists',
-	generic2FilterExists = 'todomd:generic2FilterExists',
-	generic3FilterExists = 'todomd:generic3FilterExists',
+	IsActive = 'todomd:isActive',
+	IsDev = 'todomd:isDev',
+	FilterActive = 'todomd:filterActive',
+	Generic1FilterExists = 'todomd:generic1FilterExists',
+	Generic2FilterExists = 'todomd:generic2FilterExists',
+	Generic3FilterExists = 'todomd:generic3FilterExists',
 }
 /**
  * Helper type makes all properties optional with exceptions of required ones
@@ -393,56 +393,6 @@ export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDe
  * Messages that can only be sent from extension to webview.
  */
 export type MessageToWebview = WebviewMessageFocusFilterInput | WebviewMessageUpdateEverything;
-/**
- * All commands contributed by this extension.
- */
-export const enum CommandIds {
-	toggleDone = 'todomd.toggleDone',
-	hideTask = 'todomd.hideTask',
-	collapseAllNestedTasks = 'todomd.collapseAllNestedTasks',
-	expandAllTasks = 'todomd.expandAllTasks',
-	focusTasksWebviewAndInput = 'todomd.focusTasksWebviewAndInput',
-	deleteTask = 'todomd.deleteTask',
-	archiveCompletedTasks = 'todomd.archiveCompletedTasks',
-	archiveSelectedCompletedTasks = 'todomd.archiveSelectedCompletedTasks',
-	startTask = 'todomd.startTask',
-	sortByPriority = 'todomd.sortByPriority',
-	sortByDefault = 'todomd.sortByDefault',
-	createSimilarTask = 'todomd.createSimilarTask',
-	getNextTask = 'todomd.getNextTask',
-	getFewNextTasks = 'todomd.getFewNextTasks',
-	getRandomTask = 'todomd.getRandomTask',
-	addTaskToDefaultFile = 'todomd.addTaskToDefaultFile',
-	addTaskToActiveFile = 'todomd.addTaskToActiveFile',
-	setDueDate = 'todomd.setDueDate',
-	setDueDateWithArgs = 'todomd.setDueDateWithArgs',
-	openDefaultArchiveFile = 'todomd.openDefaultArchiveFile',
-	openDefaultFile = 'todomd.openDefaultFile',
-	specifyDefaultFile = 'todomd.specifyDefaultFile',
-	specifyDefaultArchiveFile = 'todomd.specifyDefaultArchiveFile',
-	completeTask = 'todomd.completeTask',
-	filter = 'todomd.filter',
-	clearFilter = 'todomd.clearFilter',
-	goToLine = 'todomd.goToLine',
-	goToLineInArchived = 'todomd.goToLineInArchived',
-	resetAllRecurringTasks = 'todomd.resetAllRecurringTasks',
-	followLink = 'todomd.followLink',
-	incrementPriority = 'todomd.incrementPriority',
-	decrementPriority = 'todomd.decrementPriority',
-	showWebviewSettings = 'todomd.showWebviewSettings',
-	showDefaultFileSetting = 'todomd.showDefaultFileSetting',
-	webviewToggleShowRecurringUpcoming = 'todomd.webview.toggleShowRecurringUpcoming',
-	toggleComment = 'todomd.toggleComment',
-	toggleTagsTreeViewSorting = 'todomd.toggleTagsTreeViewSorting',
-	toggleProjectsTreeViewSorting = 'todomd.toggleProjectsTreeViewSorting',
-	toggleContextsTreeViewSorting = 'todomd.toggleContextsTreeViewSorting',
-	// ──── Dev ───────────────────────────────────────────────────
-	setLastVisit = 'todomd.dev.setLastVisit',
-	clearGlobalState = 'todomd.dev.clearGlobalState',
-	showGlobalState = 'todomd.dev.showGlobalState',
-	removeAllOverdue = 'todomd.dev.removeAllOverdue',
-	replaceWithToday = 'todomd.dev.replaceDateWithToday',
-}
 
 /**
  * Keep autocomplete for the union type with `| string`.

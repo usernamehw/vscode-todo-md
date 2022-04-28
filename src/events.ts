@@ -38,7 +38,7 @@ export async function onChangeActiveTextEditor(editor: TextEditor | undefined): 
 		$state.activeDocumentTabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : $config.tabSize;
 		await updateEverything(editor);
 		activateEditorFeatures(editor);
-		await setContext(VscodeContext.isActive, true);
+		await setContext(VscodeContext.IsActive, true);
 
 		const needReset = checkIfNeedResetRecurringTasks(editor.document.uri.toString());
 		if (needReset) {
@@ -51,7 +51,7 @@ export async function onChangeActiveTextEditor(editor: TextEditor | undefined): 
 		$state.activeDocumentTabSize = $config.tabSize;
 		$state.theRightFileOpened = false;
 		await updateEverything();
-		await setContext(VscodeContext.isActive, false);
+		await setContext(VscodeContext.IsActive, false);
 	}
 	changeActiveEditorEventInProgress = false;
 }
@@ -141,4 +141,4 @@ export const updateEverything = throttle(async (editor?: TextEditor) => {
 	}
 	mainStatusBar.update(getNextFewTasks());
 	updateAllTreeViews();
-}, Constants.THROTTLE_EVERYTHING);
+}, Constants.ThrottleEverything);

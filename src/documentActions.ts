@@ -335,7 +335,7 @@ export async function resetAllRecurringTasks(document: TextDocument, lastVisit: 
 						const res = new DueDate(task.due.raw, {
 							targetDate: date.toDate(),
 						});
-						if (res.isDue === DueState.due || res.isDue === DueState.overdue) {
+						if (res.isDue === DueState.Due || res.isDue === DueState.Overdue) {
 							addOverdueSpecialTagWorkspaceEdit(edit, document.uri, line, date.format(DATE_FORMAT));
 							break;
 						}
@@ -389,7 +389,7 @@ export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: 
 }
 export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, line: TextLine, task: TheTask, forceIncludeTime = false) {
 	const dateInIso = getDateInISOFormat(new Date(), forceIncludeTime || $config.completionDateIncludeTime);
-	const newCompletionDate = helpCreateSpecialTag(SpecialTagName.completionDate, $config.completionDateIncludeDate ? dateInIso : undefined);
+	const newCompletionDate = helpCreateSpecialTag(SpecialTagName.CompletionDate, $config.completionDateIncludeDate ? dateInIso : undefined);
 	if (task.completionDateRange) {
 		edit.replace(document.uri, task.completionDateRange, newCompletionDate);
 	} else {
@@ -404,7 +404,7 @@ export function insertDurationWorkspaceEdit(edit: WorkspaceEdit, document: TextD
 		return;
 	}
 
-	const newDurationDate = helpCreateSpecialTag(SpecialTagName.duration, durationTo(task, true, $config.durationIncludeSeconds));
+	const newDurationDate = helpCreateSpecialTag(SpecialTagName.Duration, durationTo(task, true, $config.durationIncludeSeconds));
 	if (task.durationRange) {
 		edit.replace(document.uri, task.durationRange, newDurationDate);
 	} else {
@@ -485,7 +485,7 @@ export function startTaskAtLineWorkspaceEdit(edit: WorkspaceEdit, document: Text
 	if (!task) {
 		return;
 	}
-	const newStartDate = helpCreateSpecialTag(SpecialTagName.started, getDateInISOFormat(undefined, true));
+	const newStartDate = helpCreateSpecialTag(SpecialTagName.Started, getDateInISOFormat(undefined, true));
 	if (task.startRange) {
 		edit.replace(document.uri, task.startRange, newStartDate);
 	} else {

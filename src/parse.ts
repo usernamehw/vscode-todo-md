@@ -86,24 +86,24 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 				const specialTag = word.slice(1, firstColonIndex);
 				const specialTagValue = word.slice(firstColonIndex + 1, -1);
 				const range = new Range(lineNumber, index, lineNumber, index + word.length);
-				if (specialTag === SpecialTagName.due) {
+				if (specialTag === SpecialTagName.Due) {
 					if (specialTagValue.length) {
 						due = new DueDate(specialTagValue);
 						dueRange = range;
 					}
-				} else if (specialTag === SpecialTagName.overdue) {
+				} else if (specialTag === SpecialTagName.Overdue) {
 					overdue = specialTagValue;
 					overdueRange = range;
-				} else if (specialTag === SpecialTagName.creationDate) {
+				} else if (specialTag === SpecialTagName.CreationDate) {
 					creationDate = specialTagValue;
 					specialTagRanges.push(range);
-				} else if (specialTag === SpecialTagName.completionDate) {
+				} else if (specialTag === SpecialTagName.CompletionDate) {
 					// Presence of completion date indicates that the task is done
 					done = true;
 					completionDate = specialTagValue;
 					completionDateRange = range;
 					specialTagRanges.push(range);
-				} else if (specialTag === SpecialTagName.count) {
+				} else if (specialTag === SpecialTagName.Count) {
 					if (specialTagValue === undefined) {
 						break;
 					}
@@ -122,18 +122,18 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 						current: currentValue,
 						needed: neededValue,
 					};
-				} else if (specialTag === SpecialTagName.hidden) {
+				} else if (specialTag === SpecialTagName.Hidden) {
 					isHidden = true;
 					specialTagRanges.push(range);
-				} else if (specialTag === SpecialTagName.collapsed) {
+				} else if (specialTag === SpecialTagName.Collapsed) {
 					isCollapsed = true;
 					collapseRange = range;
 					specialTagRanges.push(range);
-				} else if (specialTag === SpecialTagName.started) {
+				} else if (specialTag === SpecialTagName.Started) {
 					start = specialTagValue;
 					startRange = range;
 					specialTagRanges.push(range);
-				} else if (specialTag === SpecialTagName.duration) {
+				} else if (specialTag === SpecialTagName.Duration) {
 					duration = specialTagValue;
 					durationRange = range;
 					specialTagRanges.push(range);
@@ -408,7 +408,7 @@ export function parseWord(word: string, lineNumber: number, index: number): Pars
 			const specialTag = word.slice(1, firstColonIndex);
 			const specialTagValue = word.slice(firstColonIndex + 1, -1);
 			const range = new Range(lineNumber, index, lineNumber, index + word.length);
-			if (specialTag === SpecialTagName.due) {
+			if (specialTag === SpecialTagName.Due) {
 				if (specialTagValue.length) {
 					return {
 						type: 'due',
@@ -416,20 +416,20 @@ export function parseWord(word: string, lineNumber: number, index: number): Pars
 						range,
 					};
 				}
-			} else if (specialTag === SpecialTagName.overdue) {
+			} else if (specialTag === SpecialTagName.Overdue) {
 				return {
 					type: 'overdue',
 					value: specialTagValue,
 					range,
 				};
-			} else if (specialTag === SpecialTagName.creationDate) {
+			} else if (specialTag === SpecialTagName.CreationDate) {
 				return {
 					type: 'creationDate',
 					value: specialTagValue,
 					range,
 				};
 				// specialTagRanges.push(range);
-			} else if (specialTag === SpecialTagName.completionDate) {
+			} else if (specialTag === SpecialTagName.CompletionDate) {
 				// Presence of completion date indicates that the task is done
 				return {
 					type: 'completionDate',
@@ -438,7 +438,7 @@ export function parseWord(word: string, lineNumber: number, index: number): Pars
 					range,
 				};
 				// specialTagRanges.push(range);
-			} else if (specialTag === SpecialTagName.count) {
+			} else if (specialTag === SpecialTagName.Count) {
 				if (specialTagValue === undefined) {
 					break;
 				}
@@ -460,28 +460,28 @@ export function parseWord(word: string, lineNumber: number, index: number): Pars
 					range,
 				};
 				// specialTagRanges.push(range);
-			} else if (specialTag === SpecialTagName.hidden) {
+			} else if (specialTag === SpecialTagName.Hidden) {
 				return {
 					type: 'hidden',
 					isHidden: true,
 					range,
 				};
 				// specialTagRanges.push(range);
-			} else if (specialTag === SpecialTagName.collapsed) {
+			} else if (specialTag === SpecialTagName.Collapsed) {
 				return {
 					type: 'collapsed',
 					isCollapsed: true,
 					range,
 				};
 				// specialTagRanges.push(range);
-			} else if (specialTag === SpecialTagName.started) {
+			} else if (specialTag === SpecialTagName.Started) {
 				return {
 					type: 'start',
 					value: specialTagValue,
 					range,
 				};
 				// specialTagRanges.push(range);
-			} else if (specialTag === SpecialTagName.duration) {
+			} else if (specialTag === SpecialTagName.Duration) {
 				return {
 					type: 'duration',
 					value: specialTagValue,

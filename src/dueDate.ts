@@ -16,7 +16,7 @@ export class DueDate {
 	/** If this due date is recurring or not */
 	isRecurring = false;
 	/** Due state. Can be: due, notDue, overdue, invalid */
-	isDue = DueState.notDue;
+	isDue = DueState.NotDue;
 	/** Closest due date (assigned only when the task is not due today) */
 	closestDueDateInTheFuture: string;
 	/** Days until this task is due */
@@ -34,16 +34,16 @@ export class DueDate {
 		this.isDue = result.isDue;
 		this.type = result.dueType;
 		this.overdueStr = options?.overdueStr;
-		if (result.isDue === DueState.notDue) {
+		if (result.isDue === DueState.NotDue) {
 			const closest = this.calcClosestDueDateInTheFuture();
 			this.closestDueDateInTheFuture = closest.closestString;
 			this.daysUntilDue = closest.daysUntil;
-		} else if (result.isDue === DueState.due || result.isDue === DueState.overdue) {
+		} else if (result.isDue === DueState.Due || result.isDue === DueState.Overdue) {
 			this.closestDueDateInTheFuture = `${dayOfTheWeek(dayjs())} [today]`;
 		} else {
 			this.closestDueDateInTheFuture = '';
 		}
-		if (this.isDue === DueState.overdue) {
+		if (this.isDue === DueState.Overdue) {
 			this.overdueInDays = this.getOverdueInDays();
 		}
 	}
@@ -92,12 +92,12 @@ export class DueDate {
 		const result = dueDates.map(dueDate => DueDate.parseDueDate(dueDate, targetDate));
 
 		const isRecurring = result.some(r => r.isRecurring);
-		const hasInvalid = result.some(r => r.isDue === DueState.invalid);
-		const hasOverdue = result.some(r => r.isDue === DueState.overdue) || overdue;
-		const hasDue = result.some(r => r.isDue === DueState.due);
-		const isDue = hasInvalid ? DueState.invalid :
-			hasOverdue ? DueState.overdue :
-				hasDue ? DueState.due : DueState.notDue;
+		const hasInvalid = result.some(r => r.isDue === DueState.Invalid);
+		const hasOverdue = result.some(r => r.isDue === DueState.Overdue) || overdue;
+		const hasDue = result.some(r => r.isDue === DueState.Due);
+		const isDue = hasInvalid ? DueState.Invalid :
+			hasOverdue ? DueState.Overdue :
+				hasDue ? DueState.Due : DueState.NotDue;
 		const dueType = result[0].dueType;
 
 		return {
@@ -113,12 +113,12 @@ export class DueDate {
 		if (due === 'today') {
 			return {
 				isRecurring: false,
-				isDue: DueState.due,
+				isDue: DueState.Due,
 				dueType: 'recurringWithoutStartingDate',
 			};
 		}
 		let isRecurring = false;
-		let isDue = DueState.notDue;
+		let isDue = DueState.NotDue;
 		let dueType: DueType;
 
 		const dueWithDateMatch = DueDate.dueWithDateRegexp.exec(due);
@@ -134,7 +134,7 @@ export class DueDate {
 				return {
 					isRecurring: Boolean(dueRecurringPart),
 					dueType: 'invalid',
-					isDue: DueState.invalid,
+					isDue: DueState.Invalid,
 				};
 			}
 
@@ -154,7 +154,7 @@ export class DueDate {
 				isRecurring = true;
 				dueType = 'recurringWithoutStartingDate';
 			} else {
-				isDue = DueState.invalid;
+				isDue = DueState.Invalid;
 				dueType = 'invalid';
 			}
 		}
@@ -169,10 +169,10 @@ export class DueDate {
 	 */
 	private static isDueExactDate(date: Date, targetDate: Date): DueState {
 		if (dayjs(targetDate).isBefore(date)) {
-			return DueState.notDue;
+			return DueState.NotDue;
 		}
 		const diffInDays = dayjs(date).diff(dayjs(targetDate), 'day');
-		return diffInDays === 0 ? DueState.due : DueState.overdue;
+		return diffInDays === 0 ? DueState.Due : DueState.Overdue;
 	}
 	// private static isDueBetween(d1: string, d2: string): DueReturn {
 	// 	const now = dayjs();
@@ -195,54 +195,54 @@ export class DueDate {
 	private static isDueToday(dueString: string, targetDate: Date): DueState {
 		const value = dueString.toLowerCase();
 		if (value === 'ed') {
-			return DueState.due;
+			return DueState.Due;
 		}
 
 		switch (targetDate.getDay()) {
 			case 0: {
 				if (value === 'sun' || value === 'sunday') {
-					return DueState.due;
+					return DueState.Due;
 				}
 				break;
 			}
 			case 1: {
 				if (value === 'mon' || value === 'monday') {
-					return DueState.due;
+					return DueState.Due;
 				}
 				break;
 			}
 			case 2: {
 				if (value === 'tue' || value === 'tuesday') {
-					return DueState.due;
+					return DueState.Due;
 				}
 				break;
 			}
 			case 3: {
 				if (value === 'wed' || value === 'wednesday') {
-					return DueState.due;
+					return DueState.Due;
 				}
 				break;
 			}
 			case 4: {
 				if (value === 'thu' || value === 'thursday') {
-					return DueState.due;
+					return DueState.Due;
 				}
 				break;
 			}
 			case 5: {
 				if (value === 'fri' || value === 'friday') {
-					return DueState.due;
+					return DueState.Due;
 				}
 				break;
 			}
 			case 6: {
 				if (value === 'sat' || value === 'saturday') {
-					return DueState.due;
+					return DueState.Due;
 				}
 				break;
 			}
 		}
-		return DueState.notDue;
+		return DueState.NotDue;
 	}
 	/**
 	 * Parse recurring due date with starting date `due:2019-06-19|e2d`
@@ -258,12 +258,12 @@ export class DueDate {
 			if (unit === 'd') {
 				const diffInDays = dayjs(dateWithoutTime(targetDate)).diff(dueDateStart, 'day');
 				if (diffInDays % interval === 0) {
-					return DueState.due;
+					return DueState.Due;
 				}
 			}
 		}
 
-		return DueState.notDue;
+		return DueState.NotDue;
 	}
 }
 

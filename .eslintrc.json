@@ -18,7 +18,9 @@
 	],
 	"overrides": [
 		{
-			"files": ["*.vue"],
+			"files": [
+				"*.vue"
+			],
 			"parserOptions": {
 				"parser": "@babel/eslint-parser",
 				"ecmaVersion": 2019,
@@ -29,50 +31,83 @@
 				"plugin:vue/recommended"
 			],
 			"settings": {
-				"html/html-extensions": [".html"]
+				"html/html-extensions": [
+					".html"
+				]
 			},
 			"rules": {
 				"vue/component-name-in-template-casing": 0,
 				"vue/no-v-html": 0,
-				"vue/html-indent": [1, 4, {
-					"attribute": 1,
-					"closeBracket": 0,
-					"baseIndent": 0
-				}],
-				"vue/html-quotes": [1, "double"],
+				"vue/html-indent": [
+					1,
+					4,
+					{
+						"attribute": 1,
+						"closeBracket": 0,
+						"baseIndent": 0
+					}
+				],
+				"vue/html-quotes": [
+					1,
+					"double"
+				],
 				"vue/no-confusing-v-for-v-if": 1,
 				"vue/order-in-components": 1,
-				"vue/this-in-template": [1, "never"],
-				"vue/v-on-style": [1, "shorthand"],
-				"vue/v-bind-style": [1, "shorthand"],
+				"vue/this-in-template": [
+					1,
+					"never"
+				],
+				"vue/v-on-style": [
+					1,
+					"shorthand"
+				],
+				"vue/v-bind-style": [
+					1,
+					"shorthand"
+				],
 				"vue/require-prop-types": 1,
 				"vue/require-default-prop": 1,
 				"vue/no-multi-spaces": 1,
-				"vue/name-property-casing": [1, "PascalCase"],
-				"vue/mustache-interpolation-spacing": [1, "always"],
-				"vue/max-attributes-per-line": [1, {
-					"singleline": {
-						"max": 1
-					},
-					"multiline": {
-						"max": 1,
-						"allowFirstLine": true
+				"vue/name-property-casing": [
+					1,
+					"PascalCase"
+				],
+				"vue/mustache-interpolation-spacing": [
+					1,
+					"always"
+				],
+				"vue/max-attributes-per-line": [
+					1,
+					{
+						"singleline": {
+							"max": 1
+						},
+						"multiline": {
+							"max": 1,
+							"allowFirstLine": true
+						}
 					}
-				}],
-				"vue/html-self-closing": [1, {
-					"html": {
-						"void": "never",
-						"normal": "never",
-						"component": "always"
-					},
-					"svg": "always",
-					"math": "always"
-				}],
+				],
+				"vue/html-self-closing": [
+					1,
+					{
+						"html": {
+							"void": "never",
+							"normal": "never",
+							"component": "always"
+						},
+						"svg": "always",
+						"math": "always"
+					}
+				],
 				"vue/html-end-tags": 1,
 				"vue/html-closing-bracket-newline": 0,
 				"vue/singleline-html-element-content-newline": 0,
 				"vue/multiline-html-element-content-newline": 0,
-				"vue/attribute-hyphenation": [1, "never"],
+				"vue/attribute-hyphenation": [
+					1,
+					"never"
+				],
 				"vue/valid-v-text": 1,
 				"vue/valid-v-show": 1,
 				"vue/valid-v-pre": 1,
@@ -106,7 +141,9 @@
 			}
 		},
 		{
-			"files": ["*.ts"],
+			"files": [
+				"*.ts"
+			],
 			"parser": "@typescript-eslint/parser",
 			"parserOptions": {
 				"project": "./tsconfig.json"
@@ -119,41 +156,69 @@
 			],
 			"rules": {
 				"no-autofix/prefer-const": 1,
-
 				"@typescript-eslint/semi": 1,
 				"@typescript-eslint/sort-type-union-intersection-members": 1,
 				"@typescript-eslint/adjacent-overload-signatures": 1,
-				"@typescript-eslint/array-type": [1, {
-					"default": "array"
-				}],
+				"@typescript-eslint/array-type": [
+					1,
+					{
+						"default": "array"
+					}
+				],
 				"@typescript-eslint/await-thenable": 0,
 				"@typescript-eslint/no-confusing-void-expression": 0,
 				"@typescript-eslint/ban-ts-ignore": 0,
 				"@typescript-eslint/explicit-module-boundary-types": 0,
 				"@typescript-eslint/ban-types": 1,
 				"@typescript-eslint/ban-ts-comment": 0,
-				"@typescript-eslint/consistent-type-definitions": [1, "interface"],
+				"@typescript-eslint/consistent-type-definitions": [
+					1,
+					"interface"
+				],
 				"@typescript-eslint/explicit-function-return-type": 0,
 				"@typescript-eslint/explicit-member-accessibility": 0,
 				"@typescript-eslint/func-call-spacing": 1,
 				"@typescript-eslint/generic-type-naming": 0,
-				"@typescript-eslint/indent": [1, "tab", {
-					"SwitchCase": 1
-				}],
-				"@typescript-eslint/interface-name-prefix": [0, "always"],
-				"@typescript-eslint/member-delimiter-style": [1, {
-					"multiline": {
-						"delimiter": "semi",
-						"requireLast": true
-					},
-					"singleline": {
-						"delimiter": "semi",
-						"requireLast": false
+				"@typescript-eslint/indent": [
+					1,
+					"tab",
+					{
+						"SwitchCase": 1
 					}
-				}],
-				"@typescript-eslint/member-naming": [0, {
-					"private": "^_"
-				}],
+				],
+				"@typescript-eslint/interface-name-prefix": [
+					0,
+					"always"
+				],
+				"@typescript-eslint/member-delimiter-style": [
+					1,
+					{
+						"multiline": {
+							"delimiter": "semi",
+							"requireLast": true
+						},
+						"singleline": {
+							"delimiter": "semi",
+							"requireLast": false
+						}
+					}
+				],
+				"@typescript-eslint/naming-convention": [
+					"warn",
+					{
+						"selector": "enumMember",
+						"format": [
+							"PascalCase",
+							"UPPER_CASE"
+						]
+					}
+				],
+				"@typescript-eslint/member-naming": [
+					0,
+					{
+						"private": "^_"
+					}
+				],
 				"@typescript-eslint/member-ordering": 0,
 				"@typescript-eslint/no-array-constructor": 1,
 				"@typescript-eslint/no-empty-function": 0,
@@ -164,9 +229,12 @@
 				"@typescript-eslint/no-floating-promises": 0,
 				"@typescript-eslint/no-for-in-array": 1,
 				"@typescript-eslint/no-inferrable-types": 1,
-				"@typescript-eslint/no-magic-numbers": [0, {
-					"ignoreEnums": true
-				}],
+				"@typescript-eslint/no-magic-numbers": [
+					0,
+					{
+						"ignoreEnums": true
+					}
+				],
 				"@typescript-eslint/no-misused-new": 1,
 				"@typescript-eslint/no-misused-promises": 0,
 				"@typescript-eslint/no-namespace": 1,
@@ -190,24 +258,29 @@
 				"@typescript-eslint/require-await": 1,
 				"@typescript-eslint/restrict-plus-operands": 1,
 				"@typescript-eslint/strict-boolean-expressions": 0,
-				"@typescript-eslint/type-annotation-spacing": [1, {
-					"before": false,
-					"after": true
-				}],
+				"@typescript-eslint/type-annotation-spacing": [
+					1,
+					{
+						"before": false,
+						"after": true
+					}
+				],
 				"@typescript-eslint/unbound-method": 0,
 				"@typescript-eslint/unified-signatures": 1,
-
 				"valid-jsdoc": 0,
 				"camelcase": 1,
 				"comma-dangle": 0,
-				"@typescript-eslint/comma-dangle": [1, {
-					"arrays": "always-multiline",
-					"objects": "always-multiline",
-					"imports": "always-multiline",
-					"exports": "never",
-					"functions": "always-multiline",
-					"enums": "always"
-				}],
+				"@typescript-eslint/comma-dangle": [
+					1,
+					{
+						"arrays": "always-multiline",
+						"objects": "always-multiline",
+						"imports": "always-multiline",
+						"exports": "never",
+						"functions": "always-multiline",
+						"enums": "always"
+					}
+				],
 				"no-bitwise": 1,
 				"no-alert": 0,
 				"curly": 1,
@@ -227,15 +300,31 @@
 				"no-unsafe-negation": 1,
 				"no-regex-spaces": 1,
 				"no-redeclare": 1,
-				"spaced-comment": [1, "always", { "exceptions": ["/"] }],
+				"spaced-comment": [
+					1,
+					"always",
+					{
+						"exceptions": [
+							"/"
+						]
+					}
+				],
 				"no-sparse-arrays": 1,
 				"no-unexpected-multiline": 1,
 				"no-unreachable": 0,
 				"use-isnan": 1,
-				"valid-typeof": [1, { "requireStringLiterals": true }],
+				"valid-typeof": [
+					1,
+					{
+						"requireStringLiterals": true
+					}
+				],
 				"array-callback-return": 1,
 				"block-scoped-var": 1,
-				"complexity": [0, 10],
+				"complexity": [
+					0,
+					10
+				],
 				"consistent-return": 1,
 				"default-case": 0,
 				"dot-notation": 1,
@@ -288,7 +377,12 @@
 				"yoda": 1,
 				"no-label-var": 1,
 				"no-shadow": 0,
-				"@typescript-eslint/no-shadow": 1,
+				"@typescript-eslint/no-shadow": [
+					1,
+					{
+						"ignoreTypeValueShadow": true
+					}
+				],
 				"newline-before-return": 0,
 				"newline-after-var": 0,
 				"array-bracket-spacing": [
@@ -344,9 +438,23 @@
 					0,
 					4
 				],
-				"new-cap": [1, { "capIsNewExceptions": ["Component", "Prop", "Watch"] }],
+				"new-cap": [
+					1,
+					{
+						"capIsNewExceptions": [
+							"Component",
+							"Prop",
+							"Watch"
+						]
+					}
+				],
 				"new-parens": 1,
-				"newline-per-chained-call": [0, { "ignoreChainWithDepth": 2 }],
+				"newline-per-chained-call": [
+					0,
+					{
+						"ignoreChainWithDepth": 2
+					}
+				],
 				"no-nested-ternary": 0,
 				"no-new-object": 1,
 				"no-array-constructor": 1,
@@ -376,11 +484,14 @@
 					}
 				],
 				"space-before-blocks": 1,
-				"space-before-function-paren": [1, {
-					"anonymous": "never",
-					"named": "never",
-					"asyncArrow": "always"
-				}],
+				"space-before-function-paren": [
+					1,
+					{
+						"anonymous": "never",
+						"named": "never",
+						"asyncArrow": "always"
+					}
+				],
 				"space-in-parens": [
 					1,
 					"never"
@@ -397,7 +508,6 @@
 				],
 				"no-unneeded-ternary": 1,
 				"no-underscore-dangle": 0,
-
 				"no-new-symbol": 1,
 				"no-confusing-arrow": 0,
 				"no-this-before-super": 1,
@@ -405,16 +515,19 @@
 				"no-useless-constructor": 0,
 				"no-dupe-class-members": 1,
 				"no-duplicate-imports": 0,
-				"@typescript-eslint/no-duplicate-imports": ["warn"],
+				"@typescript-eslint/no-duplicate-imports": [
+					"warn"
+				],
 				"no-iterator": 1,
-
 				"prefer-numeric-literals": 1,
-				"template-curly-spacing": [1, "never"],
+				"template-curly-spacing": [
+					1,
+					"never"
+				],
 				"one-var-declaration-per-line": [
 					1,
 					"always"
 				],
-
 				"no-magic-numbers": [
 					0,
 					{
@@ -432,19 +545,35 @@
 				],
 				"no-unused-vars": 0,
 				"func-names": 0,
-
-
 				"prefer-const": 0,
 				"prefer-spread": 1,
 				"prefer-destructuring": 0,
 				"prefer-rest-params": 1,
 				"prefer-template": 1,
-				"prefer-arrow-callback": [1, {
-					"allowNamedFunctions": true
-				}],
-				"arrow-spacing": [1, { "before": true, "after": true }],
-				"arrow-parens": [1, "as-needed", { "requireForBlockBody": false }],
-				"arrow-body-style": [1, "as-needed"],
+				"prefer-arrow-callback": [
+					1,
+					{
+						"allowNamedFunctions": true
+					}
+				],
+				"arrow-spacing": [
+					1,
+					{
+						"before": true,
+						"after": true
+					}
+				],
+				"arrow-parens": [
+					1,
+					"as-needed",
+					{
+						"requireForBlockBody": false
+					}
+				],
+				"arrow-body-style": [
+					1,
+					"as-needed"
+				],
 				"constructor-super": 1,
 				"no-class-assign": 1,
 				"no-const-assign": 1,

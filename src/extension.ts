@@ -69,28 +69,28 @@ export abstract class $state {
 
 
 export const enum Constants {
-	extensionSettingsPrefix = 'todomd',
-	LAST_VISIT_BY_FILE_STORAGE_KEY = 'LAST_VISIT_BY_FILE_STORAGE_KEY',
+	ExtensionSettingsPrefix = 'todomd',
+	LastVisitByFileStorageKey = 'LAST_VISIT_BY_FILE_STORAGE_KEY',
 
-	tagsTreeViewId = 'todomd.tags',
-	projectsTreeViewId = 'todomd.projects',
-	contextsTreeViewId = 'todomd.contexts',
-	dueTreeViewId = 'todomd.due',
-	tasksTreeViewId = 'todomd.tasks',
-	archivedTreeViewId = 'todomd.archived',
-	generic1TreeViewId = 'todomd.generic1',
-	generic2TreeViewId = 'todomd.generic2',
-	generic3TreeViewId = 'todomd.generic3',
+	TagsTreeViewId = 'todomd.tags',
+	ProjectsTreeViewId = 'todomd.projects',
+	ContextsTreeViewId = 'todomd.contexts',
+	DueTreeViewId = 'todomd.due',
+	TasksTreeViewId = 'todomd.tasks',
+	ArchivedTreeViewId = 'todomd.archived',
+	Generic1TreeViewId = 'todomd.generic1',
+	Generic2TreeViewId = 'todomd.generic2',
+	Generic3TreeViewId = 'todomd.generic3',
 
-	defaultFileSetting = 'todomd.defaultFile',
-	defaultArchiveFileSetting = 'todomd.defaultArchiveFile',
+	DefaultFileSetting = 'todomd.defaultFile',
+	DefaultArchiveFileSetting = 'todomd.defaultArchiveFile',
 
-	extensionMenuPrefix = 'Todo MD:',
+	ExtensionMenuPrefix = 'Todo MD:',
 
-	THROTTLE_EVERYTHING = 120,
+	ThrottleEverything = 120,
 }
 
-export let $config = workspace.getConfiguration().get(Constants.extensionSettingsPrefix) as ExtensionConfig;
+export let $config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
 export const counterStatusBar = new CounterStatusBar();
 export const mainStatusBar = new MainStatusBar();
 mainStatusBar.show();
@@ -141,7 +141,7 @@ export class Global {
 
 export async function activate(extensionContext: ExtensionContext) {
 	$state.extensionContext = extensionContext;
-	const lastVisitByFile = extensionContext.globalState.get<typeof $state['lastVisitByFile'] | undefined>(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY);
+	const lastVisitByFile = extensionContext.globalState.get<typeof $state['lastVisitByFile'] | undefined>(Constants.LastVisitByFileStorageKey);
 	$state.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
 	$state.editorLineHeight = getEditorLineHeight();
@@ -182,14 +182,14 @@ export async function activate(extensionContext: ExtensionContext) {
 	}));
 
 	function onConfigChange(e: ConfigurationChangeEvent) {
-		if (!e.affectsConfiguration(Constants.extensionSettingsPrefix)) {
+		if (!e.affectsConfiguration(Constants.ExtensionSettingsPrefix)) {
 			return;
 		}
 		updateConfig();
 	}
 
 	function updateConfig() {
-		$config = workspace.getConfiguration().get(Constants.extensionSettingsPrefix) as ExtensionConfig;
+		$config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
 
 		disposeEditorDisposables();
 		$state.editorLineHeight = getEditorLineHeight();
@@ -201,7 +201,7 @@ export async function activate(extensionContext: ExtensionContext) {
 	}
 	function updateIsDevContext() {
 		if (process.env.NODE_ENV === 'development' || $config.isDev) {
-			setContext(VscodeContext.isDev, true);
+			setContext(VscodeContext.IsDev, true);
 		}
 	}
 
@@ -272,7 +272,7 @@ function disposeEditorDisposables() {
  */
 export async function updateLastVisitGlobalState(stringUri: string, date: Date) {
 	$state.lastVisitByFile[stringUri] = date;
-	await $state.extensionContext.globalState.update(Constants.LAST_VISIT_BY_FILE_STORAGE_KEY, $state.lastVisitByFile);
+	await $state.extensionContext.globalState.update(Constants.LastVisitByFileStorageKey, $state.lastVisitByFile);
 }
 
 export function deactivate() {

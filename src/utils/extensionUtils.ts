@@ -65,7 +65,7 @@ async function specifyFile(isArchive: boolean) {
 		return undefined;
 	}
 
-	const settingName = isArchive ? Constants.defaultArchiveFileSetting : Constants.defaultFileSetting;
+	const settingName = isArchive ? Constants.DefaultArchiveFileSetting : Constants.DefaultFileSetting;
 	return updateSetting(settingName, filePath);
 }
 /**
@@ -147,25 +147,25 @@ export function taskToString(task: TheTask) {
 		result.push(task.contexts.map(context => `@${context}`).join(''));
 	}
 	if (task.due) {
-		result.push(helpCreateSpecialTag(SpecialTagName.due, task.due.raw));
+		result.push(helpCreateSpecialTag(SpecialTagName.Due, task.due.raw));
 	}
 	if (task.overdue) {
-		result.push(helpCreateSpecialTag(SpecialTagName.overdue, task.overdue));
+		result.push(helpCreateSpecialTag(SpecialTagName.Overdue, task.overdue));
 	}
 	if (task.creationDate) {
-		result.push(helpCreateSpecialTag(SpecialTagName.creationDate, task.creationDate));
+		result.push(helpCreateSpecialTag(SpecialTagName.CreationDate, task.creationDate));
 	}
 	if (task.completionDate) {
-		result.push(helpCreateSpecialTag(SpecialTagName.completionDate, task.completionDate));
+		result.push(helpCreateSpecialTag(SpecialTagName.CompletionDate, task.completionDate));
 	}
 	if (task.count) {
-		result.push(helpCreateSpecialTag(SpecialTagName.count, `${task.count.current}/${task.count.needed}`));
+		result.push(helpCreateSpecialTag(SpecialTagName.Count, `${task.count.current}/${task.count.needed}`));
 	}
 	if (task.isCollapsed) {
-		result.push(helpCreateSpecialTag(SpecialTagName.collapsed));
+		result.push(helpCreateSpecialTag(SpecialTagName.Collapsed));
 	}
 	if (task.isHidden) {
-		result.push(helpCreateSpecialTag(SpecialTagName.hidden));
+		result.push(helpCreateSpecialTag(SpecialTagName.Hidden));
 	}
 	return (task.indent ? task.indent : '') + result.join(' ');
 }
@@ -180,27 +180,27 @@ export function helpCreateSpecialTag(tag: SpecialTagName, value?: string) {
  * All special tags as strings.
  */
 export const enum SpecialTagName {
-	due = 'due',
-	overdue = 'overdue',
-	completionDate = 'cm',
-	creationDate = 'cr',
-	started = 'start',
-	duration = 'duration',
-	hidden = 'h',
-	collapsed = 'c',
-	count = 'count',
+	Due = 'due',
+	Overdue = 'overdue',
+	CompletionDate = 'cm',
+	CreationDate = 'cr',
+	Started = 'start',
+	Duration = 'duration',
+	Hidden = 'h',
+	Collapsed = 'c',
+	Count = 'count',
 }
 /**
  * Very short special tag description for autocomplete widget.
  */
 export const specialTagDescription = {
-	[SpecialTagName.due]: 'due',
-	[SpecialTagName.overdue]: 'overdue',
-	[SpecialTagName.completionDate]: 'completionDate',
-	[SpecialTagName.creationDate]: 'creationDate',
-	[SpecialTagName.started]: 'started',
-	[SpecialTagName.duration]: 'duration',
-	[SpecialTagName.hidden]: 'hidden',
-	[SpecialTagName.collapsed]: 'collapsed',
-	[SpecialTagName.count]: 'count',
+	[SpecialTagName.Due]: 'due',
+	[SpecialTagName.Overdue]: 'overdue',
+	[SpecialTagName.CompletionDate]: 'completionDate',
+	[SpecialTagName.CreationDate]: 'creationDate',
+	[SpecialTagName.Started]: 'started',
+	[SpecialTagName.Duration]: 'duration',
+	[SpecialTagName.Hidden]: 'hidden',
+	[SpecialTagName.Collapsed]: 'collapsed',
+	[SpecialTagName.Count]: 'count',
 } as const;

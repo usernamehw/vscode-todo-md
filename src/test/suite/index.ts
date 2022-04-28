@@ -14,6 +14,7 @@ export async function run(): Promise<void> {
 	const testsRoot = path.resolve(__dirname, '..');
 
 	return new Promise((c, e) => {
+		// eslint-disable-next-line consistent-return
 		glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
 			if (err) {
 				return e(err);
@@ -31,6 +32,7 @@ export async function run(): Promise<void> {
 						c();
 					}
 				});
+			// eslint-disable-next-line @typescript-eslint/no-shadow
 			} catch (err) {
 				console.error(err);
 				e(err);

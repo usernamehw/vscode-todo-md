@@ -1,9 +1,10 @@
 import { Command, Event, EventEmitter, ThemeColor, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
+import { CommandId } from '../commands';
 import { $config } from '../extension';
 import { getTaskHover } from '../languageFeatures/getTaskHover';
 import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
-import { CommandIds, SortNestedTasks } from '../types';
+import { SortNestedTasks } from '../types';
 import { formatTask } from '../utils/taskUtils';
 
 
@@ -78,7 +79,7 @@ export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
  * Transform tasks to be able to use in a Tree View. All nested tasks also included.
  */
 export function tasksToTreeItems(tasks: TheTask[], tryToApplySort = false, isArchived = false) {
-	if (tryToApplySort && $config.sortNestedTasks === SortNestedTasks.default) {
+	if (tryToApplySort && $config.sortNestedTasks === SortNestedTasks.Default) {
 		tasks = defaultSortTasks(tasks);
 	}
 	const result = [];
@@ -93,7 +94,7 @@ export function tasksToTreeItems(tasks: TheTask[], tryToApplySort = false, isArc
 			}),
 			task,
 			{
-				command: isArchived ? CommandIds.goToLineInArchived : CommandIds.goToLine,
+				command: isArchived ? CommandId.GoToLineInArchived : CommandId.GoToLine,
 				title: 'Go To Line',
 				arguments: [task.lineNumber],
 			},

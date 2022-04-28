@@ -76,7 +76,7 @@ export const store = new Store({
 			}
 			if (!state.config.showRecurringUpcoming) {
 				filteredTasks = filteredTasks.filter(task => {
-					if (task.due?.isRecurring && task.due.isDue === DueState.notDue) {
+					if (task.due?.isRecurring && task.due.isDue === DueState.NotDue) {
 						return false;
 					} else {
 						return true;

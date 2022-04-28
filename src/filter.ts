@@ -2,29 +2,29 @@ import { TheTask } from './TheTask';
 import { DueState } from './types';
 
 const enum FilterType {
-	rawContains,
-	titleContains,
-	tagEqual,
-	contextEqual,
-	projectEqual,
-	priorityEqual,
-	hasDue,
-	due,
-	overdue,
-	recurring,
-	done,
-	started,
-	noTag,
-	noProject,
-	noContext,
+	RawContains,
+	TitleContains,
+	TagEqual,
+	ContextEqual,
+	ProjectEqual,
+	PriorityEqual,
+	HasDue,
+	Due,
+	Overdue,
+	Recurring,
+	Done,
+	Started,
+	NoTag,
+	NoProject,
+	NoContext,
 }
 /**
  * When the filter has `>` or `<` symbols.
  */
 const enum FilterMoreLess {
-	none,
-	more,
-	less,
+	None,
+	More,
+	Less,
 }
 interface Filter {
 	value: string;
@@ -44,46 +44,46 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 		const results = [];
 		for (const filter of filters) {
 			let filterResult;
-			if (filter.filterType === FilterType.rawContains) {
+			if (filter.filterType === FilterType.RawContains) {
 				// Anything in the string (rawText)
 				if (task.rawText.toLowerCase().includes(filter.value.toLowerCase())) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.titleContains) {
+			} else if (filter.filterType === FilterType.TitleContains) {
 				// Title match
 				if (task.title.toLowerCase().includes(filter.value.toLowerCase())) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.tagEqual) {
+			} else if (filter.filterType === FilterType.TagEqual) {
 				// #Tag
 				if (task.tags.includes(filter.value)) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.contextEqual) {
+			} else if (filter.filterType === FilterType.ContextEqual) {
 				// @Context
 				if (task.contexts.includes(filter.value)) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.projectEqual) {
+			} else if (filter.filterType === FilterType.ProjectEqual) {
 				// +Project
 				if (task.projects.includes(filter.value)) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.priorityEqual) {
+			} else if (filter.filterType === FilterType.PriorityEqual) {
 				// $A - $Z priority
 				if (filter.filterMoreLess) {
 					// >$A <$A
-					if (filter.filterMoreLess === FilterMoreLess.more) {
+					if (filter.filterMoreLess === FilterMoreLess.More) {
 						filterResult = filter.value >= task.priority;
 					} else {
 						filterResult = filter.value <= task.priority;
@@ -96,63 +96,63 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 						filterResult = false;
 					}
 				}
-			} else if (filter.filterType === FilterType.done) {
+			} else if (filter.filterType === FilterType.Done) {
 				// $done
 				if (task.done) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.started) {
+			} else if (filter.filterType === FilterType.Started) {
 				// $started
 				if (task.startRange && !task.durationRange) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.hasDue) {
+			} else if (filter.filterType === FilterType.HasDue) {
 				// $hasDue
 				if (task.due) {
 					return true;
 				} else {
 					return false;
 				}
-			} else if (filter.filterType === FilterType.due) {
+			} else if (filter.filterType === FilterType.Due) {
 				// $due
-				if (task.due?.isDue === DueState.due || task.due?.isDue === DueState.overdue) {
+				if (task.due?.isDue === DueState.Due || task.due?.isDue === DueState.Overdue) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.overdue) {
+			} else if (filter.filterType === FilterType.Overdue) {
 				// $overdue
-				if (task.due?.isDue === DueState.overdue) {
+				if (task.due?.isDue === DueState.Overdue) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.recurring) {
+			} else if (filter.filterType === FilterType.Recurring) {
 				// $recurring
 				if (task.due?.isRecurring === true) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.noTag) {
+			} else if (filter.filterType === FilterType.NoTag) {
 				// $noTag
 				if (task.tags.length === 0) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.noProject) {
+			} else if (filter.filterType === FilterType.NoProject) {
 				// $noProject
 				if (task.projects.length === 0) {
 					filterResult = true;
 				} else {
 					filterResult = false;
 				}
-			} else if (filter.filterType === FilterType.noContext) {
+			} else if (filter.filterType === FilterType.NoContext) {
 				// $noContext
 				if (task.contexts.length === 0) {
 					filterResult = true;
@@ -178,7 +178,7 @@ function parseFilter(filterStr = '') {
 	const titleMatch = titleRegex.exec(filterStr);
 	if (titleMatch) {
 		filters.push({
-			filterType: FilterType.titleContains,
+			filterType: FilterType.TitleContains,
 			value: titleMatch[2],
 			isNegation: Boolean(titleMatch[1]),
 		});
@@ -192,7 +192,7 @@ function parseFilter(filterStr = '') {
 		const filter: Filter = {
 			isNegation: false,
 			value: '',
-			filterType: FilterType.rawContains,
+			filterType: FilterType.RawContains,
 		};
 		let isNegation;
 		let value;
@@ -205,7 +205,7 @@ function parseFilter(filterStr = '') {
 			if (word[0] === '>' || word[0] === '<') {
 				firstChar = word[1];
 				value = word.slice(2);
-				filter.filterMoreLess = word[0] === '>' ? FilterMoreLess.more : FilterMoreLess.less;
+				filter.filterMoreLess = word[0] === '>' ? FilterMoreLess.More : FilterMoreLess.Less;
 			} else {
 				value = word.slice(1);
 				firstChar = word[0];
@@ -216,45 +216,45 @@ function parseFilter(filterStr = '') {
 				const tags = word.split('#').filter(tag => tag.length);
 				for (const tag of tags) {
 					filters.push({
-						filterType: FilterType.tagEqual,
+						filterType: FilterType.TagEqual,
 						value: tag,
 					});
 				}
 				continue;
 			}
 			case '@': {
-				filter.filterType = FilterType.contextEqual; break;
+				filter.filterType = FilterType.ContextEqual; break;
 			}
 			case '+': {
-				filter.filterType = FilterType.projectEqual; break;
+				filter.filterType = FilterType.ProjectEqual; break;
 			}
 			case '$': {
 				if (value === 'done') {
-					filter.filterType = FilterType.done;
+					filter.filterType = FilterType.Done;
 				} else if (value === 'started') {
-					filter.filterType = FilterType.started;
+					filter.filterType = FilterType.Started;
 				} else if (value === 'hasDue') {
-					filter.filterType = FilterType.hasDue;
+					filter.filterType = FilterType.HasDue;
 				} else if (value === 'due') {
-					filter.filterType = FilterType.due;
+					filter.filterType = FilterType.Due;
 				} else if (value === 'overdue') {
-					filter.filterType = FilterType.overdue;
+					filter.filterType = FilterType.Overdue;
 				} else if (value === 'recurring') {
-					filter.filterType = FilterType.recurring;
+					filter.filterType = FilterType.Recurring;
 				} else if (value === 'noProject') {
-					filter.filterType = FilterType.noProject;
+					filter.filterType = FilterType.NoProject;
 				} else if (value === 'noContext') {
-					filter.filterType = FilterType.noContext;
+					filter.filterType = FilterType.NoContext;
 				} else if (value === 'noTag') {
-					filter.filterType = FilterType.noTag;
+					filter.filterType = FilterType.NoTag;
 				} else if (/^[A-Z]$/.test(value)) {
-					filter.filterType = FilterType.priorityEqual;
+					filter.filterType = FilterType.PriorityEqual;
 				}
 				break;
 			}
 			default: {
 				value = word;
-				filter.filterType = FilterType.rawContains;
+				filter.filterType = FilterType.RawContains;
 			}
 		}
 		filter.value = value;

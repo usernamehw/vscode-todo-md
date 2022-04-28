@@ -81,10 +81,10 @@ export default class Task extends Vue {
 		}
 		if (this.model.due) {
 			switch (this.model.due.isDue) {
-				case DueState.notDue: classMap.notDue = true;break;
-				case DueState.due: classMap.due = true;break;
-				case DueState.overdue: classMap.overdue = true;break;
-				case DueState.invalid: classMap.invalid = true;break;
+				case DueState.NotDue: classMap.notDue = true;break;
+				case DueState.Due: classMap.due = true;break;
+				case DueState.Overdue: classMap.overdue = true;break;
+				case DueState.Invalid: classMap.invalid = true;break;
 			}
 		}
 		if (this.config.completedStrikeThrough) {
@@ -103,25 +103,25 @@ export default class Task extends Vue {
 			let dueText = '';
 			let dueTitle = '';
 			switch (this.model.due.isDue) {
-				case DueState.notDue: {
+				case DueState.NotDue: {
 					dueClasses.push('task__due-state--not-due');
 					dueText = `<span class="codicon codicon-milestone"></span><span class="task__days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
 					dueTitle = `In ${this.model.due.daysUntilDue} days`;
 					break;
 				}
-				case DueState.due: {
+				case DueState.Due: {
 					dueClasses.push('task__due-state--due');
 					dueText = '<span class="codicon codicon-history"></span>';
 					dueTitle = `Due Today`;
 					break;
 				}
-				case DueState.overdue: {
+				case DueState.Overdue: {
 					dueClasses.push('task__due-state--overdue');
 					dueText = `<span class="codicon codicon-history"></span><span class="task__overdue-count">${this.model.due?.overdueInDays || ''}</span>`;
 					dueTitle = `Overdue by ${this.model.due?.overdueInDays || '?'} days`;
 					break;
 				}
-				case DueState.invalid: {
+				case DueState.Invalid: {
 					dueClasses.push('task__due-state--invalid');
 					dueText = '<span class="codicon codicon-error"></span><span class="task__days-to-count">Invalid</span>';
 					dueTitle = 'Due date is Invalid';

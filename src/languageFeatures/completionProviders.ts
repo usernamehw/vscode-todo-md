@@ -90,23 +90,23 @@ export function updateCompletions() {
 				today.insertText = getDateInISOFormat(new Date());
 
 				const setDueDateToday = new CompletionItem('SET_DUE_TODAY', CompletionItemKind.Constant);
-				setDueDateToday.insertText = helpCreateSpecialTag(SpecialTagName.due, getDateInISOFormat(new Date()));
+				setDueDateToday.insertText = helpCreateSpecialTag(SpecialTagName.Due, getDateInISOFormat(new Date()));
 
 				const setDueDateTomorrow = new CompletionItem('SET_DUE_TOMORROW', CompletionItemKind.Constant);
-				setDueDateTomorrow.insertText = helpCreateSpecialTag(SpecialTagName.due, getDateInISOFormat(dayjs().add(1, 'day')));
+				setDueDateTomorrow.insertText = helpCreateSpecialTag(SpecialTagName.Due, getDateInISOFormat(dayjs().add(1, 'day')));
 
 				const setDueDateYesterday = new CompletionItem('SET_DUE_YESTERDAY', CompletionItemKind.Constant);
-				setDueDateYesterday.insertText = helpCreateSpecialTag(SpecialTagName.due, getDateInISOFormat(dayjs().subtract(1, 'day')));
+				setDueDateYesterday.insertText = helpCreateSpecialTag(SpecialTagName.Due, getDateInISOFormat(dayjs().subtract(1, 'day')));
 
 				const setDueDateThisWeek = new CompletionItem('SET_DUE_THIS_WEEK', CompletionItemKind.Constant);
-				setDueDateThisWeek.insertText = helpCreateSpecialTag(SpecialTagName.due, helpCreateDueDate('this week'));
+				setDueDateThisWeek.insertText = helpCreateSpecialTag(SpecialTagName.Due, helpCreateDueDate('this week'));
 
 				const setDueDateNextWeek = new CompletionItem('SET_DUE_NEXT_WEEK', CompletionItemKind.Constant);
-				setDueDateNextWeek.insertText = helpCreateSpecialTag(SpecialTagName.due, helpCreateDueDate('next week'));
+				setDueDateNextWeek.insertText = helpCreateSpecialTag(SpecialTagName.Due, helpCreateDueDate('next week'));
 
 				const weekdayCompletions: CompletionItem[] = weekdayNamesLong.map(weekdayName => {
 					const setDueDateWeekday = new CompletionItem(`SET_DUE_${weekdayName.toUpperCase()}`);
-					setDueDateWeekday.insertText = helpCreateSpecialTag(SpecialTagName.due, helpCreateDueDate(weekdayName));
+					setDueDateWeekday.insertText = helpCreateSpecialTag(SpecialTagName.Due, helpCreateDueDate(weekdayName));
 					return setDueDateWeekday;
 				});
 
@@ -132,15 +132,15 @@ export function updateCompletions() {
 					return undefined;
 				}
 				const specialTags = [
-					SpecialTagName.collapsed,
-					SpecialTagName.completionDate,
-					SpecialTagName.count,
-					SpecialTagName.creationDate,
-					SpecialTagName.due,
-					SpecialTagName.duration,
-					SpecialTagName.hidden,
-					SpecialTagName.overdue,
-					SpecialTagName.started,
+					SpecialTagName.Collapsed,
+					SpecialTagName.CompletionDate,
+					SpecialTagName.Count,
+					SpecialTagName.CreationDate,
+					SpecialTagName.Due,
+					SpecialTagName.Duration,
+					SpecialTagName.Hidden,
+					SpecialTagName.Overdue,
+					SpecialTagName.Started,
 				];
 
 				const specialTagCompletionItems = [];

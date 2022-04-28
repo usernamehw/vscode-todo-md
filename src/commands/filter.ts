@@ -32,7 +32,7 @@ export function filter(editor: TextEditor) {
 			return;
 		}
 		tasksView.description = filterStr;
-		setContext(VscodeContext.filterActive, true);
+		setContext(VscodeContext.FilterActive, true);
 		$state.taskTreeViewFilterValue = filterStr;
 		updateTasksTreeView();
 	});

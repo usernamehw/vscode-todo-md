@@ -220,11 +220,11 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 		if (task.due) {
 			const due = task.due;
 			const dueRange = task.dueRange!;// if due exists - dueRange exists too
-			if (due.isDue === DueState.due) {
+			if (due.isDue === DueState.Due) {
 				dueDecorationRanges.push(dueRange);
-			} else if (due.isDue === DueState.notDue) {
+			} else if (due.isDue === DueState.NotDue) {
 				notDueDecorationRanges.push(dueRange);
-			} else if (due.isDue === DueState.overdue) {
+			} else if (due.isDue === DueState.Overdue) {
 				overdueDecorationOptions.push({
 					range: dueRange,
 					renderOptions: {
@@ -236,10 +236,10 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 				if (task.overdueRange) {
 					specialtagDecorationRanges.push(task.overdueRange);
 				}
-			} else if (due.isDue === DueState.invalid) {
+			} else if (due.isDue === DueState.Invalid) {
 				invalidDueDateDecorationRanges.push(dueRange);
 			}
-			if (due.isDue === DueState.notDue && due.closestDueDateInTheFuture) {
+			if (due.isDue === DueState.NotDue && due.closestDueDateInTheFuture) {
 				closestDueDateDecorationOptions.push({
 					range: dueRange,
 					renderOptions: {

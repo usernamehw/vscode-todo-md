@@ -39,27 +39,27 @@ let generic3View: TreeView<any>;
  * Create all Tree Views
  */
 export function createAllTreeViews() {
-	tagsView = window.createTreeView(Constants.tagsTreeViewId, {
+	tagsView = window.createTreeView(Constants.TagsTreeViewId, {
 		treeDataProvider: tagProvider,
 		showCollapseAll: true,
 	});
 
-	projectView = window.createTreeView(Constants.projectsTreeViewId, {
+	projectView = window.createTreeView(Constants.ProjectsTreeViewId, {
 		treeDataProvider: projectProvider,
 		showCollapseAll: true,
 	});
 
-	contextView = window.createTreeView(Constants.contextsTreeViewId, {
+	contextView = window.createTreeView(Constants.ContextsTreeViewId, {
 		treeDataProvider: contextProvider,
 		showCollapseAll: true,
 	});
 
-	dueView = window.createTreeView(Constants.dueTreeViewId, {
+	dueView = window.createTreeView(Constants.DueTreeViewId, {
 		treeDataProvider: dueProvider,
 		showCollapseAll: true,
 	});
 
-	tasksView = window.createTreeView(Constants.tasksTreeViewId, {
+	tasksView = window.createTreeView(Constants.TasksTreeViewId, {
 		treeDataProvider: taskProvider,
 		showCollapseAll: true,
 	});
@@ -70,7 +70,7 @@ export function createAllTreeViews() {
 		toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 	});
 
-	archivedView = window.createTreeView(Constants.archivedTreeViewId, {
+	archivedView = window.createTreeView(Constants.ArchivedTreeViewId, {
 		treeDataProvider: archivedProvider,
 	});
 
@@ -80,7 +80,7 @@ export function createAllTreeViews() {
 			if (typeof generic1.filter !== 'string' || typeof generic1.title !== 'string') {
 				window.showWarningMessage('Tree View must have filter and title and they must be strings.');
 			} else {
-				generic1View = window.createTreeView(Constants.generic1TreeViewId, {
+				generic1View = window.createTreeView(Constants.Generic1TreeViewId, {
 					treeDataProvider: generic1Provider,
 					showCollapseAll: true,
 				});
@@ -90,7 +90,7 @@ export function createAllTreeViews() {
 				generic1View.onDidExpandElement(async event => {
 					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 				});
-				setContext(VscodeContext.generic1FilterExists, true);
+				setContext(VscodeContext.Generic1FilterExists, true);
 			}
 		}
 
@@ -99,7 +99,7 @@ export function createAllTreeViews() {
 			if (typeof generic2.filter !== 'string' || typeof generic2.title !== 'string') {
 				window.showWarningMessage('Tree View must have filter and title and they must be strings.');
 			} else {
-				generic2View = window.createTreeView(Constants.generic2TreeViewId, {
+				generic2View = window.createTreeView(Constants.Generic2TreeViewId, {
 					treeDataProvider: generic2Provider,
 					showCollapseAll: true,
 				});
@@ -109,7 +109,7 @@ export function createAllTreeViews() {
 				generic2View.onDidExpandElement(async event => {
 					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 				});
-				setContext(VscodeContext.generic2FilterExists, true);
+				setContext(VscodeContext.Generic2FilterExists, true);
 			}
 		}
 
@@ -118,7 +118,7 @@ export function createAllTreeViews() {
 			if (typeof generic3.filter !== 'string' || typeof generic3.title !== 'string') {
 				window.showWarningMessage('Tree View must have filter and title and they must be strings.');
 			} else {
-				generic3View = window.createTreeView(Constants.generic3TreeViewId, {
+				generic3View = window.createTreeView(Constants.Generic3TreeViewId, {
 					treeDataProvider: generic3Provider,
 					showCollapseAll: true,
 				});
@@ -128,13 +128,13 @@ export function createAllTreeViews() {
 				generic3View.onDidExpandElement(async event => {
 					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
 				});
-				setContext(VscodeContext.generic3FilterExists, true);
+				setContext(VscodeContext.Generic3FilterExists, true);
 			}
 		}
 	} else {
-		setContext(VscodeContext.generic1FilterExists, false);
-		setContext(VscodeContext.generic2FilterExists, false);
-		setContext(VscodeContext.generic3FilterExists, false);
+		setContext(VscodeContext.Generic1FilterExists, false);
+		setContext(VscodeContext.Generic2FilterExists, false);
+		setContext(VscodeContext.Generic3FilterExists, false);
 	}
 }
 /**
@@ -146,7 +146,7 @@ export function updateAllTreeViews() {
 
 	updateTasksTreeView();
 
-	const dueTasks = $state.tasksAsTree.filter(task => task.due?.isDue === DueState.due || task.due?.isDue === DueState.overdue);
+	const dueTasks = $state.tasksAsTree.filter(task => task.due?.isDue === DueState.Due || task.due?.isDue === DueState.Overdue);
 	dueProvider.refresh(defaultSortTasks(dueTasks));
 	setViewTitle(dueView, 'due', dueTasks.length);
 
@@ -288,7 +288,7 @@ export function groupAndSortTreeItems(tasks: TheTask[]): ParsedItems {
  * Sort future Tree items. (Only first level).
  */
 function sortItemsForProvider(items: ItemForProvider[], sortType: TreeItemSortType) {
-	if (sortType === TreeItemSortType.alphabetic) {
+	if (sortType === TreeItemSortType.Alphabetic) {
 		items.sort((a, b) => a.title.localeCompare(b.title));
 	} else {
 		items.sort((a, b) => b.tasks.length - a.tasks.length);

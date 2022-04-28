@@ -11,9 +11,9 @@ const enum SortDirection {
  * Sorting property
  */
 export const enum SortProperty {
-	priority,
-	notDue,
-	overdue,
+	Priority,
+	NotDue,
+	Overdue,
 }
 /**
  * Does not modify the original array.
@@ -22,7 +22,7 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 	const tasksCopy = tasks.slice();
 	let sortedTasks: TheTask[] = [];
 
-	if (property === SortProperty.priority) {
+	if (property === SortProperty.Priority) {
 		sortedTasks = tasksCopy.sort((a, b) => {
 			if (a.priority === b.priority) {
 				return 0;
@@ -30,7 +30,7 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 				return a.priority > b.priority ? 1 : -1;
 			}
 		});
-	} else if (property === SortProperty.overdue) {
+	} else if (property === SortProperty.Overdue) {
 		sortedTasks = tasksCopy.sort((a, b) => {
 			const overdueA = a.due?.overdueInDays || 0;
 			const overdueB = b.due?.overdueInDays || 0;
@@ -40,7 +40,7 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 				return overdueA < overdueB ? 1 : -1;
 			}
 		});
-	} else if (property === SortProperty.notDue) {
+	} else if (property === SortProperty.NotDue) {
 		sortedTasks = tasksCopy.sort((a, b) => {
 			const untilA = a.due?.daysUntilDue || 0;
 			const untilB = b.due?.daysUntilDue || 0;
@@ -65,19 +65,19 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
  * With secondary sort by priority.
  */
 export function defaultSortTasks(tasks: TheTask[]) {
-	tasks = sortTasks(tasks, SortProperty.priority);
+	tasks = sortTasks(tasks, SortProperty.Priority);
 
-	const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.overdue);
-	const dueTasks = tasks.filter(t => t.due?.isDue === DueState.due);
-	const invalidDue = tasks.filter(t => t.due?.isDue === DueState.invalid);
-	const dueSpecifiedButNotDue = tasks.filter(t => t.due?.isDue === DueState.notDue);
+	const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.Overdue);
+	const dueTasks = tasks.filter(t => t.due?.isDue === DueState.Due);
+	const invalidDue = tasks.filter(t => t.due?.isDue === DueState.Invalid);
+	const dueSpecifiedButNotDue = tasks.filter(t => t.due?.isDue === DueState.NotDue);
 	const dueNotSpecified = tasks.filter(t => !t.due);
 
 	return [
 		...invalidDue,
-		...sortTasks(overdueTasks, SortProperty.overdue),
+		...sortTasks(overdueTasks, SortProperty.Overdue),
 		...dueTasks,
 		...dueNotSpecified,
-		...sortTasks(dueSpecifiedButNotDue, SortProperty.notDue),
+		...sortTasks(dueSpecifiedButNotDue, SortProperty.NotDue),
 	];
 }

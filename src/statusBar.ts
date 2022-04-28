@@ -52,8 +52,8 @@ export class CounterStatusBar extends StatusBar {
 export class MainStatusBar extends StatusBar {
 	constructor() {
 		super();
-		this.statusBarItem = window.createStatusBarItem(`${Constants.extensionMenuPrefix} Main`, StatusBarAlignment.Left, -20001);
-		this.statusBarItem.name = `${Constants.extensionMenuPrefix} Main`;
+		this.statusBarItem = window.createStatusBarItem(`${Constants.ExtensionMenuPrefix} Main`, StatusBarAlignment.Left, -20001);
+		this.statusBarItem.name = `${Constants.ExtensionMenuPrefix} Main`;
 	}
 
 	show() {

@@ -46,19 +46,19 @@ const notDoneTask = newTask({
 const dueTask = newTask({
 	// @ts-ignore
 	due: {
-		isDue: DueState.due,
+		isDue: DueState.Due,
 	},
 });
 const notDueTask = newTask({
 	// @ts-ignore
 	due: {
-		isDue: DueState.notDue,
+		isDue: DueState.NotDue,
 	},
 });
 const overdueTask = newTask({
 	// @ts-ignore
 	due: {
-		isDue: DueState.overdue,
+		isDue: DueState.Overdue,
 	},
 });
 const priorityATask = newTask({
