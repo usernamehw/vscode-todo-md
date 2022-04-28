@@ -90,19 +90,8 @@ export async function toggleTaskCollapseRecursive(document: TextDocument, lineNu
  * Insert/Replace due date
  */
 export async function setDueDateAtLine(document: TextDocument, lineNumber: number, newDueDate: string) {
-	const dueDate = `{due:${newDueDate}}`;
 	const edit = new WorkspaceEdit();
-	const task = getTaskAtLineExtension(lineNumber);
-	if (task?.overdueRange) {
-		edit.delete(document.uri, task.overdueRange);
-	}
-	if (task?.dueRange) {
-		edit.replace(document.uri, task.dueRange, dueDate);
-	} else {
-		const line = document.lineAt(lineNumber);
-		const isLineEndsWithWhitespace = line.text.endsWith(' ');
-		edit.insert(document.uri, line.range.end, `${isLineEndsWithWhitespace ? '' : ' '}${dueDate}`);
-	}
+	setDueDateWorkspaceEdit(edit, document, lineNumber, newDueDate);
 	return await applyEdit(edit, document);
 }
 /**
@@ -501,5 +490,19 @@ export function startTaskAtLineWorkspaceEdit(edit: WorkspaceEdit, document: Text
 		edit.replace(document.uri, task.startRange, newStartDate);
 	} else {
 		edit.insert(document.uri, line.range.end, ` ${newStartDate}`);
+	}
+}
+export function setDueDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number, newDueDate: string) {
+	const dueDate = `{due:${newDueDate}}`;
+	const task = getTaskAtLineExtension(lineNumber);
+	if (task?.overdueRange) {
+		edit.delete(document.uri, task.overdueRange);
+	}
+	if (task?.dueRange) {
+		edit.replace(document.uri, task.dueRange, dueDate);
+	} else {
+		const line = document.lineAt(lineNumber);
+		const isLineEndsWithWhitespace = line.text.endsWith(' ');
+		edit.insert(document.uri, line.range.end, `${isLineEndsWithWhitespace ? '' : ' '}${dueDate}`);
 	}
 }

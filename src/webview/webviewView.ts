@@ -1,6 +1,6 @@
 import path from 'path';
 import { CancellationToken, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
-import { openSetDueDateInputbox } from '../commands';
+import { openSetDueDateInputbox } from '../commands/setDueDate';
 import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTaskAtLine, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state, Global } from '../extension';
@@ -112,7 +112,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					break;
 				}
 				case 'setDueDate': {
-					openSetDueDateInputbox(await getActiveOrDefaultDocument(), message.value);
+					openSetDueDateInputbox(await getActiveOrDefaultDocument(), [message.value]);
 					break;
 				}
 			}
