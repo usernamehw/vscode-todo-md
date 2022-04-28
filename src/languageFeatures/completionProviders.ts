@@ -3,7 +3,7 @@ import { CompletionItem, CompletionItemKind, languages, Position, Range, TextDoc
 import { DueDate } from '../dueDate';
 import { $state, Global } from '../extension';
 import { helpCreateDueDate } from '../time/setDueDateHelper';
-import { getDateInISOFormat } from '../time/timeUtils';
+import { getDateInISOFormat, weekdayNamesLong } from '../time/timeUtils';
 import { helpCreateSpecialTag, specialTagDescription, SpecialTagName } from '../utils/extensionUtils';
 import { unique } from '../utils/utils';
 import { getWordAtPosition, getWordRangeAtPosition } from '../utils/vscodeUtils';
@@ -104,7 +104,14 @@ export function updateCompletions() {
 				const setDueDateNextWeek = new CompletionItem('SET_DUE_NEXT_WEEK', CompletionItemKind.Constant);
 				setDueDateNextWeek.insertText = helpCreateSpecialTag(SpecialTagName.due, helpCreateDueDate('next week'));
 
+				const weekdayCompletions: CompletionItem[] = weekdayNamesLong.map(weekdayName => {
+					const setDueDateWeekday = new CompletionItem(`SET_DUE_${weekdayName.toUpperCase()}`);
+					setDueDateWeekday.insertText = helpCreateSpecialTag(SpecialTagName.due, helpCreateDueDate(weekdayName));
+					return setDueDateWeekday;
+				});
+
 				return [
+					...weekdayCompletions,
 					today,
 					setDueDateToday,
 					setDueDateTomorrow,
