@@ -157,7 +157,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (51)
+## Settings (53)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -213,6 +213,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |labelShowItems|**true**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|
 |useBoldTextInLabels|**true**|Show projects/tags/contexts in labels in **BOLD**.|
 |completedStrikeThrough|**true**|Show strike-through text decoration for completed tasks in editor.|
+|setDueDateThisWeekDay|"Friday"|Week day when using set due date command or suggest `SET_DUE_THIS_WEEK`.|
+|setDueDateNextWeekDay|"Friday"|Week day when using set due date command or suggest `SET_DUE_NEXT_WEEK`.|
 |decorations|\{"project":\{\},"context":\{\},"tag":\{\},"comment":\{\},"notDue":\{\},"due":\{\},"overdue":\{\},"invalidDue":\{\},"priorityAForeground":\{\},"priorityBForeground":\{\},"priorityCForeground":\{\},"priorityDForeground":\{\},"priorityEForeground":\{\},"priorityFForeground":\{\},"completedTask":\{\}\}|Advanced decoration tweaking. https://github.com/usernamehw/vscode-todo-md/issues/4|
 <!-- SETTINGS_END -->
 
