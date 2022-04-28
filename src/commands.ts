@@ -128,6 +128,9 @@ export async function showTaskInNotification(task: TheTask) {
 		window.showInformationMessage(formattedTask);
 	}
 }
+/**
+ * Return unique line numbers with cursors or selections.
+ */
 export function getSelectedLineNumbers(editor: TextEditor): number[] {
 	const lineNumbers: number[] = [];
 	for (const selection of editor.selections) {

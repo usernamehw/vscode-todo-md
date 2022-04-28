@@ -1,7 +1,14 @@
-import { TextEditor } from 'vscode';
-import { incrementOrDecrementPriority } from '../documentActions';
+import { TextEditor, WorkspaceEdit } from 'vscode';
+import { getSelectedLineNumbers } from '../commands';
+import { incrementOrDecrementPriorityWorkspaceEdit } from '../documentActions';
+import { applyEdit } from '../utils/extensionUtils';
 
 export function decrementPriority(editor: TextEditor) {
-	const lineNumber = editor.selection.active.line;
-	incrementOrDecrementPriority(editor.document, lineNumber, 'decrement');
+	const edit = new WorkspaceEdit();
+
+	for (const line of getSelectedLineNumbers(editor)) {
+		incrementOrDecrementPriorityWorkspaceEdit(edit, editor.document, line, 'decrement');
+	}
+
+	applyEdit(edit, editor.document);
 }

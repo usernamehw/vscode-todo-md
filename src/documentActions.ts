@@ -233,27 +233,6 @@ export async function decrementCountForTask(document: TextDocument, lineNumber: 
 	return applyEdit(edit, document);
 }
 /**
- * Increment/Decrement a priority. Create it if the task doesn't have one.
- */
-export async function incrementOrDecrementPriority(document: TextDocument, lineNumber: number, type: 'decrement' | 'increment') {
-	const task = getTaskAtLineExtension(lineNumber);
-	if (!task ||
-			type === 'increment' && task.priority === 'A' ||
-			type === 'decrement' && task.priority === 'Z') {
-		return undefined;
-	}
-	const newPriority = type === 'increment' ? String.fromCharCode(task.priority.charCodeAt(0) - 1) : String.fromCharCode(task.priority.charCodeAt(0) + 1);
-	const edit = new WorkspaceEdit();
-	if (task.priorityRange) {
-		// Task has a priority
-		edit.replace(document.uri, task.priorityRange, `(${newPriority})`);
-	} else {
-		// No priority, create one
-		edit.insert(document.uri, new Position(lineNumber, 0), `(${newPriority}) `);
-	}
-	return applyEdit(edit, document);
-}
-/**
  * Remove overdue special tag
  */
 async function removeOverdueFromLine(document: TextDocument, task: TheTask) {
@@ -501,4 +480,24 @@ export function editTaskWorkspaceEdit(edit: WorkspaceEdit, document: TextDocumen
 	const newTaskAsText = taskToString(task);
 	const line = document.lineAt(task.lineNumber);
 	edit.replace(document.uri, line.range, newTaskAsText);
+}
+
+/**
+ * Increment/Decrement a priority. Create it if the task doesn't have one.
+ */
+export function incrementOrDecrementPriorityWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number, type: 'decrement' | 'increment') {
+	const task = getTaskAtLineExtension(lineNumber);
+	if (!task ||
+			type === 'increment' && task.priority === 'A' ||
+			type === 'decrement' && task.priority === 'Z') {
+		return;
+	}
+	const newPriority = type === 'increment' ? String.fromCharCode(task.priority.charCodeAt(0) - 1) : String.fromCharCode(task.priority.charCodeAt(0) + 1);
+	if (task.priorityRange) {
+		// Task has a priority
+		edit.replace(document.uri, task.priorityRange, `(${newPriority})`);
+	} else {
+		// No priority, create one
+		edit.insert(document.uri, new Position(lineNumber, 0), `(${newPriority}) `);
+	}
 }
