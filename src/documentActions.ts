@@ -7,7 +7,7 @@ import { Count, TheTask } from './TheTask';
 import { dateWithoutTime, DATE_FORMAT, durationTo, getDateInISOFormat } from './time/timeUtils';
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { DueState } from './types';
-import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, specialTag, SpecialTagName, taskToString } from './utils/extensionUtils';
+import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, helpCreateSpecialTag, SpecialTagName, taskToString } from './utils/extensionUtils';
 import { forEachTask, getNestedTasksLineNumbers, getTaskAtLineExtension } from './utils/taskUtils';
 import { unique } from './utils/utils';
 
@@ -115,7 +115,7 @@ export async function startTaskAtLine(document: TextDocument, lineNumber: number
 	if (!task) {
 		return undefined;
 	}
-	const newStartDate = specialTag(SpecialTagName.started, getDateInISOFormat(undefined, true));
+	const newStartDate = helpCreateSpecialTag(SpecialTagName.started, getDateInISOFormat(undefined, true));
 	if (task.startRange) {
 		edit.replace(document.uri, task.startRange, newStartDate);
 	} else {
@@ -434,7 +434,7 @@ export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: 
 }
 export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, line: TextLine, task: TheTask, forceIncludeTime = false) {
 	const dateInIso = getDateInISOFormat(new Date(), forceIncludeTime || $config.completionDateIncludeTime);
-	const newCompletionDate = specialTag(SpecialTagName.completionDate, $config.completionDateIncludeDate ? dateInIso : undefined);
+	const newCompletionDate = helpCreateSpecialTag(SpecialTagName.completionDate, $config.completionDateIncludeDate ? dateInIso : undefined);
 	if (task.completionDateRange) {
 		edit.replace(document.uri, task.completionDateRange, newCompletionDate);
 	} else {
@@ -449,7 +449,7 @@ export function insertDurationWorkspaceEdit(edit: WorkspaceEdit, document: TextD
 		return;
 	}
 
-	const newDurationDate = specialTag(SpecialTagName.duration, durationTo(task, true, $config.durationIncludeSeconds));
+	const newDurationDate = helpCreateSpecialTag(SpecialTagName.duration, durationTo(task, true, $config.durationIncludeSeconds));
 	if (task.durationRange) {
 		edit.replace(document.uri, task.durationRange, newDurationDate);
 	} else {

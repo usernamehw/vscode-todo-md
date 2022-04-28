@@ -395,6 +395,25 @@
 					"markdownDescription": "Show strike-through text decoration for completed tasks in editor.",
 					"default": true
 				},
+				"todomd.setDueDateThisWeekDay": {
+					"type": "string",
+					"markdownDescription": "Week day when using set due date command or suggest `SET_DUE_THIS_WEEK`.",
+					"enum": [
+						"Friday",
+						"Sunday"
+					],
+					"default": "Friday"
+				},
+				"todomd.setDueDateNextWeekDay": {
+					"type": "string",
+					"markdownDescription": "Week day when using set due date command or suggest `SET_DUE_NEXT_WEEK`.",
+					"enum": [
+						"Monday",
+						"Friday",
+						"Sunday"
+					],
+					"default": "Friday"
+				},
 				"todomd.decorations": {
 					"type": "object",
 					"markdownDescription": "Advanced decoration tweaking. https://github.com/usernamehw/vscode-todo-md/issues/4",

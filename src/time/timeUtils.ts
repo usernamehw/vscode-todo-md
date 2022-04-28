@@ -32,9 +32,9 @@ export function getDateInISOFormat(date: Date | Dayjs = new Date(), includeTime 
  * Transform day of the week `sun` | `sunday` into its JS index
  * - sunday => 0
  */
-export function dayOfWeekToIndexOfWeek(dayOfWeek: string): number {
+export function dayOfWeekToIndexOfWeek(dayOfWeek: string, isMondayTheFirstDayOfTheWeek = false): number {
 	if (/^(sun|sunday)$/i.test(dayOfWeek)) {
-		return 0;
+		return isMondayTheFirstDayOfTheWeek ? 7 : 0;
 	} else if (/^(mon|monday)$/i.test(dayOfWeek)) {
 		return 1;
 	} else if (/^(tue|tuesday)$/i.test(dayOfWeek)) {

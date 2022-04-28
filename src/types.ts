@@ -191,6 +191,14 @@ export interface ExtensionConfig {
 	 */
 	closestDueDateIncludeWeekday: boolean;
 	/**
+	 * Week day when using set due date command or suggest `SET_DUE_THIS_WEEK`.
+	 */
+	setDueDateThisWeekDay: 'Friday' | 'Sunday';
+	/**
+	 * Week day when using set due date command or suggest `SET_DUE_NEXT_WEEK`.
+	 */
+	setDueDateNextWeekDay: 'Friday' | 'Monday' | 'Sunday';
+	/**
 	 * Show strike-through text decoration for completed tasks in editor.
 	 */
 	completedStrikeThrough: boolean;
@@ -435,3 +443,9 @@ export const enum CommandIds {
 	removeAllOverdue = 'todomd.dev.removeAllOverdue',
 	replaceWithToday = 'todomd.dev.replaceDateWithToday',
 }
+
+/**
+ * Keep autocomplete for the union type with `| string`.
+ * https://github.com/microsoft/TypeScript/issues/29729
+ */
+export type LiteralUnion<T extends U, U = string> = T | (Record<never, never> & U);

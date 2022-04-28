@@ -147,25 +147,25 @@ export function taskToString(task: TheTask) {
 		result.push(task.contexts.map(context => `@${context}`).join(''));
 	}
 	if (task.due) {
-		result.push(specialTag(SpecialTagName.due, task.due.raw));
+		result.push(helpCreateSpecialTag(SpecialTagName.due, task.due.raw));
 	}
 	if (task.overdue) {
-		result.push(specialTag(SpecialTagName.overdue, task.overdue));
+		result.push(helpCreateSpecialTag(SpecialTagName.overdue, task.overdue));
 	}
 	if (task.creationDate) {
-		result.push(specialTag(SpecialTagName.creationDate, task.creationDate));
+		result.push(helpCreateSpecialTag(SpecialTagName.creationDate, task.creationDate));
 	}
 	if (task.completionDate) {
-		result.push(specialTag(SpecialTagName.completionDate, task.completionDate));
+		result.push(helpCreateSpecialTag(SpecialTagName.completionDate, task.completionDate));
 	}
 	if (task.count) {
-		result.push(specialTag(SpecialTagName.count, `${task.count.current}/${task.count.needed}`));
+		result.push(helpCreateSpecialTag(SpecialTagName.count, `${task.count.current}/${task.count.needed}`));
 	}
 	if (task.isCollapsed) {
-		result.push(specialTag(SpecialTagName.collapsed));
+		result.push(helpCreateSpecialTag(SpecialTagName.collapsed));
 	}
 	if (task.isHidden) {
-		result.push(specialTag(SpecialTagName.hidden));
+		result.push(helpCreateSpecialTag(SpecialTagName.hidden));
 	}
 	return (task.indent ? task.indent : '') + result.join(' ');
 }
@@ -173,7 +173,7 @@ export function taskToString(task: TheTask) {
 /**
  * Helper function. Construct special tag with some autocomplete.
  */
-export function specialTag(tag: SpecialTagName, value?: string) {
+export function helpCreateSpecialTag(tag: SpecialTagName, value?: string) {
 	return `{${tag}${value ? `:${value}` : ''}}`;
 }
 /**

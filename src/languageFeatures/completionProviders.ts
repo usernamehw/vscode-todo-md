@@ -1,13 +1,14 @@
 import dayjs from 'dayjs';
 import { CompletionItem, CompletionItemKind, languages, Position, Range, TextDocument } from 'vscode';
 import { DueDate } from '../dueDate';
-import { $config, $state, Global } from '../extension';
+import { $state, Global } from '../extension';
 import { helpCreateDueDate } from '../time/setDueDateHelper';
 import { getDateInISOFormat } from '../time/timeUtils';
-import { specialTagDescription, SpecialTagName } from '../utils/extensionUtils';
+import { helpCreateSpecialTag, specialTagDescription, SpecialTagName } from '../utils/extensionUtils';
 import { unique } from '../utils/utils';
 import { getWordAtPosition, getWordRangeAtPosition } from '../utils/vscodeUtils';
 import { getTodoMdFileDocumentSelector } from './languageFeatures';
+
 /**
  * Update editor autocomplete/suggest
  */
@@ -87,17 +88,29 @@ export function updateCompletions() {
 			provideCompletionItems(document: TextDocument, position: Position) {
 				const today = new CompletionItem('TODAY', CompletionItemKind.Constant);
 				today.insertText = getDateInISOFormat(new Date());
+
 				const setDueDateToday = new CompletionItem('SET_DUE_TODAY', CompletionItemKind.Constant);
 				setDueDateToday.insertText = `{due:${getDateInISOFormat(new Date())}}`;
+
 				const setDueDateTomorrow = new CompletionItem('SET_DUE_TOMORROW', CompletionItemKind.Constant);
 				setDueDateTomorrow.insertText = `{due:${getDateInISOFormat(dayjs().add(1, 'day'))}}`;
+
 				const setDueDateYesterday = new CompletionItem('SET_DUE_YESTERDAY', CompletionItemKind.Constant);
 				setDueDateYesterday.insertText = `{due:${getDateInISOFormat(dayjs().subtract(1, 'day'))}}`;
+
+				const setDueDateThisWeek = new CompletionItem('SET_DUE_THIS_WEEK', CompletionItemKind.Constant);
+				setDueDateThisWeek.insertText = helpCreateSpecialTag(SpecialTagName.due, helpCreateDueDate('this week'));
+
+				const setDueDateNextWeek = new CompletionItem('SET_DUE_NEXT_WEEK', CompletionItemKind.Constant);
+				setDueDateNextWeek.insertText = helpCreateSpecialTag(SpecialTagName.due, helpCreateDueDate('next week'));
+
 				return [
 					today,
 					setDueDateToday,
 					setDueDateTomorrow,
 					setDueDateYesterday,
+					setDueDateThisWeek,
+					setDueDateNextWeek,
 				];
 			},
 		},

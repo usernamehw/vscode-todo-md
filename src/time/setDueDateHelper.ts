@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import { $config } from '../extension';
+import { LiteralUnion } from '../types';
 import { DATE_FORMAT, dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek, monthStringToMonthIndex } from './timeUtils';
 
 /**
@@ -9,11 +11,16 @@ import { DATE_FORMAT, dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek, monthStringToM
  *
  * - Returns `undefined` for invalid input. TODO: maybe just return empty string?
  */
-export function helpCreateDueDate(str: string, targetNow = new Date()): string | undefined {
+export function helpCreateDueDate(str: LiteralUnion<'next week' | 'this week'>, targetNow = new Date()): string | undefined {
 	if (str === '+') {
 		str = '+1';// alias for tomorrow
 	} else if (str === '-') {
 		str = '-1';// alias for yesterday
+	}
+	if (str === 'this week') {
+		return dayjs().set('day', dayOfWeekToIndexOfWeek($config.setDueDateThisWeekDay, true)).format(DATE_FORMAT);
+	} else if (str === 'next week') {
+		return dayjs().add(1, 'week').set('day', dayOfWeekToIndexOfWeek($config.setDueDateNextWeekDay, true)).format(DATE_FORMAT);
 	}
 	const justDateMatch = /^(\d+)$/.exec(str);
 	const dayShiftMatch = /^(\+|-)(\d+)(d|w|m)?$/.exec(str);
@@ -55,7 +62,7 @@ export function helpCreateDueDate(str: string, targetNow = new Date()): string |
 			now.add(1, 'month').set('date', targetDate);
 		return targetDateDayjs.format(DATE_FORMAT);
 	} else if (dayOfTheWeekMatch) {
-		const targetDayIndex = dayOfWeekToIndexOfWeek(str);
+		const targetDayIndex = dayOfWeekToIndexOfWeek(str, true);
 		let tryDay = now.set('day', targetDayIndex);
 		if (tryDay.isBefore(now, 'day')) {
 			tryDay = tryDay.add(7, 'day');
