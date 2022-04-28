@@ -7,7 +7,7 @@ import { $config, $state, Global } from '../extension';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
-import { followLink, openFileInEditorByPath } from '../utils/vscodeUtils';
+import { followLink } from '../utils/vscodeUtils';
 import { getNonce } from './webviewUtils';
 
 export class TasksWebviewViewProvider implements WebviewViewProvider {
@@ -65,7 +65,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					break;
 				}
 				case 'startTask': {
-					await startTaskAtLine(await getActiveOrDefaultDocument(), message.value);
+					await startTaskAtLine(message.value, await getActiveOrDefaultDocument());
 					await updateEverything();
 					break;
 				}

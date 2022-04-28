@@ -106,24 +106,6 @@ export async function setDueDateAtLine(document: TextDocument, lineNumber: numbe
 	return await applyEdit(edit, document);
 }
 /**
- * Start time tracking (task duration). Triggered manually by user.
- */
-export async function startTaskAtLine(document: TextDocument, lineNumber: number) {
-	const edit = new WorkspaceEdit();
-	const line = document.lineAt(lineNumber);
-	const task = getTaskAtLineExtension(lineNumber);
-	if (!task) {
-		return undefined;
-	}
-	const newStartDate = helpCreateSpecialTag(SpecialTagName.started, getDateInISOFormat(undefined, true));
-	if (task.startRange) {
-		edit.replace(document.uri, task.startRange, newStartDate);
-	} else {
-		edit.insert(document.uri, line.range.end, ` ${newStartDate}`);
-	}
-	return await applyEdit(edit, document);
-}
-/**
  * Delete the task. Show confirmation dialog if necessary. Modal dialog shows all the tasks that will be deleted.
  */
 export async function tryToDeleteTask(document: TextDocument, lineNumber: number) {
@@ -391,6 +373,11 @@ export async function appendTaskToFile(text: string, filePath: string) {
 	edit.insert(uri, eofPosition, `\n${text}`);
 	return applyEdit(edit, document);
 }
+export async function startTaskAtLine(lineNumber: number, document: TextDocument) {
+	const edit = new WorkspaceEdit();
+	startTaskAtLineWorkspaceEdit(edit, document, lineNumber);
+	return await applyEdit(edit, document);
+}
 // ────────────────────────────────────────────────────────────
 // ──── Do not apply edit ─────────────────────────────────────
 // ────────────────────────────────────────────────────────────
@@ -481,7 +468,6 @@ export function editTaskWorkspaceEdit(edit: WorkspaceEdit, document: TextDocumen
 	const line = document.lineAt(task.lineNumber);
 	edit.replace(document.uri, line.range, newTaskAsText);
 }
-
 /**
  * Increment/Decrement a priority. Create it if the task doesn't have one.
  */
@@ -499,5 +485,21 @@ export function incrementOrDecrementPriorityWorkspaceEdit(edit: WorkspaceEdit, d
 	} else {
 		// No priority, create one
 		edit.insert(document.uri, new Position(lineNumber, 0), `(${newPriority}) `);
+	}
+}
+/**
+ * Start time tracking (task duration). Triggered manually by user.
+ */
+export function startTaskAtLineWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
+	const line = document.lineAt(lineNumber);
+	const task = getTaskAtLineExtension(lineNumber);
+	if (!task) {
+		return;
+	}
+	const newStartDate = helpCreateSpecialTag(SpecialTagName.started, getDateInISOFormat(undefined, true));
+	if (task.startRange) {
+		edit.replace(document.uri, task.startRange, newStartDate);
+	} else {
+		edit.insert(document.uri, line.range.end, ` ${newStartDate}`);
 	}
 }
