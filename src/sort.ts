@@ -1,5 +1,7 @@
+import dayjs from 'dayjs';
 import { TheTask } from './TheTask';
 import { DueState } from './types';
+
 /**
  * Sorting direction
  */
@@ -14,6 +16,7 @@ export const enum SortProperty {
 	Priority,
 	NotDue,
 	Overdue,
+	CreationDate,
 }
 /**
  * Does not modify the original array.
@@ -28,6 +31,19 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 				return 0;
 			} else {
 				return a.priority > b.priority ? 1 : -1;
+			}
+		});
+	} else if (property === SortProperty.CreationDate) {
+		sortedTasks = tasksCopy.sort((a, b) => {
+			if (a.creationDate === b.creationDate) {
+				return 0;
+			} else {
+				if (a.creationDate === undefined) {
+					return -Infinity;
+				} else if (b.creationDate === undefined) {
+					return Infinity;
+				}
+				return dayjs(a.creationDate).diff(b.creationDate);
 			}
 		});
 	} else if (property === SortProperty.Overdue) {

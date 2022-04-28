@@ -1107,6 +1107,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.sortByCreationDate",
+				"title": "Sort by Creation Date",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.setDueDate",
 				"description": "Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate)",
 				"title": "Set due date",
@@ -1501,6 +1506,10 @@
 				{
 					"command": "todomd.sortByPriority",
 					"group": "0@1"
+				},
+				{
+					"command": "todomd.sortByCreationDate",
+					"group": "0@2"
 				},
 				{
 					"command": "todomd.setDueDate",

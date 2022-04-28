@@ -31,6 +31,7 @@ import { setLastVisit } from './commands/setLastVisit';
 import { showDefaultFileSetting } from './commands/showDefaultFileSetting';
 import { showGlobalState } from './commands/showGlobalState';
 import { showWebviewSettings } from './commands/showWebviewSettings';
+import { sortByCreationDate } from './commands/sortByCreationDate';
 import { sortByDefault } from './commands/sortByDefault';
 import { sortByPriority } from './commands/sortByPriority';
 import { specifyDefaultArchiveFileCommand } from './commands/specifyDefaultArchiveFile';
@@ -64,8 +65,11 @@ export const enum CommandId {
 	ArchiveCompletedTasks = 'todomd.archiveCompletedTasks',
 	ArchiveSelectedCompletedTasks = 'todomd.archiveSelectedCompletedTasks',
 	StartTask = 'todomd.startTask',
+	// ────────────────────────────────────────────────────────────
 	SortByPriority = 'todomd.sortByPriority',
 	SortByDefault = 'todomd.sortByDefault',
+	SortByCreationDate = 'todomd.sortByCreationDate',
+	// ────────────────────────────────────────────────────────────
 	CreateSimilarTask = 'todomd.createSimilarTask',
 	GetNextTask = 'todomd.getNextTask',
 	GetFewNextTasks = 'todomd.getFewNextTasks',
@@ -137,7 +141,7 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.ToggleTagsTreeViewSorting, toggleTagsTreeViewSorting);
 	commands.registerCommand(CommandId.ToggleProjectsTreeViewSorting, toggleProjectsTreeViewSorting);
 	commands.registerCommand(CommandId.ToggleContextsTreeViewSorting, toggleContextsTreeViewSorting);
-	// ────────────────────────────────────────────────────────────
+	// ──── Require Text Editor ───────────────────────────────────
 	commands.registerTextEditorCommand(CommandId.SetLastVisit, setLastVisit);
 	commands.registerTextEditorCommand(CommandId.IncrementPriority, incrementPriority);
 	commands.registerTextEditorCommand(CommandId.ResetAllRecurringTasks, resetAllRecurringTasksCommand);
@@ -147,6 +151,7 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.ReplaceWithToday, replaceWithToday);
 	commands.registerTextEditorCommand(CommandId.SortByPriority, sortByPriority);
 	commands.registerTextEditorCommand(CommandId.SortByDefault, sortByDefault);
+	commands.registerTextEditorCommand(CommandId.SortByCreationDate, sortByCreationDate);
 	commands.registerTextEditorCommand(CommandId.CreateSimilarTask, createSimilarTask);
 	commands.registerTextEditorCommand(CommandId.ArchiveCompletedTasks, archiveCompletedTasks);
 	commands.registerTextEditorCommand(CommandId.SetDueDate, setDueDate);
@@ -190,7 +195,7 @@ export function getSelectedLineNumbers(editor: TextEditor): number[] {
 /**
  * Sort tasks in editor. Default sort is by due date. Same due date sorted by priority.
  */
-export function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortProperty: 'default' | 'priority') {
+export function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortProperty: 'creationDate' | 'default' | 'priority') {
 	const selection = editor.selection;
 	let lineStart = selection.start.line;
 	let lineEnd = selection.end.line;
@@ -208,8 +213,12 @@ export function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sort
 	let sortedTasks: TheTask[];
 	if (sortProperty === 'priority') {
 		sortedTasks = sortTasks(tasks, SortProperty.Priority);
-	} else {
+	} else if (sortProperty === 'creationDate') {
+		sortedTasks = sortTasks(tasks, SortProperty.CreationDate);
+	} else if (sortProperty === 'default') {
 		sortedTasks = defaultSortTasks(tasks);
+	} else {
+		throw Error(`Unknown sort property ${sortProperty}`);
 	}
 	const result = sortedTasks.map(t => t.rawText).join('\n');
 	edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
