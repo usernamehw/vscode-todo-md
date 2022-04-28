@@ -1,9 +1,16 @@
+## 2.10.0 `28 Apr 2022`
+
+- ✨ Add badge decoration in editor showing tag count #46
+- ✨ Add status bar item that shows due task `"todomd.statusBarMainEnabled": true,`
+- ✨ Add completions in editor for `THIS_WEEK`, `NEXT_WEEK` and weekdays `SET_DUE_MONDAY`, ...
+- 🐛 Fix problem when decorations activated on non-todomd file
+
 ## 2.9.2 `10 Mar 2022`
 
 - ✨ Ignore yaml frontmatter header
 - ✨ Use bold font weight for priority decoration
 - ✨ Sort not due tasks above tasks without due date
-- 💥 remove `sortTaskParts` command
+- 💥 Remove `sortTaskParts` command
 
 ## 2.9.1 `06 Feb 2022`
 
