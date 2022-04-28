@@ -1493,7 +1493,7 @@
 					"group": "inline"
 				}
 			],
-			"todomd.toggleDone": [
+			"todomd.contextMenu": [
 				{
 					"command": "todomd.sortByDefault",
 					"group": "0@0"
@@ -1521,7 +1521,7 @@
 			],
 			"editor/context": [
 				{
-					"submenu": "todomd.toggleDone",
+					"submenu": "todomd.contextMenu",
 					"group": "navigation",
 					"when": "todomd:isActive"
 				}
@@ -1612,7 +1612,7 @@
 		},
 		"submenus": [
 			{
-				"id": "todomd.toggleDone",
+				"id": "todomd.contextMenu",
 				"label": "Todo MD"
 			}
 		],
