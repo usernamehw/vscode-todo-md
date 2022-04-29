@@ -26,7 +26,8 @@ export default class Task extends Vue {
 	filterInputValue!: string;
 	selectedTaskLineNumber!: number;
 
-	duration = this.model.start ? durationTo(this.model, false, !this.model.done) : '';// TODO: respect `durationIncludeSeconds`
+	duration = this.model.duration ? this.model.duration :
+		this.model.start ? durationTo(this.model, false, !this.model.done) : '';// TODO: respect `durationIncludeSeconds`
 	durationTimerId: any;
 
 	toggleTaskCollapse = () => {
@@ -141,7 +142,7 @@ export default class Task extends Vue {
 	}
 
 	mounted() {
-		if (this.model.start && !this.model.completionDate) {
+		if (!this.model.duration && this.model.start && !this.model.done) {
 			this.durationTimerId = setInterval(() => {
 				this.duration = durationTo(this.model, false, true);
 			}, 1000);
