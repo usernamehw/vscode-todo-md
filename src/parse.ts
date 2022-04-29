@@ -100,7 +100,9 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 				} else if (specialTag === SpecialTagName.CompletionDate) {
 					// Presence of completion date indicates that the task is done
 					done = true;
-					completionDate = specialTagValue;
+					if (word !== '{cm}') {
+						completionDate = specialTagValue;
+					}
 					completionDateRange = range;
 					specialTagRanges.push(range);
 				} else if (specialTag === SpecialTagName.Count) {
