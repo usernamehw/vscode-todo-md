@@ -9,6 +9,7 @@ import { registerAllCommands } from './commands';
 import { updateEditorDecorationStyle } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor } from './events';
+import { updateLanguageFeatures } from './languageFeatures/languageFeatures';
 import { parseDocument } from './parse';
 import { CounterStatusBar, MainStatusBar } from './statusBar';
 import { TheTask } from './TheTask';
@@ -174,6 +175,8 @@ export async function activate(extensionContext: ExtensionContext) {
 	updateArchivedTasks();
 	updateIsDevContext();
 
+	updateLanguageFeatures();
+
 	/**
 	 * The event is fired twice quickly when closing an editor, also when swtitching to untitled file ???
 	 */
@@ -192,6 +195,7 @@ export async function activate(extensionContext: ExtensionContext) {
 		$config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
 
 		disposeEditorDisposables();
+		updateLanguageFeatures();
 		$state.editorLineHeight = getEditorLineHeight();
 		updateEditorDecorationStyle();
 		updateUserSuggestItems();

@@ -1,20 +1,15 @@
 import dayjs from 'dayjs';
 import throttle from 'lodash/throttle';
 import { languages, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
+import { getNextFewTasks } from './commands/getFewNextTasks';
 import { doUpdateEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
-import { Constants, $config, $state, Global, counterStatusBar, updateLastVisitGlobalState, updateState, mainStatusBar } from './extension';
-import { updateHover } from './languageFeatures/hoverProvider';
-import { updateCompletions } from './languageFeatures/completionProviders';
-import { updateDocumentHighlights } from './languageFeatures/documentHighlights';
-import { updateReferenceProvider } from './languageFeatures/referenceProvider';
-import { updateRenameProvider } from './languageFeatures/renameProvider';
+import { $config, $state, Constants, counterStatusBar, Global, mainStatusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
 import { sleep } from './utils/utils';
 import { setContext } from './utils/vscodeUtils';
-import { getNextFewTasks } from './commands/getFewNextTasks';
 
 let changeActiveEditorEventInProgress = false;
 /**
@@ -95,36 +90,18 @@ export function isTheRightFileName(editor: TextEditor): boolean {
 	},	editor.document) !== 0;
 }
 /**
- * There's a number of editor features that are only needed when the active file matches a pattern.
- *
- * For example: completions, status bar text, editor hover.
+ * Activate document text change event listener.
  */
 export function activateEditorFeatures(editor: TextEditor) {
 	$state.theRightFileOpened = true;
 	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
-	updateCompletions();
-	updateDocumentHighlights();
-	updateRenameProvider();
-	updateReferenceProvider();
-	updateHover();
 	counterStatusBar.show();
 }
 /**
- * When `todo.md` document is closed - all the features except for the Tree Views
- * will be disabled.
+ * Deactivate document text change event listener.
  */
 export function deactivateEditorFeatures() {
 	Global.changeTextDocumentDisposable?.dispose();
-	Global.contextAutocompleteDisposable?.dispose();
-	Global.tagAutocompleteDisposable?.dispose();
-	Global.projectAutocompleteDisposable?.dispose();
-	Global.generalAutocompleteDisposable?.dispose();
-	Global.specialTagsAutocompleteDisposable?.dispose();
-	Global.setDueDateAutocompleteDisposable?.dispose();
-	Global.documentHighlightsDisposable?.dispose();
-	Global.renameProviderDisposable?.dispose();
-	Global.referenceProviderDisposable?.dispose();
-	Global.hoverDisposable?.dispose();
 	counterStatusBar.hide();
 }
 /**
