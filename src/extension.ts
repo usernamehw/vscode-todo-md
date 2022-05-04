@@ -25,6 +25,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(isoWeek);
 dayjs.extend(duration);
 dayjs.Ls.en.weekStart = 1;
+
 /**
  * Things extension keeps a global reference to and uses extensively
  */
@@ -94,7 +95,7 @@ export const enum Constants {
 export let $config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
 export const counterStatusBar = new CounterStatusBar();
 export const mainStatusBar = new MainStatusBar();
-mainStatusBar.show();
+
 /**
  * Global vscode variables (mostly disposables)
  */

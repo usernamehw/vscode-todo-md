@@ -54,6 +54,7 @@ export class MainStatusBar extends StatusBar {
 		super();
 		this.statusBarItem = window.createStatusBarItem(`${Constants.ExtensionMenuPrefix} Main`, StatusBarAlignment.Left, -20001);
 		this.statusBarItem.name = `${Constants.ExtensionMenuPrefix} Main`;
+		this.show();
 	}
 
 	show() {
