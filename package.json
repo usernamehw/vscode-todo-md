@@ -1097,13 +1097,18 @@
 				"icon": "$(add)"
 			},
 			{
+				"command": "todomd.sortByDefault",
+				"title": "Sort by due date & priority (default sort)",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.sortByPriority",
 				"title": "Sort by priority",
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.sortByDefault",
-				"title": "Sort by due date & priority (default sort)",
+				"command": "todomd.sortByProject",
+				"title": "Sort by project",
 				"category": "Todo MD"
 			},
 			{
@@ -1508,8 +1513,12 @@
 					"group": "0@1"
 				},
 				{
-					"command": "todomd.sortByCreationDate",
+					"command": "todomd.sortByProject",
 					"group": "0@2"
+				},
+				{
+					"command": "todomd.sortByCreationDate",
+					"group": "0@3"
 				},
 				{
 					"command": "todomd.setDueDate",

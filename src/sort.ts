@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import intersection from 'lodash/intersection';
 import { TheTask } from './TheTask';
 import { DueState } from './types';
 
@@ -13,7 +14,9 @@ const enum SortDirection {
  * Sorting property
  */
 export const enum SortProperty {
+	Default,
 	Priority,
+	Project,
 	NotDue,
 	Overdue,
 	CreationDate,
@@ -33,6 +36,8 @@ export function sortTasks(tasks: TheTask[], property: SortProperty, direction = 
 				return a.priority > b.priority ? 1 : -1;
 			}
 		});
+	} else if (property === SortProperty.Project) {
+		sortedTasks = sortBySimilarityOfArrays(tasksCopy, 'project');
 	} else if (property === SortProperty.CreationDate) {
 		sortedTasks = tasksCopy.sort((a, b) => {
 			if (a.creationDate === b.creationDate) {
@@ -96,4 +101,39 @@ export function defaultSortTasks(tasks: TheTask[]) {
 		...dueNotSpecified,
 		...sortTasks(dueSpecifiedButNotDue, SortProperty.NotDue),
 	];
+}
+
+function sortBySimilarityOfArrays(tasks: TheTask[], property: 'project'): TheTask[] {
+	const similarityMap: {
+		ln1: number;
+		ln2: number;
+		similarity: number;
+	}[] = [];
+
+	for (const task1 of tasks) {
+		const ln1 = task1.lineNumber;
+		for (const task2 of tasks) {
+			const ln2 = task2.lineNumber;
+			let similarity = 0;
+			if (property === 'project') {
+				similarity = intersection(task1.projects, task2.projects).length;
+			}
+			similarityMap.push({
+				ln1,
+				ln2,
+				similarity,
+			});
+		}
+	}
+	similarityMap.sort((a, b) => a.similarity - b.similarity);
+
+	const result = [];
+	for (const sim of similarityMap) {
+		result.push(sim.ln2, sim.ln1);
+	}
+
+	// keep unique line numbers but from the end of the array
+	return [...new Set(result.reverse())]
+		.reverse()
+		.map(lineNumber => tasks.find(task => task.lineNumber === lineNumber)!);
 }
