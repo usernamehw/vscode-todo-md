@@ -20,7 +20,7 @@ export async function openFileInEditor(path: string) {
 	window.showTextDocument(document);
 }
 /**
- * Given only start and end lines - get the full Range with characters.
+ * Given only start and end lines - get the full Range (with characters).
  */
 export function getFullRangeFromLines(document: TextDocument, lineStart: number, lineEnd: number): Range {
 	const lineAtTheEnd = document.lineAt(lineEnd);
