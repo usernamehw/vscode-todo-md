@@ -4,6 +4,7 @@ import { TextEditor, TextEditorEdit } from 'vscode';
 import { TheTask } from './TheTask';
 import { DueState } from './types';
 import { getTaskAtLineExtension } from './utils/taskUtils';
+import { UnsupportedValueError } from './utils/utils';
 import { getFullRangeFromLines } from './utils/vscodeUtils';
 
 /**
@@ -32,7 +33,9 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 	const tasksCopy = tasks.slice();
 	let sortedTasks: TheTask[] = [];
 
-	if (sortProperty === SortProperty.Priority) {
+	if (sortProperty === SortProperty.Default) {
+		sortedTasks = defaultSortTasks(tasksCopy);
+	} else if (sortProperty === SortProperty.Priority) {
 		sortedTasks = tasksCopy.sort((a, b) => {
 			if (a.priority === b.priority) {
 				return 0;
@@ -89,7 +92,7 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 			}
 		});
 	} else {
-		throw Error(`Unknown sort property: ${sortProperty}`);
+		throw new UnsupportedValueError(sortProperty);
 	}
 
 	if (direction === SortDirection.ASC) {

@@ -71,3 +71,11 @@ export function unique<T extends boolean | number | string>(arr: T[]): T[] {
 export function isEmptyObject(obj: any) {
 	return Object.keys(obj).length === 0;
 }
+/**
+ * Exhaustive type checking.
+ */
+export class UnsupportedValueError extends Error {
+	constructor(value: never) {
+		super(`Unsupported value: ${value}`);
+	}
+}
