@@ -8,6 +8,7 @@ import { formatTask, getTaskAtLineExtension } from '../utils/taskUtils';
 import { followLinks } from '../utils/vscodeUtils';
 
 export async function completeTask() {
+	// TODO: refactor this file
 	// Show Quick Pick to complete a task
 	const document = await getActiveOrDefaultDocument();
 	// TODO: should this be tree?
@@ -27,12 +28,17 @@ export async function completeTask() {
 		iconPath: new ThemeIcon('link-external'),
 		tooltip: 'Follow link',
 	};
+	const completeTaskInlineButton: QuickInputButton = {
+		iconPath: new ThemeIcon('check'),
+		tooltip: 'Complete task',
+	};
 
-	qp.items = notCompletedTasks.map(item => ({
-		...item,
+	qp.items = notCompletedTasks.map(notCompletedTask => ({
+		...notCompletedTask,
 		buttons: [
 			revealTaskInlineButton,
 			followLinkInlineButton,
+			completeTaskInlineButton,
 		],
 	}));
 
@@ -41,7 +47,7 @@ export async function completeTask() {
 		// @ts-ignore
 		activeQuickPickItem = e[0];
 	});
-	qp.onDidTriggerItemButton(e => {
+	qp.onDidTriggerItemButton(async e => {
 		// @ts-ignore
 		const task = getTaskAtLineExtension(e.item.ln);
 		if (!task) {
@@ -51,6 +57,22 @@ export async function completeTask() {
 			followLinks(task.links);
 		} else if (e.button.tooltip === revealTaskInlineButton.tooltip) {
 			revealTask(task.lineNumber);
+		} else if (e.button.tooltip === completeTaskInlineButton.tooltip) {
+			// @ts-ignore
+			await toggleDoneAtLine(await getActiveOrDefaultDocument(), e.item.ln);
+			await updateState();
+			qp.items = defaultSortTasks($state.tasks.filter(t => !t.done)).map(t => ({
+				label: formatTask(t),
+				ln: t.lineNumber,
+			})).map(notCompletedTask => ({
+				...notCompletedTask,
+				buttons: [
+					revealTaskInlineButton,
+					followLinkInlineButton,
+					completeTaskInlineButton,
+				],
+			}));
+			return;
 		}
 		qp.hide();
 		qp.dispose();
