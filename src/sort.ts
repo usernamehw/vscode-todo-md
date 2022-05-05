@@ -21,6 +21,7 @@ export const enum SortProperty {
 	Default,
 	Priority,
 	Project,
+	DueDate,
 	NotDue,
 	Overdue,
 	CreationDate,
@@ -71,6 +72,8 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 				return dayjs(a.completionDate).diff(b.completionDate);
 			}
 		});
+	} else if (sortProperty === SortProperty.DueDate) {
+		sortedTasks = sortByDueDate(tasksCopy);
 	} else if (sortProperty === SortProperty.Overdue) {
 		sortedTasks = tasksCopy.sort((a, b) => {
 			const overdueA = a.due?.overdueInDays || 0;
@@ -101,15 +104,10 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 
 	return sortedTasks;
 }
-
 /**
  * Sort tasks by groups in this order: Invalid => Overdue => Due => Has due, but not due => No due specified;
- *
- * With secondary sort by priority.
  */
-export function defaultSortTasks(tasks: TheTask[]) {
-	tasks = sortTasks(tasks, SortProperty.Priority);
-
+export function sortByDueDate(tasks: TheTask[]): TheTask[] {
 	const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.Overdue);
 	const dueTasks = tasks.filter(t => t.due?.isDue === DueState.Due);
 	const invalidDue = tasks.filter(t => t.due?.isDue === DueState.Invalid);
@@ -123,6 +121,15 @@ export function defaultSortTasks(tasks: TheTask[]) {
 		...dueNotSpecified,
 		...sortTasks(dueSpecifiedButNotDue, SortProperty.NotDue),
 	];
+}
+
+/**
+ * Sort tasks by groups in this order: Invalid => Overdue => Due => Has due, but not due => No due specified;
+ *
+ * With secondary sort by priority.
+ */
+export function defaultSortTasks(tasks: TheTask[]): TheTask[] {
+	return sortByDueDate(sortTasks(tasks, SortProperty.Priority));
 }
 
 function sortBySimilarityOfArrays(tasks: TheTask[], property: 'project'): TheTask[] {

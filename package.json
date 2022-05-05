@@ -1117,6 +1117,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.sortByDueDate",
+				"title": "Sort by Due Date",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.sortByCompletionDate",
 				"title": "Sort by Completion Date",
 				"category": "Todo MD"
@@ -1522,12 +1527,16 @@
 					"group": "0@2"
 				},
 				{
-					"command": "todomd.sortByCompletionDate",
+					"command": "todomd.sortByDueDate",
 					"group": "0@3"
 				},
 				{
-					"command": "todomd.sortByCreationDate",
+					"command": "todomd.sortByCompletionDate",
 					"group": "0@4"
+				},
+				{
+					"command": "todomd.sortByCreationDate",
+					"group": "0@5"
 				},
 				{
 					"command": "todomd.setDueDate",

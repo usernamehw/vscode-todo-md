@@ -68,6 +68,7 @@ export const enum CommandId {
 	SortByProject = 'todomd.sortByProject',
 	SortByCreationDate = 'todomd.sortByCreationDate',
 	SortByCompletionDate = 'todomd.sortByCompletionDate',
+	SortByDueDate = 'todomd.sortByDueDate',
 	// ────────────────────────────────────────────────────────────
 	CreateSimilarTask = 'todomd.createSimilarTask',
 	GetNextTask = 'todomd.getNextTask',
@@ -153,6 +154,7 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.SortByProject, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Project));
 	commands.registerTextEditorCommand(CommandId.SortByCreationDate, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.CreationDate));
 	commands.registerTextEditorCommand(CommandId.SortByCompletionDate, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.CompletionDate));
+	commands.registerTextEditorCommand(CommandId.SortByDueDate, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.DueDate));
 	commands.registerTextEditorCommand(CommandId.CreateSimilarTask, createSimilarTask);
 	commands.registerTextEditorCommand(CommandId.ArchiveCompletedTasks, archiveCompletedTasks);
 	commands.registerTextEditorCommand(CommandId.SetDueDate, setDueDate);
