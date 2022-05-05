@@ -1,10 +1,8 @@
 import { MarkdownString } from 'vscode';
 import { $config } from '../extension';
 import { TheTask } from '../TheTask';
-import { durationTo, makeClosestDueDateDecoration } from '../time/timeUtils';
+import { durationTo } from '../time/timeUtils';
 import { DueState } from '../types';
-import { helpGetColor } from '../utils/colors';
-
 /**
  * Transform task to show it in Tree View or Editor hover as markdown
  */
@@ -31,22 +29,22 @@ export function getTaskHover(task: TheTask) {
 	let due = '';
 	if (task.due || task.overdue) {
 		let dueColor = '';
-		let dueContent = '';
+		let overdueNumberOfDays = '';
 		let codicon = '$(history)';
 		if (task.due?.isDue === DueState.Due) {
-			dueColor = helpGetColor('due');
+			dueColor = '#5faedb';
 		} else if (task.due?.isDue === DueState.Overdue) {
-			dueColor = helpGetColor('overdue');
-			dueContent = String(task.due.overdueInDays);
-		} else if (task.due?.isDue === DueState.NotDue) {
-			dueColor = helpGetColor('notDue');
-			dueContent = makeClosestDueDateDecoration(task);
+			dueColor = '#d44343';
+			overdueNumberOfDays = String(task.due.overdueInDays);
 		} else if (task.due?.isDue === DueState.Invalid) {
-			dueColor = helpGetColor('invalid');
+			dueColor = '#7284eb';
 			codicon = '$(error)';
-			dueContent = 'Invalid';
+			overdueNumberOfDays = 'Invalid';
 		}
-		due = ` <span style="color:${dueColor || 'inherit'};">|${codicon} ${dueContent}|</span>&nbsp;`;
+		due = ` <span style="color:${dueColor || 'inherit'};">${codicon} ${overdueNumberOfDays}</span>&nbsp;`;
+		if (task.due?.isDue === DueState.NotDue) {
+			due = '';
+		}
 	}
 
 	const words = task.title.split(' ');
