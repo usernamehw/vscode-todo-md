@@ -6,7 +6,7 @@
 		"browser": true
 	},
 	"parserOptions": {
-		"ecmaVersion": 2020,
+		"ecmaVersion": 2019,
 		"sourceType": "module",
 		"project": "./tsconfig.json"
 	},
@@ -23,7 +23,7 @@
 			],
 			"parserOptions": {
 				"parser": "@babel/eslint-parser",
-				"ecmaVersion": 2020,
+				"ecmaVersion": 2019,
 				"requireConfigFile": false,
 				"sourceType": "module"
 			},

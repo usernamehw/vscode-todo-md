@@ -80,7 +80,7 @@ module.exports = (env, options) => {
 				// @ts-ignore
 				new TerserPlugin({
 					terserOptions: {
-						ecma: 2020,
+						ecma: 2019,
 						toplevel: true,
 						// @ts-ignore
 						format: {
