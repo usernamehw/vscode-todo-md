@@ -1,11 +1,10 @@
 import dayjs from 'dayjs';
 import intersection from 'lodash/intersection';
-import { TextEditor, TextEditorEdit } from 'vscode';
 import { TheTask } from './TheTask';
 import { DueState } from './types';
-import { getTaskAtLineExtension } from './utils/taskUtils';
 import { UnsupportedValueError } from './utils/utils';
-import { getFullRangeFromLines } from './utils/vscodeUtils';
+
+// 🛑 Do not import anything of VSCode into this file
 
 /**
  * Sorting direction
@@ -175,30 +174,4 @@ function sortBySimilarityOfArrays(tasks: TheTask[], property: 'context' | 'proje
 	return [...new Set(result.reverse())]
 		.reverse()
 		.map(lineNumber => tasks.find(task => task.lineNumber === lineNumber)!);
-}
-
-/**
- * Sort tasks in editor. Default sort is by due date. Same due date sorted by priority.
- */
-export function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortProperty: SortProperty) {
-	const selection = editor.selection;
-	let lineStart = selection.start.line;
-	let lineEnd = selection.end.line;
-	if (selection.isEmpty) {
-		lineStart = 0;
-		lineEnd = editor.document.lineCount - 1;
-	}
-	const tasks: TheTask[] = [];
-	for (let i = lineStart; i <= lineEnd; i++) {
-		const task = getTaskAtLineExtension(i);
-		if (task) {
-			tasks.push(task);
-		}
-	}
-	const sortedTasks = sortTasks(tasks, sortProperty);
-	if (!sortedTasks.length) {
-		return;
-	}
-	const result = sortedTasks.map(t => t.rawText).join('\n');
-	edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 }

@@ -1,4 +1,4 @@
-import { commands, TextEditor, window } from 'vscode';
+import { commands, TextEditor, TextEditorEdit, window } from 'vscode';
 import { addTaskToActiveFile } from './commands/addTaskToActiveFile';
 import { addTaskToDefaultFile } from './commands/addTaskToDefaultFile';
 import { archiveCompletedTasks } from './commands/archiveCompletedTasks';
@@ -42,12 +42,12 @@ import { toggleTagsTreeViewSorting } from './commands/toggleTagsTreeViewSorting'
 import { webviewToggleShowRecurringUpcoming } from './commands/webviewToggleShowRecurringUpcoming';
 import { appendTaskToFile } from './documentActions';
 import { $config } from './extension';
-import { SortProperty, sortTasksInEditor } from './sort';
+import { SortProperty, sortTasks } from './sort';
 import { TheTask } from './TheTask';
 import { getDateInISOFormat } from './time/timeUtils';
-import { formatTask } from './utils/taskUtils';
+import { formatTask, getTaskAtLineExtension } from './utils/taskUtils';
 import { unique } from './utils/utils';
-import { followLinks } from './utils/vscodeUtils';
+import { followLinks, getFullRangeFromLines } from './utils/vscodeUtils';
 
 /**
  * All commands contributed by this extension.
@@ -198,4 +198,29 @@ export function getSelectedLineNumbers(editor: TextEditor): number[] {
 		}
 	}
 	return unique(lineNumbers);
+}
+/**
+ * Sort tasks in editor. Default sort is by due date. Same due date sorted by priority.
+ */
+export function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortProperty: SortProperty) {
+	const selection = editor.selection;
+	let lineStart = selection.start.line;
+	let lineEnd = selection.end.line;
+	if (selection.isEmpty) {
+		lineStart = 0;
+		lineEnd = editor.document.lineCount - 1;
+	}
+	const tasks: TheTask[] = [];
+	for (let i = lineStart; i <= lineEnd; i++) {
+		const task = getTaskAtLineExtension(i);
+		if (task) {
+			tasks.push(task);
+		}
+	}
+	const sortedTasks = sortTasks(tasks, sortProperty);
+	if (!sortedTasks.length) {
+		return;
+	}
+	const result = sortedTasks.map(t => t.rawText).join('\n');
+	edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 }
