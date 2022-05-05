@@ -22,6 +22,7 @@ export const enum SortProperty {
 	Priority,
 	Project,
 	Tag,
+	Context,
 	DueDate,
 	NotDue,
 	Overdue,
@@ -49,6 +50,8 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 		sortedTasks = sortBySimilarityOfArrays(tasksCopy, 'project');
 	} else if (sortProperty === SortProperty.Tag) {
 		sortedTasks = sortBySimilarityOfArrays(tasksCopy, 'tag');
+	} else if (sortProperty === SortProperty.Context) {
+		sortedTasks = sortBySimilarityOfArrays(tasksCopy, 'context');
 	} else if (sortProperty === SortProperty.CreationDate) {
 		sortedTasks = tasksCopy.sort((a, b) => {
 			if (a.creationDate === b.creationDate) {
@@ -135,7 +138,7 @@ export function defaultSortTasks(tasks: TheTask[]): TheTask[] {
 	return sortByDueDate(sortTasks(tasks, SortProperty.Priority));
 }
 
-function sortBySimilarityOfArrays(tasks: TheTask[], property: 'project' | 'tag'): TheTask[] {
+function sortBySimilarityOfArrays(tasks: TheTask[], property: 'context' | 'project' | 'tag'): TheTask[] {
 	const similarityMap: {
 		ln1: number;
 		ln2: number;
@@ -151,6 +154,8 @@ function sortBySimilarityOfArrays(tasks: TheTask[], property: 'project' | 'tag')
 				similarity = intersection(task1.projects, task2.projects).length;
 			} else if (property === 'tag') {
 				similarity = intersection(task1.tags, task2.tags).length;
+			} else if (property === 'context') {
+				similarity = intersection(task1.contexts, task2.contexts).length;
 			}
 			similarityMap.push({
 				ln1,
