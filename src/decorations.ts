@@ -1,7 +1,6 @@
-import dayjs from 'dayjs';
 import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
 import { $config, $state, Global } from './extension';
-import { weekdayNamesShort } from './time/timeUtils';
+import { makeClosestDueDateDecoration } from './time/timeUtils';
 import { DueState } from './types';
 import { forEachTask } from './utils/taskUtils';
 import { isEmptyObject } from './utils/utils';
@@ -99,16 +98,16 @@ export function updateEditorDecorationStyle() {
 		...$config.decorations.due,
 	});
 	const enum DueDecorations {
-		padding = '0 0.5ch',
-		margin = '0.5ch',
-		border = '1px dashed',
+		Padding = '0 0.5ch',
+		Margin = '0.5ch',
+		Border = '1px dashed',
 	}
 	Global.overdueDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.overdueForeground'),
 		after: {
 			color: new ThemeColor('todomd.overdueForeground'),
-			border: DueDecorations.border,
-			textDecoration: `;margin-left:${DueDecorations.margin};text-align:center;padding:${DueDecorations.padding};`,
+			border: DueDecorations.Border,
+			textDecoration: `;margin-left:${DueDecorations.Margin};text-align:center;padding:${DueDecorations.Padding};`,
 		},
 		...$config.decorations.overdue,
 	});
@@ -119,9 +118,9 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.closestDueDateDecorationType = window.createTextEditorDecorationType({
 		after: {
-			border: DueDecorations.border,
+			border: DueDecorations.Border,
 			color: new ThemeColor('todomd.specialTagForeground'),
-			textDecoration: `;margin-left:${DueDecorations.margin};text-align:center;padding:${DueDecorations.padding};`,
+			textDecoration: `;margin-left:${DueDecorations.Margin};text-align:center;padding:${DueDecorations.Padding};`,
 		},
 	});
 	Global.nestedTasksCountDecorationType = window.createTextEditorDecorationType({
@@ -131,8 +130,8 @@ export function updateEditorDecorationStyle() {
 			color: new ThemeColor('todomd.nestedTasksCountForeground'),
 			border: '1px solid',
 			borderColor: new ThemeColor('todomd.nestedTasksCountBorder'),
-			margin: `0 0 0 ${DueDecorations.margin}`,
-			textDecoration: `;text-align:center;padding:${DueDecorations.padding};position:relative;`,
+			margin: `0 0 0 ${DueDecorations.Margin}`,
+			textDecoration: `;text-align:center;padding:${DueDecorations.Padding};position:relative;`,
 		},
 	});
 	Global.nestedTasksPieDecorationType = window.createTextEditorDecorationType({
@@ -140,7 +139,7 @@ export function updateEditorDecorationStyle() {
 		after: {
 			width: `${$state.editorLineHeight}px`,
 			height: `${$state.editorLineHeight}px`,
-			margin: `0 0 0 ${DueDecorations.margin}`,
+			margin: `0 0 0 ${DueDecorations.Margin}`,
 			textDecoration: `;vertical-align:middle;position:relative;top:-1px;`,
 		},
 	});
@@ -244,7 +243,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 					range: dueRange,
 					renderOptions: {
 						after: {
-							contentText: `+${due.daysUntilDue}d${$config.closestDueDateIncludeWeekday ? ` ${weekdayNamesShort[dayjs().add(due.daysUntilDue, 'day').get('day')]}` : ''} `,
+							contentText: makeClosestDueDateDecoration(task),
 						},
 					},
 				});
@@ -306,13 +305,13 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
  */
 function createPieProgressSvg(size: number, done: number, all: number) {
 	const enum Svg {
-		width = 20,
+		Width = 20,
 	}
 	const targetPercentage = done / all * 100;
 	const circleBg = `%23${$config.progressBackground.slice(1)}`;
 	const pieBg = `%23${$config.progressForeground.slice(1)}`;
 
-	let svgStr = `<svg xmlns="http://www.w3.org/2000/svg" height="${size}" width="${size}" viewBox="0 0 ${Svg.width} ${Svg.width}">`;
+	let svgStr = `<svg xmlns="http://www.w3.org/2000/svg" height="${size}" width="${size}" viewBox="0 0 ${Svg.Width} ${Svg.Width}">`;
 	svgStr += `<circle r="10" cx="10" cy="10" fill="${circleBg}" />`;
 	svgStr += `<circle r="5" cx="10" cy="10" fill="transparent" stroke="${pieBg}" stroke-width="10" stroke-dasharray="calc(${targetPercentage} * 31.4 / 100) 31.4" transform="rotate(-90) translate(-20)" />`;
 	svgStr += '</svg>';
