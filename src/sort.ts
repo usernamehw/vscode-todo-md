@@ -4,7 +4,7 @@ import { TheTask } from './TheTask';
 import { DueState } from './types';
 import { UnsupportedValueError } from './utils/utils';
 
-// 🛑 Do not import anything of VSCode into this file
+// 🛑 Do not import anything from 'vscode' or 'extension' into this file
 
 /**
  * Sorting direction

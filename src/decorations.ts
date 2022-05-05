@@ -1,6 +1,6 @@
 import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
 import { $config, $state, Global } from './extension';
-import { makeClosestDueDateDecoration } from './time/timeUtils';
+import { makeClosestDueDateDecoration } from './languageFeatures/getTaskHover';
 import { DueState } from './types';
 import { forEachTask } from './utils/taskUtils';
 import { isEmptyObject } from './utils/utils';

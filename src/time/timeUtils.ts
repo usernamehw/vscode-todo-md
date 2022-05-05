@@ -1,6 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { $config } from '../extension';
 import { TheTask } from '../TheTask';
+
+// 🛑 Do not import anything from 'vscode' or 'extension' into this file
 
 export const ONE_MINUTE_IN_MS = 60000;
 export const ONE_HOUR_IN_MS = 3600000;
@@ -111,14 +112,6 @@ export function dateDiff(date: dayjs.Dayjs): string {
  */
 export function dateAndDateDiff(date: dayjs.Dayjs): string {
 	return `${date.format(DATE_FORMAT)} ${dayOfTheWeek(date)} [${dateDiff(date)}]`;
-}
-/**
- * Return closest due date in a format (depending on a user setting):
- * - `+20d Fri`
- * - `+20d`
- */
-export function makeClosestDueDateDecoration(task: TheTask): string {
-	return `+${task.due!.daysUntilDue}d${$config.closestDueDateIncludeWeekday ? ` ${weekdayNamesShort[dayjs().add(task.due!.daysUntilDue, 'day').get('day')]}` : ''}`;
 }
 /**
  * Check if the date is valid.
