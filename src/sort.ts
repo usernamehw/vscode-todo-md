@@ -21,6 +21,7 @@ export const enum SortProperty {
 	Default,
 	Priority,
 	Project,
+	Tag,
 	DueDate,
 	NotDue,
 	Overdue,
@@ -46,6 +47,8 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 		});
 	} else if (sortProperty === SortProperty.Project) {
 		sortedTasks = sortBySimilarityOfArrays(tasksCopy, 'project');
+	} else if (sortProperty === SortProperty.Tag) {
+		sortedTasks = sortBySimilarityOfArrays(tasksCopy, 'tag');
 	} else if (sortProperty === SortProperty.CreationDate) {
 		sortedTasks = tasksCopy.sort((a, b) => {
 			if (a.creationDate === b.creationDate) {
@@ -132,7 +135,7 @@ export function defaultSortTasks(tasks: TheTask[]): TheTask[] {
 	return sortByDueDate(sortTasks(tasks, SortProperty.Priority));
 }
 
-function sortBySimilarityOfArrays(tasks: TheTask[], property: 'project'): TheTask[] {
+function sortBySimilarityOfArrays(tasks: TheTask[], property: 'project' | 'tag'): TheTask[] {
 	const similarityMap: {
 		ln1: number;
 		ln2: number;
@@ -146,6 +149,8 @@ function sortBySimilarityOfArrays(tasks: TheTask[], property: 'project'): TheTas
 			let similarity = 0;
 			if (property === 'project') {
 				similarity = intersection(task1.projects, task2.projects).length;
+			} else if (property === 'tag') {
+				similarity = intersection(task1.tags, task2.tags).length;
 			}
 			similarityMap.push({
 				ln1,
