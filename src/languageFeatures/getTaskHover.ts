@@ -9,7 +9,7 @@ import { helpGetColor } from '../utils/colors';
 /**
  * Transform task to show it in Tree View or Editor hover as markdown
  */
-export function getTaskHover(task: TheTask) {
+export function getTaskHoverMd(task: TheTask) {
 	const markdown = new MarkdownString(undefined, true);
 	markdown.isTrusted = true;
 	const priorityColor = task.priority === 'A' ? '#ec4f47' :

@@ -1,10 +1,10 @@
 import { Hover, languages, MarkdownString } from 'vscode';
 import { $state, Global } from '../extension';
-import { getTodoMdFileDocumentSelector } from './languageFeatures';
 import { parseWord } from '../parse';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
-import { getTaskHover } from './getTaskHover';
+import { getTaskHoverMd } from './getTaskHover';
+import { getTodoMdFileDocumentSelector } from './languageFeatures';
 
 export function updateHover() {
 	Global.hoverDisposable?.dispose();
@@ -17,19 +17,44 @@ export function updateHover() {
 				if (!task) {
 					return undefined;
 				}
+
 				const range = getWordRangeAtPosition(document, position);
 				const word = document.getText(range);
+				/**
+				 * Add hover description from the user setting "todomd.suggestItems".
+				 */
 				const hoveredWordUserDescription = new MarkdownString(undefined, true);
 				hoveredWordUserDescription.isTrusted = true;
+				/**
+				 * Add all tasks with the same project/tag/context.
+				 */
+				const otherTasks: MarkdownString[] = [];
+
 				if (range) {
 					const parsedWord = parseWord(word, position.line, range.start.character);
 					if (parsedWord.type === 'project') {
-						if ($state.suggestProjects[parsedWord.value]) {
-							hoveredWordUserDescription.appendMarkdown($state.suggestProjects[parsedWord.value]);
+						const projectName = parsedWord.value;
+						if ($state.suggestProjects[projectName]) {
+							hoveredWordUserDescription.appendMarkdown($state.suggestProjects[projectName]);
+						}
+
+						for (const otherTask of $state.projectsForTreeView.find(project => project.title === projectName)?.tasks || []) {
+							if (otherTask.lineNumber === task.lineNumber) {
+								continue;
+							}
+							otherTasks.push(getTaskHoverMd(otherTask));
 						}
 					} else if (parsedWord.type === 'context') {
-						if ($state.suggestContexts[parsedWord.value]) {
-							hoveredWordUserDescription.appendMarkdown($state.suggestContexts[parsedWord.value]);
+						const contextName = parsedWord.value;
+						if ($state.suggestContexts[contextName]) {
+							hoveredWordUserDescription.appendMarkdown($state.suggestContexts[contextName]);
+						}
+
+						for (const otherTask of $state.contextsForTreeView.find(context => context.title === contextName)?.tasks || []) {
+							if (otherTask.lineNumber === task.lineNumber) {
+								continue;
+							}
+							otherTasks.push(getTaskHoverMd(otherTask));
 						}
 					} else if (parsedWord.type === 'tags') {
 						let index = 0;
@@ -45,11 +70,19 @@ export function updateHover() {
 						if ($state.suggestTags[tagName]) {
 							hoveredWordUserDescription.appendMarkdown($state.suggestTags[tagName]);
 						}
+
+						for (const otherTask of $state.tagsForTreeView.find(tag => tag.title === tagName)?.tasks || []) {
+							if (otherTask.lineNumber === task.lineNumber) {
+								continue;
+							}
+							otherTasks.push(getTaskHoverMd(otherTask));
+						}
 					}
 				}
 				return new Hover([
 					hoveredWordUserDescription,
-					getTaskHover(task),
+					getTaskHoverMd(task),
+					...otherTasks,
 				]);
 			},
 		},

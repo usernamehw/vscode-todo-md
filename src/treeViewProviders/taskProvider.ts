@@ -1,7 +1,7 @@
 import { Command, Event, EventEmitter, ThemeColor, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { CommandId } from '../commands';
 import { $config } from '../extension';
-import { getTaskHover } from '../languageFeatures/getTaskHover';
+import { getTaskHoverMd } from '../languageFeatures/getTaskHover';
 import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
 import { SortNestedTasks } from '../types';
@@ -54,7 +54,7 @@ export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
 	 * Resolve `tooltip` only on hover
 	 */
 	resolveTreeItem(item: TaskTreeItem, el: TaskTreeItem) {
-		el.tooltip = getTaskHover(el.task);
+		el.tooltip = getTaskHoverMd(el.task);
 		return el;
 	}
 
