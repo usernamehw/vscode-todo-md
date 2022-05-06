@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { CompletionItem, CompletionItemKind, languages, Position, Range, TextDocument } from 'vscode';
+import { CompletionItem, CompletionItemKind, languages, MarkdownString, Position, Range, TextDocument } from 'vscode';
 import { DueDate } from '../dueDate';
 import { $state, Global } from '../extension';
 import { helpCreateDueDate } from '../time/setDueDateHelper';
@@ -31,6 +31,9 @@ export function updateCompletions() {
 				const tags = unique($state.tags.concat(Object.keys($state.suggestTags)));
 				for (const tag of tags) {
 					const tagCompletion = new CompletionItem(tag, CompletionItemKind.Field);
+					const documentation = new MarkdownString($state.suggestTags[tag], true);
+					documentation.isTrusted = true;
+					tagCompletion.documentation = documentation;
 					tagCompletion.insertText = `${tag} `;
 					tagCompletions.push(tagCompletion);
 				}
@@ -52,6 +55,9 @@ export function updateCompletions() {
 				const projects = unique($state.projects.concat(Object.keys($state.suggestProjects)));
 				for (const project of projects) {
 					const projectCompletion = new CompletionItem(project, CompletionItemKind.Field);
+					const documentation = new MarkdownString($state.suggestProjects[project], true);
+					documentation.isTrusted = true;
+					projectCompletion.documentation = documentation;
 					projectCompletion.insertText = `${project} `;
 					projectCompletions.push(projectCompletion);
 				}
@@ -73,6 +79,9 @@ export function updateCompletions() {
 				const contexts = unique($state.contexts.concat(Object.keys($state.suggestContexts)));
 				for (const context of contexts) {
 					const contextCompletion = new CompletionItem(context, CompletionItemKind.Field);
+					const documentation = new MarkdownString($state.suggestContexts[context], true);
+					documentation.isTrusted = true;
+					contextCompletion.documentation = documentation;
 					contextCompletion.insertText = `${context} `;
 					contextCompletions.push(contextCompletion);
 				}
@@ -105,7 +114,7 @@ export function updateCompletions() {
 				setDueDateNextWeek.insertText = helpCreateSpecialTag(SpecialTagName.Due, helpCreateDueDate('next week'));
 
 				const weekdayCompletions: CompletionItem[] = weekdayNamesLong.map(weekdayName => {
-					const setDueDateWeekday = new CompletionItem(`SET_DUE_${weekdayName.toUpperCase()}`);
+					const setDueDateWeekday = new CompletionItem(`SET_DUE_${weekdayName.toUpperCase()}`, CompletionItemKind.Constant);
 					setDueDateWeekday.insertText = helpCreateSpecialTag(SpecialTagName.Due, helpCreateDueDate(weekdayName));
 					return setDueDateWeekday;
 				});
