@@ -1525,6 +1525,28 @@
 			],
 			"todomd.contextMenu": [
 				{
+					"submenu": "todomd.sortMenu",
+					"group": "0@0"
+				},
+				{
+					"command": "todomd.setDueDate",
+					"group": "1@0"
+				},
+				{
+					"command": "todomd.startTask",
+					"group": "2@0"
+				},
+				{
+					"command": "todomd.incrementPriority",
+					"group": "3@0"
+				},
+				{
+					"command": "todomd.decrementPriority",
+					"group": "3@1"
+				}
+			],
+			"todomd.sortMenu": [
+				{
 					"command": "todomd.sortByDefault",
 					"group": "0@0"
 				},
@@ -1555,22 +1577,6 @@
 				{
 					"command": "todomd.sortByCreationDate",
 					"group": "0@7"
-				},
-				{
-					"command": "todomd.setDueDate",
-					"group": "1@0"
-				},
-				{
-					"command": "todomd.startTask",
-					"group": "2@0"
-				},
-				{
-					"command": "todomd.incrementPriority",
-					"group": "3@0"
-				},
-				{
-					"command": "todomd.decrementPriority",
-					"group": "3@1"
 				}
 			],
 			"editor/context": [
@@ -1668,6 +1674,10 @@
 			{
 				"id": "todomd.contextMenu",
 				"label": "Todo MD"
+			},
+			{
+				"id": "todomd.sortMenu",
+				"label": "Sort"
 			}
 		],
 		"viewsContainers": {
