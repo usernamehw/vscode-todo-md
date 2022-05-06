@@ -117,7 +117,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`
 
 <!-- COMMANDS_START -->
-## Commands (33)
+## Commands (39)
 
 |Command|Description|
 |-|-|
@@ -137,8 +137,14 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.deleteTask|Todo MD: Delete the Task|
 |todomd.addTaskToDefaultFile|Todo MD: Add a Task to DEFAULT file|
 |todomd.addTaskToActiveFile|Todo MD: Add a Task to ACTIVE file|
-|todomd.sortByPriority|Todo MD: Sort by priority|
-|todomd.sortByDefault|Todo MD: Sort by due date & priority (default sort)|
+|todomd.sortByDefault|Todo MD: Sort by Due Date & Priority (default sort)|
+|todomd.sortByPriority|Todo MD: Sort by Priority|
+|todomd.sortByProject|Todo MD: Sort by Project|
+|todomd.sortByTag|Todo MD: Sort by Tag|
+|todomd.sortByContext|Todo MD: Sort by Context|
+|todomd.sortByCreationDate|Todo MD: Sort by Creation Date|
+|todomd.sortByDueDate|Todo MD: Sort by Due Date|
+|todomd.sortByCompletionDate|Todo MD: Sort by Completion Date|
 |todomd.setDueDate|Todo MD: Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate)|
 |todomd.setDate|Todo MD: Set date|
 |todomd.archiveCompletedTasks|Todo MD: Archive completed Tasks|
@@ -223,6 +229,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COLORS_START -->
 ## Colors (21)
 
+Can be specified in `settings.json` (**`workbench.colorCustomizations`** section)
+
 |Color|Dark|Light|HC|Description|
 |-|-|-|-|-|
 |todomd.commentForeground|`#b4b4b4`|`#b4b4b4`|`#b4b4b4`|Color of comments `# Comment`|
@@ -248,8 +256,6 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.treeViewCompletedTaskIcon|`#7cc54b`|`#7cc54b`|`#7cc54b`|Color of completed task icon in Tree View.|
 <!-- COLORS_END -->
 
-Can be specified in `settings.json` (**`workbench.colorCustomizations`** section)
-
 ## More Documentation
 
 https://github.com/usernamehw/vscode-todo-md/tree/master/docs/docs.md
@@ -257,10 +263,12 @@ https://github.com/usernamehw/vscode-todo-md/tree/master/docs/docs.md
 ## Please upvote the following upstream vscode issues:
 
 - [#116141 Allow TreeItem's to have optional checkboxes](https://github.com/microsoft/vscode/issues/116141)
-- [#32813 \[theming\] Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
+- [#97190 Provide some richer (optional) UI for custom tree views](https://github.com/microsoft/vscode/issues/97190)
+- [#32813 Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
+- [#115365 Allow TreeItem.label to support MarkdownString](https://github.com/microsoft/vscode/issues/115365)
 - [#21611 Add option to always show word based suggestions](https://github.com/microsoft/vscode/issues/21611)
 - [#54285 Contributed webview context menu actions](https://github.com/microsoft/vscode/issues/54285)
 - [#85682 Api for editor insets](https://github.com/microsoft/vscode/issues/85682)
 - [#32856 Inline text adornments break word wrapping](https://github.com/microsoft/vscode/issues/32856)
-- [#25633 [theming] when completing color keys in settings, fill in current value](https://github.com/microsoft/vscode/issues/25633)
+- [#25633 When completing color keys in settings, fill in current value](https://github.com/microsoft/vscode/issues/25633)
 - [#5455 OnClick event on Gutter](https://github.com/microsoft/vscode/issues/5455)
