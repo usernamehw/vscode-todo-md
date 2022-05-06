@@ -1,3 +1,12 @@
+## 2.11.0 `06 May 2022`
+
+- ✨ Editor hover shows other tasks with the same [project, tag, context]
+- ✨ Sort by [due date, creation date, completion date, project, tag, context]
+- ✨ Editor context submenu with some of the extension commands
+- ✨ Support multi-cursor/selection for commands: [increment/decrement priority, set due date, start]
+- ✨ Show closest due date in hover for non-due tasks
+- ✨ Inline button to complete a task from the Quick Pick (`todomd.completeTask`)
+
 ## 2.10.0 `28 Apr 2022`
 
 - ✨ Add badge decoration in editor showing tag count #46
