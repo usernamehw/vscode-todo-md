@@ -43,7 +43,6 @@
 		"onCommand:todomd.addTaskToDefaultFile"
 	],
 	"main": "./dist/extension",
-	"preview": true,
 	"contributes": {
 		"configuration": {
 			"type": "object",
