@@ -66,7 +66,7 @@ export class MainStatusBar extends StatusBar {
 	}
 
 	update(fewNextTasks: TheTask[]) {
-		if (!$config.statusBarCounterEnabled) {
+		if (!$config.statusBarMainEnabled) {
 			return;
 		}
 		const firstTaskFormatted = formatTask(fewNextTasks[0]);
