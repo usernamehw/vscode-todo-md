@@ -49,7 +49,7 @@ export default defineComponent({
 				this.hide();
 				return;
 			}
-			this.filteredSuggestItems = fuzzysort.go(value, this.suggestItems, { allowTypo: true }).map(item => item.target);
+			this.filteredSuggestItems = fuzzysort.go(value, this.suggestItems).map(item => item.target);
 			if (this.autoshow) {
 				this.show();
 			}

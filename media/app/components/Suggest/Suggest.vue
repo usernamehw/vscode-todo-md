@@ -13,8 +13,8 @@
     <div v-if="suggestItemsVisible"
          class="suggest__autocomplete-container">
         <div v-for="(suggestItem, index) of filteredSuggestItems"
-             :id="'index' + index"
-             :key="suggestItem + Math.random()"
+             :id="'index' + String(index)"
+             :key="suggestItem + String(Math.random())"
              class="suggest__autocomplete-item"
              :class="{'suggest__autocomplete-item--active': index === activeIndex}"
              @click="selectItemAtIndex(index);acceptActiveSuggest()"
