@@ -22,6 +22,9 @@ media/*.css
 !media/webview.css
 media/webview.js.LICENSE.txt
 
+dist/extension.js.LICENSE.txt
+vetur.config.js
+
 node_modules
 test.md
 demo.md
