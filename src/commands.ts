@@ -23,7 +23,6 @@ import { incrementPriority } from './commands/incrementPriority';
 import { openDefaultArchiveFile } from './commands/openDefaultArchiveFile';
 import { openDefaultFile } from './commands/openDefaultFile';
 import { removeAllOverdue } from './commands/removeAllOverdue';
-import { replaceWithToday } from './commands/replaceWithToday';
 import { resetAllRecurringTasksCommand } from './commands/resetAllRecurringTasks';
 import { setDueDate } from './commands/setDueDate';
 import { setDueDateWithArgs } from './commands/setDueDateWithArgs';
@@ -105,7 +104,6 @@ export const enum CommandId {
 	ClearGlobalState = 'todomd.dev.clearGlobalState',
 	ShowGlobalState = 'todomd.dev.showGlobalState',
 	RemoveAllOverdue = 'todomd.dev.removeAllOverdue',
-	ReplaceWithToday = 'todomd.dev.replaceDateWithToday',
 }
 
 /**
@@ -150,7 +148,6 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.DecrementPriority, decrementPriority);
 	commands.registerTextEditorCommand(CommandId.ToggleComment, toggleComment);
 	commands.registerTextEditorCommand(CommandId.Filter, filter);
-	commands.registerTextEditorCommand(CommandId.ReplaceWithToday, replaceWithToday);
 	commands.registerTextEditorCommand(CommandId.SortByDefault, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Default));
 	commands.registerTextEditorCommand(CommandId.SortByPriority, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Priority));
 	commands.registerTextEditorCommand(CommandId.SortByProject, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Project));

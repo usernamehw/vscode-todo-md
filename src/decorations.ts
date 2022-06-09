@@ -171,7 +171,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 
 	forEachTask(task => {
 		// When decoration have `isWholeLine` range can be empty / wouldn't matter
-		const emptyRange = new Range(task.lineNumber, 0, task.lineNumber, 0);// TODO: move outside?
+		const emptyRange = new Range(task.lineNumber, 0, task.lineNumber, 0);
 		if (task.done) {
 			completedDecorationRanges.push(emptyRange);
 		}

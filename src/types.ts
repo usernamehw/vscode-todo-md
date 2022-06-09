@@ -191,6 +191,10 @@ export interface ExtensionConfig {
 	 */
 	closestDueDateIncludeWeekday: boolean;
 	/**
+	 * When completing overdue recurring task - replace the starting date with today's date.
+	 */
+	autoBumpRecurringOverdueDate: boolean;
+	/**
 	 * Week day when using set due date command or suggest `SET_DUE_THIS_WEEK`.
 	 */
 	setDueDateThisWeekDay: 'Friday' | 'Sunday';

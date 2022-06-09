@@ -163,7 +163,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (53)
+## Settings (54)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -209,6 +209,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |completionDateIncludeTime|**false**|When completing a task add date and time: `{cm:2020-04-30T09:11:17}`|
 |creationDateIncludeTime|**false**|When creating a task add date and time: `{cr:2020-04-30T09:11:17}`|
 |closestDueDateIncludeWeekday|**false**|When enabled - editor decoration that shows number of days to the due date adds the weekday name.|
+|autoBumpRecurringOverdueDate|**false**|When completing overdue recurring task - replace the starting date with today's date.|
 |isDev|**false**|For emulating dev mode. Most likely of no use to anyone, except the extension author.|
 |tabSize|**4**|Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).|
 |savedFilters|\[\]|Filters that you can pick when applying a filter.|

@@ -19,6 +19,5 @@
 		"todomd.dev.clearGlobalState",
 		"todomd.dev.showGlobalState",
 		"todomd.dev.removeAllOverdue",
-		"todomd.dev.replaceDateWithToday",
 	]
 }

@@ -315,6 +315,11 @@
 					"markdownDescription": "When enabled - editor decoration that shows number of days to the due date adds the weekday name.",
 					"default": false
 				},
+				"todomd.autoBumpRecurringOverdueDate": {
+					"type": "boolean",
+					"markdownDescription": "When completing overdue recurring task - replace the starting date with today's date.",
+					"default": false
+				},
 				"todomd.isDev": {
 					"type": "boolean",
 					"markdownDescription": "For emulating dev mode. Most likely of no use to anyone, except the extension author.",
@@ -1661,10 +1666,6 @@
 				},
 				{
 					"command": "todomd.dev.removeAllOverdue",
-					"when": "todomd:isDev"
-				},
-				{
-					"command": "todomd.dev.replaceDateWithToday",
 					"when": "todomd:isDev"
 				}
 			]

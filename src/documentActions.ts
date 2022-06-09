@@ -219,11 +219,14 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	if (!task) {
 		return;
 	}
+	const edit = new WorkspaceEdit();
 	if (task.overdue) {
-		await removeOverdueFromLine(document, task);
+		await removeOverdueFromLine(document, task); // TODO: should be a workspace edit
+		if ($config.autoBumpRecurringOverdueDate && !task.done && task.due?.type === 'recurringWithDate') {
+			replaceRecurringDateWithTodayWorkspaceEdit(edit, document, document.uri, task);
+		}
 	}
 	const line = document.lineAt(lineNumber);
-	const edit = new WorkspaceEdit();
 	if (task.done) {
 		removeCompletionDateWorkspaceEdit(edit, document.uri, task);
 		removeDurationWorkspaceEdit(edit, document.uri, task);
@@ -415,6 +418,13 @@ export function removeCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: Uri,
 	if (task.completionDateRange) {
 		edit.delete(uri, task.completionDateRange);
 	}
+}
+export function replaceRecurringDateWithTodayWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, uri: Uri, task: TheTask) {
+	const dueText = document.getText(task.dueRange);
+	if (!task.dueRange || !dueText) {
+		return;
+	}
+	edit.replace(uri, task.dueRange, dueText.replace(/\d{4}-\d{2}-\d{2}/, getDateInISOFormat()));
 }
 export function removeDurationWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
 	if (task.durationRange) {
