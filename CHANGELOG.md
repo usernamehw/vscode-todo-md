@@ -1,3 +1,9 @@
+## 2.12.0 `09 Jun 2022`
+
+- 🔨 Refactor webview: Vue 2 => Vue 3
+- ✨ Add setting `"todomd.autoBumpRecurringOverdueDate"`
+- 🐛 Fix wrong setting used for status bar item
+
 ## 2.11.0 `06 May 2022`
 
 - ✨ Editor hover shows other tasks with the same [project, tag, context]
