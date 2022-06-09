@@ -47,7 +47,10 @@ export function getTaskHoverMd(task: TheTask) {
 			codicon = '$(error)';
 			dueContent = 'Invalid';
 		}
-		due = ` <span style="color:${dueColor || 'inherit'};">|${codicon} ${dueContent}|</span>&nbsp;`;
+		if (dueContent) {
+			dueContent = ` ${dueContent}`;
+		}
+		due = ` <span style="color:${dueColor || 'inherit'};">|${codicon}${dueContent}|</span>&nbsp;`;
 	}
 
 	const words = task.title.split(' ');
