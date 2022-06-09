@@ -12,6 +12,7 @@
 		"./",
 		"media"
 	],
+	"editor.formatOnSave": false,
 	"stylelint.config": {
 		"defaultSeverity": "warning",
 		"ignoreFiles": [],

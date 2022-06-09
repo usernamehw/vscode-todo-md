@@ -10,5 +10,6 @@ media/main.js
 media/webview.js
 media/*.map
 media/*.css
+media/webview.js.LICENSE.txt
 src/**/*.js
 scripts/generateDecorationSchema.js

@@ -1,41 +1,54 @@
-import Vue from 'vue';
-import Vuex, { Store } from 'vuex';
+import { createPinia, defineStore } from 'pinia';
 import { showToastNotification } from '..';
 import { filterItems } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
-import { TheTask } from '../../src/TheTask';
+import type { TheTask } from '../../src/TheTask';
 import { DueState, ExtensionConfig, MessageFromWebview, MessageToWebview } from '../../src/types';
-import App from './App';
 import { SendMessage } from './SendMessage';
-import { flattenDeep, getTaskAtLineWebview, isTaskVisible } from './storeUtils';
 
-Vue.use(Vuex);
+interface SavedState {
+	filterInputValue: string;
+}
+interface VscodeWebviewApi {
+	getState(): SavedState;
+	setState(state: SavedState): void;
+	postMessage(message: MessageFromWebview): void;
+}
+/** @ts-ignore */
+// eslint-disable-next-line no-undef
+export const vscodeApi: VscodeWebviewApi = acquireVsCodeApi();
+window.onerror = function(message, source, lineno, colno, error) {
+	SendMessage.showNotification(`[WEBVIEW] ${message}`);
+};
 
-const enum Mutation {
-	UPDATE_FILTER_VALUE = 'UPDATE_FILTER_VALUE',
-	TOGGLE_DONE = 'TOGGLE_DONE',
-	SELECT_TASK = 'SELECT_TASK',
-}
-const enum Action {
-	SELECT_NEXT_TASK = 'SELECT_NEXT_TASK',
-	SELECT_PREV_TASK = 'SELECT_PREV_TASK',
-}
-// TODO: maybe use dynamic type with keyof and ReturnType<>?
-export interface Getters {
-	filteredSortedTasks: TheTask[];
-	flattenedFilteredSortedTasks: TheTask[];
-	autocompleteItems: [{
-		data: string[];
-	}];
+export const pinia = createPinia();
+// Without prefix TypeScript autocomplete breaks :(
+// setMapStoreSuffix('');
+// declare module 'pinia' {
+// 	export interface MapStoresCustomization {
+// 		suffix: '';
+// 	}
+// }
+
+interface StoreState {
+	tasksAsTree: TheTask[];
+	tags: string[];
+	projects: string[];
+	contexts: string[];
+	defaultFileSpecified: boolean;
+	activeDocumentOpened: boolean;
+	filterInputValue: string;
+	config: ExtensionConfig['webview'];
+	selectedTaskLineNumber: number;
 }
 
-export const store = new Store({
-	// strict: isDev,
-	state: {
-		tasksAsTree: [] as TheTask[],
-		tags: [] as string[],
-		projects: [] as string[],
-		contexts: [] as string[],
+export const useStore = defineStore({
+	id: 'store',
+	state: (): StoreState => ({
+		tasksAsTree: [],
+		tags: [],
+		projects: [],
+		contexts: [],
 		defaultFileSpecified: true,
 		activeDocumentOpened: false,
 		filterInputValue: '',
@@ -56,12 +69,15 @@ export const store = new Store({
 			indentSize: '1.8em',
 			tagStyles: {},
 			lineHeight: 1.4,
-		} as ExtensionConfig['webview'],
+			customCSSPath: '',
+			scrollbarOverflow: false,
+		},
 		selectedTaskLineNumber: -1,
-	},
+	}),
+	// ────────────────────────────────────────────────────────────
 	getters: {
-		filteredSortedTasks: state => {
-			let filteredTasks = state.tasksAsTree;
+		filteredSortedTasks: (state): TheTask[] => {
+			let filteredTasks = state.tasksAsTree as TheTask[];
 			if (state.filterInputValue !== '') {
 				filteredTasks = filterItems(filteredTasks, state.filterInputValue || '');
 			}
@@ -88,9 +104,12 @@ export const store = new Store({
 			}
 			return defaultSortTasks(filteredTasks);
 		},
-		flattenedFilteredSortedTasks: (state, getters) => flattenDeep(getters.filteredSortedTasks),
-		autocompleteItems: state => {
-			const filterConstants = [// TODO: constants should be in const enum
+		flattenedFilteredSortedTasks(): TheTask[] {
+			return flattenDeep(this.filteredSortedTasks);
+		},
+		suggestItems(state): string[] {
+			// TODO: constants should be in const enum
+			const filterConstants = [
 				'$due',
 				'$started',
 				'$hasDue',
@@ -104,41 +123,77 @@ export const store = new Store({
 			const autocompleteTags = state.tags.map(tag => `#${tag}`);
 			const autocompleteProjects = state.projects.map(project => `+${project}`);
 			const autocompleteContexts = state.contexts.map(context => `@${context}`);
-			return [{
-				data: filterConstants.concat(autocompleteTags, autocompleteProjects, autocompleteContexts),
-			}];
+			return filterConstants.concat(autocompleteTags, autocompleteProjects, autocompleteContexts);
 		},
 	},
-	mutations: {
-		[Mutation.SELECT_TASK]: (state, lineNumber: number) => {
-			state.selectedTaskLineNumber = lineNumber;
-		},
-		[Mutation.UPDATE_FILTER_VALUE]: (state, newValue: string) => {
-			state.filterInputValue = newValue;
-		},
-		[Mutation.TOGGLE_DONE]: (state, task: TheTask) => {
-			task.done = !task.done;
-		},
-	},
+	// ────────────────────────────────────────────────────────────
 	actions: {
-		[Action.SELECT_NEXT_TASK]({ commit, state, getters: gt }) {
-			const getters = gt as Getters;
-			if (!getters.filteredSortedTasks.length) {
+		setEverything({
+			tasksAsTree,
+			config,
+			defaultFileSpecified,
+			activeDocumentOpened,
+			tags,
+			projects,
+			contexts,
+		}: {
+			tasksAsTree: TheTask[];
+			config: ExtensionConfig['webview'];
+			defaultFileSpecified: boolean;
+			activeDocumentOpened: boolean;
+			tags: string[];
+			projects: string[];
+			contexts: string[];
+		}) {
+			this.tasksAsTree = tasksAsTree;
+			this.config = config;
+			this.defaultFileSpecified = defaultFileSpecified;
+			this.activeDocumentOpened = activeDocumentOpened;
+			this.tags = tags;
+			this.projects = projects;
+			this.contexts = contexts;
+		},
+		selectTask(lineNumber: number) {
+			this.selectedTaskLineNumber = lineNumber;
+		},
+		selectFirstTask() {
+			if (this.filteredSortedTasks.length) {
+				this.selectTask(this.selectedTaskLineNumber = this.filteredSortedTasks[0].lineNumber);
+			}
+		},
+		updateFilterValue(value: string, append = false) {
+			const newValue = append ? this.filterInputValue += ` ${value}` : value;
+			this.filterInputValue = newValue;
+			vscodeApi.setState({
+				filterInputValue: newValue,
+			});
+		},
+		toggleDone(task: TheTask) {
+			task.done = !task.done;
+			if (task.done && this.config.notificationsEnabled) {
+				showToastNotification(`${task.title}`, {
+					type: 'success',
+				});
+			}
+			SendMessage.toggleDone(task.lineNumber);
+		},
+		selectNextTask() {
+			if (!this.filteredSortedTasks.length) {
 				return undefined;
 			}
 			let targetTask: TheTask;
-			if (state.selectedTaskLineNumber === -1) {
+			if (this.selectedTaskLineNumber === -1) {
 				// None selected. Select the first visible task
-				targetTask = getters.filteredSortedTasks[0];
+				targetTask = this.filteredSortedTasks[0];
 			} else {
 				// Selected task exists
-				const selectedTask = getTaskAtLineWebview(state.selectedTaskLineNumber);
+				const selectedTask = this.getTaskAtLine(this.selectedTaskLineNumber);
 
 				if (!selectedTask) {
 					return undefined;
 				}
 
-				const tasks = getters.flattenedFilteredSortedTasks.filter(task => isTaskVisible(task));
+				const tasks = this.flattenedFilteredSortedTasks.filter(task => this.isTaskNotCollapsed(task));
 				if (tasks.length < 2) {
 					return undefined;
 				}
@@ -146,25 +201,24 @@ export const store = new Store({
 				const currentIndex = tasks.findIndex(task => selectedTask.lineNumber === task.lineNumber);
 				targetTask = currentIndex === tasks.length - 1 ? tasks[0] : tasks[currentIndex + 1];
 			}
-			selectTaskMutation(targetTask.lineNumber);
+			this.selectTask(targetTask.lineNumber);
 			return targetTask.lineNumber;
 		},
-		[Action.SELECT_PREV_TASK]({ commit, state, getters: gt }) {
-			const getters = gt as Getters;
-			if (!getters.filteredSortedTasks.length) {
+		selectPrevTask() {
+			if (!this.filteredSortedTasks.length) {
 				return undefined;
 			}
 			let targetTask: TheTask;
-			if (state.selectedTaskLineNumber === -1) {
+			if (this.selectedTaskLineNumber === -1) {
 				// None selected. Select the first visible task
-				targetTask = getters.flattenedFilteredSortedTasks[getters.flattenedFilteredSortedTasks.length - 1];
+				targetTask = this.flattenedFilteredSortedTasks[this.flattenedFilteredSortedTasks.length - 1];
 			} else {
-				const selectedTask = getTaskAtLineWebview(state.selectedTaskLineNumber);
+				const selectedTask = this.getTaskAtLine(this.selectedTaskLineNumber);
 				if (!selectedTask) {
 					return undefined;
 				}
 
-				const tasks = getters.flattenedFilteredSortedTasks.filter(task => isTaskVisible(task));
+				const tasks = this.flattenedFilteredSortedTasks.filter(task => this.isTaskNotCollapsed(task));
 
 				if (tasks.length < 2) {
 					return undefined;
@@ -177,30 +231,64 @@ export const store = new Store({
 					targetTask = tasks[currentIndex - 1];
 				}
 			}
-			selectTaskMutation(targetTask.lineNumber);
+			this.selectTask(targetTask.lineNumber);
 			return targetTask.lineNumber;
+		},
+		// ──── helpers ───────────────────────────────────────────────
+		getTaskAtLine(lineNumber: number, tasks?: TheTask[]): TheTask | undefined {
+			for (const task of tasks || this.tasksAsTree as TheTask[]) {
+				if (task.lineNumber === lineNumber) {
+					return task;
+				}
+				if (task.subtasks.length) {
+					const foundTask = this.getTaskAtLine(lineNumber, task.subtasks);
+					if (foundTask) {
+						return foundTask;
+					}
+				}
+			}
+			return undefined;
+		},
+		/**
+		 * Return `true` when task is not collapsed (visible).
+		 *
+		 * This is **NOT** a check if task is scrolled out of view.
+		 */
+		isTaskNotCollapsed(task: TheTask): boolean {
+			if (task.parentTaskLineNumber === undefined) {
+				return true;
+			}
+			for (let currentTask = task; currentTask.parentTaskLineNumber !== undefined;) {
+				const parentTask = this.getTaskAtLine(currentTask.parentTaskLineNumber, this.flattenedFilteredSortedTasks);
+				if (!parentTask) {
+					return false;
+				}
+				if (parentTask.isCollapsed) {
+					return false;
+				}
+				currentTask = parentTask;
+			}
+
+			return true;
+		},
+		getAllNestedTasksWebview(task: TheTask): TheTask[] {
+			const allNestedTaksIds = this.getNestedTasksLineNumbers(task.subtasks);
+			return allNestedTaksIds.map(lineNumber => this.getTaskAtLine(lineNumber)!);
+		},
+		getNestedTasksLineNumbers(tasks: TheTask[]): number[] {
+			const ids = [];
+			for (const task of tasks) {
+				ids.push(task.lineNumber);
+				if (task.subtasks) {
+					ids.push(...this.getNestedTasksLineNumbers(task.subtasks));
+				}
+			}
+			return ids;
 		},
 	},
 });
 
-interface SavedState {
-	filterInputValue: string;
-}
-interface VscodeWebviewApi {
-	getState(): SavedState;
-	setState(state: SavedState): void;
-	postMessage(message: MessageFromWebview): void;
-}
-/** @ts-ignore */
-// eslint-disable-next-line no-undef
-export const vscodeApi: VscodeWebviewApi = acquireVsCodeApi();
-window.onerror = function(message, source, lineno, colno, error) {
-	SendMessage.showNotification(`[WEBVIEW] ${message}`);
-};
-const savedState = getState();
-updateFilterValueMutation(savedState.filterInputValue);
-
-function getState(): SavedState {
+export function getState(): SavedState {
 	const savedStateDefaults: SavedState = {
 		filterInputValue: '',
 	};
@@ -211,13 +299,16 @@ window.addEventListener('message', event => {
 	const message: MessageToWebview = event.data; // The json data that the extension sent
 	switch (message.type) {
 		case 'updateEverything': {
-			store.state.config = message.value.config;
-			store.state.defaultFileSpecified = message.value.defaultFileSpecified;
-			store.state.activeDocumentOpened = message.value.activeDocumentOpened;
-			store.state.tasksAsTree = message.value.tasksAsTree;
-			store.state.tags = message.value.tags;
-			store.state.projects = message.value.projects;
-			store.state.contexts = message.value.contexts;
+			const store = useStore();
+			store.setEverything({
+				tasksAsTree: message.value.tasksAsTree,
+				config: message.value.config,
+				defaultFileSpecified: message.value.defaultFileSpecified,
+				activeDocumentOpened: message.value.activeDocumentOpened,
+				tags: message.value.tags,
+				projects: message.value.projects,
+				contexts: message.value.contexts,
+			});
 			const bodyStyle = document.body.style;
 			bodyStyle.setProperty('--font-size', message.value.config.fontSize);
 			bodyStyle.setProperty('--font-family', message.value.config.fontFamily);
@@ -229,36 +320,31 @@ window.addEventListener('message', event => {
 			break;
 		}
 		case 'focusFilterInput': {
-			App.focusFilterInput();
-			break;
+			// App.focusFilterInput();
+			// break;
 		}
 	}
 });
 
-// mutations
-export function updateFilterValueMutation(newValue: string) {
-	store.commit(Mutation.UPDATE_FILTER_VALUE, newValue);
-	vscodeApi.setState({
-		filterInputValue: newValue,
-	});
+interface NestedObject {
+	subtasks: NestedObject[];
 }
-export function toggleDoneMutation(task: TheTask) {
-	store.commit(Mutation.TOGGLE_DONE, task);
-	if (task.done && store.state.config.notificationsEnabled) {
-		showToastNotification(`${task.title}`, {
-			type: 'success',
-		});
+/**
+ * Recursive function to flatten an array.
+ * Nested property name is hardcoded as `subtasks`
+ */
+export function flattenDeep<T extends NestedObject>(arr: T[]): T[] {
+	const flattened: T[] = [];
+	function flatten(innerArr: T[]) {
+		for (const item of innerArr) {
+			flattened.push(item);
+			if (item.subtasks.length) {
+				// @ts-ignore
+				flatten(item.subtasks);
+			}
+		}
 	}
-	SendMessage.toggleDone(task.lineNumber);
-}
-export function selectTaskMutation(lineNumber: number) {
-	store.commit(Mutation.SELECT_TASK, lineNumber);
+	flatten(arr);
+	return flattened;
 }
 
-// actions
-export async function selectNextTaskAction() {
-	return store.dispatch(Action.SELECT_NEXT_TASK);
-}
-export async function selectPrevTaskAction() {
-	return store.dispatch(Action.SELECT_PREV_TASK);
-}

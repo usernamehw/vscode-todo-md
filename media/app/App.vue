@@ -1,45 +1,39 @@
 <template>
 <div>
-    <vue-autosuggest
-        ref="autosuggest"
-        :value="filterInputValue"
-        :suggestions="filteredSuggestions"
-        :inputProps="{id:'autosuggest__input'}"
-        :shouldRenderSuggestions="(size, loading) => (size >= 0 && !loading) && config.autoShowSuggest && !shouldHideSuggest"
-        @input="onFilterChangeDebounced"
-        @selected="onSelected"
-        @keydown.tab="tabHandler"
-        @keydown.ctrl.space="openSuggest"
-        @keydown.down="downHandler"
-        @keydown.up="upHandler"
-        @closed="onClosedSuggest"
-        @opened="onOpenedSuggest">
-        <div slot-scope="{suggestion}">
-            <div v-html="fuzzyHighlight(suggestion.item)"></div>
-        </div>
-    </vue-autosuggest>
-    <div v-if="filteredSortedTasks && filteredSortedTasks.length"
+    <div>
+        <Suggest ref="suggest"
+                 :value="storeStore.filterInputValue"
+                 :suggestItems="storeStore.suggestItems"
+                 :autoshow="storeStore.config.autoShowSuggest"
+                 @input="onInput"
+                 @keydownDown="onDown"
+                 @keydownUp="onUp" />
+    </div>
+    <div v-if="storeStore.filteredSortedTasks && storeStore.filteredSortedTasks.length"
          class="task-list"
-         :class="{'task-list--details-visible': taskDetailsVisible}"
+         :class="{ 'task-list--details-visible': taskDetailsVisible }"
          @scroll.passive="onTaskListScroll">
-        <task v-for="task in filteredSortedTasks"
+        <task v-for="task in storeStore.filteredSortedTasks"
               :key="task.lineNumber + task.rawText"
               :model="task" />
     </div>
-    <div v-if="!defaultFileSpecified && !activeDocumentOpened"
+
+    <TaskDetails v-show="taskDetailsVisible"
+                 ref="taskDetails" />
+
+    <div v-if="!storeStore.defaultFileSpecified && !storeStore.activeDocumentOpened"
          class="welcome">
         <p class="welcome__text">Default file path is not specified.</p>
         <div><a class="btn btn--welcome"
                 href="command:todomd.showDefaultFileSetting">Specify Default File</a></div>
     </div>
 
-    <TaskDetails v-if="taskDetailsVisible"
-                 ref="taskDetails" />
+    <notifications position="bottom right"
+                   group="group1" />
 
-    <notifications position="bottom right" />
-
-    <vue-context ref="taskContextMenu"
-                 :closeOnScroll="false">
+    <div ref="taskContextMenu"
+         hidden
+         class="context-menu">
         <li title="Start time tracking.">
             <a href="#"
                @click="startTask"><span class="icon codicon codicon-play-circle"></span>Start</a>
@@ -56,7 +50,7 @@
             <a href="#"
                @click="deleteTask"><span class="icon codicon codicon-trash"></span>Delete</a>
         </li>
-    </vue-context>
+    </div>
 </div>
 </template>
 

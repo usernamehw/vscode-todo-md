@@ -1,22 +1,14 @@
-import fuzzysort from 'fuzzysort';
-import debounce from 'lodash/debounce';
 import { marked } from 'marked';
-import Vue from 'vue';
-// @ts-ignore
-import VueAutosuggest from 'vue-autosuggest';
-// @ts-ignore
-import VueContext from 'vue-context';
-import VueNotifications from 'vue-notification';
-import { Component } from 'vue-property-decorator';
-import { mapGetters, mapState } from 'vuex';
+import { mapStores } from 'pinia';
+import { defineComponent } from 'vue';
 import { TheTask } from '../../src/TheTask';
-import { ExtensionConfig } from '../../src/types';
-import type TaskDetails from './components/TaskDetails';
+import Suggest from './components/Suggest/Suggest';
+import SuggestComponent from './components/Suggest/Suggest.vue';
+import TaskDetailsComponent from './components/TaskDetails/TaskDetails.vue';
 import { SendMessage } from './SendMessage';
-import { selectNextTaskAction, selectPrevTaskAction, selectTaskMutation, toggleDoneMutation, updateFilterValueMutation } from './store';
-import { getTaskAtLineWebview } from './storeUtils';
-import TaskComponent from './Task.vue';
+import { getState, useStore } from './store';
 import { VueEvents } from './webviewTypes';
+
 /**
  * Render paragraph without actual `<p>` tag
  */
@@ -37,207 +29,117 @@ marked.Renderer.prototype.link = (href, title = '', text) => {
 	}
 };
 
-Vue.use(VueAutosuggest);
-Vue.use(VueNotifications);
-Vue.component('task', TaskComponent);// needs to be global for recursive rendering
-
-@Component({
+export default defineComponent({
+	name: 'App',
 	components: {
-		VueContext,
-		TaskDetails: async () => import('./components/TaskDetails.vue'),
+		Suggest: SuggestComponent,
+		TaskDetails: TaskDetailsComponent,
 	},
+	data: () => ({
+		/**
+		 * Task rename modal input value
+		 */
+		newTaskTitle: '',
+		contextMenuTask: undefined as TheTask | undefined, // TheTask
+		taskDetailsManuallyTriggered: false,
+		options: [
+			{
+				name: 'wow',
+			},
+		],
+	}),
 	computed: {
-		...mapState(['tasksAsTree', 'filterInputValue', 'config', 'defaultFileSpecified', 'activeDocumentOpened', 'selectedTaskLineNumber']),
-		...mapGetters(['filteredSortedTasks', 'autocompleteItems']),
+		...mapStores(useStore),
+		taskDetailsVisible(): boolean {
+			return (this.storeStore.config.showTaskDetails || this.taskDetailsManuallyTriggered) && this.storeStore.selectedTaskLineNumber !== -1;
+		},
 	},
-})
-export default class App extends Vue {
-	tasksAsTree!: TheTask[];
-	filteredSortedTasks!: TheTask[];
-	filterInputValue!: string;
-	config!: ExtensionConfig['webview'];
-	defaultFileSpecified!: boolean;
-	activeDocumentOpened!: boolean;
-	autocompleteItems!: any;
-	/**
-	 * `-1` When no task is selected.
-	 */
-	selectedTaskLineNumber!: number;
-	/**
-	 * Task rename modal input value
-	 */
-	newTaskTitle = '';
-
-	contextMenuTask!: TheTask;
-
-	filteredSuggestions: {
-		data: string[];
-	}[] = [];
-	isSuggestVisible = false;
-	/**
-	 * Hack to prevent keydown event opening suggest
-	 */
-	shouldHideSuggest = false;
-	shouldRevokeAutoShowSuggest = false;
-
-	showNotification = SendMessage.showNotification;
-
-	taskDetailsManuallyTriggered = false;
-
-	get taskDetailsVisible() {
-		return (this.config.showTaskDetails || this.taskDetailsManuallyTriggered) && this.selectedTaskLineNumber !== -1;
-	}
-
-	$refs!: {
-		autosuggest: any;
-		taskContextMenu: any;
-		newTaskText: HTMLInputElement;
-		taskDetails: TaskDetails;
-	};
-	// ──────────────────────────────────────────────────────────────────────
-	/**
-	 * Highlight filter matches for single autocomplete item
-	 */
-	fuzzyHighlight(value: string) {
-		return fuzzysort.highlight(fuzzysort.single(this.filterInputValue, value) || undefined, '<mark>', '</mark>');
-	}
-	/**
-	 * Open autocomplete on Ctrl+Space
-	 */
-	openSuggest() {
-		if (!this.config.autoShowSuggest) {
-			this.config.autoShowSuggest = true;
-			this.shouldRevokeAutoShowSuggest = true;
-		}
-		this.shouldHideSuggest = false;
-	}
-	onOpenedSuggest() {
-		this.isSuggestVisible = true;
-	}
-	onClosedSuggest() {
-		this.isSuggestVisible = false;
-		if (this.shouldRevokeAutoShowSuggest) {
-			this.config.autoShowSuggest = false;
-			this.shouldRevokeAutoShowSuggest = false;
-		}
-	}
-	/**
-	 * Event that is fired when typing in filter input
-	 */
-	onFilterInputChange(value: string) {
-		this.shouldHideSuggest = false;
-		selectTaskMutation(-1);
-		updateFilterValueMutation(value);
-		this.filteredSuggestions = [{
-			data: fuzzysort.go(value, this.autocompleteItems[0].data).map(item => item.target),
-		}];
-		Vue.nextTick(() => {
-			this.$refs.autosuggest.setCurrentIndex(0);
-			this.selectFirstTask();
-		});
-		this.updateWebviewCounter(this.filteredSortedTasks.length);
-	}
-	onFilterChangeDebounced = debounce(this.onFilterInputChange, 100);
-	/**
-	 * Event fired when accepting autocomplete suggestions
-	 */
-	onSelected(e: { item: string }) {
-		if (e) {
-			this.onFilterInputChange(e.item);
-			App.focusFilterInput();
-		}
-	}
-	/**
-	 * Handle Tab keypress as Autocomplete accept suggestion
-	 * (only when autocomplete is visible)
-	 */
-	tabHandler(e: KeyboardEvent) {
-		const { listeners, setCurrentIndex, setChangeItem, getItemByIndex } = this.$refs.autosuggest;
-		const item = getItemByIndex(this.$refs.autosuggest.currentIndex);
-		if (!item) {
-			return;
-		}
-		e.preventDefault();
-		setChangeItem(item, true);
-		this.$refs.autosuggest.loading = true;
-		listeners.selected(true);
-	}
-	async downHandler(e: KeyboardEvent) {
-		if (!this.filteredSuggestions.length || this.filteredSuggestions[0].data[0] === this.filterInputValue || !this.isSuggestVisible) {
-			this.shouldHideSuggest = true;
-			const selectedTaskLineNumber = await selectNextTaskAction();
-			if (selectedTaskLineNumber && !this.isSuggestVisible) {
-				this.scrollIntoView(selectedTaskLineNumber);
-				e.preventDefault();
+	methods: {
+		// ──── Context Menu ──────────────────────────────────────────
+		hideContextMenu() {
+			(this.$refs.taskContextMenu as HTMLElement).hidden = true;
+		},
+		showContextMenu(event: MouseEvent) {
+			const contextMenuContainer = this.$refs.taskContextMenu as HTMLElement;
+			contextMenuContainer.style.setProperty('--mouse-x', `${event.clientX}px`);
+			contextMenuContainer.style.setProperty('--mouse-y', `${event.clientY}px`);
+			contextMenuContainer.hidden = false;
+		},
+		// ──── Context Menu Items ────────────────────────────────────
+		deleteTask() {
+			if (this.contextMenuTask) {
+				SendMessage.deleteTask(this.contextMenuTask.lineNumber);
+				this.hideContextMenu();
 			}
-			return;
-		}
-	}
-	async upHandler(e: KeyboardEvent) {
-		if (!this.filteredSuggestions.length || this.filteredSuggestions[0].data[0] === this.filterInputValue || !this.isSuggestVisible) {
-			const selectedTaskLineNumber = await selectPrevTaskAction();
-			if (selectedTaskLineNumber && !this.isSuggestVisible) {
-				this.scrollIntoView(selectedTaskLineNumber);
-				e.preventDefault();
+		},
+		revealTask() {
+			if (this.contextMenuTask) {
+				SendMessage.revealTask(this.contextMenuTask.lineNumber);
+				this.hideContextMenu();
 			}
-			return;
-		}
-	}
-	deleteTask() {
-		SendMessage.deleteTask(this.contextMenuTask.lineNumber);
-	}
-	revealTask() {
-		SendMessage.revealTask(this.contextMenuTask.lineNumber);
-	}
-	startTask() {
-		SendMessage.startTask(this.contextMenuTask.lineNumber);
-	}
-	setDueDate() {
-		SendMessage.setDueDate(this.contextMenuTask.lineNumber);
-	}
-	onTaskListScroll() {
-		this.$refs.taskContextMenu.close();
-	}
-	// ──────────────────────────────────────────────────────────────────────
-	selectFirstTask() {
-		const firstTask = this.filteredSortedTasks[0];
-		if (firstTask) {
-			selectTaskMutation(firstTask.lineNumber);
-		}
-	}
-	updateWebviewCounter(numberOfTasks: number) {
-		SendMessage.updateWebviewTitle(numberOfTasks);
-	}
-	static focusFilterInput() {
-		Vue.nextTick(() => {
-			const suggest = document.getElementById('autosuggest__input');
-			if (suggest) {
-				suggest.focus();
+		},
+		startTask() {
+			if (this.contextMenuTask) {
+				SendMessage.startTask(this.contextMenuTask.lineNumber);
+				this.hideContextMenu();
 			}
-		});
-	}
-	focusFilterInput = App.focusFilterInput;
-	scrollIntoView(lineNumber: number) {
-		const element = document.getElementById(`ln${lineNumber}`);
-		// @ts-ignore https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded
-		element.scrollIntoViewIfNeeded(false);
-	}
-	// ──────────────────────────────────────────────────────────────────────
+		},
+		setDueDate() {
+			if (this.contextMenuTask) {
+				SendMessage.setDueDate(this.contextMenuTask.lineNumber);
+				this.hideContextMenu();
+			}
+		},
+		onTaskListScroll() {
+			this.hideContextMenu();
+		},
+		// ────────────────────────────────────────────────────────────
+		onInput(value: string) {
+			this.storeStore.selectTask(-1);
+			this.storeStore.updateFilterValue(value);
+			this.storeStore.selectFirstTask();
+			this.$nextTick(() => {
+				this.storeStore.selectFirstTask();
+			});
+			SendMessage.updateWebviewTitle(this.storeStore.filteredSortedTasks.length);
+		},
+		onDown() {
+			const ln = this.storeStore.selectNextTask();
+			if (ln && ln !== -1) {
+				this.scrollIntoView(ln);
+			}
+		},
+		onUp() {
+			const ln = this.storeStore.selectPrevTask();
+			if (ln && ln !== -1) {
+				this.scrollIntoView(ln);
+			}
+		},
+		scrollIntoView(lineNumber: number) {
+			// @ts-ignore https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded
+			document.getElementById(`ln${lineNumber}`).scrollIntoViewIfNeeded(false);
+		},
+		focusFilterInput() {
+			(this.$refs.suggest as typeof Suggest)?.focus();
+		},
+	},
 	mounted() {
+		const savedState = getState();
+		this.storeStore.updateFilterValue(savedState.filterInputValue);
 		SendMessage.webviewLoaded();
 
-		App.focusFilterInput();
-		window.addEventListener('focus', App.focusFilterInput);
 		setTimeout(() => {
-			this.selectFirstTask();
-		}, 100);
-
-		this.$root.$on(VueEvents.openTaskContextMenu, (data: {e: MouseEvent; task: TheTask}) => {
-			this.contextMenuTask = data.task;
-			this.$refs.taskContextMenu.open(data.e);
+			this.storeStore.selectFirstTask();
 		});
-		this.$root.$on(VueEvents.focusFilterInput, () => {
-			App.focusFilterInput();
+
+		// @ts-ignore
+		this.emitter.on(VueEvents.OpenTaskContextMenu, (obj: {event: MouseEvent; task: TheTask}) => {
+			this.contextMenuTask = obj.task;
+			this.showContextMenu(obj.event);
+		});
+		// @ts-ignore
+		this.emitter.on(VueEvents.FocusFilterInput, () => {
+			this.focusFilterInput();
 		});
 
 		window.addEventListener('click', e => {
@@ -249,26 +151,27 @@ export default class App extends Vue {
 
 		window.addEventListener('keydown', e => {
 			if (e.key === 'ArrowRight') {
-				SendMessage.toggleTaskCollapse(this.selectedTaskLineNumber);
+				SendMessage.toggleTaskCollapse(this.storeStore.selectedTaskLineNumber);
 			} else if (e.key === 'Delete' && e.shiftKey) {
-				if (this.selectedTaskLineNumber !== -1) {
-					SendMessage.deleteTask(this.selectedTaskLineNumber);
+				if (this.storeStore.selectedTaskLineNumber !== -1) {
+					SendMessage.deleteTask(this.storeStore.selectedTaskLineNumber);
 				}
 			} else if (e.key === 'Escape') {
-				selectTaskMutation(-1);
+				this.storeStore.selectTask(-1);
 				this.taskDetailsManuallyTriggered = false;
-				this.focusFilterInput();
+				(this.$refs.suggest as typeof Suggest)?.focus();
+				this.hideContextMenu();
 			} else if (e.key === 'd' && e.altKey) {
-				const task = getTaskAtLineWebview(this.selectedTaskLineNumber);
+				const task = this.storeStore.getTaskAtLine(this.storeStore.selectedTaskLineNumber);
 				if (task) {
-					toggleDoneMutation(task);
+					this.storeStore.toggleDone(task);
 				}
 			} else if (e.key === 'F2') {
 				this.taskDetailsManuallyTriggered = true;
 				setTimeout(() => {
-					this.$refs.taskDetails.$refs.detailsTaskTitle.focus();
+					(this.$refs.taskDetails as typeof TaskDetailsComponent).focus();
 				}, 100);
 			}
 		});
-	}
-}
+	},
+});

@@ -79,15 +79,18 @@
 				"vue/max-attributes-per-line": [
 					1,
 					{
-						"singleline": {
-							"max": 1
-						},
-						"multiline": {
-							"max": 1,
-							"allowFirstLine": true
-						}
+						"singleline": 1,
+						"multiline": 1
 					}
 				],
+				"vue/first-attribute-linebreak": [
+					1,
+					{
+						"singleline": "beside",
+						"multiline": "beside"
+					}
+				],
+				"vue/multi-word-component-names": 0,
 				"vue/html-self-closing": [
 					1,
 					{

@@ -21,6 +21,7 @@ const vueLoader = {
 	test: /\.vue$/,
 	loader: 'vue-loader',
 	options: {
+		isServerBuild: false,
 		optimizeSSR: false,
 	},
 };
@@ -53,7 +54,7 @@ module.exports = (env, options) => {
 			extensions: ['.ts', '.js', '.vue', '.css', '.scss', '.json'],
 			alias: {
 				src: path.resolve('./src'),
-				vue$: 'vue/dist/vue.esm.js',
+				// vue$: 'vue/dist/vue.esm.js',
 			},
 		},
 		module: {
@@ -74,23 +75,23 @@ module.exports = (env, options) => {
 	if (options.mode === 'production') {
 		// Prod
 		// @ts-ignore
-		config.optimization = {
-			minimize: true,
-			minimizer: [
-				// @ts-ignore
-				new TerserPlugin({
-					terserOptions: {
-						ecma: 2020,
-						toplevel: true,
-						// @ts-ignore
-						format: {
-							comments: false,// Opt out of LICENSE.txt creation
-						},
-					},
-					extractComments: false,
-				}),
-			],
-		}
+		// config.optimization = {
+		// 	minimize: true,
+		// 	minimizer: [
+		// 		// @ts-ignore
+		// 		new TerserPlugin({
+		// 			terserOptions: {
+		// 				ecma: 2020,
+		// 				toplevel: true,
+		// 				// @ts-ignore
+		// 				format: {
+		// 					comments: false,// Opt out of LICENSE.txt creation
+		// 				},
+		// 			},
+		// 			extractComments: false,
+		// 		}),
+		// 	],
+		// }
 	} else {
 		// Dev
 	}

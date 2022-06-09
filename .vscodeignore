@@ -20,6 +20,7 @@ package-lock.json
 media/app
 media/*.css
 !media/webview.css
+media/webview.js.LICENSE.txt
 
 node_modules
 test.md
