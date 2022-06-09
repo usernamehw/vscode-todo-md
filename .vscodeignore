@@ -24,6 +24,7 @@ media/webview.js.LICENSE.txt
 
 dist/extension.js.LICENSE.txt
 vetur.config.js
+.stylelintrc.json
 
 node_modules
 test.md

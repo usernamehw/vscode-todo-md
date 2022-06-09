@@ -10,6 +10,7 @@
 	width: calc(100% - 24px);
 	z-index: var(--z-index-filter-input);
 }
+
 .suggest__input {
 	background-color: var(--vscode-input-background);
 	border: 1px solid var(--vscode-input-border);
@@ -32,17 +33,18 @@
 		outline: none !important;
 	}
 }
+
 .suggest__autocomplete-container {
 	background-color: var(--vscode-sideBar-background) !important;
 	color: var(--vscode-editorSuggestWidget-foreground) !important;
 	font-family: var(--vscode-editor-font-family) !important;
-	position: absolute;
-	z-index: 1000;
-	top: 100%;
 	left: 0;
-	right: 0;
 	max-height: 150px;
 	overflow-y: auto;
+	position: absolute;
+	right: 0;
+	top: 100%;
+	z-index: 1000;
 
 	&:not(:empty) {
 		border-color: var(--vscode-editorSuggestWidget-border) !important;
@@ -53,8 +55,8 @@
 
 .suggest__autocomplete-item {
 	cursor: pointer;
-	padding: 3px 7px;
 	font-weight: bold;
+	padding: 3px 7px;
 
 	> .suggest__highlight {
 		background-color: transparent;
