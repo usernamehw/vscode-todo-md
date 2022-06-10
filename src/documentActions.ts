@@ -204,14 +204,6 @@ export async function decrementCountForTask(document: TextDocument, lineNumber: 
 	return applyEdit(edit, document);
 }
 /**
- * Remove overdue special tag
- */
-async function removeOverdueFromLine(document: TextDocument, task: TheTask) {
-	const edit = new WorkspaceEdit();
-	removeOverdueWorkspaceEdit(edit, document.uri, task);
-	return applyEdit(edit, document);
-}
-/**
  * Toggle task completion. Handle what to insert/delete.
  */
 export async function toggleDoneAtLine(document: TextDocument, lineNumber: number) {
@@ -221,7 +213,7 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	}
 	const edit = new WorkspaceEdit();
 	if (task.overdue) {
-		await removeOverdueFromLine(document, task); // TODO: should be a workspace edit
+		removeOverdueWorkspaceEdit(edit, document.uri, task);
 		if ($config.autoBumpRecurringOverdueDate && !task.done && task.due?.type === 'recurringWithDate') {
 			replaceRecurringDateWithTodayWorkspaceEdit(edit, document, document.uri, task);
 		}
@@ -387,7 +379,7 @@ export function deleteTaskWorkspaceEdit(edit: WorkspaceEdit, document: TextDocum
 }
 export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
 	if (task.overdueRange) {
-		edit.delete(uri, task.overdueRange);
+		edit.delete(uri, task.overdueRange.with(new Position(task.overdueRange.start.line, task.overdueRange.start.character - 1)));
 	}
 }
 export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, line: TextLine, task: TheTask, forceIncludeTime = false) {
