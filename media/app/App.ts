@@ -157,7 +157,7 @@ export default defineComponent({
 					SendMessage.deleteTask(this.storeStore.selectedTaskLineNumber);
 				}
 			} else if (e.key === 'Escape') {
-				this.storeStore.selectTask(-1);
+				this.storeStore.selectFirstTask();
 				this.taskDetailsManuallyTriggered = false;
 				(this.$refs.suggest as typeof Suggest)?.focus();
 				this.hideContextMenu();
