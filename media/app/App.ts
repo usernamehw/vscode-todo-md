@@ -174,4 +174,9 @@ export default defineComponent({
 			}
 		});
 	},
+	watch: {
+		'storeStore.focusFilterInputRand'() {
+			this.focusFilterInput();
+		},
+	},
 });

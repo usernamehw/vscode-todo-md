@@ -40,6 +40,11 @@ interface StoreState {
 	filterInputValue: string;
 	config: ExtensionConfig['webview'];
 	selectedTaskLineNumber: number;
+	/**
+	 * Send improvised event from store: assign a random number and listen for changes
+	 * inside the app to focus the main input element.
+	 */
+	focusFilterInputRand: number;
 }
 
 export const useStore = defineStore({
@@ -52,6 +57,7 @@ export const useStore = defineStore({
 		defaultFileSpecified: true,
 		activeDocumentOpened: false,
 		filterInputValue: '',
+		focusFilterInputRand: 0,
 		config: {
 			autoShowSuggest: true,
 			showCompleted: true,
@@ -167,6 +173,9 @@ export const useStore = defineStore({
 			vscodeApi.setState({
 				filterInputValue: newValue,
 			});
+		},
+		focusFilterInput() {
+			this.focusFilterInputRand = Math.random();
 		},
 		toggleDone(task: TheTask) {
 			task.done = !task.done;
@@ -320,8 +329,9 @@ window.addEventListener('message', event => {
 			break;
 		}
 		case 'focusFilterInput': {
-			// App.focusFilterInput();
-			// break;
+			const store = useStore();
+			store.focusFilterInput();
+			break;
 		}
 	}
 });
