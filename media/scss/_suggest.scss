@@ -19,7 +19,7 @@
 	font-family: var(--vscode-editor-font-family);
 	font-size: 13px;
 	height: 24px;
-	outline: none !important;
+	outline: none;
 	padding: 3px;
 	padding-left: 4px;
 	width: 100%;
@@ -29,15 +29,15 @@
 	}
 
 	&:focus {
-		border: 1px solid var(--vscode-focusBorder) !important;
-		outline: none !important;
+		border: 1px solid var(--vscode-focusBorder);
+		outline: none;
 	}
 }
 
 .suggest__autocomplete-container {
-	background-color: var(--vscode-sideBar-background) !important;
-	color: var(--vscode-editorSuggestWidget-foreground) !important;
-	font-family: var(--vscode-editor-font-family) !important;
+	background-color: var(--vscode-sideBar-background);
+	color: var(--vscode-editorSuggestWidget-foreground);
+	font-family: var(--vscode-editor-font-family);
 	left: 0;
 	max-height: 150px;
 	overflow-y: auto;
@@ -47,7 +47,7 @@
 	z-index: 1000;
 
 	&:not(:empty) {
-		border-color: var(--vscode-editorSuggestWidget-border) !important;
+		border-color: var(--vscode-editorSuggestWidget-border);
 		border-style: solid;
 		border-width: 1px;
 	}
@@ -60,17 +60,17 @@
 
 	> .suggest__highlight {
 		background-color: transparent;
-		color: var(--vscode-editorSuggestWidget-highlightForeground) !important;
+		color: var(--vscode-editorSuggestWidget-highlightForeground);
+	}
+
+	&:hover {
+		background-color: var(--vscode-list-hoverBackground);
+		color: var(--vscode-editorSuggestWidget-foreground);
 	}
 
 	&--active {
 		background-color: var(--vscode-editorSuggestWidget-selectedBackground) !important;
 		color: var(--vscode-editorSuggestWidget-selectedForeground) !important;
-	}
-
-	&:hover {
-		background-color: var(--vscode-list-hoverBackground) !important;
-		color: var(--vscode-editorSuggestWidget-foreground) !important;
 	}
 }
 
