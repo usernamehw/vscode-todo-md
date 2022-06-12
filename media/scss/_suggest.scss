@@ -71,6 +71,10 @@
 	&--active {
 		background-color: var(--vscode-editorSuggestWidget-selectedBackground) !important;
 		color: var(--vscode-editorSuggestWidget-selectedForeground) !important;
+
+		> .suggest__highlight {
+			color: var(--vscode-editorSuggestWidget-focusHighlightForeground) !important;
+		}
 	}
 }
 
