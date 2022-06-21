@@ -1,3 +1,7 @@
+## 2.12.1 `21 Jun 2022`
+
+- 🐛 Minor bug fixes
+
 ## 2.12.0 `09 Jun 2022`
 
 - 🔨 Refactor webview: Vue 2 => Vue 3
