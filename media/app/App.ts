@@ -147,6 +147,7 @@ export default defineComponent({
 			if (link && link.dataset.href) {
 				SendMessage.followLink(link.dataset.href);
 			}
+			this.hideContextMenu();
 		});
 
 		window.addEventListener('keydown', e => {
