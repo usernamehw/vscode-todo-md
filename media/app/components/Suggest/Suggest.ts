@@ -59,6 +59,7 @@ export default defineComponent({
 				this.$emit('input', this.filteredSuggestItems[this.activeIndex]);
 				e?.preventDefault();
 				this.hide();
+				this.focus();
 			}
 		},
 		onKeydownDown(e: KeyboardEvent) {
