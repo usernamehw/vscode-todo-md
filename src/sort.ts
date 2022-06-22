@@ -67,6 +67,12 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 	} else if (sortProperty === SortProperty.CompletionDate) {
 		sortedTasks = tasksCopy.sort((a, b) => {
 			if (a.completionDate === b.completionDate) {
+				// Empty completion date `{cm}`
+				if (a.done && !a.completionDate) {
+					return 1;
+				} else if (b.done && !b.completionDate) {
+					return -1;
+				}
 				return 0;
 			} else {
 				if (a.completionDate === undefined) {
