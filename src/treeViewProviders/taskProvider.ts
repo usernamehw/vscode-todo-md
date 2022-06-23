@@ -19,7 +19,7 @@ export class TaskTreeItem extends TreeItem {
 	) {
 		super(label);
 		if (task.links.length) {
-			this.contextValue = 'link';
+			this.contextValue = 'taskWithLink';
 		}
 		if (task.subtasks.length) {
 			if (task.isCollapsed) {

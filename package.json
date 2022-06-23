@@ -1503,27 +1503,27 @@
 			"view/item/context": [
 				{
 					"command": "todomd.startTask",
-					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/",
-					"group": "1_action"
+					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem =~ /(task|taskWithLink)/",
+					"group": "1_0"
 				},
 				{
 					"command": "todomd.hideTask",
-					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/",
-					"group": "3_action"
+					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem =~ /(task|taskWithLink)/",
+					"group": "3_0"
 				},
 				{
 					"command": "todomd.deleteTask",
-					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/",
-					"group": "7_danger"
+					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem =~ /(task|taskWithLink)/",
+					"group": "7_0"
 				},
 				{
 					"command": "todomd.followLink",
-					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/ && viewItem == link",
-					"group": "2_navigation"
+					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem == taskWithLink",
+					"group": "2_0"
 				},
 				{
 					"command": "todomd.toggleDone",
-					"when": "view =~ /todomd.(tasks|due|generic1|generic2|generic3)/",
+					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem =~ /(task|taskWithLink)/",
 					"group": "inline"
 				}
 			],
