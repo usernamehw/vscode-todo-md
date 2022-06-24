@@ -132,7 +132,7 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 							}
 						}, task.subtasks);
 					}
-					// if any nested item had a due date then show it in the view
+					// if any nested item is 'due', then show it
 					if (dueItemFound > 0) {
 						filterResult = true;
 					}
