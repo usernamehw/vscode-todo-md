@@ -1,5 +1,6 @@
 import { TheTask } from './TheTask';
 import { DueState } from './types';
+import { forEachTask } from './utils/taskUtils';
 
 const enum FilterType {
 	RawContains,
@@ -124,19 +125,18 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 				} else {
 					if (task.subtasks.length > 0) {
 						// check any subtasks/nested-items for due/overdue to show in the view
-						task.subtasks.forEach(subtask => {
+						forEachTask(subtask => {
 							if (subtask.due?.isDue === DueState.Due || subtask.due?.isDue === DueState.Overdue) {
 								filterResult = true;
 							} else {
 								filterResult = false;
 							}
-						});
+						}, task.subtasks);
 					}
 					else {
 						filterResult = false;
 					}
 				}
-
 			} else if (filter.filterType === FilterType.Overdue) {
 				// $overdue
 				if (task.due?.isDue === DueState.Overdue) {
