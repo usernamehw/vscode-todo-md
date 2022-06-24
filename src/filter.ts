@@ -123,15 +123,18 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 				if (task.due?.isDue === DueState.Due || task.due?.isDue === DueState.Overdue) {
 					filterResult = true;
 				} else {
+					// check any subtasks/nested-items for due/overdue to show in the view
+					let dueItemFound = 0;
 					if (task.subtasks.length > 0) {
-						// check any subtasks/nested-items for due/overdue to show in the view
 						forEachTask(subtask => {
 							if (subtask.due?.isDue === DueState.Due || subtask.due?.isDue === DueState.Overdue) {
-								filterResult = true;
-							} else {
-								filterResult = false;
+								dueItemFound++;
 							}
 						}, task.subtasks);
+					}
+					// if any nested item had a due date then show it in the view
+					if (dueItemFound > 0) {
+						filterResult = true;
 					}
 					else {
 						filterResult = false;
