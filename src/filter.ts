@@ -122,8 +122,21 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 				if (task.due?.isDue === DueState.Due || task.due?.isDue === DueState.Overdue) {
 					filterResult = true;
 				} else {
-					filterResult = false;
+					if (task.subtasks.length > 0) {
+						// check any subtasks/nested-items for due/overdue to show in the view
+						task.subtasks.forEach(subtask => {
+							if (subtask.due?.isDue === DueState.Due || subtask.due?.isDue === DueState.Overdue) {
+								filterResult = true;
+							} else {
+								filterResult = false;
+							}
+						});
+					}
+					else {
+						filterResult = false;
+					}
 				}
+
 			} else if (filter.filterType === FilterType.Overdue) {
 				// $overdue
 				if (task.due?.isDue === DueState.Overdue) {

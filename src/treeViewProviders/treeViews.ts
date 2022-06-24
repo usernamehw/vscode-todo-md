@@ -146,7 +146,7 @@ export function updateAllTreeViews() {
 
 	updateTasksTreeView();
 
-	const dueTasks = $state.tasksAsTree.filter(task => task.due?.isDue === DueState.Due || task.due?.isDue === DueState.Overdue);
+	const dueTasks = filterItems($state.tasksAsTree, '$due');
 	dueProvider.refresh(defaultSortTasks(dueTasks));
 	setViewTitle(dueView, 'due', dueTasks.length);
 
