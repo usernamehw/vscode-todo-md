@@ -302,7 +302,9 @@ export async function parseDocument(document: TextDocument): Promise<ParsedDocum
 	for (const task of tasks) {
 		if (task.parentTaskLineNumber !== undefined) {
 			tasksMap[task.parentTaskLineNumber].subtasks.push(tasksMap[task.lineNumber]);
-			tasksAsTree.push(tasksMap[task.lineNumber]);
+			if (task.due || task.overdue) {
+				tasksAsTree.push(tasksMap[task.lineNumber]);
+			}
 		} else {
 			tasksAsTree.push(tasksMap[task.lineNumber]);
 		}
