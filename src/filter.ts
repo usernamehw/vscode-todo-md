@@ -43,41 +43,37 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 	const filteredTasks = tasks.filter(task => {
 		const results = [];
 		for (const filter of filters) {
-			let filterResult;
+			let filterResult = false;
+			if (task.subtasks.length) {
+				const nestedMatch = filterItems(task.subtasks, filterStr);
+				if (nestedMatch.length > 0) {
+					filterResult = true;
+				}
+			}
 			if (filter.filterType === FilterType.RawContains) {
 				// Anything in the string (rawText)
 				if (task.rawText.toLowerCase().includes(filter.value.toLowerCase())) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.TitleContains) {
 				// Title match
 				if (task.title.toLowerCase().includes(filter.value.toLowerCase())) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.TagEqual) {
 				// #Tag
 				if (task.tags.includes(filter.value)) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.ContextEqual) {
 				// @Context
 				if (task.contexts.includes(filter.value)) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.ProjectEqual) {
 				// +Project
 				if (task.projects.includes(filter.value)) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.PriorityEqual) {
 				// $A - $Z priority
@@ -92,72 +88,52 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 					// Simple equal
 					if (task.priority === filter.value) {
 						filterResult = true;
-					} else {
-						filterResult = false;
 					}
 				}
 			} else if (filter.filterType === FilterType.Done) {
 				// $done
 				if (task.done) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.Started) {
 				// $started
 				if (task.startRange && !task.durationRange) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.HasDue) {
 				// $hasDue
 				if (task.due) {
-					return true;
-				} else {
-					return false;
+					filterResult = true;
 				}
 			} else if (filter.filterType === FilterType.Due) {
 				// $due
 				if (task.due?.isDue === DueState.Due || task.due?.isDue === DueState.Overdue) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.Overdue) {
 				// $overdue
 				if (task.due?.isDue === DueState.Overdue) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.Recurring) {
 				// $recurring
 				if (task.due?.isRecurring === true) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.NoTag) {
 				// $noTag
 				if (task.tags.length === 0) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.NoProject) {
 				// $noProject
 				if (task.projects.length === 0) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			} else if (filter.filterType === FilterType.NoContext) {
 				// $noContext
 				if (task.contexts.length === 0) {
 					filterResult = true;
-				} else {
-					filterResult = false;
 				}
 			}
 			if (filter.isNegation) {
