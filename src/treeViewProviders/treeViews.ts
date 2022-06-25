@@ -1,6 +1,6 @@
-import { TreeView, Uri, window, workspace } from 'vscode';
+import { TreeView, TreeViewExpansionEvent, Uri, window, workspace } from 'vscode';
 import { toggleTaskCollapse } from '../documentActions';
-import { Constants, $config, $state } from '../extension';
+import { $config, $state, Constants, updateState } from '../extension';
 import { filterItems } from '../filter';
 import { parseDocument } from '../parse';
 import { defaultSortTasks } from '../sort';
@@ -9,7 +9,7 @@ import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider } from '../treeViewProviders/taskProvider';
-import { DueState, ItemForProvider, TreeItemSortType, VscodeContext } from '../types';
+import { ItemForProvider, TreeItemSortType, VscodeContext } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { forEachTask } from '../utils/taskUtils';
 import { setContext } from '../utils/vscodeUtils';
@@ -59,18 +59,15 @@ export function createAllTreeViews() {
 		showCollapseAll: true,
 	});
 
-	// TODO: dueView should toggle collapse?
+	dueView.onDidCollapseElement(onElementCollapseExpand);
+	dueView.onDidExpandElement(onElementCollapseExpand);
 
 	tasksView = window.createTreeView(Constants.TasksTreeViewId, {
 		treeDataProvider: taskProvider,
 		showCollapseAll: true,
 	});
-	tasksView.onDidCollapseElement(async event => {
-		toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
-	});
-	tasksView.onDidExpandElement(async event => {
-		toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
-	});
+	tasksView.onDidCollapseElement(onElementCollapseExpand);
+	tasksView.onDidExpandElement(onElementCollapseExpand);
 
 	archivedView = window.createTreeView(Constants.ArchivedTreeViewId, {
 		treeDataProvider: archivedProvider,
@@ -86,12 +83,8 @@ export function createAllTreeViews() {
 					treeDataProvider: generic1Provider,
 					showCollapseAll: true,
 				});
-				generic1View.onDidCollapseElement(async event => {
-					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
-				});
-				generic1View.onDidExpandElement(async event => {
-					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
-				});
+				generic1View.onDidCollapseElement(onElementCollapseExpand);
+				generic1View.onDidExpandElement(onElementCollapseExpand);
 				setContext(VscodeContext.Generic1FilterExists, true);
 			}
 		}
@@ -105,12 +98,8 @@ export function createAllTreeViews() {
 					treeDataProvider: generic2Provider,
 					showCollapseAll: true,
 				});
-				generic2View.onDidCollapseElement(async event => {
-					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
-				});
-				generic2View.onDidExpandElement(async event => {
-					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
-				});
+				generic2View.onDidCollapseElement(onElementCollapseExpand);
+				generic2View.onDidExpandElement(onElementCollapseExpand);
 				setContext(VscodeContext.Generic2FilterExists, true);
 			}
 		}
@@ -124,12 +113,8 @@ export function createAllTreeViews() {
 					treeDataProvider: generic3Provider,
 					showCollapseAll: true,
 				});
-				generic3View.onDidCollapseElement(async event => {
-					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
-				});
-				generic3View.onDidExpandElement(async event => {
-					toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask).lineNumber);
-				});
+				generic3View.onDidCollapseElement(onElementCollapseExpand);
+				generic3View.onDidExpandElement(onElementCollapseExpand);
 				setContext(VscodeContext.Generic3FilterExists, true);
 			}
 		}
@@ -180,12 +165,7 @@ export function updateAllTreeViews() {
  * Update only Tasks Tree View
  */
 export function updateTasksTreeView() {
-	let tasksForProvider;
-	if ($state.taskTreeViewFilterValue) {
-		tasksForProvider = filterItems($state.tasksAsTree, $state.taskTreeViewFilterValue);
-	} else {
-		tasksForProvider = $state.tasksAsTree;
-	}
+	const tasksForProvider = filterItems($state.tasksAsTree, $state.taskTreeViewFilterValue);
 	taskProvider.refresh(tasksForProvider);
 	setViewTitle(tasksView, 'tasks', tasksForProvider.length);
 }
@@ -198,11 +178,10 @@ export function updateArchivedTasksTreeView() {
 	setViewTitle(archivedView, 'archived', archivedTasks.length);
 }
 /**
- * Set tree view title
- * TODO: filterValue argument never used?
+ * Set tree view title.
  */
-function setViewTitle(view: TreeView<any>, title: string, counter: number, filterValue = '') {
-	view.title = `${title} (${counter}) ${filterValue}`;
+function setViewTitle(view: TreeView<any>, title: string, counter: number) {
+	view.title = `${title} (${counter})`;
 }
 /**
  * Tags/Projects/Contexts grouped and sorted for Tree Views.
@@ -315,4 +294,11 @@ export async function updateArchivedTasks() {
  */
 export async function getArchivedDocument() {
 	return await workspace.openTextDocument(Uri.file($config.defaultArchiveFile));
+}
+
+async function onElementCollapseExpand(event: TreeViewExpansionEvent<any>) {
+	await toggleTaskCollapse(await getActiveOrDefaultDocument(), (event.element.task as TheTask)?.lineNumber);
+	await updateState();
+	// TODO: doesn't work for tree views ...
+	updateAllTreeViews();
 }
