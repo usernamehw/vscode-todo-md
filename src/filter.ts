@@ -18,6 +18,7 @@ const enum FilterType {
 	NoTag,
 	NoProject,
 	NoContext,
+	Hidden,
 }
 /**
  * When the filter has `>` or `<` symbols.
@@ -138,6 +139,11 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 				if (task.contexts.length === 0) {
 					filterResult = true;
 				}
+			} else if (filter.filterType === FilterType.Hidden) {
+				// $hidden
+				if (task.isHidden) {
+					filterResult = true;
+				}
 			}
 			if (filter.isNegation) {
 				filterResult = !filterResult;
@@ -219,6 +225,8 @@ function parseFilter(filterStr = '') {
 					filter.filterType = FilterType.NoContext;
 				} else if (value === 'noTag') {
 					filter.filterType = FilterType.NoTag;
+				} else if (value === 'hidden') {
+					filter.filterType = FilterType.Hidden;
 				} else if (/^[A-Z]$/.test(value)) {
 					filter.filterType = FilterType.PriorityEqual;
 				}

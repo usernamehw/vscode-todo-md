@@ -116,15 +116,16 @@ export const useStore = defineStore({
 		suggestItems(state): string[] {
 			// TODO: constants should be in const enum
 			const filterConstants = [
-				'$due',
+				'$done',
 				'$started',
 				'$hasDue',
-				'$done',
+				'$due',
 				'$overdue',
 				'$recurring',
 				'$noTag',
 				'$noProject',
 				'$noContext',
+				'$hidden',
 			];
 			const autocompleteTags = state.tags.map(tag => `#${tag}`);
 			const autocompleteProjects = state.projects.map(project => `+${project}`);
