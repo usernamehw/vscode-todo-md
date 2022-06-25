@@ -3,7 +3,7 @@
 2 single project +Project
 3 +One text +Two +Three
 4 @One multiple contexts, their ranges @Two @Three
-5 #one#two text #three#four
+5 #one #two text #three #four
 6 (C) text
 7
 8 Completed task with completion date {cm:2020-05-02}

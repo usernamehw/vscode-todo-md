@@ -145,9 +145,11 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 				break;
 			}
 			case '#': {
-				tagsDelimiterRanges.push(new Range(lineNumber, index, lineNumber, index + 1));
-				tagsRange.push(new Range(lineNumber, index + 1, lineNumber, index + word.length));
-				tags.push(word.slice(1));
+				if (word.length !== 1) {
+					tagsDelimiterRanges.push(new Range(lineNumber, index, lineNumber, index + 1));
+					tagsRange.push(new Range(lineNumber, index + 1, lineNumber, index + word.length));
+					tags.push(word.slice(1));
+				}
 				text.push(word);
 				break;
 			}

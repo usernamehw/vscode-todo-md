@@ -85,13 +85,6 @@ describe(`${headerDelimiter('filter')}Filter tags`, () => {
 		const filtered = filterItems(items, '#html #js');
 		assert.deepEqual(filtered, [threeTagsTask]);
 	});
-	it('Multiple tags without space `#html#js`', () => {
-		const items = [justTextTask, threeTagsTask];
-		const filtered = filterItems(items, '#html#js');
-		const filtered2 = filterItems(items, '#js#html');
-		assert.deepEqual(filtered, [threeTagsTask]);
-		assert.deepEqual(filtered2, [threeTagsTask]);
-	});
 });
 describe('Filter contexts', () => {
 	it('One context', () => {
