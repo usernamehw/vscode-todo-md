@@ -59,6 +59,8 @@ export function createAllTreeViews() {
 		showCollapseAll: true,
 	});
 
+	// TODO: dueView should toggle collapse?
+
 	tasksView = window.createTreeView(Constants.TasksTreeViewId, {
 		treeDataProvider: taskProvider,
 		showCollapseAll: true,
@@ -197,6 +199,7 @@ export function updateArchivedTasksTreeView() {
 }
 /**
  * Set tree view title
+ * TODO: filterValue argument never used?
  */
 function setViewTitle(view: TreeView<any>, title: string, counter: number, filterValue = '') {
 	view.title = `${title} (${counter}) ${filterValue}`;

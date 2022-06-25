@@ -11,7 +11,7 @@ export async function removeAllOverdue() {
 	const edit = new WorkspaceEdit();
 	forEachTask(task => {
 		if (task.overdueRange) {
-			removeOverdueWorkspaceEdit(edit, activeDocument.uri, task);
+			removeOverdueWorkspaceEdit(edit, activeDocument, task);
 		}
 	});
 	applyEdit(edit, activeDocument);

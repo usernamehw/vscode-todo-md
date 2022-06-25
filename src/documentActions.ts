@@ -39,7 +39,7 @@ export async function hideTaskAtLine(document: TextDocument, lineNumber: number)
 		return undefined;
 	}
 	if (!task.isHidden) {
-		edit.insert(document.uri, line.range.end, ' {h}');
+		insertEditAtTheEndOfLine(edit, document, line.range.end, helpCreateSpecialTag(SpecialTagName.Hidden));
 	}
 	return applyEdit(edit, document);
 }
@@ -177,12 +177,12 @@ export async function incrementCountForTask(document: TextDocument, lineNumber: 
 		newValue = count.current + 1;
 		if (newValue === count.needed) {
 			insertCompletionDateWorkspaceEdit(edit, document, line, task);
-			removeOverdueWorkspaceEdit(edit, document.uri, task);
+			removeOverdueWorkspaceEdit(edit, document, task);
 		}
 		setCountCurrentValueWorkspaceEdit(edit, document.uri, count, String(newValue));
 	} else {
 		setCountCurrentValueWorkspaceEdit(edit, document.uri, count, '0');
-		removeCompletionDateWorkspaceEdit(edit, document.uri, task);
+		removeCompletionDateWorkspaceEdit(edit, document, task);
 	}
 	return applyEdit(edit, document);
 }
@@ -198,7 +198,7 @@ export async function decrementCountForTask(document: TextDocument, lineNumber: 
 	if (count.current === 0) {
 		return undefined;
 	} else if (count.current === count.needed) {
-		removeCompletionDateWorkspaceEdit(edit, document.uri, task);
+		removeCompletionDateWorkspaceEdit(edit, document, task);
 	}
 	setCountCurrentValueWorkspaceEdit(edit, document.uri, count, String(count.current - 1));
 	return applyEdit(edit, document);
@@ -213,16 +213,16 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	}
 	const edit = new WorkspaceEdit();
 	if (task.overdue) {
-		removeOverdueWorkspaceEdit(edit, document.uri, task);
+		removeOverdueWorkspaceEdit(edit, document, task);
 		if ($config.autoBumpRecurringOverdueDate && !task.done && task.due?.type === 'recurringWithDate') {
 			replaceRecurringDateWithTodayWorkspaceEdit(edit, document, document.uri, task);
 		}
 	}
 	const line = document.lineAt(lineNumber);
 	if (task.done) {
-		removeCompletionDateWorkspaceEdit(edit, document.uri, task);
-		removeDurationWorkspaceEdit(edit, document.uri, task);
-		removeStartWorkspaceEdit(edit, document.uri, task);
+		removeCompletionDateWorkspaceEdit(edit, document, task);
+		removeDurationWorkspaceEdit(edit, document, task);
+		removeStartWorkspaceEdit(edit, document, task);
 	} else {
 		insertCompletionDateWorkspaceEdit(edit, document, line, task);
 	}
@@ -318,9 +318,9 @@ export async function resetAllRecurringTasks(document: TextDocument, lastVisit: 
 		if (task.due?.isRecurring) {
 			const line = document.lineAt(task.lineNumber);
 			if (task.done) {
-				removeCompletionDateWorkspaceEdit(edit, document.uri, task);
-				removeStartWorkspaceEdit(edit, document.uri, task);
-				removeDurationWorkspaceEdit(edit, document.uri, task);
+				removeCompletionDateWorkspaceEdit(edit, document, task);
+				removeStartWorkspaceEdit(edit, document, task);
+				removeDurationWorkspaceEdit(edit, document, task);
 			} else {
 				if (!task.overdue && !dayjs().isSame(lastVisit, 'day')) {
 					const lastVisitWithoutTime = dateWithoutTime(lastVisit);
@@ -331,7 +331,7 @@ export async function resetAllRecurringTasks(document: TextDocument, lastVisit: 
 							targetDate: date.toDate(),
 						});
 						if (res.isDue === DueState.Due || res.isDue === DueState.Overdue) {
-							addOverdueSpecialTagWorkspaceEdit(edit, document.uri, line, date.format(DATE_FORMAT));
+							addOverdueSpecialTagWorkspaceEdit(edit, document, line, date.format(DATE_FORMAT));
 							break;
 						}
 					}
@@ -369,17 +369,17 @@ export function toggleTaskCollapseWorkspaceEdit(edit: WorkspaceEdit, document: T
 	const line = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);
 	if (task?.collapseRange) {
-		edit.delete(document.uri, task.collapseRange);
+		deleteEdit(edit, document, task.collapseRange);
 	} else {
-		edit.insert(document.uri, line.range.end, ' {c}');
+		insertEditAtTheEndOfLine(edit, document, line.range.end, helpCreateSpecialTag(SpecialTagName.Collapsed));
 	}
 }
 export function deleteTaskWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
 	edit.delete(document.uri, document.lineAt(lineNumber).rangeIncludingLineBreak);
 }
-export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
+export function removeOverdueWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, task: TheTask) {
 	if (task.overdueRange) {
-		edit.delete(uri, task.overdueRange.with(new Position(task.overdueRange.start.line, task.overdueRange.start.character - 1)));
+		deleteEdit(edit, document, task.overdueRange);
 	}
 }
 export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, line: TextLine, task: TheTask, forceIncludeTime = false) {
@@ -388,7 +388,7 @@ export function insertCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document:
 	if (task.completionDateRange) {
 		edit.replace(document.uri, task.completionDateRange, newCompletionDate);
 	} else {
-		edit.insert(document.uri, new Position(line.lineNumber, line.range.end.character), ` ${newCompletionDate}`);
+		insertEditAtTheEndOfLine(edit, document, new Position(line.lineNumber, line.range.end.character), newCompletionDate);
 	}
 	if (task.start) {
 		insertDurationWorkspaceEdit(edit, document, line, task);
@@ -403,12 +403,12 @@ export function insertDurationWorkspaceEdit(edit: WorkspaceEdit, document: TextD
 	if (task.durationRange) {
 		edit.replace(document.uri, task.durationRange, newDurationDate);
 	} else {
-		edit.insert(document.uri, line.range.end, ` ${newDurationDate}`);
+		insertEditAtTheEndOfLine(edit, document, line.range.end, newDurationDate);
 	}
 }
-export function removeCompletionDateWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
+export function removeCompletionDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, task: TheTask) {
 	if (task.completionDateRange) {
-		edit.delete(uri, task.completionDateRange);
+		deleteEdit(edit, document, task.completionDateRange);
 	}
 }
 export function replaceRecurringDateWithTodayWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, uri: Uri, task: TheTask) {
@@ -418,14 +418,14 @@ export function replaceRecurringDateWithTodayWorkspaceEdit(edit: WorkspaceEdit, 
 	}
 	edit.replace(uri, task.dueRange, dueText.replace(/\d{4}-\d{2}-\d{2}/, getDateInISOFormat()));
 }
-export function removeDurationWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
+export function removeDurationWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, task: TheTask) {
 	if (task.durationRange) {
-		edit.delete(uri, task.durationRange);
+		deleteEdit(edit, document, task.durationRange);
 	}
 }
-export function removeStartWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, task: TheTask) {
+export function removeStartWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, task: TheTask) {
 	if (task.startRange) {
-		edit.delete(uri, task.startRange);
+		deleteEdit(edit, document, task.startRange);
 	}
 }
 export function archiveTaskWorkspaceEdit(edit: WorkspaceEdit, archiveFileEdit: WorkspaceEdit, archiveDocument: TextDocument, uri: Uri, line: TextLine, shouldDelete: boolean) {
@@ -434,8 +434,8 @@ export function archiveTaskWorkspaceEdit(edit: WorkspaceEdit, archiveFileEdit: W
 		edit.delete(uri, line.rangeIncludingLineBreak);// Delete task from active file
 	}
 }
-function addOverdueSpecialTagWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, line: TextLine, overdueDateString: string) {
-	edit.insert(uri, new Position(line.lineNumber, line.range.end.character), ` {overdue:${overdueDateString}}`);
+function addOverdueSpecialTagWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, line: TextLine, overdueDateString: string) {
+	insertEditAtTheEndOfLine(edit, document, new Position(line.lineNumber, line.range.end.character), helpCreateSpecialTag(SpecialTagName.Overdue, overdueDateString));
 }
 export function setCountCurrentValueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri, count: Count, value: string) {
 	const charIndexWithOffset = count.range.start.character + 'count:'.length + 1;
@@ -491,20 +491,40 @@ export function startTaskAtLineWorkspaceEdit(edit: WorkspaceEdit, document: Text
 	if (task.startRange) {
 		edit.replace(document.uri, task.startRange, newStartDate);
 	} else {
-		edit.insert(document.uri, line.range.end, ` ${newStartDate}`);
+		insertEditAtTheEndOfLine(edit, document, line.range.end, newStartDate);
 	}
 }
 export function setDueDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number, newDueDate: string) {
-	const dueDate = `{due:${newDueDate}}`;
+	const dueDate = helpCreateSpecialTag(SpecialTagName.Due, newDueDate);
 	const task = getTaskAtLineExtension(lineNumber);
 	if (task?.overdueRange) {
-		edit.delete(document.uri, task.overdueRange);
+		deleteEdit(edit, document, task.overdueRange);
 	}
 	if (task?.dueRange) {
 		edit.replace(document.uri, task.dueRange, dueDate);
 	} else {
 		const line = document.lineAt(lineNumber);
-		const isLineEndsWithWhitespace = line.text.endsWith(' ');
-		edit.insert(document.uri, line.range.end, `${isLineEndsWithWhitespace ? '' : ' '}${dueDate}`);
+		insertEditAtTheEndOfLine(edit, document, line.range.end, dueDate);
 	}
+}
+
+/**
+ * Delete range from the line.
+ * Also delete whitespace before the range (if present).
+ */
+function deleteEdit(edit: WorkspaceEdit, document: TextDocument, range: Range): void {
+	const charBeforePosition = new Position(range.start.line, range.start.character - 1);
+	const charBefore = document.getText(new Range(charBeforePosition, range.start));
+	if (charBefore === ' ') {
+		range = range.with(charBeforePosition);
+	}
+	edit.delete(document.uri, range);
+}
+/**
+ * Insert text at the end of the line.
+ * Only add whitespace when needed.
+ */
+function insertEditAtTheEndOfLine(edit: WorkspaceEdit, document: TextDocument, position: Position, text: string): void {
+	const charBefore = document.getText(new Range(position.with(position.line, position.character - 1), position));
+	edit.insert(document.uri, position, charBefore !== ' ' ? ` ${text}` : text);
 }
