@@ -57,15 +57,7 @@ export function updateHover() {
 							otherTasks.push(getTaskHoverMd(otherTask));
 						}
 					} else if (parsedWord.type === 'tags') {
-						let index = 0;
-						for (let i = 0; i < parsedWord.ranges.length; i++) {
-							const tagRange = parsedWord.ranges[i];
-							if (tagRange.contains(position)) {
-								index = i;
-								break;
-							}
-						}
-						const tagName = parsedWord.value[index];
+						const tagName = parsedWord.value;
 
 						if ($state.suggestTags[tagName]) {
 							hoveredWordUserDescription.appendMarkdown($state.suggestTags[tagName]);

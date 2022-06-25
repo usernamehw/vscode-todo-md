@@ -145,14 +145,9 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 				break;
 			}
 			case '#': {
-				const tempTags = word.split('#').filter(tag => tag.length);
-				let temp = index;
-				for (const tag of tempTags) {
-					tagsDelimiterRanges.push(new Range(lineNumber, temp, lineNumber, temp + 1));
-					tagsRange.push(new Range(lineNumber, temp + 1, lineNumber, temp + 1 + tag.length));
-					temp += tag.length + 1;
-					tags.push(tag);
-				}
+				tagsDelimiterRanges.push(new Range(lineNumber, index, lineNumber, index + 1));
+				tagsRange.push(new Range(lineNumber, index + 1, lineNumber, index + word.length));
+				tags.push(word.slice(1));
 				text.push(word);
 				break;
 			}
@@ -336,9 +331,9 @@ export interface ParsedWordContext {
 }
 export interface ParsedWordTags {
 	type: 'tags';
-	ranges: Range[];
-	delimiterRange: Range[];
-	value: string[];
+	range: Range;
+	delimiterRange: Range;
+	value: string;
 }
 interface ParsedWordDue {
 	type: 'due';
@@ -499,22 +494,11 @@ export function parseWord(word: string, lineNumber: number, index: number): Pars
 			break;
 		}
 		case '#': {
-			const tempTags = word.split('#').filter(tag => tag.length);
-			let temp = index;
-			const tags = [];
-			const tagsRanges = [];
-			const delimiterRanges = [];
-			for (const tag of tempTags) {
-				delimiterRanges.push(new Range(lineNumber, temp, lineNumber, temp + 1));
-				tagsRanges.push(new Range(lineNumber, temp + 1, lineNumber, temp + 1 + tag.length));
-				temp += tag.length + 1;
-				tags.push(tag);
-			}
 			return {
 				type: 'tags',
-				delimiterRange: delimiterRanges,
-				ranges: tagsRanges,
-				value: tags,
+				delimiterRange: new Range(lineNumber, index, lineNumber, index + 1),
+				range: new Range(lineNumber, index + 1, lineNumber, index + word.length),
+				value: word.slice(1),
 			};
 		}
 		case '@': {
