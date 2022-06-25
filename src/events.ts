@@ -5,6 +5,7 @@ import { getNextFewTasks } from './commands/getFewNextTasks';
 import { doUpdateEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { $config, $state, Constants, counterStatusBar, Global, mainStatusBar, updateLastVisitGlobalState, updateState } from './extension';
+import { clearDiagnostics, updateDiagnostic } from './languageFeatures/diagnostics';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
@@ -115,6 +116,9 @@ export const updateEverything = throttle(async (editor?: TextEditor) => {
 	if (editor && isTheRightFileName(editor)) {
 		doUpdateEditorDecorations(editor);
 		counterStatusBar.update($state.tasks);
+		updateDiagnostic(editor, $state.tasksAsTree);
+	} else {
+		clearDiagnostics();
 	}
 	mainStatusBar.update(getNextFewTasks());
 	updateAllTreeViews();
