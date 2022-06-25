@@ -41,22 +41,31 @@ export default defineComponent({
 			(this.$refs.input as HTMLInputElement)?.focus();
 		},
 		onInput(e: InputEvent) {
-			const value: string | undefined = (e.target as HTMLInputElement)?.value;
-			this.$emit('input', value);
-			if (!value) {
+			const inputValue: string | undefined = (e.target as HTMLInputElement)?.value;
+			this.$emit('input', inputValue);
+			if (!inputValue) {
 				this.filteredSuggestItems = this.suggestItems;
 				this.activeIndex = 0;
 				this.hide();
 				return;
 			}
-			this.filteredSuggestItems = fuzzysort.go(value, this.suggestItems).map(item => item.target);
+
+			this.filteredSuggestItems = fuzzysort.go(this.getLastFilter(inputValue), this.suggestItems).map(item => item.target);
 			if (this.autoshow) {
 				this.show();
+			}
+			if (this.filteredSuggestItems.length === 0) {
+				this.hide();
 			}
 		},
 		acceptActiveSuggest(e?: KeyboardEvent) {
 			if (this.suggestItemsVisible) {
-				this.$emit('input', this.filteredSuggestItems[this.activeIndex]);
+				let newInputValue = this.filteredSuggestItems[this.activeIndex];
+				const inputFilters = this.getInputFilters(this.value);
+				if (inputFilters.length > 1) {
+					newInputValue = `${inputFilters.slice(0, -1).join(' ')} ${this.filteredSuggestItems[this.activeIndex]}`;
+				}
+				this.$emit('input', newInputValue);
 				e?.preventDefault();
 				this.hide();
 				this.focus();
@@ -101,7 +110,14 @@ export default defineComponent({
 				return suggestItem;
 			}
 			// @ts-ignore
-			return fuzzysort.highlight(fuzzysort.single(this.value, suggestItem), '<mark class="suggest__highlight">', '</mark>');
+			return fuzzysort.highlight(fuzzysort.single(this.getLastFilter(this.value), suggestItem), '<mark class="suggest__highlight">', '</mark>');
+		},
+		getInputFilters(inputValue: string): string[] {
+			return inputValue.split(' ').filter(Boolean);
+		},
+		getLastFilter(inputValue: string): string {
+			const inputFilters = this.getInputFilters(inputValue);
+			return inputFilters[inputFilters.length - 1] || '';
 		},
 	},
 	created() {
