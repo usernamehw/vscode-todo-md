@@ -1,3 +1,11 @@
+## 2.13.0 `25 Jun 2022`
+
+- 💥 Tags without spaces in between - deprecated
+- ✨ Filter also searches in subtasks [PR 57](https://github.com/usernamehw/vscode-todo-md/pull/57) by [dustinsterk](https://github.com/dustinsterk)
+- ✨ [Tree View] Add inline button to complete task to Tags/Projects/Contexts #53
+- ✨ [webview] Autocomplete shows for secondary filters #50
+- 🐛 Remove extra whitespace added by document edits
+
 ## 2.12.1 `21 Jun 2022`
 
 - 🐛 Minor bug fixes
