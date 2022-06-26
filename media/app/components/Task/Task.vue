@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="!model.isHidden">
     <div :id="'ln' + model.lineNumber"
          class="task"
          :class="classes"
