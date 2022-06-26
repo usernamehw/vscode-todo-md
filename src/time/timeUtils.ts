@@ -14,7 +14,7 @@ export const DATE_TIME_FORMAT = `${DATE_FORMAT}T${TIME_FORMAT}`;
 /** Matches short & long week day `sun` or `sunday`. Case-insensitive. */
 export const dayOfTheWeekRegexp = /^(sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday)$/i;
 /** Matches short & long month `jan` or `january`. Case-insensitive */
-export const monthRegexp = /^(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)$/i;
+export const monthRegexp = /^(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Jul|July|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)$/i;
 export const weekdayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const weekdayNamesLong = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -116,7 +116,7 @@ export function dateAndDateDiff(date: dayjs.Dayjs): string {
 /**
  * Check if the date is valid.
  *
- * For instance `2020` `10` `32` is an invalid date bc date 32 doesn't exist
+ * For instance `2020-10-32` is an invalid date bc date 32 doesn't exist
  */
 export function isValidDate(year: number, month: number, date: number): boolean {
 	const jsDate = new Date(year, month, date);
@@ -125,7 +125,7 @@ export function isValidDate(year: number, month: number, date: number): boolean 
 /**
  * Get date with Hours/Minuses/Seconds/Milliseconds set to 0.
  */
-export function dateWithoutTime(date: Date) {
+export function dateWithoutTime(date: Date): Date {
 	return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
