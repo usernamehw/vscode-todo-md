@@ -7,7 +7,7 @@
 	"license": "MIT",
 	"icon": "img/icon.png",
 	"engines": {
-		"vscode": "^1.67.0"
+		"vscode": "^1.68.0"
 	},
 	"repository": {
 		"type": "git",
@@ -1771,7 +1771,7 @@
 		"@types/marked": "^4.0.3",
 		"@types/mocha": "^9.1.1",
 		"@types/node": "16.x",
-		"@types/vscode": "^1.67.0",
+		"@types/vscode": "^1.68.0",
 		"@typescript-eslint/eslint-plugin": "^5.29.0",
 		"@typescript-eslint/parser": "^5.29.0",
 		"@vue/compiler-sfc": "^3.2.37",
@@ -1783,9 +1783,9 @@
 		"eslint-plugin-no-autofix": "^1.2.3",
 		"eslint-plugin-vue": "^8.7.1",
 		"glob": "^8.0.3",
-		"mocha": "^9.2.2",
-		"sass": "^1.52.3",
-		"sass-loader": "^13.0.0",
+		"mocha": "^10.0.0",
+		"sass": "^1.53.0",
+		"sass-loader": "^13.0.1",
 		"source-map-support": "^0.5.21",
 		"style-loader": "^3.3.1",
 		"stylelint": "^14.9.1",
@@ -1795,7 +1795,7 @@
 		"stylelint-no-unsupported-browser-features": "^5.0.3",
 		"stylelint-order": "^5.0.0",
 		"stylelint-scss": "^4.2.0",
-		"ts-loader": "^9.3.0",
+		"ts-loader": "^9.3.1",
 		"typescript": "^4.7.4",
 		"typescript-json-schema": "^0.53.1",
 		"vscode-codicons": "0.0.17",
