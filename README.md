@@ -199,7 +199,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |sortContextsView|"alphabetic"|Controls contexts Tree View sorting.|
 |sortNestedTasks|"default"|Controls nested tasks sorting in Tree Views.|
 |suggestItems|\{\}|This extension will only autocomplete tags/projects/contexts located in **1** file. This setting allows you to add items and their description(markdown) to autocomplete in all files (where extension is active). Examples: `#tag`, `+project`, `@context`.|
-|tagCounterBadgeEnabled|**true**|Shows small badge to show a number of times the tag is present in the active document.|
+|counterBadgeEnabled|**true**|Shows small badge to show a number of times the tag/project/context is present in the active document.|
 |progressBackground|"\#c6cdd3"|Editor decoration for nested tasks progress (pie chart) background.|
 |progressForeground|"\#0077AA"|Editor decoration for nested tasks progress (pie chart) foreground.|
 |statusBarMainEnabled|**false**|Controls visibility of status bar that shows next tasks to complete.|

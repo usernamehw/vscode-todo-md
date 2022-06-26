@@ -5,6 +5,7 @@ import { DueState } from './types';
 import { forEachTask } from './utils/taskUtils';
 import { isEmptyObject } from './utils/utils';
 import { svgToUri } from './utils/vscodeUtils';
+
 /**
  * Update editor decoration style
  */
@@ -54,19 +55,19 @@ export function updateEditorDecorationStyle() {
 		fontWeight: 'bold',
 		...$config.decorations.priorityFForeground,
 	});
-	const tagCounterBadgeDecoration = ';position:absolute;display:inline-flex;align-items:center;padding:0px 1px;border-radius:2px;font-size:9px;top:-10%;height:50%;';
-	const tagCounterBadgeDecorationLight = 'background-color:rgba(0,0,0,0.06);color:#111;';
-	const tagCounterBadgeDecorationDark = 'background-color:rgba(255,255,255,0.12);color:#eee;';
+	const counterBadgeDecoration = ';position:absolute;display:inline-flex;align-items:center;padding:0px 1px;border-radius:2px;font-size:9px;top:-10%;height:50%;';
+	const counterBadgeDecorationLight = 'background-color:rgba(0,0,0,0.06);color:#111;';
+	const counterBadgeDecorationDark = 'background-color:rgba(255,255,255,0.12);color:#eee;';
 	Global.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagForeground'),
 		light: {
 			after: {
-				textDecoration: $config.tagCounterBadgeEnabled ? `${tagCounterBadgeDecoration}${tagCounterBadgeDecorationLight}` : undefined,
+				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
 			},
 		},
 		dark: {
 			after: {
-				textDecoration: $config.tagCounterBadgeEnabled ? `${tagCounterBadgeDecoration}${tagCounterBadgeDecorationDark}` : undefined,
+				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationDark}` : undefined,
 			},
 		},
 		...$config.decorations.tag,
@@ -83,10 +84,30 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.projectDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.projectForeground'),
+		light: {
+			after: {
+				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
+			},
+		},
+		dark: {
+			after: {
+				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationDark}` : undefined,
+			},
+		},
 		...$config.decorations.project,
 	});
 	Global.contextDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.contextForeground'),
+		light: {
+			after: {
+				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
+			},
+		},
+		dark: {
+			after: {
+				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationDark}` : undefined,
+			},
+		},
 		...$config.decorations.context,
 	});
 	Global.notDueDecorationType = window.createTextEditorDecorationType({
@@ -150,6 +171,8 @@ export function updateEditorDecorationStyle() {
 export function doUpdateEditorDecorations(editor: TextEditor) {
 	const completedDecorationRanges: Range[] = [];
 	const tagsDecorationOptions: DecorationOptions[] = [];
+	const projectDecorationOptions: DecorationOptions[] = [];
+	const contextDecorationOptions: DecorationOptions[] = [];
 	const priorityADecorationRanges: Range[] = [];
 	const priorityBDecorationRanges: Range[] = [];
 	const priorityCDecorationRanges: Range[] = [];
@@ -159,8 +182,6 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	const tagsDelimiterDecorationRanges: Range[] = [];
 	const tagWithDelimiterDecorationRanges: Range[] = [];
 	const specialtagDecorationRanges: Range[] = [];
-	const projectDecorationRanges: Range[] = [];
-	const contextDecorationRanges: Range[] = [];
 	const notDueDecorationRanges: Range[] = [];
 	const dueDecorationRanges: Range[] = [];
 	const overdueDecorationOptions: DecorationOptions[] = [];
@@ -179,7 +200,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 			if (!Global.userSpecifiedAdvancedTagDecorations) {
 				for (let i = 0; i < task.tags.length; i++) {
 					let contentText: string | undefined = undefined;
-					if ($config.tagCounterBadgeEnabled) {
+					if ($config.counterBadgeEnabled) {
 						contentText = String($state.tagsForTreeView.find(tag => tag.title === task.tags[i])?.tasks.length || '');
 					}
 					tagsDecorationOptions.push({
@@ -211,10 +232,36 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 			specialtagDecorationRanges.push(...task.specialTagRanges);
 		}
 		if (task.contextRanges && task.contextRanges.length) {
-			contextDecorationRanges.push(...task.contextRanges);
+			for (let i = 0; i < task.contexts.length; i++) {
+				let contentText: string | undefined = undefined;
+				if ($config.counterBadgeEnabled) {
+					contentText = String($state.contextsForTreeView.find(context => context.title === task.contexts[i])?.tasks.length || '');
+				}
+				contextDecorationOptions.push({
+					range: task.contextRanges[i],
+					renderOptions: {
+						after: {
+							contentText,
+						},
+					},
+				});
+			}
 		}
 		if (task.projectRanges && task.projectRanges.length) {
-			projectDecorationRanges.push(...task.projectRanges);
+			for (let i = 0; i < task.projects.length; i++) {
+				let contentText: string | undefined = undefined;
+				if ($config.counterBadgeEnabled) {
+					contentText = String($state.projectsForTreeView.find(project => project.title === task.projects[i])?.tasks.length || '');
+				}
+				projectDecorationOptions.push({
+					range: task.projectRanges[i],
+					renderOptions: {
+						after: {
+							contentText,
+						},
+					},
+				});
+			}
 		}
 		if (task.due) {
 			const due = task.due;
@@ -279,6 +326,8 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 
 	editor.setDecorations(Global.completedTaskDecorationType, completedDecorationRanges);
 	editor.setDecorations(Global.tagsDecorationType, tagsDecorationOptions);
+	editor.setDecorations(Global.projectDecorationType, projectDecorationOptions);
+	editor.setDecorations(Global.contextDecorationType, contextDecorationOptions);
 	editor.setDecorations(Global.tagWithDelimiterDecorationType, tagWithDelimiterDecorationRanges);
 	editor.setDecorations(Global.tagsDelimiterDecorationType, tagsDelimiterDecorationRanges);
 	editor.setDecorations(Global.specialTagDecorationType, specialtagDecorationRanges);
@@ -288,8 +337,6 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(Global.priorityDDecorationType, priorityDDecorationRanges);
 	editor.setDecorations(Global.priorityEDecorationType, priorityEDecorationRanges);
 	editor.setDecorations(Global.priorityFDecorationType, priorityFDecorationRanges);
-	editor.setDecorations(Global.projectDecorationType, projectDecorationRanges);
-	editor.setDecorations(Global.contextDecorationType, contextDecorationRanges);
 	editor.setDecorations(Global.notDueDecorationType, notDueDecorationRanges);
 	editor.setDecorations(Global.dueDecorationType, dueDecorationRanges);
 	editor.setDecorations(Global.overdueDecorationType, overdueDecorationOptions);

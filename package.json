@@ -263,9 +263,9 @@
 					"additionalProperties": false,
 					"default": {}
 				},
-				"todomd.tagCounterBadgeEnabled": {
+				"todomd.counterBadgeEnabled": {
 					"type": "boolean",
-					"markdownDescription": "Shows small badge to show a number of times the tag is present in the active document.",
+					"markdownDescription": "Shows small badge to show a number of times the tag/project/context is present in the active document.",
 					"default": true
 				},
 				"todomd.progressBackground": {
@@ -1240,11 +1240,6 @@
 			{
 				"command": "todomd.dev.removeAllOverdue",
 				"title": "DEV: Remove all overdue tags.",
-				"category": "Todo MD"
-			},
-			{
-				"command": "todomd.dev.replaceDateWithToday",
-				"title": "DEV: Replace date with today.",
 				"category": "Todo MD"
 			}
 		],

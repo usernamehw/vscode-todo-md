@@ -119,9 +119,9 @@ export interface ExtensionConfig {
 	 */
 	suggestItems: Record<string, string>;
 	/**
-	 * Shows small badge to show a number of times the tag is present in the active document.
+	 * Shows small badge to show a number of times the tag/project/context is present in the active document.
 	 */
-	tagCounterBadgeEnabled: boolean;
+	counterBadgeEnabled: boolean;
 	/**
 	 * Editor decoration for nested tasks progress (pie chart) background.
 	 */
