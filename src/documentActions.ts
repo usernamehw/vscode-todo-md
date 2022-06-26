@@ -513,7 +513,7 @@ export function setDueDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocum
  * Also delete whitespace before the range (if present).
  */
 function deleteEdit(edit: WorkspaceEdit, document: TextDocument, range: Range): void {
-	const charBeforePosition = new Position(range.start.line, range.start.character - 1);
+	const charBeforePosition = new Position(range.start.line, range.start.character - (range.start.character > 0 ? 1 : 0));
 	const charBefore = document.getText(new Range(charBeforePosition, range.start));
 	if (charBefore === ' ') {
 		range = range.with(charBeforePosition);
@@ -525,6 +525,7 @@ function deleteEdit(edit: WorkspaceEdit, document: TextDocument, range: Range): 
  * Only add whitespace when needed.
  */
 function insertEditAtTheEndOfLine(edit: WorkspaceEdit, document: TextDocument, position: Position, text: string): void {
-	const charBefore = document.getText(new Range(position.with(position.line, position.character - 1), position));
-	edit.insert(document.uri, position, charBefore !== ' ' ? ` ${text}` : text);
+	const charBeforePosition = position.with(position.line, position.character - (position.character > 0 ? 1 : 0));
+	const charBefore = document.getText(new Range(charBeforePosition, position));
+	edit.insert(document.uri, position, charBefore !== ' ' && charBefore !== '' ? ` ${text}` : text);
 }
