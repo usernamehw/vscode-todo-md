@@ -1,4 +1,4 @@
-import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
+import { DecorationOptions, DecorationRangeBehavior, Range, TextEditor, ThemeColor, window } from 'vscode';
 import { $config, $state, Global } from './extension';
 import { makeClosestDueDateDecoration } from './languageFeatures/getTaskHover';
 import { DueState } from './types';
@@ -60,6 +60,7 @@ export function updateEditorDecorationStyle() {
 	const counterBadgeDecorationDark = 'background-color:rgba(255,255,255,0.12);color:#eee;';
 	Global.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagForeground'),
+		rangeBehavior: DecorationRangeBehavior.ClosedClosed,
 		light: {
 			after: {
 				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
@@ -84,6 +85,7 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.projectDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.projectForeground'),
+		rangeBehavior: DecorationRangeBehavior.ClosedClosed,
 		light: {
 			after: {
 				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
@@ -98,6 +100,7 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.contextDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.contextForeground'),
+		rangeBehavior: DecorationRangeBehavior.ClosedClosed,
 		light: {
 			after: {
 				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
