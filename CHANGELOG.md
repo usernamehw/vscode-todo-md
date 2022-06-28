@@ -1,3 +1,10 @@
+## 2.14.0 `28 Jun 2022`
+
+- ✨ [editor] Show problems as diagnostics (duplicated tag/project/context, invalid due date)
+- ✨ Add `$hidden` filter
+- ✨ Rename setting `tagCounterBadgeEnabled` to `counterBadgeEnabled` and show counter badge for project/context also
+- 🐛 [editor] Fix illigal range edit when the line is empty
+
 ## 2.13.0 `25 Jun 2022`
 
 - 💥 Tags without spaces in between - deprecated

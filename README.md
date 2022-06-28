@@ -31,7 +31,7 @@ Nested projects are ok `+Project\nested` but at the same time they do not get tr
 ## Tags
 
 ```
-#tag1#tag2
+#tag1 #tag2
 ```
 
 ## Priority
@@ -61,13 +61,6 @@ tag | description | example
 `count`|Instead of completing the task increases count by 1. When the number matches the goal - the task is considered completed|`{count:0/3}`
 `start`|Datetime when task was started|`{start:2021-04-08T16:17:15}`
 `duration`|After completing task with `{start}` tag - calculate task duration|`{duration:1h2m}`
-
-<!--
-- ❌ id (UUID)
-- ❌ id/p (dependent task / blocked task?)
-- ❌ f/star (favorite/starred)
-- ❌ note
--->
 
 ### Recurring due date
 
@@ -112,6 +105,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `$noTag` - Task with no tags
 - `$noProject` - Task with no projects
 - `$noContext` - Task with no contexts
+- `$hidden` - Task with `{h}` special tag
 - `TEXT_TO_SEARCH` - Search in raw text (anything in the line)
 - `"TEXT_TO_SEARCH"` - Search only in task title (not in special entities, like tag or project)
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`
