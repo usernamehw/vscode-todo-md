@@ -123,11 +123,12 @@ export default defineComponent({
 			(this.$refs.suggest as typeof Suggest)?.focus();
 		},
 	},
-	mounted() {
+	created() {
 		const savedState = getState();
 		this.storeStore.updateFilterValue(savedState.filterInputValue);
 		SendMessage.webviewLoaded();
-
+	},
+	mounted() {
 		setTimeout(() => {
 			this.storeStore.selectFirstTask();
 		});
