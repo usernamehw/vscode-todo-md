@@ -1342,15 +1342,6 @@
 				"description": "Color of special tags `{h}`"
 			},
 			{
-				"id": "todomd.tagDelimiterForeground",
-				"defaults": {
-					"light": "#9ba6b1",
-					"dark": "#b4b4b4",
-					"highContrast": "#b4b4b4"
-				},
-				"description": "Color of the `#` symbol between tags"
-			},
-			{
 				"id": "todomd.projectForeground",
 				"defaults": {
 					"light": "#36cc9a",

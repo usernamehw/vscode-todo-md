@@ -60,7 +60,6 @@ export function updateEditorDecorationStyle() {
 	const counterBadgeDecorationDark = 'background-color:rgba(255,255,255,0.12);color:#eee;';
 	Global.tagsDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagForeground'),
-		rangeBehavior: DecorationRangeBehavior.ClosedClosed,
 		light: {
 			after: {
 				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
@@ -77,15 +76,11 @@ export function updateEditorDecorationStyle() {
 		color: new ThemeColor('todomd.tagForeground'),
 		...$config.decorations.tag,
 	});
-	Global.tagsDelimiterDecorationType = window.createTextEditorDecorationType({
-		color: new ThemeColor('todomd.tagDelimiterForeground'),
-	});
 	Global.specialTagDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.specialTagForeground'),
 	});
 	Global.projectDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.projectForeground'),
-		rangeBehavior: DecorationRangeBehavior.ClosedClosed,
 		light: {
 			after: {
 				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
@@ -100,7 +95,6 @@ export function updateEditorDecorationStyle() {
 	});
 	Global.contextDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.contextForeground'),
-		rangeBehavior: DecorationRangeBehavior.ClosedClosed,
 		light: {
 			after: {
 				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
@@ -182,7 +176,6 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	const priorityDDecorationRanges: Range[] = [];
 	const priorityEDecorationRanges: Range[] = [];
 	const priorityFDecorationRanges: Range[] = [];
-	const tagsDelimiterDecorationRanges: Range[] = [];
 	const tagWithDelimiterDecorationRanges: Range[] = [];
 	const specialtagDecorationRanges: Range[] = [];
 	const notDueDecorationRanges: Range[] = [];
@@ -215,7 +208,6 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 						},
 					});
 				}
-				tagsDelimiterDecorationRanges.push(...task.tagsDelimiterRanges!);// if `tagsRange` exists - `tagsDelimiterRanges` also exists
 			} else {
 				// User has advanced decorations. Include tag symbol in decoration range.
 				tagWithDelimiterDecorationRanges.push(...task.tagsRange.map(range => new Range(range.start.line, range.start.character - 1, range.end.line, range.end.character)));
@@ -332,7 +324,6 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(Global.projectDecorationType, projectDecorationOptions);
 	editor.setDecorations(Global.contextDecorationType, contextDecorationOptions);
 	editor.setDecorations(Global.tagWithDelimiterDecorationType, tagWithDelimiterDecorationRanges);
-	editor.setDecorations(Global.tagsDelimiterDecorationType, tagsDelimiterDecorationRanges);
 	editor.setDecorations(Global.specialTagDecorationType, specialtagDecorationRanges);
 	editor.setDecorations(Global.priorityADecorationType, priorityADecorationRanges);
 	editor.setDecorations(Global.priorityBDecorationType, priorityBDecorationRanges);

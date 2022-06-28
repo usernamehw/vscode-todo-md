@@ -136,10 +136,6 @@ export class TheTask {
 	 */
 	priorityRange?: Range;
 	/**
-	 * Tags delimiter ranges `#` sign needed for editor decorations
-	 */
-	tagsDelimiterRanges?: Range[];
-	/**
 	 * Tags ranges needed for editor decorations
 	 */
 	tagsRange?: Range[];
@@ -201,7 +197,6 @@ export class TheTask {
 		this.contextRanges = init.contextRanges ?? [];
 		this.projectRanges = init.projectRanges ?? [];
 		this.priorityRange = init.priorityRange;
-		this.tagsDelimiterRanges = init.tagsDelimiterRanges;
 		this.tagsRange = init.tagsRange;
 		this.overdueRange = init.overdueRange;
 		this.collapseRange = init.collapseRange;

@@ -126,7 +126,6 @@ export class Global {
 	static priorityFDecorationType: TextEditorDecorationType;
 	static tagsDecorationType: TextEditorDecorationType;
 	static tagWithDelimiterDecorationType: TextEditorDecorationType;
-	static tagsDelimiterDecorationType: TextEditorDecorationType;
 	static specialTagDecorationType: TextEditorDecorationType;
 	static projectDecorationType: TextEditorDecorationType;
 	static contextDecorationType: TextEditorDecorationType;
@@ -259,7 +258,6 @@ function disposeEditorDisposables() {
 	Global.priorityFDecorationType?.dispose();
 	Global.tagsDecorationType?.dispose();
 	Global.tagWithDelimiterDecorationType?.dispose();
-	Global.tagsDelimiterDecorationType?.dispose();
 	Global.specialTagDecorationType?.dispose();
 	Global.projectDecorationType?.dispose();
 	Global.contextDecorationType?.dispose();

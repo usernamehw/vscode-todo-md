@@ -228,7 +228,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 ## Colors
 
 <!-- COLORS_START -->
-## Colors (21)
+## Colors (20)
 
 Can be specified in `settings.json` (**`workbench.colorCustomizations`** section)
 
@@ -244,7 +244,6 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 |todomd.tagForeground|`#1abaff`|`#029cdf`|`#1abaff`|Tag color `#Tag`|
 |todomd.contextForeground|`#7284eb`|`#7284eb`|`#7284eb`|Context color `@Context`|
 |todomd.specialTagForeground|`#7e8081`|`#7e8081`|`#7e8081`|Color of special tags `{h}`|
-|todomd.tagDelimiterForeground|`#b4b4b4`|`#9ba6b1`|`#b4b4b4`|Color of the `#` symbol between tags|
 |todomd.projectForeground|`#36cc9a`|`#36cc9a`|`#36cc9a`|Project color `+Project`|
 |todomd.notDueForeground|`#afafaf`|`#7e8081`|`#afafaf`|Not due|
 |todomd.dueForeground|`#5faedb`|`#5faedb`|`#5faedb`|Due|

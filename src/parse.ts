@@ -57,7 +57,6 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 	let priority: Priority | undefined;
 	let priorityRange: Range | undefined;
 	const tags: string[] = [];
-	const tagsDelimiterRanges: Range[] = [];
 	const tagsRange: Range[] = [];
 	let count: Count | undefined;
 	let completionDate: string | undefined;
@@ -76,6 +75,8 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 	let completionDateRange: Range | undefined;
 
 	for (const word of words) {
+		const wordRange = new Range(lineNumber, index, lineNumber, index + word.length);
+
 		switch (word[0]) {
 			case '{': {
 				if (word[word.length - 1] !== '}') {
@@ -146,9 +147,8 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 			}
 			case '#': {
 				if (word.length !== 1) {
-					tagsDelimiterRanges.push(new Range(lineNumber, index, lineNumber, index + 1));
-					tagsRange.push(new Range(lineNumber, index + 1, lineNumber, index + word.length));
 					tags.push(word.slice(1));
+					tagsRange.push(wordRange);
 				}
 				text.push(word);
 				break;
@@ -156,7 +156,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 			case '@': {
 				if (word.length !== 1) {
 					contexts.push(word.slice(1));
-					contextRanges.push(new Range(lineNumber, index, lineNumber, index + word.length));
+					contextRanges.push(wordRange);
 				}
 				text.push(word);
 				break;
@@ -164,7 +164,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 			case '+': {
 				if (word.length !== 1) {
 					projects.push(word.slice(1));
-					projectRanges.push(new Range(lineNumber, index, lineNumber, index + word.length));
+					projectRanges.push(wordRange);
 				}
 				text.push(word);
 				break;
@@ -191,7 +191,6 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 			indent,
 			tags,
 			rawText,
-			tagsDelimiterRanges,
 			tagsRange,
 			projects,
 			projectRanges,
