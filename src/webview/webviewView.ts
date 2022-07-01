@@ -4,6 +4,7 @@ import { openSetDueDateInputbox } from '../commands/setDueDate';
 import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTaskAtLine, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state, Global } from '../extension';
+import { showCompletedPercentage } from '../statusBar';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
@@ -104,7 +105,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					break;
 				}
 				case 'updateWebviewTitle': {
-					this.updateTitle(message.value);
+					this.updateTitle(message.value.numberOfTasks, message.value.numberOfCompletedTasks);
 					break;
 				}
 				case 'followLink': {
@@ -143,15 +144,15 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					config: $config.webview,
 				},
 			});
-			this.updateTitle($state.tasksAsTree.length);
+			this.updateTitle($state.tasksAsTree.length, $state.tasksAsTree.filter(task => task.done).length);
 		}
 	}
 	/**
 	 * Update webview title (counter).
 	 */
-	updateTitle(numberOfTasks: number) {
+	updateTitle(numberOfTasks: number, numberOfCompletedTasks: number) {
 		if (this._view) {
-			this._view.title = `webview (${numberOfTasks})`;
+			this._view.title = `webview ${showCompletedPercentage(numberOfTasks, numberOfCompletedTasks)}`;
 		}
 	}
 	/**

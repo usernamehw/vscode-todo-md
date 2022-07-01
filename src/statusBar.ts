@@ -1,5 +1,5 @@
 import { MarkdownString, StatusBarAlignment, StatusBarItem, window } from 'vscode';
-import { Constants, $config } from './extension';
+import { $config, Constants } from './extension';
 import { TheTask } from './TheTask';
 import { formatTask } from './utils/taskUtils';
 import { percentage } from './utils/utils';
@@ -44,8 +44,7 @@ export class CounterStatusBar extends StatusBar {
 	 */
 	update(tasks: TheTask[]) {
 		const completedTasks = tasks.filter(t => t.done);
-		const percentageString = percentage(completedTasks.length, tasks.length).toFixed(1);
-		this.statusBarItem.text = `${completedTasks.length}/${tasks.length} (${percentageString}%)`;
+		this.statusBarItem.text = showCompletedPercentage(tasks.length, completedTasks.length);
 	}
 }
 
@@ -77,4 +76,9 @@ export class MainStatusBar extends StatusBar {
 		markdown.appendMarkdown(fewNextTasks.slice(0, 10).map((task, i) => `- ${formatTask(task)}`).join('\n'));
 		this.updateHover(markdown);
 	}
+}
+
+export function showCompletedPercentage(tasksCount: number, completedTasksCount: number): string {
+	const percentageString = percentage(completedTasksCount, tasksCount).toFixed(1);
+	return `${completedTasksCount}/${tasksCount} (${percentageString}%)`;
 }

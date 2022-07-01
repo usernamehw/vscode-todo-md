@@ -101,7 +101,7 @@ export default defineComponent({
 			this.$nextTick(() => {
 				this.storeStore.selectFirstTask();
 			});
-			SendMessage.updateWebviewTitle(this.storeStore.flattenedFilteredSortedTasks.length);
+			SendMessage.updateWebviewTitle(this.storeStore.flattenedFilteredSortedTasks.length, this.storeStore.flattenedFilteredSortedTasks.filter(task => task.done).length);
 		},
 		onDown() {
 			const ln = this.storeStore.selectNextTask();

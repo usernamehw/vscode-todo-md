@@ -360,7 +360,10 @@ interface WebviewMessageDeleteTask extends WebviewMessageBase {
 }
 interface WebviewMessageUpdateTitle extends WebviewMessageBase {
 	type: 'updateWebviewTitle';
-	value: number;
+	value: {
+		numberOfTasks: number;
+		numberOfCompletedTasks: number;
+	};
 }
 interface WebviewMessageFollowLink extends WebviewMessageBase {
 	type: 'followLink';

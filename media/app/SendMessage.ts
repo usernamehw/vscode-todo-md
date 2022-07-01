@@ -64,10 +64,13 @@ export class SendMessage {
 			value: text,
 		});
 	}
-	static updateWebviewTitle(numberOfTasks: number) {
+	static updateWebviewTitle(numberOfTasks: number, numberOfCompletedTasks: number) {
 		vscodeApi.postMessage({
 			type: 'updateWebviewTitle',
-			value: numberOfTasks,
+			value: {
+				numberOfTasks,
+				numberOfCompletedTasks,
+			},
 		});
 	}
 	static editRawText(lineNumber: number, newRawText: string) {
