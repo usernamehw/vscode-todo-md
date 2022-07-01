@@ -1223,6 +1223,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.removeOverdue",
+				"title": "DEV: Remove overdue",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.dev.clearGlobalState",
 				"title": "DEV: Clear global state",
 				"category": "Todo MD"

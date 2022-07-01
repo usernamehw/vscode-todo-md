@@ -23,6 +23,7 @@ import { incrementPriority } from './commands/incrementPriority';
 import { openDefaultArchiveFile } from './commands/openDefaultArchiveFile';
 import { openDefaultFile } from './commands/openDefaultFile';
 import { removeAllOverdue } from './commands/removeAllOverdue';
+import { removeOverdue } from './commands/removeOverdue';
 import { resetAllRecurringTasksCommand } from './commands/resetAllRecurringTasks';
 import { setDueDate } from './commands/setDueDate';
 import { setDueDateWithArgs } from './commands/setDueDateWithArgs';
@@ -61,6 +62,7 @@ export const enum CommandId {
 	ArchiveCompletedTasks = 'todomd.archiveCompletedTasks',
 	ArchiveSelectedCompletedTasks = 'todomd.archiveSelectedCompletedTasks',
 	StartTask = 'todomd.startTask',
+	RemoveOverdue = 'todomd.removeOverdue',
 	// ────────────────────────────────────────────────────────────
 	SortByDefault = 'todomd.sortByDefault',
 	SortByPriority = 'todomd.sortByPriority',
@@ -142,6 +144,7 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.ToggleProjectsTreeViewSorting, toggleProjectsTreeViewSorting);
 	commands.registerCommand(CommandId.ToggleContextsTreeViewSorting, toggleContextsTreeViewSorting);
 	// ──── Require Text Editor ───────────────────────────────────
+	commands.registerTextEditorCommand(CommandId.RemoveOverdue, removeOverdue);
 	commands.registerTextEditorCommand(CommandId.SetLastVisit, setLastVisit);
 	commands.registerTextEditorCommand(CommandId.IncrementPriority, incrementPriority);
 	commands.registerTextEditorCommand(CommandId.ResetAllRecurringTasks, resetAllRecurringTasksCommand);

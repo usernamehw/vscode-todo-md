@@ -227,7 +227,7 @@
 				"@typescript-eslint/no-empty-function": 0,
 				"@typescript-eslint/no-empty-interface": 0,
 				"@typescript-eslint/no-explicit-any": 0,
-				"@typescript-eslint/no-extra-parens": 1,
+				"@typescript-eslint/no-extra-parens": 0,
 				"@typescript-eslint/no-extraneous-class": 0,
 				"@typescript-eslint/no-floating-promises": 0,
 				"@typescript-eslint/no-for-in-array": 1,
