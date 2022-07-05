@@ -372,7 +372,7 @@
 				"todomd.labelDueSymbol": {
 					"type": "string",
 					"markdownDescription": "Prefix for task that is due in labels (tree view, notification, modal, quick pick).",
-					"default": "📘 "
+					"default": "📗 "
 				},
 				"todomd.labelOverdueSymbol": {
 					"type": "string",

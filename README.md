@@ -212,7 +212,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |tabSize|**4**|Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).|
 |savedFilters|\[\]|Filters that you can pick when applying a filter.|
 |treeViews|\[\]|Add more tree views with predefined filters.|
-|labelDueSymbol|"📘&nbsp;"|Prefix for task that is due in labels (tree view, notification, modal, quick pick).|
+|labelDueSymbol|"📗&nbsp;"|Prefix for task that is due in labels (tree view, notification, modal, quick pick).|
 |labelOverdueSymbol|"📕&nbsp;"|Prefix for task that is overdue in labels (tree view, notification, modal, quick pick).|
 |labelInvalidDueSymbol|"🟣&nbsp;"|Prefix for task that has invalid due date in labels (tree view, notification, modal, quick pick).|
 |labelShowItems|**true**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|
