@@ -27,6 +27,7 @@ export const enum SortProperty {
 	Overdue,
 	CreationDate,
 	CompletionDate,
+	Favorite,
 }
 /**
  * Does not modify the original array.
@@ -105,6 +106,14 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 				return untilA > untilB ? 1 : -1;
 			}
 		});
+	} else if (sortProperty === SortProperty.Favorite) {
+		sortedTasks = tasksCopy.sort((a, b) => {
+			if (a.favorite === b.favorite) {
+				return 0;
+			} else {
+				return a.favorite < b.favorite ? 1 : -1;
+			}
+		});
 	} else {
 		throw new UnsupportedValueError(sortProperty);
 	}
@@ -140,7 +149,7 @@ export function sortByDueDate(tasks: TheTask[]): TheTask[] {
  * With secondary sort by priority.
  */
 export function defaultSortTasks(tasks: TheTask[]): TheTask[] {
-	return sortByDueDate(sortTasks(tasks, SortProperty.Priority));
+	return sortTasks(sortByDueDate(sortTasks(tasks, SortProperty.Priority)), SortProperty.Favorite);
 }
 
 function sortBySimilarityOfArrays(tasks: TheTask[], property: 'context' | 'project' | 'tag'): TheTask[] {
