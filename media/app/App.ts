@@ -58,6 +58,7 @@ export default defineComponent({
 		// ──── Context Menu ──────────────────────────────────────────
 		hideContextMenu() {
 			(this.$refs.taskContextMenu as HTMLElement).hidden = true;
+			this.focusFilterInput();
 		},
 		showContextMenu(event: MouseEvent) {
 			const contextMenuContainer = this.$refs.taskContextMenu as HTMLElement;
