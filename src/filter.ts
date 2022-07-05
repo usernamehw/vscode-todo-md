@@ -14,6 +14,7 @@ const enum FilterType {
 	Overdue,
 	Recurring,
 	Done,
+	Favorite,
 	Started,
 	NoTag,
 	NoProject,
@@ -144,6 +145,11 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 				if (task.isHidden) {
 					filterResult = true;
 				}
+			} else if (filter.filterType === FilterType.Favorite) {
+				// $favorite
+				if (task.favorite) {
+					filterResult = true;
+				}
 			}
 			if (filter.isNegation) {
 				filterResult = !filterResult;
@@ -227,6 +233,8 @@ function parseFilter(filterStr = '') {
 					filter.filterType = FilterType.NoTag;
 				} else if (value === 'hidden') {
 					filter.filterType = FilterType.Hidden;
+				} else if (value === 'favorite') {
+					filter.filterType = FilterType.Favorite;
 				} else if (/^[A-Z]$/.test(value)) {
 					filter.filterType = FilterType.PriorityEqual;
 				}

@@ -126,6 +126,7 @@ export const useStore = defineStore({
 				'$noProject',
 				'$noContext',
 				'$hidden',
+				'$favorite',
 			];
 			const autocompleteTags = state.tags.map(tag => `#${tag}`);
 			const autocompleteProjects = state.projects.map(project => `+${project}`);
