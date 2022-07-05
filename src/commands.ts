@@ -37,6 +37,7 @@ import { startTask } from './commands/startTask';
 import { toggleComment } from './commands/toggleComment';
 import { toggleContextsTreeViewSorting } from './commands/toggleContextsTreeViewSorting';
 import { toggleDone } from './commands/toggleDone';
+import { toggleFavoriteTask } from './commands/toggleFavoriteTask';
 import { toggleProjectsTreeViewSorting } from './commands/toggleProjectsTreeViewSorting';
 import { toggleTagsTreeViewSorting } from './commands/toggleTagsTreeViewSorting';
 import { webviewToggleShowRecurringUpcoming } from './commands/webviewToggleShowRecurringUpcoming';
@@ -54,6 +55,7 @@ import { followLinks, getFullRangeFromLines } from './utils/vscodeUtils';
  */
 export const enum CommandId {
 	ToggleDone = 'todomd.toggleDone',
+	ToggleFavorite = 'todomd.toggleFavorite',
 	HideTask = 'todomd.hideTask',
 	CollapseAllNestedTasks = 'todomd.collapseAllNestedTasks',
 	ExpandAllTasks = 'todomd.expandAllTasks',
@@ -143,6 +145,7 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.ToggleTagsTreeViewSorting, toggleTagsTreeViewSorting);
 	commands.registerCommand(CommandId.ToggleProjectsTreeViewSorting, toggleProjectsTreeViewSorting);
 	commands.registerCommand(CommandId.ToggleContextsTreeViewSorting, toggleContextsTreeViewSorting);
+	commands.registerCommand(CommandId.ToggleFavorite, toggleFavoriteTask);
 	// ──── Require Text Editor ───────────────────────────────────
 	commands.registerTextEditorCommand(CommandId.RemoveOverdue, removeOverdue);
 	commands.registerTextEditorCommand(CommandId.SetLastVisit, setLastVisit);

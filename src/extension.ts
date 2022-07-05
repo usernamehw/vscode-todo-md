@@ -116,7 +116,9 @@ export class Global {
 	static changeTextDocumentDisposable: Disposable;
 	static changeActiveTextEditorDisposable: Disposable;
 
+	// TODO: decoration types should be inside decorations.ts file
 	static completedTaskDecorationType: TextEditorDecorationType;
+	static favoriteTaskDecorationType: TextEditorDecorationType;
 	static commentDecorationType: TextEditorDecorationType;
 	static priorityADecorationType: TextEditorDecorationType;
 	static priorityBDecorationType: TextEditorDecorationType;
@@ -245,6 +247,7 @@ export async function updateState() {
 	$state.contexts = treeItems.contexts;
 }
 function disposeEditorDisposables() {
+	Global.favoriteTaskDecorationType?.dispose();
 	Global.completedTaskDecorationType?.dispose();
 	Global.commentDecorationType?.dispose();
 	Global.priorityADecorationType?.dispose();

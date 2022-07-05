@@ -479,6 +479,21 @@ export function incrementOrDecrementPriorityWorkspaceEdit(edit: WorkspaceEdit, d
 	}
 }
 /**
+ * Toggle favorite special tag `{f}`.
+ */
+export function toggleFavoriteWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
+	const line = document.lineAt(lineNumber);
+	const task = getTaskAtLineExtension(lineNumber);
+	if (!task) {
+		return;
+	}
+	if (task.favoriteRange) {
+		edit.delete(document.uri, task.favoriteRange);
+	} else {
+		insertEditAtTheEndOfLine(edit, document, line.range.end, helpCreateSpecialTag(SpecialTagName.Favorite));
+	}
+}
+/**
  * Start time tracking (task duration). Triggered manually by user.
  */
 export function startTaskAtLineWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {

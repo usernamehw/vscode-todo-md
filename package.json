@@ -1158,8 +1158,14 @@
 			},
 			{
 				"command": "todomd.startTask",
-				"description": "Start task (when completed adds `{duration}` tag)",
+				"description": "Start task (when completed adds `{duration}` special tag)",
 				"title": "Start",
+				"category": "Todo MD"
+			},
+			{
+				"command": "todomd.toggleFavorite",
+				"description": "Toggle Favorite (`{f}` special tag).",
+				"title": "Toggle Favorite",
 				"category": "Todo MD"
 			},
 			{
@@ -1224,7 +1230,7 @@
 			},
 			{
 				"command": "todomd.removeOverdue",
-				"title": "DEV: Remove overdue",
+				"title": "Remove overdue",
 				"category": "Todo MD"
 			},
 			{
@@ -1256,6 +1262,15 @@
 			}
 		],
 		"colors": [
+			{
+				"id": "todomd.favoriteTaskBackground",
+				"defaults": {
+					"light": "#f62caf18",
+					"dark": "#f62caf18",
+					"highContrast": "#f62caf18"
+				},
+				"description": "Entire line background color for favorite tasks `{f}`."
+			},
 			{
 				"id": "todomd.commentForeground",
 				"defaults": {
@@ -1498,19 +1513,24 @@
 					"group": "1_0"
 				},
 				{
+					"command": "todomd.toggleFavorite",
+					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem =~ /(task|taskWithLink)/",
+					"group": "2_0"
+				},
+				{
+					"command": "todomd.followLink",
+					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem == taskWithLink",
+					"group": "3_0"
+				},
+				{
 					"command": "todomd.hideTask",
 					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem =~ /(task|taskWithLink)/",
-					"group": "3_0"
+					"group": "4_0"
 				},
 				{
 					"command": "todomd.deleteTask",
 					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem =~ /(task|taskWithLink)/",
 					"group": "7_0"
-				},
-				{
-					"command": "todomd.followLink",
-					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem == taskWithLink",
-					"group": "2_0"
 				},
 				{
 					"command": "todomd.toggleDone",

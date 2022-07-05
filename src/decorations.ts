@@ -1,4 +1,4 @@
-import { DecorationOptions, DecorationRangeBehavior, Range, TextEditor, ThemeColor, window } from 'vscode';
+import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
 import { $config, $state, Global } from './extension';
 import { makeClosestDueDateDecoration } from './languageFeatures/getTaskHover';
 import { DueState } from './types';
@@ -18,6 +18,10 @@ export function updateEditorDecorationStyle() {
 			textDecoration: $config.completedStrikeThrough ? 'line-through rgba(0, 0, 0, 0.25)' : undefined,
 		},
 		...$config.decorations.completedTask,
+	});
+	Global.favoriteTaskDecorationType = window.createTextEditorDecorationType({
+		isWholeLine: true,
+		backgroundColor: new ThemeColor('todomd.favoriteTaskBackground'),
 	});
 	Global.commentDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.commentForeground'),
@@ -167,6 +171,7 @@ export function updateEditorDecorationStyle() {
  */
 export function doUpdateEditorDecorations(editor: TextEditor) {
 	const completedDecorationRanges: Range[] = [];
+	const favoriteDecorationRanges: Range[] = [];
 	const tagsDecorationOptions: DecorationOptions[] = [];
 	const projectDecorationOptions: DecorationOptions[] = [];
 	const contextDecorationOptions: DecorationOptions[] = [];
@@ -191,6 +196,9 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 		const emptyRange = new Range(task.lineNumber, 0, task.lineNumber, 0);
 		if (task.done) {
 			completedDecorationRanges.push(emptyRange);
+		}
+		if (task.favorite) {
+			favoriteDecorationRanges.push(emptyRange);
 		}
 		if (task.tagsRange) {
 			if (!Global.userSpecifiedAdvancedTagDecorations) {
@@ -320,6 +328,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	});
 
 	editor.setDecorations(Global.completedTaskDecorationType, completedDecorationRanges);
+	editor.setDecorations(Global.favoriteTaskDecorationType, favoriteDecorationRanges);
 	editor.setDecorations(Global.tagsDecorationType, tagsDecorationOptions);
 	editor.setDecorations(Global.projectDecorationType, projectDecorationOptions);
 	editor.setDecorations(Global.contextDecorationType, contextDecorationOptions);

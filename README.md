@@ -52,6 +52,7 @@ List of special tags:
 
 tag | description | example
 ---|---|---
+`f`|Favorite|`{f}`
 `due`|Due date|`{due:2020-05-15}`
 `overdue`|Oldest overdue date (only for recurring tasks). Added automatically.|`{overdue:2020-05-15}`
 `cm`|Completion date|`{cm:2020-05-15}`
@@ -111,7 +112,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`
 
 <!-- COMMANDS_START -->
-## Commands (39)
+## Commands (41)
 
 |Command|Description|
 |-|-|
@@ -142,7 +143,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.setDueDate|Todo MD: Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate)|
 |todomd.setDate|Todo MD: Set date|
 |todomd.archiveCompletedTasks|Todo MD: Archive completed Tasks|
-|todomd.startTask|Todo MD: Start task (when completed adds `{duration}` tag)|
+|todomd.startTask|Todo MD: Start task (when completed adds `{duration}` special tag)|
+|todomd.toggleFavorite|Todo MD: Toggle Favorite (`{f}` special tag).|
 |todomd.openDefaultArchiveFile|Todo MD: Open default archive file|
 |todomd.openDefaultFile|Todo MD: Open default file|
 |todomd.createSimilarTask|Todo MD: Create similar task (same tags, projects, contexts).|
@@ -154,6 +156,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.clearFilter|Todo MD: Clear Filter|
 |todomd.resetAllRecurringTasks|Todo MD: Reset all Recurring tasks|
 |todomd.followLink|Todo MD: Follow link|
+|todomd.removeOverdue|Todo MD: Remove overdue|
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
@@ -222,12 +225,13 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 ## Colors
 
 <!-- COLORS_START -->
-## Colors (20)
+## Colors (21)
 
 Can be specified in `settings.json` (**`workbench.colorCustomizations`** section)
 
 |Color|Dark|Light|HC|Description|
 |-|-|-|-|-|
+|todomd.favoriteTaskBackground|`#f62caf18`|`#f62caf18`|`#f62caf18`|Entire line background color for favorite tasks `{f}`.|
 |todomd.commentForeground|`#b4b4b4`|`#b4b4b4`|`#b4b4b4`|Color of comments `# Comment`|
 |todomd.priorityAForeground|`#ec4f47`|`#ec4f47`|`#ec4f47`|`(A)`|
 |todomd.priorityBForeground|`#fd9f9a`|`#fd9f9a`|`#fd9f9a`|`(B)`|

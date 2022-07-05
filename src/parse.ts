@@ -47,6 +47,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 	const words = line.split(' ');
 
 	let done = false;
+	let isFavorite = false;
 	const rawText = textLine.text;
 	const contexts = [];
 	const contextRanges: Range[] = [];
@@ -73,6 +74,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 	let overdueRange: Range | undefined;
 	let collapseRange: Range | undefined;
 	let completionDateRange: Range | undefined;
+	let favoriteRange: Range | undefined;
 
 	for (const word of words) {
 		const wordRange = new Range(lineNumber, index, lineNumber, index + word.length);
@@ -132,6 +134,10 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 					isCollapsed = true;
 					collapseRange = range;
 					specialTagRanges.push(range);
+				} else if (specialTag === SpecialTagName.Favorite) {
+					isFavorite = true;
+					specialTagRanges.push(range);
+					favoriteRange = range;
 				} else if (specialTag === SpecialTagName.Started) {
 					start = specialTagValue;
 					startRange = range;
@@ -195,6 +201,8 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 			projects,
 			projectRanges,
 			done,
+			favorite: isFavorite,
+			favoriteRange,
 			priority,
 			start,
 			startRange,

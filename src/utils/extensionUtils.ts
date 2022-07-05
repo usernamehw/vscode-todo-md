@@ -180,6 +180,7 @@ export function helpCreateSpecialTag(tag: SpecialTagName, value?: string) {
  * All special tags as strings.
  */
 export const enum SpecialTagName {
+	Favorite = 'f',
 	Due = 'due',
 	Overdue = 'overdue',
 	CompletionDate = 'cm',
@@ -194,6 +195,7 @@ export const enum SpecialTagName {
  * Very short special tag description for autocomplete widget.
  */
 export const specialTagDescription = {
+	[SpecialTagName.Favorite]: 'favorite',
 	[SpecialTagName.Due]: 'due',
 	[SpecialTagName.Overdue]: 'overdue',
 	[SpecialTagName.CompletionDate]: 'completionDate',

@@ -8,7 +8,7 @@ export type Priority = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'
 /**
  * Task can be create with just a few required properties.
  */
-export type TaskInit = OptionalExceptFor<TheTask, 'indentLvl' | 'lineNumber' | 'rawText' | 'title'>;
+export type TaskInit = OptionalExceptFor<TheTask, 'favorite' | 'indentLvl' | 'lineNumber' | 'rawText' | 'title'>;
 /**
  * Modifier for task completion.
  * Instead of completing the task increases count by 1.
@@ -88,6 +88,10 @@ export class TheTask {
 	 */
 	creationDate?: string;
 	/**
+	 * Favorite (sorted above and maybe highlighted?).
+	 */
+	favorite: boolean;
+	/**
 	 * Parsed links in the task
 	 */
 	links: Link[];
@@ -163,6 +167,10 @@ export class TheTask {
 	 * Collapse special tag range `{c}`
 	 */
 	collapseRange?: Range;
+	/**
+	 * Favorite special tag range `{f}`
+	 */
+	favoriteRange?: Range;
 
 	constructor(init: TaskInit) {
 		this.title = init.title;
@@ -171,6 +179,7 @@ export class TheTask {
 		this.subtasks = init.subtasks ?? [];
 		this.rawText = init.rawText;
 		this.done = init.done ?? false;
+		this.favorite = init.favorite ?? false;
 		this.tags = init.tags ?? [];
 		this.projects = init.projects ?? [];
 		this.priority = init.priority ?? TheTask.defaultTaskPriority;
@@ -201,6 +210,7 @@ export class TheTask {
 		this.overdueRange = init.overdueRange;
 		this.collapseRange = init.collapseRange;
 		this.completionDateRange = init.completionDateRange;
+		this.favoriteRange = init.favoriteRange;
 	}
 
 	// static isRoot(task: TheTask) {
