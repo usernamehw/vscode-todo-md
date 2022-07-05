@@ -1356,8 +1356,8 @@
 				"id": "todomd.specialTagForeground",
 				"defaults": {
 					"light": "#7e8081",
-					"dark": "#7e8081",
-					"highContrast": "#7e8081"
+					"dark": "#c3ccfc",
+					"highContrast": "#c3ccfc"
 				},
 				"description": "Color of special tags `{h}`"
 			},
@@ -1374,17 +1374,17 @@
 				"id": "todomd.notDueForeground",
 				"defaults": {
 					"light": "#7e8081",
-					"dark": "#afafaf",
-					"highContrast": "#afafaf"
+					"dark": "#c3ccfc",
+					"highContrast": "#c3ccfc"
 				},
 				"description": "Not due"
 			},
 			{
 				"id": "todomd.dueForeground",
 				"defaults": {
-					"light": "#5faedb",
-					"dark": "#5faedb",
-					"highContrast": "#5faedb"
+					"light": "#01c208",
+					"dark": "#35c03a",
+					"highContrast": "#37df3d"
 				},
 				"description": "Due"
 			},
@@ -1392,7 +1392,7 @@
 				"id": "todomd.overdueForeground",
 				"defaults": {
 					"light": "#d44343",
-					"dark": "#f64f4f",
+					"dark": "#d44343",
 					"highContrast": "#f64f4f"
 				},
 				"description": "Overdue"

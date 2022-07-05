@@ -242,11 +242,11 @@ Can be specified in `settings.json` (**`workbench.colorCustomizations`** section
 |todomd.priorityFForeground|`#00cfad`|`#00cfad`|`#00cfad`|`(F)`|
 |todomd.tagForeground|`#1abaff`|`#029cdf`|`#1abaff`|Tag color `#Tag`|
 |todomd.contextForeground|`#7284eb`|`#7284eb`|`#7284eb`|Context color `@Context`|
-|todomd.specialTagForeground|`#7e8081`|`#7e8081`|`#7e8081`|Color of special tags `{h}`|
+|todomd.specialTagForeground|`#c3ccfc`|`#7e8081`|`#c3ccfc`|Color of special tags `{h}`|
 |todomd.projectForeground|`#36cc9a`|`#36cc9a`|`#36cc9a`|Project color `+Project`|
-|todomd.notDueForeground|`#afafaf`|`#7e8081`|`#afafaf`|Not due|
-|todomd.dueForeground|`#5faedb`|`#5faedb`|`#5faedb`|Due|
-|todomd.overdueForeground|`#f64f4f`|`#d44343`|`#f64f4f`|Overdue|
+|todomd.notDueForeground|`#c3ccfc`|`#7e8081`|`#c3ccfc`|Not due|
+|todomd.dueForeground|`#35c03a`|`#01c208`|`#37df3d`|Due|
+|todomd.overdueForeground|`#d44343`|`#d44343`|`#f64f4f`|Overdue|
 |todomd.invalidDueDateForeground|`#ffffff`|`#ffffff`|`#ffffff`|Due date that is either has an invalid format `2020-05` or an invalid date `2020-12-35`|
 |todomd.invalidDueDateBackground|`#7284eb`|`#7284eb`|`#7284eb`|Due date that is either has an invalid format `2020-05` or an invalid date `2020-12-35`|
 |todomd.nestedTasksCountBackground|`#e0d971`|`#f7f3c099`|`#e0d971`|Nested tasks counter editor decoration background.|
