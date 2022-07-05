@@ -1,3 +1,9 @@
+## 2.15.0 `05 Jul 2022`
+
+- ✨ Add `{f}` (Favorite special tag), `$favorite` filter
+- ✨ [editor] Command to remove overdue from selected lines
+- 🔨 Tweak colors (due decoration is green)
+
 ## 2.14.0 `28 Jun 2022`
 
 - ✨ [editor] Show problems as diagnostics (duplicated tag/project/context, invalid due date)
