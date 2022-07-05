@@ -234,6 +234,10 @@ a {
 		}
 	}
 
+	&--favorite {
+		background-color: #f62caf18;
+	}
+
 	&--selected {
 		background-color: var(--selected-task-bg);
 	}
