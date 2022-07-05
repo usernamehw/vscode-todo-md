@@ -362,6 +362,11 @@ export async function startTaskAtLine(lineNumber: number, document: TextDocument
 	startTaskAtLineWorkspaceEdit(edit, document, lineNumber);
 	return await applyEdit(edit, document);
 }
+export async function toggleFavoriteAtLine(lineNumber: number, document: TextDocument) {
+	const edit = new WorkspaceEdit();
+	toggleFavoriteWorkspaceEdit(edit, document, lineNumber);
+	return await applyEdit(edit, document);
+}
 // ────────────────────────────────────────────────────────────
 // ──── Do not apply edit ─────────────────────────────────────
 // ────────────────────────────────────────────────────────────

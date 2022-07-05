@@ -16,6 +16,12 @@ export class SendMessage {
 			value: lineNumber,
 		});
 	}
+	static toggleFavorite(lineNumber: number) {
+		vscodeApi.postMessage({
+			type: 'toggleFavorite',
+			value: lineNumber,
+		});
+	}
 	static startTask(lineNumber: number) {
 		vscodeApi.postMessage({
 			type: 'startTask',

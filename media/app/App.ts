@@ -78,6 +78,12 @@ export default defineComponent({
 				this.hideContextMenu();
 			}
 		},
+		toggleFavorite() {
+			if (this.contextMenuTask) {
+				SendMessage.toggleFavorite(this.contextMenuTask.lineNumber);
+				this.hideContextMenu();
+			}
+		},
 		startTask() {
 			if (this.contextMenuTask) {
 				SendMessage.startTask(this.contextMenuTask.lineNumber);

@@ -1,13 +1,14 @@
 import path from 'path';
 import { CancellationToken, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
 import { openSetDueDateInputbox } from '../commands/setDueDate';
-import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTaskAtLine, toggleDoneAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
+import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTaskAtLine, toggleDoneAtLine, toggleFavoriteAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state, Global } from '../extension';
 import { showCompletedPercentage } from '../statusBar';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
+import { UnsupportedValueError } from '../utils/utils';
 import { followLink } from '../utils/vscodeUtils';
 import { getNonce } from './webviewUtils';
 
@@ -70,6 +71,11 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					await updateEverything();
 					break;
 				}
+				case 'toggleFavorite': {
+					await toggleFavoriteAtLine(message.value, await getActiveOrDefaultDocument());
+					await updateEverything();
+					break;
+				}
 				case 'toggleTaskCollapseRecursive': {
 					await toggleTaskCollapseRecursive(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();
@@ -115,6 +121,9 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 				case 'setDueDate': {
 					openSetDueDateInputbox(await getActiveOrDefaultDocument(), [message.value]);
 					break;
+				}
+				default: {
+					throw new UnsupportedValueError(message);
 				}
 			}
 		});
