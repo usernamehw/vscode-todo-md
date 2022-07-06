@@ -123,4 +123,8 @@ describe('Special tags {}', () => {
 		const task = getTaskAt(15)!;
 		assert.isTrue(task.isCollapsed);
 	});
+	it('20 Favorite', () => {
+		const task = getTaskAt(20)!;
+		assert.isTrue(task.favorite);
+	});
 });
