@@ -2,8 +2,8 @@ import { ColorThemeKind, window } from 'vscode';
 
 const colors = {
 	due: {
-		light: '#5faedb',
-		dark: '#5faedb',
+		light: '#01c208',
+		dark: '#35c03a',
 	},
 	overdue: {
 		light: '#d44343',
