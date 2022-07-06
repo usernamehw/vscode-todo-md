@@ -144,12 +144,20 @@ export function sortByDueDate(tasks: TheTask[]): TheTask[] {
 }
 
 /**
- * Sort tasks by groups in this order: Invalid => Overdue => Due => Has due, but not due => No due specified;
+ * Favorite tasks grouped and above everything else.
+ *
+ * Groups are in this order: Invalid => Overdue => Due => Has due, but not due => No due specified;
  *
  * With secondary sort by priority.
  */
 export function defaultSortTasks(tasks: TheTask[]): TheTask[] {
-	return sortTasks(sortByDueDate(sortTasks(tasks, SortProperty.Priority)), SortProperty.Favorite);
+	const favoriteTasks = tasks.filter(task => task.favorite);
+	const notFavoriteTasks = tasks.filter(task => !task.favorite);
+
+	return [
+		...sortByDueDate(sortTasks(favoriteTasks, SortProperty.Priority)),
+		...sortByDueDate(sortTasks(notFavoriteTasks, SortProperty.Priority)),
+	];
 }
 
 function sortBySimilarityOfArrays(tasks: TheTask[], property: 'context' | 'project' | 'tag'): TheTask[] {
