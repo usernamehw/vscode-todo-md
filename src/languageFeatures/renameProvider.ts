@@ -66,9 +66,7 @@ export function updateRenameProvider() {
 
 
 export function getAllTagRangesInDocument(tag: ParsedWordTags, position: Position): Range[] {
-	const tagRange = tag.range;
-	const rangeWithDelimiter = new Range(tagRange.start.line, tagRange.start.character - 1, tagRange.end.line, tagRange.end.character);
-	if (rangeWithDelimiter.contains(position)) {
+	if (tag.range.contains(position)) {
 		const documentRanges: Range[] = [];
 		forEachTask(task => {
 			const index = task.tags.indexOf(tag.value);
@@ -76,7 +74,7 @@ export function getAllTagRangesInDocument(tag: ParsedWordTags, position: Positio
 				documentRanges.push(task.tagsRange![index]);
 			}
 		});
-		return documentRanges.map(range => new Range(range.start.line, range.start.character - 1, range.end.line, range.end.character));
+		return documentRanges;
 	}
 	return [];
 }
