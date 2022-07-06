@@ -9,23 +9,14 @@ import { clearDiagnostics, updateDiagnostic } from './languageFeatures/diagnosti
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
-import { sleep } from './utils/utils';
 import { setContext } from './utils/vscodeUtils';
 
-let changeActiveEditorEventInProgress = false;
 /**
  * Active text editor changes (tab).
  *
  * This event can be fired multiple times very quickly 5-20ms interval.
  */
 export async function onChangeActiveTextEditor(editor: TextEditor | undefined): Promise<void> {
-	if (changeActiveEditorEventInProgress) {
-		await sleep(50);
-	}
-	if (changeActiveEditorEventInProgress) {
-		await sleep(200);
-	}
-	changeActiveEditorEventInProgress = true;
 	if ($state.theRightFileOpened) {
 		deactivateEditorFeatures();
 	}
@@ -49,7 +40,6 @@ export async function onChangeActiveTextEditor(editor: TextEditor | undefined): 
 		await updateEverything();
 		await setContext(VscodeContext.IsActive, false);
 	}
-	changeActiveEditorEventInProgress = false;
 }
 /**
  * Only run reset all recurring tasks when needed (first open file in a day)

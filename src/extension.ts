@@ -179,7 +179,7 @@ export async function activate(extensionContext: ExtensionContext) {
 	/**
 	 * The event is fired twice quickly when closing an editor, also when swtitching to untitled file ???
 	 */
-	Global.changeActiveTextEditorDisposable = window.onDidChangeActiveTextEditor(throttle(onChangeActiveTextEditor, 20, {
+	Global.changeActiveTextEditorDisposable = window.onDidChangeActiveTextEditor(throttle(onChangeActiveTextEditor, 25, {
 		leading: false,
 	}));
 
