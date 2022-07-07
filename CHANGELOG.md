@@ -1,3 +1,9 @@
+## 2.15.1 `07 Jul 2022`
+
+- ✨ [webview] Show favorite icon
+- ✨ [Tree View] Show completed percentage in title
+- 🐛 Minor bug fixes
+
 ## 2.15.0 `05 Jul 2022`
 
 - ✨ Add `{f}` (Favorite special tag), `$favorite` filter
