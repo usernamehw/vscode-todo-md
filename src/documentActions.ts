@@ -493,7 +493,7 @@ export function toggleFavoriteWorkspaceEdit(edit: WorkspaceEdit, document: TextD
 		return;
 	}
 	if (task.favoriteRange) {
-		edit.delete(document.uri, task.favoriteRange);
+		deleteEdit(edit, document, task.favoriteRange);
 	} else {
 		insertEditAtTheEndOfLine(edit, document, line.range.end, helpCreateSpecialTag(SpecialTagName.Favorite));
 	}
