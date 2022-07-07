@@ -349,6 +349,21 @@ a {
 		color: var(--context-fg);
 	}
 
+	&__favorite {
+		// similar to due-state. Maybe dedup?
+		align-items: center;
+		display: flex;
+		justify-content: center;
+		float: right;
+		margin-left: $approxOneSpace;
+		padding: 0 0.3em;
+		position: relative;
+		top: 2px;
+		border: 1px solid transparentize(deeppink, 0.7);
+		color: deeppink;
+		padding-bottom: 0.15em;
+		padding-top: 0.15em;
+	}
 	&__due-state {
 		align-items: center;
 		cursor: default;
