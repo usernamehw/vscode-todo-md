@@ -108,7 +108,7 @@ export default defineComponent({
 			this.$nextTick(() => {
 				this.storeStore.selectFirstTask();
 			});
-			SendMessage.updateWebviewTitle(this.storeStore.flattenedFilteredSortedTasks.length, this.storeStore.flattenedFilteredSortedTasks.filter(task => task.done).length);
+			this.updateWebviewTitle();
 		},
 		onDown() {
 			const ln = this.storeStore.selectNextTask();
@@ -128,6 +128,9 @@ export default defineComponent({
 		},
 		focusFilterInput() {
 			(this.$refs.suggest as typeof Suggest)?.focus();
+		},
+		updateWebviewTitle() {
+			SendMessage.updateWebviewTitle(this.storeStore.flattenedFilteredSortedTasks.length, this.storeStore.flattenedFilteredSortedTasks.filter(task => task.done).length);
 		},
 	},
 	created() {
@@ -186,6 +189,9 @@ export default defineComponent({
 	watch: {
 		'storeStore.focusFilterInputRand'() {
 			this.focusFilterInput();
+		},
+		'storeStore.updateWebviewTitleEvent'() {
+			this.updateWebviewTitle();
 		},
 	},
 });

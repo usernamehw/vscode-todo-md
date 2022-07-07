@@ -44,7 +44,8 @@ interface StoreState {
 	 * Send improvised event from store: assign a random number and listen for changes
 	 * inside the app to focus the main input element.
 	 */
-	focusFilterInputRand: number;
+	focusFilterInputEvent: number;
+	updateWebviewTitleEvent: number;
 }
 
 export const useStore = defineStore({
@@ -57,7 +58,6 @@ export const useStore = defineStore({
 		defaultFileSpecified: true,
 		activeDocumentOpened: false,
 		filterInputValue: '',
-		focusFilterInputRand: 0,
 		config: {
 			autoShowSuggest: true,
 			showCompleted: true,
@@ -79,6 +79,8 @@ export const useStore = defineStore({
 			scrollbarOverflow: false,
 		},
 		selectedTaskLineNumber: -1,
+		focusFilterInputEvent: 0,
+		updateWebviewTitleEvent: 0,
 	}),
 	// ────────────────────────────────────────────────────────────
 	getters: {
@@ -177,7 +179,10 @@ export const useStore = defineStore({
 			});
 		},
 		focusFilterInput() {
-			this.focusFilterInputRand = Math.random();
+			this.focusFilterInputEvent = Math.random();
+		},
+		updateWebviewTitle() {
+			this.updateWebviewTitleEvent = Math.random();
 		},
 		toggleDone(task: TheTask) {
 			task.done = !task.done;
@@ -328,6 +333,7 @@ window.addEventListener('message', event => {
 			bodyStyle.setProperty('--priority-left-padding', message.value.config.showPriority ? '3px' : '1px');
 			bodyStyle.setProperty('--indent-size', message.value.config.indentSize);
 			bodyStyle.setProperty('--list-scrollbar-value', message.value.config.scrollbarOverflow ? 'overlay' : 'auto');
+			store.updateWebviewTitle();
 			break;
 		}
 		case 'focusFilterInput': {

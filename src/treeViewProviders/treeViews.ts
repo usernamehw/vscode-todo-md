@@ -4,6 +4,7 @@ import { $config, $state, Constants, updateState } from '../extension';
 import { filterItems } from '../filter';
 import { parseDocument } from '../parse';
 import { defaultSortTasks } from '../sort';
+import { showCompletedPercentage } from '../statusBar';
 import { TheTask } from '../TheTask';
 import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
@@ -167,7 +168,7 @@ export function updateAllTreeViews() {
 export function updateTasksTreeView() {
 	const tasksForProvider = filterItems($state.tasksAsTree, $state.taskTreeViewFilterValue);
 	taskProvider.refresh(tasksForProvider);
-	setViewTitle(tasksView, 'tasks', tasksForProvider.length);
+	tasksView.title = `tasks ${showCompletedPercentage($state.tasks.length, $state.tasks.filter(task => task.done).length)}`;
 }
 /**
  * Update archived Tasks Tree View (since it's only changing on archiving of the task, which is rare)

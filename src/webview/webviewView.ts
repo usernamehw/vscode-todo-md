@@ -153,7 +153,6 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					config: $config.webview,
 				},
 			});
-			this.updateTitle($state.tasksAsTree.length, $state.tasksAsTree.filter(task => task.done).length);
 		}
 	}
 	/**
