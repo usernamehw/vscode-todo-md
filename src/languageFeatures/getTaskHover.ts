@@ -29,6 +29,10 @@ export function getTaskHoverMd(task: TheTask) {
 	if (task.count) {
 		count = ` \`[${task.count.current}/${task.count.needed}]\``;
 	}
+	let favorite = '';
+	if (task.favorite) {
+		favorite = ` <span title="Favorite task." style="color:${helpGetColor('favorite')};">$(heart)</span>`;
+	}
 	let due = '';
 	if (task.due || task.overdue) {
 		let dueColor = '';
@@ -76,7 +80,7 @@ export function getTaskHoverMd(task: TheTask) {
 
 	taskTitle = resultWords.join(' ');
 
-	markdown.appendMarkdown(`${taskTitle}${count}${due}\n\n`);
+	markdown.appendMarkdown(`${taskTitle}${count}${favorite}${due}\n\n`);
 
 	if (task.start) {
 		markdown.appendMarkdown(`<span>$(watch) ${durationTo(task, false, $config.durationIncludeSeconds)}</span>\n\n`);

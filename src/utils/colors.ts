@@ -1,6 +1,10 @@
 import { ColorThemeKind, window } from 'vscode';
 
 const colors = {
+	favorite: {
+		light: '#ff1493',
+		dark: '#ff1493',
+	},
 	due: {
 		light: '#01c208',
 		dark: '#35c03a',
