@@ -1,6 +1,6 @@
+import cloneDeep from 'lodash/cloneDeep';
 import { TheTask } from './TheTask';
 import { DueState } from './types';
-import cloneDeep from 'lodash/cloneDeep';
 
 const enum FilterType {
 	RawContains,
@@ -38,7 +38,7 @@ interface Filter {
 /**
  * Take tasks and a filter string and return filtered tasks.
  */
-export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
+export function filterTasks(tasks: TheTask[], filterStr = ''): TheTask[] {
 	if (filterStr.length === 0) {
 		return tasks;
 	}
@@ -49,7 +49,7 @@ export function filterItems(tasks: TheTask[], filterStr = ''): TheTask[] {
 		for (const filter of filters) {
 			let filterResult = false;
 			if (task.subtasks.length) {
-				const nestedMatch = filterItems(task.subtasks, filterStr);
+				const nestedMatch = filterTasks(task.subtasks, filterStr);
 				if (nestedMatch.length > 0) {
 					filterResult = true;
 					task.subtasks = nestedMatch;

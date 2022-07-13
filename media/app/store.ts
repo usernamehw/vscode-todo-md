@@ -1,6 +1,6 @@
 import { createPinia, defineStore } from 'pinia';
 import { showToastNotification } from '..';
-import { filterItems } from '../../src/filter';
+import { filterTasks } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import type { TheTask } from '../../src/TheTask';
 import { DueState, ExtensionConfig, MessageFromWebview, MessageToWebview } from '../../src/types';
@@ -87,7 +87,7 @@ export const useStore = defineStore({
 		filteredSortedTasks: (state): TheTask[] => {
 			let filteredTasks = state.tasksAsTree as TheTask[];
 			if (state.filterInputValue !== '') {
-				filteredTasks = filterItems(filteredTasks, state.filterInputValue || '');
+				filteredTasks = filterTasks(filteredTasks, state.filterInputValue || '');
 			}
 			if (!state.config.showRecurringCompleted) {
 				filteredTasks = filteredTasks.filter(task => {
