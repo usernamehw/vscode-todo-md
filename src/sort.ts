@@ -138,8 +138,8 @@ export function sortByDueDate(tasks: TheTask[]): TheTask[] {
 		...invalidDue,
 		...sortTasks(overdueTasks, SortProperty.Overdue),
 		...dueTasks,
-		...dueNotSpecified,
 		...sortTasks(dueSpecifiedButNotDue, SortProperty.NotDue),
+		...dueNotSpecified,
 	];
 }
 
