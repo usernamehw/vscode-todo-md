@@ -1,9 +1,12 @@
 
 /**
- * @param a small number
- * @param b big number
+ * @param a part number
+ * @param b 100% number
  */
 export function percentage(a: number, b: number): number {
+	if (b === 0) {
+		return 0;
+	}
 	return a / b * 100;
 }
 /**
