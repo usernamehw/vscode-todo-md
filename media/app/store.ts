@@ -45,6 +45,10 @@ interface StoreState {
 	 * inside the app to focus the main input element.
 	 */
 	focusFilterInputEvent: number;
+	/**
+	 * Send improvised event from store: assign a random number and listen for changes
+	 * inside the app to update webview title.
+	 */
 	updateWebviewTitleEvent: number;
 }
 
@@ -107,8 +111,15 @@ export const useStore = defineStore({
 					}
 				});
 			}
-			if (!state.config.showCompleted) {
+			// ignore setting `webview.showCompleted` when `$done` filter is present
+			if (!state.config.showCompleted/*  && !state.filterInputValue.includes('$done') */) {
 				filteredTasks = filteredTasks.filter(task => !task.done);
+				// filteredTasks = filterTasks(filteredTasks, '-$done');
+			}
+			// Filter out hidden tasks unless `$hidden` filter is present
+			if (!state.filterInputValue.includes('$hidden')) {
+				filteredTasks = filteredTasks.filter(task => !task.isHidden);
+				// filteredTasks = filterTasks(filteredTasks, '-$hidden');
 			}
 			return defaultSortTasks(filteredTasks);
 		},

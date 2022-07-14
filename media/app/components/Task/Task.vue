@@ -1,5 +1,5 @@
 <template>
-<div v-if="!(model.isHidden && !storeStore.filterInputValue.includes('$hidden'))">
+<div>
     <div :id="'ln' + model.lineNumber"
          class="task"
          :class="classes"
