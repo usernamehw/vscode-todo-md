@@ -29,8 +29,6 @@ body {
 
 	--task-hover-bg: rgba(0, 0, 0, 0.05);
 
-	--task-favorite: #f62caf13;
-
 	--task-left-padding: 3px;
 	--twistie-size: calc(var(--font-size) + 4px);
 
@@ -106,8 +104,6 @@ body.vscode-dark {
 	--border-darker: #6d6d6d;
 
 	--task-hover-bg: rgba(255, 255, 255, 0.1);
-
-	--task-favorite: initial;
 
 	--done-task-bg: #99ff8c1a;
 
@@ -242,10 +238,6 @@ a {
 			padding-bottom: 0;
 			padding-top: 0;
 		}
-	}
-
-	&--favorite {
-		background-color: var(--task-favorite);
 	}
 
 	&--selected {
