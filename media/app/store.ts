@@ -1,6 +1,6 @@
 import { createPinia, defineStore } from 'pinia';
 import { showToastNotification } from '..';
-import { filterTasks } from '../../src/filter';
+import { filterConstants, filterTasks } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import type { TheTask } from '../../src/TheTask';
 import { ExtensionConfig, IsDue, MessageFromWebview, MessageToWebview } from '../../src/types';
@@ -116,25 +116,12 @@ export const useStore = defineStore({
 			return flattenTasksDeep(this.filteredSortedTasks);
 		},
 		suggestItems(state): string[] {
-			// TODO: constants should be in const enum
-			const filterConstants = [
-				'$done',
-				'$started',
-				'$due',
-				'$overdue',
-				'$upcoming',
-				'$recurring',
-				'$noDue',
-				'$noTag',
-				'$noProject',
-				'$noContext',
-				'$hidden',
-				'$favorite',
+			return [
+				...filterConstants.map(filterConst => filterConst.name),
+				...state.tags.map(tag => `#${tag}`),
+				...state.projects.map(project => `+${project}`),
+				...state.contexts.map(context => `@${context}`),
 			];
-			const autocompleteTags = state.tags.map(tag => `#${tag}`);
-			const autocompleteProjects = state.projects.map(project => `+${project}`);
-			const autocompleteContexts = state.contexts.map(context => `@${context}`);
-			return filterConstants.concat(autocompleteTags, autocompleteProjects, autocompleteContexts);
 		},
 	},
 	// ────────────────────────────────────────────────────────────

@@ -105,9 +105,10 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `$recurring` - Recurring tasks
 - `$hidden` - Task with `{h}` special tag
 - `$favorite` - Task with `{f}` special tag
+- `$started` - Not completed task with `{start:...}` tag
 - `$noDue` - Due date is specified in any way
-- `$noTag` - Task with no tags
 - `$noProject` - Task with no projects
+- `$noTag` - Task with no tags
 - `$noContext` - Task with no contexts
 - `TEXT_TO_SEARCH` - Search in raw text (anything in the line)
 - `"TEXT_TO_SEARCH"` - Search only in task title (not in special entities, like tag or project)
