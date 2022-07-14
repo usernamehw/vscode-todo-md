@@ -149,6 +149,10 @@ export default defineComponent({
 			this.focusFilterInput();
 		});
 
+		window.onfocus = () => {
+			this.focusFilterInput();
+		};
+
 		window.addEventListener('click', e => {
 			const link = (e.target as HTMLElement).closest('a');
 			if (link && link.dataset.href) {
