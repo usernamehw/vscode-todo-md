@@ -9,11 +9,11 @@
                  @keydownDown="onDown"
                  @keydownUp="onUp" />
     </div>
-    <div v-if="storeStore.filteredSortedTasks && storeStore.filteredSortedTasks.length"
+    <div v-if="storeStore.filteredSortedTasks.tasks && storeStore.filteredSortedTasks.tasks.length"
          class="task-list"
          :class="{ 'task-list--details-visible': taskDetailsVisible }"
          @scroll.passive="onTaskListScroll">
-        <task v-for="task in storeStore.filteredSortedTasks"
+        <task v-for="task of storeStore.filteredSortedTasks.tasks"
               :key="task.lineNumber + task.rawText"
               :model="task" />
     </div>

@@ -134,7 +134,7 @@ export function updateAllTreeViews() {
 
 	updateTasksTreeView();
 
-	const dueTasks = filterTasks($state.tasksAsTree, '$due');
+	const dueTasks = filterTasks($state.tasksAsTree, '$due').tasks;
 	dueProvider.refresh(defaultSortTasks(dueTasks));
 	setViewTitle(dueView, 'due', dueTasks.length);
 
@@ -145,17 +145,17 @@ export function updateAllTreeViews() {
 	setViewTitle(contextView, 'contexts', $state.contextsForTreeView.length);
 
 	if (generic1View) {
-		const filteredTasks = filterTasks($state.tasksAsTree, $config.treeViews[0].filter);
+		const filteredTasks = filterTasks($state.tasksAsTree, $config.treeViews[0].filter).tasks;
 		generic1Provider.refresh(filteredTasks);
 		setViewTitle(generic1View, $config.treeViews[0].title, filteredTasks.length);
 	}
 	if (generic2View) {
-		const filteredTasks = filterTasks($state.tasksAsTree, $config.treeViews[1].filter);
+		const filteredTasks = filterTasks($state.tasksAsTree, $config.treeViews[1].filter).tasks;
 		generic2Provider.refresh(filteredTasks);
 		setViewTitle(generic2View, $config.treeViews[1].title, filteredTasks.length);
 	}
 	if (generic3View) {
-		const filteredTasks = filterTasks($state.tasksAsTree, $config.treeViews[2].filter);
+		const filteredTasks = filterTasks($state.tasksAsTree, $config.treeViews[2].filter).tasks;
 		generic3Provider.refresh(filteredTasks);
 		setViewTitle(generic3View, $config.treeViews[2].title, filteredTasks.length);
 	}
@@ -166,7 +166,7 @@ export function updateAllTreeViews() {
  * Update only Tasks Tree View
  */
 export function updateTasksTreeView() {
-	const tasksForProvider = filterTasks($state.tasksAsTree, $state.taskTreeViewFilterValue);
+	const tasksForProvider = filterTasks($state.tasksAsTree, $state.taskTreeViewFilterValue).tasks;
 	taskProvider.refresh(tasksForProvider);
 	tasksView.title = `tasks ${showCompletedPercentage($state.tasks.length, $state.tasks.filter(task => task.done).length)}`;
 }

@@ -66,6 +66,7 @@ export default defineComponent({
 		classes() {
 			const classMap: Record<string, boolean> = {};
 			classMap['task--done'] = this.model.done;
+			classMap['task--filter-dont-match'] = this.storeStore.tasksThatDontMatchFilter.includes(this.model.lineNumber);
 			classMap['task--favorite'] = this.model.favorite;
 			if (this.model.parentTaskLineNumber !== undefined) {
 				classMap[`task--nested-lvl-${this.model.indentLvl}`] = true;

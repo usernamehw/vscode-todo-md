@@ -1,6 +1,7 @@
+import difference from 'lodash/difference';
 import { createPinia, defineStore } from 'pinia';
 import { showToastNotification } from '..';
-import { filterConstants, filterTasks } from '../../src/filter';
+import { filterConstants, filterTasks, FilterTasksResult } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import type { TheTask } from '../../src/TheTask';
 import { ExtensionConfig, IsDue, MessageFromWebview, MessageToWebview } from '../../src/types';
@@ -82,11 +83,15 @@ export const useStore = defineStore({
 	}),
 	// ────────────────────────────────────────────────────────────
 	getters: {
-		filteredSortedTasks: (state): TheTask[] => {
+		filteredSortedTasks: (state): FilterTasksResult => {
 			let filteredTasks = state.tasksAsTree as TheTask[];
+			let matchIds: number[] = [];
 			if (state.filterInputValue !== '') {
-				filteredTasks = filterTasks(filteredTasks, state.filterInputValue || '');
+				const filtered = filterTasks(filteredTasks, state.filterInputValue || '');
+				filteredTasks = filtered.tasks;
+				matchIds = filtered.matchIds;
 			}
+			// TODO: use filterTasks()
 			if (!state.config.showRecurringCompleted) {
 				filteredTasks = filteredTasks.filter(task => {
 					if (task.due?.isRecurring && task.done) {
@@ -115,10 +120,19 @@ export const useStore = defineStore({
 				filteredTasks = filteredTasks.filter(task => !task.isHidden);
 				// filteredTasks = filterTasks(filteredTasks, '-$hidden');
 			}
-			return defaultSortTasks(filteredTasks);
+			return {
+				tasks: defaultSortTasks(filteredTasks),
+				matchIds,
+			};
 		},
 		flattenedFilteredSortedTasks(): TheTask[] {
-			return flattenTasksDeep(this.filteredSortedTasks);
+			return flattenTasksDeep(this.filteredSortedTasks.tasks);
+		},
+		tasksThatDontMatchFilter(): number[] {
+			if (!this.filterInputValue) {
+				return [];
+			}
+			return difference(this.flattenedFilteredSortedTasks.map(task => task.lineNumber), this.filteredSortedTasks.matchIds);
 		},
 		suggestItems(state): string[] {
 			return [
@@ -160,8 +174,8 @@ export const useStore = defineStore({
 			this.selectedTaskLineNumber = lineNumber;
 		},
 		selectFirstTask() {
-			if (this.filteredSortedTasks.length) {
-				this.selectTask(this.selectedTaskLineNumber = this.filteredSortedTasks[0].lineNumber);
+			if (this.filteredSortedTasks.tasks.length) {
+				this.selectTask(this.selectedTaskLineNumber = this.filteredSortedTasks.tasks[0].lineNumber);
 			}
 		},
 		updateFilterValue(value: string, append = false) {
@@ -188,13 +202,13 @@ export const useStore = defineStore({
 			SendMessage.toggleDone(task.lineNumber);
 		},
 		selectNextTask() {
-			if (!this.filteredSortedTasks.length) {
+			if (!this.filteredSortedTasks.tasks.length) {
 				return undefined;
 			}
 			let targetTask: TheTask;
 			if (this.selectedTaskLineNumber === -1) {
 				// None selected. Select the first visible task
-				targetTask = this.filteredSortedTasks[0];
+				targetTask = this.filteredSortedTasks.tasks[0];
 			} else {
 				// Selected task exists
 				const selectedTask = this.getTaskAtLine(this.selectedTaskLineNumber);
@@ -215,7 +229,7 @@ export const useStore = defineStore({
 			return targetTask.lineNumber;
 		},
 		selectPrevTask() {
-			if (!this.filteredSortedTasks.length) {
+			if (!this.filteredSortedTasks.tasks.length) {
 				return undefined;
 			}
 			let targetTask: TheTask;

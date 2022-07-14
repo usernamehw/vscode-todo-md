@@ -79,77 +79,77 @@ describe(`${headerDelimiter('filter')}Filter tags`, () => {
 	it('One tag', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask];
 		const filtered = filterTasks(items, '#html');
-		assert.deepEqual(filtered, [threeTagsTask, oneTagHtmlTask]);
+		assert.deepEqual(filtered.tasks, [threeTagsTask, oneTagHtmlTask]);
 	});
 	it('Multiple tags `#html #js`', () => {
 		const items = [justTextTask, threeTagsTask];
 		const filtered = filterTasks(items, '#html #js');
-		assert.deepEqual(filtered, [threeTagsTask]);
+		assert.deepEqual(filtered.tasks, [threeTagsTask]);
 	});
 });
 describe('Filter contexts', () => {
 	it('One context', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask, multipleContextTask, oneContextTask];
 		const filtered = filterTasks(items, '@work');
-		assert.deepEqual(filtered, [multipleContextTask]);
+		assert.deepEqual(filtered.tasks, [multipleContextTask]);
 	});
 	it('Multiple contexts', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask, multipleContextTask, oneContextTask];
 		const filtered = filterTasks(items, '@home @work');
-		assert.deepEqual(filtered, [multipleContextTask]);
+		assert.deepEqual(filtered.tasks, [multipleContextTask]);
 	});
 });
 describe('Filter projects', () => {
 	it('One project', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask, multipleContextTask, oneContextTask, oneProjectTask, multipleProjectTask];
 		const filtered = filterTasks(items, '+one');
-		assert.deepEqual(filtered, [oneProjectTask, multipleProjectTask]);
+		assert.deepEqual(filtered.tasks, [oneProjectTask, multipleProjectTask]);
 	});
 	it('Multiple projects', () => {
 		const items = [justTextTask, threeTagsTask, oneTagHtmlTask, multipleContextTask, oneContextTask, oneProjectTask, multipleProjectTask];
 		const filtered = filterTasks(items, '+one +two');
-		assert.deepEqual(filtered, [multipleProjectTask]);
+		assert.deepEqual(filtered.tasks, [multipleProjectTask]);
 	});
 });
 describe('Filter $done', () => {
 	it('$done', () => {
 		const items = [doneTask, notDoneTask];
 		const filtered = filterTasks(items, '$done');
-		assert.deepEqual(filtered, [doneTask]);
+		assert.deepEqual(filtered.tasks, [doneTask]);
 	});
 	it('-$done', () => {
 		const items = [doneTask, notDoneTask];
 		const filtered = filterTasks(items, '-$done');
-		assert.deepEqual(filtered, [notDoneTask]);
+		assert.deepEqual(filtered.tasks, [notDoneTask]);
 	});
 });
 describe('Filter $due', () => {
 	it('$due', () => {
 		const items = [dueTask, notDueTask, overdueTask];
 		const filtered = filterTasks(items, '$due');
-		assert.deepEqual(filtered, [dueTask, overdueTask]);
+		assert.deepEqual(filtered.tasks, [dueTask, overdueTask]);
 	});
 	it('$overdue', () => {
 		const items = [dueTask, notDueTask, overdueTask];
 		const filtered = filterTasks(items, '$overdue');
-		assert.deepEqual(filtered, [overdueTask]);
+		assert.deepEqual(filtered.tasks, [overdueTask]);
 	});
 });
 describe('Filter $C priority', () => {
 	it('$C', () => {
 		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
 		const filtered = filterTasks(items, '$C');
-		assert.deepEqual(filtered, [priorityCTask]);
+		assert.deepEqual(filtered.tasks, [priorityCTask]);
 	});
 	it('>$C Priority C or higher', () => {
 		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
 		const filtered = filterTasks(items, '>$C');
-		assert.deepEqual(filtered, [priorityATask, priorityCTask]);
+		assert.deepEqual(filtered.tasks, [priorityATask, priorityCTask]);
 	});
 	it('<$C Priority C or lower', () => {
 		const items = [priorityATask, priorityCTask, priorityETask, priorityZTask];
 		const filtered = filterTasks(items, '<$C');
-		assert.deepEqual(filtered, [priorityCTask, priorityETask, priorityZTask]);
+		assert.deepEqual(filtered.tasks, [priorityCTask, priorityETask, priorityZTask]);
 	});
 });
 
@@ -164,7 +164,7 @@ describe('Filter "title"', () => {
 		});
 		const items = [needleInTheTag, needleInTheTitle];
 		const filtered = filterTasks(items, '"needle"');
-		assert.deepEqual(filtered, [needleInTheTitle]);
+		assert.deepEqual(filtered.tasks, [needleInTheTitle]);
 	});
 });
 
@@ -195,14 +195,14 @@ describe('Filter matches nested tasks (subtasks)', () => {
 		const expectedParent = cloneDeep(parentTask);
 		expectedParent.subtasks.splice(1, 1);
 		expectedParent.subtasks[0].subtasks.splice(0, 1);
-		assert.deepEqual(filterTasks([parentTask], '#html'), [expectedParent]);
+		assert.deepEqual(filterTasks([parentTask], '#html').tasks, [expectedParent]);
 
 		// Match for "+something" should produce:
 		// Parent
 		//     lvl 1 Subtask 2 +something
 		const expectedParent2 = cloneDeep(parentTask);
 		expectedParent2.subtasks.splice(0, 1);
-		assert.deepEqual(filterTasks([parentTask], '+something'), [expectedParent2]);
+		assert.deepEqual(filterTasks([parentTask], '+something').tasks, [expectedParent2]);
 	});
 });
 

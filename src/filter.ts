@@ -114,24 +114,41 @@ interface Filter {
 	isNegation?: boolean;
 	filterMoreLess?: FilterMoreLess;
 }
+export interface FilterTasksResult {
+	tasks: TheTask[];
+	/**
+	 * Line numbers of the tasks that match.
+	 * (There are tasks that are returned because they are
+	 * a parent of a task that matches, but not the task itself).
+	 */
+	matchIds: TheTask['lineNumber'][];
+}
 /**
  * Take tasks and a filter string and return filtered tasks.
  */
-export function filterTasks(tasks: TheTask[], filterStr = ''): TheTask[] {
+export function filterTasks(tasks: TheTask[], filterStr = ''): FilterTasksResult {
 	if (filterStr.length === 0) {
-		return tasks;
+		return {
+			tasks,
+			matchIds: [],
+		};
 	}
 
 	const filters = parseFilter(filterStr);
+	const matchIds: number[] = [];
+
 	const filteredTasks = cloneDeep(tasks).filter(task => {
-		const results = [];
+		const filterResults: boolean[] = [];
+		const nestedResults: boolean[] = [];
 		for (const filter of filters) {
 			let filterResult = false;
+			let nestedResult = false;
 			if (task.subtasks.length) {
 				const nestedMatch = filterTasks(task.subtasks, filterStr);
-				if (nestedMatch.length > 0) {
-					filterResult = true;
-					task.subtasks = nestedMatch;
+				if (nestedMatch.tasks.length > 0) {
+					nestedResult = true;
+					matchIds.push(...nestedMatch.matchIds);
+					task.subtasks = nestedMatch.tasks;
 				}
 			}
 			if (filter.filterType === FilterType.RawContains) {
@@ -238,11 +255,19 @@ export function filterTasks(tasks: TheTask[], filterStr = ''): TheTask[] {
 			if (filter.isNegation) {
 				filterResult = !filterResult;
 			}
-			results.push(filterResult);
+			filterResults.push(filterResult);
+			nestedResults.push(nestedResult);
 		}
-		return results.every(r => r === true);
+
+		if (filterResults.every(Boolean)) {
+			matchIds.push(task.lineNumber);
+		}
+		return filterResults.every(Boolean) || nestedResults.every(Boolean);
 	});
-	return filteredTasks;
+	return {
+		tasks: filteredTasks,
+		matchIds,
+	};
 }
 /**
  * Determine which type of filter this is and if it has negation or range (<,>).
