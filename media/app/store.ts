@@ -45,11 +45,6 @@ interface StoreState {
 	 * inside the app to focus the main input element.
 	 */
 	focusFilterInputEvent: number;
-	/**
-	 * Send improvised event from store: assign a random number and listen for changes
-	 * inside the app to update webview title.
-	 */
-	updateWebviewTitleEvent: number;
 }
 
 export const useStore = defineStore({
@@ -84,7 +79,6 @@ export const useStore = defineStore({
 		},
 		selectedTaskLineNumber: -1,
 		focusFilterInputEvent: 0,
-		updateWebviewTitleEvent: 0,
 	}),
 	// ────────────────────────────────────────────────────────────
 	getters: {
@@ -176,12 +170,13 @@ export const useStore = defineStore({
 			vscodeApi.setState({
 				filterInputValue: newValue,
 			});
+			this.updateWebviewTitle();
 		},
 		focusFilterInput() {
 			this.focusFilterInputEvent = Math.random();
 		},
 		updateWebviewTitle() {
-			this.updateWebviewTitleEvent = Math.random();
+			SendMessage.updateWebviewTitle(this.flattenedFilteredSortedTasks.length, this.flattenedFilteredSortedTasks.filter(task => task.done).length);
 		},
 		toggleDone(task: TheTask) {
 			task.done = !task.done;

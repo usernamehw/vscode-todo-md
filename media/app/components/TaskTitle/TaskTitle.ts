@@ -27,7 +27,7 @@ export default defineComponent({
 			} else {
 				this.storeStore.updateFilterValue(newValue);
 			}
-			// this.$root.$emit(VueEvents.focusFilterInput);
+			this.storeStore.focusFilterInput();
 		},
 		styleForTag(tag: string) {
 			if (tag in this.storeStore.config.tagStyles) {
