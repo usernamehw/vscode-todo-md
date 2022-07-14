@@ -27,7 +27,9 @@ body {
 	--border-high-contrast: #bebebe;
 	--border-darker: #cecece;
 
-	--task-hover-bg: rgba(0, 0, 0, 0.07);
+	--task-hover-bg: rgba(0, 0, 0, 0.05);
+
+	--task-favorite: #f62caf18;
 
 	--task-left-padding: 3px;
 	--twistie-size: calc(var(--font-size) + 4px);
@@ -35,7 +37,7 @@ body {
 	--foreground: var(--vscode-foreground);
 
 	--done-task-bg: #e9f0d6;
-	--selected-task-bg: #e2e2e2;
+	--selected-task-bg: rgba(0, 0, 0, 0.03);
 
 	--twistie-hover-bg: rgba(0, 0, 0, 0.07);
 	--checkbox-hover-bg: rgba(0, 0, 0, 0.07);
@@ -105,6 +107,8 @@ body.vscode-dark {
 
 	--task-hover-bg: rgba(255, 255, 255, 0.1);
 
+	--task-favorite: initial;
+
 	--done-task-bg: #99ff8c1a;
 
 	--tag-bg: #{darken($tagBackground, 10%)};
@@ -118,8 +122,9 @@ body.vscode-dark {
 
 	--count-bg: #ffffff1a;
 	--count-button-bg: #ffffff1a;
+	--count-button-hover-bg: #ffffff2a;
 
-	--selected-task-bg: #92929250;
+	--selected-task-bg: rgba(255, 255, 255, 0.04);
 
 	--nested-count-bg: #ebe7b5;
 	--nested-count-fg: #000000;
@@ -209,7 +214,8 @@ a {
 // ────────────────────────────────────────────────────────────
 .task {
 	border-left: var(--priority-left-padding) solid transparent;
-	box-shadow: 0 1px 0 0 var(--border-low-contrast);
+	border: 1px solid transparent;
+	border-bottom: 1px solid var(--border-low-contrast);
 	padding: var(--padding) var(--task-left-padding);
 	position: relative;
 	word-wrap: break-word;
@@ -235,11 +241,12 @@ a {
 	}
 
 	&--favorite {
-		background-color: #f62caf18;
+		background-color: var(--task-favorite);
 	}
 
 	&--selected {
-		background-color: var(--selected-task-bg);
+		border-color: rgb(0, 162, 255);
+		box-shadow: inset 0 0 100vw 100vh var(--selected-task-bg);
 	}
 
 	&--nested-lvl-1 {
@@ -465,6 +472,7 @@ a {
 	}
 
 	&__count-container {
+		display: inline-flex;
 		background-color: var(--count-bg);
 		margin-left: $approxOneSpace;
 		white-space: pre;

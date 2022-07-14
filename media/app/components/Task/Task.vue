@@ -36,9 +36,11 @@
         --><span v-if="model.count"
                  class="task__count-container">
             <button class="task__decrement-count"
+                    title="Decrement count."
                     @click.stop="decrementCount">-</button>
             <span class="task__count">{{ model.count.current }} / {{ model.count.needed }}</span>
             <button class="task__increment-count"
+                    title="Increment count."
                     @click.stop="incrementCount">+</button>
         </span>
     </div>
