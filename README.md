@@ -119,7 +119,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 
 |Command|Description|
 |-|-|
-|todomd.toggleComment|Todo MD: Toggle comment. (Not binded by default). You can bind it only for active file: **{"key": "ctrl+/","command": "todomd.toggleComment","when": "editorFocus && todomd:isActive"}** in keybindings.json.|
+|todomd.toggleComment|Todo MD: Toggle comment. <kbd>Ctrl/Cmd</kbd>+<kbd>/</kbd> (Only when in todo.md file)|
 |todomd.toggleTagsTreeViewSorting|Todo MD: Toggle Tags Tree View Sorting|
 |todomd.toggleProjectsTreeViewSorting|Todo MD: Toggle Projects Tree View Sorting|
 |todomd.toggleContextsTreeViewSorting|Todo MD: Toggle Contexts Tree View Sorting|

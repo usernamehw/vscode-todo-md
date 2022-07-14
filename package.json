@@ -1011,7 +1011,7 @@
 			{
 				"command": "todomd.toggleComment",
 				"title": "Toggle Comment",
-				"description": "Toggle comment. (Not binded by default). You can bind it only for active file: **{\"key\": \"ctrl+/\",\"command\": \"todomd.toggleComment\",\"when\": \"editorFocus && todomd:isActive\"}** in keybindings.json.",
+				"description": "Toggle comment. <kbd>Ctrl/Cmd</kbd>+<kbd>/</kbd> (Only when in todo.md file)",
 				"category": "Todo MD"
 			},
 			{
@@ -1257,7 +1257,13 @@
 		"keybindings": [
 			{
 				"command": "todomd.toggleDone",
-				"key": "Alt+D",
+				"key": "alt+D",
+				"when": "editorTextFocus && todomd:isActive"
+			},
+			{
+				"command": "todomd.toggleComment",
+				"key": "ctrl+/",
+				"mac": "cmd+/",
 				"when": "editorTextFocus && todomd:isActive"
 			}
 		],
