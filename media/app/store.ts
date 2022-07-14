@@ -136,7 +136,7 @@ export const useStore = defineStore({
 		},
 		suggestItems(state): string[] {
 			return [
-				...filterConstants.map(filterConst => filterConst.name),
+				...filterConstants,
 				...state.tags.map(tag => `#${tag}`),
 				...state.projects.map(project => `+${project}`),
 				...state.contexts.map(context => `@${context}`),

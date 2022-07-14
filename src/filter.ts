@@ -4,81 +4,22 @@ import { IsDue } from './types';
 
 /**
  * Special filters (starts with `$` sign).
+ * Maybe add $A-$F?
  */
-export const filterConstants: { name: string; description: string }[] = [
-	// {
-	// 	name: '$A',
-	// 	description: 'Priority (A)',
-	// },
-	// {
-	// 	name: '$B',
-	// 	description: 'Priority (B)',
-	// },
-	// {
-	// 	name: '$C',
-	// 	description: 'Priority (C)',
-	// },
-	// {
-	// 	name: '$D',
-	// 	description: 'Priority (D)',
-	// },
-	// {
-	// 	name: '$E',
-	// 	description: 'Priority (E)',
-	// },
-	// {
-	// 	name: '$F',
-	// 	description: 'Priority (F)',
-	// },
-	{
-		name: '$done',
-		description: 'Completed tasks.',
-	},
-	{
-		name: '$started',
-		description: 'Started task (with `{start}` tag).',
-	},
-	{
-		name: '$due',
-		description: 'Due or overdue task.',
-	},
-	{
-		name: '$overdue',
-		description: 'Overdue task.',
-	},
-	{
-		name: '$upcoming',
-		description: 'Task with due date but not yet due.',
-	},
-	{
-		name: '$recurring',
-		description: 'Task with repeating due date.',
-	},
-	{
-		name: '$noDue',
-		description: 'Task without due date.',
-	},
-	{
-		name: '$noProject',
-		description: 'Task with 0 projects.',
-	},
-	{
-		name: '$noTag',
-		description: 'Task with 0 tags.',
-	},
-	{
-		name: '$noContext',
-		description: 'Task with 0 contexts.',
-	},
-	{
-		name: '$hidden',
-		description: 'Task with `{h}` special tag.',
-	},
-	{
-		name: '$favorite',
-		description: 'Task with `{f}` special tag.',
-	},
-];
+export const filterConstants = [
+	'$done',
+	'$started',
+	'$due',
+	'$overdue',
+	'$upcoming',
+	'$recurring',
+	'$noDue',
+	'$noProject',
+	'$noTag',
+	'$noContext',
+	'$hidden',
+	'$favorite',
+] as const;
 
 const enum FilterType {
 	RawContains,
