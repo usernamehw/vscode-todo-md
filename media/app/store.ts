@@ -120,10 +120,10 @@ export const useStore = defineStore({
 			const filterConstants = [
 				'$done',
 				'$started',
-				'$hasDue',
 				'$due',
 				'$overdue',
 				'$recurring',
+				'$noDue',
 				'$noTag',
 				'$noProject',
 				'$noContext',

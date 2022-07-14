@@ -99,15 +99,15 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `$A` - Priority
 - `>$C` - Priority range (here it matches `$A`, `$B`, `$C`)
 - `$done` - Completed task
-- `$hasDue` - Due date is specified in any way
 - `$due` - Due or Overdue task
 - `$overdue` - Overdue task
 - `$recurring` - Recurring tasks
+- `$hidden` - Task with `{h}` special tag
+- `$favorite` - Task with `{f}` special tag
+- `$noDue` - Due date is specified in any way
 - `$noTag` - Task with no tags
 - `$noProject` - Task with no projects
 - `$noContext` - Task with no contexts
-- `$hidden` - Task with `{h}` special tag
-- `$favorite` - Task with `{f}` special tag
 - `TEXT_TO_SEARCH` - Search in raw text (anything in the line)
 - `"TEXT_TO_SEARCH"` - Search only in task title (not in special entities, like tag or project)
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`

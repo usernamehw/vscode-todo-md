@@ -9,17 +9,17 @@ const enum FilterType {
 	ContextEqual,
 	ProjectEqual,
 	PriorityEqual,
-	HasDue,
 	Due,
 	Overdue,
 	Recurring,
 	Done,
 	Favorite,
 	Started,
+	Hidden,
+	NoDue,
 	NoTag,
 	NoProject,
 	NoContext,
-	Hidden,
 }
 /**
  * When the filter has `>` or `<` symbols.
@@ -105,11 +105,6 @@ export function filterTasks(tasks: TheTask[], filterStr = ''): TheTask[] {
 				if (task.startRange && !task.durationRange) {
 					filterResult = true;
 				}
-			} else if (filter.filterType === FilterType.HasDue) {
-				// $hasDue
-				if (task.due) {
-					filterResult = true;
-				}
 			} else if (filter.filterType === FilterType.Due) {
 				// $due
 				if (task.due?.isDue === DueState.Due || task.due?.isDue === DueState.Overdue) {
@@ -123,6 +118,11 @@ export function filterTasks(tasks: TheTask[], filterStr = ''): TheTask[] {
 			} else if (filter.filterType === FilterType.Recurring) {
 				// $recurring
 				if (task.due?.isRecurring === true) {
+					filterResult = true;
+				}
+			} else if (filter.filterType === FilterType.NoDue) {
+				// $noDue
+				if (task.due === undefined) {
 					filterResult = true;
 				}
 			} else if (filter.filterType === FilterType.NoTag) {
@@ -217,8 +217,8 @@ function parseFilter(filterStr = '') {
 					filter.filterType = FilterType.Done;
 				} else if (value === 'started') {
 					filter.filterType = FilterType.Started;
-				} else if (value === 'hasDue') {
-					filter.filterType = FilterType.HasDue;
+				} else if (value === 'noDue') {
+					filter.filterType = FilterType.NoDue;
 				} else if (value === 'due') {
 					filter.filterType = FilterType.Due;
 				} else if (value === 'overdue') {
