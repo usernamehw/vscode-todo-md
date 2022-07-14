@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { TheTask } from './TheTask';
-import { DueState } from './types';
+import { IsDue } from './types';
 
 const enum FilterType {
 	RawContains,
@@ -108,17 +108,17 @@ export function filterTasks(tasks: TheTask[], filterStr = ''): TheTask[] {
 				}
 			} else if (filter.filterType === FilterType.Due) {
 				// $due
-				if (task.due?.isDue === DueState.Due || task.due?.isDue === DueState.Overdue) {
+				if (task.due?.isDue === IsDue.Due || task.due?.isDue === IsDue.Overdue) {
 					filterResult = true;
 				}
 			} else if (filter.filterType === FilterType.Overdue) {
 				// $overdue
-				if (task.due?.isDue === DueState.Overdue) {
+				if (task.due?.isDue === IsDue.Overdue) {
 					filterResult = true;
 				}
 			} else if (filter.filterType === FilterType.Upcoming) {
 				// $upcoming
-				if (task.due !== undefined && task.due.isDue === DueState.NotDue) {
+				if (task.due !== undefined && task.due.isDue === IsDue.NotDue) {
 					filterResult = true;
 				}
 			} else if (filter.filterType === FilterType.Recurring) {

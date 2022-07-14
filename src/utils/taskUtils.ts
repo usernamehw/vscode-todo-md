@@ -1,6 +1,6 @@
 import { $config, $state } from '../extension';
 import type { TheTask } from '../TheTask';
-import { DueState } from '../types';
+import { IsDue } from '../types';
 import { fancyLetterBold } from './utils';
 
 /**
@@ -66,11 +66,11 @@ export function formatTask(task: TheTask, {
 } = {}): string {
 	let result = '';
 	if (!ignoreDueDate) {
-		if (task.due?.isDue === DueState.Due) {
+		if (task.due?.isDue === IsDue.Due) {
 			result += $config.labelDueSymbol;
-		} else if (task.due?.isDue === DueState.Overdue) {
+		} else if (task.due?.isDue === IsDue.Overdue) {
 			result += $config.labelOverdueSymbol;
-		} else if (task.due?.isDue === DueState.Invalid) {
+		} else if (task.due?.isDue === IsDue.Invalid) {
 			result += $config.labelInvalidDueSymbol;
 		}
 	}

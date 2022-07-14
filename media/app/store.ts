@@ -3,7 +3,7 @@ import { showToastNotification } from '..';
 import { filterTasks } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import type { TheTask } from '../../src/TheTask';
-import { DueState, ExtensionConfig, MessageFromWebview, MessageToWebview } from '../../src/types';
+import { ExtensionConfig, IsDue, MessageFromWebview, MessageToWebview } from '../../src/types';
 import { SendMessage } from './SendMessage';
 
 interface SavedState {
@@ -100,7 +100,7 @@ export const useStore = defineStore({
 			}
 			if (!state.config.showRecurringUpcoming) {
 				filteredTasks = filteredTasks.filter(task => {
-					if (task.due?.isRecurring && task.due.isDue === DueState.NotDue) {
+					if (task.due?.isRecurring && task.due.isDue === IsDue.NotDue) {
 						return false;
 					} else {
 						return true;
@@ -113,7 +113,7 @@ export const useStore = defineStore({
 			return defaultSortTasks(filteredTasks);
 		},
 		flattenedFilteredSortedTasks(): TheTask[] {
-			return flattenDeep(this.filteredSortedTasks);
+			return flattenTasksDeep(this.filteredSortedTasks);
 		},
 		suggestItems(state): string[] {
 			// TODO: constants should be in const enum
@@ -345,25 +345,21 @@ window.addEventListener('message', event => {
 	}
 });
 
-interface NestedObject {
-	subtasks: NestedObject[];
-}
 /**
  * Recursive function to flatten an array.
  * Nested property name is hardcoded as `subtasks`
  */
-export function flattenDeep<T extends NestedObject>(arr: T[]): T[] {
-	const flattened: T[] = [];
-	function flatten(innerArr: T[]) {
-		for (const item of innerArr) {
-			flattened.push(item);
+export function flattenTasksDeep(tasks: TheTask[]): TheTask[] {
+	const flattenedTasks: TheTask[] = [];
+	function flatten(subtasks: TheTask[]): void {
+		for (const item of subtasks) {
+			flattenedTasks.push(item);
 			if (item.subtasks.length) {
-				// @ts-ignore
 				flatten(item.subtasks);
 			}
 		}
 	}
-	flatten(arr);
-	return flattened;
+	flatten(tasks);
+	return flattenedTasks;
 }
 

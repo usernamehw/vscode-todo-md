@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { describe, it } from 'mocha';
 import { filterTasks } from '../../filter';
 import { TaskInit, TheTask } from '../../TheTask';
-import { DueState } from '../../types';
+import { IsDue } from '../../types';
 import { headerDelimiter } from './testUtils';
 
 function newTask(task: Partial<TaskInit>) {
@@ -47,19 +47,19 @@ const notDoneTask = newTask({
 const dueTask = newTask({
 	// @ts-ignore
 	due: {
-		isDue: DueState.Due,
+		isDue: IsDue.Due,
 	},
 });
 const notDueTask = newTask({
 	// @ts-ignore
 	due: {
-		isDue: DueState.NotDue,
+		isDue: IsDue.NotDue,
 	},
 });
 const overdueTask = newTask({
 	// @ts-ignore
 	due: {
-		isDue: DueState.Overdue,
+		isDue: IsDue.Overdue,
 	},
 });
 const priorityATask = newTask({

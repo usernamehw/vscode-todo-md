@@ -11,7 +11,7 @@ export interface ItemForProvider {
 /**
  * Due date possible values
  */
-export const enum DueState {
+export const enum IsDue {
 	NotDue,
 	Due,
 	Overdue,

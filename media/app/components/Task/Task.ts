@@ -2,11 +2,11 @@ import { mapStores } from 'pinia';
 import { defineComponent, PropType } from 'vue';
 import type { TheTask } from '../../../../src/TheTask';
 import { durationTo } from '../../../../src/time/timeUtils';
-import { DueState } from '../../../../src/types';
-import TaskTitleComponent from '../TaskTitle/TaskTitle';
+import { IsDue } from '../../../../src/types';
 import { SendMessage } from '../../SendMessage';
 import { useStore } from '../../store';
 import { VueEvents } from '../../webviewTypes';
+import TaskTitleComponent from '../TaskTitle/TaskTitle';
 
 export default defineComponent({
 	name: 'task',
@@ -82,10 +82,10 @@ export default defineComponent({
 			}
 			if (this.model.due) {
 				switch (this.model.due.isDue) {
-					case DueState.NotDue: classMap.notDue = true;break;
-					case DueState.Due: classMap.due = true;break;
-					case DueState.Overdue: classMap.overdue = true;break;
-					case DueState.Invalid: classMap.invalid = true;break;
+					case IsDue.NotDue: classMap.notDue = true;break;
+					case IsDue.Due: classMap.due = true;break;
+					case IsDue.Overdue: classMap.overdue = true;break;
+					case IsDue.Invalid: classMap.invalid = true;break;
 				}
 			}
 			if (this.storeStore.config.completedStrikeThrough) {
@@ -104,25 +104,25 @@ export default defineComponent({
 				let dueText = '';
 				let dueTitle = '';
 				switch (this.model.due.isDue) {
-					case DueState.NotDue: {
+					case IsDue.NotDue: {
 						dueClasses.push('task__due-state--not-due');
 						dueText = `<span class="codicon codicon-milestone"></span><span class="task__days-to-count">${this.model.due.closestDueDateInTheFuture}</span>`;
 						dueTitle = `In ${this.model.due.daysUntilDue} days`;
 						break;
 					}
-					case DueState.Due: {
+					case IsDue.Due: {
 						dueClasses.push('task__due-state--due');
 						dueText = '<span class="codicon codicon-history"></span>';
 						dueTitle = `Due Today`;
 						break;
 					}
-					case DueState.Overdue: {
+					case IsDue.Overdue: {
 						dueClasses.push('task__due-state--overdue');
 						dueText = `<span class="codicon codicon-history"></span><span class="task__overdue-count">${this.model.due?.overdueInDays || ''}</span>`;
 						dueTitle = `Overdue by ${this.model.due?.overdueInDays || '?'} days`;
 						break;
 					}
-					case DueState.Invalid: {
+					case IsDue.Invalid: {
 						dueClasses.push('task__due-state--invalid');
 						dueText = '<span class="codicon codicon-error"></span><span class="task__days-to-count">Invalid</span>';
 						dueTitle = 'Due date is Invalid';

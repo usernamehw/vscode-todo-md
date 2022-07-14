@@ -3,7 +3,7 @@ import { MarkdownString } from 'vscode';
 import { $config } from '../extension';
 import { TheTask } from '../TheTask';
 import { durationTo, weekdayNamesShort } from '../time/timeUtils';
-import { DueState } from '../types';
+import { IsDue } from '../types';
 import { helpGetColor } from '../utils/colors';
 
 /**
@@ -38,15 +38,15 @@ export function getTaskHoverMd(task: TheTask) {
 		let dueColor = '';
 		let dueContent = '';
 		let codicon = '$(history)';
-		if (task.due?.isDue === DueState.Due) {
+		if (task.due?.isDue === IsDue.Due) {
 			dueColor = helpGetColor('due');
-		} else if (task.due?.isDue === DueState.Overdue) {
+		} else if (task.due?.isDue === IsDue.Overdue) {
 			dueColor = helpGetColor('overdue');
 			dueContent = String(task.due.overdueInDays);
-		} else if (task.due?.isDue === DueState.NotDue) {
+		} else if (task.due?.isDue === IsDue.NotDue) {
 			dueColor = helpGetColor('notDue');
 			dueContent = makeClosestDueDateDecoration(task);
-		} else if (task.due?.isDue === DueState.Invalid) {
+		} else if (task.due?.isDue === IsDue.Invalid) {
 			dueColor = helpGetColor('invalid');
 			codicon = '$(error)';
 			dueContent = 'Invalid';

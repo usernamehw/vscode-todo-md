@@ -1,7 +1,7 @@
 import { DecorationOptions, Range, TextEditor, ThemeColor, window } from 'vscode';
 import { $config, $state, Global } from './extension';
 import { makeClosestDueDateDecoration } from './languageFeatures/getTaskHover';
-import { DueState } from './types';
+import { IsDue } from './types';
 import { forEachTask } from './utils/taskUtils';
 import { isEmptyObject } from './utils/utils';
 import { svgToUri } from './utils/vscodeUtils';
@@ -269,11 +269,11 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 		if (task.due) {
 			const due = task.due;
 			const dueRange = task.dueRange!;// if due exists - dueRange exists too
-			if (due.isDue === DueState.Due) {
+			if (due.isDue === IsDue.Due) {
 				dueDecorationRanges.push(dueRange);
-			} else if (due.isDue === DueState.NotDue) {
+			} else if (due.isDue === IsDue.NotDue) {
 				notDueDecorationRanges.push(dueRange);
-			} else if (due.isDue === DueState.Overdue) {
+			} else if (due.isDue === IsDue.Overdue) {
 				overdueDecorationOptions.push({
 					range: dueRange,
 					renderOptions: {
@@ -285,10 +285,10 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 				if (task.overdueRange) {
 					specialtagDecorationRanges.push(task.overdueRange);
 				}
-			} else if (due.isDue === DueState.Invalid) {
+			} else if (due.isDue === IsDue.Invalid) {
 				invalidDueDateDecorationRanges.push(dueRange);
 			}
-			if (due.isDue === DueState.NotDue && due.closestDueDateInTheFuture) {
+			if (due.isDue === IsDue.NotDue && due.closestDueDateInTheFuture) {
 				closestDueDateDecorationOptions.push({
 					range: dueRange,
 					renderOptions: {

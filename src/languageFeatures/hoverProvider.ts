@@ -4,7 +4,7 @@ import { DueDate } from '../dueDate';
 import { $config, $state, Global } from '../extension';
 import { parseWord } from '../parse';
 import { getDateInISOFormat } from '../time/timeUtils';
-import { DueState } from '../types';
+import { IsDue } from '../types';
 import { helpGetColor } from '../utils/colors';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
@@ -148,7 +148,7 @@ function renderHtmlCalendar(date: Dayjs, dueDate: DueDate): string {
 	for (let i = 1; i <= daysInMonth; i++) {
 		const tempDate = date.set('date', i);
 		const dayOfWeek = tempDate.get('d');
-		const isDue = DueDate.parseDue(dueDate.raw, tempDate.toDate()).isDue === DueState.Due;
+		const isDue = DueDate.parseDue(dueDate.raw, tempDate.toDate()).isDue === IsDue.Due;
 		const isDueStyle = isDue ? ` style="color:${helpGetColor('due')};"` : '';
 		let cell = `<code>${String(i).padStart(2, '0')}</code>`;
 		if (tempDate.isSame(now, 'date')) {

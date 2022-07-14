@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
 import { dateDiff, dateWithoutTime, dayOfTheWeek, isValidDate } from './time/timeUtils';
-import { DueState } from './types';
+import { IsDue } from './types';
 
 export type DueType = 'invalid' | 'normalDate' | 'recurringWithDate' | 'recurringWithoutStartingDate';
+
 /**
  * Should handle most of the due date functions
  */
@@ -16,7 +17,7 @@ export class DueDate {
 	/** If this due date is recurring or not */
 	isRecurring = false;
 	/** Due state. Can be: due, notDue, overdue, invalid */
-	isDue = DueState.NotDue;
+	isDue = IsDue.NotDue;
 	/** Closest due date (assigned only when the task is not due today) */
 	closestDueDateInTheFuture: string;
 	/** Days until this task is due */
@@ -34,16 +35,16 @@ export class DueDate {
 		this.isDue = result.isDue;
 		this.type = result.dueType;
 		this.overdueStr = options?.overdueStr;
-		if (result.isDue === DueState.NotDue) {
+		if (result.isDue === IsDue.NotDue) {
 			const closest = this.calcClosestDueDateInTheFuture();
 			this.closestDueDateInTheFuture = closest.closestString;
 			this.daysUntilDue = closest.daysUntil;
-		} else if (result.isDue === DueState.Due || result.isDue === DueState.Overdue) {
+		} else if (result.isDue === IsDue.Due || result.isDue === IsDue.Overdue) {
 			this.closestDueDateInTheFuture = `${dayOfTheWeek(dayjs())} [today]`;
 		} else {
 			this.closestDueDateInTheFuture = '';
 		}
-		if (this.isDue === DueState.Overdue) {
+		if (this.isDue === IsDue.Overdue) {
 			this.overdueInDays = this.getOverdueInDays();
 		}
 	}
@@ -92,12 +93,12 @@ export class DueDate {
 		const result = dueDates.map(dueDate => DueDate.parseDueDate(dueDate, targetDate));
 
 		const isRecurring = result.some(r => r.isRecurring);
-		const hasInvalid = result.some(r => r.isDue === DueState.Invalid);
-		const hasOverdue = result.some(r => r.isDue === DueState.Overdue) || overdue;
-		const hasDue = result.some(r => r.isDue === DueState.Due);
-		const isDue = hasInvalid ? DueState.Invalid :
-			hasOverdue ? DueState.Overdue :
-				hasDue ? DueState.Due : DueState.NotDue;
+		const hasInvalid = result.some(r => r.isDue === IsDue.Invalid);
+		const hasOverdue = result.some(r => r.isDue === IsDue.Overdue) || overdue;
+		const hasDue = result.some(r => r.isDue === IsDue.Due);
+		const isDue = hasInvalid ? IsDue.Invalid :
+			hasOverdue ? IsDue.Overdue :
+				hasDue ? IsDue.Due : IsDue.NotDue;
 		const dueType = result[0].dueType;
 
 		return {
@@ -113,12 +114,12 @@ export class DueDate {
 		if (due === 'today') {
 			return {
 				isRecurring: false,
-				isDue: DueState.Due,
+				isDue: IsDue.Due,
 				dueType: 'recurringWithoutStartingDate',
 			};
 		}
 		let isRecurring = false;
-		let isDue = DueState.NotDue;
+		let isDue = IsDue.NotDue;
 		let dueType: DueType;
 
 		const dueWithDateMatch = DueDate.dueWithDateRegexp.exec(due);
@@ -134,7 +135,7 @@ export class DueDate {
 				return {
 					isRecurring: Boolean(dueRecurringPart),
 					dueType: 'invalid',
-					isDue: DueState.Invalid,
+					isDue: IsDue.Invalid,
 				};
 			}
 
@@ -154,7 +155,7 @@ export class DueDate {
 				isRecurring = true;
 				dueType = 'recurringWithoutStartingDate';
 			} else {
-				isDue = DueState.Invalid;
+				isDue = IsDue.Invalid;
 				dueType = 'invalid';
 			}
 		}
@@ -167,12 +168,12 @@ export class DueDate {
 	/**
 	 * Parse a simple date `2020-02-15`
 	 */
-	private static isDueExactDate(date: Date, targetDate: Date): DueState {
+	private static isDueExactDate(date: Date, targetDate: Date): IsDue {
 		if (dayjs(targetDate).isBefore(date)) {
-			return DueState.NotDue;
+			return IsDue.NotDue;
 		}
 		const diffInDays = dayjs(date).diff(dayjs(targetDate), 'day');
-		return diffInDays === 0 ? DueState.Due : DueState.Overdue;
+		return diffInDays === 0 ? IsDue.Due : IsDue.Overdue;
 	}
 	// private static isDueBetween(d1: string, d2: string): DueReturn {
 	// 	const now = dayjs();
@@ -180,9 +181,9 @@ export class DueDate {
 	// 	const date2 = dayjs(d2);
 	// 	let isDue;
 	// 	if (date1.isBefore(now, 'day') && date2.isBefore(now, 'day')) {
-	// 		isDue = DueState.overdue;
+	// 		isDue = IsDue.overdue;
 	// 	} else {
-	// 		isDue = dayjs().isBetween(d1, dayjs(d2), 'day', '[]') ? DueState.due : DueState.notDue;
+	// 		isDue = dayjs().isBetween(d1, dayjs(d2), 'day', '[]') ? IsDue.due : IsDue.notDue;
 	// 	}
 	// 	return {
 	// 		isRecurring: false,
@@ -192,62 +193,62 @@ export class DueDate {
 	/**
 	 * Parse constant due date
 	 */
-	private static isDueToday(dueString: string, targetDate: Date): DueState {
+	private static isDueToday(dueString: string, targetDate: Date): IsDue {
 		const value = dueString.toLowerCase();
 		if (value === 'ed') {
-			return DueState.Due;
+			return IsDue.Due;
 		}
 
 		switch (targetDate.getDay()) {
 			case 0: {
 				if (value === 'sun' || value === 'sunday') {
-					return DueState.Due;
+					return IsDue.Due;
 				}
 				break;
 			}
 			case 1: {
 				if (value === 'mon' || value === 'monday') {
-					return DueState.Due;
+					return IsDue.Due;
 				}
 				break;
 			}
 			case 2: {
 				if (value === 'tue' || value === 'tuesday') {
-					return DueState.Due;
+					return IsDue.Due;
 				}
 				break;
 			}
 			case 3: {
 				if (value === 'wed' || value === 'wednesday') {
-					return DueState.Due;
+					return IsDue.Due;
 				}
 				break;
 			}
 			case 4: {
 				if (value === 'thu' || value === 'thursday') {
-					return DueState.Due;
+					return IsDue.Due;
 				}
 				break;
 			}
 			case 5: {
 				if (value === 'fri' || value === 'friday') {
-					return DueState.Due;
+					return IsDue.Due;
 				}
 				break;
 			}
 			case 6: {
 				if (value === 'sat' || value === 'saturday') {
-					return DueState.Due;
+					return IsDue.Due;
 				}
 				break;
 			}
 		}
-		return DueState.NotDue;
+		return IsDue.NotDue;
 	}
 	/**
 	 * Parse recurring due date with starting date `due:2019-06-19|e2d`
 	 */
-	private static isDueWithDate(dueString: string, dueDateStart: Date | number | undefined, targetDate = new Date()): DueState {
+	private static isDueWithDate(dueString: string, dueDateStart: Date | number | undefined, targetDate = new Date()): IsDue {
 		if (dueDateStart === undefined) {
 			throw new Error('dueDate was specified, but dueDateStart is missing');
 		}
@@ -258,18 +259,18 @@ export class DueDate {
 			if (unit === 'd') {
 				const diffInDays = dayjs(dateWithoutTime(targetDate)).diff(dueDateStart, 'day');
 				if (diffInDays % interval === 0) {
-					return DueState.Due;
+					return IsDue.Due;
 				}
 			}
 		}
 
-		return DueState.NotDue;
+		return IsDue.NotDue;
 	}
 }
 
 interface DueReturn {
 	isRecurring: boolean;
-	isDue: DueState;
+	isDue: IsDue;
 	dueType: DueType;
 	// isRange: boolean;
 }

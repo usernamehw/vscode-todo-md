@@ -6,7 +6,7 @@ import { parseDocument } from './parse';
 import { Count, TheTask } from './TheTask';
 import { dateWithoutTime, DATE_FORMAT, durationTo, getDateInISOFormat } from './time/timeUtils';
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
-import { DueState } from './types';
+import { IsDue } from './types';
 import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, helpCreateSpecialTag, SpecialTagName, taskToString } from './utils/extensionUtils';
 import { forEachTask, getNestedTasksLineNumbers, getTaskAtLineExtension } from './utils/taskUtils';
 import { unique } from './utils/utils';
@@ -330,7 +330,7 @@ export async function resetAllRecurringTasks(document: TextDocument, lastVisit: 
 						const res = new DueDate(task.due.raw, {
 							targetDate: date.toDate(),
 						});
-						if (res.isDue === DueState.Due || res.isDue === DueState.Overdue) {
+						if (res.isDue === IsDue.Due || res.isDue === IsDue.Overdue) {
 							addOverdueSpecialTagWorkspaceEdit(edit, document, line, date.format(DATE_FORMAT));
 							break;
 						}

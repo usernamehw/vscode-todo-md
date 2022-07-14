@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import intersection from 'lodash/intersection';
 import { TheTask } from './TheTask';
-import { DueState } from './types';
+import { IsDue } from './types';
 import { UnsupportedValueError } from './utils/utils';
 
 // 🛑 Do not import anything from 'vscode' or 'extension' into this file
@@ -128,10 +128,10 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
  * Sort tasks by groups in this order: Invalid => Overdue => Due => Has due, but not due => No due specified;
  */
 export function sortByDueDate(tasks: TheTask[]): TheTask[] {
-	const overdueTasks = tasks.filter(t => t.due?.isDue === DueState.Overdue);
-	const dueTasks = tasks.filter(t => t.due?.isDue === DueState.Due);
-	const invalidDue = tasks.filter(t => t.due?.isDue === DueState.Invalid);
-	const dueSpecifiedButNotDue = tasks.filter(t => t.due?.isDue === DueState.NotDue);
+	const overdueTasks = tasks.filter(t => t.due?.isDue === IsDue.Overdue);
+	const dueTasks = tasks.filter(t => t.due?.isDue === IsDue.Due);
+	const invalidDue = tasks.filter(t => t.due?.isDue === IsDue.Invalid);
+	const dueSpecifiedButNotDue = tasks.filter(t => t.due?.isDue === IsDue.NotDue);
 	const dueNotSpecified = tasks.filter(t => !t.due);
 
 	return [
