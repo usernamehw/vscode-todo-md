@@ -29,7 +29,7 @@ body {
 
 	--task-hover-bg: rgba(0, 0, 0, 0.05);
 
-	--task-favorite: #f62caf18;
+	--task-favorite: #f62caf13;
 
 	--task-left-padding: 3px;
 	--twistie-size: calc(var(--font-size) + 4px);
@@ -213,8 +213,8 @@ a {
 // ──── Task ──────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────
 .task {
-	border-left: var(--priority-left-padding) solid transparent;
 	border: 1px solid transparent;
+	border-left: var(--priority-left-padding) solid transparent;
 	border-bottom: 1px solid var(--border-low-contrast);
 	padding: var(--padding) var(--task-left-padding);
 	position: relative;
@@ -245,7 +245,8 @@ a {
 	}
 
 	&--selected {
-		border-color: rgb(0, 162, 255);
+		border-top: 1px solid rgb(0, 162, 255);
+		border-bottom: 1px solid rgb(0, 162, 255);
 		box-shadow: inset 0 0 100vw 100vh var(--selected-task-bg);
 	}
 
