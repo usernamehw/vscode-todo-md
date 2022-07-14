@@ -72,6 +72,7 @@ export default defineComponent({
 			}
 		},
 		onKeydownDown(e: KeyboardEvent) {
+			e.preventDefault();
 			if (this.suggestItemsVisible) {
 				const nextItemIndex = this.activeIndex + 1;
 				if (this.filteredSuggestItems[nextItemIndex]) {
@@ -79,12 +80,12 @@ export default defineComponent({
 				} else {
 					this.selectItemAtIndex(0);
 				}
-				e.preventDefault();
 			} else {
 				this.$emit('keydownDown');
 			}
 		},
 		onKeydownUp(e: KeyboardEvent) {
+			e.preventDefault();
 			if (this.suggestItemsVisible) {
 				const prevItemIndex = this.activeIndex - 1;
 				if (this.filteredSuggestItems[prevItemIndex]) {
@@ -92,7 +93,6 @@ export default defineComponent({
 				} else {
 					this.selectItemAtIndex(this.filteredSuggestItems.length - 1);
 				}
-				e.preventDefault();
 			} else {
 				this.$emit('keydownUp');
 			}
