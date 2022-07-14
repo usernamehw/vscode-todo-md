@@ -101,6 +101,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `$done` - Completed task
 - `$due` - Due or Overdue task
 - `$overdue` - Overdue task
+- `$upcoming` - Task with due date, that is not due (equal to this filter: `-$noDue -$due`)
 - `$recurring` - Recurring tasks
 - `$hidden` - Task with `{h}` special tag
 - `$favorite` - Task with `{f}` special tag

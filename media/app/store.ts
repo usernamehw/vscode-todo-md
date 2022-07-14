@@ -122,6 +122,7 @@ export const useStore = defineStore({
 				'$started',
 				'$due',
 				'$overdue',
+				'$upcoming',
 				'$recurring',
 				'$noDue',
 				'$noTag',

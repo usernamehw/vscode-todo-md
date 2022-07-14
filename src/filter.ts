@@ -11,6 +11,7 @@ const enum FilterType {
 	PriorityEqual,
 	Due,
 	Overdue,
+	Upcoming,
 	Recurring,
 	Done,
 	Favorite,
@@ -113,6 +114,11 @@ export function filterTasks(tasks: TheTask[], filterStr = ''): TheTask[] {
 			} else if (filter.filterType === FilterType.Overdue) {
 				// $overdue
 				if (task.due?.isDue === DueState.Overdue) {
+					filterResult = true;
+				}
+			} else if (filter.filterType === FilterType.Upcoming) {
+				// $upcoming
+				if (task.due !== undefined && task.due.isDue === DueState.NotDue) {
 					filterResult = true;
 				}
 			} else if (filter.filterType === FilterType.Recurring) {
@@ -223,6 +229,8 @@ function parseFilter(filterStr = '') {
 					filter.filterType = FilterType.Due;
 				} else if (value === 'overdue') {
 					filter.filterType = FilterType.Overdue;
+				} else if (value === 'upcoming') {
+					filter.filterType = FilterType.Upcoming;
 				} else if (value === 'recurring') {
 					filter.filterType = FilterType.Recurring;
 				} else if (value === 'noProject') {
