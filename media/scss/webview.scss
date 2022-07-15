@@ -216,12 +216,13 @@ a {
 	position: relative;
 	word-wrap: break-word;
 
-	&:hover {
-		box-shadow: inset 0 0 2000px 0 var(--task-hover-bg);
+	&--filter-dont-match {
+		opacity: 0.5;
 	}
 
-	&--filter-dont-match {
-		opacity: 0.4;
+	&:hover {
+		opacity: 1;
+		box-shadow: inset 0 0 2000px 0 var(--task-hover-bg);
 	}
 
 	&--done {
@@ -241,6 +242,7 @@ a {
 	}
 
 	&--selected {
+		opacity: 1;
 		border-top: 1px solid rgb(0, 162, 255);
 		border-bottom: 1px solid rgb(0, 162, 255);
 		box-shadow: inset 0 0 100vw 100vh var(--selected-task-bg);
