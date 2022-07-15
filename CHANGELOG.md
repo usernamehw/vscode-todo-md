@@ -1,3 +1,12 @@
+## 2.16.0 `15 Jul 2022`
+
+- ✨ Someday file, move to someday command `todomd.moveToSomeday`
+- ✨ Bind <kbd>Ctrl/Cmd</kbd>+<kbd>/</kbd> to toggle comments
+- ✨ Replace `$hasDue` filter with `$noDue`; Add `$upcoming` filter
+- ✨ Sort not due tasks above tasks without due date
+- ✨ [webview] Deprioritize unmatched nested filtered tasks instead of removing them
+- 🔨 [webview] Don't use background for favorite task
+
 ## 2.15.1 `07 Jul 2022`
 
 - ✨ [webview] Show favorite icon
