@@ -198,8 +198,8 @@
 				},
 				"todomd.activatePattern": {
 					"type": "string",
-					"markdownDescription": "Choose files that extension will operate on. By default activated on 2 files (todo.md & todo.archive.md). This format is called `Glob`. Examples:\n\nActivate on any (.txt) file - `**/*.txt`.\n\nActivate only on single file (todo.txt) - `**/todo.txt`\n\nActivate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`",
-					"default": "**/{todo,todo.archive}.md"
+					"markdownDescription": "Choose files that extension will operate on. By default activated on 3 files (todo.md, someday.md & todo.archive.md). This format is called `Glob`. Examples:\n\nActivate on any (.txt) file - `**/*.txt`.\n\nActivate only on single file (todo.txt) - `**/todo.txt`\n\nActivate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`",
+					"default": "**/{todo,someday,todo.archive}.md"
 				},
 				"todomd.getNextNumberOfTasks": {
 					"type": "integer",

@@ -10,7 +10,7 @@
 
 ![webview demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/img/webview_demo.png)
 
-By default works for files with names `todo.md` & `todo.archive.md` (But can be changed with `activatePattern` setting).
+By default works for files with names `todo.md`, `someday.md` & `todo.archive.md` (But can be changed with `todomd.activatePattern` setting).
 
 # Features
 
@@ -195,7 +195,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |durationIncludeSeconds|**false**|When enabled - duration (editor, hover) includes seconds.|
 |autoArchiveTasks|**false**|When enabled - will move tasks to archive file (on completion).|
 |confirmTaskDelete|"always"|Show confirmation when deleting task from Tree View or Webview.|
-|activatePattern|"\*\*/\{todo,todo.archive\}.md"|Choose files that extension will operate on. By default activated on 2 files (todo.md & todo.archive.md). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
+|activatePattern|"\*\*/\{todo,someday,todo.archive\}.md"|Choose files that extension will operate on. By default activated on 3 files (todo.md, someday.md & todo.archive.md). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
 |getNextNumberOfTasks|**5**|Number of tasks returned by `getFewNextTasks` command.|
 |sortTagsView|"alphabetic"|Controls tags Tree View sorting.|
 |sortProjectsView|"alphabetic"|Controls projects Tree View sorting.|
