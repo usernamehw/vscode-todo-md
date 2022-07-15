@@ -23,6 +23,7 @@ import { incrementPriority } from './commands/incrementPriority';
 import { moveToSomeday } from './commands/moveToSomeday';
 import { openDefaultArchiveFile } from './commands/openDefaultArchiveFile';
 import { openDefaultFile } from './commands/openDefaultFile';
+import { openSomedayFile } from './commands/openSomedayFile';
 import { removeAllOverdue } from './commands/removeAllOverdue';
 import { removeOverdue } from './commands/removeOverdue';
 import { resetAllRecurringTasksCommand } from './commands/resetAllRecurringTasks';
@@ -85,8 +86,9 @@ export const enum CommandId {
 	AddTaskToActiveFile = 'todomd.addTaskToActiveFile',
 	SetDueDate = 'todomd.setDueDate',
 	SetDueDateWithArgs = 'todomd.setDueDateWithArgs',
-	OpenDefaultArchiveFile = 'todomd.openDefaultArchiveFile',
 	OpenDefaultFile = 'todomd.openDefaultFile',
+	OpenDefaultArchiveFile = 'todomd.openDefaultArchiveFile',
+	OpenSomedayFile = 'todomd.openSomedayFile',
 	SpecifyDefaultFile = 'todomd.specifyDefaultFile',
 	SpecifyDefaultArchiveFile = 'todomd.specifyDefaultArchiveFile',
 	CompleteTask = 'todomd.completeTask',
@@ -129,8 +131,9 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.AddTaskToDefaultFile, addTaskToDefaultFile);
 	commands.registerCommand(CommandId.AddTaskToActiveFile, addTaskToActiveFile);
 	commands.registerCommand(CommandId.SetDueDateWithArgs, setDueDateWithArgs);
-	commands.registerCommand(CommandId.OpenDefaultArchiveFile, openDefaultArchiveFile);
 	commands.registerCommand(CommandId.OpenDefaultFile, openDefaultFile);
+	commands.registerCommand(CommandId.OpenDefaultArchiveFile, openDefaultArchiveFile);
+	commands.registerCommand(CommandId.OpenSomedayFile, openSomedayFile);
 	commands.registerCommand(CommandId.SpecifyDefaultFile, specifyDefaultFileCommand);
 	commands.registerCommand(CommandId.SpecifyDefaultArchiveFile, specifyDefaultArchiveFileCommand);
 	commands.registerCommand(CommandId.CompleteTask, completeTask);

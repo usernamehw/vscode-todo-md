@@ -115,7 +115,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`
 
 <!-- COMMANDS_START -->
-## Commands (42)
+## Commands (43)
 
 |Command|Description|
 |-|-|
@@ -148,8 +148,9 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.archiveCompletedTasks|Todo MD: Archive completed Tasks|
 |todomd.startTask|Todo MD: Start task (when completed adds `{duration}` special tag)|
 |todomd.toggleFavorite|Todo MD: Toggle Favorite (`{f}` special tag).|
-|todomd.openDefaultArchiveFile|Todo MD: Open default archive file|
 |todomd.openDefaultFile|Todo MD: Open default file|
+|todomd.openDefaultArchiveFile|Todo MD: Open default archive file|
+|todomd.openSomedayFile|Todo MD: Open someday file|
 |todomd.createSimilarTask|Todo MD: Create similar task (same tags, projects, contexts).|
 |todomd.completeTask|Todo MD: Complete a Task|
 |todomd.getNextTask|Todo MD: Get due task from main file. If none are due - get one with the highest priority.|

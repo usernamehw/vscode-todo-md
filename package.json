@@ -1174,15 +1174,20 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.openDefaultFile",
+				"title": "Open default file",
+				"category": "Todo MD",
+				"icon": "$(go-to-file)"
+			},
+			{
 				"command": "todomd.openDefaultArchiveFile",
 				"title": "Open default archive file",
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.openDefaultFile",
-				"title": "Open default file",
-				"category": "Todo MD",
-				"icon": "$(go-to-file)"
+				"command": "todomd.openSomedayFile",
+				"title": "Open someday file",
+				"category": "Todo MD"
 			},
 			{
 				"command": "todomd.createSimilarTask",
