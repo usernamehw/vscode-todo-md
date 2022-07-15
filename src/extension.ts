@@ -86,6 +86,7 @@ export const enum Constants {
 
 	DefaultFileSetting = 'todomd.defaultFile',
 	DefaultArchiveFileSetting = 'todomd.defaultArchiveFile',
+	DefaultSomedayFileSetting = 'todomd.defaultSomedayFile',
 
 	ExtensionMenuPrefix = 'Todo MD:',
 

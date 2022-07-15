@@ -115,7 +115,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`
 
 <!-- COMMANDS_START -->
-## Commands (41)
+## Commands (42)
 
 |Command|Description|
 |-|-|
@@ -160,10 +160,11 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.resetAllRecurringTasks|Todo MD: Reset all Recurring tasks|
 |todomd.followLink|Todo MD: Follow link|
 |todomd.removeOverdue|Todo MD: Remove overdue|
+|todomd.moveToSomeday|Todo MD: Move to Someday file|
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (54)
+## Settings (55)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -189,6 +190,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.tagStyles|\{\}|Set different color for any tag in a webview.|
 |defaultFile|""|Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`.<br>[**Pick default file**](command:todomd.specifyDefaultFile)|
 |defaultArchiveFile|""|Absolute path to file that all archived tasks will be moved to. <br>[**Pick archive file**](command:todomd.specifyDefaultArchiveFile)|
+|defaultSomedayFile|""|Absolute path to file that is used as a "someday" file.|
 |durationIncludeSeconds|**false**|When enabled - duration (editor, hover) includes seconds.|
 |autoArchiveTasks|**false**|When enabled - will move tasks to archive file (on completion).|
 |confirmTaskDelete|"always"|Show confirmation when deleting task from Tree View or Webview.|

@@ -1,10 +1,9 @@
 import { TextDocument, TextEditor, ThemeIcon, window, WorkspaceEdit } from 'vscode';
-import { getSelectedLineNumbers } from '../commands';
 import { setDueDateWorkspaceEdit } from '../documentActions';
 import { DueDate } from '../dueDate';
 import { updateEverything } from '../events';
 import { helpCreateDueDate } from '../time/setDueDateHelper';
-import { applyEdit } from '../utils/extensionUtils';
+import { applyEdit, getSelectedLineNumbers } from '../utils/extensionUtils';
 import { followLink, inputOffset } from '../utils/vscodeUtils';
 
 export function setDueDate(editor: TextEditor) {

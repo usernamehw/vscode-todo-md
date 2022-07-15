@@ -43,7 +43,7 @@ export function forEachTask(f: (task: TheTask)=> void, tasks = $state.tasksAsTre
 }
 
 /**
- * Gets all nested task line numbers (recursive)
+ * Gets all nested task line numbers (recursive).
  */
 export function getNestedTasksLineNumbers(tasks: TheTask[]): number[] {
 	const ids = [];

@@ -171,6 +171,11 @@
 					"markdownDescription": "Absolute path to file that all archived tasks will be moved to. \n\n[**Pick archive file**](command:todomd.specifyDefaultArchiveFile)",
 					"default": ""
 				},
+				"todomd.defaultSomedayFile": {
+					"type": "string",
+					"markdownDescription": "Absolute path to file that is used as a \"someday\" file.",
+					"default": ""
+				},
 				"todomd.durationIncludeSeconds": {
 					"type": "boolean",
 					"markdownDescription": "When enabled - duration (editor, hover) includes seconds.",
@@ -1234,6 +1239,11 @@
 				"category": "Todo MD"
 			},
 			{
+				"command": "todomd.moveToSomeday",
+				"title": "Move to Someday file",
+				"category": "Todo MD"
+			},
+			{
 				"command": "todomd.dev.clearGlobalState",
 				"title": "DEV: Clear global state",
 				"category": "Todo MD"
@@ -1654,6 +1664,10 @@
 				},
 				{
 					"command": "todomd.archiveCompletedTasks",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.moveToSomeday",
 					"when": "todomd:isActive"
 				},
 				{

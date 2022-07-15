@@ -5,7 +5,8 @@ import { getTaskAtLineExtension } from '../utils/taskUtils';
 
 export function archiveCompletedTasks(editor: TextEditor) {
 	const selection = editor.selection;
-	if (selection.isEmpty) {
+	// TODO: multiple selections?
+	if (editor.selections.length === 1 && selection.isEmpty) {
 		// Archive all completed tasks
 		// TODO: should there be a function `getCompletedTasks()`?
 		const completedTasks = $state.tasks.filter(t => t.done);

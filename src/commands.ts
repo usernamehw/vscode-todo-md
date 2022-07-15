@@ -20,6 +20,7 @@ import { goToLine } from './commands/goToLine';
 import { goToLineInArchived } from './commands/goToLineInArchived';
 import { hideTask } from './commands/hideTask';
 import { incrementPriority } from './commands/incrementPriority';
+import { moveToSomeday } from './commands/moveToSomeday';
 import { openDefaultArchiveFile } from './commands/openDefaultArchiveFile';
 import { openDefaultFile } from './commands/openDefaultFile';
 import { removeAllOverdue } from './commands/removeAllOverdue';
@@ -65,6 +66,7 @@ export const enum CommandId {
 	ArchiveSelectedCompletedTasks = 'todomd.archiveSelectedCompletedTasks',
 	StartTask = 'todomd.startTask',
 	RemoveOverdue = 'todomd.removeOverdue',
+	MoveToSomeday = 'todomd.moveToSomeday',
 	// ────────────────────────────────────────────────────────────
 	SortByDefault = 'todomd.sortByDefault',
 	SortByPriority = 'todomd.sortByPriority',
@@ -164,6 +166,7 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.SortByDueDate, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.DueDate));
 	commands.registerTextEditorCommand(CommandId.CreateSimilarTask, createSimilarTask);
 	commands.registerTextEditorCommand(CommandId.ArchiveCompletedTasks, archiveCompletedTasks);
+	commands.registerTextEditorCommand(CommandId.MoveToSomeday, moveToSomeday);
 	commands.registerTextEditorCommand(CommandId.SetDueDate, setDueDate);
 }
 /**
@@ -189,18 +192,6 @@ export async function showTaskInNotification(task: TheTask) {
 	} else {
 		window.showInformationMessage(formattedTask);
 	}
-}
-/**
- * Return unique line numbers with cursors or selections.
- */
-export function getSelectedLineNumbers(editor: TextEditor): number[] {
-	const lineNumbers: number[] = [];
-	for (const selection of editor.selections) {
-		for (let i = selection.start.line; i <= selection.end.line; i++) {
-			lineNumbers.push(i);
-		}
-	}
-	return unique(lineNumbers);
 }
 /**
  * Sort tasks in editor. Default sort is by due date. Same due date sorted by priority.

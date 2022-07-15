@@ -82,3 +82,11 @@ export class UnsupportedValueError extends Error {
 		super(`Unsupported value: ${value}`);
 	}
 }
+
+type Truthy<T> = T extends '' | 0 | false | null | undefined ? never : T;
+/**
+ * filter(Boolean) doesn't work in TypeScript as expected.
+ */
+export function guardedBoolean<T>(value: T): value is Truthy<T> {
+	return Boolean(value);
+}

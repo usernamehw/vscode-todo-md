@@ -1,7 +1,9 @@
 import fs from 'fs';
-import { TextDocument, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { Constants, $config, $state } from '../extension';
+import { TextDocument, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { $config, $state, Constants } from '../extension';
 import { TheTask } from '../TheTask';
+import { getNestedTasksLineNumbers, getTaskAtLineExtension } from './taskUtils';
+import { guardedBoolean, unique } from './utils';
 import { updateSetting } from './vscodeUtils';
 
 /**
@@ -53,9 +55,9 @@ export async function getDocumentForDefaultFile() {
 	}
 	return await workspace.openTextDocument(Uri.file($config.defaultFile));
 }
-async function specifyFile(isArchive: boolean) {
+async function specifyFile(whichFile: 'archive' | 'default' | 'someday') {
 	const filePaths = await window.showOpenDialog({
-		title: `Pick default${isArchive ? ' archive' : ''} file`,
+		title: `Pick ${whichFile} file`,
 	});
 	if (!filePaths) {
 		return undefined;
@@ -65,17 +67,19 @@ async function specifyFile(isArchive: boolean) {
 		return undefined;
 	}
 
-	const settingName = isArchive ? Constants.DefaultArchiveFileSetting : Constants.DefaultFileSetting;
+	const settingName = whichFile === 'default' ? Constants.DefaultFileSetting :
+		whichFile === 'archive' ? Constants.DefaultArchiveFileSetting : Constants.DefaultSomedayFileSetting;
+
 	return updateSetting(settingName, filePath);
 }
 /**
  * Open Settings GUI at `todomd.defaultFile` item
  */
 export async function specifyDefaultFile() {
-	return await specifyFile(false);
+	return await specifyFile('default');
 }
 export async function specifyDefaultArchiveFile() {
-	return await specifyFile(true);
+	return await specifyFile('archive');
 }
 /**
  * Check if default file path is specified. If not - show notification with button to enter it.
@@ -118,6 +122,30 @@ export async function checkArchiveFileAndNotify(): Promise<boolean> {
 			const shouldSpecify = await window.showErrorMessage('Specified default archive file does not exist.', specify);
 			if (shouldSpecify === specify) {
 				specifyDefaultArchiveFile();
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
+}
+/**
+ * Check if someday file path is specified. If not - show notification with button to enter it.
+ */
+export async function checkSomedayFileAndNotify(): Promise<boolean> {
+	const specify = 'Specify';
+	if (!$config.defaultSomedayFile) {
+		const shouldSpecify = await window.showWarningMessage('Someday file path is not specified.', specify);
+		if (shouldSpecify === specify) {
+			specifyFile('someday');
+		}
+		return false;
+	} else {
+		const exists = fs.existsSync($config.defaultSomedayFile);
+		if (!exists) {
+			const shouldSpecify = await window.showErrorMessage('Someday file does not exist.', specify);
+			if (shouldSpecify === specify) {
+				specifyFile('someday');
 			}
 			return false;
 		} else {
@@ -206,3 +234,36 @@ export const specialTagDescription = {
 	[SpecialTagName.Collapsed]: 'collapsed',
 	[SpecialTagName.Count]: 'count',
 } as const;
+
+/**
+ * Return unique line numbers with cursors or selections.
+ */
+export function getSelectedLineNumbers(editor: TextEditor): number[] {
+	const lineNumbers: number[] = [];
+	for (const selection of editor.selections) {
+		for (let i = selection.start.line; i <= selection.end.line; i++) {
+			lineNumbers.push(i);
+		}
+	}
+	return unique(lineNumbers);
+}
+/**
+ * One cannot simply move tasks to another file.
+ * If some of the selected tasks are nested/subtasks - they will
+ * be separated from a parent task.
+ */
+export function getLineNumbersThatCanBeMovedToAnotherFile(editor: TextEditor): number[] {
+	const tasksLineNumbers: number[] = [];
+
+	const tasks = getSelectedLineNumbers(editor)
+		.map(lineNumber => getTaskAtLineExtension(lineNumber))
+		.filter(guardedBoolean)
+		.filter(task => task.parentTaskLineNumber === undefined);
+
+	for (const task of tasks) {
+		tasksLineNumbers.push(task.lineNumber);
+		tasksLineNumbers.push(...getNestedTasksLineNumbers(task.subtasks));
+	}
+
+	return tasksLineNumbers;
+}

@@ -1,8 +1,7 @@
 import { TextDocument, window, WorkspaceEdit } from 'vscode';
-import { getSelectedLineNumbers } from '../commands';
 import { toggleFavoriteWorkspaceEdit } from '../documentActions';
 import { TaskTreeItem } from '../treeViewProviders/taskProvider';
-import { applyEdit, getActiveOrDefaultDocument } from '../utils/extensionUtils';
+import { applyEdit, getActiveOrDefaultDocument, getSelectedLineNumbers } from '../utils/extensionUtils';
 
 export async function toggleFavoriteTask(taskTreeItem?: TaskTreeItem) {
 	const workspaceEdit = new WorkspaceEdit();

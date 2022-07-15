@@ -156,6 +156,10 @@ export interface ExtensionConfig {
 	 */
 	defaultArchiveFile: string;
 	/**
+	 * Absolute path to file that is used as a \"someday\" file.
+	 */
+	defaultSomedayFile: string;
+	/**
 	 * Add more tree views with predefined filters.
 	 */
 	treeViews: {

@@ -250,6 +250,7 @@ export async function archiveTasks(tasks: TheTask[], document: TextDocument) {
 	const archiveDocument = await workspace.openTextDocument(archiveFileUri);
 	let taskLineNumbersToArchive = [];
 
+	// TODO: use getLineNumbersThatCanBeMovedToAnotherFile()
 	for (const task of tasks) {
 		// Only root tasks provided will be archived
 		if (task.parentTaskLineNumber !== undefined) {
@@ -433,6 +434,7 @@ export function removeStartWorkspaceEdit(edit: WorkspaceEdit, document: TextDocu
 		deleteEdit(edit, document, task.startRange);
 	}
 }
+// TODO: this should be 2 functions
 export function archiveTaskWorkspaceEdit(edit: WorkspaceEdit, archiveFileEdit: WorkspaceEdit, archiveDocument: TextDocument, uri: Uri, line: TextLine, shouldDelete: boolean) {
 	appendTaskToFileWorkspaceEdit(archiveFileEdit, archiveDocument, line.text);// Add task to archive file
 	if (shouldDelete) {
@@ -447,7 +449,7 @@ export function setCountCurrentValueWorkspaceEdit(edit: WorkspaceEdit, uri: Uri,
 	const currentRange = new Range(count.range.start.line, charIndexWithOffset, count.range.start.line, charIndexWithOffset + String(count.current).length);
 	edit.replace(uri, currentRange, String(value));
 }
-function appendTaskToFileWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, text: string) {
+export function appendTaskToFileWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, text: string) {
 	const eofPosition = document.lineAt(document.lineCount - 1).rangeIncludingLineBreak.end;
 	edit.insert(document.uri, eofPosition, `\n${text}`);
 }

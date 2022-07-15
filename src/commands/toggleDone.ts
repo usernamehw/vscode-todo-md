@@ -1,10 +1,9 @@
 import { TextDocument, window } from 'vscode';
-import { getSelectedLineNumbers } from '../commands';
 import { toggleDoneOrIncrementCount } from '../documentActions';
 import { updateState } from '../extension';
 import { TaskTreeItem } from '../treeViewProviders/taskProvider';
 import { updateAllTreeViews } from '../treeViewProviders/treeViews';
-import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
+import { getActiveOrDefaultDocument, getSelectedLineNumbers } from '../utils/extensionUtils';
 
 export async function toggleDone(treeItem?: TaskTreeItem) {
 	const editor = window.activeTextEditor;
