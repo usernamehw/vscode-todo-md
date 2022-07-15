@@ -89,7 +89,7 @@ export function filterTasks(tasks: TheTask[], filterStr = ''): FilterTasksResult
 				if (nestedMatch.tasks.length > 0) {
 					nestedResult = true;
 					matchIds.push(...nestedMatch.matchIds);
-					task.subtasks = nestedMatch.tasks;
+					// task.subtasks = nestedMatch.tasks;
 				}
 			}
 			if (filter.filterType === FilterType.RawContains) {
@@ -200,6 +200,9 @@ export function filterTasks(tasks: TheTask[], filterStr = ''): FilterTasksResult
 			nestedResults.push(nestedResult);
 		}
 
+		if (filterResults.every(Boolean)) {
+			matchIds.push(...task.subtasks.map(t => t.lineNumber));
+		}
 		if (filterResults.every(Boolean)) {
 			matchIds.push(task.lineNumber);
 		}
