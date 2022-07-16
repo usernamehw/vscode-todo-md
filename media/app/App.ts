@@ -57,8 +57,12 @@ export default defineComponent({
 	methods: {
 		// ──── Context Menu ──────────────────────────────────────────
 		hideContextMenu() {
-			(this.$refs.taskContextMenu as HTMLElement).hidden = true;
-			this.focusFilterInput();
+			const $contextMenu = (this.$refs.taskContextMenu as HTMLElement);
+			const menuWasVisible = !$contextMenu.hidden;
+			$contextMenu.hidden = true;
+			if (menuWasVisible) {
+				this.focusFilterInput();
+			}
 		},
 		showContextMenu(event: MouseEvent) {
 			const contextMenuContainer = this.$refs.taskContextMenu as HTMLElement;
@@ -149,9 +153,9 @@ export default defineComponent({
 			this.focusFilterInput();
 		});
 
-		window.onfocus = () => {
+		window.addEventListener('focus', () => {
 			this.focusFilterInput();
-		};
+		});
 
 		window.addEventListener('click', e => {
 			const link = (e.target as HTMLElement).closest('a');
