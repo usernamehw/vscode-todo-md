@@ -1158,7 +1158,7 @@
 			},
 			{
 				"command": "todomd.archiveCompletedTasks",
-				"title": "Archive completed Tasks",
+				"title": "Move completed tasks to Archive file",
 				"category": "Todo MD"
 			},
 			{
@@ -1181,12 +1181,12 @@
 			},
 			{
 				"command": "todomd.openDefaultArchiveFile",
-				"title": "Open default archive file",
+				"title": "Open default Archive file",
 				"category": "Todo MD"
 			},
 			{
 				"command": "todomd.openSomedayFile",
-				"title": "Open someday file",
+				"title": "Open Someday file",
 				"category": "Todo MD"
 			},
 			{

@@ -10,7 +10,7 @@
 
 ![webview demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/img/webview_demo.png)
 
-By default works for files with names `todo.md`, `someday.md` & `todo.archive.md` (But can be changed with `todomd.activatePattern` setting).
+By default works for files with names `todo.md`, `someday.md` & `todo.archive.md` (Can be configured with `todomd.activatePattern` setting).
 
 # Features
 
@@ -145,12 +145,12 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.sortByCompletionDate|Todo MD: Sort by Completion Date|
 |todomd.setDueDate|Todo MD: Helper command to set due date relative to now. [Docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#set-due-date-helper-function-todomdsetduedate)|
 |todomd.setDate|Todo MD: Set date|
-|todomd.archiveCompletedTasks|Todo MD: Archive completed Tasks|
+|todomd.archiveCompletedTasks|Todo MD: Move completed tasks to Archive file|
 |todomd.startTask|Todo MD: Start task (when completed adds `{duration}` special tag)|
 |todomd.toggleFavorite|Todo MD: Toggle Favorite (`{f}` special tag).|
 |todomd.openDefaultFile|Todo MD: Open default file|
-|todomd.openDefaultArchiveFile|Todo MD: Open default archive file|
-|todomd.openSomedayFile|Todo MD: Open someday file|
+|todomd.openDefaultArchiveFile|Todo MD: Open default Archive file|
+|todomd.openSomedayFile|Todo MD: Open Someday file|
 |todomd.createSimilarTask|Todo MD: Create similar task (same tags, projects, contexts).|
 |todomd.completeTask|Todo MD: Complete a Task|
 |todomd.getNextTask|Todo MD: Get due task from main file. If none are due - get one with the highest priority.|
