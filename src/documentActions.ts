@@ -147,7 +147,8 @@ export async function tryToDeleteTask(document: TextDocument, lineNumber: number
 	return applyEdit(edit, document);
 }
 /**
- * Either toggle done or increment count
+ * 1. Check if {count} exists => increment count
+ * 2. If it doesn't exist => toggle done
  */
 export async function toggleDoneOrIncrementCount(document: TextDocument, lineNumber: number) {
 	const task = getTaskAtLineExtension(lineNumber);

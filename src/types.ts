@@ -334,6 +334,10 @@ interface WebviewMessageToggleDone extends WebviewMessageBase {
 	type: 'toggleDone';
 	value: number;
 }
+interface WebviewMessageToggleDoneOrIncrementCount extends WebviewMessageBase {
+	type: 'toggleDoneOrIncrementCount';
+	value: number;
+}
 interface WebviewMessageToggleCollapse extends WebviewMessageBase {
 	type: 'toggleTaskCollapse';
 	value: number;
@@ -403,7 +407,7 @@ interface WebviewMessageLoaded extends WebviewMessageBase {
 /**
  * Messages that can only be sent from webview to extension.
  */
-export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageFollowLink | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageLoaded | WebviewMessageSetDueDate | WebviewMessageShowNotification | WebviewMessageStartTask | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleFavorite | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
+export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageFollowLink | WebviewMessageGoToTask | WebviewMessageIncrementCount | WebviewMessageLoaded | WebviewMessageSetDueDate | WebviewMessageShowNotification | WebviewMessageStartTask | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleDoneOrIncrementCount | WebviewMessageToggleFavorite | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
 /**
  * Messages that can only be sent from extension to webview.
  */

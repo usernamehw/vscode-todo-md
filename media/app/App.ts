@@ -174,7 +174,11 @@ export default defineComponent({
 			} else if (e.key === 'd' && e.altKey) {
 				const task = this.storeStore.getTaskAtLine(this.storeStore.selectedTaskLineNumber);
 				if (task) {
-					this.storeStore.toggleDone(task);
+					if (task.count) {
+						SendMessage.toggleDoneOrIncrementCount(task.lineNumber);
+					} else {
+						this.storeStore.toggleDone(task);
+					}
 				}
 			} else if (e.key === 'F2') {
 				this.taskDetailsManuallyTriggered = true;

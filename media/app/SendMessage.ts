@@ -10,6 +10,12 @@ export class SendMessage {
 			value: lineNumber,
 		});
 	}
+	static toggleDoneOrIncrementCount(lineNumber: number) {
+		vscodeApi.postMessage({
+			type: 'toggleDoneOrIncrementCount',
+			value: lineNumber,
+		});
+	}
 	static revealTask(lineNumber: number) {
 		vscodeApi.postMessage({
 			type: 'goToTask',
