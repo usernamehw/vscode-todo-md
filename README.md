@@ -180,7 +180,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.showCheckbox|**true**|Controls whether checkbox is shown in the webview.|
 |webview.showTaskDetails|**false**|EXPERIMENTAL. When true - show box on the bottom of the webview that shows selected task details.|
 |webview.notificationsEnabled|**false**|When true - show notification after some actions (like task completion) in a webview.|
-|webview.fontSize|"14px"|Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)|
+|webview.fontSize|"15px"|Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)|
 |webview.fontFamily|"'Segoe UI', Tahoma, Geneva, Verdana, sans\-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'"|Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)|
 |webview.lineHeight|**1.4**|Controls line height in the webview.|
 |webview.padding|"1px"|Controls top & bottom padding. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)|

@@ -102,7 +102,7 @@
 				"todomd.webview.fontSize": {
 					"type": "string",
 					"markdownDescription": "Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)",
-					"default": "14px"
+					"default": "15px"
 				},
 				"todomd.webview.fontFamily": {
 					"type": "string",
