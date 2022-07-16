@@ -175,7 +175,13 @@ export const useStore = defineStore({
 		},
 		selectFirstTask() {
 			if (this.filteredSortedTasks.tasks.length) {
-				this.selectTask(this.selectedTaskLineNumber = this.filteredSortedTasks.tasks[0].lineNumber);
+				this.selectTask(this.filteredSortedTasks.tasks[0].lineNumber);
+				this.focusFilterInput();
+			}
+		},
+		selectLastTask() {
+			if (this.flattenedFilteredSortedTasks.length) {
+				this.selectTask(this.flattenedFilteredSortedTasks[this.flattenedFilteredSortedTasks.length - 1].lineNumber);
 				this.focusFilterInput();
 			}
 		},

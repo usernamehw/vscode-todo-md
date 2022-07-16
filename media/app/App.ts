@@ -126,7 +126,7 @@ export default defineComponent({
 		},
 		scrollIntoView(lineNumber: number) {
 			// @ts-ignore https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded
-			document.getElementById(`ln${lineNumber}`).scrollIntoViewIfNeeded(false);
+			document.getElementById(`ln${lineNumber}`)?.scrollIntoViewIfNeeded(false);
 		},
 		focusFilterInput() {
 			(this.$refs.suggest as typeof Suggest)?.focus();
@@ -181,6 +181,12 @@ export default defineComponent({
 				setTimeout(() => {
 					(this.$refs.taskDetails as typeof TaskDetailsComponent).focus();
 				}, 100);
+			} else if (e.key === 'Home') {
+				this.storeStore.selectFirstTask();
+				this.scrollIntoView(this.storeStore.selectedTaskLineNumber);
+			} else if (e.key === 'End') {
+				this.storeStore.selectLastTask();
+				this.scrollIntoView(this.storeStore.selectedTaskLineNumber);
 			}
 		});
 	},

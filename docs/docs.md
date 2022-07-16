@@ -127,6 +127,8 @@ Key | Description
 <kbd>↓</kbd>|Select next task
 <kbd>↑</kbd>|Select previous task
 <kbd>→</kbd>|Toggle collapsing of nested tasks
+<kbd>Home</kbd>|Select first task
+<kbd>End</kbd>|Select last task
 <kbd>Alt</kbd>+<kbd>D</kbd>|Toggle selected task completion
 <kbd>F2</kbd>|Edit selected task title
 <kbd>Shift+Delete</kbd>|Delete selected task
