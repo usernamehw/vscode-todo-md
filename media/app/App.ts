@@ -168,9 +168,8 @@ export default defineComponent({
 					SendMessage.deleteTask(this.storeStore.selectedTaskLineNumber);
 				}
 			} else if (e.key === 'Escape') {
-				this.storeStore.selectFirstTask();
 				this.taskDetailsManuallyTriggered = false;
-				(this.$refs.suggest as typeof Suggest)?.focus();
+				this.focusFilterInput();
 				this.hideContextMenu();
 			} else if (e.key === 'd' && e.altKey) {
 				const task = this.storeStore.getTaskAtLine(this.storeStore.selectedTaskLineNumber);
