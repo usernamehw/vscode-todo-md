@@ -176,6 +176,7 @@ export const useStore = defineStore({
 		selectFirstTask() {
 			if (this.filteredSortedTasks.tasks.length) {
 				this.selectTask(this.selectedTaskLineNumber = this.filteredSortedTasks.tasks[0].lineNumber);
+				this.focusFilterInput();
 			}
 		},
 		updateFilterValue(value: string, append = false) {
@@ -342,6 +343,9 @@ window.addEventListener('message', event => {
 			bodyStyle.setProperty('--indent-size', message.value.config.indentSize);
 			bodyStyle.setProperty('--list-scrollbar-value', message.value.config.scrollbarOverflow ? 'overlay' : 'auto');
 			store.updateWebviewTitle();
+			if (store.selectedTaskLineNumber === -1) {
+				store.selectFirstTask();
+			}
 			break;
 		}
 		case 'focusFilterInput': {

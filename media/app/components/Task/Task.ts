@@ -29,8 +29,6 @@ export default defineComponent({
 		},
 		selectThisTask() {
 			this.storeStore.selectTask(this.model.lineNumber);
-			// @ts-ignore
-			this.emitter.emit(VueEvents.FocusFilterInput);
 		},
 		openTaskContextMenu(e: MouseEvent, task: TheTask) {
 			this.storeStore.selectTask(task.lineNumber);

@@ -108,7 +108,6 @@ export default defineComponent({
 		onInput(value: string) {
 			this.storeStore.selectTask(-1);
 			this.storeStore.updateFilterValue(value);
-			this.storeStore.selectFirstTask();
 			this.$nextTick(() => {
 				this.storeStore.selectFirstTask();
 			});
@@ -139,10 +138,6 @@ export default defineComponent({
 		SendMessage.webviewLoaded();
 	},
 	mounted() {
-		setTimeout(() => {
-			this.storeStore.selectFirstTask();
-		});
-
 		// @ts-ignore
 		this.emitter.on(VueEvents.OpenTaskContextMenu, (obj: {event: MouseEvent; task: TheTask}) => {
 			this.contextMenuTask = obj.task;
