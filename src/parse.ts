@@ -88,26 +88,25 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 				const firstColonIndex = word.indexOf(':');
 				const specialTag = word.slice(1, firstColonIndex);
 				const specialTagValue = word.slice(firstColonIndex + 1, -1);
-				const range = new Range(lineNumber, index, lineNumber, index + word.length);
 				if (specialTag === SpecialTagName.Due) {
 					if (specialTagValue.length) {
 						due = new DueDate(specialTagValue);
-						dueRange = range;
+						dueRange = wordRange;
 					}
 				} else if (specialTag === SpecialTagName.Overdue) {
 					overdue = specialTagValue;
-					overdueRange = range;
+					overdueRange = wordRange;
 				} else if (specialTag === SpecialTagName.CreationDate) {
 					creationDate = specialTagValue;
-					specialTagRanges.push(range);
+					specialTagRanges.push(wordRange);
 				} else if (specialTag === SpecialTagName.CompletionDate) {
 					// Presence of completion date indicates that the task is done
 					done = true;
 					if (word !== '{cm}') {
 						completionDate = specialTagValue;
 					}
-					completionDateRange = range;
-					specialTagRanges.push(range);
+					completionDateRange = wordRange;
+					specialTagRanges.push(wordRange);
 				} else if (specialTag === SpecialTagName.Count) {
 					if (specialTagValue === undefined) {
 						break;
@@ -118,34 +117,34 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 					if (!Number.isFinite(currentValue) || !Number.isFinite(neededValue)) {
 						break;
 					}
-					specialTagRanges.push(range);
+					specialTagRanges.push(wordRange);
 					if (currentValue === neededValue) {
 						done = true;
 					}
 					count = {
-						range,
+						range: wordRange,
 						current: currentValue,
 						needed: neededValue,
 					};
 				} else if (specialTag === SpecialTagName.Hidden) {
 					isHidden = true;
-					specialTagRanges.push(range);
+					specialTagRanges.push(wordRange);
 				} else if (specialTag === SpecialTagName.Collapsed) {
 					isCollapsed = true;
-					collapseRange = range;
-					specialTagRanges.push(range);
+					collapseRange = wordRange;
+					specialTagRanges.push(wordRange);
 				} else if (specialTag === SpecialTagName.Favorite) {
 					isFavorite = true;
-					specialTagRanges.push(range);
-					favoriteRange = range;
+					specialTagRanges.push(wordRange);
+					favoriteRange = wordRange;
 				} else if (specialTag === SpecialTagName.Started) {
 					start = specialTagValue;
-					startRange = range;
-					specialTagRanges.push(range);
+					startRange = wordRange;
+					specialTagRanges.push(wordRange);
 				} else if (specialTag === SpecialTagName.Duration) {
 					duration = specialTagValue;
-					durationRange = range;
-					specialTagRanges.push(range);
+					durationRange = wordRange;
+					specialTagRanges.push(wordRange);
 				} else {
 					text.push(word);
 				}
