@@ -168,8 +168,16 @@ export function updateAllTreeViews() {
  */
 export function updateTasksTreeView() {
 	const tasksForProvider = filterTasks($state.tasksAsTree, $state.taskTreeViewFilterValue).tasks;
+	let tasksCount = 0;
+	let completedTasksCount = 0;
+	forEachTask((task => {
+		tasksCount++;
+		if (task.done) {
+			completedTasksCount++;
+		}
+	}), tasksForProvider);
 	taskProvider.refresh(tasksForProvider);
-	tasksView.title = `tasks ${showCompletedPercentage($state.tasks.length, $state.tasks.filter(task => task.done).length)}`;
+	tasksView.title = `tasks ${showCompletedPercentage(tasksCount, completedTasksCount)}`;
 }
 /**
  * Update archived Tasks Tree View (since it's only changing on archiving of the task, which is rare)

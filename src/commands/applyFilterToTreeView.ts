@@ -1,4 +1,4 @@
-import { QuickPickItem, TextEditor, window } from 'vscode';
+import { QuickPickItem, window } from 'vscode';
 import { $config, $state } from '../extension';
 import { tasksView, updateTasksTreeView } from '../treeViewProviders/treeViews';
 import { VscodeContext } from '../types';
