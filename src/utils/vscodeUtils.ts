@@ -13,13 +13,6 @@ export async function openInUntitled(content: string, language?: string): Promis
 	window.showTextDocument(document);
 }
 /**
- * Open file by absolute path in the editor(tab).
- */
-export async function openFileInEditor(path: string) {
-	const document = await workspace.openTextDocument(path);
-	window.showTextDocument(document);
-}
-/**
  * Given only start and end lines - get the full Range (with characters).
  */
 export function getFullRangeFromLines(document: TextDocument, lineStart: number, lineEnd: number): Range {
@@ -50,7 +43,7 @@ export async function followLinks(links: Link[]) {
  */
 export async function followLink(linkString: string) {
 	if (linkString.startsWith('file:///')) {
-		return await openFileInEditorByPath(linkString);
+		return await openFileInEditor(linkString);
 	} else if (linkString.startsWith('app:///')) {
 		return await env.openExternal(Uri.parse(linkString.slice(7)));
 	} else {
@@ -58,11 +51,15 @@ export async function followLink(linkString: string) {
 	}
 }
 /**
- * Open file in vscode.
- * TODO: what's the difference between openFileInEditor & this one?
+ * Open file by absolute path in the editor tab.
  */
-export async function openFileInEditorByPath(path: string) {
-	await openFileInEditor(Uri.parse(path).fsPath);
+export async function openFileInEditor(filePath: string): Promise<void> {
+	// handle vscode file protocol paths too
+	if (filePath.startsWith('file:///')) {
+		filePath = Uri.parse(filePath).fsPath;
+	}
+	const document = await workspace.openTextDocument(filePath);
+	await window.showTextDocument(document);
 }
 /**
  * Open vscode Settings GUI with input value set to the specified value.
