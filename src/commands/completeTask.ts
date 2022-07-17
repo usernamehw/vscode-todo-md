@@ -1,5 +1,5 @@
 import { QuickInputButton, ThemeIcon, window } from 'vscode';
-import { incrementCountForTask, revealTask, toggleDoneAtLine } from '../documentActions';
+import { revealTask, toggleDoneOrIncrementCountAtLines } from '../documentActions';
 import { $state, updateState } from '../extension';
 import { defaultSortTasks } from '../sort';
 import { updateAllTreeViews } from '../treeViewProviders/treeViews';
@@ -60,7 +60,7 @@ export async function completeTask() {
 			revealTask(task.lineNumber);
 		} else if (e.button.tooltip === completeTaskInlineButton.tooltip) {
 			// @ts-ignore
-			await toggleDoneAtLine(await getActiveOrDefaultDocument(), e.item.ln);
+			await toggleDoneOrIncrementCountAtLines(await getActiveOrDefaultDocument(), [e.item.ln]);
 			await updateState();
 			qp.items = defaultSortTasks($state.tasks.filter(t => !t.done)).map(t => ({
 				label: formatTask(t),
@@ -83,11 +83,7 @@ export async function completeTask() {
 		if (!task) {
 			return;
 		}
-		if (task.count) {
-			await incrementCountForTask(document, task.lineNumber, task);
-		} else {
-			await toggleDoneAtLine(document, task.lineNumber);
-		}
+		await toggleDoneOrIncrementCountAtLines(document, [task.lineNumber]);
 		await updateState();
 		updateAllTreeViews();
 		qp.dispose();

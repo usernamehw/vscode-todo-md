@@ -182,14 +182,6 @@ export async function toggleDoneOrIncrementCountAtLines(document: TextDocument, 
 	}
 }
 /**
- * Increment count special tag. If already max `3/3` then set it to `0/3`
- */
-export async function incrementCountForTask(document: TextDocument, lineNumber: number, task: TheTask) {
-	const edit = new WorkspaceEdit();
-	incrementCountForTaskWorkspaceEdit(edit, document, task);
-	return applyEdit(edit, document);
-}
-/**
  * Decrement count special tag. If alredy min `0/3` then do nothing.
  */
 export async function decrementCountForTask(document: TextDocument, lineNumber: number, task: TheTask) {

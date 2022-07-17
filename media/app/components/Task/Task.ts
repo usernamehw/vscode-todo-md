@@ -45,7 +45,7 @@ export default defineComponent({
 			this.storeStore.toggleDone(this.model);
 		},
 		incrementCount() {
-			SendMessage.incrementCount(this.model.lineNumber);
+			SendMessage.toggleDoneOrIncrementCount(this.model.lineNumber);
 		},
 		decrementCount() {
 			SendMessage.decrementCount(this.model.lineNumber);

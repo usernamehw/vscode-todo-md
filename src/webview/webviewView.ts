@@ -1,7 +1,7 @@
 import path from 'path';
 import { CancellationToken, ExtensionContext, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
 import { openSetDueDateInputbox } from '../commands/setDueDate';
-import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
+import { decrementCountForTask, editTask, editTaskRawText, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state } from '../extension';
 import { showCompletedPercentage } from '../statusBar';
@@ -85,11 +85,6 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 				}
 				case 'toggleTaskCollapseRecursive': {
 					await toggleTaskCollapseRecursive(await getActiveOrDefaultDocument(), message.value);
-					await updateEverything();
-					break;
-				}
-				case 'incrementCount': {
-					await incrementCountForTask(await getActiveOrDefaultDocument(), message.value, getTaskAtLineExtension(message.value)!);
 					await updateEverything();
 					break;
 				}

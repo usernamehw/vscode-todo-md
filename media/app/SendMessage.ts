@@ -34,12 +34,6 @@ export class SendMessage {
 			value: lineNumber,
 		});
 	}
-	static incrementCount(lineNumber: number) {
-		vscodeApi.postMessage({
-			type: 'incrementCount',
-			value: lineNumber,
-		});
-	}
 	static decrementCount(lineNumber: number) {
 		vscodeApi.postMessage({
 			type: 'decrementCount',
