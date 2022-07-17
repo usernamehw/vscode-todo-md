@@ -4,14 +4,15 @@ import { LiteralUnion } from '../types';
 import { DATE_FORMAT, dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek, monthStringToMonthIndex } from './timeUtils';
 
 /**
- * Create a due date relative to today. For instance:
+ * Create a due date relative to today. For example:
  *
- * `+10` => in 10 days
- * `Sun` => Closest future Sunday
+ * - `+10` => in 10 days
+ * - `Sun` => Closest future Sunday
+ * - ...
  *
- * - Returns `undefined` for invalid input. TODO: maybe just return empty string?
+ * Returns empty string for invalid input.
  */
-export function helpCreateDueDate(str: LiteralUnion<'next week' | 'this week'>, targetNow = new Date()): string | undefined {
+export function helpCreateDueDate(str: LiteralUnion<'next week' | 'this week'>, targetNow = new Date()): string {
 	if (str === '+') {
 		str = '+1';// alias for tomorrow
 	} else if (str === '-') {
@@ -36,7 +37,7 @@ export function helpCreateDueDate(str: LiteralUnion<'next week' | 'this week'>, 
 			unit === 'w' ? 'week' :
 				unit === 'm' ? 'month' : 'unknown';
 		if (dayJSUnit === 'unknown') {
-			return undefined;
+			return '';
 		}
 		let date: dayjs.Dayjs;
 
@@ -73,6 +74,6 @@ export function helpCreateDueDate(str: LiteralUnion<'next week' | 'this week'>, 
 		const unit = recurringMatch[2] ?? 'd';
 		return `${dayjs().format(DATE_FORMAT)}|e${number}${unit}`;
 	} else {
-		return undefined;
+		return '';
 	}
 }

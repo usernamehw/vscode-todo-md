@@ -31,8 +31,6 @@ export class TaskTreeItem extends TreeItem {
 
 		if (task.done) {
 			this.iconPath = new ThemeIcon('pass', new ThemeColor('todomd.treeViewCompletedTaskIcon'));
-		} else {
-			// this.iconPath = new ThemeIcon('circle-large-outline');// TODO: maybe
 		}
 	}
 }
