@@ -1217,13 +1217,13 @@
 				"category": "Todo MD"
 			},
 			{
-				"command": "todomd.filter",
-				"title": "Filter",
+				"command": "todomd.applyFilterToTreeView",
+				"title": "Apply Filter",
 				"category": "Todo MD",
 				"icon": "$(filter)"
 			},
 			{
-				"command": "todomd.clearFilter",
+				"command": "todomd.clearTreeViewFilter",
 				"title": "Clear Filter",
 				"category": "Todo MD",
 				"icon": "$(clear-all)"
@@ -1476,12 +1476,12 @@
 		"menus": {
 			"view/title": [
 				{
-					"command": "todomd.filter",
+					"command": "todomd.applyFilterToTreeView",
 					"when": "view == todomd.tasks && !todomd:filterActive",
 					"group": "navigation"
 				},
 				{
-					"command": "todomd.clearFilter",
+					"command": "todomd.clearTreeViewFilter",
 					"when": "view == todomd.tasks && todomd:filterActive",
 					"group": "navigation"
 				},

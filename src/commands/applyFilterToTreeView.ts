@@ -4,8 +4,7 @@ import { tasksView, updateTasksTreeView } from '../treeViewProviders/treeViews';
 import { VscodeContext } from '../types';
 import { setContext } from '../utils/vscodeUtils';
 
-// TODO: rename
-export function filter(editor: TextEditor) {
+export function applyFilterToTreeView() {
 	const quickPick = window.createQuickPick();
 	quickPick.items = $config.savedFilters.map(fl => ({
 		label: fl.title,

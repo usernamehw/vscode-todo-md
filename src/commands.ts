@@ -1,16 +1,16 @@
 import { commands, TextEditor, TextEditorEdit, window } from 'vscode';
 import { addTaskToActiveFile } from './commands/addTaskToActiveFile';
 import { addTaskToDefaultFile } from './commands/addTaskToDefaultFile';
+import { applyFilterToTreeView } from './commands/applyFilterToTreeView';
 import { archiveCompletedTasks } from './commands/archiveCompletedTasks';
-import { clearFilter } from './commands/clearFilter';
 import { clearGlobalState } from './commands/clearGlobalState';
+import { clearTreeViewFilter } from './commands/clearTreeViewFilter';
 import { collapseAllNestedTasks } from './commands/collapseAllNestedTasks';
 import { completeTask } from './commands/completeTask';
 import { createSimilarTask } from './commands/createSimilarTask';
 import { decrementPriority } from './commands/decrementPriority';
 import { deleteTask } from './commands/deleteTask';
 import { expandAllNestedTasks } from './commands/expandAllNestedTasks';
-import { filter } from './commands/filter';
 import { focusTasksWebviewAndInput } from './commands/focusTasksWebviewAndInput';
 import { followLinkCommand } from './commands/followLinkCommand';
 import { getFewNextTasksCommand } from './commands/getFewNextTasks';
@@ -49,7 +49,6 @@ import { SortProperty, sortTasks } from './sort';
 import { TheTask } from './TheTask';
 import { getDateInISOFormat } from './time/timeUtils';
 import { formatTask, getTaskAtLineExtension } from './utils/taskUtils';
-import { unique } from './utils/utils';
 import { followLinks, getFullRangeFromLines } from './utils/vscodeUtils';
 
 /**
@@ -92,8 +91,8 @@ export const enum CommandId {
 	SpecifyDefaultFile = 'todomd.specifyDefaultFile',
 	SpecifyDefaultArchiveFile = 'todomd.specifyDefaultArchiveFile',
 	CompleteTask = 'todomd.completeTask',
-	Filter = 'todomd.filter',
-	ClearFilter = 'todomd.clearFilter',
+	ApplyFilterToTreeView = 'todomd.applyFilterToTreeView',
+	ClearTreeViewFilter = 'todomd.clearTreeViewFilter',
 	GoToLine = 'todomd.goToLine',
 	GoToLineInArchived = 'todomd.goToLineInArchived',
 	ResetAllRecurringTasks = 'todomd.resetAllRecurringTasks',
@@ -137,7 +136,8 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.SpecifyDefaultFile, specifyDefaultFileCommand);
 	commands.registerCommand(CommandId.SpecifyDefaultArchiveFile, specifyDefaultArchiveFileCommand);
 	commands.registerCommand(CommandId.CompleteTask, completeTask);
-	commands.registerCommand(CommandId.ClearFilter, clearFilter);
+	commands.registerCommand(CommandId.ApplyFilterToTreeView, applyFilterToTreeView);
+	commands.registerCommand(CommandId.ClearTreeViewFilter, clearTreeViewFilter);
 	commands.registerCommand(CommandId.ClearGlobalState, clearGlobalState);
 	commands.registerCommand(CommandId.ShowGlobalState, showGlobalState);
 	commands.registerCommand(CommandId.RemoveAllOverdue, removeAllOverdue);
@@ -158,7 +158,6 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.ResetAllRecurringTasks, resetAllRecurringTasksCommand);
 	commands.registerTextEditorCommand(CommandId.DecrementPriority, decrementPriority);
 	commands.registerTextEditorCommand(CommandId.ToggleComment, toggleComment);
-	commands.registerTextEditorCommand(CommandId.Filter, filter);
 	commands.registerTextEditorCommand(CommandId.SortByDefault, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Default));
 	commands.registerTextEditorCommand(CommandId.SortByPriority, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Priority));
 	commands.registerTextEditorCommand(CommandId.SortByProject, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Project));
