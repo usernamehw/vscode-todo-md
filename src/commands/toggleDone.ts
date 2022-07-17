@@ -1,5 +1,5 @@
 import { TextDocument, window } from 'vscode';
-import { toggleDoneOrIncrementCount } from '../documentActions';
+import { toggleDoneOrIncrementCountAtLines } from '../documentActions';
 import { updateState } from '../extension';
 import { TaskTreeItem } from '../treeViewProviders/taskProvider';
 import { updateAllTreeViews } from '../treeViewProviders/treeViews';
@@ -20,9 +20,7 @@ export async function toggleDone(treeItem?: TaskTreeItem) {
 		document = editor.document;
 	}
 
-	for (const ln of lineNumbers) {
-		await toggleDoneOrIncrementCount(document, ln);
-	}
+	await toggleDoneOrIncrementCountAtLines(document, lineNumbers);
 
 	await updateState();
 	updateAllTreeViews();

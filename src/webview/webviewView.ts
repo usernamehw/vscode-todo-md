@@ -1,7 +1,7 @@
 import path from 'path';
 import { CancellationToken, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
 import { openSetDueDateInputbox } from '../commands/setDueDate';
-import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCount, toggleFavoriteAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
+import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state, Global } from '../extension';
 import { showCompletedPercentage } from '../statusBar';
@@ -57,7 +57,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					break;
 				}
 				case 'toggleDoneOrIncrementCount': {
-					await toggleDoneOrIncrementCount(await getActiveOrDefaultDocument(), message.value);
+					await toggleDoneOrIncrementCountAtLines(await getActiveOrDefaultDocument(), [message.value]);
 					await updateEverything();
 					break;
 				}
@@ -211,8 +211,10 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 			</html>`;
 	}
 }
+
 /**
  * Update main webview view (tasks)
+ * TODO: keep `webviewProvider` local
  */
 export function updateWebviewView() {
 	if (Global.webviewProvider) {

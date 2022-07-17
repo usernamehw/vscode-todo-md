@@ -7,11 +7,12 @@ import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { formatTask, getTaskAtLineExtension } from '../utils/taskUtils';
 import { followLinks } from '../utils/vscodeUtils';
 
+/**
+ * Show Quick Pick to complete a task.
+ */
 export async function completeTask() {
 	// TODO: refactor this file
-	// Show Quick Pick to complete a task
 	const document = await getActiveOrDefaultDocument();
-	// TODO: should this be tree?
 	const notCompletedTasks = defaultSortTasks($state.tasks.filter(task => !task.done)).map(task => ({
 		label: formatTask(task),
 		ln: task.lineNumber,

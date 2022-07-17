@@ -11,7 +11,7 @@ import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, helpC
 import { forEachTask, getNestedTasksLineNumbers, getTaskAtLineExtension } from './utils/taskUtils';
 import { unique } from './utils/utils';
 
-// This file contains 2 types of functions
+// This file contains 2 types of functions:
 // 1) Performs an action on the document and applies an edit (saves the document)
 // 2) Has a `WorkspaceEdit` suffix that accepts an edit and performs actions(insert/replace/delete) without applying
 
@@ -19,7 +19,7 @@ import { unique } from './utils/utils';
 // ──── Apply Edit ────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────
 /**
- * Replace entire line range with new text. (text is take from task transformed to string).
+ * Replace entire line range with new text. (transform task to its string version).
  */
 export async function editTask(document: TextDocument, task: TheTask) {
 	const edit = new WorkspaceEdit();
@@ -147,44 +147,46 @@ export async function tryToDeleteTask(document: TextDocument, lineNumber: number
 	return applyEdit(edit, document);
 }
 /**
- * 1. Check if {count} exists => increment count
- * 2. If it doesn't exist => toggle done
+ *
  */
-export async function toggleDoneOrIncrementCount(document: TextDocument, lineNumber: number) {
-	const task = getTaskAtLineExtension(lineNumber);
-	if (!task) {
-		return undefined;
+export async function toggleDoneOrIncrementCountAtLines(document: TextDocument, lineNumbers: number[]): Promise<void> {
+	const activeFileEdit = new WorkspaceEdit();
+	const tasksToArchive: TheTask[] = [];
+
+	for (const lineNumber of lineNumbers) {
+		const task = getTaskAtLineExtension(lineNumber);
+		if (!task) {
+			continue;
+		}
+		if (task.count) {
+			incrementCountForTaskWorkspaceEdit(activeFileEdit, document, task);
+		} else {
+			toggleDoneAtLineWorkspaceEdit(activeFileEdit, document, task);
+		}
+
+		if (task.count) {
+			if (task.count.needed - task.count.current === 1) {
+				tasksToArchive.push(task);
+			}
+		} else {
+			if (!task.done) {
+				tasksToArchive.push(task);
+			}
+		}
 	}
-	if (task.count) {
-		return await incrementCountForTask(document, lineNumber, task);
-	} else {
-		await toggleDoneAtLine(document, lineNumber);
-		return undefined;
+
+	await applyEdit(activeFileEdit, document);
+
+	if ($config.autoArchiveTasks) {
+		await archiveTasks(tasksToArchive, document);
 	}
 }
 /**
  * Increment count special tag. If already max `3/3` then set it to `0/3`
  */
 export async function incrementCountForTask(document: TextDocument, lineNumber: number, task: TheTask) {
-	const line = document.lineAt(lineNumber);
 	const edit = new WorkspaceEdit();
-	const count = task.count;
-	if (!count) {
-		return Promise.resolve(undefined);
-	}
-	let newValue = 0;
-	// TODO: this function must call toggleDoneAtLine() !!!
-	if (count.current !== count.needed) {
-		newValue = count.current + 1;
-		if (newValue === count.needed) {
-			insertCompletionDateWorkspaceEdit(edit, document, line, task);
-			removeOverdueWorkspaceEdit(edit, document, task);
-		}
-		setCountCurrentValueWorkspaceEdit(edit, document.uri, count, String(newValue));
-	} else {
-		setCountCurrentValueWorkspaceEdit(edit, document.uri, count, '0');
-		removeCompletionDateWorkspaceEdit(edit, document, task);
-	}
+	incrementCountForTaskWorkspaceEdit(edit, document, task);
 	return applyEdit(edit, document);
 }
 /**
@@ -213,20 +215,7 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 		return;
 	}
 	const edit = new WorkspaceEdit();
-	if (task.overdue) {
-		removeOverdueWorkspaceEdit(edit, document, task);
-		if ($config.autoBumpRecurringOverdueDate && !task.done && task.due?.type === 'recurringWithDate') {
-			replaceRecurringDateWithTodayWorkspaceEdit(edit, document, document.uri, task);
-		}
-	}
-	const line = document.lineAt(lineNumber);
-	if (task.done) {
-		removeCompletionDateWorkspaceEdit(edit, document, task);
-		removeDurationWorkspaceEdit(edit, document, task);
-		removeStartWorkspaceEdit(edit, document, task);
-	} else {
-		insertCompletionDateWorkspaceEdit(edit, document, line, task);
-	}
+	toggleDoneAtLineWorkspaceEdit(edit, document, task);
 	await applyEdit(edit, document);
 
 	if ($config.autoArchiveTasks) {
@@ -528,6 +517,38 @@ export function setDueDateWorkspaceEdit(edit: WorkspaceEdit, document: TextDocum
 	} else {
 		const line = document.lineAt(lineNumber);
 		insertEditAtTheEndOfLine(edit, document, line.range.end, dueDate);
+	}
+}
+function incrementCountForTaskWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, task: TheTask): void {
+	if (!task.count) {
+		return;
+	}
+	let newValue = 0;
+	if (task.count.current !== task.count.needed) {
+		newValue = task.count.current + 1;
+		if (newValue === task.count.needed) {
+			toggleDoneAtLineWorkspaceEdit(edit, document, task);
+		}
+		setCountCurrentValueWorkspaceEdit(edit, document.uri, task.count, String(newValue));
+	} else {
+		setCountCurrentValueWorkspaceEdit(edit, document.uri, task.count, '0');
+		removeCompletionDateWorkspaceEdit(edit, document, task);
+	}
+}
+function toggleDoneAtLineWorkspaceEdit(activeFileEdit: WorkspaceEdit, document: TextDocument, task: TheTask): void {
+	if (task.overdue) {
+		removeOverdueWorkspaceEdit(activeFileEdit, document, task);
+		if ($config.autoBumpRecurringOverdueDate && !task.done && task.due?.type === 'recurringWithDate') {
+			replaceRecurringDateWithTodayWorkspaceEdit(activeFileEdit, document, document.uri, task);
+		}
+	}
+	const line = document.lineAt(task.lineNumber);
+	if (task.done) {
+		removeCompletionDateWorkspaceEdit(activeFileEdit, document, task);
+		removeDurationWorkspaceEdit(activeFileEdit, document, task);
+		removeStartWorkspaceEdit(activeFileEdit, document, task);
+	} else {
+		insertCompletionDateWorkspaceEdit(activeFileEdit, document, line, task);
 	}
 }
 
