@@ -1,5 +1,6 @@
 import { MarkdownString, StatusBarAlignment, StatusBarItem, window } from 'vscode';
-import { $config, Constants } from './extension';
+import { Constants } from './constants';
+import { $config } from './extension';
 import { TheTask } from './TheTask';
 import { formatTask } from './utils/taskUtils';
 import { percentage } from './utils/utils';

@@ -1,14 +1,19 @@
-import { languages, Location, Range } from 'vscode';
-import { Global } from '../extension';
+import { Disposable, languages, Location, Range } from 'vscode';
 import { parseWord } from '../parse';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
 import { getTodoMdFileDocumentSelector } from './languageFeatures';
 import { getAllContextRangesInDocument, getAllProjectRangesInDocument, getAllTagRangesInDocument } from './renameProvider';
 
-export function updateReferenceProvider() {
-	Global.referenceProviderDisposable?.dispose();
+let referenceProviderDisposable: Disposable | undefined;
 
-	Global.referenceProviderDisposable = languages.registerReferenceProvider(
+export function disposeReferenceProvider() {
+	referenceProviderDisposable?.dispose();
+}
+
+export function updateReferenceProvider() {
+	disposeReferenceProvider();
+
+	referenceProviderDisposable = languages.registerReferenceProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideReferences(document, position, context) {

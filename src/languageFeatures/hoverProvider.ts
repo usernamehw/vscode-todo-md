@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { Hover, languages, MarkdownString } from 'vscode';
+import { Disposable, Hover, languages, MarkdownString } from 'vscode';
 import { DueDate } from '../dueDate';
-import { $config, $state, Global } from '../extension';
+import { $config, $state } from '../extension';
 import { parseWord } from '../parse';
 import { getDateInISOFormat } from '../time/timeUtils';
 import { IsDue } from '../types';
@@ -11,10 +11,16 @@ import { getWordRangeAtPosition } from '../utils/vscodeUtils';
 import { getTaskHoverMd } from './getTaskHover';
 import { getTodoMdFileDocumentSelector } from './languageFeatures';
 
-export function updateHover() {
-	Global.hoverDisposable?.dispose();
+let hoverDisposable: Disposable | undefined;
 
-	Global.hoverDisposable = languages.registerHoverProvider(
+export function disposeHover() {
+	hoverDisposable?.dispose();
+}
+
+export function updateHover() {
+	disposeHover();
+
+	hoverDisposable = languages.registerHoverProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideHover(document, position, token) {

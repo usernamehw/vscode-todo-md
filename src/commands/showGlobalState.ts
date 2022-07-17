@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import { Constants, $state } from '../extension';
+import { Constants } from '../constants';
+import { $state } from '../extension';
 import { openInUntitled } from '../utils/vscodeUtils';
 
 export function showGlobalState() {

@@ -1,4 +1,4 @@
-import { sample } from 'lodash';
+import sample from 'lodash/sample';
 import { window } from 'vscode';
 import { showTaskInNotification } from '../commands';
 import { $state, updateState } from '../extension';

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import { CompletionItem, CompletionItemKind, languages, MarkdownString, Position, Range, TextDocument } from 'vscode';
+import { CompletionItem, CompletionItemKind, Disposable, languages, MarkdownString, Position, Range, TextDocument } from 'vscode';
 import { DueDate } from '../dueDate';
-import { $state, Global } from '../extension';
+import { $state } from '../extension';
 import { helpCreateDueDate } from '../time/setDueDateHelper';
 import { getDateInISOFormat, weekdayNamesLong } from '../time/timeUtils';
 import { helpCreateSpecialTag, specialTagDescription, SpecialTagName } from '../utils/extensionUtils';
@@ -9,17 +9,29 @@ import { unique } from '../utils/utils';
 import { getWordAtPosition, getWordRangeAtPosition } from '../utils/vscodeUtils';
 import { getTodoMdFileDocumentSelector } from './languageFeatures';
 
+let tagAutocompleteDisposable: Disposable | undefined;
+let projectAutocompleteDisposable: Disposable | undefined;
+let contextAutocompleteDisposable: Disposable | undefined;
+let generalAutocompleteDisposable: Disposable | undefined;
+let specialTagsAutocompleteDisposable: Disposable | undefined;
+let setDueDateAutocompleteDisposable: Disposable | undefined;
+
+export function disposeCompletionProviders() {
+	tagAutocompleteDisposable?.dispose();
+	projectAutocompleteDisposable?.dispose();
+	contextAutocompleteDisposable?.dispose();
+	generalAutocompleteDisposable?.dispose();
+	specialTagsAutocompleteDisposable?.dispose();
+	setDueDateAutocompleteDisposable?.dispose();
+}
+
 /**
  * Update editor autocomplete/suggest
  */
 export function updateCompletions() {
-	Global.tagAutocompleteDisposable?.dispose();
-	Global.projectAutocompleteDisposable?.dispose();
-	Global.contextAutocompleteDisposable?.dispose();
-	Global.generalAutocompleteDisposable?.dispose();
-	Global.specialTagsAutocompleteDisposable?.dispose();
+	disposeCompletionProviders();
 
-	Global.tagAutocompleteDisposable = languages.registerCompletionItemProvider(
+	tagAutocompleteDisposable = languages.registerCompletionItemProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
@@ -43,7 +55,7 @@ export function updateCompletions() {
 		},
 		'#',
 	);
-	Global.projectAutocompleteDisposable = languages.registerCompletionItemProvider(
+	projectAutocompleteDisposable = languages.registerCompletionItemProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
@@ -67,7 +79,7 @@ export function updateCompletions() {
 		},
 		'+',
 	);
-	Global.contextAutocompleteDisposable = languages.registerCompletionItemProvider(
+	contextAutocompleteDisposable = languages.registerCompletionItemProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
@@ -91,7 +103,7 @@ export function updateCompletions() {
 		},
 		'@',
 	);
-	Global.generalAutocompleteDisposable = languages.registerCompletionItemProvider(
+	generalAutocompleteDisposable = languages.registerCompletionItemProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
@@ -132,7 +144,7 @@ export function updateCompletions() {
 		},
 		'',
 	);
-	Global.specialTagsAutocompleteDisposable = languages.registerCompletionItemProvider(
+	specialTagsAutocompleteDisposable = languages.registerCompletionItemProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {
@@ -165,7 +177,7 @@ export function updateCompletions() {
 		},
 		'{',
 	);
-	Global.setDueDateAutocompleteDisposable = languages.registerCompletionItemProvider(
+	setDueDateAutocompleteDisposable = languages.registerCompletionItemProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideCompletionItems(document: TextDocument, position: Position) {

@@ -1,6 +1,7 @@
 import { TreeView, TreeViewExpansionEvent, Uri, window, workspace } from 'vscode';
+import { Constants } from '../constants';
 import { toggleTaskCollapse } from '../documentActions';
-import { $config, $state, Constants, updateState } from '../extension';
+import { $config, $state, updateState } from '../extension';
 import { filterTasks } from '../filter';
 import { parseDocument } from '../parse';
 import { defaultSortTasks } from '../sort';

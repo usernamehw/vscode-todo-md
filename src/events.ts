@@ -1,15 +1,19 @@
 import dayjs from 'dayjs';
 import throttle from 'lodash/throttle';
-import { languages, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
+import { Disposable, languages, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
 import { getNextFewTasks } from './commands/getFewNextTasks';
-import { doUpdateEditorDecorations } from './decorations';
+import { Constants } from './constants';
+import { disposeDecorations, doUpdateEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
-import { $config, $state, Constants, counterStatusBar, Global, mainStatusBar, updateLastVisitGlobalState, updateState } from './extension';
+import { $config, $state, counterStatusBar, mainStatusBar, updateLastVisitGlobalState, updateState } from './extension';
 import { clearDiagnostics, updateDiagnostic } from './languageFeatures/diagnostics';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
 import { setContext } from './utils/vscodeUtils';
+
+let changeTextDocumentDisposable: Disposable | undefined;
+let changeActiveTextEditorDisposable: Disposable | undefined;
 
 /**
  * Active text editor changes (tab).
@@ -85,15 +89,31 @@ export function isTheRightFileName(editor: TextEditor): boolean {
  */
 export function activateEditorFeatures(editor: TextEditor) {
 	$state.theRightFileOpened = true;
-	Global.changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
+	changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	counterStatusBar.show();
 }
 /**
  * Deactivate document text change event listener.
  */
 export function deactivateEditorFeatures() {
-	Global.changeTextDocumentDisposable?.dispose();
+	changeTextDocumentDisposable?.dispose();
 	counterStatusBar.hide();
+}
+export function disposeEditorDisposables() {
+	disposeDecorations();
+	changeTextDocumentDisposable?.dispose();
+}
+
+export function updateOnDidChangeActiveEditor() {
+	/**
+	 * The event is fired twice quickly when closing an editor, also when swtitching to untitled file ???
+	 */
+	changeActiveTextEditorDisposable = window.onDidChangeActiveTextEditor(throttle(onChangeActiveTextEditor, 25, {
+		leading: false,
+	}));
+}
+export function disposeActiveEditorChange() {
+	changeActiveTextEditorDisposable?.dispose();
 }
 /**
  * - Update state (parse the active/default file)

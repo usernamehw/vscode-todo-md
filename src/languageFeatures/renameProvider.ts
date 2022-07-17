@@ -1,14 +1,19 @@
-import { languages, Position, Range, WorkspaceEdit } from 'vscode';
-import { Global } from '../extension';
+import { Disposable, languages, Position, Range, WorkspaceEdit } from 'vscode';
 import { ParsedWordContext, ParsedWordProject, ParsedWordTags, parseWord } from '../parse';
 import { forEachTask } from '../utils/taskUtils';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
 import { getTodoMdFileDocumentSelector } from './languageFeatures';
 
-export function updateRenameProvider() {
-	Global.renameProviderDisposable?.dispose();
+let renameProviderDisposable: Disposable | undefined;
 
-	Global.renameProviderDisposable = languages.registerRenameProvider(
+export function disposeRenameProvider() {
+	renameProviderDisposable?.dispose();
+}
+
+export function updateRenameProvider() {
+	disposeRenameProvider();
+
+	renameProviderDisposable = languages.registerRenameProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideRenameEdits(document, position, newName) {

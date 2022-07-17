@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { TextDocument, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { $config, $state, Constants } from '../extension';
+import { Constants } from '../constants';
+import { $config, $state } from '../extension';
 import { TheTask } from '../TheTask';
 import { getNestedTasksLineNumbers, getTaskAtLineExtension } from './taskUtils';
 import { guardedBoolean, unique } from './utils';

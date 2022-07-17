@@ -21,6 +21,7 @@ export function getFullRangeFromLines(document: TextDocument, lineStart: number,
 }
 /**
  * Set vscode context.
+ * TODO: type safe calls
  */
 export async function setContext(context: VscodeContext, value: any) {
 	return await commands.executeCommand('setContext', context, value);

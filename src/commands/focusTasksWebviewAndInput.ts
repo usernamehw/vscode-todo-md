@@ -1,7 +1,7 @@
 import { commands } from 'vscode';
-import { Global } from '../extension';
+import { focusWebviewFilterInput } from '../webview/webviewView';
 
 export async function focusTasksWebviewAndInput() {
 	await commands.executeCommand('todomd.webviewTasks.focus');
-	Global.webviewProvider.focusFilterInput();
+	focusWebviewFilterInput();
 }

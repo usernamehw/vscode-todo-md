@@ -1,14 +1,19 @@
-import { DocumentHighlight, DocumentHighlightKind, languages, Range } from 'vscode';
-import { $config, Global } from '../extension';
+import { Disposable, DocumentHighlight, DocumentHighlightKind, languages, Range } from 'vscode';
 import { parseWord } from '../parse';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
 import { getTodoMdFileDocumentSelector } from './languageFeatures';
 import { getAllContextRangesInDocument, getAllProjectRangesInDocument, getAllTagRangesInDocument } from './renameProvider';
 
-export function updateDocumentHighlights() {
-	Global.documentHighlightsDisposable?.dispose();
+let documentHighlightsDisposable: Disposable | undefined;
 
-	Global.documentHighlightsDisposable = languages.registerDocumentHighlightProvider(
+export function disposeDocumentHighlights() {
+	documentHighlightsDisposable?.dispose();
+}
+
+export function updateDocumentHighlights() {
+	disposeDocumentHighlights();
+
+	documentHighlightsDisposable = languages.registerDocumentHighlightProvider(
 		getTodoMdFileDocumentSelector(),
 		{
 			provideDocumentHighlights(document, position) {

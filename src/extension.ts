@@ -3,13 +3,18 @@ import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import throttle from 'lodash/throttle';
-import { ConfigurationChangeEvent, Disposable, ExtensionContext, Range, TextDocument, TextEditorDecorationType, window, workspace } from 'vscode';
+import { ConfigurationChangeEvent, ExtensionContext, Range, TextDocument, window, workspace } from 'vscode';
 import { registerAllCommands } from './commands';
+import { Constants } from './constants';
 import { updateEditorDecorationStyle } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
-import { checkIfNeedResetRecurringTasks, onChangeActiveTextEditor } from './events';
+import { checkIfNeedResetRecurringTasks, disposeActiveEditorChange, disposeEditorDisposables, onChangeActiveTextEditor, updateOnDidChangeActiveEditor } from './events';
+import { disposeCompletionProviders } from './languageFeatures/completionProviders';
+import { disposeDocumentHighlights } from './languageFeatures/documentHighlights';
+import { disposeHover } from './languageFeatures/hoverProvider';
 import { updateLanguageFeatures } from './languageFeatures/languageFeatures';
+import { disposeReferenceProvider } from './languageFeatures/referenceProvider';
+import { disposeRenameProvider } from './languageFeatures/renameProvider';
 import { parseDocument } from './parse';
 import { CounterStatusBar, MainStatusBar } from './statusBar';
 import { TheTask } from './TheTask';
@@ -18,7 +23,7 @@ import { ExtensionConfig, ItemForProvider, VscodeContext } from './types';
 import { updateUserSuggestItems } from './userSuggestItems';
 import { getActiveDocument, getDocumentForDefaultFile } from './utils/extensionUtils';
 import { getEditorLineHeight, setContext } from './utils/vscodeUtils';
-import { TasksWebviewViewProvider } from './webview/webviewView';
+import { createWebviewView } from './webview/webviewView';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -69,83 +74,13 @@ export abstract class $state {
 	static editorLineHeight = 20;
 }
 
-
-export const enum Constants {
-	ExtensionSettingsPrefix = 'todomd',
-	LastVisitByFileStorageKey = 'LAST_VISIT_BY_FILE_STORAGE_KEY',
-
-	TagsTreeViewId = 'todomd.tags',
-	ProjectsTreeViewId = 'todomd.projects',
-	ContextsTreeViewId = 'todomd.contexts',
-	DueTreeViewId = 'todomd.due',
-	TasksTreeViewId = 'todomd.tasks',
-	ArchivedTreeViewId = 'todomd.archived',
-	Generic1TreeViewId = 'todomd.generic1',
-	Generic2TreeViewId = 'todomd.generic2',
-	Generic3TreeViewId = 'todomd.generic3',
-
-	DefaultFileSetting = 'todomd.defaultFile',
-	DefaultArchiveFileSetting = 'todomd.defaultArchiveFile',
-	DefaultSomedayFileSetting = 'todomd.defaultSomedayFile',
-
-	ExtensionMenuPrefix = 'Todo MD:',
-
-	ThrottleEverything = 120,
-}
-
 export let $config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
 export const counterStatusBar = new CounterStatusBar();
 export const mainStatusBar = new MainStatusBar();
 
-/**
- * Global vscode variables (mostly disposables)
- */
-export class Global {
-	static webviewProvider: TasksWebviewViewProvider;
-
-	static tagAutocompleteDisposable: Disposable;
-	static projectAutocompleteDisposable: Disposable;
-	static contextAutocompleteDisposable: Disposable;
-	static generalAutocompleteDisposable: Disposable;
-	static specialTagsAutocompleteDisposable: Disposable;
-	static setDueDateAutocompleteDisposable: Disposable;
-
-	static hoverDisposable: Disposable;
-	static documentHighlightsDisposable: Disposable;
-	static renameProviderDisposable: Disposable;
-	static referenceProviderDisposable: Disposable;
-	static changeTextDocumentDisposable: Disposable;
-	static changeActiveTextEditorDisposable: Disposable;
-
-	// TODO: decoration types should be inside decorations.ts file
-	static completedTaskDecorationType: TextEditorDecorationType;
-	static favoriteTaskDecorationType: TextEditorDecorationType;
-	static commentDecorationType: TextEditorDecorationType;
-	static priorityADecorationType: TextEditorDecorationType;
-	static priorityBDecorationType: TextEditorDecorationType;
-	static priorityCDecorationType: TextEditorDecorationType;
-	static priorityDDecorationType: TextEditorDecorationType;
-	static priorityEDecorationType: TextEditorDecorationType;
-	static priorityFDecorationType: TextEditorDecorationType;
-	static tagsDecorationType: TextEditorDecorationType;
-	static tagWithDelimiterDecorationType: TextEditorDecorationType;
-	static specialTagDecorationType: TextEditorDecorationType;
-	static projectDecorationType: TextEditorDecorationType;
-	static contextDecorationType: TextEditorDecorationType;
-	static notDueDecorationType: TextEditorDecorationType;
-	static dueDecorationType: TextEditorDecorationType;
-	static overdueDecorationType: TextEditorDecorationType;
-	static invalidDueDateDecorationType: TextEditorDecorationType;
-	static closestDueDateDecorationType: TextEditorDecorationType;
-	static nestedTasksCountDecorationType: TextEditorDecorationType;
-	static nestedTasksPieDecorationType: TextEditorDecorationType;
-
-	static userSpecifiedAdvancedTagDecorations: boolean;
-}
-
-export async function activate(extensionContext: ExtensionContext) {
-	$state.extensionContext = extensionContext;
-	const lastVisitByFile = extensionContext.globalState.get<typeof $state['lastVisitByFile'] | undefined>(Constants.LastVisitByFileStorageKey);
+export async function activate(context: ExtensionContext) {
+	$state.extensionContext = context;
+	const lastVisitByFile = context.globalState.get<typeof $state['lastVisitByFile'] | undefined>(Constants.LastVisitByFileStorageKey);
 	$state.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
 	$state.editorLineHeight = getEditorLineHeight();
@@ -153,6 +88,7 @@ export async function activate(extensionContext: ExtensionContext) {
 	updateUserSuggestItems();
 	registerAllCommands();
 	createAllTreeViews();
+	createWebviewView(context);
 
 	const defaultFileDocument = await getDocumentForDefaultFile();
 	if (defaultFileDocument) {
@@ -166,23 +102,12 @@ export async function activate(extensionContext: ExtensionContext) {
 
 	onChangeActiveTextEditor(window.activeTextEditor);// Trigger on change event at activation
 
-	Global.webviewProvider = new TasksWebviewViewProvider($state.extensionContext.extensionUri);
-	$state.extensionContext.subscriptions.push(
-		window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, Global.webviewProvider),
-	);
-
 	updateAllTreeViews();
 	updateArchivedTasks();
 	updateIsDevContext();
 
 	updateLanguageFeatures();
-
-	/**
-	 * The event is fired twice quickly when closing an editor, also when swtitching to untitled file ???
-	 */
-	Global.changeActiveTextEditorDisposable = window.onDidChangeActiveTextEditor(throttle(onChangeActiveTextEditor, 25, {
-		leading: false,
-	}));
+	updateOnDidChangeActiveEditor();
 
 	function onConfigChange(e: ConfigurationChangeEvent) {
 		if (!e.affectsConfiguration(Constants.ExtensionSettingsPrefix)) {
@@ -209,7 +134,7 @@ export async function activate(extensionContext: ExtensionContext) {
 		}
 	}
 
-	extensionContext.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));
+	context.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));
 }
 /**
  * Update primary `state` properties, such as `tasks` or `tags`, based on provided document or based on default file
@@ -247,30 +172,6 @@ export async function updateState() {
 	$state.projects = treeItems.projects;
 	$state.contexts = treeItems.contexts;
 }
-function disposeEditorDisposables() {
-	Global.favoriteTaskDecorationType?.dispose();
-	Global.completedTaskDecorationType?.dispose();
-	Global.commentDecorationType?.dispose();
-	Global.priorityADecorationType?.dispose();
-	Global.priorityBDecorationType?.dispose();
-	Global.priorityCDecorationType?.dispose();
-	Global.priorityDDecorationType?.dispose();
-	Global.priorityEDecorationType?.dispose();
-	Global.priorityFDecorationType?.dispose();
-	Global.tagsDecorationType?.dispose();
-	Global.tagWithDelimiterDecorationType?.dispose();
-	Global.specialTagDecorationType?.dispose();
-	Global.projectDecorationType?.dispose();
-	Global.contextDecorationType?.dispose();
-	Global.notDueDecorationType?.dispose();
-	Global.dueDecorationType?.dispose();
-	Global.overdueDecorationType?.dispose();
-	Global.invalidDueDateDecorationType?.dispose();
-	Global.closestDueDateDecorationType?.dispose();
-	Global.nestedTasksCountDecorationType?.dispose();
-	Global.nestedTasksPieDecorationType?.dispose();
-	Global.changeTextDocumentDisposable?.dispose();
-}
 /**
  * Update global storage value of last visit by file
  */
@@ -281,16 +182,10 @@ export async function updateLastVisitGlobalState(stringUri: string, date: Date) 
 
 export function deactivate() {
 	disposeEditorDisposables();
-	Global.tagAutocompleteDisposable?.dispose();
-	Global.projectAutocompleteDisposable?.dispose();
-	Global.contextAutocompleteDisposable?.dispose();
-	Global.generalAutocompleteDisposable?.dispose();
-	Global.specialTagsAutocompleteDisposable?.dispose();
-	Global.setDueDateAutocompleteDisposable?.dispose();
-	Global.changeTextDocumentDisposable?.dispose();
-	Global.hoverDisposable?.dispose();
-	Global.documentHighlightsDisposable?.dispose();
-	Global.renameProviderDisposable?.dispose();
-	Global.referenceProviderDisposable?.dispose();
-	Global.changeActiveTextEditorDisposable?.dispose();
+	disposeCompletionProviders();
+	disposeHover();
+	disposeDocumentHighlights();
+	disposeRenameProvider();
+	disposeReferenceProvider();
+	disposeActiveEditorChange();
 }

@@ -1,9 +1,9 @@
 import path from 'path';
-import { CancellationToken, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
+import { CancellationToken, ExtensionContext, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
 import { openSetDueDateInputbox } from '../commands/setDueDate';
 import { decrementCountForTask, editTask, editTaskRawText, incrementCountForTask, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
-import { $config, $state, Global } from '../extension';
+import { $config, $state } from '../extension';
 import { showCompletedPercentage } from '../statusBar';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
@@ -11,6 +11,8 @@ import { getTaskAtLineExtension } from '../utils/taskUtils';
 import { UnsupportedValueError } from '../utils/utils';
 import { followLink } from '../utils/vscodeUtils';
 import { getNonce } from './webviewUtils';
+
+let tasksWebviewViewProvider: TasksWebviewViewProvider;
 
 export class TasksWebviewViewProvider implements WebviewViewProvider {
 	public static readonly viewType = 'todomd.webviewTasks';
@@ -212,13 +214,19 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 	}
 }
 
+export function createWebviewView(context: ExtensionContext) {
+	tasksWebviewViewProvider = new TasksWebviewViewProvider(context.extensionUri);
+	context.subscriptions.push(
+		window.registerWebviewViewProvider(TasksWebviewViewProvider.viewType, tasksWebviewViewProvider),
+	);
+}
 /**
  * Update main webview view (tasks)
- * TODO: keep `webviewProvider` local
  */
 export function updateWebviewView() {
-	if (Global.webviewProvider) {
-		Global.webviewProvider.sendEverything();
-	}
+	tasksWebviewViewProvider.sendEverything();
+}
+export function focusWebviewFilterInput() {
+	tasksWebviewViewProvider.focusFilterInput();
 }
 
