@@ -5,7 +5,7 @@
     - [Filter uses AND logic](#filter-uses-and-logic)
 - [Set due date helper function `todomd.setDueDate`](#set-due-date-helper-function-todomdsetduedate)
     - [Syntax](#syntax)
-    - [Set due date with autocomplete](#set-due-date-with-autocomplete)
+    - [Set due date with autocomplete](#use-set-due-date-helper-with-autocomplete)
 - [Advanced editor decorations](#advanced-editor-decorations)
 - [Webview](#webview)
     - [Tasks are rendered as markdown](#tasks-are-rendered-as-markdown)
@@ -43,20 +43,23 @@ For instance, filter `#html #css` will only return items containing both tags (1
 
 example | description
 --- | ---
-`+0`|today
+`+0`|today (plus needed)
 `+1`|tomorrow
+`-1`|yesterday
 `+1d`|tomorrow
 `+1w`|in one week
 `-1w`|one week ago
 `+1m`|in one month
 `-1m`|one month ago
-`-1`|yesterday
+`0`|last day of the month
 `20`|closest future 20th date. If current date is <= 20, then it would be 20th of the current month. Otherwise, 20th of the next month.
+`this week`|This week date (depends on `todomd.setDueDateThisWeekDay` setting)
+`next week`|Next week date (depends on `todomd.setDueDateNextWeekDay` setting)
 `fri` or `friday`|closest future friday.
 `nov 20` or `november 20`|closest future 20th of November.
 `e3d`|every 3 days with today as a starting date
 
-### Set due date with autocomplete
+### Use set due date helper with autocomplete
 
 It's also possible to set due date by typing `$` at the end of the word of the future date:
 
@@ -72,21 +75,7 @@ It's also possible to set due date by typing `$` at the end of the word of the f
 
 It's possible to tweak some of the editor decorations with `todomd.decorations` setting.
 
-Examples:
-
-Use background for priority:
-
-```js
-"todomd.decorations": {
-    "priorityA": {
-        "color": "inherit",
-        "backgroundColor": "#fe7474",
-        "borderRadius": "5px",
-    },
-}
-```
-
-Use background and gutter icon for completed task:
+Example: use background and gutter icon for completed task:
 
 ```js
 "completedTask": {
@@ -116,9 +105,10 @@ Some text <mark>Important</mark> text text text
 A markdown link [GitHub](https://github.com)
 <span style="display:inline-block;background:linear-gradient(0.25turn,#3f87a6,#ebf8e1,#f69d3c);color:#fff;padding:0.5rem;border-radius:3px;font-style:bold;">==========</span>
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" preserveAspectRatio="xMidYMid"><path d="M191.979 0v219.867L0 191.354l191.979 64.644 64-26.623V30.592l.021-.01-.021-.042v-3.915L191.979 0zm-67.183 37.458L65.994 95.583 30.592 68.921l-14.59 4.873 36.017 35.604L16.002 145l14.59 4.875 35.402-26.663h.002l58.798 58.121 35.217-14.963V52.421l-35.215-14.963zm-.002 41.473v60.927L84.34 109.394l40.454-30.463z" fill="#016ec5"/></svg> Inline svg icon
+Image: <br> <img width="100" height="100" src="https://unsplash.it/200/200">
 ```
 
-![webview renders markdown demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/docs/img/webview_markdown_enabled.png)
+![webview renders markdown demo](https://raw.githubusercontent.com/usernamehw/vscode-todo-md/master/docs/img/webview_markdown.png)
 
 ### Webview Hotkeys
 
@@ -131,7 +121,7 @@ Key | Description
 <kbd>End</kbd>|Select last task
 <kbd>Alt</kbd>+<kbd>D</kbd>|Toggle selected task completion
 <kbd>F2</kbd>|Edit selected task title
-<kbd>Shift+Delete</kbd>|Delete selected task
+<kbd>Shift</kbd>+<kbd>Delete</kbd>|Delete selected task
 <kbd>Ctrl</kbd>+<kbd>Space</kbd>|Open autocomplete (When `todomd.webview.autoShowSuggest` is disabled)
 <kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> (on a task)|Reveals task in the file
 <kbd>L Mouse Button</kbd> (on tag/project/context)|Set filter to the value of the item
