@@ -40,6 +40,8 @@ body {
 	--twistie-hover-bg: rgba(0, 0, 0, 0.07);
 	--checkbox-hover-bg: rgba(0, 0, 0, 0.07);
 
+	--tag-padding: 0px 4px;
+
 	--tag-fg: #{$tagForeground};
 	--tag-bg: #{$tagBackground};
 	--tag-border: #{$tagBorder};
@@ -107,10 +109,12 @@ body.vscode-dark {
 
 	--done-task-bg: #99ff8c1a;
 
-	--tag-bg: #{darken($tagBackground, 10%)};
+	--tag-padding: 1px 4px;
+
+	--tag-bg: #{darken($tagBackground, 12.5%)};
 	--tag-fg: #000000;
 
-	--project-bg: #{darken($projectBackground, 20%)};
+	--project-bg: #{darken($projectBackground, 22.5%)};
 	--project-fg: #000000;
 
 	--context-bg: #{darken($contextBackground, 10%)};
@@ -324,7 +328,7 @@ a {
 		cursor: pointer;
 		font-family: var(--vscode-editor-font-family);
 		margin-left: $approxOneSpace;
-		padding: 0 4px;
+		padding: var(--tag-padding);
 		white-space: pre;
 
 		&:hover {
