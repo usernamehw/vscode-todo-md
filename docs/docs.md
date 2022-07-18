@@ -83,14 +83,23 @@ Example: use background and gutter icon for completed task:
     "overviewRulerColor": "#80e73caa",
     "gutterIconPath": "C:/icons/check.png",
     "gutterIconSize": "20px",
-    "textDecoration": "none;",
-    "light": {
-        "textDecoration": "none;",
-    }
 },
 ```
 
 ![completed_task_gif](./img/completed_task_decoration.gif)
+
+Change appearance of a chosen project/tag/context:
+
+```js
+"todomd.decorations": {
+	"#important": {
+		"color": "#ff000080",
+		"fontWeight": "bold"
+	},
+},
+```
+
+![advanced_decoration_specific_tag](./img/advanced_decoration_specific_tag.png)
 
 ## Webview
 
