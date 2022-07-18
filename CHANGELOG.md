@@ -1,3 +1,10 @@
+## 2.17.0 `18 Jul 2022`
+
+- ✨ [editor] Advanced editor decorations: allow targeting a specific project/tag/context [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)
+- 🐛 [Tree View] Applying filter should change counter/percentage in title
+- 🔨 [editor] Toggle done for multiple tasks should be done in one edit
+- 🔨 Minor tweaks and refactoring
+
 ## 2.16.0 `15 Jul 2022`
 
 - ✨ Someday file, move to someday command `todomd.moveToSomeday`

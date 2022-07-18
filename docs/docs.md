@@ -78,12 +78,14 @@ It's possible to tweak some of the editor decorations with `todomd.decorations` 
 Example: use background and gutter icon for completed task:
 
 ```js
-"completedTask": {
-    "backgroundColor": "#80e73c10",
-    "overviewRulerColor": "#80e73caa",
-    "gutterIconPath": "C:/icons/check.png",
-    "gutterIconSize": "20px",
-},
+"todomd.decorations": {
+	"completedTask": {
+		"backgroundColor": "#80e73c10",
+		"overviewRulerColor": "#80e73caa",
+		"gutterIconPath": "C:/icons/check.png",
+		"gutterIconSize": "20px",
+	},
+}
 ```
 
 ![completed_task_gif](./img/completed_task_decoration.gif)
