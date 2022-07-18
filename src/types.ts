@@ -134,9 +134,7 @@ export interface ExtensionConfig {
 	/**
 	 * Advanced decorations allowing to change any available editor decoration options (borders, outline, background, foreground, before, after...)
 	 */
-	decorations: {
-		[key in AdvancedDecorations]: DecorationRenderOptions;
-	};
+	decorations: Record<LiteralUnion<AdvancedDecorations>, DecorationRenderOptions>;
 	/**
 	 * Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).
 	 */

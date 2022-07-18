@@ -27,6 +27,14 @@ let closestDueDateDecorationType: TextEditorDecorationType;
 let nestedTasksCountDecorationType: TextEditorDecorationType;
 let nestedTasksPieDecorationType: TextEditorDecorationType;
 
+let projectAdvancedDecorations: Record<string, TextEditorDecorationType> = {};
+let tagAdvancedDecorations: Record<string, TextEditorDecorationType> = {};
+let contextAdvancedDecorations: Record<string, TextEditorDecorationType> = {};
+
+let projectAdvancedExist = false;
+let tagAdvancedExist = false;
+let contextAdvancedExist = false;
+
 export function disposeDecorations() {
 	completedTaskDecorationType?.dispose();
 	favoriteTaskDecorationType?.dispose();
@@ -49,6 +57,16 @@ export function disposeDecorations() {
 	closestDueDateDecorationType?.dispose();
 	nestedTasksCountDecorationType?.dispose();
 	nestedTasksPieDecorationType?.dispose();
+
+	for (const decoration of Object.values(projectAdvancedDecorations)) {
+		decoration?.dispose();
+	}
+	for (const decoration of Object.values(tagAdvancedDecorations)) {
+		decoration?.dispose();
+	}
+	for (const decoration of Object.values(contextAdvancedDecorations)) {
+		decoration?.dispose();
+	}
 }
 
 /**
@@ -106,22 +124,20 @@ export function updateEditorDecorationStyle() {
 		fontWeight: 'bold',
 		...$config.decorations.priorityF,
 	});
-	const counterBadgeDecoration = ';position:absolute;display:inline-flex;align-items:center;padding:0px 1px;border-radius:2px;font-size:9px;top:-10%;height:50%;';
-	const counterBadgeDecorationLight = 'background-color:rgba(0,0,0,0.06);color:#111;';
-	const counterBadgeDecorationDark = 'background-color:rgba(255,255,255,0.12);color:#eee;';
+	projectDecorationType = window.createTextEditorDecorationType({
+		color: new ThemeColor('todomd.projectForeground'),
+		...getBadgeDecorationStyle(),
+		...$config.decorations.project,
+	});
 	tagsDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagForeground'),
-		light: {
-			after: {
-				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
-			},
-		},
-		dark: {
-			after: {
-				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationDark}` : undefined,
-			},
-		},
+		...getBadgeDecorationStyle(),
 		...$config.decorations.tag,
+	});
+	contextDecorationType = window.createTextEditorDecorationType({
+		color: new ThemeColor('todomd.contextForeground'),
+		...getBadgeDecorationStyle(),
+		...$config.decorations.context,
 	});
 	tagWithDelimiterDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.tagForeground'),
@@ -129,34 +145,6 @@ export function updateEditorDecorationStyle() {
 	});
 	specialTagDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.specialTagForeground'),
-	});
-	projectDecorationType = window.createTextEditorDecorationType({
-		color: new ThemeColor('todomd.projectForeground'),
-		light: {
-			after: {
-				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
-			},
-		},
-		dark: {
-			after: {
-				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationDark}` : undefined,
-			},
-		},
-		...$config.decorations.project,
-	});
-	contextDecorationType = window.createTextEditorDecorationType({
-		color: new ThemeColor('todomd.contextForeground'),
-		light: {
-			after: {
-				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
-			},
-		},
-		dark: {
-			after: {
-				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationDark}` : undefined,
-			},
-		},
-		...$config.decorations.context,
 	});
 	notDueDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.notDueForeground'),
@@ -212,6 +200,34 @@ export function updateEditorDecorationStyle() {
 			textDecoration: `;vertical-align:middle;position:relative;top:-1px;`,
 		},
 	});
+	// ────────────────────────────────────────────────────────────
+	projectAdvancedDecorations = {};
+	tagAdvancedDecorations = {};
+	contextAdvancedDecorations = {};
+	projectAdvancedExist = false;
+	tagAdvancedExist = false;
+	contextAdvancedExist = false;
+	for (const key in $config.decorations) {
+		if (key[0] === '+') {
+			projectAdvancedDecorations[key.slice(1)] = window.createTextEditorDecorationType({
+				...getBadgeDecorationStyle(),
+				...$config.decorations[key],
+			});
+			projectAdvancedExist = true;
+		} else if (key[0] === '#') {
+			tagAdvancedDecorations[key.slice(1)] = window.createTextEditorDecorationType({
+				...getBadgeDecorationStyle(),
+				...$config.decorations[key],
+			});
+			tagAdvancedExist = true;
+		} else if (key[0] === '@') {
+			contextAdvancedDecorations[key.slice(1)] = window.createTextEditorDecorationType({
+				...getBadgeDecorationStyle(),
+				...$config.decorations[key],
+			});
+			contextAdvancedExist = true;
+		}
+	}
 }
 /**
  * Actually update the editor decorations
@@ -238,6 +254,10 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	const nestedTasksDecorationOptions: DecorationOptions[] = [];
 	const nestedTasksPieOptions: DecorationOptions[] = [];
 
+	const projectAdvancedDecorationOptions: Record<string, DecorationOptions[]> = {};
+	const tagAdvancedDecorationOptions: Record<string, DecorationOptions[]> = {};
+	const contextAdvancedDecorationOptions: Record<string, DecorationOptions[]> = {};
+
 	forEachTask(task => {
 		// When decoration have `isWholeLine` range can be empty / wouldn't matter
 		const emptyRange = new Range(task.lineNumber, 0, task.lineNumber, 0);
@@ -247,20 +267,79 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 		if (task.favorite) {
 			favoriteDecorationRanges.push(emptyRange);
 		}
-		if (task.tagsRange) {
-			for (let i = 0; i < task.tags.length; i++) {
+		if (task.projectRanges && task.projectRanges.length) {
+			for (let i = 0; i < task.projects.length; i++) {
+				const taskProject = task.projects[i];
 				let contentText: string | undefined = undefined;
 				if ($config.counterBadgeEnabled) {
-					contentText = String($state.tagsForTreeView.find(tag => tag.title === task.tags[i])?.tasks.length || '');
+					contentText = String($state.projectsForTreeView.find(project => project.title === task.projects[i])?.tasks.length || '');
 				}
-				tagsDecorationOptions.push({
+				const projectOptions: DecorationOptions = {
+					range: task.projectRanges[i],
+					renderOptions: {
+						after: {
+							contentText,
+						},
+					},
+				};
+				if (projectAdvancedExist && projectAdvancedDecorations[task.projects[i]]) {
+					if (!projectAdvancedDecorationOptions[taskProject]) {
+						projectAdvancedDecorationOptions[taskProject] = [];
+					}
+					projectAdvancedDecorationOptions[taskProject].push(projectOptions);
+				} else {
+					projectDecorationOptions.push(projectOptions);
+				}
+			}
+		}
+		if (task.tagsRange) {
+			for (let i = 0; i < task.tags.length; i++) {
+				const taskTag = task.tags[i];
+				let contentText: string | undefined = undefined;
+				if ($config.counterBadgeEnabled) {
+					contentText = String($state.tagsForTreeView.find(tag => tag.title === taskTag)?.tasks.length || '');
+				}
+				const tagOptions: DecorationOptions = {
 					range: task.tagsRange[i],
 					renderOptions: {
 						after: {
 							contentText,
 						},
 					},
-				});
+				};
+				if (tagAdvancedExist && tagAdvancedDecorations[taskTag]) {
+					if (!tagAdvancedDecorationOptions[taskTag]) {
+						tagAdvancedDecorationOptions[taskTag] = [];
+					}
+					tagAdvancedDecorationOptions[taskTag].push(tagOptions);
+				} else {
+					tagsDecorationOptions.push(tagOptions);
+				}
+			}
+		}
+		if (task.contextRanges && task.contextRanges.length) {
+			for (let i = 0; i < task.contexts.length; i++) {
+				const taskContext = task.contexts[i];
+				let contentText: string | undefined = undefined;
+				if ($config.counterBadgeEnabled) {
+					contentText = String($state.contextsForTreeView.find(context => context.title === task.contexts[i])?.tasks.length || '');
+				}
+				const contextOptions: DecorationOptions = {
+					range: task.contextRanges[i],
+					renderOptions: {
+						after: {
+							contentText,
+						},
+					},
+				};
+				if (contextAdvancedExist && contextAdvancedDecorations[task.contexts[i]]) {
+					if (!contextAdvancedDecorationOptions[taskContext]) {
+						contextAdvancedDecorationOptions[taskContext] = [];
+					}
+					contextAdvancedDecorationOptions[taskContext].push(contextOptions);
+				} else {
+					contextDecorationOptions.push(contextOptions);
+				}
 			}
 		}
 		if (task.priorityRange) {
@@ -275,38 +354,6 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 		}
 		if (task.specialTagRanges.length) {
 			specialtagDecorationRanges.push(...task.specialTagRanges);
-		}
-		if (task.contextRanges && task.contextRanges.length) {
-			for (let i = 0; i < task.contexts.length; i++) {
-				let contentText: string | undefined = undefined;
-				if ($config.counterBadgeEnabled) {
-					contentText = String($state.contextsForTreeView.find(context => context.title === task.contexts[i])?.tasks.length || '');
-				}
-				contextDecorationOptions.push({
-					range: task.contextRanges[i],
-					renderOptions: {
-						after: {
-							contentText,
-						},
-					},
-				});
-			}
-		}
-		if (task.projectRanges && task.projectRanges.length) {
-			for (let i = 0; i < task.projects.length; i++) {
-				let contentText: string | undefined = undefined;
-				if ($config.counterBadgeEnabled) {
-					contentText = String($state.projectsForTreeView.find(project => project.title === task.projects[i])?.tasks.length || '');
-				}
-				projectDecorationOptions.push({
-					range: task.projectRanges[i],
-					renderOptions: {
-						after: {
-							contentText,
-						},
-					},
-				});
-			}
 		}
 		if (task.due) {
 			const due = task.due;
@@ -369,6 +416,16 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 		}
 	});
 
+	for (const [key, value] of Object.entries(projectAdvancedDecorationOptions)) {
+		editor.setDecorations(projectAdvancedDecorations[key], value);
+	}
+	for (const [key, value] of Object.entries(tagAdvancedDecorationOptions)) {
+		editor.setDecorations(tagAdvancedDecorations[key], value);
+	}
+	for (const [key, value] of Object.entries(contextAdvancedDecorationOptions)) {
+		editor.setDecorations(contextAdvancedDecorations[key], value);
+	}
+
 	editor.setDecorations(completedTaskDecorationType, completedDecorationRanges);
 	editor.setDecorations(favoriteTaskDecorationType, favoriteDecorationRanges);
 	editor.setDecorations(tagsDecorationType, tagsDecorationOptions);
@@ -390,6 +447,25 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 	editor.setDecorations(nestedTasksCountDecorationType, nestedTasksDecorationOptions);
 	editor.setDecorations(nestedTasksPieDecorationType, nestedTasksPieOptions);
 	editor.setDecorations(commentDecorationType, $state.commentLines);
+}
+
+function getBadgeDecorationStyle() {
+	const counterBadgeDecoration = ';position:absolute;display:inline-flex;align-items:center;padding:0px 1px;border-radius:2px;font-size:9px;top:-10%;height:50%;';
+	const counterBadgeDecorationLight = 'background-color:rgba(0,0,0,0.06);color:#111;';
+	const counterBadgeDecorationDark = 'background-color:rgba(255,255,255,0.12);color:#eee;';
+
+	return {
+		light: {
+			after: {
+				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationLight}` : undefined,
+			},
+		},
+		dark: {
+			after: {
+				textDecoration: $config.counterBadgeEnabled ? `${counterBadgeDecoration}${counterBadgeDecorationDark}` : undefined,
+			},
+		},
+	};
 }
 
 /**

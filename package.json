@@ -425,7 +425,7 @@
 				},
 				"todomd.decorations": {
 					"type": "object",
-					"markdownDescription": "Advanced decoration tweaking. Allowed values:\n\n- `project`\n- `context`\n- `tag`\n- `comment`\n- `notDue`\n- `context`\n- `due`\n- `overdue`\n- `invalidDue`\n- `favorite`\n- `priorityA`\n- `priorityB`\n- `priorityC`\n- `priorityD`\n- `priorityE`\n- `priorityF`\n- `completedTask`\n [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)",
+					"markdownDescription": "Advanced decoration tweaking. Allowed values:\n\n- `project`\n- `context`\n- `tag`\n- `comment`\n- `notDue`\n- `context`\n- `due`\n- `overdue`\n- `invalidDue`\n- `favorite`\n- `priorityA`\n- `priorityB`\n- `priorityC`\n- `priorityD`\n- `priorityE`\n- `priorityF`\n- `completedTask`\n- `+someProject`\n- `#someTag`\n- `@someContext`\n\n [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)",
 					"default": {
 						"project": {},
 						"context": {},
@@ -445,7 +445,7 @@
 						"completedTask": {}
 					},
 					"patternProperties": {
-						"^(project|context|tag|comment|notDue|due|overdue|invalidDue|favorite|priorityA|priorityB|priorityC|priorityD|priorityE|priorityF|completedTask|#.+)$": {
+						"^(project|context|tag|comment|notDue|due|overdue|invalidDue|favorite|priorityA|priorityB|priorityC|priorityD|priorityE|priorityF|completedTask|(#|\\+|@)\\S+)$": {
 							"type": "object",
 							"properties": {
 								"isWholeLine": {
