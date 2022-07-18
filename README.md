@@ -156,8 +156,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.getNextTask|Todo MD: Get due task from main file. If none are due - get one with the highest priority.|
 |todomd.getFewNextTasks|Todo MD: Get several tasks. Due tasks are on top.|
 |todomd.getRandomTask|Todo MD: Get random task|
-|todomd.filter|Todo MD: Filter|
-|todomd.clearFilter|Todo MD: Clear Filter|
+|todomd.applyFilterToTreeView|Todo MD: Apply Filter|
+|todomd.clearTreeViewFilter|Todo MD: Clear Filter|
 |todomd.resetAllRecurringTasks|Todo MD: Reset all Recurring tasks|
 |todomd.followLink|Todo MD: Follow link|
 |todomd.removeOverdue|Todo MD: Remove overdue|
@@ -183,7 +183,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.fontSize|"15px"|Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)|
 |webview.fontFamily|"'Segoe UI', Tahoma, Geneva, Verdana, sans\-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'"|Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)|
 |webview.lineHeight|**1.4**|Controls line height in the webview.|
-|webview.padding|"1px"|Controls top & bottom padding. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)|
+|webview.padding|"2px"|Controls top & bottom padding. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)|
 |webview.indentSize|"1.8em"|Controls visual indent of nested elements in a webview.|
 |webview.customCheckboxEnabled|**true**|Whether checkbox is rendered as native input element or a custom styled element.|
 |webview.autoShowSuggest|**true**|Show autocomplete when typing. (When disabled suggest can be called by `Ctrl`+`Space`)|
@@ -225,7 +225,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |completedStrikeThrough|**true**|Show strike-through text decoration for completed tasks in editor.|
 |setDueDateThisWeekDay|"Friday"|Week day when using set due date command or suggest `SET_DUE_THIS_WEEK`.|
 |setDueDateNextWeekDay|"Friday"|Week day when using set due date command or suggest `SET_DUE_NEXT_WEEK`.|
-|decorations|\{"project":\{\},"context":\{\},"tag":\{\},"comment":\{\},"notDue":\{\},"due":\{\},"overdue":\{\},"invalidDue":\{\},"priorityAForeground":\{\},"priorityBForeground":\{\},"priorityCForeground":\{\},"priorityDForeground":\{\},"priorityEForeground":\{\},"priorityFForeground":\{\},"completedTask":\{\}\}|Advanced decoration tweaking. https://github.com/usernamehw/vscode-todo-md/issues/4|
+|decorations|\{"project":\{\},"context":\{\},"tag":\{\},"comment":\{\},"notDue":\{\},"due":\{\},"overdue":\{\},"invalidDue":\{\},"favorite":\{\},"priorityA":\{\},"priorityB":\{\},"priorityC":\{\},"priorityD":\{\},"priorityE":\{\},"priorityF":\{\},"completedTask":\{\}\}|Advanced decoration tweaking. Allowed values:<br>- `project`<br>- `context`<br>- `tag`<br>- `comment`<br>- `notDue`<br>- `context`<br>- `due`<br>- `overdue`<br>- `invalidDue`<br>- `favorite`<br>- `priorityA`<br>- `priorityB`<br>- `priorityC`<br>- `priorityD`<br>- `priorityE`<br>- `priorityF`<br>- `completedTask`<br> [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)|
 <!-- SETTINGS_END -->
 
 ## Colors

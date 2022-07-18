@@ -68,6 +68,7 @@ export function updateEditorDecorationStyle() {
 	favoriteTaskDecorationType = window.createTextEditorDecorationType({
 		isWholeLine: true,
 		backgroundColor: new ThemeColor('todomd.favoriteTaskBackground'),
+		...$config.decorations.favorite,
 	});
 	commentDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.commentForeground'),
@@ -78,32 +79,32 @@ export function updateEditorDecorationStyle() {
 	priorityADecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityAForeground'),
 		fontWeight: 'bold',
-		...$config.decorations.priorityAForeground,
+		...$config.decorations.priorityA,
 	});
 	priorityBDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityBForeground'),
 		fontWeight: 'bold',
-		...$config.decorations.priorityBForeground,
+		...$config.decorations.priorityB,
 	});
 	priorityCDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityCForeground'),
 		fontWeight: 'bold',
-		...$config.decorations.priorityCForeground,
+		...$config.decorations.priorityC,
 	});
 	priorityDDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityDForeground'),
 		fontWeight: 'bold',
-		...$config.decorations.priorityDForeground,
+		...$config.decorations.priorityD,
 	});
 	priorityEDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityEForeground'),
 		fontWeight: 'bold',
-		...$config.decorations.priorityEForeground,
+		...$config.decorations.priorityE,
 	});
 	priorityFDecorationType = window.createTextEditorDecorationType({
 		color: new ThemeColor('todomd.priorityFForeground'),
 		fontWeight: 'bold',
-		...$config.decorations.priorityFForeground,
+		...$config.decorations.priorityF,
 	});
 	const counterBadgeDecoration = ';position:absolute;display:inline-flex;align-items:center;padding:0px 1px;border-radius:2px;font-size:9px;top:-10%;height:50%;';
 	const counterBadgeDecorationLight = 'background-color:rgba(0,0,0,0.06);color:#111;';
