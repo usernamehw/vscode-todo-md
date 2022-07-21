@@ -100,7 +100,8 @@ body {
 	transform: translateZ(0);// where are those values coming from?
 }
 
-body.vscode-dark {
+body.vscode-dark,
+body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 	--border-low-contrast: #ffffff1c;
 	--border-high-contrast: #949494;
 	--border-darker: #6d6d6d;
