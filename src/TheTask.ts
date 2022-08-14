@@ -171,6 +171,10 @@ export class TheTask {
 	 * Favorite special tag range `{f}`
 	 */
 	favoriteRange?: Range;
+	/**
+	 * Do not add overdue to this task.
+	 */
+	noOverdue?: boolean;
 
 	constructor(init: TaskInit) {
 		this.title = init.title;
@@ -211,6 +215,7 @@ export class TheTask {
 		this.collapseRange = init.collapseRange;
 		this.completionDateRange = init.completionDateRange;
 		this.favoriteRange = init.favoriteRange;
+		this.noOverdue = init.noOverdue;
 	}
 
 	// static isRoot(task: TheTask) {

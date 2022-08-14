@@ -162,6 +162,7 @@ export function updateCompletions() {
 					SpecialTagName.Hidden,
 					SpecialTagName.Overdue,
 					SpecialTagName.Started,
+					SpecialTagName.NoOverdue,
 				];
 
 				const specialTagCompletionItems = [];

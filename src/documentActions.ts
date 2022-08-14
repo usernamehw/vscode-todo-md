@@ -314,7 +314,9 @@ export async function resetAllRecurringTasks(document: TextDocument, lastVisit: 
 							targetDate: date.toDate(),
 						});
 						if (res.isDue === IsDue.Due || res.isDue === IsDue.Overdue) {
-							addOverdueSpecialTagWorkspaceEdit(edit, document, line, date.format(DATE_FORMAT));
+							if (!task.noOverdue) {
+								addOverdueSpecialTagWorkspaceEdit(edit, document, line, date.format(DATE_FORMAT));
+							}
 							break;
 						}
 					}

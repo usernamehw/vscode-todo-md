@@ -48,6 +48,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 
 	let done = false;
 	let isFavorite = false;
+	let noOverdue: boolean | undefined;
 	const rawText = textLine.text;
 	const contexts = [];
 	const contextRanges: Range[] = [];
@@ -145,6 +146,9 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 					duration = specialTagValue;
 					durationRange = wordRange;
 					specialTagRanges.push(wordRange);
+				} else if (specialTag === SpecialTagName.NoOverdue) {
+					noOverdue = true;
+					specialTagRanges.push(wordRange);
 				} else {
 					text.push(word);
 				}
@@ -225,6 +229,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 			title: text.join(' '),
 			lineNumber,
 			indentLvl,
+			noOverdue,
 		}),
 	};
 }

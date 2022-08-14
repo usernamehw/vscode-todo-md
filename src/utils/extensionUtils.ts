@@ -219,11 +219,12 @@ export const enum SpecialTagName {
 	Hidden = 'h',
 	Collapsed = 'c',
 	Count = 'count',
+	NoOverdue = 'noOverdue',
 }
 /**
  * Very short special tag description for autocomplete widget.
  */
-export const specialTagDescription = {
+export const specialTagDescription: Record<SpecialTagName, string> = {
 	[SpecialTagName.Favorite]: 'favorite',
 	[SpecialTagName.Due]: 'due',
 	[SpecialTagName.Overdue]: 'overdue',
@@ -234,6 +235,7 @@ export const specialTagDescription = {
 	[SpecialTagName.Hidden]: 'hidden',
 	[SpecialTagName.Collapsed]: 'collapsed',
 	[SpecialTagName.Count]: 'count',
+	[SpecialTagName.NoOverdue]: 'no overdue',
 } as const;
 
 /**
