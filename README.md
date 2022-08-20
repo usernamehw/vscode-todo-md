@@ -165,7 +165,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (55)
+## Settings (56)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -218,6 +218,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |savedFilters|\[\]|Filters that you can pick when applying a filter.|
 |treeViews|\[\]|Add more tree views with predefined filters.|
 |labelDueSymbol|"📗&nbsp;"|Prefix for task that is due in labels (tree view, notification, modal, quick pick).|
+|labelNotDueSymbol|"📔&nbsp;"|Prefix for task that that is not due in labels (tree view, notification, modal, quick pick).|
 |labelOverdueSymbol|"📕&nbsp;"|Prefix for task that is overdue in labels (tree view, notification, modal, quick pick).|
 |labelInvalidDueSymbol|"🟣&nbsp;"|Prefix for task that has invalid due date in labels (tree view, notification, modal, quick pick).|
 |labelShowItems|**true**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|

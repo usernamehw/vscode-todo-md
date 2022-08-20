@@ -68,6 +68,8 @@ export function formatTask(task: TheTask, {
 	if (!ignoreDueDate) {
 		if (task.due?.isDue === IsDue.Due) {
 			result += $config.labelDueSymbol;
+		} else if (task.due?.isDue === IsDue.NotDue) {
+			result += $config.labelNotDueSymbol;
 		} else if (task.due?.isDue === IsDue.Overdue) {
 			result += $config.labelOverdueSymbol;
 		} else if (task.due?.isDue === IsDue.Invalid) {

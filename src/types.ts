@@ -174,6 +174,10 @@ export interface ExtensionConfig {
 	 */
 	labelDueSymbol: string;
 	/**
+	 * Prefix for task that that is not due in labels (tree view, notification, modal, quick pick).
+	 */
+	labelNotDueSymbol: string;
+	/**
 	 * Prefix for task that is overdue in labels (tree view, notification, modal, quick pick).
 	 */
 	labelOverdueSymbol: string;
