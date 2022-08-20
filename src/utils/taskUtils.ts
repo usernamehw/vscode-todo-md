@@ -80,6 +80,9 @@ export function formatTask(task: TheTask, {
 	if (task.count) {
 		result += ` [${task.count.current}/${task.count.needed}]`;
 	}
+	if (task.favorite) {
+		result += $config.labelFavorite;
+	}
 	if (result.length === 0) {
 		return task.rawText;
 	}

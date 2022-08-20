@@ -394,6 +394,11 @@
 					"markdownDescription": "Prefix for task that has invalid due date in labels (tree view, notification, modal, quick pick).",
 					"default": "🟣 "
 				},
+				"todomd.labelFavorite": {
+					"type": "string",
+					"markdownDescription": "Label shown when task has favorite `{f}` special tag. (tree view, notification, modal, quick pick)",
+					"default": " ♥ "
+				},
 				"todomd.labelShowItems": {
 					"type": "boolean",
 					"markdownDescription": "Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).",

@@ -186,6 +186,10 @@ export interface ExtensionConfig {
 	 */
 	labelInvalidDueSymbol: string;
 	/**
+	 * Label shown when task has favorite `{f}` special tag.
+	 */
+	labelFavorite: string;
+	/**
 	 * Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).
 	 */
 	labelShowItems: boolean;
