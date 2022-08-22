@@ -108,7 +108,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					window.showInformationMessage(message.value);
 					break;
 				}
-				case 'goToTask': {
+				case 'revealTask': {
 					revealTask(message.value);
 					break;
 				}

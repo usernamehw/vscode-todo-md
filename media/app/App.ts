@@ -5,8 +5,7 @@ import { TheTask } from '../../src/TheTask';
 import Suggest from './components/Suggest/Suggest';
 import SuggestComponent from './components/Suggest/Suggest.vue';
 import TaskDetailsComponent from './components/TaskDetails/TaskDetails.vue';
-import { SendMessage } from './SendMessage';
-import { getState, useStore } from './store';
+import { getState, sendMessage, useStore } from './store';
 import { VueEvents } from './webviewTypes';
 
 /**
@@ -73,31 +72,46 @@ export default defineComponent({
 		// ──── Context Menu Items ────────────────────────────────────
 		deleteTask() {
 			if (this.contextMenuTask) {
-				SendMessage.deleteTask(this.contextMenuTask.lineNumber);
+				sendMessage({
+					type: 'deleteTask',
+					value: this.contextMenuTask.lineNumber,
+				});
 				this.hideContextMenu();
 			}
 		},
 		revealTask() {
 			if (this.contextMenuTask) {
-				SendMessage.revealTask(this.contextMenuTask.lineNumber);
+				sendMessage({
+					type: 'revealTask',
+					value: this.contextMenuTask.lineNumber,
+				});
 				this.hideContextMenu();
 			}
 		},
 		toggleFavorite() {
 			if (this.contextMenuTask) {
-				SendMessage.toggleFavorite(this.contextMenuTask.lineNumber);
+				sendMessage({
+					type: 'toggleFavorite',
+					value: this.contextMenuTask.lineNumber,
+				});
 				this.hideContextMenu();
 			}
 		},
 		startTask() {
 			if (this.contextMenuTask) {
-				SendMessage.startTask(this.contextMenuTask.lineNumber);
+				sendMessage({
+					type: 'startTask',
+					value: this.contextMenuTask.lineNumber,
+				});
 				this.hideContextMenu();
 			}
 		},
 		setDueDate() {
 			if (this.contextMenuTask) {
-				SendMessage.setDueDate(this.contextMenuTask.lineNumber);
+				sendMessage({
+					type: 'setDueDate',
+					value: this.contextMenuTask.lineNumber,
+				});
 				this.hideContextMenu();
 			}
 		},
@@ -135,7 +149,10 @@ export default defineComponent({
 	created() {
 		const savedState = getState();
 		this.storeStore.updateFilterValue(savedState.filterInputValue);
-		SendMessage.webviewLoaded();
+		sendMessage({
+			type: 'webviewLoaded',
+			value: true,
+		});
 	},
 	mounted() {
 		// @ts-ignore
@@ -155,17 +172,26 @@ export default defineComponent({
 		window.addEventListener('click', e => {
 			const link = (e.target as HTMLElement).closest('a');
 			if (link && link.dataset.href) {
-				SendMessage.followLink(link.dataset.href);
+				sendMessage({
+					type: 'followLink',
+					value: link.dataset.href,
+				});
 			}
 			this.hideContextMenu();
 		});
 
 		window.addEventListener('keydown', e => {
 			if (e.key === 'ArrowRight') {
-				SendMessage.toggleTaskCollapse(this.storeStore.selectedTaskLineNumber);
+				sendMessage({
+					type: 'toggleTaskCollapse',
+					value: this.storeStore.selectedTaskLineNumber,
+				});
 			} else if (e.key === 'Delete' && e.shiftKey) {
 				if (this.storeStore.selectedTaskLineNumber !== -1) {
-					SendMessage.deleteTask(this.storeStore.selectedTaskLineNumber);
+					sendMessage({
+						type: 'deleteTask',
+						value: this.storeStore.selectedTaskLineNumber,
+					});
 				}
 			} else if (e.key === 'Escape') {
 				this.taskDetailsManuallyTriggered = false;
@@ -175,7 +201,10 @@ export default defineComponent({
 				const task = this.storeStore.getTaskAtLine(this.storeStore.selectedTaskLineNumber);
 				if (task) {
 					if (task.count) {
-						SendMessage.toggleDoneOrIncrementCount(task.lineNumber);
+						sendMessage({
+							type: 'toggleDoneOrIncrementCount',
+							value: task.lineNumber,
+						});
 					} else {
 						this.storeStore.toggleDone(task);
 					}

@@ -5,7 +5,6 @@ import { filterConstants, filterTasks, FilterTasksResult } from '../../src/filte
 import { defaultSortTasks } from '../../src/sort';
 import type { TheTask } from '../../src/TheTask';
 import { ExtensionConfig, IsDue, MessageFromWebview, MessageToWebview } from '../../src/types';
-import { SendMessage } from './SendMessage';
 
 interface SavedState {
 	filterInputValue: string;
@@ -18,8 +17,14 @@ interface VscodeWebviewApi {
 /** @ts-ignore */
 // eslint-disable-next-line no-undef
 export const vscodeApi: VscodeWebviewApi = acquireVsCodeApi();
+export function sendMessage(message: MessageFromWebview): void {
+	vscodeApi.postMessage(message);
+}
 window.onerror = function(message, source, lineno, colno, error) {
-	SendMessage.showNotification(`[WEBVIEW] ${message}`);
+	sendMessage({
+		type: 'showNotification',
+		value: `[WEBVIEW] ${message}`,
+	});
 };
 
 export const pinia = createPinia();
@@ -197,7 +202,13 @@ export const useStore = defineStore({
 			this.focusFilterInputEvent = Math.random();
 		},
 		updateWebviewTitle() {
-			SendMessage.updateWebviewTitle(this.flattenedFilteredSortedTasks.length, this.flattenedFilteredSortedTasks.filter(task => task.done).length);
+			sendMessage({
+				type: 'updateWebviewTitle',
+				value: {
+					numberOfCompletedTasks: this.flattenedFilteredSortedTasks.filter(task => task.done).length,
+					numberOfTasks: this.flattenedFilteredSortedTasks.length,
+				},
+			});
 		},
 		toggleDone(task: TheTask) {
 			task.done = !task.done;
@@ -206,7 +217,10 @@ export const useStore = defineStore({
 					type: 'success',
 				});
 			}
-			SendMessage.toggleDone(task.lineNumber);
+			sendMessage({
+				type: 'toggleDone',
+				value: task.lineNumber,
+			});
 		},
 		selectNextTask() {
 			if (!this.filteredSortedTasks.tasks.length) {

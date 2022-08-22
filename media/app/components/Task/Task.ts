@@ -3,8 +3,7 @@ import { defineComponent, PropType } from 'vue';
 import type { TheTask } from '../../../../src/TheTask';
 import { durationTo } from '../../../../src/time/timeUtils';
 import { IsDue } from '../../../../src/types';
-import { SendMessage } from '../../SendMessage';
-import { useStore } from '../../store';
+import { sendMessage, useStore } from '../../store';
 import { VueEvents } from '../../webviewTypes';
 import TaskTitleComponent from '../TaskTitle/TaskTitle';
 
@@ -25,7 +24,10 @@ export default defineComponent({
 	}),
 	methods: {
 		revealTask() {
-			SendMessage.revealTask(this.model.lineNumber);
+			sendMessage({
+				type: 'revealTask',
+				value: this.model.lineNumber,
+			});
 		},
 		selectThisTask() {
 			this.storeStore.selectTask(this.model.lineNumber);
@@ -36,19 +38,31 @@ export default defineComponent({
 			this.emitter.emit(VueEvents.OpenTaskContextMenu, { event: e, task });
 		},
 		toggleTaskCollapse() {
-			SendMessage.toggleTaskCollapse(this.model.lineNumber);
+			sendMessage({
+				type: 'toggleTaskCollapse',
+				value: this.model.lineNumber,
+			});
 		},
 		toggleTaskCollapseRecursive() {
-			SendMessage.toggleTaskCollapseRecursive(this.model.lineNumber);
+			sendMessage({
+				type: 'toggleTaskCollapseRecursive',
+				value: this.model.lineNumber,
+			});
 		},
 		toggleDone() {
 			this.storeStore.toggleDone(this.model);
 		},
 		incrementCount() {
-			SendMessage.toggleDoneOrIncrementCount(this.model.lineNumber);
+			sendMessage({
+				type: 'toggleDoneOrIncrementCount',
+				value: this.model.lineNumber,
+			});
 		},
 		decrementCount() {
-			SendMessage.decrementCount(this.model.lineNumber);
+			sendMessage({
+				type: 'decrementCount',
+				value: this.model.lineNumber,
+			});
 		},
 	},
 	computed: {

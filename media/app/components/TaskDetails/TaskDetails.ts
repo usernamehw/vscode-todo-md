@@ -1,8 +1,7 @@
 import debounce from 'lodash/debounce';
 import { mapStores } from 'pinia';
 import { defineComponent } from 'vue';
-import { SendMessage } from '../../SendMessage';
-import { useStore } from '../../store';
+import { sendMessage, useStore } from '../../store';
 
 export default defineComponent({
 	name: 'TaskDetails',
@@ -33,7 +32,13 @@ export default defineComponent({
 		},
 		editSelectedTask() {
 			if (this.inputValue) {
-				SendMessage.editRawText(this.storeStore.selectedTaskLineNumber, this.inputValue);
+				sendMessage({
+					type: 'editTaskRawText',
+					value: {
+						lineNumber: this.storeStore.selectedTaskLineNumber,
+						newRawText: this.inputValue,
+					},
+				});
 			}
 		},
 		editSelectedTaskDebounced: debounce(function() {
