@@ -13,7 +13,7 @@
          class="task-list"
          :class="{ 'task-list--details-visible': taskDetailsVisible }"
          @scroll.passive="onTaskListScroll">
-        <task v-for="task of storeStore.filteredSortedTasks.tasks"
+        <Task v-for="task of storeStore.filteredSortedTasks.tasks"
               :key="task.lineNumber + task.rawText"
               :model="task" />
     </div>

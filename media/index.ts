@@ -25,7 +25,7 @@ const app = createApp(App);
 app.config.globalProperties.emitter = emitter;
 app.use(pinia);
 app.use(Notifications);
-app.component('task', TaskComponent);
+app.component('Task', TaskComponent);
 app.mount('#app');
 
 type NotificationType = 'error' | 'info' | 'success' | 'warn';

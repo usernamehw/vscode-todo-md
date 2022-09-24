@@ -51,7 +51,7 @@
 					1,
 					"double"
 				],
-				"vue/no-confusing-v-for-v-if": 1,
+				"vue/no-use-v-if-with-v-for": 1,
 				"vue/order-in-components": 1,
 				"vue/this-in-template": [
 					1,
@@ -68,7 +68,7 @@
 				"vue/require-prop-types": 1,
 				"vue/require-default-prop": 1,
 				"vue/no-multi-spaces": 1,
-				"vue/name-property-casing": [
+				"vue/component-definition-name-casing": [
 					1,
 					"PascalCase"
 				],
