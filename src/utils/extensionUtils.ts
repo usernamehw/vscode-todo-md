@@ -73,14 +73,14 @@ async function specifyFile(whichFile: 'archive' | 'default' | 'someday') {
 
 	return updateSetting(settingName, filePath);
 }
-/**
- * Open Settings GUI at `todomd.defaultFile` item
- */
 export async function specifyDefaultFile() {
 	return await specifyFile('default');
 }
 export async function specifyDefaultArchiveFile() {
 	return await specifyFile('archive');
+}
+export async function specifyDefaultSomedayFile() {
+	return await specifyFile('someday');
 }
 /**
  * Check if default file path is specified. If not - show notification with button to enter it.

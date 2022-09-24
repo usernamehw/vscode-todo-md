@@ -35,6 +35,7 @@ import { showGlobalState } from './commands/showGlobalState';
 import { showWebviewSettings } from './commands/showWebviewSettings';
 import { specifyDefaultArchiveFileCommand } from './commands/specifyDefaultArchiveFile';
 import { specifyDefaultFileCommand } from './commands/specifyDefaultFile';
+import { specifyDefaultSomedayFileCommand } from './commands/specifyDefaultSomedayFile';
 import { startTask } from './commands/startTask';
 import { toggleComment } from './commands/toggleComment';
 import { toggleContextsTreeViewSorting } from './commands/toggleContextsTreeViewSorting';
@@ -90,6 +91,7 @@ export const enum CommandId {
 	OpenSomedayFile = 'todomd.openSomedayFile',
 	SpecifyDefaultFile = 'todomd.specifyDefaultFile',
 	SpecifyDefaultArchiveFile = 'todomd.specifyDefaultArchiveFile',
+	SpecifyDefaultSomedayFile = 'todomd.specifyDefaultSomedayFile',
 	CompleteTask = 'todomd.completeTask',
 	ApplyFilterToTreeView = 'todomd.applyFilterToTreeView',
 	ClearTreeViewFilter = 'todomd.clearTreeViewFilter',
@@ -135,6 +137,7 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.OpenSomedayFile, openSomedayFile);
 	commands.registerCommand(CommandId.SpecifyDefaultFile, specifyDefaultFileCommand);
 	commands.registerCommand(CommandId.SpecifyDefaultArchiveFile, specifyDefaultArchiveFileCommand);
+	commands.registerCommand(CommandId.SpecifyDefaultSomedayFile, specifyDefaultSomedayFileCommand);
 	commands.registerCommand(CommandId.CompleteTask, completeTask);
 	commands.registerCommand(CommandId.ApplyFilterToTreeView, applyFilterToTreeView);
 	commands.registerCommand(CommandId.ClearTreeViewFilter, clearTreeViewFilter);

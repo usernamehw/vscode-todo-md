@@ -168,12 +168,12 @@
 				},
 				"todomd.defaultArchiveFile": {
 					"type": "string",
-					"markdownDescription": "Absolute path to file that all archived tasks will be moved to. \n\n[**Pick archive file**](command:todomd.specifyDefaultArchiveFile)",
+					"markdownDescription": "Absolute path to file that all archived tasks will be moved to.\n\n[**Pick archive file**](command:todomd.specifyDefaultArchiveFile)",
 					"default": ""
 				},
 				"todomd.defaultSomedayFile": {
 					"type": "string",
-					"markdownDescription": "Absolute path to file that is used as a \"someday\" file.",
+					"markdownDescription": "Absolute path to file that is used as the \"someday\" file.\n\n[**Pick someday file**](command:todomd.specifyDefaultSomedayFile)",
 					"default": ""
 				},
 				"todomd.durationIncludeSeconds": {
