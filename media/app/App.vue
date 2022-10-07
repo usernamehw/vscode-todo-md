@@ -23,9 +23,9 @@
 
     <div v-if="!storeStore.defaultFileSpecified && !storeStore.activeDocumentOpened"
          class="welcome">
-        <p class="welcome__text">Default file path is not specified.</p>
+        <p class="welcome__text">Default file path (<code>todomd.defaultFile</code> setting) is not set.</p>
         <div><a class="btn btn--welcome"
-                href="command:todomd.showDefaultFileSetting">Specify Default File</a></div>
+                href="command:todomd.showDefaultFileSetting">Specify Default File Path</a></div>
     </div>
 
     <notifications position="bottom right"

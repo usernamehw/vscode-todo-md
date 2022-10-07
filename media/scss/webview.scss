@@ -171,20 +171,23 @@ a {
 	border: none;
 	color: var(--vscode-button-foreground);
 	font-family: var(--vscode-font-family);
+	border-radius: 2px;
 	margin: 0 auto;
 
 	&--welcome {
+		font-size: 13px;
 		align-items: center;
 		cursor: pointer;
 		display: flex;
 		justify-content: center;
 		margin-left: auto;
 		margin-right: auto;
-		max-width: 260px;
 		outline-offset: 2px !important;
 		padding: 4px;
 		text-align: center;
-		width: calc(100% - 40px);
+		width: calc(100% - 24px);
+		margin-left: 12px !important;
+		margin-right: 12px !important;
 	}
 
 	&--link {
@@ -194,6 +197,7 @@ a {
 	&:hover {
 		background-color: var(--vscode-button-hoverBackground);
 		color: var(--vscode-button-foreground);
+		text-decoration: none;
 	}
 }
 // ────────────────────────────────────────────────────────────
