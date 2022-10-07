@@ -1656,7 +1656,35 @@
 					"when": "todomd:isActive"
 				},
 				{
+					"command": "todomd.sortByDefault",
+					"when": "todomd:isActive"
+				},
+				{
 					"command": "todomd.sortByPriority",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.sortByProject",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.sortByTag",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.sortByContext",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.sortByCreationDate",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.sortByDueDate",
+					"when": "todomd:isActive"
+				},
+				{
+					"command": "todomd.sortByCompletionDate",
 					"when": "todomd:isActive"
 				},
 				{
