@@ -165,7 +165,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (57)
+## Settings (58)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -190,8 +190,8 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.customCSSPath|""|Absolute path to custom CSS for the webview.|
 |webview.tagStyles|\{\}|Set different color for any tag in a webview.|
 |defaultFile|""|Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`.<br>[**Pick default file**](command:todomd.specifyDefaultFile)|
-|defaultArchiveFile|""|Absolute path to file that all archived tasks will be moved to. <br>[**Pick archive file**](command:todomd.specifyDefaultArchiveFile)|
-|defaultSomedayFile|""|Absolute path to file that is used as a "someday" file.|
+|defaultArchiveFile|""|Absolute path to file that all archived tasks will be moved to.<br>[**Pick archive file**](command:todomd.specifyDefaultArchiveFile)|
+|defaultSomedayFile|""|Absolute path to file that is used as the "someday" file.<br>[**Pick someday file**](command:todomd.specifyDefaultSomedayFile)|
 |durationIncludeSeconds|**false**|When enabled - duration (editor, hover) includes seconds.|
 |autoArchiveTasks|**false**|When enabled - will move tasks to archive file (on completion).|
 |confirmTaskDelete|"always"|Show confirmation when deleting task from Tree View or Webview.|
@@ -217,6 +217,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |tabSize|**4**|Number used for parsing nested tasks when indentation cannot be guessed (file is not opened in editor).|
 |savedFilters|\[\]|Filters that you can pick when applying a filter.|
 |treeViews|\[\]|Add more tree views with predefined filters.|
+|treeView.showBadge|**true**|Whether or not to show due tasks counter badge for tree view container.|
 |labelDueSymbol|"📗&nbsp;"|Prefix for task that is due in labels (tree view, notification, modal, quick pick).|
 |labelNotDueSymbol|"📔&nbsp;"|Prefix for task that that is not due in labels (tree view, notification, modal, quick pick).|
 |labelOverdueSymbol|"📕&nbsp;"|Prefix for task that is overdue in labels (tree view, notification, modal, quick pick).|

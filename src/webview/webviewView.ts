@@ -4,7 +4,9 @@ import { openSetDueDateInputbox } from '../commands/setDueDate';
 import { decrementCountForTask, editTask, editTaskRawText, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state } from '../extension';
+import { filterTasks } from '../filter';
 import { showCompletedPercentage } from '../statusBar';
+import { setViewBadge } from '../treeViewProviders/treeViews';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
@@ -156,6 +158,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 				},
 			});
 		}
+		setViewBadge(this._view, filterTasks($state.tasks, '$due -$done').tasks.length, 'Number of due tasks.');
 	}
 	/**
 	 * Update webview title (counter).

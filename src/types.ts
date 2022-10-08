@@ -165,6 +165,12 @@ export interface ExtensionConfig {
 		title: string;
 		filter: string;
 	}[];
+	treeView: {
+		/**
+		 * Whether or not to show due tasks counter badge for tree view container.
+		 */
+		showBadge: boolean;
+	};
 	/**
 	 * Number of tasks returned by `getFewNextTasks` command.
 	 */

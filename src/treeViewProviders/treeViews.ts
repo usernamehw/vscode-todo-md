@@ -1,4 +1,4 @@
-import { TreeView, TreeViewExpansionEvent, Uri, window, workspace } from 'vscode';
+import { TreeView, TreeViewExpansionEvent, Uri, WebviewView, window, workspace } from 'vscode';
 import { Constants } from '../constants';
 import { toggleTaskCollapse } from '../documentActions';
 import { $config, $state, updateState } from '../extension';
@@ -138,6 +138,8 @@ export function updateAllTreeViews() {
 	const dueTasks = filterTasks($state.tasksAsTree, '$due').tasks;
 	dueProvider.refresh(defaultSortTasks(dueTasks));
 	setViewTitle(dueView, 'due', dueTasks.length);
+	const notCompletedDueTasks = filterTasks(dueTasks, '-$done').tasks;
+	setViewBadge(dueView, notCompletedDueTasks.length, 'Number of due tasks.');
 
 	projectProvider.refresh($state.projectsForTreeView);
 	setViewTitle(projectView, 'projects', $state.projectsForTreeView.length);
@@ -192,6 +194,26 @@ export function updateArchivedTasksTreeView() {
  */
 function setViewTitle(view: TreeView<any>, title: string, counter: number) {
 	view.title = `${title} (${counter})`;
+}
+/**
+ * Set webview view or tree view numerical badge that is shown for
+ * the view container.
+ */
+export function setViewBadge(view: TreeView<any> | WebviewView | undefined, value: number, tooltip: string): void {
+	if (!view) {
+		return;
+	}
+	if ($config.treeView.showBadge) {
+		view.badge = {
+			value,
+			tooltip: value ? tooltip : '',
+		};
+	} else {
+		view.badge = {
+			tooltip: '',
+			value: 0,
+		};
+	}
 }
 /**
  * Tags/Projects/Contexts grouped and sorted for Tree Views.
