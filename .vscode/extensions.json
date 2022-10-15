@@ -3,7 +3,7 @@
 		"dbaeumer.vscode-eslint",
 		"editorconfig.editorconfig",
 		"stylelint.vscode-stylelint",
-		"octref.vetur",
+		"Vue.volar",
 		"connor4312.css-theme-completions",
 		"usernamehw.contributions"
 	]
