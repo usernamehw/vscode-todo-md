@@ -2,7 +2,7 @@
 	"name": "todo-md",
 	"displayName": "Todo MD",
 	"description": "Todo tracking based on `todo.txt` format.",
-	"version": "2.17.0",
+	"version": "2.18.0",
 	"publisher": "usernamehw",
 	"license": "MIT",
 	"icon": "img/icon.png",
