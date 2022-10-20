@@ -43,6 +43,7 @@ export async function followLinks(links: Link[]) {
  * Opens a link externally using the default application.
  */
 export async function followLink(linkString: string) {
+	// TODO: try catch showErrorNotification
 	if (linkString.startsWith('file:///')) {
 		return await openFileInEditor(linkString);
 	} else if (linkString.startsWith('app:///')) {
