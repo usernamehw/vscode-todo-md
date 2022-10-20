@@ -1,3 +1,11 @@
+## 2.18.0 `20 Oct 2022`
+
+- ✨ Tree View counter badge for due tasks
+- ✨ `{noOverdue}` special tag
+- ✨ Label for not due task
+- ✨ Show favorite status in labels
+- 🐛 Only show sorting commands when todomd file is opened
+
 ## 2.17.0 `18 Jul 2022`
 
 - ✨ [editor] Advanced editor decorations: allow targeting a specific project/tag/context [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)
