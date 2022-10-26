@@ -29,17 +29,19 @@ export async function editTask(document: TextDocument, task: TheTask) {
 	return applyEdit(edit, document);
 }
 /**
- * Add `{h}` special tag
+ * Add or remove `{h}` special tag.
  */
-export async function hideTaskAtLine(document: TextDocument, lineNumber: number) {
+export async function toggleHiddenAtLine(document: TextDocument, lineNumber: number) {
 	const edit = new WorkspaceEdit();
 	const line = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);
 	if (!task) {
 		return undefined;
 	}
-	if (!task.isHidden) {
+	if (!task.hiddenRange) {
 		insertEditAtTheEndOfLine(edit, document, line.range.end, helpCreateSpecialTag(SpecialTagName.Hidden));
+	} else {
+		deleteEdit(edit, document, task.hiddenRange);
 	}
 	return applyEdit(edit, document);
 }

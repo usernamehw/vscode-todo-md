@@ -1,7 +1,7 @@
 import path from 'path';
 import { CancellationToken, ExtensionContext, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
 import { openSetDueDateInputbox } from '../commands/setDueDate';
-import { decrementCountForTask, editTask, editTaskRawText, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
+import { decrementCountForTask, editTask, editTaskRawText, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleHiddenAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state } from '../extension';
 import { filterTasks } from '../filter';
@@ -82,6 +82,11 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 				}
 				case 'toggleFavorite': {
 					await toggleFavoriteAtLine(message.value, await getActiveOrDefaultDocument());
+					await updateEverything();
+					break;
+				}
+				case 'toggleHidden': {
+					await toggleHiddenAtLine(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();
 					break;
 				}

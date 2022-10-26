@@ -70,6 +70,15 @@ export default defineComponent({
 			contextMenuContainer.hidden = false;
 		},
 		// ──── Context Menu Items ────────────────────────────────────
+		toggleHidden() {
+			if (this.contextMenuTask) {
+				sendMessage({
+					type: 'toggleHidden',
+					value: this.contextMenuTask.lineNumber,
+				});
+				this.hideContextMenu();
+			}
+		},
 		deleteTask() {
 			if (this.contextMenuTask) {
 				sendMessage({

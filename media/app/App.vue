@@ -46,6 +46,10 @@
             <a href="#"
                @click="toggleFavorite"><span class="icon codicon codicon-heart"></span>Toggle Favorite</a>
         </li>
+        <li title="Hide or show task (hidden special tag).">
+            <a href="#"
+               @click="toggleHidden"><span class="icon codicon codicon-eye-closed"></span>Toggle Hidden status</a>
+        </li>
         <li title="Open helper Quick Pick to choose the due date.">
             <a href="#"
                @click="setDueDate"><span class="icon codicon codicon-milestone"></span>Set due date</a>

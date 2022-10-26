@@ -409,6 +409,10 @@ interface WebviewMessageToggleFavorite extends WebviewMessageBase {
 	type: 'toggleFavorite';
 	value: number;
 }
+interface WebviewMessageToggleHidden extends WebviewMessageBase {
+	type: 'toggleHidden';
+	value: number;
+}
 interface WebviewMessageLoaded extends WebviewMessageBase {
 	type: 'webviewLoaded';
 	value: true;
@@ -416,7 +420,7 @@ interface WebviewMessageLoaded extends WebviewMessageBase {
 /**
  * Messages that can only be sent from webview to extension.
  */
-export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageFollowLink | WebviewMessageLoaded | WebviewMessageRevealTask | WebviewMessageSetDueDate | WebviewMessageShowNotification | WebviewMessageStartTask | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleDoneOrIncrementCount | WebviewMessageToggleFavorite | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
+export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageFollowLink | WebviewMessageLoaded | WebviewMessageRevealTask | WebviewMessageSetDueDate | WebviewMessageShowNotification | WebviewMessageStartTask | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleDoneOrIncrementCount | WebviewMessageToggleFavorite | WebviewMessageToggleHidden | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
 /**
  * Messages that can only be sent from extension to webview.
  */

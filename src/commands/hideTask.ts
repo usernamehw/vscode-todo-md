@@ -1,4 +1,4 @@
-import { hideTaskAtLine } from '../documentActions';
+import { toggleHiddenAtLine } from '../documentActions';
 import { updateState } from '../extension';
 import { TaskTreeItem } from '../treeViewProviders/taskProvider';
 import { updateAllTreeViews } from '../treeViewProviders/treeViews';
@@ -11,7 +11,7 @@ export async function hideTask(treeItem?: TaskTreeItem) {
 	const lineNumber = treeItem.task.lineNumber;
 	const document = await getActiveOrDefaultDocument();
 
-	hideTaskAtLine(document, lineNumber);
+	toggleHiddenAtLine(document, lineNumber);
 
 	await updateState();
 	updateAllTreeViews();

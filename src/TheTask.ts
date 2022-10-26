@@ -172,6 +172,10 @@ export class TheTask {
 	 */
 	favoriteRange?: Range;
 	/**
+	 * Hidden special tag range `{h}`
+	 */
+	hiddenRange?: Range;
+	/**
 	 * Do not add overdue to this task.
 	 */
 	noOverdue?: boolean;
@@ -215,6 +219,7 @@ export class TheTask {
 		this.collapseRange = init.collapseRange;
 		this.completionDateRange = init.completionDateRange;
 		this.favoriteRange = init.favoriteRange;
+		this.hiddenRange = init.hiddenRange;
 		this.noOverdue = init.noOverdue;
 	}
 

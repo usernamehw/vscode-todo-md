@@ -76,6 +76,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 	let collapseRange: Range | undefined;
 	let completionDateRange: Range | undefined;
 	let favoriteRange: Range | undefined;
+	let hiddenRange: Range | undefined;
 
 	for (const word of words) {
 		const wordRange = new Range(lineNumber, index, lineNumber, index + word.length);
@@ -129,6 +130,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 					};
 				} else if (specialTag === SpecialTagName.Hidden) {
 					isHidden = true;
+					hiddenRange = wordRange;
 					specialTagRanges.push(wordRange);
 				} else if (specialTag === SpecialTagName.Collapsed) {
 					isCollapsed = true;
@@ -206,6 +208,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 			done,
 			favorite: isFavorite,
 			favoriteRange,
+			hiddenRange,
 			priority,
 			start,
 			startRange,
