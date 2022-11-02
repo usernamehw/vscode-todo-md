@@ -14,6 +14,7 @@
 .suggest__input {
 	background-color: var(--vscode-input-background);
 	border: 1px solid var(--vscode-input-border);
+	border-radius: 2px;
 	color: var(--vscode-input-foreground);
 	display: block;
 	font-family: var(--vscode-editor-font-family);
