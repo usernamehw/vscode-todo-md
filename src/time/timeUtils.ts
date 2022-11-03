@@ -100,6 +100,8 @@ export function dateDiff(date: dayjs.Dayjs): string {
 		diff = 'today';
 	} else if (dayjs().add(1, 'day').isSame(date, 'date')) {
 		diff = 'tomorrow';
+	} else if (dayjs().subtract(1, 'day').isSame(date, 'date')) {
+		diff = 'yesterday';
 	} else {
 		diff = dayjs().to(date);
 	}

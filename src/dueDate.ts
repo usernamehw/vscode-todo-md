@@ -35,12 +35,10 @@ export class DueDate {
 		this.isDue = result.isDue;
 		this.type = result.dueType;
 		this.overdueStr = options?.overdueStr;
-		if (result.isDue === IsDue.NotDue) {
+		if (result.isDue === IsDue.NotDue || result.isDue === IsDue.Due || result.isDue === IsDue.Overdue) {
 			const closest = this.calcClosestDueDateInTheFuture();
 			this.closestDueDateInTheFuture = closest.closestString;
 			this.daysUntilDue = closest.daysUntil;
-		} else if (result.isDue === IsDue.Due || result.isDue === IsDue.Overdue) {
-			this.closestDueDateInTheFuture = `${dayOfTheWeek(dayjs())} [today]`;
 		} else {
 			this.closestDueDateInTheFuture = '';
 		}
