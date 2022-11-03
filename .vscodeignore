@@ -29,9 +29,7 @@ vetur.config.js
 node_modules
 test.md
 demo.md
-LICENSE
 docs
-LICENSE.txt
 **/*.scss
 img/demo.png
 img/webview_demo.png
