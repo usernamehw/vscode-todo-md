@@ -10,6 +10,8 @@ import { DATE_FORMAT, dayOfTheWeekRegexp, dayOfWeekToIndexOfWeek, monthStringToM
  * - `Sun` => Closest future Sunday
  * - ...
  *
+ * TODO: maybe should support tomorrow, yesterday, and simple date `2022-05-05`?
+ *
  * Returns empty string for invalid input.
  */
 export function helpCreateDueDate(str: LiteralUnion<'next week' | 'this week'>, targetNow = new Date()): string {

@@ -92,7 +92,7 @@ export function dayOfTheWeek(date: dayjs.Dayjs): string {
 	return date.format('ddd');
 }
 /**
- * Human readable date diff? `in 2 days`
+ * Human readable date diff. e.g. `in 2 days`
  */
 export function dateDiff(date: dayjs.Dayjs): string {
 	let diff;
@@ -106,12 +106,12 @@ export function dateDiff(date: dayjs.Dayjs): string {
 	return diff;
 }
 /**
- * Return date, day of the week and a diff
+ * Return day of the week, date and a diff.
  *
- * e.g. `2020-10-23 Fri [in 2 days]`
+ * e.g. `Fri 2020-10-23 [in 2 days]`
  */
 export function dateAndDateDiff(date: dayjs.Dayjs): string {
-	return `${date.format(DATE_FORMAT)} ${dayOfTheWeek(date)} [${dateDiff(date)}]`;
+	return `${dayOfTheWeek(date)} ${date.format(DATE_FORMAT)} [${dateDiff(date)}]`;
 }
 /**
  * Check if the date is valid.

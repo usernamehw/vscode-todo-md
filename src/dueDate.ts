@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { dateDiff, dateWithoutTime, dayOfTheWeek, isValidDate } from './time/timeUtils';
+import { dateAndDateDiff, dateWithoutTime, dayOfTheWeek, isValidDate } from './time/timeUtils';
 import { IsDue } from './types';
 
 export type DueType = 'invalid' | 'normalDate' | 'recurringWithDate' | 'recurringWithoutStartingDate';
@@ -55,7 +55,7 @@ export class DueDate {
 		if (this.type === 'normalDate') {
 			const date = dayjs(this.raw);
 			return {
-				closestString: dateDiff(date),
+				closestString: dateAndDateDiff(date),
 				daysUntil: dayjs(date).diff(dayjs(), 'day') + 1,
 			};
 		}
@@ -64,7 +64,7 @@ export class DueDate {
 			const { isDue } = DueDate.parseDue(this.raw, date.toDate());
 			if (isDue) {
 				return {
-					closestString: `${dayOfTheWeek(date)} [${dateDiff(date)}]`,
+					closestString: dateAndDateDiff(date),
 					daysUntil: i,
 				};
 			}
