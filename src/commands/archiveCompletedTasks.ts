@@ -8,7 +8,7 @@ export function archiveCompletedTasks(editor: TextEditor) {
 	// TODO: multiple selections?
 	if (editor.selections.length === 1 && selection.isEmpty) {
 		// Archive all completed tasks
-		const completedTasks = $state.tasks.filter(t => t.done);
+		const completedTasks = $state.tasksAsTree.filter(t => t.done);
 		archiveTasks(completedTasks, editor.document);
 	} else {
 		// Archive only selected completed tasks
