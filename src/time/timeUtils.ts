@@ -92,7 +92,7 @@ export function dayOfTheWeek(date: dayjs.Dayjs): string {
 	return date.format('ddd');
 }
 /**
- * Human readable date diff. e.g. `in 2 days`
+ * Human readable date diff. e.g. `in 2 days`.
  */
 export function dateDiff(date: dayjs.Dayjs): string {
 	let diff;
@@ -103,7 +103,7 @@ export function dateDiff(date: dayjs.Dayjs): string {
 	} else if (dayjs().subtract(1, 'day').isSame(date, 'date')) {
 		diff = 'yesterday';
 	} else {
-		diff = dayjs().to(date);
+		diff = dayjs().to(date.add(1, 'day'));
 	}
 	return diff;
 }
