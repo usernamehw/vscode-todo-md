@@ -1,10 +1,20 @@
 import { assert } from 'chai';
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import isBetween from 'dayjs/plugin/isBetween';
+import isoWeek from 'dayjs/plugin/isoWeek';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import _ from 'lodash';
 import { describe, it } from 'mocha';
 import { DueDate } from '../../dueDate';
 import { IsDue } from '../../types';
 import { headerDelimiter } from './testUtils';
+
+dayjs.extend(isBetween);
+dayjs.extend(relativeTime);
+dayjs.extend(isoWeek);
+dayjs.extend(duration);
+dayjs.Ls.en.weekStart = 1;
 
 function addDays(date: Date, n: number) {
 	return dayjs(date).add(n, 'day').toDate();
