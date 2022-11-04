@@ -168,41 +168,4 @@ describe('Filter "title"', () => {
 	});
 });
 
-describe('Filter matches nested tasks (subtasks)', () => {
-	it('"Match nested tasks."', () => {
-		// Parent
-		//     lvl 1 Subtask 1
-		//         lvl 2 Subtask 1
-		//         lvl 2 Subtask 2 #html #css
-		//     lvl 1 Subtask 2 +something
-		const parentTask = newTask({ title: 'Parent' });
-		const lvl1Subtask1 = newTask({ title: 'lvl 1 Subtask 1' });
-		const lvl2Subtask1 = newTask({ title: 'lvl 2 Subtask 1' });
-		const lvl2Subtask2 = newTask({ title: 'lvl 2 Subtask 2', tags: ['html', 'css'] });
-		const lvl1Subtask2 = newTask({ title: 'lvl 1 Subtask 2', projects: ['something'] });
-
-		lvl1Subtask1.subtasks = [lvl2Subtask1, lvl2Subtask2];
-
-		parentTask.subtasks = [
-			lvl1Subtask1,
-			lvl1Subtask2,
-		];
-
-		// Match for "#html" should produce:
-		// Parent
-		//     lvl 1 Subtask 1
-		//         lvl 2 Subtask 2 #html #css
-		const expectedParent = cloneDeep(parentTask);
-		expectedParent.subtasks.splice(1, 1);
-		expectedParent.subtasks[0].subtasks.splice(0, 1);
-		assert.deepEqual(filterTasks([parentTask], '#html').tasks, [expectedParent]);
-
-		// Match for "+something" should produce:
-		// Parent
-		//     lvl 1 Subtask 2 +something
-		const expectedParent2 = cloneDeep(parentTask);
-		expectedParent2.subtasks.splice(0, 1);
-		assert.deepEqual(filterTasks([parentTask], '+something').tasks, [expectedParent2]);
-	});
-});
 
