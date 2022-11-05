@@ -24,6 +24,7 @@ export default defineComponent({
 		filteredSuggestItems: [] as string[],
 		activeIndex: 0,
 		suggestItemsVisible: false,
+		lastFilterHasNegation: false,
 	}),
 	emits: [
 		'input',
@@ -63,7 +64,9 @@ export default defineComponent({
 				let newInputValue = this.filteredSuggestItems[this.activeIndex];
 				const inputFilters = this.getInputFilters(this.value);
 				if (inputFilters.length > 1) {
-					newInputValue = `${inputFilters.slice(0, -1).join(' ')} ${this.filteredSuggestItems[this.activeIndex]}`;
+					newInputValue = `${inputFilters.slice(0, -1).join(' ')} ${this.lastFilterNegation}${this.filteredSuggestItems[this.activeIndex]}`;
+				} else {
+					newInputValue = this.lastFilterNegation + newInputValue;
 				}
 				this.$emit('input', newInputValue);
 				e?.preventDefault();
@@ -117,7 +120,14 @@ export default defineComponent({
 		},
 		getLastFilter(inputValue: string): string {
 			const inputFilters = this.getInputFilters(inputValue);
-			return inputFilters[inputFilters.length - 1] || '';
+			const lastFilter = inputFilters[inputFilters.length - 1] || '';
+			this.lastFilterHasNegation = /^-/.test(lastFilter);
+			return lastFilter.replace(/^-/, '');
+		},
+	},
+	computed: {
+		lastFilterNegation() {
+			return this.lastFilterHasNegation ? '-' : '';
 		},
 	},
 	created() {
