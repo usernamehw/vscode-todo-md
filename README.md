@@ -74,6 +74,10 @@ Recurring due dates should not be archived and their completion state should be 
 {due:mon}
 # Recurring date that is due every 2nd day (starting date required)
 {due:2020-06-28|e2d}
+# Recurring date that is due every 2nd month at the 31th (or last day of the month if it has less than 31 days)
+{due:2020-02-31|e2m}
+# Recurring date that is due every 2nd year at the last day of Feb
+{due:2020-02-31|e2y}
 ```
 
 ### Multiple recurring due dates `,`

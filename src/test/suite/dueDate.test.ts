@@ -20,7 +20,10 @@ function addDays(date: Date, n: number) {
 	return dayjs(date).add(n, 'day').toDate();
 }
 
-const $1jan2018monday = new Date(2018, 0, 1);// just an ok date, first day of the year, month, week
+/**
+ * Just an ok date, first day of the year, month, week
+ */
+const $1jan2018monday = new Date(2018, 0, 1);
 const $2jan2018tuesday = new Date(2018, 0, 2);
 const $3jan2018wednesday = new Date(2018, 0, 3);
 const $4jan2018thursday = new Date(2018, 0, 4);
@@ -94,9 +97,14 @@ describe('♻ Recurring', () => {
 	});
 });
 
-describe('♻ Recurring with starting date', () => {
+describe('♻ Recurring with starting date (days)', () => {
 	const dueString = '2018-01-01|e2d';
 
+	it(`${dueString} is not due before the starting date`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2017, 11, 31) }).isDue, IsDue.NotDue);
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2017, 11, 30) }).isDue, IsDue.NotDue);
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2017, 11, 29) }).isDue, IsDue.NotDue);
+	});
 	it(`${dueString} is due on the same day`, () => {
 		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 0, 1) }).isDue, IsDue.Due);
 	});
@@ -107,6 +115,141 @@ describe('♻ Recurring with starting date', () => {
 		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 0, 3) }).isDue, IsDue.Due);
 	});
 });
+// ────────────────────────────────────────────────────────────
+describe('♻ Recurring with starting date (months) e1m', () => {
+	const dueString = '2018-01-01|e1m';
+
+	it(`${dueString} is not due before the starting date`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2017, 11, 1) }).isDue, IsDue.NotDue, new Date(2017, 11, 1).toString());
+	});
+	it(`${dueString} is due on the same day`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 0, 1) }).isDue, IsDue.Due, new Date(2018, 0, 1).toString());
+	});
+	it(`${dueString} is not due on the next day`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 0, 2) }).isDue, IsDue.NotDue, new Date(2018, 0, 2).toString());
+	});
+	it(`${dueString} is due on the first date of the next month`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 1, 1) }).isDue, IsDue.Due, new Date(2018, 1, 1).toString());
+	});
+});
+describe('♻ Recurring with starting date (months) e2m', () => {
+	const dueString = '2018-01-01|e2m';
+
+	it(`${dueString} is due on the same day`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 0, 1) }).isDue, IsDue.Due, new Date(2018, 0, 1).toString());
+	});
+	it(`${dueString} is not due on the next day`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 0, 2) }).isDue, IsDue.NotDue, new Date(2018, 0, 2).toString());
+	});
+	it(`${dueString} is not due on the same day the next month`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 1, 1) }).isDue, IsDue.NotDue, new Date(2018, 1, 1).toString());
+	});
+	it(`${dueString} is due on the same day in 2 months`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2018, 2, 1) }).isDue, IsDue.Due, new Date(2018, 2, 1).toString());
+	});
+});
+describe('♻ Recurring with starting date (months) e2m (last day)', () => {
+	const dueString = '2022-01-31|e2m';
+
+	it(`${dueString} is due on the same day the same month (last day)`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 0, 31) }).isDue, IsDue.Due, new Date(2022, 0, 31).toString());
+	});
+	it(`${dueString} is not due on the last day the next month (last day)`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 1, 28) }).isDue, IsDue.NotDue, new Date(2022, 1, 28).toString());
+	});
+	it(`${dueString} is due on the same day in 2 months`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 2, 31) }).isDue, IsDue.Due, new Date(2022, 2, 31).toString());
+	});
+});
+describe('♻ Recurring with starting date (months) e2m (last day)', () => {
+	const dueString = '2022-02-31|e2m';
+
+	it(`${dueString} is not due on the days before and after the starting due date`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 1, 27) }).isDue, IsDue.NotDue, new Date(2022, 1, 27).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 2, 1) }).isDue, IsDue.NotDue, new Date(2022, 2, 1).toString());
+	});
+	it(`${dueString} is due on the last day of the same month`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 1, 28) }).isDue, IsDue.Due, new Date(2022, 1, 28).toString());
+	});
+	it(`${dueString} is not due on the last day of the next month`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 2, 31) }).isDue, IsDue.NotDue, new Date(2022, 2, 31).toString());
+	});
+	it(`${dueString} is due on the last day in 2 months`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 3, 30) }).isDue, IsDue.Due, new Date(2022, 3, 30).toString());
+	});
+});
+
+describe('♻ Recurring with starting date (months) e1m (not last day of month / last day of month)', () => {
+	const dueString = '2022-03-30|e1m';
+
+	it(`${dueString} is not due. Starting date - not last day of month. Target date - last day of month.`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 5, 30) }).isDue, IsDue.Due, new Date(2022, 5, 30).toString());
+	});
+});
+// ────────────────────────────────────────────────────────────
+describe('♻ Recurring with starting date (years) e1y', () => {
+	const dueString = '2022-01-01|e1y';
+
+	it(`${dueString} not due before the starting date year`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2021, 0, 1) }).isDue, IsDue.NotDue, new Date(2021, 0, 1).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2020, 0, 1) }).isDue, IsDue.NotDue, new Date(2020, 0, 1).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2019, 0, 1) }).isDue, IsDue.NotDue, new Date(2019, 0, 1).toString());
+	});
+	it(`${dueString} due at the starting year date`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 0, 1) }).isDue, IsDue.Due, new Date(2022, 0, 1).toString());
+	});
+	it(`${dueString} due when it should`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2023, 0, 1) }).isDue, IsDue.Due, new Date(2023, 0, 1).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2024, 0, 1) }).isDue, IsDue.Due, new Date(2024, 0, 1).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2025, 0, 1) }).isDue, IsDue.Due, new Date(2025, 0, 1).toString());
+	});
+	it(`${dueString} not due at other dates`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 0, 2) }).isDue, IsDue.NotDue, new Date(2022, 0, 2).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 0, 31) }).isDue, IsDue.NotDue, new Date(2022, 0, 31).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 1, 1) }).isDue, IsDue.NotDue, new Date(2022, 1, 1).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 11, 1) }).isDue, IsDue.NotDue, new Date(2022, 11, 1).toString());
+	});
+});
+
+describe('♻ Recurring with starting date (years) e2y', () => {
+	const dueString = '2022-01-01|e2y';
+
+	it(`${dueString} due when should`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 0, 1) }).isDue, IsDue.Due, new Date(2022, 0, 1).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2024, 0, 1) }).isDue, IsDue.Due, new Date(2024, 0, 1).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2026, 0, 1) }).isDue, IsDue.Due, new Date(2026, 0, 1).toString());
+	});
+	it(`${dueString} not due when shouldn't`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2023, 0, 1) }).isDue, IsDue.NotDue, new Date(2023, 0, 1).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 1, 1) }).isDue, IsDue.NotDue, new Date(2022, 1, 1).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2025, 1, 1) }).isDue, IsDue.NotDue, new Date(2025, 1, 1).toString());
+	});
+});
+
+describe('♻ Recurring with starting date (years) e2y (last day)', () => {
+	const dueString = '2022-02-31|e2y';
+
+	it(`${dueString} is not due on the days before and after the starting due date`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 1, 27) }).isDue, IsDue.NotDue, new Date(2022, 1, 27).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 2, 1) }).isDue, IsDue.NotDue, new Date(2022, 2, 1).toString());
+	});
+	it(`${dueString} is due on the last day of the same month`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 1, 28) }).isDue, IsDue.Due, new Date(2022, 1, 28).toString());
+	});
+	it(`${dueString} is not due on the last day of the next month`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 2, 31) }).isDue, IsDue.NotDue, new Date(2022, 2, 31).toString());
+	});
+	it(`${dueString} is due when it should`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2022, 1, 28) }).isDue, IsDue.Due, new Date(2022, 1, 28).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2024, 1, 29) }).isDue, IsDue.Due, new Date(2024, 1, 29).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2026, 1, 28) }).isDue, IsDue.Due, new Date(2026, 1, 28).toString());
+	});
+	it(`${dueString} is not due when it shouldn't`, () => {
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2023, 1, 28) }).isDue, IsDue.NotDue, new Date(2023, 1, 28).toString());
+		assert.equal(new DueDate(dueString, { targetDate: new Date(2024, 1, 28) }).isDue, IsDue.NotDue, new Date(2024, 1, 28).toString());
+	});
+});
+
 
 describe('Comma delimited `,`', () => {
 	it('`mon,sun`', () => {

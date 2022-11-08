@@ -119,6 +119,9 @@ export function dateAndDateDiff(date: dayjs.Dayjs): string {
  * Check if the date is valid.
  *
  * For instance `2020-10-32` is an invalid date bc date 32 doesn't exist
+ * @param year 4 digit year
+ * @param month 0-11 js month index
+ * @param date 1-31 date number
  */
 export function isValidDate(year: number, month: number, date: number): boolean {
 	const jsDate = new Date(year, month, date);
