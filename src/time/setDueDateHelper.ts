@@ -28,7 +28,7 @@ export function helpCreateDueDate(str: LiteralUnion<'next week' | 'this week'>, 
 	const justDateMatch = /^(\d+)$/.exec(str);
 	const dayShiftMatch = /^(\+|-)(\d+)(d|w|m)?$/.exec(str);
 	const dayOfTheWeekMatch = dayOfTheWeekRegexp.exec(str);
-	const recurringMatch = /e(\d+)(d)/.exec(str);
+	const recurringMatch = /e(\d+)(d|m|y)/.exec(str);
 	const monthMatch = /^(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Jul|July|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)\s?(\d\d?)$/i.exec(str);
 	const now = dayjs(targetNow);
 	if (dayShiftMatch) {
