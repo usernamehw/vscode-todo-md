@@ -1,3 +1,13 @@
+## 2.19.0 `09 Nov 2022`
+
+- ✨ Recurring monthly/yearly due date `{due:2023-01-31|e1m}` [#67](https://github.com/usernamehw/vscode-todo-md/issues/67)
+- ✨ More unified closest due date format in webview and editor input hover
+- ✨ [webview] Toggle hidden status from context menu
+- 🐛 Fix recurring due date being due even before starting date
+- 🐛 Fix nested tasks not moved to archive file
+- 🐛 [webview] Fix autocomplete not showing when using negation sign `-`
+- 🐛 Show `>100` sign istead of `+100` when due date is in the future (not calculated)
+
 ## 2.18.0 `20 Oct 2022`
 
 - ✨ Tree View counter badge for due tasks
