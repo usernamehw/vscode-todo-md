@@ -19,5 +19,5 @@ export const enum Constants {
 
 	ExtensionMenuPrefix = 'Todo MD:',
 
-	ThrottleEverything = 120,
+	ThrottleEverything = 140,
 }

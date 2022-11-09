@@ -3,13 +3,15 @@ import { dateAndDateDiff, dateWithoutTime, isValidDate } from './time/timeUtils'
 import { IsDue } from './types';
 
 export type DueType = 'invalid' | 'normalDate' | 'recurringWithDate' | 'recurringWithoutStartingDate';
+// type RecurringIntervalUnit = 'd' | 'm' | 'y';
 
 /**
  * Should handle most of the due date functions
  */
 export class DueDate {
 	private static readonly dueWithDateRegexp = /^(\d\d\d\d)-(\d\d)-(\d\d)(\|(e\d+(d|m|y)))?$/i;
-	private static readonly dueRecurringRegexp = /^(ed|sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday)$/i;
+	private static readonly dueRecurringRegexp = /^(today|ed|sun|sunday|mon|monday|tue|tuesday|wed|wednesday|thu|thursday|fri|friday|sat|saturday)$/i;
+	public static readonly futureFarAwayDueDateMessage = 'More than 100 days.';
 
 	/** Unmodified value of due date */
 	public readonly raw: string;
@@ -20,7 +22,7 @@ export class DueDate {
 	/** Due state. Can be: due, notDue, overdue, invalid */
 	public isDue = IsDue.NotDue;
 	/** Closest due date (assigned only when the task is not due today) */
-	public readonly closestDueDateInTheFuture: string;
+	public closestDueDateInTheFuture = '';
 	/** Days until this task is due */
 	public daysUntilDue = 0;
 	/** Overdue date when the task was first time missed to complete. */
@@ -36,13 +38,7 @@ export class DueDate {
 		this.isDue = result.isDue;
 		this.type = result.dueType;
 		this.overdueStr = options?.overdueStr;
-		if (result.isDue === IsDue.NotDue || result.isDue === IsDue.Due || result.isDue === IsDue.Overdue) {
-			const closest = this.calcClosestDueDateInTheFuture();
-			this.closestDueDateInTheFuture = closest.closestString;
-			this.daysUntilDue = closest.daysUntil;
-		} else {
-			this.closestDueDateInTheFuture = '';
-		}
+		this.calcClosestDueDateInTheFuture();
 		if (this.isDue === IsDue.Overdue) {
 			this.overdueInDays = this.getOverdueInDays();
 		}
@@ -50,28 +46,29 @@ export class DueDate {
 	/**
 	 * When the next time the task is going to be due.
 	 */
-	private calcClosestDueDateInTheFuture() {
+	private calcClosestDueDateInTheFuture(): void {
+		if (this.type === 'invalid' || this.isDue === IsDue.Overdue || this.isDue === IsDue.Due) {
+			return;
+		}
 		if (this.type === 'normalDate') {
 			const date = dayjs(this.raw);
-			return {
-				closestString: dateAndDateDiff(date),
-				daysUntil: dayjs(date).diff(dayjs(), 'day') + 1,
-			};
+			this.closestDueDateInTheFuture = dateAndDateDiff(date);
+			this.daysUntilDue = dayjs(date).diff(dayjs(), 'day') + 1;
+			return;
 		}
-		for (let i = 1; i < 100; i++) {
+
+		for (let i = 1; i <= 100; i++) {
 			const date = dayjs().add(i, 'day');
 			const { isDue } = DueDate.parseDue(this.raw, date.toDate());
-			if (isDue) {
-				return {
-					closestString: dateAndDateDiff(date),
-					daysUntil: i,
-				};
+			if (isDue === IsDue.Due) {
+				this.closestDueDateInTheFuture = dateAndDateDiff(date);
+				this.daysUntilDue = i;
+				return;
 			}
 		}
-		return {
-			closestString: 'More than 100 days',
-			daysUntil: 100,
-		};
+
+		this.closestDueDateInTheFuture = DueDate.futureFarAwayDueDateMessage;
+		this.daysUntilDue = 100;
 	}
 	/**
 	 * Get diff (in days) between today and overdue date
@@ -80,8 +77,7 @@ export class DueDate {
 		if (this.overdueStr) {
 			return dayjs().diff(this.overdueStr, 'day');
 		} else {
-			const nowWithoutTime = dateWithoutTime(new Date());
-			return dayjs(nowWithoutTime).diff(dayjs(this.raw), 'day');
+			return dayjs(dateWithoutTime(new Date())).diff(dayjs(this.raw), 'day');
 		}
 	}
 	/**
@@ -110,13 +106,6 @@ export class DueDate {
 	 * Determines what kind of due date it is and returns an object with info.
 	 */
 	private static parseDueDate(due: string, targetDate: Date): DueReturn {
-		if (due === 'today') {
-			return {
-				isRecurring: false,
-				isDue: IsDue.Due,
-				dueType: 'recurringWithoutStartingDate',
-			};
-		}
 		let isRecurring = false;
 		let isDue = IsDue.NotDue;
 		let dueType: DueType;
@@ -127,7 +116,7 @@ export class DueDate {
 			const month = Number(dueWithDateMatch[2]) - 1;
 			const date = Number(dueWithDateMatch[3]);
 			const rawStartingDate = datePartsToRawFormattedDate(year, month, date);
-			const dateObject = new Date(year, month, date);
+			const startingDate = new Date(year, month, date);
 			const dueRecurringPart = dueWithDateMatch[5];
 
 			if (!dueRecurringPart) {
@@ -139,11 +128,11 @@ export class DueDate {
 						isDue: IsDue.Invalid,
 					};
 				}
-				isDue = DueDate.isDueExactDate(dateObject, targetDate);
+				isDue = DueDate.isDueExactDate(startingDate, targetDate);
 				isRecurring = false;
 				dueType = 'normalDate';
 			} else {
-				isDue = DueDate.isDueRecurringWithDate(dueRecurringPart, dateObject, rawStartingDate, targetDate);
+				isDue = DueDate.isDueRecurringWithDate(dueRecurringPart, startingDate, rawStartingDate, targetDate);
 				isRecurring = true;
 				dueType = 'recurringWithDate';
 			}
@@ -234,8 +223,8 @@ export class DueDate {
 	 * `due:2019-06-19|e2m`.
 	 *
 	 */
-	private static isDueRecurringWithDate(dueString: string, dueDateStart: Date | undefined, rawStartingDate: string, targetDate: Date): IsDue {
-		if (dueDateStart === undefined) {
+	private static isDueRecurringWithDate(dueString: string, startingDate: Date | undefined, rawStartingDate: string, targetDate: Date): IsDue {
+		if (startingDate === undefined) {
 			throw new Error('Starting date is missing.');
 		}
 
@@ -247,10 +236,10 @@ export class DueDate {
 		const interval = match[1] ? Number(match[1]) : 1;
 		const unit = match[2].toLowerCase() as 'd' | 'm' | 'y';
 		if (unit === 'd') {
-			if (dayjs(targetDate).isBefore(dayjs(dueDateStart))) {
+			if (dayjs(targetDate).isBefore(dayjs(startingDate))) {
 				return IsDue.NotDue;
 			}
-			const diffInDays = dayjs(dateWithoutTime(targetDate)).diff(dueDateStart, 'day');
+			const diffInDays = dayjs(dateWithoutTime(targetDate)).diff(startingDate, 'day');
 			if (diffInDays % interval === 0) {
 				return IsDue.Due;
 			}
@@ -263,14 +252,14 @@ export class DueDate {
 			const startingDateParts = rawFormattedDateToDateParts(rawStartingDate);
 			const startingDateLastDayOfMonth = dayjs(new Date(startingDateParts.year, startingDateParts.month, 1)).daysInMonth();
 			if (isLastStartingDate) {
-				dueDateStart = new Date(startingDateParts.year, startingDateParts.month, startingDateLastDayOfMonth);
+				startingDate = new Date(startingDateParts.year, startingDateParts.month, startingDateLastDayOfMonth);
 			}
 
-			if (dayjs(targetDate).isBefore(dayjs(dueDateStart), 'month')) {
+			if (dayjs(targetDate).isBefore(dayjs(startingDate), 'month')) {
 				return IsDue.NotDue;
 			}
 
-			const diffInMonths = dayjs(targetDate).diff(dueDateStart, 'month');
+			const diffInMonths = dayjs(targetDate).diff(startingDate, 'month');
 
 			if (!(diffInMonths % interval === 0)) {
 				return IsDue.NotDue;
@@ -283,7 +272,7 @@ export class DueDate {
 				}
 			} else {
 				// not last day of the month, precise date of month match
-				if (dayjs(dateWithoutTime(targetDate)).date() === dueDateStart.getDate()) {
+				if (dayjs(dateWithoutTime(targetDate)).date() === startingDate.getDate()) {
 					return IsDue.Due;
 				}
 			}
@@ -297,20 +286,20 @@ export class DueDate {
 			const startingDateParts = rawFormattedDateToDateParts(rawStartingDate);
 			const startingDateLastDayOfMonth = dayjs(new Date(startingDateParts.year, startingDateParts.month, 1)).daysInMonth();
 			if (isLastStartingDate) {
-				dueDateStart = new Date(startingDateParts.year, startingDateParts.month, startingDateLastDayOfMonth);
+				startingDate = new Date(startingDateParts.year, startingDateParts.month, startingDateLastDayOfMonth);
 			}
 
-			const diffInYears = dayjs(targetDate).diff(dueDateStart, 'year');
+			const diffInYears = dayjs(targetDate).diff(startingDate, 'year');
 
 			if (!(diffInYears % interval === 0)) {
 				return IsDue.NotDue;
 			}
 
-			if (dayjs(targetDate).isBefore(dayjs(dueDateStart), 'year')) {
+			if (dayjs(targetDate).isBefore(dayjs(startingDate), 'year')) {
 				return IsDue.NotDue;
 			}
 
-			if (targetDate.getMonth() !== dueDateStart.getMonth()) {
+			if (targetDate.getMonth() !== startingDate.getMonth()) {
 				return IsDue.NotDue;
 			}
 
@@ -321,7 +310,7 @@ export class DueDate {
 				}
 			} else {
 				// not last day of the month, precise date of month match
-				if (dayjs(dateWithoutTime(targetDate)).date() === dueDateStart.getDate()) {
+				if (dayjs(dateWithoutTime(targetDate)).date() === startingDate.getDate()) {
 					return IsDue.Due;
 				}
 			}
@@ -332,11 +321,14 @@ export class DueDate {
 }
 
 
-
+/**
+ * TODO: memoize?
+ */
 function isLastOrNonExistingDateInMonth(dateString: string): boolean | undefined {
-	const year = Number(dateString.split('-')[0]);
-	const month = Number(dateString.split('-')[1]) - 1;
-	const date = Number(dateString.split('-')[2]);
+	const parts = dateString.split('-');
+	const year = Number(parts[0]);
+	const month = Number(parts[1]) - 1;
+	const date = Number(parts[2]);
 
 	if (date >= 32) {
 		return undefined;
