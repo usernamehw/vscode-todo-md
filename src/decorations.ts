@@ -1,6 +1,9 @@
+import dayjs from 'dayjs';
 import { DecorationOptions, Range, TextEditor, TextEditorDecorationType, ThemeColor, window } from 'vscode';
+import { DueDate } from './dueDate';
 import { $config, $state } from './extension';
-import { makeClosestDueDateDecoration } from './languageFeatures/getTaskHover';
+import { TheTask } from './TheTask';
+import { weekdayNamesShort } from './time/timeUtils';
 import { IsDue } from './types';
 import { forEachTask } from './utils/taskUtils';
 import { svgToUri } from './utils/vscodeUtils';
@@ -484,4 +487,14 @@ function createPieProgressSvg(size: number, done: number, all: number) {
 	svgStr += `<circle r="5" cx="10" cy="10" fill="transparent" stroke="${pieBg}" stroke-width="10" stroke-dasharray="calc(${targetPercentage} * 31.4 / 100) 31.4" transform="rotate(-90) translate(-20)" />`;
 	svgStr += '</svg>';
 	return svgStr;
+}
+
+/**
+ * Return closest due date in a format (depending on a user setting):
+ * - `+20d Fri`
+ * - `+20d`
+ */
+export function makeClosestDueDateDecoration(task: TheTask): string {
+	const daysUntilPart = task.due?.closestDueDateInTheFuture === DueDate.futureFarAwayDueDateMessage ? `>${task.due.daysUntilDue}d` : `+${task.due!.daysUntilDue}d`;
+	return `${daysUntilPart}${$config.closestDueDateIncludeWeekday ? ` ${weekdayNamesShort[dayjs().add(task.due!.daysUntilDue, 'day').get('day')]}` : ''}`;
 }

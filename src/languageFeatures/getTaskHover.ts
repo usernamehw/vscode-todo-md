@@ -1,8 +1,7 @@
-import dayjs from 'dayjs';
 import { MarkdownString } from 'vscode';
 import { $config } from '../extension';
 import { TheTask } from '../TheTask';
-import { durationTo, weekdayNamesShort } from '../time/timeUtils';
+import { durationTo } from '../time/timeUtils';
 import { IsDue } from '../types';
 import { helpGetColor } from '../utils/colors';
 
@@ -45,7 +44,7 @@ export function getTaskHoverMd(task: TheTask) {
 			dueContent = String(task.due.overdueInDays);
 		} else if (task.due?.isDue === IsDue.NotDue) {
 			dueColor = helpGetColor('notDue');
-			dueContent = makeClosestDueDateDecoration(task);
+			dueContent = task.due.closestDueDateInTheFuture;
 		} else if (task.due?.isDue === IsDue.Invalid) {
 			dueColor = helpGetColor('invalid');
 			codicon = '$(error)';
@@ -89,11 +88,3 @@ export function getTaskHoverMd(task: TheTask) {
 	return markdown;
 }
 
-/**
- * Return closest due date in a format (depending on a user setting):
- * - `+20d Fri`
- * - `+20d`
- */
-export function makeClosestDueDateDecoration(task: TheTask): string {
-	return `+${task.due!.daysUntilDue}d${$config.closestDueDateIncludeWeekday ? ` ${weekdayNamesShort[dayjs().add(task.due!.daysUntilDue, 'day').get('day')]}` : ''}`;
-}
