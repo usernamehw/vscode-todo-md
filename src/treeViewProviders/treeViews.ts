@@ -135,10 +135,9 @@ export function updateAllTreeViews() {
 
 	updateTasksTreeView();
 
-	const dueTasks = filterTasks($state.tasksAsTree, '$due').tasks;
-	dueProvider.refresh(defaultSortTasks(dueTasks));
-	setViewTitle(dueView, 'due', dueTasks.length);
-	const notCompletedDueTasks = filterTasks(dueTasks, '-$done').tasks;
+	const notCompletedDueTasks = filterTasks($state.tasksAsTree, '$due -$done').tasks;
+	dueProvider.refresh(defaultSortTasks(notCompletedDueTasks));
+	setViewTitle(dueView, 'due', notCompletedDueTasks.length);
 	setViewBadge(dueView, notCompletedDueTasks.length, 'Number of due tasks.');
 
 	projectProvider.refresh($state.projectsForTreeView);
