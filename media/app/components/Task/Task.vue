@@ -10,7 +10,8 @@
             <span v-html="dueDate"></span>
         </template>
         <template v-if="model.favorite">
-            <span class="task__favorite codicon codicon-heart"></span>
+            <span title="Favorite task."
+                  class="task__favorite codicon codicon-heart"></span>
         </template>
         <span v-if="model.subtasks.length"
               class="task__twistie codicon"
