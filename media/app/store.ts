@@ -44,7 +44,7 @@ interface StoreState {
 	defaultFileSpecified: boolean;
 	activeDocumentOpened: boolean;
 	filterInputValue: string;
-	config: ExtensionConfig['webview'];
+	config: ExtensionConfig;
 	selectedTaskLineNumber: number;
 	/**
 	 * Send improvised event from store: assign a random number and listen for changes
@@ -64,25 +64,27 @@ export const useStore = defineStore({
 		activeDocumentOpened: false,
 		filterInputValue: '',
 		config: {
-			autoShowSuggest: true,
-			showCompleted: true,
-			showRecurringCompleted: true,
-			showRecurringUpcoming: true,
-			completedStrikeThrough: false,
-			showPriority: true,
-			showCheckbox: true,
-			fontSize: '13px',
-			padding: '0px',
-			customCheckboxEnabled: false,
-			notificationsEnabled: false,
-			showTaskDetails: false,
-			fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`,
-			indentSize: '1.8em',
-			tagStyles: {},
-			lineHeight: 1.4,
-			customCSSPath: '',
-			scrollbarOverflow: false,
-		},
+			webview: {
+				autoShowSuggest: true,
+				showCompleted: true,
+				showRecurringCompleted: true,
+				showRecurringUpcoming: true,
+				completedStrikeThrough: false,
+				showPriority: true,
+				showCheckbox: true,
+				fontSize: '13px',
+				padding: '0px',
+				customCheckboxEnabled: false,
+				notificationsEnabled: false,
+				showTaskDetails: false,
+				fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji'`,
+				indentSize: '1.8em',
+				tagStyles: {},
+				lineHeight: 1.4,
+				customCSSPath: '',
+				scrollbarOverflow: false,
+			},
+		} as any,
 		selectedTaskLineNumber: -1,
 		focusFilterInputEvent: 0,
 	}),
@@ -97,7 +99,7 @@ export const useStore = defineStore({
 				matchIds = filtered.matchIds;
 			}
 			// TODO: use filterTasks()
-			if (!state.config.showRecurringCompleted) {
+			if (!state.config.webview.showRecurringCompleted) {
 				filteredTasks = filteredTasks.filter(task => {
 					if (task.due?.isRecurring && task.done) {
 						return false;
@@ -106,7 +108,7 @@ export const useStore = defineStore({
 					}
 				});
 			}
-			if (!state.config.showRecurringUpcoming) {
+			if (!state.config.webview.showRecurringUpcoming) {
 				filteredTasks = filteredTasks.filter(task => {
 					if (task.due?.isRecurring && task.due.isDue === IsDue.NotDue) {
 						return false;
@@ -116,7 +118,7 @@ export const useStore = defineStore({
 				});
 			}
 			// ignore setting `webview.showCompleted` when `$done` filter is present
-			if (!state.config.showCompleted/*  && !state.filterInputValue.includes('$done') */) {
+			if (!state.config.webview.showCompleted/*  && !state.filterInputValue.includes('$done') */) {
 				filteredTasks = filteredTasks.filter(task => !task.done);
 				// filteredTasks = filterTasks(filteredTasks, '-$done');
 			}
@@ -160,7 +162,7 @@ export const useStore = defineStore({
 			contexts,
 		}: {
 			tasksAsTree: TheTask[];
-			config: ExtensionConfig['webview'];
+			config: ExtensionConfig;
 			defaultFileSpecified: boolean;
 			activeDocumentOpened: boolean;
 			tags: string[];
@@ -212,7 +214,7 @@ export const useStore = defineStore({
 		},
 		toggleDone(task: TheTask) {
 			task.done = !task.done;
-			if (task.done && this.config.notificationsEnabled) {
+			if (task.done && this.config.webview.notificationsEnabled) {
 				showToastNotification(`${task.title}`, {
 					type: 'success',
 				});
@@ -355,13 +357,13 @@ window.addEventListener('message', event => {
 				contexts: message.value.contexts,
 			});
 			const bodyStyle = document.body.style;
-			bodyStyle.setProperty('--font-size', message.value.config.fontSize);
-			bodyStyle.setProperty('--font-family', message.value.config.fontFamily);
-			bodyStyle.setProperty('--line-height', String(message.value.config.lineHeight));
-			bodyStyle.setProperty('--padding', message.value.config.padding);
-			bodyStyle.setProperty('--priority-left-padding', message.value.config.showPriority ? '3px' : '1px');
-			bodyStyle.setProperty('--indent-size', message.value.config.indentSize);
-			bodyStyle.setProperty('--list-scrollbar-value', message.value.config.scrollbarOverflow ? 'overlay' : 'auto');
+			bodyStyle.setProperty('--font-size', message.value.config.webview.fontSize);
+			bodyStyle.setProperty('--font-family', message.value.config.webview.fontFamily);
+			bodyStyle.setProperty('--line-height', String(message.value.config.webview.lineHeight));
+			bodyStyle.setProperty('--padding', message.value.config.webview.padding);
+			bodyStyle.setProperty('--priority-left-padding', message.value.config.webview.showPriority ? '3px' : '1px');
+			bodyStyle.setProperty('--indent-size', message.value.config.webview.indentSize);
+			bodyStyle.setProperty('--list-scrollbar-value', message.value.config.webview.scrollbarOverflow ? 'overlay' : 'auto');
 			store.updateWebviewTitle();
 			if (store.selectedTaskLineNumber === -1) {
 				store.selectFirstTask();

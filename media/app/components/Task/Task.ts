@@ -82,7 +82,7 @@ export default defineComponent({
 			if (this.model.parentTaskLineNumber !== undefined) {
 				classMap[`task--nested-lvl-${this.model.indentLvl}`] = true;
 			}
-			if (this.storeStore.config.showPriority) {
+			if (this.storeStore.config.webview.showPriority) {
 				switch (this.model.priority) {
 					case 'A': classMap['task--priA'] = true; break;
 					case 'B': classMap['task--priB'] = true; break;
@@ -100,7 +100,7 @@ export default defineComponent({
 					case IsDue.Invalid: classMap.invalid = true;break;
 				}
 			}
-			if (this.storeStore.config.completedStrikeThrough) {
+			if (this.storeStore.config.webview.completedStrikeThrough) {
 				classMap['task--strike-through'] = true;
 			}
 			if (this.storeStore.selectedTaskLineNumber === this.model.lineNumber) {
@@ -146,11 +146,11 @@ export default defineComponent({
 		},
 	},
 	mounted() {
-		this.duration = this.model.duration ? this.model.duration : this.model.start ? durationTo(this.model, false, !this.model.done) : '';// TODO: respect `durationIncludeSeconds`
+		this.duration = this.model.duration ? this.model.duration : this.model.start ? durationTo(this.model, false, this.storeStore.config.durationIncludeSeconds) : '';
 
 		if (!this.model.duration && this.model.start && !this.model.done) {
 			this.durationTimerId = setInterval(() => {
-				this.duration = durationTo(this.model, false, true);
+				this.duration = durationTo(this.model, false, this.storeStore.config.durationIncludeSeconds);
 			}, 1000);
 		}
 	},

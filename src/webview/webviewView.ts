@@ -159,7 +159,7 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					contexts: $state.contexts,
 					defaultFileSpecified: Boolean($config.defaultFile),
 					activeDocumentOpened: Boolean($state.activeDocument),
-					config: $config.webview,
+					config: $config,
 				},
 			});
 		}

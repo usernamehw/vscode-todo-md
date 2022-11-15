@@ -336,7 +336,7 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 		contexts: string[];
 		defaultFileSpecified: boolean;
 		activeDocumentOpened: boolean;
-		config: ExtensionConfig['webview'];
+		config: ExtensionConfig;
 	};
 }
 interface WebviewMessageFocusFilterInput {

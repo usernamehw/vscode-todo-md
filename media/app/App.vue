@@ -4,7 +4,7 @@
         <Suggest ref="suggest"
                  :value="storeStore.filterInputValue"
                  :suggestItems="storeStore.suggestItems"
-                 :autoshow="storeStore.config.autoShowSuggest"
+                 :autoshow="storeStore.config.webview.autoShowSuggest"
                  @input="onInput"
                  @keydownDown="onDown"
                  @keydownUp="onUp" />

@@ -50,7 +50,7 @@ export default defineComponent({
 	computed: {
 		...mapStores(useStore),
 		taskDetailsVisible(): boolean {
-			return (this.storeStore.config.showTaskDetails || this.taskDetailsManuallyTriggered) && this.storeStore.selectedTaskLineNumber !== -1;
+			return (this.storeStore.config.webview.showTaskDetails || this.taskDetailsManuallyTriggered) && this.storeStore.selectedTaskLineNumber !== -1;
 		},
 	},
 	methods: {

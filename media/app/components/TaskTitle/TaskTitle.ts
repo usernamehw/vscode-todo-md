@@ -30,8 +30,8 @@ export default defineComponent({
 			this.storeStore.focusFilterInput();
 		},
 		styleForTag(tag: string) {
-			if (tag in this.storeStore.config.tagStyles) {
-				return this.storeStore.config.tagStyles[tag];
+			if (tag in this.storeStore.config.webview.tagStyles) {
+				return this.storeStore.config.webview.tagStyles[tag];
 			}
 			return undefined;
 		},
