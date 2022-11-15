@@ -482,9 +482,16 @@ function createPieProgressSvg(size: number, done: number, all: number) {
 	const circleBg = `%23${$config.progressBackground.slice(1)}`;
 	const pieBg = `%23${$config.progressForeground.slice(1)}`;
 
-	let svgStr = `<svg xmlns="http://www.w3.org/2000/svg" height="${size}" width="${size}" viewBox="0 0 ${Svg.Width} ${Svg.Width}">`;
-	svgStr += `<circle r="10" cx="10" cy="10" fill="${circleBg}" />`;
-	svgStr += `<circle r="5" cx="10" cy="10" fill="transparent" stroke="${pieBg}" stroke-width="10" stroke-dasharray="calc(${targetPercentage} * 31.4 / 100) 31.4" transform="rotate(-90) translate(-20)" />`;
+	let svgStr = ``;
+	if (targetPercentage === 100) {
+		svgStr += `<svg xmlns="http://www.w3.org/2000/svg" height="${size}" width="${size}" viewBox="0 0 ${80} ${80}">`;
+		svgStr += `<circle r="40" cx="40" cy="40" fill="${pieBg}" />`;
+		svgStr += `<path fill="${circleBg}" d="M33.9 56.3L19.9 42.2 24.1 38 33.9 47.8 58.6 23.1 62.9 27.3z"/>`;
+	} else {
+		svgStr += `<svg xmlns="http://www.w3.org/2000/svg" height="${size}" width="${size}" viewBox="0 0 ${Svg.Width} ${Svg.Width}">`;
+		svgStr += `<circle r="10" cx="10" cy="10" fill="${circleBg}" />`;
+		svgStr += `<circle r="5" cx="10" cy="10" fill="transparent" stroke="${pieBg}" stroke-width="10" stroke-dasharray="calc(${targetPercentage} * 31.4 / 100) 31.4" transform="rotate(-90) translate(-20)" />`;
+	}
 	svgStr += '</svg>';
 	return svgStr;
 }
