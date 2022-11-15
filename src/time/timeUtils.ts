@@ -152,9 +152,9 @@ export function durationTo(task: TheTask, formatForEditor = true, includeSeconds
 	const minutes = duration.minutes();
 	const seconds = duration.seconds();
 
-	const yearFormat = `YYYY[y]`;
-	const monthFormat = `MM[m]`;
-	const daysFormat = `DD[d]`;
+	const yearFormat = `YY[y]`;
+	const monthFormat = `M[m]`;
+	const daysFormat = `D[d]`;
 	const dateTimeDelimiter = formatForEditor ? '_' : ' ';
 	const yearMonthDateDelimiter = formatForEditor ? '-' : ' ';
 	const hourFormat = `HH[h]`;
