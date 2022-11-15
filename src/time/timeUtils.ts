@@ -171,9 +171,7 @@ export function durationTo(task: TheTask, formatForEditor = true, includeSeconds
 		datePartsFormat.unshift(yearFormat);
 	}
 
-	if (seconds !== 0) {
-		timePartsFormat.unshift(secondFormat);
-	}
+	timePartsFormat.unshift(secondFormat);
 	if (minutes !== 0) {
 		timePartsFormat.unshift(minuteFormat);
 	}
