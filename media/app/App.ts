@@ -233,7 +233,7 @@ export default defineComponent({
 		});
 	},
 	watch: {
-		'storeStore.focusFilterInputRand'() {
+		'storeStore.focusFilterInputEvent'() {
 			this.focusFilterInput();
 		},
 	},
