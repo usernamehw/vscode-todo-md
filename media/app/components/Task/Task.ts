@@ -19,7 +19,7 @@ export default defineComponent({
 		TaskTitle: TaskTitleComponent,
 	},
 	data: () => ({
-		duration: '',
+		duration: '00s',
 		durationTimerId: 0 as any,
 	}),
 	methods: {

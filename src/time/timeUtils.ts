@@ -153,13 +153,13 @@ export function durationTo(task: TheTask, formatForEditor = true, includeSeconds
 	const seconds = duration.seconds();
 
 	const yearFormat = `YYYY[y]`;
-	const monthFormat = `M[m]`;
-	const daysFormat = `D[d]`;
+	const monthFormat = `MM[m]`;
+	const daysFormat = `DD[d]`;
 	const dateTimeDelimiter = formatForEditor ? '_' : ' ';
 	const yearMonthDateDelimiter = formatForEditor ? '-' : ' ';
-	const hourFormat = `H[h]`;
-	const minuteFormat = `m[m]`;
-	const secondFormat = includeSeconds ? `s[s]` : '';
+	const hourFormat = `HH[h]`;
+	const minuteFormat = `mm[m]`;
+	const secondFormat = includeSeconds ? `ss[s]` : '';
 
 	if (days !== 0) {
 		datePartsFormat.unshift(daysFormat);
