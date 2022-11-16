@@ -26,7 +26,7 @@
 	width: 100%;
 
 	&::selection {
-		background-color: var(--vscode-editor-selectionBackground);
+		background-color: var(--vscode-selection-background);
 	}
 
 	&:focus {
