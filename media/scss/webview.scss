@@ -1,5 +1,7 @@
 @use 'box_sizing';
 @use 'suggest';
+@use 'modal';
+@use 'new_task_modal';
 @use 'context_menu';
 @use 'misc';
 @use 'mixins';
@@ -28,6 +30,8 @@ body {
 	--border-darker: #cecece;
 
 	--task-hover-bg: rgba(0, 0, 0, 0.05);
+
+	--hover-highlight: rgba(0, 0, 0, 0.1);
 
 	--task-left-padding: 3px;
 	--twistie-size: calc(var(--font-size) + 4px);
@@ -108,6 +112,8 @@ body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 
 	--task-hover-bg: rgba(255, 255, 255, 0.1);
 
+	--hover-highlight: rgba(255, 255, 255, 0.1);
+
 	--done-task-bg: #99ff8c1a;
 
 	--tag-padding: 1px 4px;
@@ -171,6 +177,7 @@ a {
 	border: none;
 	color: var(--vscode-button-foreground);
 	font-family: var(--vscode-font-family);
+	cursor: pointer;
 	border-radius: 2px;
 	margin: 0 auto;
 

@@ -46,6 +46,10 @@ export default defineComponent({
 				name: 'wow',
 			},
 		],
+		// ──── New Task ──────────────────────────────────────────────
+		isNewTaskModalVisible: false,
+		newTaskAt: 'root' as 'root' | 'subtask',
+		newTaskAsText: '',
 	}),
 	computed: {
 		...mapStores(useStore),
@@ -126,6 +130,30 @@ export default defineComponent({
 		},
 		onTaskListScroll() {
 			this.hideContextMenu();
+		},
+		// ──── New Task ──────────────────────────────────────────────
+		showAddNewTaskModal() {
+			this.newTaskAsText = '';
+			this.isNewTaskModalVisible = true;
+			setTimeout(() => {
+				(this.$refs.newTaskInput as HTMLInputElement).focus();
+			}, 100);
+		},
+		hideAddNewTaskModal() {
+			this.isNewTaskModalVisible = false;
+		},
+		addTask() {
+			sendMessage({
+				type: 'addNewTask',
+				value: {
+					rawTaskText: this.newTaskAsText,
+					parentTaskLineNumber: this.newTaskAt === 'root' ? undefined : this.storeStore.selectedTaskLineNumber,
+				},
+			});
+			this.isNewTaskModalVisible = false;
+		},
+		newTaskModalClosed() {
+			this.focusFilterInput();
 		},
 		// ────────────────────────────────────────────────────────────
 		onInput(value: string) {
@@ -229,12 +257,22 @@ export default defineComponent({
 			} else if (e.key === 'End') {
 				this.storeStore.selectLastTask();
 				this.scrollIntoView(this.storeStore.selectedTaskLineNumber);
+			} else if (e.key === 'Insert') {
+				if (e.ctrlKey) {
+					this.newTaskAt = 'subtask';
+				} else {
+					this.newTaskAt = 'root';
+				}
+				this.showAddNewTaskModal();
 			}
 		});
 	},
 	watch: {
 		'storeStore.focusFilterInputEvent'() {
 			this.focusFilterInput();
+		},
+		'storeStore.showAddNewTaskModalEvent'() {
+			this.showAddNewTaskModal();
 		},
 	},
 });

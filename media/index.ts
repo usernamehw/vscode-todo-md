@@ -6,9 +6,10 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import mitt from 'mitt';
 import { createApp } from 'vue';
+import { vfmPlugin } from 'vue-final-modal';
 import App from './app/App.vue';
-import { pinia } from './app/store';
 import TaskComponent from './app/components/Task/Task.vue';
+import { pinia } from './app/store';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -25,6 +26,7 @@ const app = createApp(App);
 app.config.globalProperties.emitter = emitter;
 app.use(pinia);
 app.use(Notifications);
+app.use(vfmPlugin);
 app.component('Task', TaskComponent);
 app.mount('#app');
 

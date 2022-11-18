@@ -130,9 +130,11 @@ Key | Description
 <kbd>→</kbd>|Toggle collapsing of nested tasks
 <kbd>Home</kbd>|Select first task
 <kbd>End</kbd>|Select last task
+<kbd>Insert</kbd>|Add new task to root
+<kbd>Ctrl</kbd>+<kbd>Insert</kbd>|Add new task as a subtask to selected task
+<kbd>Shift</kbd>+<kbd>Delete</kbd>|Delete selected task
 <kbd>Alt</kbd>+<kbd>D</kbd>|Toggle selected task completion
 <kbd>F2</kbd>|Edit selected task title
-<kbd>Shift</kbd>+<kbd>Delete</kbd>|Delete selected task
 <kbd>Ctrl</kbd>+<kbd>Space</kbd>|Open autocomplete (When `todomd.webview.autoShowSuggest` is disabled)
 <kbd>Alt</kbd> + <kbd>L Mouse Button</kbd> (on a task)|Reveals task in the file
 <kbd>L Mouse Button</kbd> (on tag/project/context)|Set filter to the value of the item

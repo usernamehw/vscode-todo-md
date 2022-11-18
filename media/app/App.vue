@@ -28,6 +28,27 @@
                 href="command:todomd.showDefaultFileSetting">Specify Default File Path</a></div>
     </div>
 
+    <vue-final-modal v-model="isNewTaskModalVisible"
+                     classes="modal-container"
+                     contentClass="modal-content"
+                     :escToClose="true"
+                     :focusRetain="false"
+                     @closed="newTaskModalClosed">
+        <h3>New task {{ newTaskAt === 'subtask' ? 'as a subtask' : 'at root' }}.</h3>
+        <div class="new-task__input-container">
+            <input ref="newTaskInput"
+                   v-model="newTaskAsText"
+                   class="suggest__input"
+                   @keyup.enter="addTask">
+            <button class="btn"
+                    title="Add new task."
+                    @click="addTask"><span class="icon codicon codicon-plus new-task__add-codicon"></span></button>
+        </div>
+        <button class="modal-close"
+                title="Close modal dialog."
+                @click="hideAddNewTaskModal"><span class="icon codicon codicon-close"></span></button>
+    </vue-final-modal>
+
     <notifications position="bottom right"
                    group="group1" />
 

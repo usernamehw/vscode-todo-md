@@ -342,7 +342,12 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 interface WebviewMessageFocusFilterInput {
 	type: 'focusFilterInput';
 }
-// From webview to extension
+interface WebviewMessageShowAddNewTaskModal {
+	type: 'showAddNewTaskModal';
+}
+// ────────────────────────────────────────────────────────────
+// ──── From webview to extension ─────────────────────────────
+// ────────────────────────────────────────────────────────────
 interface WebviewMessageToggleDone extends WebviewMessageBase {
 	type: 'toggleDone';
 	value: number;
@@ -417,14 +422,21 @@ interface WebviewMessageLoaded extends WebviewMessageBase {
 	type: 'webviewLoaded';
 	value: true;
 }
+interface WebviewAddNewTask extends WebviewMessageBase {
+	type: 'addNewTask';
+	value: {
+		rawTaskText: string;
+		parentTaskLineNumber: number | undefined;
+	};
+}
 /**
  * Messages that can only be sent from webview to extension.
  */
-export type MessageFromWebview = WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageFollowLink | WebviewMessageLoaded | WebviewMessageRevealTask | WebviewMessageSetDueDate | WebviewMessageShowNotification | WebviewMessageStartTask | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleDoneOrIncrementCount | WebviewMessageToggleFavorite | WebviewMessageToggleHidden | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
+export type MessageFromWebview = WebviewAddNewTask | WebviewMessageDecrementCount | WebviewMessageDeleteTask | WebviewMessageEditTask | WebviewMessageEditTaskRawText | WebviewMessageFollowLink | WebviewMessageLoaded | WebviewMessageRevealTask | WebviewMessageSetDueDate | WebviewMessageShowNotification | WebviewMessageStartTask | WebviewMessageToggleCollapse | WebviewMessageToggleDone | WebviewMessageToggleDoneOrIncrementCount | WebviewMessageToggleFavorite | WebviewMessageToggleHidden | WebviewMessageToggleTaskCollapseRecursive | WebviewMessageUpdateTitle;
 /**
  * Messages that can only be sent from extension to webview.
  */
-export type MessageToWebview = WebviewMessageFocusFilterInput | WebviewMessageUpdateEverything;
+export type MessageToWebview = WebviewMessageFocusFilterInput | WebviewMessageShowAddNewTaskModal | WebviewMessageUpdateEverything;
 
 /**
  * Keep autocomplete for the union type with `| string`.

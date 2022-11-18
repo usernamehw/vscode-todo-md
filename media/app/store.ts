@@ -51,6 +51,11 @@ interface StoreState {
 	 * inside the app to focus the main input element.
 	 */
 	focusFilterInputEvent: number;
+	/**
+	 * Send improvised event from store: assign a random number and listen for changes
+	 * inside the app to focus the main input element.
+	 */
+	showAddNewTaskModalEvent: number;
 }
 
 export const useStore = defineStore({
@@ -87,6 +92,7 @@ export const useStore = defineStore({
 		} as any,
 		selectedTaskLineNumber: -1,
 		focusFilterInputEvent: 0,
+		showAddNewTaskModalEvent: 0,
 	}),
 	// ────────────────────────────────────────────────────────────
 	getters: {
@@ -202,6 +208,9 @@ export const useStore = defineStore({
 		},
 		focusFilterInput() {
 			this.focusFilterInputEvent = Math.random();
+		},
+		addNewTaskModal() {
+			this.showAddNewTaskModalEvent = Math.random();
 		},
 		updateWebviewTitle() {
 			sendMessage({
@@ -373,6 +382,11 @@ window.addEventListener('message', event => {
 		case 'focusFilterInput': {
 			const store = useStore();
 			store.focusFilterInput();
+			break;
+		}
+		case 'showAddNewTaskModal': {
+			const store = useStore();
+			store.addNewTaskModal();
 			break;
 		}
 	}

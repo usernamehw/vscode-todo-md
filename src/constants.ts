@@ -13,6 +13,8 @@ export const enum Constants {
 	Generic2TreeViewId = 'todomd.generic2',
 	Generic3TreeViewId = 'todomd.generic3',
 
+	FocusWebviewViewCommandId = 'todomd.webviewTasks.focus',
+
 	DefaultFileSetting = 'todomd.defaultFile',
 	DefaultArchiveFileSetting = 'todomd.defaultArchiveFile',
 	DefaultSomedayFileSetting = 'todomd.defaultSomedayFile',

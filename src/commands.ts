@@ -1,5 +1,6 @@
 import { commands, TextEditor, TextEditorEdit, window } from 'vscode';
 import { addTaskToActiveFile } from './commands/addTaskToActiveFile';
+import { addTaskToActiveFileWebview } from './commands/addTaskToActiveFileWebview';
 import { addTaskToDefaultFile } from './commands/addTaskToDefaultFile';
 import { applyFilterToTreeView } from './commands/applyFilterToTreeView';
 import { archiveCompletedTasks } from './commands/archiveCompletedTasks';
@@ -84,6 +85,7 @@ export const enum CommandId {
 	GetRandomTask = 'todomd.getRandomTask',
 	AddTaskToDefaultFile = 'todomd.addTaskToDefaultFile',
 	AddTaskToActiveFile = 'todomd.addTaskToActiveFile',
+	AddTaskToActiveFileWebview = 'todomd.addTaskToActiveFileWebview',
 	SetDueDate = 'todomd.setDueDate',
 	SetDueDateWithArgs = 'todomd.setDueDateWithArgs',
 	OpenDefaultFile = 'todomd.openDefaultFile',
@@ -131,6 +133,7 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.GetRandomTask, getRandomTask);
 	commands.registerCommand(CommandId.AddTaskToDefaultFile, addTaskToDefaultFile);
 	commands.registerCommand(CommandId.AddTaskToActiveFile, addTaskToActiveFile);
+	commands.registerCommand(CommandId.AddTaskToActiveFileWebview, addTaskToActiveFileWebview);
 	commands.registerCommand(CommandId.SetDueDateWithArgs, setDueDateWithArgs);
 	commands.registerCommand(CommandId.OpenDefaultFile, openDefaultFile);
 	commands.registerCommand(CommandId.OpenDefaultArchiveFile, openDefaultArchiveFile);

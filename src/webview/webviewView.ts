@@ -1,7 +1,7 @@
 import path from 'path';
 import { CancellationToken, ExtensionContext, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
 import { openSetDueDateInputbox } from '../commands/setDueDate';
-import { decrementCountForTask, editTask, editTaskRawText, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleHiddenAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
+import { addNewTask, decrementCountForTask, editTask, editTaskRawText, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleHiddenAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state } from '../extension';
 import { filterTasks } from '../filter';
@@ -110,6 +110,11 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					await updateEverything();
 					break;
 				}
+				case 'addNewTask': {
+					await addNewTask(await getActiveOrDefaultDocument(), message.value.rawTaskText, message.value.parentTaskLineNumber);
+					await updateEverything();
+					break;
+				}
 				// ──── No need to update everything ──────────────────────────
 				case 'showNotification': {
 					window.showInformationMessage(message.value);
@@ -181,6 +186,11 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 			type: 'focusFilterInput',
 		});
 	}
+	showAddNewTaskModal() {
+		this.sendMessageToWebview({
+			type: 'showAddNewTaskModal',
+		});
+	}
 	/**
 	 * Send message. js objects that will be serialized to json.
 	 */
@@ -233,3 +243,6 @@ export function focusWebviewFilterInput() {
 	tasksWebviewViewProvider.focusFilterInput();
 }
 
+export function showAddNewTaskModal() {
+	tasksWebviewViewProvider.showAddNewTaskModal();
+}

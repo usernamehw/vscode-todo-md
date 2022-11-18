@@ -1103,6 +1103,12 @@
 				"icon": "$(add)"
 			},
 			{
+				"command": "todomd.addTaskToActiveFileWebview",
+				"title": "Add a Task to ACTIVE file",
+				"category": "Todo MD",
+				"icon": "$(add)"
+			},
+			{
 				"command": "todomd.sortByDefault",
 				"title": "Sort by Due Date & Priority (default sort)",
 				"category": "Todo MD"
@@ -1484,7 +1490,12 @@
 				},
 				{
 					"command": "todomd.addTaskToActiveFile",
-					"when": "view =~ /todomd.(tasks|webviewTasks)/",
+					"when": "view =~ /todomd.(tasks)/",
+					"group": "navigation"
+				},
+				{
+					"command": "todomd.addTaskToActiveFileWebview",
+					"when": "view =~ /todomd.(webviewTasks)/",
 					"group": "navigation"
 				},
 				{
@@ -1646,6 +1657,10 @@
 				},
 				{
 					"command": "todomd.focusTasksWebviewAndInput",
+					"when": "false"
+				},
+				{
+					"command": "todomd.addTaskToActiveFileWebview",
 					"when": "false"
 				},
 				{
@@ -1875,6 +1890,7 @@
 		"marked": "^4.2.2",
 		"mitt": "^3.0.0",
 		"pinia": "^2.0.23",
-		"vue": "^3.2.45"
+		"vue": "^3.2.45",
+		"vue-final-modal": "^3.4.10"
 	}
 }

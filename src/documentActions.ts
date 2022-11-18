@@ -18,6 +18,27 @@ import { unique } from './utils/utils';
 // ────────────────────────────────────────────────────────────
 // ──── Apply Edit ────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────
+
+/**
+ * Add new task either at the end of the document or as a subtask.
+ */
+export async function addNewTask(document: TextDocument, rawTaskText: string, parentTaskLineNumber: number | undefined): Promise<boolean> {
+	const edit = new WorkspaceEdit();
+	if (parentTaskLineNumber === undefined) {
+		edit.insert(document.uri, new Position(document.lineCount, 0), `\n${rawTaskText}`);
+	} else {
+		const parentTask = getTaskAtLineExtension(parentTaskLineNumber);
+		if (!parentTask) {
+			return false;
+		}
+		const nestedTasksCount = getNestedTasksLineNumbers([parentTask]).length;
+		const parentTaskTextLine = document.lineAt(parentTaskLineNumber);
+		const parentTaskIndentSize = Math.floor(parentTaskTextLine.firstNonWhitespaceCharacterIndex / $config.tabSize) * $config.tabSize;
+		const creationDate = $config.addCreationDate ? `${helpCreateSpecialTag(SpecialTagName.CreationDate, getDateInISOFormat(new Date(), $config.creationDateIncludeTime))} ` : '';
+		edit.insert(document.uri, new Position(parentTaskLineNumber + nestedTasksCount, 0), `${' '.repeat(parentTaskIndentSize + $config.tabSize)}${creationDate}${rawTaskText}\n`);
+	}
+	return applyEdit(edit, document);
+}
 /**
  * Replace entire line range with new text. (transform task to its string version).
  */
