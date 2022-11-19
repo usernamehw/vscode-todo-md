@@ -1,3 +1,4 @@
+import throttle from 'lodash/throttle';
 import { marked } from 'marked';
 import { mapStores } from 'pinia';
 import { defineComponent } from 'vue';
@@ -128,9 +129,19 @@ export default defineComponent({
 				this.hideContextMenu();
 			}
 		},
-		onTaskListScroll() {
+		onTaskListScroll: throttle(function() {
+			// @ts-ignore
 			this.hideContextMenu();
-		},
+			// App header box shadow to indicate that task list container is scrolled
+			// @ts-ignore
+			const $taskList = (this.$refs.taskList as HTMLElement);
+			const $appHeader = document.getElementById('suggest-container')!;
+			if ($taskList.scrollTop > 0) {
+				$appHeader.classList.add('app-header--box-shadow');
+			} else {
+				$appHeader.classList.remove('app-header--box-shadow');
+			}
+		}, 50),
 		// ──── New Task ──────────────────────────────────────────────
 		showAddNewTaskModal() {
 			this.newTaskAsText = '';

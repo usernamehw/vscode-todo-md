@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div>
+    <header>
         <Suggest ref="suggest"
                  :value="storeStore.filterInputValue"
                  :suggestItems="storeStore.suggestItems"
@@ -8,8 +8,9 @@
                  @input="onInput"
                  @keydownDown="onDown"
                  @keydownUp="onUp" />
-    </div>
+    </header>
     <div v-if="storeStore.filteredSortedTasks.tasks && storeStore.filteredSortedTasks.tasks.length"
+         ref="taskList"
          class="task-list"
          :class="{ 'task-list--details-visible': taskDetailsVisible }"
          @scroll.passive="onTaskListScroll">

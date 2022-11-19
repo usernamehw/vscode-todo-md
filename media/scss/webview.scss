@@ -629,3 +629,9 @@ a {
 		}
 	}
 }
+
+.app-header {
+	&--box-shadow {
+		box-shadow: 0 0 6px 3px var(--vscode-scrollbar-shadow) !important;
+	}
+}
