@@ -1,18 +1,18 @@
 .suggest-container {
+	background-color: var(--vscode-sideBar-background);
 	position: fixed;
 	left: 0;
 	right: 0;
 	top: 0;
+	z-index: var(--z-index-filter-input);
 }
 
 .suggest {
-	background-color: var(--vscode-sideBar-background);
 	margin-left: 12px;
 	margin-right: 12px;
 	padding-top: 4px;
 	padding-bottom: 4px;
 	width: calc(100% - 24px);
-	z-index: var(--z-index-filter-input);
 }
 
 .suggest__input {
