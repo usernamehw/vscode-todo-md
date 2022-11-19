@@ -60,6 +60,7 @@ export default defineComponent({
 			if (this.autoshow) {
 				this.show();
 			}
+			this.selectItemAtIndex(0);
 			if (this.filteredSuggestItems.length === 0) {
 				this.hide();
 			}
