@@ -59,11 +59,13 @@
 }
 
 .suggest__autocomplete-item {
+	display: flex;
+	justify-content: space-between;
 	cursor: pointer;
 	font-weight: bold;
 	padding: 3px 7px;
 
-	> .suggest__highlight {
+	.suggest__highlight {
 		background-color: transparent;
 		color: var(--vscode-editorSuggestWidget-highlightForeground);
 	}
@@ -77,9 +79,14 @@
 		background-color: var(--vscode-editorSuggestWidget-selectedBackground) !important;
 		color: var(--vscode-editorSuggestWidget-selectedForeground) !important;
 
-		> .suggest__highlight {
+		.suggest__highlight {
 			color: var(--vscode-editorSuggestWidget-focusHighlightForeground) !important;
 		}
 	}
 }
 
+.suggest__autocomplete-item-description {
+	font-weight: normal;
+	float: left;
+	font-size: smaller;
+}

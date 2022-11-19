@@ -19,8 +19,10 @@
                  :key="suggestItem + String(Math.random())"
                  class="suggest__autocomplete-item"
                  :class="{'suggest__autocomplete-item--active': index === activeIndex}"
-                 @click="selectItemAtIndex(index);acceptActiveSuggest()"
-                 v-html="fuzzyHighlight(suggestItem)"></div>
+                 @click="selectItemAtIndex(index);acceptActiveSuggest()">
+                <div v-html="fuzzyHighlight(suggestItem.title)"></div>
+                <div class="suggest__autocomplete-item-description">{{ suggestItem.description }}</div>
+            </div>
         </div>
     </div>
 </div>

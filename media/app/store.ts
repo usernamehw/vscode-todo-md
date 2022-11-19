@@ -4,7 +4,8 @@ import { showToastNotification } from '..';
 import { filterConstants, filterTasks, FilterTasksResult } from '../../src/filter';
 import { defaultSortTasks } from '../../src/sort';
 import type { TheTask } from '../../src/TheTask';
-import { ExtensionConfig, IsDue, MessageFromWebview, MessageToWebview } from '../../src/types';
+import { ExtensionConfig, IsDue, ItemWithCount, MessageFromWebview, MessageToWebview } from '../../src/types';
+import { SuggestItem } from './components/Suggest/Suggest';
 
 interface SavedState {
 	filterInputValue: string;
@@ -41,6 +42,9 @@ interface StoreState {
 	tags: string[];
 	projects: string[];
 	contexts: string[];
+	projectsWithCount: ItemWithCount[];
+	tagsWithCount: ItemWithCount[];
+	contextsWithCount: ItemWithCount[];
 	defaultFileSpecified: boolean;
 	activeDocumentOpened: boolean;
 	filterInputValue: string;
@@ -65,6 +69,9 @@ export const useStore = defineStore({
 		tags: [],
 		projects: [],
 		contexts: [],
+		projectsWithCount: [],
+		tagsWithCount: [],
+		contextsWithCount: [],
 		defaultFileSpecified: true,
 		activeDocumentOpened: false,
 		filterInputValue: '',
@@ -147,13 +154,13 @@ export const useStore = defineStore({
 			}
 			return difference(this.flattenedFilteredSortedTasks.map(task => task.lineNumber), this.filteredSortedTasks.matchIds);
 		},
-		suggestItems(state): string[] {
+		suggestItems(state): SuggestItem[] {
 			return [
-				...filterConstants,
-				...state.tags.map(tag => `#${tag}`),
-				...state.projects.map(project => `+${project}`),
-				...state.contexts.map(context => `@${context}`),
-			];
+				...filterConstants.map(constant => ({ title: constant })),
+				...state.tags.map(tag => ({ title: `#${tag}`, description: state.tagsWithCount.find(t => t.title === tag)?.count })),
+				...state.projects.map(project => ({ title: `+${project}`, description: state.projectsWithCount.find(p => p.title === project)?.count })),
+				...state.contexts.map(context => ({ title: `@${context}`, description: state.contextsWithCount.find(c => c.title === context)?.count })),
+			] as SuggestItem[];
 		},
 	},
 	// ────────────────────────────────────────────────────────────
@@ -166,6 +173,9 @@ export const useStore = defineStore({
 			tags,
 			projects,
 			contexts,
+			projectsWithCount,
+			tagsWithCount,
+			contextsWithCount,
 		}: {
 			tasksAsTree: TheTask[];
 			config: ExtensionConfig;
@@ -174,6 +184,9 @@ export const useStore = defineStore({
 			tags: string[];
 			projects: string[];
 			contexts: string[];
+			projectsWithCount: ItemWithCount[];
+			tagsWithCount: ItemWithCount[];
+			contextsWithCount: ItemWithCount[];
 		}) {
 			this.tasksAsTree = tasksAsTree;
 			this.config = config;
@@ -182,6 +195,9 @@ export const useStore = defineStore({
 			this.tags = tags;
 			this.projects = projects;
 			this.contexts = contexts;
+			this.projectsWithCount = projectsWithCount;
+			this.tagsWithCount = tagsWithCount;
+			this.contextsWithCount = contextsWithCount;
 		},
 		selectTask(lineNumber: number) {
 			this.selectedTaskLineNumber = lineNumber;
@@ -364,6 +380,9 @@ window.addEventListener('message', event => {
 				tags: message.value.tags,
 				projects: message.value.projects,
 				contexts: message.value.contexts,
+				projectsWithCount: message.value.projectsWithCount,
+				tagsWithCount: message.value.tagsWithCount,
+				contextsWithCount: message.value.contextsWithCount,
 			});
 			const bodyStyle = document.body.style;
 			bodyStyle.setProperty('--font-size', message.value.config.webview.fontSize);

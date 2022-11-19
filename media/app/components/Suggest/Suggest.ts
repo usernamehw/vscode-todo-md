@@ -1,6 +1,11 @@
 import fuzzysort from 'fuzzysort';
 import { defineComponent, PropType } from 'vue';
 
+export interface SuggestItem {
+	title: string;
+	description?: string;
+}
+
 export default defineComponent({
 	name: 'Suggest',
 	props: {
@@ -10,7 +15,7 @@ export default defineComponent({
 			default: '',
 		},
 		suggestItems: {
-			type: Array as PropType<string[]>,
+			type: Array as PropType<SuggestItem[]>,
 			required: true,
 			default: [],
 		},
@@ -21,7 +26,7 @@ export default defineComponent({
 		},
 	},
 	data: () => ({
-		filteredSuggestItems: [] as string[],
+		filteredSuggestItems: [] as SuggestItem[],
 		activeIndex: 0,
 		suggestItemsVisible: false,
 		lastFilterHasNegation: false,
@@ -51,7 +56,7 @@ export default defineComponent({
 				return;
 			}
 
-			this.filteredSuggestItems = fuzzysort.go(this.getLastFilter(inputValue), this.suggestItems).map(item => item.target);
+			this.filteredSuggestItems = fuzzysort.go(this.getLastFilter(inputValue), this.suggestItems, { key: 'title' }).map(item => item.obj);
 			if (this.autoshow) {
 				this.show();
 			}
@@ -61,7 +66,7 @@ export default defineComponent({
 		},
 		acceptActiveSuggest(e?: KeyboardEvent) {
 			if (this.suggestItemsVisible) {
-				let newInputValue = this.filteredSuggestItems[this.activeIndex];
+				let newInputValue = this.filteredSuggestItems[this.activeIndex].title;
 				const inputFilters = this.getInputFilters(this.value);
 				if (inputFilters.length > 1) {
 					newInputValue = `${inputFilters.slice(0, -1).join(' ')} ${this.lastFilterNegation}${this.filteredSuggestItems[this.activeIndex]}`;

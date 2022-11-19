@@ -326,6 +326,10 @@ interface WebviewMessageBase {
 	type: string;
 	value: unknown;
 }
+export interface ItemWithCount {
+	title: string;
+	count: number;
+}
 // From extension to webview
 interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 	type: 'updateEverything';
@@ -337,6 +341,9 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 		defaultFileSpecified: boolean;
 		activeDocumentOpened: boolean;
 		config: ExtensionConfig;
+		projectsWithCount: ItemWithCount[];
+		tagsWithCount: ItemWithCount[];
+		contextsWithCount: ItemWithCount[];
 	};
 }
 interface WebviewMessageFocusFilterInput {

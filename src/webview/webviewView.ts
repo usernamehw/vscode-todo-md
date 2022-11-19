@@ -9,7 +9,7 @@ import { showCompletedPercentage } from '../statusBar';
 import { setViewBadge } from '../treeViewProviders/treeViews';
 import { MessageFromWebview, MessageToWebview } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
-import { getTaskAtLineExtension } from '../utils/taskUtils';
+import { getNestedTasksLineNumbers, getTaskAtLineExtension } from '../utils/taskUtils';
 import { UnsupportedValueError } from '../utils/utils';
 import { followLink } from '../utils/vscodeUtils';
 import { getNonce } from './webviewUtils';
@@ -162,6 +162,18 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					tags: $state.tags,
 					projects: $state.projects,
 					contexts: $state.contexts,
+					projectsWithCount: $state.projectsForTreeView.map((project => ({
+						title: project.title,
+						count: getNestedTasksLineNumbers(project.tasks).length,
+					}))),
+					tagsWithCount: $state.tagsForTreeView.map((tag => ({
+						title: tag.title,
+						count: getNestedTasksLineNumbers(tag.tasks).length,
+					}))),
+					contextsWithCount: $state.contextsForTreeView.map((context => ({
+						title: context.title,
+						count: getNestedTasksLineNumbers(context.tasks).length,
+					}))),
 					defaultFileSpecified: Boolean($config.defaultFile),
 					activeDocumentOpened: Boolean($state.activeDocument),
 					config: $config,
