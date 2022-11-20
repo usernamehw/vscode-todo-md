@@ -1,3 +1,8 @@
+## 2.20.0 `20 Nov 2022`
+
+- ✨ [webview] Add task or subtask in modal dialog <kbd>Insert</kbd> or <kbd>Ctrl</kbd>+<kbd>Insert</kbd>
+- 🐛 Minor bug fixes
+
 ## 2.19.0 `09 Nov 2022`
 
 - ✨ Recurring monthly/yearly due date `{due:2023-01-31|e1m}` [#67](https://github.com/usernamehw/vscode-todo-md/issues/67)
