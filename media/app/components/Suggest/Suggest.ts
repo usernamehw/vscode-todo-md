@@ -70,7 +70,7 @@ export default defineComponent({
 				let newInputValue = this.filteredSuggestItems[this.activeIndex].title;
 				const inputFilters = this.getInputFilters(this.value);
 				if (inputFilters.length > 1) {
-					newInputValue = `${inputFilters.slice(0, -1).join(' ')} ${this.lastFilterNegation}${this.filteredSuggestItems[this.activeIndex]}`;
+					newInputValue = `${inputFilters.slice(0, -1).join(' ')} ${this.lastFilterNegation}${this.filteredSuggestItems[this.activeIndex].title}`;
 				} else {
 					newInputValue = this.lastFilterNegation + newInputValue;
 				}
