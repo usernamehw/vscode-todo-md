@@ -65,14 +65,13 @@ module.exports = (env, options) => {
 			],
 		},
 		plugins: [
-			// @ts-ignore
 			new VueLoaderPlugin(),
-			// @ts-ignore
 			new FriendlyErrorsWebpackPlugin(),
 		],
 	};
 
 	if (options.mode === 'production') {
+		config.devtool = false;
 		// Prod
 		// @ts-ignore
 		// config.optimization = {

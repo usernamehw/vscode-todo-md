@@ -1829,7 +1829,7 @@
 		"vscode:prepublish": "npm run scss & npm run webview & webpack --mode production --color",
 		"postinstall": "node scripts/copyWebviewResourcesFromNodeModules.js",
 		"watch:extension": "webpack --mode development --watch --stats minimal",
-		"scss": "sass --style=compressed media/scss:media",
+		"scss": "sass --no-source-map --style=compressed media/scss:media",
 		"watch:scss": "sass --watch media/scss:media",
 		"copyAndCompressVendorCss": "sass --style=compressed --no-source-map node_modules/vscode-codicons/dist/codicon.css:media/vendor/codicon.css",
 		"webview": "webpack --mode production --config media/webpack.config.js",
