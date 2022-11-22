@@ -43,12 +43,13 @@
 	background-color: var(--vscode-sideBar-background);
 	color: var(--vscode-editorSuggestWidget-foreground);
 	font-family: var(--vscode-editor-font-family);
-	left: 0;
 	max-height: 150px;
 	overflow-y: auto;
 	position: absolute;
 	right: 0;
-	top: 100%;
+	left: 12px;
+	top: calc(100% - 4px);
+	width: calc(100% - 24px);
 	z-index: 1000;
 
 	&:not(:empty) {
