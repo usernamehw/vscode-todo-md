@@ -26,6 +26,7 @@ const app = createApp(App);
 app.config.globalProperties.emitter = emitter;
 app.use(pinia);
 app.use(Notifications);
+// @ts-ignore
 app.use(vfmPlugin);
 app.component('Task', TaskComponent);
 app.mount('#app');
