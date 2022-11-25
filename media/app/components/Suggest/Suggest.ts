@@ -4,6 +4,10 @@ import { defineComponent, PropType } from 'vue';
 export interface SuggestItem {
 	title: string;
 	description?: string;
+	/**
+	 * Replace title with this when available.
+	 */
+	extra?: string;
 }
 
 export default defineComponent({
@@ -67,10 +71,11 @@ export default defineComponent({
 		},
 		acceptActiveSuggest(e?: KeyboardEvent) {
 			if (this.suggestItemsVisible) {
-				let newInputValue = this.filteredSuggestItems[this.activeIndex].title;
+				const activeFilteredSuggestItem = this.filteredSuggestItems[this.activeIndex];
+				let newInputValue = activeFilteredSuggestItem.extra || activeFilteredSuggestItem.title;
 				const inputFilters = this.getInputFilters(this.value);
 				if (inputFilters.length > 1) {
-					newInputValue = `${inputFilters.slice(0, -1).join(' ')} ${this.lastFilterNegation}${this.filteredSuggestItems[this.activeIndex].title}`;
+					newInputValue = `${inputFilters.slice(0, -1).join(' ')} ${this.lastFilterNegation}${newInputValue}`;
 				} else {
 					newInputValue = this.lastFilterNegation + newInputValue;
 				}
