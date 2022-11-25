@@ -1,3 +1,8 @@
+## 2.21.0 `25 Nov 2022`
+
+- ✨ Add filters from `todomd.savedFilters` setting to webview autocomplete
+- 🐛 Fix webview autocomplete for multiple filters
+
 ## 2.20.0 `20 Nov 2022`
 
 - ✨ [webview] Add task or subtask in modal dialog <kbd>Insert</kbd> or <kbd>Ctrl</kbd>+<kbd>Insert</kbd>
