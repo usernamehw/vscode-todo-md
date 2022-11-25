@@ -161,7 +161,7 @@ export const useStore = defineStore({
 				...state.tags.map(tag => ({ title: `#${tag}`, description: state.tagsWithCount.find(t => t.title === tag)?.count })),
 				...state.projects.map(project => ({ title: `+${project}`, description: state.projectsWithCount.find(p => p.title === project)?.count })),
 				...state.contexts.map(context => ({ title: `@${context}`, description: state.contextsWithCount.find(c => c.title === context)?.count })),
-				...state.config.savedFilters.map(filter => ({ title: filter.title, extra: filter.filter })),
+				...state.config.savedFilters.map(filter => ({ title: filter.title, description: 'saved filter', extra: filter.filter })),
 			] as SuggestItem[];
 		},
 	},
