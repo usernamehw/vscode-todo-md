@@ -240,10 +240,12 @@ export const useStore = defineStore({
 			});
 		},
 		toggleDone(task: TheTask) {
-			if (!task.done && !this.config.webview.showCompleted) {
-				// When completing a task and it's not visible by default the first task becomes focused
-				// This changes it to select next task or previous if completed task was last
-				this.selectCloseTask();
+			if (
+				!task.done &&
+				task.parentTaskLineNumber === undefined &&
+				!this.config.webview.showCompleted
+			) {
+				this.selectCloseTask(task.lineNumber);
 			}
 			task.done = !task.done;
 			if (task.done && this.config.webview.notificationsEnabled) {
@@ -251,34 +253,52 @@ export const useStore = defineStore({
 					type: 'success',
 				});
 			}
-			sendMessage({
-				type: 'toggleDone',
-				value: task.lineNumber,
+			setTimeout(() => {
+				sendMessage({
+					type: 'toggleDone',
+					value: task.lineNumber,
+				});
 			});
 		},
-		selectCloseTask() {
+		/**
+		 * When completing a task and it's not visible by default the first task becomes focused
+		 * This changes it to select next task or previous if completed task was last
+		 */
+		selectCloseTask(lineNumber: number) {
 			if (this.filteredSortedTasks.tasks.length <= 1) {
 				return;
 			}
-			if (this.selectedTaskLineNumber === this.filteredSortedTasks.tasks[0].lineNumber) {
+			if (lineNumber === this.filteredSortedTasks.tasks[0].lineNumber) {
+				// first visible task selected
 				this.selectNextTask();
-			} else if (this.selectedTaskLineNumber === this.filteredSortedTasks.tasks[this.filteredSortedTasks.tasks.length - 1].lineNumber) {
-				this.selectPrevTask();
+			} else if (lineNumber === this.filteredSortedTasks.tasks[this.filteredSortedTasks.tasks.length - 1].lineNumber) {
+				// last visible task selected
+				this.selectPrevTask(lineNumber);
 			} else {
-				this.selectNextTask();
+				const task = this.getTaskAtLine(lineNumber);
+				if (task?.subtasks.length) {
+					// Task with subtasks => subtasks will become hidden => select the next task at root
+					const allNested = this.getAllNestedTasksWebview(task);
+					this.selectNextTask(allNested[allNested.length - 1].lineNumber);
+				} else {
+					this.selectNextTask(lineNumber);
+				}
 			}
 		},
-		selectNextTask() {
+		selectNextTask(selectedLineNumber?: number) {
+			if (selectedLineNumber === undefined) {
+				selectedLineNumber = this.selectedTaskLineNumber;
+			}
 			if (!this.filteredSortedTasks.tasks.length) {
 				return undefined;
 			}
 			let targetTask: TheTask;
-			if (this.selectedTaskLineNumber === -1) {
+			if (selectedLineNumber === -1) {
 				// None selected. Select the first visible task
 				targetTask = this.filteredSortedTasks.tasks[0];
 			} else {
 				// Selected task exists
-				const selectedTask = this.getTaskAtLine(this.selectedTaskLineNumber);
+				const selectedTask = this.getTaskAtLine(selectedLineNumber);
 
 				if (!selectedTask) {
 					return undefined;
@@ -295,16 +315,19 @@ export const useStore = defineStore({
 			this.selectTask(targetTask.lineNumber);
 			return targetTask.lineNumber;
 		},
-		selectPrevTask() {
+		selectPrevTask(selectedLineNumber?: number) {
+			if (selectedLineNumber === undefined) {
+				selectedLineNumber = this.selectedTaskLineNumber;
+			}
 			if (!this.filteredSortedTasks.tasks.length) {
 				return undefined;
 			}
 			let targetTask: TheTask;
-			if (this.selectedTaskLineNumber === -1) {
+			if (selectedLineNumber === -1) {
 				// None selected. Select the first visible task
 				targetTask = this.flattenedFilteredSortedTasks[this.flattenedFilteredSortedTasks.length - 1];
 			} else {
-				const selectedTask = this.getTaskAtLine(this.selectedTaskLineNumber);
+				const selectedTask = this.getTaskAtLine(selectedLineNumber);
 				if (!selectedTask) {
 					return undefined;
 				}
