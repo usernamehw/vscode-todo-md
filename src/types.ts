@@ -124,6 +124,10 @@ export interface ExtensionConfig {
 	 */
 	counterBadgeEnabled: boolean;
 	/**
+	 * Controls whether editor nested task decoration (pie chart) is shown or not.
+	 */
+	progressChartEnabled: boolean;
+	/**
 	 * Editor decoration for nested tasks progress (pie chart) background.
 	 */
 	progressBackground: string;

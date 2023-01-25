@@ -412,7 +412,9 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 				range: emptyRange,
 				renderOptions: {
 					after: {
-						contentIconPath: svgToUri(createPieProgressSvg($state.editorLineHeight, numberOfCompletedSubtasks, numberOfSubtasks)),
+						contentIconPath: $config.progressChartEnabled ?
+							svgToUri(createPieProgressSvg($state.editorLineHeight, numberOfCompletedSubtasks, numberOfSubtasks)) :
+							undefined,
 					},
 				},
 			});

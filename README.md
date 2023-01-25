@@ -169,7 +169,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (58)
+## Settings (59)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -207,6 +207,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |sortNestedTasks|"default"|Controls nested tasks sorting in Tree Views.|
 |suggestItems|\{\}|This extension will only autocomplete tags/projects/contexts located in **1** file. This setting allows you to add items and their description(markdown) to autocomplete in all files (where extension is active). Examples: `#tag`, `+project`, `@context`.|
 |counterBadgeEnabled|**true**|Shows small badge to show a number of times the tag/project/context is present in the active document.|
+|progressChartEnabled|**true**|Controls whether editor nested task decoration (pie chart) is shown or not.|
 |progressBackground|"\#c6cdd3"|Editor decoration for nested tasks progress (pie chart) background.|
 |progressForeground|"\#0077AA"|Editor decoration for nested tasks progress (pie chart) foreground.|
 |statusBarMainEnabled|**false**|Controls visibility of status bar that shows next tasks to complete.|
