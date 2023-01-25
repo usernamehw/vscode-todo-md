@@ -240,6 +240,11 @@ export const useStore = defineStore({
 			});
 		},
 		toggleDone(task: TheTask) {
+			if (!task.done && !this.config.webview.showCompleted) {
+				// When completing a task and it's not visible by default the first task becomes focused
+				// This changes it to select next task or previous if completed task was last
+				this.selectCloseTask();
+			}
 			task.done = !task.done;
 			if (task.done && this.config.webview.notificationsEnabled) {
 				showToastNotification(`${task.title}`, {
@@ -250,6 +255,18 @@ export const useStore = defineStore({
 				type: 'toggleDone',
 				value: task.lineNumber,
 			});
+		},
+		selectCloseTask() {
+			if (this.filteredSortedTasks.tasks.length <= 1) {
+				return;
+			}
+			if (this.selectedTaskLineNumber === this.filteredSortedTasks.tasks[0].lineNumber) {
+				this.selectNextTask();
+			} else if (this.selectedTaskLineNumber === this.filteredSortedTasks.tasks[this.filteredSortedTasks.tasks.length - 1].lineNumber) {
+				this.selectPrevTask();
+			} else {
+				this.selectNextTask();
+			}
 		},
 		selectNextTask() {
 			if (!this.filteredSortedTasks.tasks.length) {
