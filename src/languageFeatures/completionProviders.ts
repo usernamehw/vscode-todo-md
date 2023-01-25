@@ -46,7 +46,7 @@ export function updateCompletions() {
 					const documentation = new MarkdownString($state.suggestTags[tag], true);
 					documentation.isTrusted = true;
 					tagCompletion.documentation = $state.suggestTags[tag] ? documentation : undefined;
-					tagCompletion.insertText = `${tag} `;
+					tagCompletion.insertText = tag;
 					tagCompletions.push(tagCompletion);
 				}
 
@@ -70,7 +70,7 @@ export function updateCompletions() {
 					const documentation = new MarkdownString($state.suggestProjects[project], true);
 					documentation.isTrusted = true;
 					projectCompletion.documentation = $state.suggestProjects[project] ? documentation : undefined;
-					projectCompletion.insertText = `${project} `;
+					projectCompletion.insertText = project;
 					projectCompletions.push(projectCompletion);
 				}
 
@@ -94,7 +94,7 @@ export function updateCompletions() {
 					const documentation = new MarkdownString($state.suggestContexts[context], true);
 					documentation.isTrusted = true;
 					contextCompletion.documentation = $state.suggestContexts[context] ? documentation : undefined;
-					contextCompletion.insertText = `${context} `;
+					contextCompletion.insertText = context;
 					contextCompletions.push(contextCompletion);
 				}
 
