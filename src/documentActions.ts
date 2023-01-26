@@ -35,6 +35,14 @@ export async function addNewTask(document: TextDocument, rawTaskText: string, pa
 		const parentTaskTextLine = document.lineAt(parentTaskLineNumber);
 		const parentTaskIndentSize = Math.floor(parentTaskTextLine.firstNonWhitespaceCharacterIndex / $config.tabSize) * $config.tabSize;
 		const creationDate = $config.addCreationDate ? `${helpCreateSpecialTag(SpecialTagName.CreationDate, getDateInISOFormat(new Date(), $config.creationDateIncludeTime))} ` : '';
+
+		if (
+			parentTaskLineNumber !== undefined &&
+			document.lineCount === (parentTaskLineNumber + 1)
+		) {
+			edit.insert(document.uri, parentTaskTextLine.range.end, '\n');
+		}
+
 		edit.insert(document.uri, new Position(parentTaskLineNumber + nestedTasksCount, 0), `${' '.repeat(parentTaskIndentSize + $config.tabSize)}${creationDate}${rawTaskText}\n`);
 	}
 	return applyEdit(edit, document);
