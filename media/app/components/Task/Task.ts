@@ -75,13 +75,18 @@ export default defineComponent({
 				return undefined;
 			}
 		},
+		style() {
+			if (this.model.parentTaskLineNumber !== undefined) {
+				return {
+					'padding-left': `calc(var(--indent-size) * ${this.model.indentLvl})`,
+				};
+			}
+			return {};
+		},
 		classes() {
 			const classMap: Record<string, boolean> = {};
 			classMap['task--done'] = this.model.done;
 			classMap['task--filter-dont-match'] = this.storeStore.tasksThatDontMatchFilter.includes(this.model.lineNumber);
-			if (this.model.parentTaskLineNumber !== undefined) {
-				classMap[`task--nested-lvl-${this.model.indentLvl}`] = true;
-			}
 			if (this.storeStore.config.webview.showPriority) {
 				switch (this.model.priority) {
 					case 'A': classMap['task--priA'] = true; break;

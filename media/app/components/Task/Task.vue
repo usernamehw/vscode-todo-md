@@ -3,6 +3,7 @@
     <div :id="'ln' + model.lineNumber"
          class="task"
          :class="classes"
+         :style="style"
          @click.alt="revealTask"
          @click.exact="selectThisTask"
          @contextmenu.prevent.stop="openTaskContextMenu($event, model)">
