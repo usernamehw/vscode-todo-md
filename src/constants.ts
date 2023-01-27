@@ -21,5 +21,7 @@ export const enum Constants {
 
 	ExtensionMenuPrefix = 'Todo MD:',
 
+	NestingSymbol = '◦',
+
 	ThrottleEverything = 140,
 }

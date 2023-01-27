@@ -1,26 +1,19 @@
-import { QuickInputButton, ThemeIcon, window } from 'vscode';
+import { QuickInputButton, QuickPickItem, ThemeIcon, window } from 'vscode';
+import { Constants } from '../constants';
 import { revealTask, toggleDoneOrIncrementCountAtLines } from '../documentActions';
 import { $state, updateState } from '../extension';
 import { defaultSortTasks } from '../sort';
+import { TheTask } from '../TheTask';
 import { updateAllTreeViews } from '../treeViewProviders/treeViews';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
-import { formatTask, getTaskAtLineExtension } from '../utils/taskUtils';
+import { forEachTask, formatTask, getTaskAtLineExtension } from '../utils/taskUtils';
 import { followLinks } from '../utils/vscodeUtils';
 
 /**
  * Show Quick Pick to complete a task.
  */
 export async function completeTask() {
-	// TODO: refactor this file
 	const document = await getActiveOrDefaultDocument();
-	const notCompletedTasks = defaultSortTasks($state.tasks.filter(task => !task.done)).map(task => ({
-		label: formatTask(task),
-		ln: task.lineNumber,
-	}));
-	const qp = window.createQuickPick();
-	qp.title = 'Complete a task';
-	qp.placeholder = 'Choose a task to complete';
-
 	const revealTaskInlineButton: QuickInputButton = {
 		iconPath: new ThemeIcon('go-to-file'),
 		tooltip: 'Reveal task',
@@ -34,16 +27,18 @@ export async function completeTask() {
 		tooltip: 'Complete task',
 	};
 
-	qp.items = notCompletedTasks.map(notCompletedTask => ({
-		...notCompletedTask,
-		buttons: [
-			revealTaskInlineButton,
-			followLinkInlineButton,
-			completeTaskInlineButton,
-		],
-	}));
+	const qp = window.createQuickPick();
+	qp.title = 'Complete a task';
+	qp.placeholder = 'Choose a task to complete';
 
-	let activeQuickPickItem: typeof notCompletedTasks[0];
+	qp.items = tasksToQuickPickItems({
+		tasks: sortedNotCompletedTasks($state.tasksAsTree),
+		revealTaskInlineButton,
+		followLinkInlineButton,
+		completeTaskInlineButton,
+	});
+
+	let activeQuickPickItem: QuickPickItem & { ln: number };
 	qp.onDidChangeActive(e => {
 		// @ts-ignore
 		activeQuickPickItem = e[0];
@@ -62,17 +57,12 @@ export async function completeTask() {
 			// @ts-ignore
 			await toggleDoneOrIncrementCountAtLines(await getActiveOrDefaultDocument(), [e.item.ln]);
 			await updateState();
-			qp.items = defaultSortTasks($state.tasks.filter(t => !t.done)).map(t => ({
-				label: formatTask(t),
-				ln: t.lineNumber,
-			})).map(notCompletedTask => ({
-				...notCompletedTask,
-				buttons: [
-					revealTaskInlineButton,
-					followLinkInlineButton,
-					completeTaskInlineButton,
-				],
-			}));
+			qp.items = tasksToQuickPickItems({
+				tasks: sortedNotCompletedTasks($state.tasksAsTree),
+				revealTaskInlineButton,
+				followLinkInlineButton,
+				completeTaskInlineButton,
+			});
 			return;
 		}
 		qp.hide();
@@ -89,4 +79,38 @@ export async function completeTask() {
 		qp.dispose();
 	});
 	qp.show();
+}
+
+function sortedNotCompletedTasks(tasks: TheTask[]): TheTask[] {
+	return defaultSortTasks(tasks)
+		.filter(task => !task.done);
+}
+
+function tasksToQuickPickItems({
+	tasks,
+	revealTaskInlineButton,
+	followLinkInlineButton,
+	completeTaskInlineButton,
+}: {
+	tasks: TheTask[];
+	revealTaskInlineButton: QuickInputButton;
+	followLinkInlineButton: QuickInputButton;
+	completeTaskInlineButton: QuickInputButton;
+}): QuickPickItem[] {
+	const flattenedTasks: TheTask[] = [];
+	forEachTask((task => {
+		if (!task.done) {
+			flattenedTasks.push(task);
+		}
+	}), tasks);
+
+	return flattenedTasks.map(task => ({
+		label: `${Constants.NestingSymbol.repeat(task.indentLvl * 4)}${formatTask(task)}`,
+		ln: task.lineNumber,
+		buttons: [
+			task.links.length ? followLinkInlineButton : undefined,
+			completeTaskInlineButton,
+			revealTaskInlineButton,
+		].filter(Boolean),
+	} as QuickPickItem));
 }
