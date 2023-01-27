@@ -1,3 +1,10 @@
+## 2.22.0 `27 Jan 2023`
+
+- ✨ [webview] Select closest task after completing a task (if completed task gets hiden)
+- ✨ [editor] Setting to control editor pie chart visibility `"todomd.progressChartEnabled"`
+- 🐛 Nested tasks show in correct order in `todomd.completeTask` Quick Pick
+- 💥 [editor] Don't add whitespace after accepting tag/project/context suggest completion
+
 ## 2.21.0 `25 Nov 2022`
 
 - ✨ Add filters from `todomd.savedFilters` setting to webview autocomplete
