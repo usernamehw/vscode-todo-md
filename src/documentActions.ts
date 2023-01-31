@@ -87,6 +87,10 @@ export async function editTaskRawText(document: TextDocument, lineNumber: number
  * Toggle `{c}` special tag
  */
 export async function toggleTaskCollapse(document: TextDocument, lineNumber: number) {
+	const task = getTaskAtLineExtension(lineNumber);
+	if (!task?.subtasks.length) {
+		return undefined;
+	}
 	const edit = new WorkspaceEdit();
 	toggleTaskCollapseWorkspaceEdit(edit, document, lineNumber);
 	return applyEdit(edit, document);
