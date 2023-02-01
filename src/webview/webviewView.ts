@@ -103,6 +103,9 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 				case 'deleteTask': {
 					await tryToDeleteTask(await getActiveOrDefaultDocument(), message.value);
 					await updateEverything();
+					this.sendMessageToWebview({
+						type: 'focusFilterInput',
+					});
 					break;
 				}
 				case 'editTaskRawText': {
