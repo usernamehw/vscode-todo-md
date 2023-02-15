@@ -38,7 +38,6 @@ module.exports = (env, options) => {
 			}],
 		},
 		plugins: [
-			// @ts-ignore
 			new FriendlyErrorsWebpackPlugin(),
 		],
 	};

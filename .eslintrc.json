@@ -328,7 +328,7 @@
 					0,
 					10
 				],
-				"consistent-return": 1,
+				"consistent-return": 0,
 				"default-case": 0,
 				"dot-notation": 1,
 				"eqeqeq": [

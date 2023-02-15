@@ -15,7 +15,8 @@
 	background-color: var(--vscode-menu-background);
 	border: 1px solid var(--vscode-menu-border);
 	margin: 0;
-	padding: 0.5em 0;
+	padding: 4px 0;
+	border-radius: 5px;
 	// overflow-y: auto;
 	// max-height: calc(100% - 50px);
 	// min-width: 10rem;
@@ -41,8 +42,10 @@
 	color: var(--vscode-menu-foreground);
 	display: flex;
 	height: 1.7rem;
-	margin: 0;
+	border-radius: 4px;
+	margin: 0 4px;
 	padding: 0.5rem;
+	padding-left: 10px;
 	text-decoration: none;
 	white-space: nowrap;
 }
