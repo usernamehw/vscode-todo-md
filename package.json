@@ -7,7 +7,7 @@
 	"license": "MIT",
 	"icon": "img/icon.png",
 	"engines": {
-		"vscode": "^1.72.0"
+		"vscode": "^1.75.0"
 	},
 	"repository": {
 		"type": "git",
@@ -32,13 +32,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onStartupFinished",
-		"onCommand:todomd.focusTasksWebviewAndInput",
-		"onCommand:todomd.toggleDone",
-		"onCommand:todomd.completeTask",
-		"onCommand:todomd.getNextTask",
-		"onCommand:todomd.getFewNextTasks",
-		"onCommand:todomd.addTaskToDefaultFile"
+		"onStartupFinished"
 	],
 	"main": "./dist/extension",
 	"contributes": {
@@ -1845,25 +1839,25 @@
 		"@babel/eslint-parser": "^7.19.1",
 		"@soda/friendly-errors-webpack-plugin": "^1.8.1",
 		"@types/chai": "^4.3.4",
-		"@types/glob": "^8.0.1",
+		"@types/glob": "^8.1.0",
 		"@types/lodash": "^4.14.191",
 		"@types/marked": "^4.0.8",
 		"@types/mocha": "^10.0.1",
 		"@types/node": "16.x",
-		"@types/vscode": "^1.72.0",
-		"@typescript-eslint/eslint-plugin": "^5.49.0",
-		"@typescript-eslint/parser": "^5.49.0",
-		"@vue/compiler-sfc": "^3.2.45",
+		"@types/vscode": "^1.75.0",
+		"@typescript-eslint/eslint-plugin": "^5.54.1",
+		"@typescript-eslint/parser": "^5.54.1",
+		"@vue/compiler-sfc": "^3.2.47",
 		"chai": "^4.3.7",
 		"concurrently": "^7.6.0",
 		"css-loader": "^6.7.3",
-		"eslint": "^8.32.0",
+		"eslint": "^8.35.0",
 		"eslint-plugin-html": "^7.1.0",
 		"eslint-plugin-no-autofix": "^1.2.3",
 		"eslint-plugin-vue": "^9.9.0",
 		"glob": "^8.1.0",
 		"mocha": "^10.2.0",
-		"sass": "^1.57.1",
+		"sass": "^1.58.3",
 		"sass-loader": "^13.2.0",
 		"source-map-support": "^0.5.21",
 		"style-loader": "^3.3.1",
@@ -1875,8 +1869,8 @@
 		"stylelint-order": "^6.0.1",
 		"stylelint-scss": "^4.3.0",
 		"ts-loader": "^9.4.2",
-		"typescript": "^4.9.4",
-		"typescript-json-schema": "^0.53.1",
+		"typescript": "^4.9.5",
+		"typescript-json-schema": "^0.55.0",
 		"vscode-codicons": "0.0.17",
 		"vscode-test": "^1.6.1",
 		"vue-loader": "^17.0.1",
@@ -1886,14 +1880,14 @@
 		"webpack-cli": "^5.0.1"
 	},
 	"dependencies": {
-		"@kyvg/vue3-notification": "^2.8.0",
+		"@kyvg/vue3-notification": "^2.9.0",
 		"dayjs": "^1.11.7",
 		"fuzzysort": "^2.0.4",
 		"lodash": "^4.17.21",
 		"marked": "^4.2.12",
 		"mitt": "^3.0.0",
-		"pinia": "^2.0.29",
-		"vue": "^3.2.45",
+		"pinia": "^2.0.33",
+		"vue": "^3.2.47",
 		"vue-final-modal": "^3.4.11"
 	}
 }
