@@ -47,7 +47,7 @@ export class DueDate {
 	 * When the next time the task is going to be due.
 	 */
 	private calcClosestDueDateInTheFuture(): void {
-		if (this.type === 'invalid' || this.isDue === IsDue.Overdue || this.isDue === IsDue.Due) {
+		if (this.type === 'invalid' || this.isDue === IsDue.Overdue) {
 			return;
 		}
 		if (this.type === 'normalDate') {
