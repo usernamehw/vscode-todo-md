@@ -296,6 +296,10 @@ export interface ExtensionConfig {
 		 */
 		indentSize: string;
 		/**
+		 * Focus filter input after clicking(selecting) any task.
+		 */
+		focusFilterInputOnClick: boolean;
+		/**
 		 * Set different color for any tag in a webview.
 		 */
 		tagStyles: {

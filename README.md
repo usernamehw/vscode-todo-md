@@ -169,7 +169,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (59)
+## Settings (60)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -191,6 +191,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.indentSize|"1.8em"|Controls visual indent of nested elements in a webview.|
 |webview.customCheckboxEnabled|**true**|Whether checkbox is rendered as native input element or a custom styled element.|
 |webview.autoShowSuggest|**true**|Show autocomplete when typing. (When disabled suggest can be called by `Ctrl`+`Space`)|
+|webview.focusFilterInputOnClick|**true**|Focus filter input after clicking(selecting) any task.|
 |webview.customCSSPath|""|Absolute path to custom CSS for the webview.|
 |webview.tagStyles|\{\}|Set different color for any tag in a webview.|
 |defaultFile|""|Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`.<br>[**Pick default file**](command:todomd.specifyDefaultFile)|

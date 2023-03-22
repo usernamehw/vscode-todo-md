@@ -203,6 +203,9 @@ export const useStore = defineStore({
 		},
 		selectTask(lineNumber: number) {
 			this.selectedTaskLineNumber = lineNumber;
+			if (this.config.webview.focusFilterInputOnClick) {
+				this.focusFilterInput();
+			}
 		},
 		selectFirstTask() {
 			if (this.filteredSortedTasks.tasks.length) {

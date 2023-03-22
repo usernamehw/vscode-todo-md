@@ -128,6 +128,11 @@
 					"markdownDescription": "Show autocomplete when typing. (When disabled suggest can be called by `Ctrl`+`Space`)",
 					"default": true
 				},
+				"todomd.webview.focusFilterInputOnClick": {
+					"type": "boolean",
+					"markdownDescription": "Focus filter input after clicking(selecting) any task.",
+					"default": true
+				},
 				"todomd.webview.customCSSPath": {
 					"type": "string",
 					"markdownDescription": "Absolute path to custom CSS for the webview.",
