@@ -1,3 +1,11 @@
+## 2.23.0 `22 Mar 2023`
+
+- ✨ [editor] Show more info on due date hover
+- ✨ [webview] Tweak context menu style
+- ✨ [webview] Allow `<video>` tag (from https)
+- ✨ [webview] New setting to focus filter input on every task selection change `"todomd.webview.focusFilterInputOnClick"`
+- 🐛 Fix `command:` & `app:///` links not working in Quick Pick (`todomd.completeTask`)
+
 ## 2.22.0 `27 Jan 2023`
 
 - ✨ [webview] Select closest task after completing a task (if completed task gets hiden)
@@ -7,7 +15,7 @@
 
 ## 2.21.0 `25 Nov 2022`
 
-- ✨ Add filters from `todomd.savedFilters` setting to webview autocomplete
+- ✨ Add filters from `"todomd.savedFilters"` setting to webview autocomplete
 - 🐛 Fix webview autocomplete for multiple filters
 
 ## 2.20.0 `20 Nov 2022`
@@ -415,7 +423,7 @@
 
 ## 0.0.14 `27 Jun 2020`
 
-- Republish extension to marketplace
+- 🔨 Republish extension to marketplace
 
 ## 0.0.13 `18 May 2020`
 
@@ -485,4 +493,4 @@
 
 ## 0.0.1 `30 Apr 2020`
 
-- Initial release
+- 🔨 Initial release
