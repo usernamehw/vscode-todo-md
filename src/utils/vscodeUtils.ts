@@ -43,13 +43,32 @@ export async function followLinks(links: Link[]) {
  * Opens a link externally using the default application.
  */
 export async function followLink(linkString: string) {
-	// TODO: try catch showErrorNotification
-	if (linkString.startsWith('file:///')) {
-		return await openFileInEditor(linkString);
-	} else if (linkString.startsWith('app:///')) {
-		return await env.openExternal(Uri.parse(linkString.slice(7)));
-	} else {
-		return await env.openExternal(Uri.parse(linkString));
+	const enum Prefixes {
+		File = 'file:///',
+		AppFromWebview = 'app:///',
+		AppFromLinks = 'app:',
+		Command = 'command:',
+	}
+
+	try {
+		if (linkString.startsWith(Prefixes.File)) {
+			return await openFileInEditor(linkString);
+		} else if (linkString.startsWith(Prefixes.AppFromWebview)) {
+			return await env.openExternal(Uri.parse(linkString.slice(Prefixes.AppFromWebview.length)));
+		} else if (linkString.startsWith(Prefixes.AppFromLinks)) {
+			return await env.openExternal(Uri.parse(linkString.slice(Prefixes.AppFromLinks.length)));
+		} else if (linkString.startsWith(Prefixes.Command)) {
+			const commandString = linkString.slice(Prefixes.Command.length);
+			const commandParts = commandString.split('?');
+			const commandId = commandParts[0];
+			const argsPart = commandParts[1];
+			const args = argsPart ? JSON.parse(decodeURIComponent(argsPart)) : undefined;
+			commands.executeCommand(commandId, args);
+		} else {
+			return await env.openExternal(Uri.parse(linkString));
+		}
+	} catch (e) {
+		window.showErrorMessage((e as Error).message);
 	}
 }
 /**
