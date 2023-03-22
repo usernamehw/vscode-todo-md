@@ -1860,7 +1860,7 @@
 		"eslint-plugin-html": "^7.1.0",
 		"eslint-plugin-no-autofix": "^1.2.3",
 		"eslint-plugin-vue": "^9.9.0",
-		"glob": "^9.3.1",
+		"glob": "^8.1.0",
 		"mocha": "^10.2.0",
 		"sass": "^1.59.3",
 		"sass-loader": "^13.2.1",

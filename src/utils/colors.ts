@@ -21,7 +21,11 @@ const colors = {
 		light: '#7284eb',
 		dark: '#7284eb',
 	},
-} as const;
+	today: {
+		light: '#7284eb',
+		dark: '#7284eb',
+	},
+} satisfies Record<string, {light: string; dark: string}>;
 
 /**
  * Get color ,ideally, depending on theme light/dark.

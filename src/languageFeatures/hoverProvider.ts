@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { Disposable, Hover, languages, MarkdownString } from 'vscode';
 import { DueDate } from '../dueDate';
-import { $config, $state } from '../extension';
+import { $state } from '../extension';
 import { parseWord } from '../parse';
 import { getDateInISOFormat } from '../time/timeUtils';
 import { IsDue } from '../types';
@@ -85,9 +85,7 @@ export function updateHover() {
 						dueHover.isTrusted = true;
 						dueHover.supportHtml = true;
 
-						if ($config.isDev) {
-							dueHover.appendMarkdown(renderCalendarsForDueDate(task.due!));
-						}
+						dueHover.appendMarkdown(renderCalendarsForDueDate(task.due!));
 
 						otherMarkdownHovers.push(dueHover);
 					}
@@ -158,7 +156,7 @@ function renderHtmlCalendar(date: Dayjs, dueDate: DueDate): string {
 		const isDueStyle = isDue ? ` style="color:${helpGetColor('due')};"` : '';
 		let cell = `<code>${String(i).padStart(2, '0')}</code>`;
 		if (tempDate.isSame(now, 'date')) {
-			cell = `<b>${cell}</b>`;
+			cell = `<span style="color:${helpGetColor('today')};">${cell}</span>`;
 		}
 
 		htmlText += `<td title="${getDateInISOFormat(tempDate)}"><span${isDueStyle}>${cell}</span></td>`;
