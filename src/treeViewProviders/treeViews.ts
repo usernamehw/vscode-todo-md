@@ -2,6 +2,7 @@ import { TreeCheckboxChangeEvent, TreeView, TreeViewExpansionEvent, Uri, Webview
 import { TheTask } from '../TheTask';
 import { Constants } from '../constants';
 import { toggleDoneAtLine, toggleTaskCollapse } from '../documentActions';
+import { updateEverything } from '../events';
 import { $config, $state, updateState } from '../extension';
 import { filterTasks } from '../filter';
 import { parseDocument } from '../parse';
@@ -360,4 +361,5 @@ async function onDidChangeCheckboxState(e: TreeCheckboxChangeEvent<TaskTreeItem>
 	}
 
 	await toggleDoneAtLine(await getActiveOrDefaultDocument(), task.lineNumber);
+	await updateEverything();
 }
