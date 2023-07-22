@@ -13,8 +13,7 @@
 	"plugins": [
 		"html",
 		"vue",
-		"@typescript-eslint",
-		"no-autofix"
+		"@typescript-eslint"
 	],
 	"overrides": [
 		{
@@ -158,7 +157,6 @@
 				"plugin:@typescript-eslint/recommended"
 			],
 			"rules": {
-				"no-autofix/prefer-const": 1,
 				"@typescript-eslint/semi": 1,
 				"@typescript-eslint/sort-type-union-intersection-members": 1,
 				"@typescript-eslint/adjacent-overload-signatures": 1,
@@ -548,7 +546,7 @@
 				],
 				"no-unused-vars": 0,
 				"func-names": 0,
-				"prefer-const": 0,
+				"prefer-const": 1,
 				"prefer-spread": 1,
 				"prefer-destructuring": 0,
 				"prefer-rest-params": 1,
