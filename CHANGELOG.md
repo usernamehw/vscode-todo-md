@@ -1,3 +1,7 @@
+## 2.24.0 `22 Jul 2023`
+
+- ✨ [Tree View] Use vscode checkbox api (`"todomd.treeView.useVscodeCheckboxApi"` setting)
+
 ## 2.23.0 `22 Mar 2023`
 
 - ✨ [editor] Show more info on due date hover
