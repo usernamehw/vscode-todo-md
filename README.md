@@ -275,12 +275,10 @@ https://github.com/usernamehw/vscode-todo-md/tree/master/docs/docs.md
 
 ## Please upvote the following upstream vscode issues:
 
-- [#116141 Allow TreeItem's to have optional checkboxes](https://github.com/microsoft/vscode/issues/116141)
 - [#97190 Provide some richer (optional) UI for custom tree views](https://github.com/microsoft/vscode/issues/97190)
 - [#32813 Access theme's colors programmatically](https://github.com/microsoft/vscode/issues/32813)
 - [#115365 Allow TreeItem.label to support MarkdownString](https://github.com/microsoft/vscode/issues/115365)
 - [#21611 Add option to always show word based suggestions](https://github.com/microsoft/vscode/issues/21611)
-- [#54285 Contributed webview context menu actions](https://github.com/microsoft/vscode/issues/54285)
 - [#85682 Api for editor insets](https://github.com/microsoft/vscode/issues/85682)
 - [#32856 Inline text adornments break word wrapping](https://github.com/microsoft/vscode/issues/32856)
 - [#25633 When completing color keys in settings, fill in current value](https://github.com/microsoft/vscode/issues/25633)
