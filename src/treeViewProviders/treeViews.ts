@@ -1,16 +1,16 @@
-import { TreeView, TreeViewExpansionEvent, Uri, WebviewView, window, workspace } from 'vscode';
+import { TreeCheckboxChangeEvent, TreeView, TreeViewExpansionEvent, Uri, WebviewView, window, workspace } from 'vscode';
+import { TheTask } from '../TheTask';
 import { Constants } from '../constants';
-import { toggleTaskCollapse } from '../documentActions';
+import { toggleDoneAtLine, toggleTaskCollapse } from '../documentActions';
 import { $config, $state, updateState } from '../extension';
 import { filterTasks } from '../filter';
 import { parseDocument } from '../parse';
 import { defaultSortTasks } from '../sort';
 import { showCompletedPercentage } from '../statusBar';
-import { TheTask } from '../TheTask';
 import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
-import { TaskProvider } from '../treeViewProviders/taskProvider';
+import { TaskProvider, TaskTreeItem } from '../treeViewProviders/taskProvider';
 import { ItemForProvider, TreeItemSortType, VscodeContext } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { forEachTask } from '../utils/taskUtils';
@@ -44,36 +44,48 @@ export function createAllTreeViews() {
 	tagsView = window.createTreeView(Constants.TagsTreeViewId, {
 		treeDataProvider: tagProvider,
 		showCollapseAll: true,
+		manageCheckboxStateManually: true,
 	});
+	tagsView.onDidChangeCheckboxState(onDidChangeCheckboxState);
 
 	projectView = window.createTreeView(Constants.ProjectsTreeViewId, {
 		treeDataProvider: projectProvider,
 		showCollapseAll: true,
+		manageCheckboxStateManually: true,
 	});
+	projectView.onDidChangeCheckboxState(onDidChangeCheckboxState);
 
 	contextView = window.createTreeView(Constants.ContextsTreeViewId, {
 		treeDataProvider: contextProvider,
 		showCollapseAll: true,
+		manageCheckboxStateManually: true,
 	});
+	contextView.onDidChangeCheckboxState(onDidChangeCheckboxState);
 
 	dueView = window.createTreeView(Constants.DueTreeViewId, {
 		treeDataProvider: dueProvider,
 		showCollapseAll: true,
+		manageCheckboxStateManually: true,
 	});
 
 	dueView.onDidCollapseElement(onElementCollapseExpand);
 	dueView.onDidExpandElement(onElementCollapseExpand);
+	dueView.onDidChangeCheckboxState(onDidChangeCheckboxState);
 
 	tasksView = window.createTreeView(Constants.TasksTreeViewId, {
 		treeDataProvider: taskProvider,
 		showCollapseAll: true,
+		manageCheckboxStateManually: true,
 	});
 	tasksView.onDidCollapseElement(onElementCollapseExpand);
 	tasksView.onDidExpandElement(onElementCollapseExpand);
+	tasksView.onDidChangeCheckboxState(onDidChangeCheckboxState);
 
 	archivedView = window.createTreeView(Constants.ArchivedTreeViewId, {
 		treeDataProvider: archivedProvider,
+		manageCheckboxStateManually: true,
 	});
+	archivedView.onDidChangeCheckboxState(onDidChangeCheckboxState);
 
 	if ($config.treeViews.length) {
 		const generic1 = $config.treeViews[0];
@@ -84,9 +96,11 @@ export function createAllTreeViews() {
 				generic1View = window.createTreeView(Constants.Generic1TreeViewId, {
 					treeDataProvider: generic1Provider,
 					showCollapseAll: true,
+					manageCheckboxStateManually: true,
 				});
 				generic1View.onDidCollapseElement(onElementCollapseExpand);
 				generic1View.onDidExpandElement(onElementCollapseExpand);
+				generic1View.onDidChangeCheckboxState(onDidChangeCheckboxState);
 				setContext(VscodeContext.Generic1FilterExists, true);
 			}
 		}
@@ -99,9 +113,11 @@ export function createAllTreeViews() {
 				generic2View = window.createTreeView(Constants.Generic2TreeViewId, {
 					treeDataProvider: generic2Provider,
 					showCollapseAll: true,
+					manageCheckboxStateManually: true,
 				});
 				generic2View.onDidCollapseElement(onElementCollapseExpand);
 				generic2View.onDidExpandElement(onElementCollapseExpand);
+				generic2View.onDidChangeCheckboxState(onDidChangeCheckboxState);
 				setContext(VscodeContext.Generic2FilterExists, true);
 			}
 		}
@@ -114,9 +130,11 @@ export function createAllTreeViews() {
 				generic3View = window.createTreeView(Constants.Generic3TreeViewId, {
 					treeDataProvider: generic3Provider,
 					showCollapseAll: true,
+					manageCheckboxStateManually: true,
 				});
 				generic3View.onDidCollapseElement(onElementCollapseExpand);
 				generic3View.onDidExpandElement(onElementCollapseExpand);
+				generic3View.onDidChangeCheckboxState(onDidChangeCheckboxState);
 				setContext(VscodeContext.Generic3FilterExists, true);
 			}
 		}
@@ -332,4 +350,14 @@ async function onElementCollapseExpand(event: TreeViewExpansionEvent<any>) {
 	await updateState();
 	// TODO: doesn't work for tree views ...
 	updateAllTreeViews();
+}
+
+async function onDidChangeCheckboxState(e: TreeCheckboxChangeEvent<TaskTreeItem>) {
+	const task = e.items[0]?.[0]?.task;
+	if (task === undefined) {
+		window.showErrorMessage(`Failed to get task.`);
+		return;
+	}
+
+	await toggleDoneAtLine(await getActiveOrDefaultDocument(), task.lineNumber);
 }

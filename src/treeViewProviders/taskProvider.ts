@@ -1,9 +1,9 @@
-import { Command, Event, EventEmitter, ThemeColor, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
+import { Command, Event, EventEmitter, ThemeColor, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCheckboxState, TreeItemCollapsibleState } from 'vscode';
+import { TheTask } from '../TheTask';
 import { CommandId } from '../commands';
 import { $config } from '../extension';
 import { getTaskHoverMd } from '../languageFeatures/getTaskHover';
 import { defaultSortTasks } from '../sort';
-import { TheTask } from '../TheTask';
 import { SortNestedTasks } from '../types';
 import { formatTask } from '../utils/taskUtils';
 
@@ -29,8 +29,14 @@ export class TaskTreeItem extends TreeItem {
 			}
 		}
 
-		if (task.done) {
-			this.iconPath = new ThemeIcon('pass', new ThemeColor('todomd.treeViewCompletedTaskIcon'));
+		if ($config.treeView.useVscodeCheckboxApi) {
+			// Use native vscode checkboxes
+			this.checkboxState = task.done ? TreeItemCheckboxState.Checked : TreeItemCheckboxState.Unchecked;
+		} else {
+			// Use icon to show completed state
+			if (task.done) {
+				this.iconPath = new ThemeIcon('pass', new ThemeColor('todomd.treeViewCompletedTaskIcon'));
+			}
 		}
 	}
 }

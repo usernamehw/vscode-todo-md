@@ -169,7 +169,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (60)
+## Settings (61)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -224,6 +224,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |savedFilters|\[\]|Filters that you can pick when applying a filter.|
 |treeViews|\[\]|Add more tree views with predefined filters.|
 |treeView.showBadge|**true**|Whether or not to show due tasks counter badge for tree view container.|
+|treeView.useVscodeCheckboxApi|**true**|When checked - will use vscode api to show checkboxes https://github.com/microsoft/vscode/issues/116141.|
 |labelDueSymbol|"📗&nbsp;"|Prefix for task that is due in labels (tree view, notification, modal, quick pick).|
 |labelNotDueSymbol|"📔&nbsp;"|Prefix for task that that is not due in labels (tree view, notification, modal, quick pick).|
 |labelOverdueSymbol|"📕&nbsp;"|Prefix for task that is overdue in labels (tree view, notification, modal, quick pick).|

@@ -381,6 +381,11 @@
 					"markdownDescription": "Whether or not to show due tasks counter badge for tree view container.",
 					"default": true
 				},
+				"todomd.treeView.useVscodeCheckboxApi": {
+					"type": "boolean",
+					"markdownDescription": "When checked - will use vscode api to show checkboxes https://github.com/microsoft/vscode/issues/116141.",
+					"default": true
+				},
 				"todomd.labelDueSymbol": {
 					"type": "string",
 					"markdownDescription": "Prefix for task that is due in labels (tree view, notification, modal, quick pick).",
@@ -1565,7 +1570,7 @@
 				},
 				{
 					"command": "todomd.toggleDone",
-					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem =~ /(task|taskWithLink)/",
+					"when": "view =~ /todomd.(tasks|due|projects|tags|contexts|generic1|generic2|generic3)/ && viewItem =~ /(task|taskWithLink)/ && !config.todomd.treeView.useVscodeCheckboxApi",
 					"group": "inline"
 				}
 			],

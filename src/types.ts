@@ -174,6 +174,10 @@ export interface ExtensionConfig {
 		 * Whether or not to show due tasks counter badge for tree view container.
 		 */
 		showBadge: boolean;
+		/**
+		 * When checked - will use vscode api to show checkboxes https://github.com/microsoft/vscode/issues/116141.
+		 */
+		useVscodeCheckboxApi: boolean;
 	};
 	/**
 	 * Number of tasks returned by `getFewNextTasks` command.
