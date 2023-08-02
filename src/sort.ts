@@ -121,6 +121,13 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 	if (direction === SortDirection.ASC) {
 		return sortedTasks.reverse();
 	}
+	
+	// Recursively sort nested tasks
+	for (const task of sortedTasks) {
+		if (task.subtasks.length) {
+			task.subtasks = sortTasks(task.subtasks, sortProperty, direction);
+		}
+	}
 
 	return sortedTasks;
 }

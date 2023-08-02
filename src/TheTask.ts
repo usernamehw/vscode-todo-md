@@ -232,4 +232,15 @@ export class TheTask {
 	}
 
 	static defaultTaskPriority: Priority = 'G';
+	
+	/**
+	 * @returns Raw text lines corresponding to the task and all nested tasks recursively.
+	 */
+	rawTextWithNestedTasks(): string {
+		const rawTextLines = [this.rawText];
+		for (const subtask of this.subtasks) {
+			rawTextLines.push(subtask.rawTextWithNestedTasks());
+		}
+		return rawTextLines.join('\n');
+	}
 }

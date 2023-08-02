@@ -212,17 +212,31 @@ export function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sort
 		lineStart = 0;
 		lineEnd = editor.document.lineCount - 1;
 	}
+
+	// Fetch only the top-level tasks within the selection to avoid messing up
+	// nested tasks after sorting and to retain the tree structure.
 	const tasks: TheTask[] = [];
-	for (let i = lineStart; i <= lineEnd; i++) {
-		const task = getTaskAtLineExtension(i);
+	let lineno = lineStart;
+	while (lineno <= lineEnd) {
+		let task = getTaskAtLineExtension(lineno);
 		if (task) {
 			tasks.push(task);
+			// Jump past all subtasks of this task
+			while (task.subtasks.length) {
+				task = task.subtasks[task.subtasks.length - 1];
+				lineno = task.lineNumber;
+			}
 		}
+		lineno++;
 	}
+	// If the selection includes a parent task but ends without including all of its subtasks,
+	// manually extend the selection to avoid messing up the task list after sorting.
+	lineEnd = lineno - 1;
+
 	const sortedTasks = sortTasks(tasks, sortProperty);
 	if (!sortedTasks.length) {
 		return;
 	}
-	const result = sortedTasks.map(t => t.rawText).join('\n');
+	const result = sortedTasks.map(t => t.rawTextWithNestedTasks()).join('\n');
 	edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
 }
