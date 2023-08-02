@@ -238,8 +238,6 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |decorations|\{"project":\{\},"context":\{\},"tag":\{\},"comment":\{\},"notDue":\{\},"due":\{\},"overdue":\{\},"invalidDue":\{\},"favorite":\{\},"priorityA":\{\},"priorityB":\{\},"priorityC":\{\},"priorityD":\{\},"priorityE":\{\},"priorityF":\{\},"completedTask":\{\}\}|Advanced decoration tweaking. Allowed values:<br>- `project`<br>- `context`<br>- `tag`<br>- `comment`<br>- `notDue`<br>- `context`<br>- `due`<br>- `overdue`<br>- `invalidDue`<br>- `favorite`<br>- `priorityA`<br>- `priorityB`<br>- `priorityC`<br>- `priorityD`<br>- `priorityE`<br>- `priorityF`<br>- `completedTask`<br>- `+someProject`<br>- `#someTag`<br>- `@someContext`<br> [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)|
 <!-- SETTINGS_END -->
 
-## Colors
-
 <!-- COLORS_START -->
 ## Colors (21)
 
