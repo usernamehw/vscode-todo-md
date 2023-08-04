@@ -320,9 +320,8 @@ export async function revealTask(lineNumber: number, document?: TextDocument) {
 	}, 700);
 }
 /**
- * Recurring tasks completion state should reset according to schedule.
- * This function goes through all recurring tasks in a document, resets their
- * completion/count, and adds `{overdue}` tag when needed.
+ * Recurring tasks completion state should reset every day.
+ * This function goes through all tasks in a document and resets their completion/count, adds `{overdue}` tag when needed
  */
 export async function resetAllRecurringTasks(document: TextDocument, lastVisit: Date | string = new Date()) {
 	if (typeof lastVisit === 'string') {
@@ -334,47 +333,35 @@ export async function resetAllRecurringTasks(document: TextDocument, lastVisit: 
 	const nowWithoutTime = dateWithoutTime(now);
 
 	for (const task of tasks) {
-		if (!task.due?.isRecurring) {
-			continue;
-		}
-
-		let overdueDate;
-		const lastVisitWithoutTime = dateWithoutTime(lastVisit);
-		const daysSinceLastVisit = dayjs(nowWithoutTime).diff(lastVisitWithoutTime, 'day');
-		for (let i = daysSinceLastVisit; i > 0; i--) {
-			const date = dayjs().subtract(i, 'day');
-			const res = new DueDate(task.due.raw, {
-				targetDate: date.toDate(),
-			});
-			if (res.isDue === IsDue.Due || res.isDue === IsDue.Overdue) {
-				overdueDate = date;
-				break;
+		if (task.due?.isRecurring) {
+			const line = document.lineAt(task.lineNumber);
+			if (task.done) {
+				removeCompletionDateWorkspaceEdit(edit, document, task);
+				removeStartWorkspaceEdit(edit, document, task);
+				removeDurationWorkspaceEdit(edit, document, task);
+			} else {
+				if (!task.overdue && !dayjs().isSame(lastVisit, 'day')) {
+					const lastVisitWithoutTime = dateWithoutTime(lastVisit);
+					const daysSinceLastVisit = dayjs(nowWithoutTime).diff(lastVisitWithoutTime, 'day');
+					for (let i = daysSinceLastVisit; i > 0; i--) {
+						const date = dayjs().subtract(i, 'day');
+						const res = new DueDate(task.due.raw, {
+							targetDate: date.toDate(),
+						});
+						if (res.isDue === IsDue.Due || res.isDue === IsDue.Overdue) {
+							if (!task.noOverdue) {
+								addOverdueSpecialTagWorkspaceEdit(edit, document, line, date.format(DATE_FORMAT));
+							}
+							break;
+						}
+					}
+				}
 			}
-		}
-		
-		// Task is not overdue yet.
-		// If the task is not done, it can still be completed before due date.
-		// If the task is done, then there is still time before it needs to recur.
-		// Either way, nothing to reset.
-		if (overdueDate === undefined) {
-			return;
-		}
-
-		if (task.done) {
-			// Task is done and it's time for the next iteration per recurrent schedule.
-			// Reset completion state.
-			removeCompletionDateWorkspaceEdit(edit, document, task);
-			removeStartWorkspaceEdit(edit, document, task);
-			removeDurationWorkspaceEdit(edit, document, task);
 
 			const count = task.count;
 			if (count) {
 				setCountCurrentValueWorkspaceEdit(edit, document.uri, count, '0');
 			}
-		} else if (!task.overdue && !task.noOverdue) {
-			// Task is not done and overdue. Mark as such without resetting any count.
-			const line = document.lineAt(task.lineNumber);
-			addOverdueSpecialTagWorkspaceEdit(edit, document, line, overdueDate.format(DATE_FORMAT));
 		}
 	}
 	return applyEdit(edit, document);
