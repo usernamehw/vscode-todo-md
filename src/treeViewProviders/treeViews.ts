@@ -1,7 +1,7 @@
 import { TreeCheckboxChangeEvent, TreeView, TreeViewExpansionEvent, Uri, WebviewView, window, workspace } from 'vscode';
 import { TheTask } from '../TheTask';
 import { Constants } from '../constants';
-import { toggleDoneAtLine, toggleTaskCollapse } from '../documentActions';
+import { toggleDoneAtLine, toggleDoneAtLineArchived, toggleTaskCollapse } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state, updateState } from '../extension';
 import { filterTasks } from '../filter';
@@ -86,7 +86,9 @@ export function createAllTreeViews() {
 		treeDataProvider: archivedProvider,
 		manageCheckboxStateManually: true,
 	});
-	archivedView.onDidChangeCheckboxState(onDidChangeCheckboxState);
+	archivedView.onDidChangeCheckboxState((e: TreeCheckboxChangeEvent<TaskTreeItem>) => {
+		onDidChangeCheckboxState(e, true);
+	});
 
 	if ($config.treeViews.length) {
 		const generic1 = $config.treeViews[0];
@@ -353,13 +355,19 @@ async function onElementCollapseExpand(event: TreeViewExpansionEvent<any>) {
 	updateAllTreeViews();
 }
 
-async function onDidChangeCheckboxState(e: TreeCheckboxChangeEvent<TaskTreeItem>) {
+async function onDidChangeCheckboxState(e: TreeCheckboxChangeEvent<TaskTreeItem>, isArchivedTreeView = false) {
 	const task = e.items[0]?.[0]?.task;
 	if (task === undefined) {
 		window.showErrorMessage(`Failed to get task.`);
 		return;
 	}
 
-	await toggleDoneAtLine(await getActiveOrDefaultDocument(), task.lineNumber);
+	if (isArchivedTreeView) {
+		await toggleDoneAtLineArchived(await getArchivedDocument(), task.lineNumber, $state.archivedTasks);
+		await updateArchivedTasks();
+	} else {
+		await toggleDoneAtLine(await getActiveOrDefaultDocument(), task.lineNumber);
+	}
+
 	await updateEverything();
 }

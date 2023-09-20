@@ -4,7 +4,7 @@ import { DueDate } from './dueDate';
 import { $config } from './extension';
 import { parseDocument } from './parse';
 import { Count, TheTask } from './TheTask';
-import { dateWithoutTime, DATE_FORMAT, durationTo, getDateInISOFormat } from './time/timeUtils';
+import { DATE_FORMAT, dateWithoutTime, durationTo, getDateInISOFormat } from './time/timeUtils';
 import { updateArchivedTasks } from './treeViewProviders/treeViews';
 import { IsDue } from './types';
 import { applyEdit, checkArchiveFileAndNotify, getActiveOrDefaultDocument, helpCreateSpecialTag, SpecialTagName, taskToString } from './utils/extensionUtils';
@@ -248,6 +248,18 @@ export async function toggleDoneAtLine(document: TextDocument, lineNumber: numbe
 	if ($config.autoArchiveTasks) {
 		await archiveTasks([task], document);
 	}
+}
+/**
+ * Toggle task completion for archived tasks document.
+ */
+export async function toggleDoneAtLineArchived(document: TextDocument, lineNumber: number, tasks: TheTask[]) {
+	const task = getTaskAtLineExtension(lineNumber, tasks);
+	if (!task) {
+		return;
+	}
+	const edit = new WorkspaceEdit();
+	toggleDoneAtLineWorkspaceEdit(edit, document, task);
+	await applyEdit(edit, document);
 }
 /**
  * - Warning and noop when default archive file path is not specified

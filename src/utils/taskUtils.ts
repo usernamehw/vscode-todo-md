@@ -26,8 +26,8 @@ function findTaskAtLine(lineNumber: number, tasks: TheTask[]): TheTask | undefin
  * Suffix `Extension` means it gets task from the extension side
  * Suffix `Webview` means it gets task from the webview side
  */
-export function getTaskAtLineExtension(lineNumber: number) {
-	return findTaskAtLine(lineNumber, $state.tasksAsTree);
+export function getTaskAtLineExtension(lineNumber: number, tasks = $state.tasksAsTree) {
+	return findTaskAtLine(lineNumber, tasks);
 }
 
 /**
