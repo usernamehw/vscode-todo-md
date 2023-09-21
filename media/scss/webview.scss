@@ -24,6 +24,7 @@ $contextBorder: darken($contextBackground, 17%);
 $hoverDarkenPercent: 8%;
 $taskDetailsHeight: 10rem;
 $bodyPaddingTop: 4px + 4px + 24px;
+$standardBorderRadius: 3px;
 
 body {
 	--border-low-contrast: #cecece6c;
@@ -119,14 +120,14 @@ body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 
 	--tag-padding: 1px 4px;
 
-	--tag-bg: #{darken($tagBackground, 12.5%)};
-	--tag-fg: #000000;
+	--tag-bg: #029cdf;
+	--tag-fg: #{darken(#ffffff, 2.5%)};
 
-	--project-bg: #{darken($projectBackground, 22.5%)};
-	--project-fg: #000000;
+	--project-bg: #{darken(#36cc9a, 10%)};
+	--project-fg: #{darken(#ffffff, 2.5%)};
 
-	--context-bg: #{darken($contextBackground, 10%)};
-	--context-fg: #000000;
+	--context-bg: #7284eb;
+	--context-fg: #{darken(#ffffff, 2.5%)};
 
 	--count-bg: #ffffff1a;
 	--count-button-bg: #ffffff1a;
@@ -178,7 +179,7 @@ a {
 	color: var(--vscode-button-foreground);
 	font-family: var(--vscode-font-family);
 	cursor: pointer;
-	border-radius: 2px;
+	border-radius: $standardBorderRadius;
 	margin: 0 auto;
 
 	&--welcome {
@@ -198,6 +199,7 @@ a {
 	}
 
 	&--link {
+		font-size: calc(var(--font-size) - 10%);
 		padding: 0.07em 0.4em;
 	}
 
@@ -298,7 +300,7 @@ a {
 		width: var(--twistie-size);
 
 		&::before {
-			border-radius: 3px;
+			border-radius: $standardBorderRadius;
 			font-size: calc(var(--font-size) + 0.15em);
 			padding: 0.1em 0;
 		}
@@ -315,6 +317,7 @@ a {
 		border-radius: 0.25em;
 		cursor: pointer;
 		font-family: var(--vscode-editor-font-family);
+		font-size: calc(var(--font-family) - 15%);
 		margin-left: $approxOneSpace;
 		padding: var(--tag-padding);
 		white-space: pre;
@@ -357,10 +360,15 @@ a {
 		padding: 0 0.3em;
 		position: relative;
 		top: 2px;
-		border: 1px solid transparentize(deeppink, 0.7);
+		border: 1.2px solid deeppink;
 		color: deeppink;
 		padding-bottom: 0.15em;
 		padding-top: 0.15em;
+		border-radius: $standardBorderRadius;
+
+		.vscode-dark & {
+			border: 2px solid transparentize(deeppink, 0.5);
+		}
 	}
 	&__due-state {
 		align-items: center;
@@ -373,6 +381,7 @@ a {
 		padding: 0 0.3em;
 		position: relative;
 		top: 2px;
+		border-radius: $standardBorderRadius;
 
 		.vscode-dark & {
 			border-style: dashed !important;
@@ -412,6 +421,12 @@ a {
 	}
 
 	&__nested-count {
+		float: left;
+		top: 2px;
+		position: relative;
+		height: calc(var(--font-size) + 2px);
+		border-radius: $standardBorderRadius;
+
 		align-items: center;
 		background-color: var(--nested-count-bg);
 		border: 1px solid #dfd98799;
@@ -421,16 +436,12 @@ a {
 		font-family: var(--vscode-editor-font-family);
 		justify-content: center;
 		margin-right: $approxOneSpace;
-		// margin-top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height) - var(--font-size)) / 2));
-		padding: 0 0.3em;
-
-		.vscode-dark & {
-			padding: 0 0.2em;
-		}
+		padding: 0 0.2em;
 	}
 
 	&__nested-count-number {
-		font-size: calc(var(--font-size) - 1px);
+		font-size: calc(var(--font-size) - 15%);
+		font-family: var(--vscode-editor-font-family);
 		padding-left: $approxOneSpace;
 	}
 
@@ -569,7 +580,7 @@ a {
 		-webkit-appearance: none;
 		background-color: var(--vscode-checkbox-background);
 		border: 1px solid var(--vscode-checkbox-border);
-		border-radius: 3px;
+		border-radius: $standardBorderRadius;
 		bottom: 0;
 		color: var(--vscode-checkbox-foreground);
 		cursor: pointer;
