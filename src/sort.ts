@@ -125,28 +125,46 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
 	return sortedTasks;
 }
 /**
- * Sort tasks by groups in this order: Invalid => Overdue => Due => Has due, but not due => No due specified;
+ * Sort tasks by groups in this order:
+ * - Invalid
+ * - Overdue
+ * - Due
+ * - Has due, but not due
+ * - No due specified
  */
-export function sortByDueDate(tasks: TheTask[]): TheTask[] {
+export function sortByDueDate(tasks: TheTask[], mixHasDueNotDueAndDoesntHaveADue = false): TheTask[] {
+	const invalidDue = tasks.filter(t => t.due?.isDue === IsDue.Invalid);
 	const overdueTasks = tasks.filter(t => t.due?.isDue === IsDue.Overdue);
 	const dueTasks = tasks.filter(t => t.due?.isDue === IsDue.Due);
-	const invalidDue = tasks.filter(t => t.due?.isDue === IsDue.Invalid);
 	const dueSpecifiedButNotDue = tasks.filter(t => t.due?.isDue === IsDue.NotDue);
 	const dueNotSpecified = tasks.filter(t => !t.due);
+
+	let sortedLast = [
+		...sortTasks(dueSpecifiedButNotDue, SortProperty.NotDue),
+		...dueNotSpecified,
+	];
+
+	if (mixHasDueNotDueAndDoesntHaveADue) {
+		sortedLast = sortTasks(sortedLast, SortProperty.Priority);
+	}
 
 	return [
 		...invalidDue,
 		...sortTasks(overdueTasks, SortProperty.Overdue),
 		...dueTasks,
-		...sortTasks(dueSpecifiedButNotDue, SortProperty.NotDue),
-		...dueNotSpecified,
+		...sortedLast,
 	];
 }
 
 /**
  * Favorite tasks grouped and above everything else.
  *
- * Groups are in this order: Invalid => Overdue => Due => Has due, but not due => No due specified;
+ * Groups are in this order:
+ * - Invalid
+ * - Overdue
+ * - Due
+ * - Has due, but not due
+ * - No due specified
  *
  * With secondary sort by priority.
  */
@@ -157,6 +175,20 @@ export function defaultSortTasks(tasks: TheTask[]): TheTask[] {
 	return [
 		...sortByDueDate(sortTasks(favoriteTasks, SortProperty.Priority)),
 		...sortByDueDate(sortTasks(notFavoriteTasks, SortProperty.Priority)),
+	];
+}
+/**
+ * Sort tasks for commands such as `todomd.getNextTask`,
+ * `todomd.getFewNextTasks`, `todomd.completeTask` to get
+ * the highest priority/most due tasks first.
+ */
+export function nextSort(tasks: TheTask[]): TheTask[] {
+	const favoriteTasks = tasks.filter(task => task.favorite);
+	const notFavoriteTasks = tasks.filter(task => !task.favorite);
+
+	return [
+		...sortByDueDate(sortTasks(favoriteTasks, SortProperty.Priority), true),
+		...sortByDueDate(sortTasks(notFavoriteTasks, SortProperty.Priority), true),
 	];
 }
 

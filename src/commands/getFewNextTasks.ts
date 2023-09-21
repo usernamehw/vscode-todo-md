@@ -1,7 +1,7 @@
 import { window } from 'vscode';
-import { $config, $state, updateState } from '../extension';
-import { defaultSortTasks } from '../sort';
 import { TheTask } from '../TheTask';
+import { $config, $state, updateState } from '../extension';
+import { nextSort } from '../sort';
 import { formatTask } from '../utils/taskUtils';
 import { fancyNumber } from '../utils/utils';
 
@@ -22,5 +22,5 @@ export async function getFewNextTasksCommand() {
 
 export function getNextFewTasks(): TheTask[] {
 	const tasks = $state.tasks.filter(t => !t.done);
-	return defaultSortTasks(tasks);
+	return nextSort(tasks);
 }

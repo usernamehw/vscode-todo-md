@@ -1,9 +1,9 @@
 import { QuickInputButton, QuickPickItem, ThemeIcon, window } from 'vscode';
+import { TheTask } from '../TheTask';
 import { Constants } from '../constants';
 import { revealTask, toggleDoneOrIncrementCountAtLines } from '../documentActions';
 import { $state, updateState } from '../extension';
-import { defaultSortTasks } from '../sort';
-import { TheTask } from '../TheTask';
+import { nextSort } from '../sort';
 import { updateAllTreeViews } from '../treeViewProviders/treeViews';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { forEachTask, formatTask, getTaskAtLineExtension } from '../utils/taskUtils';
@@ -82,7 +82,7 @@ export async function completeTask() {
 }
 
 function sortedNotCompletedTasks(tasks: TheTask[]): TheTask[] {
-	return defaultSortTasks(tasks)
+	return nextSort(tasks)
 		.filter(task => !task.done);
 }
 
