@@ -268,7 +268,7 @@
 				"todomd.counterBadgeEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Shows small badge to show a number of times the tag/project/context is present in the active document.",
-					"default": true
+					"default": false
 				},
 				"todomd.progressChartEnabled": {
 					"type": "boolean",
