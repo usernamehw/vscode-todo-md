@@ -23,7 +23,7 @@ $contextForeground: darken($contextBackground, 70%);
 $contextBorder: darken($contextBackground, 17%);
 $hoverDarkenPercent: 8%;
 $taskDetailsHeight: 10rem;
-$bodyPaddingTop: 4px + 4px + 24px;
+$filterInputHeight: 4px + 10px + 24px;
 $standardBorderRadius: 3px;
 
 body {
@@ -101,7 +101,7 @@ body {
 	margin: 0;
 	padding-left: 0;
 	padding-right: 0;
-	padding-top: #{$bodyPaddingTop};
+	padding-top: #{$filterInputHeight};
 	position: relative;
 	-webkit-text-stroke: 0 !important;
 	transform: translateZ(0);// where are those values coming from?
@@ -216,13 +216,13 @@ a {
 // ────────────────────────────────────────────────────────────
 .task-list {
 	font-family: var(--font-family);
-	height: calc(100vh - 4px - 4px - 24px);
+	height: calc(100vh - #{$filterInputHeight});
 	line-height: var(--line-height);
 	overflow-x: hidden;
 	overflow-y: var(--list-scrollbar-value);
 
 	&--details-visible {
-		height: calc(100vh - 4px - 4px - 24px - #{$taskDetailsHeight});
+		height: calc(100vh - #{$filterInputHeight} - #{$taskDetailsHeight});
 	}
 }
 // ────────────────────────────────────────────────────────────
@@ -559,7 +559,7 @@ a {
 // ──── Welcome ───────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────
 .welcome {
-	margin-top: -$bodyPaddingTop;
+	margin-top: -$filterInputHeight;
 
 	&__text {
 		display: block;
