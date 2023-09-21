@@ -69,14 +69,15 @@ body {
 
 	--due-fg: #01c208;
 	--due-bg: #01c20812;
-	--due-border: #01c20830;
+	--due-border: #01c20840;
 
 	--not-due-bg: #e9e9e9dd;
+	--not-due-fg: inherit;
 	--not-due-border: #bebebe86;
 
 	--overdue-fg: #d3000099;
 	--overdue-bg: #d3000012;
-	--overdue-border: #d3000020;
+	--overdue-border: #d3000030;
 
 	--due-invalid-fg: #7284eb;
 	--due-invalid-bg: #7284eb12;
@@ -120,13 +121,13 @@ body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 
 	--tag-padding: 1px 4px;
 
-	--tag-bg: #029cdf;
+	--tag-bg: #{darken(#029cdf, 5%)};
 	--tag-fg: #{darken(#ffffff, 2.5%)};
 
-	--project-bg: #{darken(#36cc9a, 10%)};
+	--project-bg: #{darken(#36cc9a, 5%)};
 	--project-fg: #{darken(#ffffff, 2.5%)};
 
-	--context-bg: #7284eb;
+	--context-bg: #{darken(#7284eb, 5%)};
 	--context-fg: #{darken(#ffffff, 2.5%)};
 
 	--count-bg: #ffffff1a;
@@ -140,13 +141,14 @@ body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 
 	--due-fg: #35c03a;
 	--due-bg: #35c03a16;
-	--due-border: #35c03a90;
+	--due-border: #35c03abb;
 
 	--overdue-fg: #ff6868;
 	--overdue-bg: #fc424216;
-	--overdue-border: #ff686890;
+	--overdue-border: #ff6868bb;
 
 	--not-due-bg: #dadada30;
+	--not-due-fg: #{darken(#ffffff, 10%)};
 	--not-due-border: #bebebe29;
 
 	--twistie-hover-bg: rgba(255, 255, 255, 0.1);
@@ -398,6 +400,7 @@ a {
 		&--not-due {
 			background-color: var(--not-due-bg);
 			border: 1px solid var(--not-due-border);
+			color: var(--not-due-fg);
 		}
 
 		&--overdue {
@@ -589,7 +592,7 @@ a {
 		left: 0;
 		margin: 0;
 		margin-left: 0;
-		margin-right: 4px;
+		margin-right: 0.4em;
 		padding: 0;
 		position: relative;
 		right: 0;
