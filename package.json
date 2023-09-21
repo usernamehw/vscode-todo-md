@@ -1775,18 +1775,20 @@
 		"views": {
 			"todomd": [
 				{
-					"id": "todomd.tags",
-					"name": "Tags",
-					"visibility": "collapsed"
-				},
-				{
-					"id": "todomd.due",
-					"name": "Due",
-					"visibility": "collapsed"
+					"type": "webview",
+					"id": "todomd.webviewTasks",
+					"contextualTitle": "Tasks",
+					"name": "Webview",
+					"icon": "$(check)"
 				},
 				{
 					"id": "todomd.tasks",
 					"name": "Tasks"
+				},
+				{
+					"id": "todomd.tags",
+					"name": "Tags",
+					"visibility": "collapsed"
 				},
 				{
 					"id": "todomd.projects",
@@ -1804,6 +1806,11 @@
 					"visibility": "collapsed"
 				},
 				{
+					"id": "todomd.due",
+					"name": "Due",
+					"visibility": "collapsed"
+				},
+				{
 					"id": "todomd.generic1",
 					"name": "Generic1",
 					"when": "todomd:generic1FilterExists"
@@ -1817,13 +1824,6 @@
 					"id": "todomd.generic3",
 					"name": "Generic3",
 					"when": "todomd:generic3FilterExists"
-				},
-				{
-					"type": "webview",
-					"id": "todomd.webviewTasks",
-					"contextualTitle": "Tasks",
-					"name": "Webview",
-					"icon": "$(check)"
 				}
 			]
 		}
