@@ -23,6 +23,7 @@ $contextForeground: darken($contextBackground, 70%);
 $contextBorder: darken($contextBackground, 17%);
 $hoverDarkenPercent: 8%;
 $taskDetailsHeight: 10rem;
+$bodyPaddingTop: 4px + 4px + 24px;
 
 body {
 	--border-low-contrast: #cecece6c;
@@ -98,7 +99,7 @@ body {
 	margin: 0;
 	padding-left: 0;
 	padding-right: 0;
-	padding-top: calc(4px + 4px + 24px);
+	padding-top: #{$bodyPaddingTop};
 	position: relative;
 	-webkit-text-stroke: 0 !important;
 	transform: translateZ(0);// where are those values coming from?
@@ -544,6 +545,8 @@ a {
 // ──── Welcome ───────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────
 .welcome {
+	margin-top: -$bodyPaddingTop;
+
 	&__text {
 		display: block;
 		margin: 1em 20px;

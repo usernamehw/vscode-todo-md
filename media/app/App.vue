@@ -1,32 +1,34 @@
 <template>
 <div>
-    <header>
-        <Suggest ref="suggest"
-                 :value="storeStore.filterInputValue"
-                 :suggestItems="storeStore.suggestItems"
-                 :autoshow="storeStore.config.webview.autoShowSuggest"
-                 @input="onInput"
-                 @keydownDown="onDown"
-                 @keydownUp="onUp" />
-    </header>
-    <div v-if="storeStore.filteredSortedTasks.tasks && storeStore.filteredSortedTasks.tasks.length"
-         ref="taskList"
-         class="task-list"
-         :class="{ 'task-list--details-visible': taskDetailsVisible }"
-         @scroll.passive="onTaskListScroll">
-        <Task v-for="task of storeStore.filteredSortedTasks.tasks"
-              :key="task.lineNumber + task.rawText"
-              :model="task" />
-    </div>
-
-    <TaskDetails v-show="taskDetailsVisible"
-                 ref="taskDetails" />
-
     <div v-if="!storeStore.defaultFileSpecified && !storeStore.activeDocumentOpened"
          class="welcome">
         <p class="welcome__text">Default file path (<code>todomd.defaultFile</code> setting) is not set.</p>
         <div><a class="btn btn--welcome"
                 href="command:todomd.showDefaultFileSetting">Specify Default File Path</a></div>
+    </div>
+
+    <div v-else>
+        <header>
+            <Suggest ref="suggest"
+                     :value="storeStore.filterInputValue"
+                     :suggestItems="storeStore.suggestItems"
+                     :autoshow="storeStore.config.webview.autoShowSuggest"
+                     @input="onInput"
+                     @keydownDown="onDown"
+                     @keydownUp="onUp" />
+        </header>
+        <div v-if="storeStore.filteredSortedTasks.tasks && storeStore.filteredSortedTasks.tasks.length"
+             ref="taskList"
+             class="task-list"
+             :class="{ 'task-list--details-visible': taskDetailsVisible }"
+             @scroll.passive="onTaskListScroll">
+            <Task v-for="task of storeStore.filteredSortedTasks.tasks"
+                  :key="task.lineNumber + task.rawText"
+                  :model="task" />
+        </div>
+
+        <TaskDetails v-show="taskDetailsVisible"
+                     ref="taskDetails" />
     </div>
 
     <vue-final-modal v-model="isNewTaskModalVisible"
