@@ -272,6 +272,10 @@ export interface ExtensionConfig {
 		 */
 		showCheckbox: boolean;
 		/**
+		 * Controls whether nested tasks indicator (like 0/10) is shown in the webview.
+		 */
+		showNestedCounter: boolean;
+		/**
 		 * When true - show notification after completing a task.
 		 */
 		notificationsEnabled: boolean;
