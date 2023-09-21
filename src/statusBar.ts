@@ -69,8 +69,7 @@ export class MainStatusBar extends StatusBar {
 		if (!$config.statusBarMainEnabled) {
 			return;
 		}
-		const firstTaskFormatted = formatTask(fewNextTasks[0]);
-		this.updateText(firstTaskFormatted);
+		this.updateText(fewNextTasks.length ? formatTask(fewNextTasks[0]) : '');
 		const markdown = new MarkdownString(undefined, true);
 		markdown.isTrusted = true;
 		// TODO: use markdown formatting instead of formatTask()
