@@ -4,6 +4,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ConfigurationChangeEvent, ExtensionContext, Range, TextDocument, window, workspace } from 'vscode';
+import { TheTask } from './TheTask';
 import { registerAllCommands } from './commands';
 import { Constants } from './constants';
 import { updateEditorDecorationStyle } from './decorations';
@@ -17,7 +18,6 @@ import { disposeReferenceProvider } from './languageFeatures/referenceProvider';
 import { disposeRenameProvider } from './languageFeatures/renameProvider';
 import { parseDocument } from './parse';
 import { CounterStatusBar, MainStatusBar } from './statusBar';
-import { TheTask } from './TheTask';
 import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
 import { ExtensionConfig, ItemForProvider, VscodeContext } from './types';
 import { updateUserSuggestItems } from './userSuggestItems';
@@ -105,6 +105,7 @@ export async function activate(context: ExtensionContext) {
 	updateAllTreeViews();
 	updateArchivedTasks();
 	updateIsDevContext();
+	updateArchivedFilePathNotSetContext();
 
 	updateLanguageFeatures();
 	updateOnDidChangeActiveEditor();
@@ -127,11 +128,15 @@ export async function activate(context: ExtensionContext) {
 		mainStatusBar.show();
 		onChangeActiveTextEditor(window.activeTextEditor);
 		updateIsDevContext();
+		updateArchivedFilePathNotSetContext();
 	}
 	function updateIsDevContext() {
 		if (process.env.NODE_ENV === 'development' || $config.isDev) {
 			setContext(VscodeContext.IsDev, true);
 		}
+	}
+	function updateArchivedFilePathNotSetContext() {
+		setContext(VscodeContext.ArchivedFileNotSpecified, !$config.defaultArchiveFile);
 	}
 
 	context.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));

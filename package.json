@@ -1831,7 +1831,14 @@
 					"when": "todomd:generic3FilterExists"
 				}
 			]
-		}
+		},
+		"viewsWelcome": [
+			{
+				"view": "todomd.archived",
+				"enablement": "todomd:archivedFileNotSpecified",
+				"contents": "Archived file path not set.\n\n[Pick file to use as archived file](command:todomd.specifyDefaultArchiveFile)"
+			}
+		]
 	},
 	"browserslist": [
 		"chrome 102"

@@ -332,6 +332,7 @@ export const enum VscodeContext {
 	Generic1FilterExists = 'todomd:generic1FilterExists',
 	Generic2FilterExists = 'todomd:generic2FilterExists',
 	Generic3FilterExists = 'todomd:generic3FilterExists',
+	ArchivedFileNotSpecified = 'todomd:archivedFileNotSpecified',
 }
 /**
  * Helper type makes all properties optional with exceptions of required ones
