@@ -365,7 +365,7 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 				dueDecorationRanges.push(dueRange);
 			} else if (due.isDue === IsDue.NotDue) {
 				notDueDecorationRanges.push(dueRange);
-			} else if (due.isDue === IsDue.Overdue) {
+			} else if (due.isDue === IsDue.Overdue && !task.done) {
 				overdueDecorationOptions.push({
 					range: dueRange,
 					renderOptions: {
