@@ -90,14 +90,14 @@ export function isTheRightFileName(editor: TextEditor): boolean {
 export function activateEditorFeatures(editor: TextEditor) {
 	$state.theRightFileOpened = true;
 	changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
-	$state.counterStatusBar.show();
+	$state.progressStatusBar.show();
 }
 /**
  * Deactivate document text change event listener.
  */
 export function deactivateEditorFeatures() {
 	changeTextDocumentDisposable?.dispose();
-	$state.counterStatusBar.hide();
+	$state.progressStatusBar.hide();
 }
 export function disposeEditorDisposables() {
 	disposeDecorations();
@@ -125,7 +125,7 @@ export const updateEverything = throttle(async (editor?: TextEditor) => {
 	await updateState();
 	if (editor && isTheRightFileName(editor)) {
 		doUpdateEditorDecorations(editor);
-		$state.counterStatusBar.update($state.tasks);
+		$state.progressStatusBar.update($state.tasks);
 		updateDiagnostic(editor, $state.tasksAsTree);
 	} else {
 		clearDiagnostics();

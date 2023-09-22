@@ -17,7 +17,7 @@ import { updateLanguageFeatures } from './languageFeatures/languageFeatures';
 import { disposeReferenceProvider } from './languageFeatures/referenceProvider';
 import { disposeRenameProvider } from './languageFeatures/renameProvider';
 import { parseDocument } from './parse';
-import { CounterStatusBar, MainStatusBar } from './statusBar';
+import { MainStatusBar, ProgressStatusBar } from './statusBar';
 import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
 import { ExtensionConfig, ItemForProvider, VscodeContext } from './types';
 import { updateUserSuggestItems } from './userSuggestItems';
@@ -75,7 +75,7 @@ export abstract class $state {
 	/** Main status be item (shows next task). */
 	static mainStatusBar: MainStatusBar;
 	/** Counter status bar item (in format `1/3 33%`) */
-	static counterStatusBar: CounterStatusBar;
+	static progressStatusBar: ProgressStatusBar;
 }
 
 export let $config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
@@ -86,7 +86,7 @@ export async function activate(context: ExtensionContext) {
 	$state.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
 	$state.mainStatusBar = new MainStatusBar();
-	$state.counterStatusBar = new CounterStatusBar();
+	$state.progressStatusBar = new ProgressStatusBar();
 	$state.editorLineHeight = getEditorLineHeight();
 	updateEditorDecorationStyle();
 	updateUserSuggestItems();
@@ -130,7 +130,7 @@ export async function activate(context: ExtensionContext) {
 		updateEditorDecorationStyle();
 		updateUserSuggestItems();
 		$state.mainStatusBar.createStatusBarItem();
-		$state.counterStatusBar.createStatusBarItem();
+		$state.progressStatusBar.createStatusBarItem();
 		onChangeActiveTextEditor(window.activeTextEditor);
 		updateIsDevContext();
 		updateArchivedFilePathNotSetContext();

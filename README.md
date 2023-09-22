@@ -182,7 +182,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.showRecurringUpcoming|**true**|Whether recurring upcoming (not due) tasks are shown or not in the webview.|
 |webview.showPriority|**true**|Controls whether priority is shown in the webview.|
 |webview.showCheckbox|**true**|Controls whether checkbox is shown in the webview.|
-|webview.showNestedCounter|**false**|Controls whether nested tasks indicator (like `0/10`) is shown in the webview.|
+|webview.showNestedTaskCount|**false**|Controls whether nested tasks indicator (like `0/10`) is shown in the webview.|
 |webview.showTaskDetails|**false**|EXPERIMENTAL. When true - show box on the bottom of the webview that shows selected task details.|
 |webview.notificationsEnabled|**false**|When true - show notification after some actions (like task completion) in a webview.|
 |webview.fontSize|"15px"|Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)|
@@ -213,7 +213,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |progressBackground|"\#c6cdd3"|Editor decoration for nested tasks progress (pie chart) background.|
 |progressForeground|"\#0077AA"|Editor decoration for nested tasks progress (pie chart) foreground.|
 |mainStatusBarItem|{...}|Configure appearance/behavior of main status bar item (shows next task to complete).|
-|counterStatusBarItem|{...}|Configure appearance/behavior of the counter status bar item (shows only when active text editor matches `#todomd.activatePattern#`) with text format: `1/3 33%`.|
+|progressStatusBarItem|{...}|Configure appearance/behavior of the progress status bar item (shows only when active text editor matches `#todomd.activatePattern#`) with text format: `1/3 33%`.|
 |addCreationDate|**false**|When creating a task add creation date to it: `{cr:2020-04-30}`|
 |completionDateIncludeDate|**true**|Whether to include date when completing a task: `{cm}` vs `{cm:2020-04-30}`|
 |completionDateIncludeTime|**false**|When completing a task add date and time: `{cm:2020-04-30T09:11:17}`|

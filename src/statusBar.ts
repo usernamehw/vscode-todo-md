@@ -3,10 +3,10 @@ import { TheTask } from './TheTask';
 import { CommandId } from './commands';
 import { Constants } from './constants';
 import { $config } from './extension';
+import { filterTasks } from './filter';
 import { getTasksHoverMd } from './languageFeatures/getTaskHover';
 import { formatTask } from './utils/taskUtils';
 import { percentage } from './utils/utils';
-import { filterTasks } from './filter';
 
 abstract class StatusBar {
 	protected statusBarItem!: StatusBarItem;
@@ -32,7 +32,7 @@ abstract class StatusBar {
 }
 
 
-export class CounterStatusBar extends StatusBar {
+export class ProgressStatusBar extends StatusBar {
 	constructor() {
 		super();
 		this.createStatusBarItem();
@@ -45,14 +45,14 @@ export class CounterStatusBar extends StatusBar {
 		this.dispose();
 		this.statusBarItem = window.createStatusBarItem(
 			`${Constants.ExtensionMenuPrefix} Counter ${Math.random()}`,
-			$config.counterStatusBarItem.alignment === 'left' ? StatusBarAlignment.Left : StatusBarAlignment.Right,
-			$config.counterStatusBarItem.priority,
+			$config.progressStatusBarItem.alignment === 'left' ? StatusBarAlignment.Left : StatusBarAlignment.Right,
+			$config.progressStatusBarItem.priority,
 		);
 		this.show();
 	}
 
 	show() {
-		if ($config.counterStatusBarItem.enabled) {
+		if ($config.progressStatusBarItem.enabled) {
 			this.statusBarItem.show();
 		} else {
 			this.statusBarItem.hide();
@@ -63,7 +63,7 @@ export class CounterStatusBar extends StatusBar {
 	 * @param tasks All tasks that percentage should be calculated from.
 	 */
 	update(tasks: TheTask[]) {
-		if (!$config.counterStatusBarItem.enabled) {
+		if (!$config.progressStatusBarItem.enabled) {
 			return;
 		}
 

@@ -97,7 +97,7 @@ export interface ExtensionConfig {
 	/**
 	 * Configure appearance/behavior of the counter status bar item (shows only when active text editor matches `#todomd.activatePattern#`) with text format: `1/3 33%`.
 	 */
-	counterStatusBarItem: {
+	progressStatusBarItem: {
 		enabled: boolean;
 		alignment: 'left' | 'right';
 		priority: number;
@@ -285,7 +285,7 @@ export interface ExtensionConfig {
 		/**
 		 * Controls whether nested tasks indicator (like 0/10) is shown in the webview.
 		 */
-		showNestedCounter: boolean;
+		showNestedTaskCount: boolean;
 		/**
 		 * When true - show notification after completing a task.
 		 */

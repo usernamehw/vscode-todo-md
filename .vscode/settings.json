@@ -25,7 +25,7 @@
 	"contributions.settings.replaceDefaultValue": {
 		"todomd.webview.fontFamily": "\"...\"",
 		"todomd.mainStatusBarItem": "{...}",
-		"todomd.counterStatusBarItem": "{...}",
+		"todomd.progressStatusBarItem": "{...}",
 		"todomd.decorations": "{...}",
 	}
 }
