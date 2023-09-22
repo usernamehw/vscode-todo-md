@@ -21,6 +21,7 @@ import { goToLine } from './commands/goToLine';
 import { goToLineInArchived } from './commands/goToLineInArchived';
 import { hideTask } from './commands/hideTask';
 import { incrementPriority } from './commands/incrementPriority';
+import { mainStatusBarCommand } from './commands/mainStatusBarCommand';
 import { moveToSomeday } from './commands/moveToSomeday';
 import { openDefaultArchiveFile } from './commands/openDefaultArchiveFile';
 import { openDefaultFile } from './commands/openDefaultFile';
@@ -115,6 +116,8 @@ export const enum CommandId {
 	ClearGlobalState = 'todomd.dev.clearGlobalState',
 	ShowGlobalState = 'todomd.dev.showGlobalState',
 	RemoveAllOverdue = 'todomd.dev.removeAllOverdue',
+	// ──── Internal ──────────────────────────────────────────────
+	MainStatusBarCommand = 'todomd.mainStatusBarCommand',
 }
 
 /**
@@ -176,6 +179,8 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.ArchiveCompletedTasks, archiveCompletedTasks);
 	commands.registerTextEditorCommand(CommandId.MoveToSomeday, moveToSomeday);
 	commands.registerTextEditorCommand(CommandId.SetDueDate, setDueDate);
+	// ──── Internal ──────────────────────────────────────────────
+	commands.registerCommand(CommandId.MainStatusBarCommand, mainStatusBarCommand);
 }
 /**
  * Append task to the file.

@@ -5,7 +5,7 @@ import { getNextFewTasks } from './commands/getFewNextTasks';
 import { Constants } from './constants';
 import { disposeDecorations, doUpdateEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
-import { $config, $state, counterStatusBar, mainStatusBar, updateLastVisitGlobalState, updateState } from './extension';
+import { $config, $state, updateLastVisitGlobalState, updateState } from './extension';
 import { clearDiagnostics, updateDiagnostic } from './languageFeatures/diagnostics';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
 import { VscodeContext } from './types';
@@ -90,14 +90,14 @@ export function isTheRightFileName(editor: TextEditor): boolean {
 export function activateEditorFeatures(editor: TextEditor) {
 	$state.theRightFileOpened = true;
 	changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
-	counterStatusBar.show();
+	$state.counterStatusBar.show();
 }
 /**
  * Deactivate document text change event listener.
  */
 export function deactivateEditorFeatures() {
 	changeTextDocumentDisposable?.dispose();
-	counterStatusBar.hide();
+	$state.counterStatusBar.hide();
 }
 export function disposeEditorDisposables() {
 	disposeDecorations();
@@ -125,11 +125,11 @@ export const updateEverything = throttle(async (editor?: TextEditor) => {
 	await updateState();
 	if (editor && isTheRightFileName(editor)) {
 		doUpdateEditorDecorations(editor);
-		counterStatusBar.update($state.tasks);
+		$state.counterStatusBar.update($state.tasks);
 		updateDiagnostic(editor, $state.tasksAsTree);
 	} else {
 		clearDiagnostics();
 	}
-	mainStatusBar.update(getNextFewTasks());
+	$state.mainStatusBar.update(getNextFewTasks());
 	updateAllTreeViews();
 }, Constants.ThrottleEverything);

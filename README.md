@@ -169,7 +169,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (61)
+## Settings (62)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -182,10 +182,11 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.showRecurringUpcoming|**true**|Whether recurring upcoming (not due) tasks are shown or not in the webview.|
 |webview.showPriority|**true**|Controls whether priority is shown in the webview.|
 |webview.showCheckbox|**true**|Controls whether checkbox is shown in the webview.|
+|webview.showNestedCounter|**false**|Controls whether nested tasks indicator (like `0/10`) is shown in the webview.|
 |webview.showTaskDetails|**false**|EXPERIMENTAL. When true - show box on the bottom of the webview that shows selected task details.|
 |webview.notificationsEnabled|**false**|When true - show notification after some actions (like task completion) in a webview.|
 |webview.fontSize|"15px"|Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)|
-|webview.fontFamily|"'Segoe UI', Tahoma, Geneva, Verdana, sans\-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'"|Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)|
+|webview.fontFamily|"..."|Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)|
 |webview.lineHeight|**1.4**|Controls line height in the webview.|
 |webview.padding|"2px"|Controls top & bottom padding. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/padding)|
 |webview.indentSize|"1.8em"|Controls visual indent of nested elements in a webview.|
@@ -207,12 +208,12 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |sortContextsView|"alphabetic"|Controls contexts Tree View sorting.|
 |sortNestedTasks|"default"|Controls nested tasks sorting in Tree Views.|
 |suggestItems|\{\}|This extension will only autocomplete tags/projects/contexts located in **1** file. This setting allows you to add items and their description(markdown) to autocomplete in all files (where extension is active). Examples: `#tag`, `+project`, `@context`.|
-|counterBadgeEnabled|**true**|Shows small badge to show a number of times the tag/project/context is present in the active document.|
+|counterBadgeEnabled|**false**|Shows small badge to show a number of times the tag/project/context is present in the active document.|
 |progressChartEnabled|**true**|Controls whether editor nested task decoration (pie chart) is shown or not.|
 |progressBackground|"\#c6cdd3"|Editor decoration for nested tasks progress (pie chart) background.|
 |progressForeground|"\#0077AA"|Editor decoration for nested tasks progress (pie chart) foreground.|
-|statusBarMainEnabled|**false**|Controls visibility of status bar that shows next tasks to complete.|
-|statusBarCounterEnabled|**true**|Controls visibility of status bar task progress item `1/3 33%`|
+|mainStatusBarItem|{...}|Configure appearance/behavior of main status bar item (shows next task to complete).|
+|counterStatusBarItem|{...}|Configure appearance/behavior of the counter status bar item (shows only when active text editor matches `#todomd.activatePattern#`) with text format: `1/3 33%`.|
 |addCreationDate|**false**|When creating a task add creation date to it: `{cr:2020-04-30}`|
 |completionDateIncludeDate|**true**|Whether to include date when completing a task: `{cm}` vs `{cm:2020-04-30}`|
 |completionDateIncludeTime|**false**|When completing a task add date and time: `{cm:2020-04-30T09:11:17}`|
@@ -235,7 +236,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |completedStrikeThrough|**true**|Show strike-through text decoration for completed tasks in editor.|
 |setDueDateThisWeekDay|"Friday"|Week day when using set due date command or suggest `SET_DUE_THIS_WEEK`.|
 |setDueDateNextWeekDay|"Friday"|Week day when using set due date command or suggest `SET_DUE_NEXT_WEEK`.|
-|decorations|\{"project":\{\},"context":\{\},"tag":\{\},"comment":\{\},"notDue":\{\},"due":\{\},"overdue":\{\},"invalidDue":\{\},"favorite":\{\},"priorityA":\{\},"priorityB":\{\},"priorityC":\{\},"priorityD":\{\},"priorityE":\{\},"priorityF":\{\},"completedTask":\{\}\}|Advanced decoration tweaking. Allowed values:<br>- `project`<br>- `context`<br>- `tag`<br>- `comment`<br>- `notDue`<br>- `context`<br>- `due`<br>- `overdue`<br>- `invalidDue`<br>- `favorite`<br>- `priorityA`<br>- `priorityB`<br>- `priorityC`<br>- `priorityD`<br>- `priorityE`<br>- `priorityF`<br>- `completedTask`<br>- `+someProject`<br>- `#someTag`<br>- `@someContext`<br> [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)|
+|decorations|{...}|Advanced text editor decoration tweaking. [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)|
 <!-- SETTINGS_END -->
 
 <!-- COLORS_START -->

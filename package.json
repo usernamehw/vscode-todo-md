@@ -77,7 +77,7 @@
 				},
 				"todomd.webview.showNestedCounter": {
 					"type": "boolean",
-					"markdownDescription": "Controls whether nested tasks indicator (like 0/10) is shown in the webview.",
+					"markdownDescription": "Controls whether nested tasks indicator (like `0/10`) is shown in the webview.",
 					"default": false
 				},
 				"todomd.webview.completionNotificationEnabled": {
@@ -295,12 +295,98 @@
 				"todomd.statusBarMainEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Controls visibility of status bar that shows next tasks to complete.",
+					"markdownDeprecationMessage": "Deprecated in favor of `#todomd.mainStatusBarItem#` setting.",
 					"default": false
+				},
+				"todomd.mainStatusBarItem": {
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"type": "boolean",
+							"markdownDescription": "Controls visibility of this status bar item.",
+							"default": false
+						},
+						"hoverEnabled": {
+							"type": "boolean",
+							"markdownDescription": "Controls whether or not to show hover for this status bar item",
+							"default": true
+						},
+						"alignment": {
+							"type": "string",
+							"default": "left",
+							"enum": [
+								"left",
+								"right"
+							]
+						},
+						"priority": {
+							"type": "integer",
+							"default": -20001
+						},
+						"onClick": {
+							"type": "string",
+							"enum": [
+								"completeTask",
+								"revealTask",
+								"nothing"
+							],
+							"default": "completeTask",
+							"markdownDescription": "Controls visibility of status bar that shows next tasks to complete."
+						},
+						"targetTasks": {
+							"type": "string",
+							"enum": [
+								"all",
+								"due"
+							],
+							"default": "all"
+						}
+					},
+					"default": {
+						"enabled": false,
+						"hoverEnabled": true,
+						"alignment": "left",
+						"priority": -20001,
+						"onClick": "completeTask",
+						"targetTasks": "all"
+					},
+					"additionalProperties": false,
+					"markdownDescription": "Configure appearance/behavior of main status bar item (shows next task to complete)."
 				},
 				"todomd.statusBarCounterEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Controls visibility of status bar task progress item `1/3 33%`",
-					"default": true
+					"markdownDeprecationMessage": "Deprecated in favor of `#todomd.mainStatusBarItem#` setting.",
+					"default": false
+				},
+				"todomd.counterStatusBarItem": {
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"type": "boolean",
+							"markdownDescription": "Controls visibility of this status bar item.",
+							"default": false
+						},
+						"alignment": {
+							"type": "string",
+							"default": "left",
+							"enum": [
+								"left",
+								"right"
+							]
+						},
+						"priority": {
+							"type": "integer",
+							"default": -20000
+						}
+					},
+					"default": {
+						"enabled": false,
+						"alignment": "left",
+						"priority": -20000
+					},
+					"additionalProperties": false,
+					"markdownDescription": "Configure appearance/behavior of the counter status bar item (shows only when active text editor matches `#todomd.activatePattern#`) with text format: `1/3 33%`."
 				},
 				"todomd.addCreationDate": {
 					"type": "boolean",
@@ -452,7 +538,7 @@
 				},
 				"todomd.decorations": {
 					"type": "object",
-					"markdownDescription": "Advanced decoration tweaking. Allowed values:\n\n- `project`\n- `context`\n- `tag`\n- `comment`\n- `notDue`\n- `context`\n- `due`\n- `overdue`\n- `invalidDue`\n- `favorite`\n- `priorityA`\n- `priorityB`\n- `priorityC`\n- `priorityD`\n- `priorityE`\n- `priorityF`\n- `completedTask`\n- `+someProject`\n- `#someTag`\n- `@someContext`\n\n [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)",
+					"markdownDescription": "Advanced text editor decoration tweaking. [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)",
 					"default": {
 						"project": {},
 						"context": {},

@@ -20,5 +20,12 @@
 		"todomd.dev.showGlobalState",
 		"todomd.dev.removeAllOverdue",
 		"todomd.addTaskToActiveFileWebview",
-	]
+		"todomd.mainStatusBarCommand"
+	],
+	"contributions.settings.replaceDefaultValue": {
+		"todomd.webview.fontFamily": "\"...\"",
+		"todomd.mainStatusBarItem": "{...}",
+		"todomd.counterStatusBarItem": "{...}",
+		"todomd.decorations": "{...}",
+	}
 }

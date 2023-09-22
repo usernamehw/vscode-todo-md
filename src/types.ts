@@ -84,13 +84,24 @@ export interface ExtensionConfig {
 	 */
 	confirmTaskDelete: 'always' | 'hasNestedTasks' | 'never';
 	/**
-	 * Controls visibility of status bar task progress item `1/3 33%`
+	 * Configure appearance/behavior of main status bar item (shows next task to complete).
 	 */
-	statusBarCounterEnabled: boolean;
+	mainStatusBarItem: {
+		enabled: boolean;
+		hoverEnabled: boolean;
+		alignment: 'left' | 'right';
+		priority: number;
+		onClick: 'completeTask' | 'nothing' | 'revealTask';
+		targetTasks: 'all' | 'due';
+	};
 	/**
-	 * Controls visibility of status bar that shows next tasks to complete.
+	 * Configure appearance/behavior of the counter status bar item (shows only when active text editor matches `#todomd.activatePattern#`) with text format: `1/3 33%`.
 	 */
-	statusBarMainEnabled: boolean;
+	counterStatusBarItem: {
+		enabled: boolean;
+		alignment: 'left' | 'right';
+		priority: number;
+	};
 	/**
 	 * Controls tags Tree View sorting.
 	 */

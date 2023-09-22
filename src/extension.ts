@@ -72,17 +72,21 @@ export abstract class $state {
 	static activeDocumentTabSize = 4;
 	/** Editor line height (in px) */
 	static editorLineHeight = 20;
+	/** Main status be item (shows next task). */
+	static mainStatusBar: MainStatusBar;
+	/** Counter status bar item (in format `1/3 33%`) */
+	static counterStatusBar: CounterStatusBar;
 }
 
 export let $config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
-export const counterStatusBar = new CounterStatusBar();
-export const mainStatusBar = new MainStatusBar();
 
 export async function activate(context: ExtensionContext) {
 	$state.extensionContext = context;
 	const lastVisitByFile = context.globalState.get<typeof $state['lastVisitByFile'] | undefined>(Constants.LastVisitByFileStorageKey);
 	$state.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
+	$state.mainStatusBar = new MainStatusBar();
+	$state.counterStatusBar = new CounterStatusBar();
 	$state.editorLineHeight = getEditorLineHeight();
 	updateEditorDecorationStyle();
 	updateUserSuggestItems();
@@ -125,7 +129,8 @@ export async function activate(context: ExtensionContext) {
 		$state.editorLineHeight = getEditorLineHeight();
 		updateEditorDecorationStyle();
 		updateUserSuggestItems();
-		mainStatusBar.show();
+		$state.mainStatusBar.createStatusBarItem();
+		$state.counterStatusBar.createStatusBarItem();
 		onChangeActiveTextEditor(window.activeTextEditor);
 		updateIsDevContext();
 		updateArchivedFilePathNotSetContext();
