@@ -122,13 +122,13 @@ body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 	--tag-padding: 1px 4px;
 
 	--tag-bg: #{darken(#029cdf, 5%)};
-	--tag-fg: #{darken(#ffffff, 2.5%)};
+	--tag-fg: #{darken(#ffffff, 5%)};
 
-	--project-bg: #{darken(#36cc9a, 5%)};
-	--project-fg: #{darken(#ffffff, 2.5%)};
+	--project-bg: #{darken(#36cc9a, 10%)};
+	--project-fg: #{darken(#ffffff, 5%)};
 
-	--context-bg: #{darken(#7284eb, 5%)};
-	--context-fg: #{darken(#ffffff, 2.5%)};
+	--context-bg: #{darken(#7284eb, 7.5%)};
+	--context-fg: #{darken(#ffffff, 5%)};
 
 	--count-bg: #ffffff1a;
 	--count-button-bg: #ffffff1a;
@@ -320,8 +320,8 @@ a {
 		cursor: pointer;
 		font-family: var(--vscode-editor-font-family);
 		font-size: calc(var(--font-family) - 15%);
-		margin-left: $approxOneSpace;
 		padding: var(--tag-padding);
+		height: calc(var(--font-size) + 2px);
 		white-space: pre;
 
 		&:hover {
@@ -337,7 +337,6 @@ a {
 		background-color: var(--tag-bg);
 		border-color: var(--tag-border);
 		color: var(--tag-fg);
-		margin-left: 3px;
 	}
 
 	&__project {
