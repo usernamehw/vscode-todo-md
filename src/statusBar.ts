@@ -1,10 +1,10 @@
 import { MarkdownString, StatusBarAlignment, StatusBarItem, window } from 'vscode';
+import { TheTask } from './TheTask';
 import { Constants } from './constants';
 import { $config } from './extension';
-import { TheTask } from './TheTask';
+import { getTasksHoverMd } from './languageFeatures/getTaskHover';
 import { formatTask } from './utils/taskUtils';
 import { percentage } from './utils/utils';
-import { getTaskHoverMd } from './languageFeatures/getTaskHover';
 
 abstract class StatusBar {
 	protected statusBarItem!: StatusBarItem;
@@ -71,7 +71,7 @@ export class MainStatusBar extends StatusBar {
 			return;
 		}
 		this.updateText(fewNextTasks.length ? formatTask(fewNextTasks[0]) : '');
-		this.updateHover(getTaskHoverMd(fewNextTasks.slice(0, $config.getNextNumberOfTasks)));
+		this.updateHover(getTasksHoverMd(fewNextTasks.slice(0, $config.getNextNumberOfTasks)));
 	}
 }
 

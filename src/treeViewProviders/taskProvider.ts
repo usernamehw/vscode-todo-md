@@ -2,7 +2,7 @@ import { Command, Event, EventEmitter, ThemeColor, ThemeIcon, TreeDataProvider, 
 import { TheTask } from '../TheTask';
 import { CommandId } from '../commands';
 import { $config } from '../extension';
-import { getTaskHoverMd } from '../languageFeatures/getTaskHover';
+import { getTasksHoverMd } from '../languageFeatures/getTaskHover';
 import { defaultSortTasks } from '../sort';
 import { SortNestedTasks } from '../types';
 import { formatTask } from '../utils/taskUtils';
@@ -58,7 +58,7 @@ export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
 	 * Resolve `tooltip` only on hover
 	 */
 	resolveTreeItem(item: TaskTreeItem, el: TaskTreeItem) {
-		el.tooltip = getTaskHoverMd([el.task]);
+		el.tooltip = getTasksHoverMd([el.task]);
 		return el;
 	}
 

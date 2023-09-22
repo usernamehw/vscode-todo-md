@@ -1,8 +1,8 @@
 import { Event, EventEmitter, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
-import { getTaskHoverMd } from '../languageFeatures/getTaskHover';
 import { TheTask } from '../TheTask';
+import { getTasksHoverMd } from '../languageFeatures/getTaskHover';
 import { ItemForProvider } from '../types';
-import { tasksToTreeItems, TaskTreeItem } from './taskProvider';
+import { TaskTreeItem, tasksToTreeItems } from './taskProvider';
 
 export class ContextTreeItem extends TreeItem {
 	readonly collapsibleState = TreeItemCollapsibleState.Collapsed;
@@ -34,7 +34,7 @@ export class ContextProvider implements TreeDataProvider<ContextTreeItem | TaskT
 	 */
 	resolveTreeItem(item: ContextTreeItem | TaskTreeItem, el: ContextTreeItem | TaskTreeItem) {
 		if (el instanceof TaskTreeItem) {
-			el.tooltip = getTaskHoverMd([el.task]);
+			el.tooltip = getTasksHoverMd([el.task]);
 			return el;
 		}
 		return undefined;

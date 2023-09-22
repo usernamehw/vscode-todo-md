@@ -8,7 +8,7 @@ import { IsDue } from '../types';
 import { helpGetColor } from '../utils/colors';
 import { getTaskAtLineExtension } from '../utils/taskUtils';
 import { getWordRangeAtPosition } from '../utils/vscodeUtils';
-import { getTaskHoverMd } from './getTaskHover';
+import { getTasksHoverMd } from './getTaskHover';
 import { getTodoMdFileDocumentSelector } from './languageFeatures';
 
 let hoverDisposable: Disposable | undefined;
@@ -53,7 +53,7 @@ export function updateHover() {
 							if (otherTask.lineNumber === task.lineNumber) {
 								continue;
 							}
-							otherMarkdownHovers.push(getTaskHoverMd([otherTask]));
+							otherMarkdownHovers.push(getTasksHoverMd([otherTask]));
 						}
 					} else if (parsedWord.type === 'context') {
 						const contextName = parsedWord.value;
@@ -65,7 +65,7 @@ export function updateHover() {
 							if (otherTask.lineNumber === task.lineNumber) {
 								continue;
 							}
-							otherMarkdownHovers.push(getTaskHoverMd([otherTask]));
+							otherMarkdownHovers.push(getTasksHoverMd([otherTask]));
 						}
 					} else if (parsedWord.type === 'tags') {
 						const tagName = parsedWord.value;
@@ -78,7 +78,7 @@ export function updateHover() {
 							if (otherTask.lineNumber === task.lineNumber) {
 								continue;
 							}
-							otherMarkdownHovers.push(getTaskHoverMd([otherTask]));
+							otherMarkdownHovers.push(getTasksHoverMd([otherTask]));
 						}
 					} else if (parsedWord.type === 'due') {
 						const dueHover = new MarkdownString(undefined, true);
@@ -92,7 +92,7 @@ export function updateHover() {
 				}
 				return new Hover([
 					hoveredWordUserDescription,
-					getTaskHoverMd([task]),
+					getTasksHoverMd([task]),
 					...otherMarkdownHovers,
 				]);
 			},
