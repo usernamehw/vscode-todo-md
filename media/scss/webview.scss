@@ -449,17 +449,24 @@ a {
 	}
 
 	&__duration {
+		float: left;
+		top: 2px;
+		position: relative;
+		height: calc(var(--font-size) + 2px);
+		border-radius: $standardBorderRadius;
+
 		align-items: center;
 		animation: AnimateBackground 5s ease infinite;
 		background-image: linear-gradient(270deg, var(--duration-animation-color1), var(--duration-animation-color2));
 		background-size: 400% 400%;
 		cursor: default;
 		display: inline-flex;
-		font-size: calc(var(--font-size) - 1px);
+		font-size: calc(var(--font-size) - 10%);
 		justify-content: center;
 		margin-right: $approxOneSpace;
-		margin-top: 1px;
 		padding: 1px 0.25em;
+
+
 		@keyframes AnimateBackground {
 			// https://www.gradient-animator.com
 			0% {

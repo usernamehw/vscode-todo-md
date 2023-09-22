@@ -96,10 +96,10 @@ function getTaskMarkdownAsString(task: TheTask): string {
 
 	taskTitle = resultWords.join(' ');
 
-	resultMdString += `${taskTitle}${count}${favorite}${due}\n\n`;
+	resultMdString += `${taskTitle}${count}${favorite}${due}`;
 
 	if (task.start) {
-		resultMdString += `<span>$(watch) ${durationTo(task, false, $config.durationIncludeSeconds)}</span>\n\n`;
+		resultMdString += `<span style="color:${helpGetColor('durationFg')};background-color:${helpGetColor('durationBg')};">&nbsp;$(watch) ${durationTo(task, false, $config.durationIncludeSeconds)}&nbsp;</span>`;
 	}
 
 	return resultMdString;
