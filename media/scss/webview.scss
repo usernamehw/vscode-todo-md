@@ -361,15 +361,13 @@ a {
 		padding: 0 0.3em;
 		position: relative;
 		top: 2px;
-		border: 1.2px solid deeppink;
+		border: 1px solid deeppink;
+		background-color: transparentize(deeppink, 0.95);
+		font-weight: bold !important;
 		color: deeppink;
 		padding-bottom: 0.15em;
 		padding-top: 0.15em;
 		border-radius: $standardBorderRadius;
-
-		.vscode-dark & {
-			border: 2px solid transparentize(deeppink, 0.5);
-		}
 	}
 	&__due-state {
 		align-items: center;
