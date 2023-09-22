@@ -1,3 +1,14 @@
+## 2.25.0 `22 Sep 2023`
+
+- ✨ [status bar] Add more control over main status bar item (`todomd.mainStatusBarItem` setting) - enabled/hoverEnabled/alignment/priority/onClick/targetTasks
+- ✨ [webview] Tweak CSS styles
+- ✨ [Tree View] Add welcome message for Archived Tree View to set file path if needed
+- 🐛 [editor] Only draw overdue decoration when task is not completed
+- 💥 [Tree View] Change default order of Views
+- 💥 [editor] Disable text counter badge decoration by default (`todomd.counterBadgeEnabled` setting)
+- 💥 [status bar] Disable counter (now named progress) status bar item by default (`todomd.progressStatusBarItem` setting)
+- 💥 [webview] Disable nested task count by default (`todomd.webview.showNestedTaskCount` setting)
+
 ## 2.24.0 `22 Jul 2023`
 
 - ✨ [Tree View] Use vscode checkbox api (`"todomd.treeView.useVscodeCheckboxApi"` setting)
