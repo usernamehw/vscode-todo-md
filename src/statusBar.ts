@@ -4,6 +4,7 @@ import { $config } from './extension';
 import { TheTask } from './TheTask';
 import { formatTask } from './utils/taskUtils';
 import { percentage } from './utils/utils';
+import { getTaskHoverMd } from './languageFeatures/getTaskHover';
 
 abstract class StatusBar {
 	protected statusBarItem!: StatusBarItem;
@@ -70,11 +71,7 @@ export class MainStatusBar extends StatusBar {
 			return;
 		}
 		this.updateText(fewNextTasks.length ? formatTask(fewNextTasks[0]) : '');
-		const markdown = new MarkdownString(undefined, true);
-		markdown.isTrusted = true;
-		// TODO: use markdown formatting instead of formatTask()
-		markdown.appendMarkdown(fewNextTasks.slice(0, 10).map((task, i) => `- ${formatTask(task)}`).join('\n'));
-		this.updateHover(markdown);
+		this.updateHover(getTaskHoverMd(fewNextTasks.slice(0, $config.getNextNumberOfTasks)));
 	}
 }
 

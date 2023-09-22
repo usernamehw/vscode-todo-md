@@ -53,7 +53,7 @@ export function updateHover() {
 							if (otherTask.lineNumber === task.lineNumber) {
 								continue;
 							}
-							otherMarkdownHovers.push(getTaskHoverMd(otherTask));
+							otherMarkdownHovers.push(getTaskHoverMd([otherTask]));
 						}
 					} else if (parsedWord.type === 'context') {
 						const contextName = parsedWord.value;
@@ -65,7 +65,7 @@ export function updateHover() {
 							if (otherTask.lineNumber === task.lineNumber) {
 								continue;
 							}
-							otherMarkdownHovers.push(getTaskHoverMd(otherTask));
+							otherMarkdownHovers.push(getTaskHoverMd([otherTask]));
 						}
 					} else if (parsedWord.type === 'tags') {
 						const tagName = parsedWord.value;
@@ -78,7 +78,7 @@ export function updateHover() {
 							if (otherTask.lineNumber === task.lineNumber) {
 								continue;
 							}
-							otherMarkdownHovers.push(getTaskHoverMd(otherTask));
+							otherMarkdownHovers.push(getTaskHoverMd([otherTask]));
 						}
 					} else if (parsedWord.type === 'due') {
 						const dueHover = new MarkdownString(undefined, true);
@@ -92,7 +92,7 @@ export function updateHover() {
 				}
 				return new Hover([
 					hoveredWordUserDescription,
-					getTaskHoverMd(task),
+					getTaskHoverMd([task]),
 					...otherMarkdownHovers,
 				]);
 			},

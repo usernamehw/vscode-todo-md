@@ -58,7 +58,7 @@ export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
 	 * Resolve `tooltip` only on hover
 	 */
 	resolveTreeItem(item: TaskTreeItem, el: TaskTreeItem) {
-		el.tooltip = getTaskHoverMd(el.task);
+		el.tooltip = getTaskHoverMd([el.task]);
 		return el;
 	}
 

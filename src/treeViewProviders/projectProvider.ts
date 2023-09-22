@@ -34,7 +34,7 @@ export class ProjectProvider implements TreeDataProvider<ProjectTreeItem | TaskT
 	 */
 	resolveTreeItem(item: ProjectTreeItem | TaskTreeItem, el: ProjectTreeItem | TaskTreeItem) {
 		if (el instanceof TaskTreeItem) {
-			el.tooltip = getTaskHoverMd(el.task);
+			el.tooltip = getTaskHoverMd([el.task]);
 			return el;
 		}
 		return undefined;

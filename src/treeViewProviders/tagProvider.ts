@@ -35,7 +35,7 @@ export class TagProvider implements TreeDataProvider<TagTreeItem | TaskTreeItem>
 	 */
 	resolveTreeItem(item: TagTreeItem | TaskTreeItem, el: TagTreeItem | TaskTreeItem) {
 		if (el instanceof TaskTreeItem) {
-			el.tooltip = getTaskHoverMd(el.task);
+			el.tooltip = getTaskHoverMd([el.task]);
 			return el;
 		}
 		return undefined;

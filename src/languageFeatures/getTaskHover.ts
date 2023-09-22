@@ -1,6 +1,6 @@
 import { MarkdownString } from 'vscode';
-import { $config } from '../extension';
 import { TheTask } from '../TheTask';
+import { $config } from '../extension';
 import { durationTo } from '../time/timeUtils';
 import { IsDue } from '../types';
 import { helpGetColor } from '../utils/colors';
@@ -8,81 +8,84 @@ import { helpGetColor } from '../utils/colors';
 /**
  * Transform task to show it in Tree View or Editor hover as markdown
  */
-export function getTaskHoverMd(task: TheTask) {
+export function getTaskHoverMd(tasks: TheTask[]): MarkdownString {
 	const markdown = new MarkdownString(undefined, true);
 	markdown.isTrusted = true;
-	const priorityColor = task.priority === 'A' ? '#ec4f47' :
-		task.priority === 'B' ? '#fd9f9a' :
-			task.priority === 'C' ? '#ffb648' :
-				task.priority === 'D' ? '#f1d900' :
-					task.priority === 'E' ? '#97c500' :
-						task.priority === 'F' ? '#00cfad' : undefined;
-	if (priorityColor) {
-		markdown.appendMarkdown(`<span style="background-color:${priorityColor};">&thinsp;</span>&nbsp;`);
-	}
-	if (task.done) {
-		markdown.appendMarkdown(`<span style="color:#7cc54b;">$(pass)</span> `);
-	}
 
-	let count = '';
-	if (task.count) {
-		count = ` \`[${task.count.current}/${task.count.needed}]\``;
-	}
-	let favorite = '';
-	if (task.favorite) {
-		favorite = ` <span title="Favorite task." style="color:${helpGetColor('favorite')};">$(heart)</span>`;
-	}
-	let due = '';
-	if (task.due || task.overdue) {
-		let dueColor = '';
-		let dueContent = '';
-		let codicon = '$(history)';
-		if (task.due?.isDue === IsDue.Due) {
-			dueColor = helpGetColor('due');
-		} else if (task.due?.isDue === IsDue.Overdue) {
-			dueColor = helpGetColor('overdue');
-			dueContent = String(task.due.overdueInDays);
-		} else if (task.due?.isDue === IsDue.NotDue) {
-			dueColor = helpGetColor('notDue');
-			dueContent = task.due.closestDueDateInTheFuture;
-		} else if (task.due?.isDue === IsDue.Invalid) {
-			dueColor = helpGetColor('invalid');
-			codicon = '$(error)';
-			dueContent = 'Invalid';
+	for (const task of tasks) {
+		const priorityColor = task.priority === 'A' ? '#ec4f47' :
+			task.priority === 'B' ? '#fd9f9a' :
+				task.priority === 'C' ? '#ffb648' :
+					task.priority === 'D' ? '#f1d900' :
+						task.priority === 'E' ? '#97c500' :
+							task.priority === 'F' ? '#00cfad' : undefined;
+		if (priorityColor) {
+			markdown.appendMarkdown(`<span style="background-color:${priorityColor};">&thinsp;</span>&nbsp;`);
 		}
-		if (dueContent) {
-			dueContent = ` ${dueContent}`;
+		if (task.done) {
+			markdown.appendMarkdown(`<span style="color:#7cc54b;">$(pass)</span> `);
 		}
-		due = ` <span style="color:${dueColor || 'inherit'};">|${codicon}${dueContent}|</span>&nbsp;`;
-	}
 
-	const words = task.title.split(' ');
-	let taskTitle = task.title;
-
-	const resultWords = [];
-	for (const word of words) {
-		if (
-			word.length > 1 &&
-			(word[0] === '#' || word[0] === '+' || word[0] === '@')
-		) {
-			if (word[0] === '#') {
-				resultWords.push(`<span style="color:#fff;background-color:#029cdf;">&nbsp;${word}&nbsp;</span>`);
-			} else if (word[0] === '+') {
-				resultWords.push(`<span style="color:#fff;background-color:#36cc9a;">&nbsp;${word}&nbsp;</span>`);
-			} else {
-				resultWords.push(`<span style="color:#fff;background-color:#7284eb;">&nbsp;${word}&nbsp;</span>`);
+		let count = '';
+		if (task.count) {
+			count = ` \`[${task.count.current}/${task.count.needed}]\``;
+		}
+		let favorite = '';
+		if (task.favorite) {
+			favorite = ` <span title="Favorite task." style="color:${helpGetColor('favorite')};">$(heart)</span>`;
+		}
+		let due = '';
+		if (task.due || task.overdue) {
+			let dueColor = '';
+			let dueContent = '';
+			let codicon = '$(history)';
+			if (task.due?.isDue === IsDue.Due) {
+				dueColor = helpGetColor('due');
+			} else if (task.due?.isDue === IsDue.Overdue) {
+				dueColor = helpGetColor('overdue');
+				dueContent = String(task.due.overdueInDays);
+			} else if (task.due?.isDue === IsDue.NotDue) {
+				dueColor = helpGetColor('notDue');
+				dueContent = task.due.closestDueDateInTheFuture;
+			} else if (task.due?.isDue === IsDue.Invalid) {
+				dueColor = helpGetColor('invalid');
+				codicon = '$(error)';
+				dueContent = 'Invalid';
 			}
-		} else {
-			resultWords.push(word);
+			if (dueContent) {
+				dueContent = ` ${dueContent}`;
+			}
+			due = ` <span style="color:${dueColor || 'inherit'};">|${codicon}${dueContent}|</span>&nbsp;`;
 		}
-	}
 
-	taskTitle = resultWords.join(' ');
+		const words = task.title.split(' ');
+		let taskTitle = task.title;
 
-	markdown.appendMarkdown(`${taskTitle}${count}${favorite}${due}\n\n`);
+		const resultWords = [];
+		for (const word of words) {
+			if (
+				word.length > 1 &&
+			(word[0] === '#' || word[0] === '+' || word[0] === '@')
+			) {
+				if (word[0] === '#') {
+					resultWords.push(`<span style="color:#fff;background-color:#029cdf;">&nbsp;${word}&nbsp;</span>`);
+				} else if (word[0] === '+') {
+					resultWords.push(`<span style="color:#fff;background-color:#36cc9a;">&nbsp;${word}&nbsp;</span>`);
+				} else {
+					resultWords.push(`<span style="color:#fff;background-color:#7284eb;">&nbsp;${word}&nbsp;</span>`);
+				}
+			} else {
+				resultWords.push(word);
+			}
+		}
 
-	if (task.start) {
-		markdown.appendMarkdown(`<span>$(watch) ${durationTo(task, false, $config.durationIncludeSeconds)}</span>\n\n`);
+		taskTitle = resultWords.join(' ');
+
+		markdown.appendMarkdown(`${taskTitle}${count}${favorite}${due}\n\n`);
+
+		if (task.start) {
+			markdown.appendMarkdown(`<span>$(watch) ${durationTo(task, false, $config.durationIncludeSeconds)}</span>\n\n`);
+		}
 	}
 
 	return markdown;
