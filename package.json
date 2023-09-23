@@ -323,6 +323,12 @@
 							"type": "integer",
 							"default": -20001
 						},
+						"truncate": {
+							"type": "integer",
+							"markdownDescription": "If the message length is longer - crop it at the end. `0` to disable.",
+							"minimum": 0,
+							"default": 0
+						},
 						"onClick": {
 							"type": "string",
 							"enum": [
@@ -347,6 +353,7 @@
 						"hoverEnabled": true,
 						"alignment": "left",
 						"priority": -20001,
+						"truncate": 0,
 						"onClick": "completeTask",
 						"targetTasks": "all"
 					},

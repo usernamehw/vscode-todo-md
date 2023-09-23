@@ -6,7 +6,7 @@ import { $config } from './extension';
 import { filterTasks } from './filter';
 import { getTasksHoverMd } from './languageFeatures/getTaskHover';
 import { formatTask } from './utils/taskUtils';
-import { percentage } from './utils/utils';
+import { percentage, truncate } from './utils/utils';
 
 abstract class StatusBar {
 	protected statusBarItem!: StatusBarItem;
@@ -110,7 +110,12 @@ export class MainStatusBar extends StatusBar {
 			nextTasksForStatusBar = filterTasks(fewNextTasks, '$due').tasks;
 		}
 
-		this.updateText(nextTasksForStatusBar.length ? formatTask(nextTasksForStatusBar[0]) : '');
+		let formattedTask = nextTasksForStatusBar.length ? formatTask(nextTasksForStatusBar[0]) : '';
+		if ($config.mainStatusBarItem.truncate) {
+			formattedTask = truncate(formattedTask, $config.mainStatusBarItem.truncate);
+		}
+
+		this.updateText(formattedTask);
 		const hover = $config.mainStatusBarItem.hoverEnabled ? getTasksHoverMd(nextTasksForStatusBar.slice(0, $config.getNextNumberOfTasks)) : '';
 		this.updateHover(hover);
 	}

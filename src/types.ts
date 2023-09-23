@@ -91,6 +91,7 @@ export interface ExtensionConfig {
 		hoverEnabled: boolean;
 		alignment: 'left' | 'right';
 		priority: number;
+		truncate: number;
 		onClick: 'completeTask' | 'nothing' | 'revealTask';
 		targetTasks: 'all' | 'due';
 	};

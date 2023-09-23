@@ -90,3 +90,10 @@ type Truthy<T> = T extends '' | 0 | false | null | undefined ? never : T;
 export function guardedBoolean<T>(value: T): value is Truthy<T> {
 	return Boolean(value);
 }
+/**
+ * Cut off the end of the string if it's longer than provided number of characters.
+ */
+export function truncate(str: string, maxLength: number): string {
+	const chars = [...str];
+	return chars.length > maxLength ? chars.slice(0, maxLength).join('') : str;
+}
