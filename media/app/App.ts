@@ -28,10 +28,9 @@ marked.Renderer.prototype.link = (href, title = '', text) => {
 		return `<a data-href="${href}" href="javascript:void(0);" title="${href}" class="${classes}">${text}</a>`;
 	}
 };
-// Deprecated. Silent the warnings.
+
 marked.use({
-	mangle: false,
-	headerIds: false,
+	gfm: true,
 });
 
 export default defineComponent({
