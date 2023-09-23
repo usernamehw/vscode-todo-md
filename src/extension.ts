@@ -60,7 +60,9 @@ export abstract class $state {
 	/** Comment line ranges */
 	static commentLines: Range[] = [];
 	/** If active text editor matches `activatePattern` config */
-	static theRightFileOpened = false;
+	static activeEditorMatchesActivatePattern = false;
+	/** If active text editor is archive file (matches `todomd.defaultArchiveFile` setting path). */
+	static isActiveFileTheArchiveFile = false;
 	/** Last time file was opened (for resetting completion of recurring tasks) */
 	static lastVisitByFile: Record<string, Date> = {};
 	/** Current filter value of tasks Tree View */
@@ -158,7 +160,8 @@ export async function updateState() {
 		$state.projectsForTreeView = [];
 		$state.contextsForTreeView = [];
 		$state.commentLines = [];
-		$state.theRightFileOpened = false;
+		$state.activeEditorMatchesActivatePattern = false;
+		$state.isActiveFileTheArchiveFile = false;
 		$state.activeDocument = undefined;
 		return;
 	}

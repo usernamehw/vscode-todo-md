@@ -7,7 +7,7 @@ import { disposeDecorations, doUpdateEditorDecorations } from './decorations';
 import { resetAllRecurringTasks } from './documentActions';
 import { $config, $state, updateLastVisitGlobalState, updateState } from './extension';
 import { clearDiagnostics, updateDiagnostic } from './languageFeatures/diagnostics';
-import { updateAllTreeViews } from './treeViewProviders/treeViews';
+import { updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
 import { setContext, VscodeContext } from './vscodeContext';
 
@@ -20,15 +20,16 @@ let changeActiveTextEditorDisposable: Disposable | undefined;
  * This event can be fired multiple times very quickly 5-20ms interval.
  */
 export async function onChangeActiveTextEditor(editor: TextEditor | undefined): Promise<void> {
-	if ($state.theRightFileOpened) {
+	if ($state.activeEditorMatchesActivatePattern) {
 		deactivateEditorFeatures();
 	}
-	if (editor && isTheRightFileName(editor)) {
+	if (editor && isActiveFileMatchesActivatePattern(editor)) {
 		$state.activeDocument = editor.document;
 		$state.activeDocumentTabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : $config.tabSize;
 		await updateEverything(editor);
 		activateEditorFeatures(editor);
 		await setContext(VscodeContext.IsActive, true);
+		$state.isActiveFileTheArchiveFile = isActiveFileTheArchiveFile(editor);
 
 		const needReset = checkIfNeedResetRecurringTasks(editor.document.uri.toString());
 		if (needReset) {
@@ -39,10 +40,14 @@ export async function onChangeActiveTextEditor(editor: TextEditor | undefined): 
 	} else {
 		$state.activeDocument = await getDocumentForDefaultFile();
 		$state.activeDocumentTabSize = $config.tabSize;
-		$state.theRightFileOpened = false;
+		$state.activeEditorMatchesActivatePattern = false;
+		$state.isActiveFileTheArchiveFile = false;
 		await updateEverything();
 		await setContext(VscodeContext.IsActive, false);
 	}
+}
+function isActiveFileTheArchiveFile(editor: TextEditor): boolean {
+	return editor.document.uri.fsPath === $config.defaultArchiveFile;
 }
 /**
  * Only run reset all recurring tasks when needed (first open file in a day)
@@ -71,14 +76,18 @@ export function checkIfNeedResetRecurringTasks(filePath: string): {lastVisit: Da
  */
 export function onChangeTextDocument(e: TextDocumentChangeEvent) {
 	const activeTextEditor = window.activeTextEditor;
-	if (activeTextEditor && $state.theRightFileOpened) {
+	if (activeTextEditor && $state.activeEditorMatchesActivatePattern) {
 		updateEverything(activeTextEditor);
+
+		if ($state.isActiveFileTheArchiveFile) {
+			updateArchivedTasks();
+		}
 	}
 }
 /**
  * Match Uri of editor against a glob specified by user.
  */
-export function isTheRightFileName(editor: TextEditor): boolean {
+export function isActiveFileMatchesActivatePattern(editor: TextEditor): boolean {
 	return languages.match({
 		pattern: $config.activatePattern,
 	},	editor.document) !== 0;
@@ -87,7 +96,7 @@ export function isTheRightFileName(editor: TextEditor): boolean {
  * Activate document text change event listener.
  */
 export function activateEditorFeatures(editor: TextEditor) {
-	$state.theRightFileOpened = true;
+	$state.activeEditorMatchesActivatePattern = true;
 	changeTextDocumentDisposable = workspace.onDidChangeTextDocument(onChangeTextDocument);
 	$state.progressStatusBar.show();
 }
@@ -122,7 +131,7 @@ export function disposeActiveEditorChange() {
  */
 export const updateEverything = throttle(async (editor?: TextEditor) => {
 	await updateState();
-	if (editor && isTheRightFileName(editor)) {
+	if (editor && isActiveFileMatchesActivatePattern(editor)) {
 		doUpdateEditorDecorations(editor);
 		$state.progressStatusBar.update($state.tasks);
 		updateDiagnostic(editor, $state.tasksAsTree);
