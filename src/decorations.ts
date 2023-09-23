@@ -365,15 +365,19 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 				dueDecorationRanges.push(dueRange);
 			} else if (due.isDue === IsDue.NotDue) {
 				notDueDecorationRanges.push(dueRange);
-			} else if (due.isDue === IsDue.Overdue && !task.done) {
-				overdueDecorationOptions.push({
-					range: dueRange,
-					renderOptions: {
-						after: {
-							contentText: `${due.overdueInDays}d`,
+			} else if (due.isDue === IsDue.Overdue) {
+				if (!task.done) {
+					overdueDecorationOptions.push({
+						range: dueRange,
+						renderOptions: {
+							after: {
+								contentText: `${due.overdueInDays}d`,
+							},
 						},
-					},
-				});
+					});
+				} else {
+					notDueDecorationRanges.push(dueRange);
+				}
 				if (task.overdueRange) {
 					specialtagDecorationRanges.push(task.overdueRange);
 				}
