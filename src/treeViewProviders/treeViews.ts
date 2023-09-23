@@ -330,15 +330,17 @@ function sortItemsForProvider(items: ItemForProvider[], sortType: TreeItemSortTy
 }
 
 /**
- * Updates state and Tree View for archived tasks
+ * Updates state and the Archived Tree View.
  */
-export async function updateArchivedTasks() {
+export async function updateArchivedTasks(): Promise<void> {
 	if (!$config.defaultArchiveFile) {
-		return;
+		$state.archivedTasks = [];
+	} else {
+		const archivedDocument = await getArchivedDocument();
+		const parsedArchiveTasks = await parseDocument(archivedDocument);
+		$state.archivedTasks = parsedArchiveTasks.tasks;
 	}
-	const archivedDocument = await getArchivedDocument();
-	const parsedArchiveTasks = await parseDocument(archivedDocument);
-	$state.archivedTasks = parsedArchiveTasks.tasks;
+
 	updateArchivedTasksTreeView();
 }
 /**

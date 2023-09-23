@@ -134,6 +134,7 @@ export async function activate(context: ExtensionContext) {
 		onChangeActiveTextEditor(window.activeTextEditor);
 		updateIsDevContext();
 		updateArchivedFilePathNotSetContext();
+		updateArchivedTasks();
 	}
 	function updateIsDevContext() {
 		if (process.env.NODE_ENV === 'development' || $config.isDev) {
