@@ -32,7 +32,6 @@ import { resetAllRecurringTasksCommand } from './commands/resetAllRecurringTasks
 import { setDueDate } from './commands/setDueDate';
 import { setDueDateWithArgs } from './commands/setDueDateWithArgs';
 import { setLastVisit } from './commands/setLastVisit';
-import { showDefaultFileSetting } from './commands/showDefaultFileSetting';
 import { showGlobalState } from './commands/showGlobalState';
 import { showWebviewSettings } from './commands/showWebviewSettings';
 import { specifyDefaultArchiveFileCommand } from './commands/specifyDefaultArchiveFile';
@@ -105,7 +104,6 @@ export const enum CommandId {
 	IncrementPriority = 'todomd.incrementPriority',
 	DecrementPriority = 'todomd.decrementPriority',
 	ShowWebviewSettings = 'todomd.showWebviewSettings',
-	ShowDefaultFileSetting = 'todomd.showDefaultFileSetting',
 	WebviewToggleShowRecurringUpcoming = 'todomd.webview.toggleShowRecurringUpcoming',
 	ToggleComment = 'todomd.toggleComment',
 	ToggleTagsTreeViewSorting = 'todomd.toggleTagsTreeViewSorting',
@@ -154,7 +152,6 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.GoToLineInArchived, goToLineInArchived);
 	commands.registerCommand(CommandId.FollowLink, followLinkCommand);
 	commands.registerCommand(CommandId.ShowWebviewSettings, showWebviewSettings);
-	commands.registerCommand(CommandId.ShowDefaultFileSetting, showDefaultFileSetting);
 	commands.registerCommand(CommandId.WebviewToggleShowRecurringUpcoming, webviewToggleShowRecurringUpcoming);
 	commands.registerCommand(CommandId.ToggleTagsTreeViewSorting, toggleTagsTreeViewSorting);
 	commands.registerCommand(CommandId.ToggleProjectsTreeViewSorting, toggleProjectsTreeViewSorting);
