@@ -346,6 +346,28 @@
 								"due"
 							],
 							"default": "all"
+						},
+						"highlightOverdue": {
+							"type": "string",
+							"enum": [
+								"none",
+								"errorBg",
+								"errorFg",
+								"warningBg",
+								"warningFg"
+							],
+							"default": "none"
+						},
+						"highlightDue": {
+							"type": "string",
+							"enum": [
+								"none",
+								"errorBg",
+								"errorFg",
+								"warningBg",
+								"warningFg"
+							],
+							"default": "none"
 						}
 					},
 					"default": {
@@ -355,7 +377,9 @@
 						"priority": -20001,
 						"truncate": 0,
 						"onClick": "completeTask",
-						"targetTasks": "all"
+						"targetTasks": "all",
+						"highlightOverdue": "none",
+						"highlightDue": "none"
 					},
 					"additionalProperties": false,
 					"markdownDescription": "Configure appearance/behavior of main status bar item (shows next task to complete)."

@@ -94,6 +94,8 @@ export interface ExtensionConfig {
 		truncate: number;
 		onClick: 'completeTask' | 'nothing' | 'revealTask';
 		targetTasks: 'all' | 'due';
+		highlightOverdue: 'errorBg' | 'errorFg' | 'none' | 'warningBg' | 'warningFg';
+		highlightDue: 'errorBg' | 'errorFg' | 'none' | 'warningBg' | 'warningFg';
 	};
 	/**
 	 * Configure appearance/behavior of the counter status bar item (shows only when active text editor matches `#todomd.activatePattern#`) with text format: `1/3 33%`.

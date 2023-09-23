@@ -1,10 +1,11 @@
-import { MarkdownString, StatusBarAlignment, StatusBarItem, window } from 'vscode';
+import { MarkdownString, StatusBarAlignment, StatusBarItem, ThemeColor, window } from 'vscode';
 import { TheTask } from './TheTask';
 import { CommandId } from './commands';
 import { Constants } from './constants';
 import { $config } from './extension';
 import { filterTasks } from './filter';
 import { getTasksHoverMd } from './languageFeatures/getTaskHover';
+import { ExtensionConfig, IsDue } from './types';
 import { formatTask } from './utils/taskUtils';
 import { percentage, truncate } from './utils/utils';
 
@@ -81,7 +82,7 @@ export class MainStatusBar extends StatusBar {
 	/**
 	 * Dispose and create/recreate status bar item. Happens only on extension config change.
 	 */
-	createStatusBarItem() {
+	createStatusBarItem(): void {
 		this.dispose();
 		this.statusBarItem = window.createStatusBarItem(
 			`${Constants.ExtensionMenuPrefix} Main ${Math.random()}`,
@@ -92,7 +93,7 @@ export class MainStatusBar extends StatusBar {
 		this.show();
 	}
 
-	show() {
+	show(): void {
 		if ($config.mainStatusBarItem.enabled) {
 			this.statusBarItem.show();
 		} else {
@@ -100,7 +101,7 @@ export class MainStatusBar extends StatusBar {
 		}
 	}
 
-	update(fewNextTasks: TheTask[]) {
+	update(fewNextTasks: TheTask[]): void {
 		if (!$config.mainStatusBarItem.enabled) {
 			return;
 		}
@@ -109,15 +110,56 @@ export class MainStatusBar extends StatusBar {
 		if ($config.mainStatusBarItem.targetTasks === 'due') {
 			nextTasksForStatusBar = filterTasks(fewNextTasks, '$due').tasks;
 		}
+		const nextTask = nextTasksForStatusBar[0];
 
-		let formattedTask = nextTasksForStatusBar.length ? formatTask(nextTasksForStatusBar[0]) : '';
+		let formattedTask = nextTasksForStatusBar.length ? formatTask(nextTask) : '';
 		if ($config.mainStatusBarItem.truncate) {
 			formattedTask = truncate(formattedTask, $config.mainStatusBarItem.truncate);
 		}
 
 		this.updateText(formattedTask);
+
+		const isOverdue = nextTask.due?.isDue === IsDue.Overdue;
+		const isDue = nextTask.due?.isDue === IsDue.Due;
+		this.updateHighlighting(isOverdue ? 'overdue' : isDue ? 'due' : 'notDue');
+
 		const hover = $config.mainStatusBarItem.hoverEnabled ? getTasksHoverMd(nextTasksForStatusBar.slice(0, $config.getNextNumberOfTasks)) : '';
 		this.updateHover(hover);
+	}
+
+	private updateHighlighting(due: 'due' | 'notDue' | 'overdue'): void {
+		this.statusBarItem.color = undefined;
+		this.statusBarItem.backgroundColor = undefined;
+
+		if (due === 'notDue') {
+			return;
+		}
+
+		if (due === 'overdue') {
+			this.doHighlight($config.mainStatusBarItem.highlightOverdue);
+			return;
+		}
+
+		if (due === 'due') {
+			this.doHighlight($config.mainStatusBarItem.highlightDue);
+			return;
+		}
+	}
+
+	private doHighlight(highlight: ExtensionConfig['mainStatusBarItem']['highlightDue']): void {
+		if (highlight === 'none') {
+			return;
+		}
+
+		if (highlight === 'errorBg') {
+			this.statusBarItem.backgroundColor = new ThemeColor('statusBarItem.errorBackground');
+		} else if (highlight === 'errorFg') {
+			this.statusBarItem.color = new ThemeColor('editorError.foreground');
+		} else if (highlight === 'warningBg') {
+			this.statusBarItem.backgroundColor = new ThemeColor('statusBarItem.warningBackground');
+		} else if (highlight === 'warningFg') {
+			this.statusBarItem.color = new ThemeColor('editorWarning.foreground');
+		}
 	}
 }
 
