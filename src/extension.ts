@@ -19,10 +19,11 @@ import { disposeRenameProvider } from './languageFeatures/renameProvider';
 import { parseDocument } from './parse';
 import { MainStatusBar, ProgressStatusBar } from './statusBar';
 import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
-import { ExtensionConfig, ItemForProvider, VscodeContext } from './types';
+import { ExtensionConfig, ItemForProvider } from './types';
 import { updateUserSuggestItems } from './userSuggestItems';
 import { getActiveDocument, getDocumentForDefaultFile } from './utils/extensionUtils';
-import { getEditorLineHeight, setContext } from './utils/vscodeUtils';
+import { getEditorLineHeight } from './utils/vscodeUtils';
+import { updateArchivedFilePathNotSetContext, updateIsDevContext } from './vscodeContext';
 import { createWebviewView } from './webview/webviewView';
 
 dayjs.extend(isBetween);
@@ -135,14 +136,6 @@ export async function activate(context: ExtensionContext) {
 		updateIsDevContext();
 		updateArchivedFilePathNotSetContext();
 		updateArchivedTasks();
-	}
-	function updateIsDevContext() {
-		if (process.env.NODE_ENV === 'development' || $config.isDev) {
-			setContext(VscodeContext.IsDev, true);
-		}
-	}
-	function updateArchivedFilePathNotSetContext() {
-		setContext(VscodeContext.ArchivedFileNotSpecified, !$config.defaultArchiveFile);
 	}
 
 	context.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));

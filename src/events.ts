@@ -8,9 +8,8 @@ import { resetAllRecurringTasks } from './documentActions';
 import { $config, $state, updateLastVisitGlobalState, updateState } from './extension';
 import { clearDiagnostics, updateDiagnostic } from './languageFeatures/diagnostics';
 import { updateAllTreeViews } from './treeViewProviders/treeViews';
-import { VscodeContext } from './types';
 import { getDocumentForDefaultFile } from './utils/extensionUtils';
-import { setContext } from './utils/vscodeUtils';
+import { setContext, VscodeContext } from './vscodeContext';
 
 let changeTextDocumentDisposable: Disposable | undefined;
 let changeActiveTextEditorDisposable: Disposable | undefined;

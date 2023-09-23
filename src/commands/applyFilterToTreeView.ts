@@ -1,8 +1,7 @@
 import { QuickPickItem, window } from 'vscode';
 import { $config, $state } from '../extension';
 import { tasksView, updateTasksTreeView } from '../treeViewProviders/treeViews';
-import { VscodeContext } from '../types';
-import { setContext } from '../utils/vscodeUtils';
+import { VscodeContext, setContext } from '../vscodeContext';
 
 export function applyFilterToTreeView() {
 	const quickPick = window.createQuickPick();

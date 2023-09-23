@@ -12,10 +12,10 @@ import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider, TaskTreeItem } from '../treeViewProviders/taskProvider';
-import { ItemForProvider, TreeItemSortType, VscodeContext } from '../types';
+import { ItemForProvider, TreeItemSortType } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { forEachTask } from '../utils/taskUtils';
-import { setContext } from '../utils/vscodeUtils';
+import { VscodeContext, setContext } from '../vscodeContext';
 import { updateWebviewView } from '../webview/webviewView';
 
 export const tagProvider = new TagProvider([]);

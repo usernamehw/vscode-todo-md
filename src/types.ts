@@ -335,18 +335,6 @@ export interface ExtensionConfig {
 	};
 }
 /**
- * This extension context names
- */
-export const enum VscodeContext {
-	IsActive = 'todomd:isActive',
-	IsDev = 'todomd:isDev',
-	FilterActive = 'todomd:filterActive',
-	Generic1FilterExists = 'todomd:generic1FilterExists',
-	Generic2FilterExists = 'todomd:generic2FilterExists',
-	Generic3FilterExists = 'todomd:generic3FilterExists',
-	ArchivedFileNotSpecified = 'todomd:archivedFileNotSpecified',
-}
-/**
  * Helper type makes all properties optional with exceptions of required ones
  */
 export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Pick<T, TRequired>;

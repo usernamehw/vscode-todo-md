@@ -1,6 +1,5 @@
 import { commands, ConfigurationTarget, env, Position, Range, TextDocument, Uri, window, workspace } from 'vscode';
 import { Link } from '../TheTask';
-import { VscodeContext } from '../types';
 
 /**
  * Create new untitled file with provided content and language;
@@ -18,13 +17,6 @@ export async function openInUntitled(content: string, language?: string): Promis
 export function getFullRangeFromLines(document: TextDocument, lineStart: number, lineEnd: number): Range {
 	const lineAtTheEnd = document.lineAt(lineEnd);
 	return new Range(lineStart, 0, lineEnd, lineAtTheEnd.range.end.character);
-}
-/**
- * Set vscode context.
- * TODO: type safe calls
- */
-export async function setContext(context: VscodeContext, value: any) {
-	return await commands.executeCommand('setContext', context, value);
 }
 /**
  * Open URL in default browser. If multiple links then show quick pick.

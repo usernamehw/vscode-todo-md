@@ -1928,7 +1928,7 @@
 		"viewsWelcome": [
 			{
 				"view": "todomd.archived",
-				"enablement": "todomd:archivedFileNotSpecified",
+				"when": "todomd:archivedFileNotSpecified",
 				"contents": "Archived file path not set.\n\n[Pick file to use as archived file](command:todomd.specifyDefaultArchiveFile)"
 			}
 		]
