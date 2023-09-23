@@ -485,7 +485,7 @@
 				"todomd.labelNotDueSymbol": {
 					"type": "string",
 					"markdownDescription": "Prefix for task that that is not due in labels (tree view, notification, modal, quick pick).",
-					"default": "📔 "
+					"default": "📅 "
 				},
 				"todomd.labelOverdueSymbol": {
 					"type": "string",
@@ -500,7 +500,7 @@
 				"todomd.labelFavorite": {
 					"type": "string",
 					"markdownDescription": "Label shown when task has favorite `{f}` special tag. (tree view, notification, modal, quick pick)",
-					"default": " ♥ "
+					"default": " ❤️ "
 				},
 				"todomd.labelShowItems": {
 					"type": "boolean",
