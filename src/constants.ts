@@ -15,6 +15,7 @@ export const enum Constants {
 
 	FocusWebviewViewCommandId = 'todomd.webviewTasks.focus',
 
+	DefaultFileSetting = 'todomd.defaultFile',
 	DefaultArchiveFileSetting = 'todomd.defaultArchiveFile',
 	DefaultSomedayFileSetting = 'todomd.defaultSomedayFile',
 

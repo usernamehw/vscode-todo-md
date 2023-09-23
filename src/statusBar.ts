@@ -112,7 +112,14 @@ export class MainStatusBar extends StatusBar {
 		}
 		const nextTask = nextTasksForStatusBar[0];
 
-		let formattedTask = nextTasksForStatusBar.length ? formatTask(nextTask) : '';
+		if (!nextTask) {
+			this.updateText('');
+			this.updateHighlighting('notDue');
+			this.updateHover('');
+			return;
+		}
+
+		let formattedTask = formatTask(nextTask);
 		if ($config.mainStatusBarItem.truncate) {
 			formattedTask = truncate(formattedTask, $config.mainStatusBarItem.truncate);
 		}
