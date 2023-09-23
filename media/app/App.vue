@@ -28,10 +28,10 @@
                   :key="task.lineNumber + task.rawText"
                   :model="task" />
         </div>
-
-        <TaskDetails v-show="taskDetailsVisible"
-                     ref="taskDetails" />
     </div>
+
+    <TaskDetails v-show="taskDetailsVisible"
+                 ref="taskDetails" />
 
     <vue-final-modal v-model="isNewTaskModalVisible"
                      classes="modal-container"
