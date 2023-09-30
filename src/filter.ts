@@ -4,22 +4,23 @@ import { IsDue } from './types';
 
 /**
  * Special filters (starts with `$` sign).
- * Maybe add $A-$F?
  */
-export const filterConstants = [
-	'$done',
-	'$started',
-	'$due',
-	'$overdue',
-	'$upcoming',
-	'$recurring',
-	'$noDue',
-	'$noProject',
-	'$noTag',
-	'$noContext',
-	'$hidden',
-	'$favorite',
-] as const;
+export const FILTER_CONSTANTS = {
+	Done: '$done',
+	Started: '$started',
+	Due: '$due',
+	Overdue: '$overdue',
+	InvalidDue: '$invalidDue',
+	Upcoming: '$upcoming',
+	Recurring: '$recurring',
+	NoDue: '$noDue',
+	HasDue: '-$noDue',
+	NoProject: '$noProject',
+	NoTag: '$noTag',
+	NoContext: '$noContext',
+	Hidden: '$hidden',
+	Favorite: '$favorite',
+};
 
 const enum FilterType {
 	RawContains,
