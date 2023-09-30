@@ -12,6 +12,7 @@ export function applyFilterToTreeView() {
 		}) as QuickPickItem),
 		...Object.keys(FILTER_CONSTANTS).map(savedFilterKey => ({
 			label: savedFilterKey,
+			detail: FILTER_CONSTANTS[savedFilterKey as keyof typeof FILTER_CONSTANTS],
 		}) as QuickPickItem),
 	];
 	let value: string | undefined;

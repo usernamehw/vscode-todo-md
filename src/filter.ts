@@ -20,7 +20,7 @@ export const FILTER_CONSTANTS = {
 	NoContext: '$noContext',
 	Hidden: '$hidden',
 	Favorite: '$favorite',
-};
+} as const;
 
 const enum FilterType {
 	RawContains,
