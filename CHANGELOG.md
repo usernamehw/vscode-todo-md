@@ -1,3 +1,13 @@
+## 2.26.0 `30 Sep 2023`
+
+- ✨ [Tree View] Add filter constants autocomplete when applying filter via Quick Pick
+- ✨ Change emoji for Favorite and Not Due labels
+- ✨ [Tree View] Update Archived tree view when typing in archived text editor
+- ✨ [status bar] Highlight main status bar (`highlightOverdue/highlightDue` properties on `todomd.mainStatusBarItem` setting)
+- ✨ [status bar] Truncate main status bar message (`truncate` property on `todomd.mainStatusBarItem` setting)
+- 🐛 [Tree View] Properly update welcome view state on Archived tree view path change
+- 💥 [webview] Enable `gfm` GitHub Flavored Markdown for markdown rendering in webview
+
 ## 2.25.0 `22 Sep 2023`
 
 - ✨ [status bar] Add more control over main status bar item (`todomd.mainStatusBarItem` setting) - enabled/hoverEnabled/alignment/priority/onClick/targetTasks
