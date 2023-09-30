@@ -3,7 +3,7 @@
     <div v-if="!storeStore.defaultFileSpecified && !storeStore.activeDocumentOpened"
          class="welcome">
         <p class="welcome__text">
-            Open a file that matches <code>todomd.activatePattern</code> or set default file path <code>todomd.defaultFile</code>.
+            Open a file that matches <b><code>"todomd.activatePattern"</code></b> (<code>{{ storeStore.config.activatePattern }}</code>) or set default file path <b><code>"todomd.defaultFile"</code></b>.
         </p>
         <div><a class="btn btn--welcome"
                 href="command:todomd.specifyDefaultFile">Specify Default File Path</a></div>
