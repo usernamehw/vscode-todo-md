@@ -4,7 +4,7 @@ import { CommandId } from '../commands';
 import { $config } from '../extension';
 import { getTasksHoverMd } from '../languageFeatures/getTaskHover';
 import { defaultSortTasks } from '../sort';
-import { SortNestedTasks } from '../types';
+import { IsDue, SortNestedTasks } from '../types';
 import { formatTask } from '../utils/taskUtils';
 
 
@@ -37,6 +37,10 @@ export class TaskTreeItem extends TreeItem {
 			if (task.done) {
 				this.iconPath = new ThemeIcon('pass', new ThemeColor('todomd.treeViewCompletedTaskIcon'));
 			}
+		}
+
+		if (task.due?.isDue === IsDue.NotDue) {
+			this.description = task.due?.closestDueDateInTheFuture;
 		}
 	}
 }
