@@ -2,7 +2,7 @@ import { commands, TextEditor, TextEditorEdit, window } from 'vscode';
 import { addTaskToActiveFile } from './commands/addTaskToActiveFile';
 import { addTaskToActiveFileWebview } from './commands/addTaskToActiveFileWebview';
 import { addTaskToDefaultFile } from './commands/addTaskToDefaultFile';
-import { applyFilterToTreeView } from './commands/applyFilterToTreeView';
+import { applyFilterToTreeViewCommand } from './commands/applyFilterToTreeView';
 import { archiveCompletedTasks } from './commands/archiveCompletedTasks';
 import { clearGlobalState } from './commands/clearGlobalState';
 import { clearTreeViewFilter } from './commands/clearTreeViewFilter';
@@ -21,6 +21,7 @@ import { goToLine } from './commands/goToLine';
 import { goToLineInArchived } from './commands/goToLineInArchived';
 import { hideTask } from './commands/hideTask';
 import { incrementPriority } from './commands/incrementPriority';
+import { mainStatusBarCommand } from './commands/mainStatusBarCommand';
 import { moveToSomeday } from './commands/moveToSomeday';
 import { openDefaultArchiveFile } from './commands/openDefaultArchiveFile';
 import { openDefaultFile } from './commands/openDefaultFile';
@@ -31,7 +32,6 @@ import { resetAllRecurringTasksCommand } from './commands/resetAllRecurringTasks
 import { setDueDate } from './commands/setDueDate';
 import { setDueDateWithArgs } from './commands/setDueDateWithArgs';
 import { setLastVisit } from './commands/setLastVisit';
-import { showDefaultFileSetting } from './commands/showDefaultFileSetting';
 import { showGlobalState } from './commands/showGlobalState';
 import { showWebviewSettings } from './commands/showWebviewSettings';
 import { specifyDefaultArchiveFileCommand } from './commands/specifyDefaultArchiveFile';
@@ -104,7 +104,6 @@ export const enum CommandId {
 	IncrementPriority = 'todomd.incrementPriority',
 	DecrementPriority = 'todomd.decrementPriority',
 	ShowWebviewSettings = 'todomd.showWebviewSettings',
-	ShowDefaultFileSetting = 'todomd.showDefaultFileSetting',
 	WebviewToggleShowRecurringUpcoming = 'todomd.webview.toggleShowRecurringUpcoming',
 	ToggleComment = 'todomd.toggleComment',
 	ToggleTagsTreeViewSorting = 'todomd.toggleTagsTreeViewSorting',
@@ -115,6 +114,8 @@ export const enum CommandId {
 	ClearGlobalState = 'todomd.dev.clearGlobalState',
 	ShowGlobalState = 'todomd.dev.showGlobalState',
 	RemoveAllOverdue = 'todomd.dev.removeAllOverdue',
+	// ──── Internal ──────────────────────────────────────────────
+	MainStatusBarCommand = 'todomd.mainStatusBarCommand',
 }
 
 /**
@@ -142,7 +143,7 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.SpecifyDefaultArchiveFile, specifyDefaultArchiveFileCommand);
 	commands.registerCommand(CommandId.SpecifyDefaultSomedayFile, specifyDefaultSomedayFileCommand);
 	commands.registerCommand(CommandId.CompleteTask, completeTask);
-	commands.registerCommand(CommandId.ApplyFilterToTreeView, applyFilterToTreeView);
+	commands.registerCommand(CommandId.ApplyFilterToTreeView, applyFilterToTreeViewCommand);
 	commands.registerCommand(CommandId.ClearTreeViewFilter, clearTreeViewFilter);
 	commands.registerCommand(CommandId.ClearGlobalState, clearGlobalState);
 	commands.registerCommand(CommandId.ShowGlobalState, showGlobalState);
@@ -151,7 +152,6 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.GoToLineInArchived, goToLineInArchived);
 	commands.registerCommand(CommandId.FollowLink, followLinkCommand);
 	commands.registerCommand(CommandId.ShowWebviewSettings, showWebviewSettings);
-	commands.registerCommand(CommandId.ShowDefaultFileSetting, showDefaultFileSetting);
 	commands.registerCommand(CommandId.WebviewToggleShowRecurringUpcoming, webviewToggleShowRecurringUpcoming);
 	commands.registerCommand(CommandId.ToggleTagsTreeViewSorting, toggleTagsTreeViewSorting);
 	commands.registerCommand(CommandId.ToggleProjectsTreeViewSorting, toggleProjectsTreeViewSorting);
@@ -176,6 +176,8 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.ArchiveCompletedTasks, archiveCompletedTasks);
 	commands.registerTextEditorCommand(CommandId.MoveToSomeday, moveToSomeday);
 	commands.registerTextEditorCommand(CommandId.SetDueDate, setDueDate);
+	// ──── Internal ──────────────────────────────────────────────
+	commands.registerCommand(CommandId.MainStatusBarCommand, mainStatusBarCommand);
 }
 /**
  * Append task to the file.

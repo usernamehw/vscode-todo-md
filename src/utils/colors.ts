@@ -25,6 +25,14 @@ const colors = {
 		light: '#7284eb',
 		dark: '#7284eb',
 	},
+	durationBg: {
+		light: '#fff',
+		dark: '#000',
+	},
+	durationFg: {
+		light: '#000',
+		dark: '#fff',
+	},
 } satisfies Record<string, {light: string; dark: string}>;
 
 /**

@@ -1,9 +1,13 @@
-import { MarkdownString, StatusBarAlignment, StatusBarItem, window } from 'vscode';
+import { MarkdownString, StatusBarAlignment, StatusBarItem, ThemeColor, window } from 'vscode';
+import { TheTask } from './TheTask';
+import { CommandId } from './commands';
 import { Constants } from './constants';
 import { $config } from './extension';
-import { TheTask } from './TheTask';
+import { filterTasks } from './filter';
+import { getTasksHoverMd } from './languageFeatures/getTaskHover';
+import { ExtensionConfig, IsDue } from './types';
 import { formatTask } from './utils/taskUtils';
-import { percentage } from './utils/utils';
+import { percentage, truncate } from './utils/utils';
 
 abstract class StatusBar {
 	protected statusBarItem!: StatusBarItem;
@@ -13,6 +17,10 @@ abstract class StatusBar {
 
 	hide(): void {
 		this.statusBarItem.hide();
+	}
+
+	dispose(): void {
+		this.statusBarItem?.dispose();
 	}
 
 	protected updateText(text: string): void {
@@ -25,15 +33,27 @@ abstract class StatusBar {
 }
 
 
-export class CounterStatusBar extends StatusBar {
+export class ProgressStatusBar extends StatusBar {
 	constructor() {
 		super();
-		this.statusBarItem = window.createStatusBarItem(`Todo MD: Counter`, StatusBarAlignment.Left, -20000);
-		this.statusBarItem.name = `Todo MD: Counter`;
+		this.createStatusBarItem();
+	}
+
+	/**
+	 * Dispose and create/recreate status bar item. Happens only on extension config change.
+	 */
+	createStatusBarItem() {
+		this.dispose();
+		this.statusBarItem = window.createStatusBarItem(
+			`${Constants.ExtensionMenuPrefix} Counter ${Math.random()}`,
+			$config.progressStatusBarItem.alignment === 'left' ? StatusBarAlignment.Left : StatusBarAlignment.Right,
+			$config.progressStatusBarItem.priority,
+		);
+		this.show();
 	}
 
 	show() {
-		if ($config.statusBarCounterEnabled) {
+		if ($config.progressStatusBarItem.enabled) {
 			this.statusBarItem.show();
 		} else {
 			this.statusBarItem.hide();
@@ -44,6 +64,10 @@ export class CounterStatusBar extends StatusBar {
 	 * @param tasks All tasks that percentage should be calculated from.
 	 */
 	update(tasks: TheTask[]) {
+		if (!$config.progressStatusBarItem.enabled) {
+			return;
+		}
+
 		const completedTasks = tasks.filter(t => t.done);
 		this.statusBarItem.text = showCompletedPercentage(tasks.length, completedTasks.length);
 	}
@@ -52,30 +76,97 @@ export class CounterStatusBar extends StatusBar {
 export class MainStatusBar extends StatusBar {
 	constructor() {
 		super();
-		this.statusBarItem = window.createStatusBarItem(`${Constants.ExtensionMenuPrefix} Main`, StatusBarAlignment.Left, -20001);
-		this.statusBarItem.name = `${Constants.ExtensionMenuPrefix} Main`;
+		this.createStatusBarItem();
+	}
+
+	/**
+	 * Dispose and create/recreate status bar item. Happens only on extension config change.
+	 */
+	createStatusBarItem(): void {
+		this.dispose();
+		this.statusBarItem = window.createStatusBarItem(
+			`${Constants.ExtensionMenuPrefix} Main ${Math.random()}`,
+			$config.mainStatusBarItem.alignment === 'left' ? StatusBarAlignment.Left : StatusBarAlignment.Right,
+			$config.mainStatusBarItem.priority,
+		);
+		this.statusBarItem.command = $config.mainStatusBarItem.onClick === 'nothing' ? undefined : CommandId.MainStatusBarCommand;
 		this.show();
 	}
 
-	show() {
-		if ($config.statusBarMainEnabled) {
+	show(): void {
+		if ($config.mainStatusBarItem.enabled) {
 			this.statusBarItem.show();
 		} else {
 			this.statusBarItem.hide();
 		}
 	}
 
-	update(fewNextTasks: TheTask[]) {
-		if (!$config.statusBarMainEnabled) {
+	update(fewNextTasks: TheTask[]): void {
+		if (!$config.mainStatusBarItem.enabled) {
 			return;
 		}
-		const firstTaskFormatted = formatTask(fewNextTasks[0]);
-		this.updateText(firstTaskFormatted);
-		const markdown = new MarkdownString(undefined, true);
-		markdown.isTrusted = true;
-		// TODO: use markdown formatting instead of formatTask()
-		markdown.appendMarkdown(fewNextTasks.slice(0, 10).map((task, i) => `- ${formatTask(task)}`).join('\n'));
-		this.updateHover(markdown);
+
+		let nextTasksForStatusBar = fewNextTasks;
+		if ($config.mainStatusBarItem.targetTasks === 'due') {
+			nextTasksForStatusBar = filterTasks(fewNextTasks, '$due').tasks;
+		}
+		const nextTask = nextTasksForStatusBar[0];
+
+		if (!nextTask) {
+			this.updateText('');
+			this.updateHighlighting('notDue');
+			this.updateHover('');
+			return;
+		}
+
+		let formattedTask = formatTask(nextTask);
+		if ($config.mainStatusBarItem.truncate) {
+			formattedTask = truncate(formattedTask, $config.mainStatusBarItem.truncate);
+		}
+
+		this.updateText(formattedTask);
+
+		const isOverdue = nextTask.due?.isDue === IsDue.Overdue;
+		const isDue = nextTask.due?.isDue === IsDue.Due;
+		this.updateHighlighting(isOverdue ? 'overdue' : isDue ? 'due' : 'notDue');
+
+		const hover = $config.mainStatusBarItem.hoverEnabled ? getTasksHoverMd(nextTasksForStatusBar.slice(0, $config.getNextNumberOfTasks)) : '';
+		this.updateHover(hover);
+	}
+
+	private updateHighlighting(due: 'due' | 'notDue' | 'overdue'): void {
+		this.statusBarItem.color = undefined;
+		this.statusBarItem.backgroundColor = undefined;
+
+		if (due === 'notDue') {
+			return;
+		}
+
+		if (due === 'overdue') {
+			this.doHighlight($config.mainStatusBarItem.highlightOverdue);
+			return;
+		}
+
+		if (due === 'due') {
+			this.doHighlight($config.mainStatusBarItem.highlightDue);
+			return;
+		}
+	}
+
+	private doHighlight(highlight: ExtensionConfig['mainStatusBarItem']['highlightDue']): void {
+		if (highlight === 'none') {
+			return;
+		}
+
+		if (highlight === 'errorBg') {
+			this.statusBarItem.backgroundColor = new ThemeColor('statusBarItem.errorBackground');
+		} else if (highlight === 'errorFg') {
+			this.statusBarItem.color = new ThemeColor('editorError.foreground');
+		} else if (highlight === 'warningBg') {
+			this.statusBarItem.backgroundColor = new ThemeColor('statusBarItem.warningBackground');
+		} else if (highlight === 'warningFg') {
+			this.statusBarItem.color = new ThemeColor('editorWarning.foreground');
+		}
 	}
 }
 

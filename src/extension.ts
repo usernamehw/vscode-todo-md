@@ -4,6 +4,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ConfigurationChangeEvent, ExtensionContext, Range, TextDocument, window, workspace } from 'vscode';
+import { TheTask } from './TheTask';
 import { registerAllCommands } from './commands';
 import { Constants } from './constants';
 import { updateEditorDecorationStyle } from './decorations';
@@ -16,14 +17,15 @@ import { updateLanguageFeatures } from './languageFeatures/languageFeatures';
 import { disposeReferenceProvider } from './languageFeatures/referenceProvider';
 import { disposeRenameProvider } from './languageFeatures/renameProvider';
 import { parseDocument } from './parse';
-import { CounterStatusBar, MainStatusBar } from './statusBar';
-import { TheTask } from './TheTask';
+import { MainStatusBar, ProgressStatusBar } from './statusBar';
 import { createAllTreeViews, groupAndSortTreeItems, updateAllTreeViews, updateArchivedTasks } from './treeViewProviders/treeViews';
-import { ExtensionConfig, ItemForProvider, VscodeContext } from './types';
+import { ExtensionConfig, ItemForProvider } from './types';
 import { updateUserSuggestItems } from './userSuggestItems';
 import { getActiveDocument, getDocumentForDefaultFile } from './utils/extensionUtils';
-import { getEditorLineHeight, setContext } from './utils/vscodeUtils';
+import { getEditorLineHeight } from './utils/vscodeUtils';
+import { updateArchivedFilePathNotSetContext, updateIsDevContext } from './vscodeContext';
 import { createWebviewView } from './webview/webviewView';
+import { restoreGlobalState } from './vscodeGlobalState';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -59,11 +61,13 @@ export abstract class $state {
 	/** Comment line ranges */
 	static commentLines: Range[] = [];
 	/** If active text editor matches `activatePattern` config */
-	static theRightFileOpened = false;
+	static activeEditorMatchesActivatePattern = false;
+	/** If active text editor is archive file (matches `todomd.defaultArchiveFile` setting path). */
+	static isActiveFileTheArchiveFile = false;
 	/** Last time file was opened (for resetting completion of recurring tasks) */
 	static lastVisitByFile: Record<string, Date> = {};
 	/** Current filter value of tasks Tree View */
-	static taskTreeViewFilterValue = '';
+	static taskTreeViewFilterValue: string | undefined = '';
 	/** Reference to the extension context for access beyond the `activate()` function */
 	static extensionContext = {} as any as ExtensionContext;
 	/** Reference to active document. */
@@ -72,23 +76,28 @@ export abstract class $state {
 	static activeDocumentTabSize = 4;
 	/** Editor line height (in px) */
 	static editorLineHeight = 20;
+	/** Main status be item (shows next task). */
+	static mainStatusBar: MainStatusBar;
+	/** Counter status bar item (in format `1/3 33%`) */
+	static progressStatusBar: ProgressStatusBar;
 }
 
 export let $config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
-export const counterStatusBar = new CounterStatusBar();
-export const mainStatusBar = new MainStatusBar();
 
 export async function activate(context: ExtensionContext) {
 	$state.extensionContext = context;
 	const lastVisitByFile = context.globalState.get<typeof $state['lastVisitByFile'] | undefined>(Constants.LastVisitByFileStorageKey);
 	$state.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
 
+	$state.mainStatusBar = new MainStatusBar();
+	$state.progressStatusBar = new ProgressStatusBar();
 	$state.editorLineHeight = getEditorLineHeight();
 	updateEditorDecorationStyle();
 	updateUserSuggestItems();
 	registerAllCommands();
 	createAllTreeViews();
 	createWebviewView(context);
+	restoreGlobalState();
 
 	const defaultFileDocument = await getDocumentForDefaultFile();
 	if (defaultFileDocument) {
@@ -105,6 +114,7 @@ export async function activate(context: ExtensionContext) {
 	updateAllTreeViews();
 	updateArchivedTasks();
 	updateIsDevContext();
+	updateArchivedFilePathNotSetContext();
 
 	updateLanguageFeatures();
 	updateOnDidChangeActiveEditor();
@@ -124,14 +134,12 @@ export async function activate(context: ExtensionContext) {
 		$state.editorLineHeight = getEditorLineHeight();
 		updateEditorDecorationStyle();
 		updateUserSuggestItems();
-		mainStatusBar.show();
+		$state.mainStatusBar.createStatusBarItem();
+		$state.progressStatusBar.createStatusBarItem();
 		onChangeActiveTextEditor(window.activeTextEditor);
 		updateIsDevContext();
-	}
-	function updateIsDevContext() {
-		if (process.env.NODE_ENV === 'development' || $config.isDev) {
-			setContext(VscodeContext.IsDev, true);
-		}
+		updateArchivedFilePathNotSetContext();
+		updateArchivedTasks();
 	}
 
 	context.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));
@@ -154,7 +162,8 @@ export async function updateState() {
 		$state.projectsForTreeView = [];
 		$state.contextsForTreeView = [];
 		$state.commentLines = [];
-		$state.theRightFileOpened = false;
+		$state.activeEditorMatchesActivatePattern = false;
+		$state.isActiveFileTheArchiveFile = false;
 		$state.activeDocument = undefined;
 		return;
 	}

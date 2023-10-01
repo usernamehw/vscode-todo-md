@@ -23,6 +23,8 @@ $contextForeground: darken($contextBackground, 70%);
 $contextBorder: darken($contextBackground, 17%);
 $hoverDarkenPercent: 8%;
 $taskDetailsHeight: 10rem;
+$filterInputHeight: 4px + 10px + 24px;
+$standardBorderRadius: 3px;
 
 body {
 	--border-low-contrast: #cecece6c;
@@ -67,14 +69,15 @@ body {
 
 	--due-fg: #01c208;
 	--due-bg: #01c20812;
-	--due-border: #01c20830;
+	--due-border: #01c20840;
 
 	--not-due-bg: #e9e9e9dd;
+	--not-due-fg: inherit;
 	--not-due-border: #bebebe86;
 
 	--overdue-fg: #d3000099;
 	--overdue-bg: #d3000012;
-	--overdue-border: #d3000020;
+	--overdue-border: #d3000030;
 
 	--due-invalid-fg: #7284eb;
 	--due-invalid-bg: #7284eb12;
@@ -98,7 +101,7 @@ body {
 	margin: 0;
 	padding-left: 0;
 	padding-right: 0;
-	padding-top: calc(4px + 4px + 24px);
+	padding-top: #{$filterInputHeight};
 	position: relative;
 	-webkit-text-stroke: 0 !important;
 	transform: translateZ(0);// where are those values coming from?
@@ -118,14 +121,14 @@ body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 
 	--tag-padding: 1px 4px;
 
-	--tag-bg: #{darken($tagBackground, 12.5%)};
-	--tag-fg: #000000;
+	--tag-bg: #{darken(#029cdf, 5%)};
+	--tag-fg: #{darken(#ffffff, 5%)};
 
-	--project-bg: #{darken($projectBackground, 22.5%)};
-	--project-fg: #000000;
+	--project-bg: #{darken(#36cc9a, 10%)};
+	--project-fg: #{darken(#ffffff, 5%)};
 
-	--context-bg: #{darken($contextBackground, 10%)};
-	--context-fg: #000000;
+	--context-bg: #{darken(#7284eb, 7.5%)};
+	--context-fg: #{darken(#ffffff, 5%)};
 
 	--count-bg: #ffffff1a;
 	--count-button-bg: #ffffff1a;
@@ -138,13 +141,14 @@ body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 
 	--due-fg: #35c03a;
 	--due-bg: #35c03a16;
-	--due-border: #35c03a90;
+	--due-border: #35c03abb;
 
 	--overdue-fg: #ff6868;
 	--overdue-bg: #fc424216;
-	--overdue-border: #ff686890;
+	--overdue-border: #ff6868bb;
 
 	--not-due-bg: #dadada30;
+	--not-due-fg: #{darken(#ffffff, 10%)};
 	--not-due-border: #bebebe29;
 
 	--twistie-hover-bg: rgba(255, 255, 255, 0.1);
@@ -177,7 +181,7 @@ a {
 	color: var(--vscode-button-foreground);
 	font-family: var(--vscode-font-family);
 	cursor: pointer;
-	border-radius: 2px;
+	border-radius: $standardBorderRadius;
 	margin: 0 auto;
 
 	&--welcome {
@@ -197,6 +201,7 @@ a {
 	}
 
 	&--link {
+		font-size: calc(var(--font-size) - 10%);
 		padding: 0.07em 0.4em;
 	}
 
@@ -211,13 +216,13 @@ a {
 // ────────────────────────────────────────────────────────────
 .task-list {
 	font-family: var(--font-family);
-	height: calc(100vh - 4px - 4px - 24px);
+	height: calc(100vh - #{$filterInputHeight});
 	line-height: var(--line-height);
 	overflow-x: hidden;
 	overflow-y: var(--list-scrollbar-value);
 
 	&--details-visible {
-		height: calc(100vh - 4px - 4px - 24px - #{$taskDetailsHeight});
+		height: calc(100vh - #{$filterInputHeight} - #{$taskDetailsHeight});
 	}
 }
 // ────────────────────────────────────────────────────────────
@@ -297,7 +302,7 @@ a {
 		width: var(--twistie-size);
 
 		&::before {
-			border-radius: 3px;
+			border-radius: $standardBorderRadius;
 			font-size: calc(var(--font-size) + 0.15em);
 			padding: 0.1em 0;
 		}
@@ -314,8 +319,9 @@ a {
 		border-radius: 0.25em;
 		cursor: pointer;
 		font-family: var(--vscode-editor-font-family);
-		margin-left: $approxOneSpace;
+		font-size: calc(var(--font-family) - 15%);
 		padding: var(--tag-padding);
+		height: calc(var(--font-size) + 2px);
 		white-space: pre;
 
 		&:hover {
@@ -331,7 +337,6 @@ a {
 		background-color: var(--tag-bg);
 		border-color: var(--tag-border);
 		color: var(--tag-fg);
-		margin-left: 3px;
 	}
 
 	&__project {
@@ -356,10 +361,13 @@ a {
 		padding: 0 0.3em;
 		position: relative;
 		top: 2px;
-		border: 1px solid transparentize(deeppink, 0.7);
+		border: 1px solid deeppink;
+		background-color: transparentize(deeppink, 0.95);
+		font-weight: bold !important;
 		color: deeppink;
 		padding-bottom: 0.15em;
 		padding-top: 0.15em;
+		border-radius: $standardBorderRadius;
 	}
 	&__due-state {
 		align-items: center;
@@ -372,6 +380,7 @@ a {
 		padding: 0 0.3em;
 		position: relative;
 		top: 2px;
+		border-radius: $standardBorderRadius;
 
 		.vscode-dark & {
 			border-style: dashed !important;
@@ -388,6 +397,7 @@ a {
 		&--not-due {
 			background-color: var(--not-due-bg);
 			border: 1px solid var(--not-due-border);
+			color: var(--not-due-fg);
 		}
 
 		&--overdue {
@@ -411,6 +421,12 @@ a {
 	}
 
 	&__nested-count {
+		float: left;
+		top: 2px;
+		position: relative;
+		height: calc(var(--font-size) + 2px);
+		border-radius: $standardBorderRadius;
+
 		align-items: center;
 		background-color: var(--nested-count-bg);
 		border: 1px solid #dfd98799;
@@ -420,31 +436,34 @@ a {
 		font-family: var(--vscode-editor-font-family);
 		justify-content: center;
 		margin-right: $approxOneSpace;
-		// margin-top: calc(((var(--padding) * 2 + var(--font-size) * var(--line-height) - var(--font-size)) / 2));
-		padding: 0 0.3em;
-
-		.vscode-dark & {
-			padding: 0 0.2em;
-		}
+		padding: 0 0.2em;
 	}
 
 	&__nested-count-number {
-		font-size: calc(var(--font-size) - 1px);
+		font-size: calc(var(--font-size) - 15%);
+		font-family: var(--vscode-editor-font-family);
 		padding-left: $approxOneSpace;
 	}
 
 	&__duration {
+		float: left;
+		top: 2px;
+		position: relative;
+		height: calc(var(--font-size) + 2px);
+		border-radius: $standardBorderRadius;
+
 		align-items: center;
 		animation: AnimateBackground 5s ease infinite;
 		background-image: linear-gradient(270deg, var(--duration-animation-color1), var(--duration-animation-color2));
 		background-size: 400% 400%;
 		cursor: default;
 		display: inline-flex;
-		font-size: calc(var(--font-size) - 1px);
+		font-size: calc(var(--font-size) - 10%);
 		justify-content: center;
 		margin-right: $approxOneSpace;
-		margin-top: 1px;
 		padding: 1px 0.25em;
+
+
 		@keyframes AnimateBackground {
 			// https://www.gradient-animator.com
 			0% {
@@ -544,9 +563,12 @@ a {
 // ──── Welcome ───────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────
 .welcome {
+	margin-top: -$filterInputHeight;
+
 	&__text {
 		display: block;
 		margin: 1em 20px;
+		line-height: 1.6;
 	}
 }
 // ────────────────────────────────────────────────────────────
@@ -566,7 +588,7 @@ a {
 		-webkit-appearance: none;
 		background-color: var(--vscode-checkbox-background);
 		border: 1px solid var(--vscode-checkbox-border);
-		border-radius: 3px;
+		border-radius: $standardBorderRadius;
 		bottom: 0;
 		color: var(--vscode-checkbox-foreground);
 		cursor: pointer;
@@ -575,7 +597,7 @@ a {
 		left: 0;
 		margin: 0;
 		margin-left: 0;
-		margin-right: 4px;
+		margin-right: 0.4em;
 		padding: 0;
 		position: relative;
 		right: 0;

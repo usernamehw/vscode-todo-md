@@ -1,3 +1,24 @@
+## 2.26.0 `30 Sep 2023`
+
+- ✨ [Tree View] Add filter constants autocomplete when applying filter via Quick Pick
+- ✨ Change emoji for Favorite and Not Due labels
+- ✨ [Tree View] Update Archived tree view when typing in archived text editor
+- ✨ [status bar] Highlight main status bar (`highlightOverdue/highlightDue` properties on `todomd.mainStatusBarItem` setting)
+- ✨ [status bar] Truncate main status bar message (`truncate` property on `todomd.mainStatusBarItem` setting)
+- 🐛 [Tree View] Properly update welcome view state on Archived tree view path change
+- 💥 [webview] Enable `gfm` GitHub Flavored Markdown for markdown rendering in webview
+
+## 2.25.0 `22 Sep 2023`
+
+- ✨ [status bar] Add more control over main status bar item (`todomd.mainStatusBarItem` setting) - enabled/hoverEnabled/alignment/priority/onClick/targetTasks
+- ✨ [webview] Tweak CSS styles
+- ✨ [Tree View] Add welcome message for Archived Tree View to set file path if needed
+- 🐛 [editor] Only draw overdue decoration when task is not completed
+- 💥 [Tree View] Change default order of Views
+- 💥 [editor] Disable text counter badge decoration by default (`todomd.counterBadgeEnabled` setting)
+- 💥 [status bar] Disable counter (now named progress) status bar item by default (`todomd.progressStatusBarItem` setting)
+- 💥 [webview] Disable nested task count by default (`todomd.webview.showNestedTaskCount` setting)
+
 ## 2.24.0 `22 Jul 2023`
 
 - ✨ [Tree View] Use vscode checkbox api (`"todomd.treeView.useVscodeCheckboxApi"` setting)

@@ -366,14 +366,18 @@ export function doUpdateEditorDecorations(editor: TextEditor) {
 			} else if (due.isDue === IsDue.NotDue) {
 				notDueDecorationRanges.push(dueRange);
 			} else if (due.isDue === IsDue.Overdue) {
-				overdueDecorationOptions.push({
-					range: dueRange,
-					renderOptions: {
-						after: {
-							contentText: `${due.overdueInDays}d`,
+				if (!task.done) {
+					overdueDecorationOptions.push({
+						range: dueRange,
+						renderOptions: {
+							after: {
+								contentText: `${due.overdueInDays}d`,
+							},
 						},
-					},
-				});
+					});
+				} else {
+					notDueDecorationRanges.push(dueRange);
+				}
 				if (task.overdueRange) {
 					specialtagDecorationRanges.push(task.overdueRange);
 				}

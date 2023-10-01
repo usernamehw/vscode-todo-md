@@ -1,16 +1,33 @@
 import { MarkdownString } from 'vscode';
-import { $config } from '../extension';
 import { TheTask } from '../TheTask';
+import { $config } from '../extension';
 import { durationTo } from '../time/timeUtils';
 import { IsDue } from '../types';
 import { helpGetColor } from '../utils/colors';
 
 /**
- * Transform task to show it in Tree View or Editor hover as markdown
+ * Transform tasks to show it in Tree View or Editor hover as markdown.
  */
-export function getTaskHoverMd(task: TheTask) {
+export function getTasksHoverMd(tasks: TheTask[]): MarkdownString {
 	const markdown = new MarkdownString(undefined, true);
+	markdown.supportHtml = false;
 	markdown.isTrusted = true;
+	const isMultipleTasks = tasks.length > 1;
+
+	let hoverMarkdownAsString = '';
+
+	for (const task of tasks) {
+		hoverMarkdownAsString += (isMultipleTasks ? '- ' : '') + getTaskMarkdownAsString(task) + (isMultipleTasks ? '\n' : '');
+	}
+
+	markdown.appendMarkdown(hoverMarkdownAsString);
+
+	return markdown;
+}
+
+function getTaskMarkdownAsString(task: TheTask): string {
+	let resultMdString = '';
+
 	const priorityColor = task.priority === 'A' ? '#ec4f47' :
 		task.priority === 'B' ? '#fd9f9a' :
 			task.priority === 'C' ? '#ffb648' :
@@ -18,10 +35,10 @@ export function getTaskHoverMd(task: TheTask) {
 					task.priority === 'E' ? '#97c500' :
 						task.priority === 'F' ? '#00cfad' : undefined;
 	if (priorityColor) {
-		markdown.appendMarkdown(`<span style="background-color:${priorityColor};">&thinsp;</span>&nbsp;`);
+		resultMdString += `<span style="background-color:${priorityColor};">&thinsp;</span>&nbsp;`;
 	}
 	if (task.done) {
-		markdown.appendMarkdown(`<span style="color:#7cc54b;">$(pass)</span> `);
+		resultMdString += `<span style="color:#7cc54b;">$(pass)</span> `;
 	}
 
 	let count = '';
@@ -79,12 +96,11 @@ export function getTaskHoverMd(task: TheTask) {
 
 	taskTitle = resultWords.join(' ');
 
-	markdown.appendMarkdown(`${taskTitle}${count}${favorite}${due}\n\n`);
+	resultMdString += `${taskTitle}${count}${favorite}${due}`;
 
 	if (task.start) {
-		markdown.appendMarkdown(`<span>$(watch) ${durationTo(task, false, $config.durationIncludeSeconds)}</span>\n\n`);
+		resultMdString += `<span style="color:${helpGetColor('durationFg')};background-color:${helpGetColor('durationBg')};">&nbsp;$(watch) ${durationTo(task, false, $config.durationIncludeSeconds)}&nbsp;</span>`;
 	}
 
-	return markdown;
+	return resultMdString;
 }
-

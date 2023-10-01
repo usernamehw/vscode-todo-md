@@ -29,6 +29,10 @@ marked.Renderer.prototype.link = (href, title = '', text) => {
 	}
 };
 
+marked.use({
+	gfm: true,
+});
+
 export default defineComponent({
 	name: 'App',
 	components: {

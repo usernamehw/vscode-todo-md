@@ -1,7 +1,7 @@
 import { TreeCheckboxChangeEvent, TreeView, TreeViewExpansionEvent, Uri, WebviewView, window, workspace } from 'vscode';
 import { TheTask } from '../TheTask';
 import { Constants } from '../constants';
-import { toggleDoneAtLine, toggleTaskCollapse } from '../documentActions';
+import { toggleDoneAtLine, toggleDoneAtLineArchived, toggleTaskCollapse } from '../documentActions';
 import { updateEverything } from '../events';
 import { $config, $state, updateState } from '../extension';
 import { filterTasks } from '../filter';
@@ -12,10 +12,10 @@ import { ContextProvider } from '../treeViewProviders/contextProvider';
 import { ProjectProvider } from '../treeViewProviders/projectProvider';
 import { TagProvider } from '../treeViewProviders/tagProvider';
 import { TaskProvider, TaskTreeItem } from '../treeViewProviders/taskProvider';
-import { ItemForProvider, TreeItemSortType, VscodeContext } from '../types';
+import { ItemForProvider, TreeItemSortType } from '../types';
 import { getActiveOrDefaultDocument } from '../utils/extensionUtils';
 import { forEachTask } from '../utils/taskUtils';
-import { setContext } from '../utils/vscodeUtils';
+import { VscodeContext, setContext } from '../vscodeContext';
 import { updateWebviewView } from '../webview/webviewView';
 
 export const tagProvider = new TagProvider([]);
@@ -86,7 +86,9 @@ export function createAllTreeViews() {
 		treeDataProvider: archivedProvider,
 		manageCheckboxStateManually: true,
 	});
-	archivedView.onDidChangeCheckboxState(onDidChangeCheckboxState);
+	archivedView.onDidChangeCheckboxState((e: TreeCheckboxChangeEvent<TaskTreeItem>) => {
+		onDidChangeCheckboxState(e, true);
+	});
 
 	if ($config.treeViews.length) {
 		const generic1 = $config.treeViews[0];
@@ -328,15 +330,17 @@ function sortItemsForProvider(items: ItemForProvider[], sortType: TreeItemSortTy
 }
 
 /**
- * Updates state and Tree View for archived tasks
+ * Updates state and the Archived Tree View.
  */
-export async function updateArchivedTasks() {
+export async function updateArchivedTasks(): Promise<void> {
 	if (!$config.defaultArchiveFile) {
-		return;
+		$state.archivedTasks = [];
+	} else {
+		const archivedDocument = await getArchivedDocument();
+		const parsedArchiveTasks = await parseDocument(archivedDocument);
+		$state.archivedTasks = parsedArchiveTasks.tasks;
 	}
-	const archivedDocument = await getArchivedDocument();
-	const parsedArchiveTasks = await parseDocument(archivedDocument);
-	$state.archivedTasks = parsedArchiveTasks.tasks;
+
 	updateArchivedTasksTreeView();
 }
 /**
@@ -353,13 +357,19 @@ async function onElementCollapseExpand(event: TreeViewExpansionEvent<any>) {
 	updateAllTreeViews();
 }
 
-async function onDidChangeCheckboxState(e: TreeCheckboxChangeEvent<TaskTreeItem>) {
+async function onDidChangeCheckboxState(e: TreeCheckboxChangeEvent<TaskTreeItem>, isArchivedTreeView = false) {
 	const task = e.items[0]?.[0]?.task;
 	if (task === undefined) {
 		window.showErrorMessage(`Failed to get task.`);
 		return;
 	}
 
-	await toggleDoneAtLine(await getActiveOrDefaultDocument(), task.lineNumber);
+	if (isArchivedTreeView) {
+		await toggleDoneAtLineArchived(await getArchivedDocument(), task.lineNumber, $state.archivedTasks);
+		await updateArchivedTasks();
+	} else {
+		await toggleDoneAtLine(await getActiveOrDefaultDocument(), task.lineNumber);
+	}
+
 	await updateEverything();
 }

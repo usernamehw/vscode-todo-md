@@ -1,9 +1,9 @@
 import difference from 'lodash/difference';
 import { createPinia, defineStore } from 'pinia';
 import { showToastNotification } from '..';
-import { filterConstants, filterTasks, FilterTasksResult } from '../../src/filter';
-import { defaultSortTasks } from '../../src/sort';
 import type { TheTask } from '../../src/TheTask';
+import { FILTER_CONSTANTS, FilterTasksResult, filterTasks } from '../../src/filter';
+import { defaultSortTasks } from '../../src/sort';
 import { ExtensionConfig, IsDue, ItemWithCount, MessageFromWebview, MessageToWebview } from '../../src/types';
 import { SuggestItem } from './components/Suggest/Suggest';
 
@@ -157,7 +157,7 @@ export const useStore = defineStore({
 		},
 		suggestItems(state): SuggestItem[] {
 			return [
-				...filterConstants.map(constant => ({ title: constant })),
+				...Object.values(FILTER_CONSTANTS).map(constant => ({ title: constant })),
 				...state.tags.map(tag => ({ title: `#${tag}`, description: state.tagsWithCount.find(t => t.title === tag)?.count })),
 				...state.projects.map(project => ({ title: `+${project}`, description: state.projectsWithCount.find(p => p.title === project)?.count })),
 				...state.contexts.map(context => ({ title: `@${context}`, description: state.contextsWithCount.find(c => c.title === context)?.count })),

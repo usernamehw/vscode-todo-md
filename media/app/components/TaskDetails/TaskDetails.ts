@@ -26,6 +26,9 @@ export default defineComponent({
 		resizeTaskTitleTextarea() {
 			setTimeout(() => {
 				const textareaElement = this.$refs.detailsTaskTitle as HTMLTextAreaElement;
+				if (!textareaElement) {
+					return;
+				}
 				textareaElement.style.height = 'auto';
 				textareaElement.style.height = `${textareaElement.scrollHeight}px`;
 			}, 0);

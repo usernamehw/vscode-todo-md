@@ -27,7 +27,7 @@
                :class="[storeStore.config.webview.customCheckboxEnabled ? 'checkbox--custom' : 'checkbox--native']"
                @click.stop
                @change="toggleDone"><!--
-        --><template v-if="nestedCount">
+        --><template v-if="nestedCount && storeStore.config.webview.showNestedTaskCount">
             <span class="task__nested-count"
                   v-html="nestedCount"></span>
         </template><template v-if="duration">

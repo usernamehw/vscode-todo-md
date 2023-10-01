@@ -2,12 +2,12 @@
 	"name": "todo-md",
 	"displayName": "Todo MD",
 	"description": "Todo tracking based on `todo.txt` format.",
-	"version": "2.24.0",
+	"version": "2.26.0",
 	"publisher": "usernamehw",
 	"license": "MIT",
 	"icon": "img/icon.png",
 	"engines": {
-		"vscode": "^1.80.0"
+		"vscode": "^1.82.0"
 	},
 	"repository": {
 		"type": "git",
@@ -74,6 +74,11 @@
 					"type": "boolean",
 					"markdownDescription": "Controls whether checkbox is shown in the webview.",
 					"default": true
+				},
+				"todomd.webview.showNestedTaskCount": {
+					"type": "boolean",
+					"markdownDescription": "Controls whether nested tasks indicator (like `0/10`) is shown in the webview.",
+					"default": false
 				},
 				"todomd.webview.completionNotificationEnabled": {
 					"type": "boolean",
@@ -268,7 +273,7 @@
 				"todomd.counterBadgeEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Shows small badge to show a number of times the tag/project/context is present in the active document.",
-					"default": true
+					"default": false
 				},
 				"todomd.progressChartEnabled": {
 					"type": "boolean",
@@ -290,12 +295,129 @@
 				"todomd.statusBarMainEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Controls visibility of status bar that shows next tasks to complete.",
+					"markdownDeprecationMessage": "Deprecated in favor of `#todomd.mainStatusBarItem#` setting.",
 					"default": false
+				},
+				"todomd.mainStatusBarItem": {
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"type": "boolean",
+							"markdownDescription": "Controls visibility of this status bar item.",
+							"default": false
+						},
+						"hoverEnabled": {
+							"type": "boolean",
+							"markdownDescription": "Controls whether or not to show hover for this status bar item",
+							"default": true
+						},
+						"alignment": {
+							"type": "string",
+							"default": "left",
+							"enum": [
+								"left",
+								"right"
+							]
+						},
+						"priority": {
+							"type": "integer",
+							"default": -20001
+						},
+						"truncate": {
+							"type": "integer",
+							"markdownDescription": "If the message length is longer - crop it at the end. `0` to disable.",
+							"minimum": 0,
+							"default": 0
+						},
+						"onClick": {
+							"type": "string",
+							"enum": [
+								"completeTask",
+								"revealTask",
+								"nothing"
+							],
+							"default": "completeTask",
+							"markdownDescription": "Controls visibility of status bar that shows next tasks to complete."
+						},
+						"targetTasks": {
+							"type": "string",
+							"enum": [
+								"all",
+								"due"
+							],
+							"default": "all"
+						},
+						"highlightOverdue": {
+							"type": "string",
+							"enum": [
+								"none",
+								"errorBg",
+								"errorFg",
+								"warningBg",
+								"warningFg"
+							],
+							"default": "none"
+						},
+						"highlightDue": {
+							"type": "string",
+							"enum": [
+								"none",
+								"errorBg",
+								"errorFg",
+								"warningBg",
+								"warningFg"
+							],
+							"default": "none"
+						}
+					},
+					"default": {
+						"enabled": false,
+						"hoverEnabled": true,
+						"alignment": "left",
+						"priority": -20001,
+						"truncate": 0,
+						"onClick": "completeTask",
+						"targetTasks": "all",
+						"highlightOverdue": "none",
+						"highlightDue": "none"
+					},
+					"additionalProperties": false,
+					"markdownDescription": "Configure appearance/behavior of main status bar item (shows next task to complete)."
 				},
 				"todomd.statusBarCounterEnabled": {
 					"type": "boolean",
 					"markdownDescription": "Controls visibility of status bar task progress item `1/3 33%`",
-					"default": true
+					"markdownDeprecationMessage": "Deprecated in favor of `#todomd.mainStatusBarItem#` setting.",
+					"default": false
+				},
+				"todomd.progressStatusBarItem": {
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"type": "boolean",
+							"markdownDescription": "Controls visibility of this status bar item.",
+							"default": false
+						},
+						"alignment": {
+							"type": "string",
+							"default": "left",
+							"enum": [
+								"left",
+								"right"
+							]
+						},
+						"priority": {
+							"type": "integer",
+							"default": -20000
+						}
+					},
+					"default": {
+						"enabled": false,
+						"alignment": "left",
+						"priority": -20000
+					},
+					"additionalProperties": false,
+					"markdownDescription": "Configure appearance/behavior of the progress status bar item (shows only when active text editor matches `#todomd.activatePattern#`) with text format: `1/3 33%`."
 				},
 				"todomd.addCreationDate": {
 					"type": "boolean",
@@ -394,7 +516,7 @@
 				"todomd.labelNotDueSymbol": {
 					"type": "string",
 					"markdownDescription": "Prefix for task that that is not due in labels (tree view, notification, modal, quick pick).",
-					"default": "📔 "
+					"default": "📅 "
 				},
 				"todomd.labelOverdueSymbol": {
 					"type": "string",
@@ -409,7 +531,7 @@
 				"todomd.labelFavorite": {
 					"type": "string",
 					"markdownDescription": "Label shown when task has favorite `{f}` special tag. (tree view, notification, modal, quick pick)",
-					"default": " ♥ "
+					"default": " ❤️ "
 				},
 				"todomd.labelShowItems": {
 					"type": "boolean",
@@ -447,7 +569,7 @@
 				},
 				"todomd.decorations": {
 					"type": "object",
-					"markdownDescription": "Advanced decoration tweaking. Allowed values:\n\n- `project`\n- `context`\n- `tag`\n- `comment`\n- `notDue`\n- `context`\n- `due`\n- `overdue`\n- `invalidDue`\n- `favorite`\n- `priorityA`\n- `priorityB`\n- `priorityC`\n- `priorityD`\n- `priorityE`\n- `priorityF`\n- `completedTask`\n- `+someProject`\n- `#someTag`\n- `@someContext`\n\n [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)",
+					"markdownDescription": "Advanced text editor decoration tweaking. [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)",
 					"default": {
 						"project": {},
 						"context": {},
@@ -1775,18 +1897,20 @@
 		"views": {
 			"todomd": [
 				{
-					"id": "todomd.tags",
-					"name": "Tags",
-					"visibility": "collapsed"
-				},
-				{
-					"id": "todomd.due",
-					"name": "Due",
-					"visibility": "collapsed"
+					"type": "webview",
+					"id": "todomd.webviewTasks",
+					"contextualTitle": "Tasks",
+					"name": "Webview",
+					"icon": "$(check)"
 				},
 				{
 					"id": "todomd.tasks",
 					"name": "Tasks"
+				},
+				{
+					"id": "todomd.tags",
+					"name": "Tags",
+					"visibility": "collapsed"
 				},
 				{
 					"id": "todomd.projects",
@@ -1804,6 +1928,11 @@
 					"visibility": "collapsed"
 				},
 				{
+					"id": "todomd.due",
+					"name": "Due",
+					"visibility": "collapsed"
+				},
+				{
 					"id": "todomd.generic1",
 					"name": "Generic1",
 					"when": "todomd:generic1FilterExists"
@@ -1817,19 +1946,19 @@
 					"id": "todomd.generic3",
 					"name": "Generic3",
 					"when": "todomd:generic3FilterExists"
-				},
-				{
-					"type": "webview",
-					"id": "todomd.webviewTasks",
-					"contextualTitle": "Tasks",
-					"name": "Webview",
-					"icon": "$(check)"
 				}
 			]
-		}
+		},
+		"viewsWelcome": [
+			{
+				"view": "todomd.archived",
+				"when": "todomd:archivedFileNotSpecified",
+				"contents": "Archived file path not set.\n\n[Pick file to use as archived file](command:todomd.specifyDefaultArchiveFile)"
+			}
+		]
 	},
 	"browserslist": [
-		"chrome 102"
+		"chrome 114"
 	],
 	"scripts": {
 		"watch": "concurrently -r \"npm:watch:*\"",
@@ -1846,27 +1975,26 @@
 		"generateDecorationSchema": "tsc scripts\\generateDecorationSchema.ts && node scripts\\generateDecorationSchema.js"
 	},
 	"devDependencies": {
-		"@babel/eslint-parser": "^7.22.7",
+		"@babel/eslint-parser": "^7.22.15",
 		"@soda/friendly-errors-webpack-plugin": "^1.8.1",
-		"@types/chai": "^4.3.5",
+		"@types/chai": "^4.3.6",
 		"@types/glob": "^8.1.0",
-		"@types/lodash": "^4.14.195",
-		"@types/marked": "^5.0.0",
+		"@types/lodash": "^4.14.199",
 		"@types/mocha": "^10.0.1",
-		"@types/node": "16.x",
-		"@types/vscode": "^1.80.0",
-		"@typescript-eslint/eslint-plugin": "^5.61.0",
-		"@typescript-eslint/parser": "^5.61.0",
+		"@types/node": "18.x",
+		"@types/vscode": "^1.82.0",
+		"@typescript-eslint/eslint-plugin": "^5.62.0",
+		"@typescript-eslint/parser": "^5.62.0",
 		"@vue/compiler-sfc": "^3.3.4",
-		"chai": "^4.3.7",
-		"concurrently": "^8.2.0",
+		"chai": "^4.3.8",
+		"concurrently": "^8.2.1",
 		"css-loader": "^6.8.1",
-		"eslint": "^8.44.0",
+		"eslint": "^8.50.0",
 		"eslint-plugin-html": "^7.1.0",
-		"eslint-plugin-vue": "^9.15.1",
+		"eslint-plugin-vue": "^9.17.0",
 		"glob": "^8.1.0",
 		"mocha": "^10.2.0",
-		"sass": "^1.63.6",
+		"sass": "^1.68.0",
 		"sass-loader": "^13.3.2",
 		"source-map-support": "^0.5.21",
 		"style-loader": "^3.3.3",
@@ -1878,24 +2006,24 @@
 		"stylelint-order": "^6.0.3",
 		"stylelint-scss": "^4.7.0",
 		"ts-loader": "^9.4.4",
-		"typescript": "^5.1.6",
-		"typescript-json-schema": "^0.58.1",
+		"typescript": "^5.2.2",
+		"typescript-json-schema": "^0.61.0",
 		"vscode-codicons": "0.0.17",
 		"vscode-test": "^1.6.1",
 		"vue-loader": "^17.2.2",
 		"vue-style-loader": "^4.1.3",
 		"vue-template-compiler": "^2.7.14",
-		"webpack": "^5.88.1",
+		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4"
 	},
 	"dependencies": {
-		"@kyvg/vue3-notification": "^2.9.1",
-		"dayjs": "^1.11.9",
+		"@kyvg/vue3-notification": "^3.0.2",
+		"dayjs": "^1.11.10",
 		"fuzzysort": "^2.0.4",
 		"lodash": "^4.17.21",
-		"marked": "^5.1.0",
+		"marked": "^9.0.3",
 		"mitt": "^3.0.1",
-		"pinia": "^2.1.4",
+		"pinia": "^2.1.6",
 		"vue": "^3.3.4",
 		"vue-final-modal": "^3.4.11"
 	}

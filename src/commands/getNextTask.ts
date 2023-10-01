@@ -1,7 +1,7 @@
 import { window } from 'vscode';
 import { showTaskInNotification } from '../commands';
 import { $state, updateState } from '../extension';
-import { defaultSortTasks } from '../sort';
+import { nextSort } from '../sort';
 
 export async function getNextTask() {
 	await updateState();
@@ -10,7 +10,7 @@ export async function getNextTask() {
 		window.showInformationMessage('No tasks');
 		return;
 	}
-	const sortedTasks = defaultSortTasks(tasks);
+	const sortedTasks = nextSort(tasks);
 	const task = sortedTasks[0];
 	showTaskInNotification(task);
 }

@@ -84,13 +84,27 @@ export interface ExtensionConfig {
 	 */
 	confirmTaskDelete: 'always' | 'hasNestedTasks' | 'never';
 	/**
-	 * Controls visibility of status bar task progress item `1/3 33%`
+	 * Configure appearance/behavior of main status bar item (shows next task to complete).
 	 */
-	statusBarCounterEnabled: boolean;
+	mainStatusBarItem: {
+		enabled: boolean;
+		hoverEnabled: boolean;
+		alignment: 'left' | 'right';
+		priority: number;
+		truncate: number;
+		onClick: 'completeTask' | 'nothing' | 'revealTask';
+		targetTasks: 'all' | 'due';
+		highlightOverdue: 'errorBg' | 'errorFg' | 'none' | 'warningBg' | 'warningFg';
+		highlightDue: 'errorBg' | 'errorFg' | 'none' | 'warningBg' | 'warningFg';
+	};
 	/**
-	 * Controls visibility of status bar that shows next tasks to complete.
+	 * Configure appearance/behavior of the counter status bar item (shows only when active text editor matches `#todomd.activatePattern#`) with text format: `1/3 33%`.
 	 */
-	statusBarMainEnabled: boolean;
+	progressStatusBarItem: {
+		enabled: boolean;
+		alignment: 'left' | 'right';
+		priority: number;
+	};
 	/**
 	 * Controls tags Tree View sorting.
 	 */
@@ -272,6 +286,10 @@ export interface ExtensionConfig {
 		 */
 		showCheckbox: boolean;
 		/**
+		 * Controls whether nested tasks indicator (like 0/10) is shown in the webview.
+		 */
+		showNestedTaskCount: boolean;
+		/**
 		 * When true - show notification after completing a task.
 		 */
 		notificationsEnabled: boolean;
@@ -317,17 +335,6 @@ export interface ExtensionConfig {
 		 */
 		customCSSPath: string;
 	};
-}
-/**
- * This extension context names
- */
-export const enum VscodeContext {
-	IsActive = 'todomd:isActive',
-	IsDev = 'todomd:isDev',
-	FilterActive = 'todomd:filterActive',
-	Generic1FilterExists = 'todomd:generic1FilterExists',
-	Generic2FilterExists = 'todomd:generic2FilterExists',
-	Generic3FilterExists = 'todomd:generic3FilterExists',
 }
 /**
  * Helper type makes all properties optional with exceptions of required ones
