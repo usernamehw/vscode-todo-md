@@ -25,6 +25,7 @@ import { getActiveDocument, getDocumentForDefaultFile } from './utils/extensionU
 import { getEditorLineHeight } from './utils/vscodeUtils';
 import { updateArchivedFilePathNotSetContext, updateIsDevContext } from './vscodeContext';
 import { createWebviewView } from './webview/webviewView';
+import { restoreGlobalState } from './vscodeGlobalState';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -66,7 +67,7 @@ export abstract class $state {
 	/** Last time file was opened (for resetting completion of recurring tasks) */
 	static lastVisitByFile: Record<string, Date> = {};
 	/** Current filter value of tasks Tree View */
-	static taskTreeViewFilterValue = '';
+	static taskTreeViewFilterValue: string | undefined = '';
 	/** Reference to the extension context for access beyond the `activate()` function */
 	static extensionContext = {} as any as ExtensionContext;
 	/** Reference to active document. */
@@ -96,6 +97,7 @@ export async function activate(context: ExtensionContext) {
 	registerAllCommands();
 	createAllTreeViews();
 	createWebviewView(context);
+	restoreGlobalState();
 
 	const defaultFileDocument = await getDocumentForDefaultFile();
 	if (defaultFileDocument) {

@@ -3,12 +3,13 @@ import { $config, $state } from '../extension';
 import { FILTER_CONSTANTS } from '../filter';
 import { tasksView, updateTasksTreeView } from '../treeViewProviders/treeViews';
 import { VscodeContext, setContext } from '../vscodeContext';
+import { setGlobalSate } from '../vscodeGlobalState';
 
-export function applyFilterToTreeView() {
+export function applyFilterToTreeViewCommand() {
 	const quickPick = window.createQuickPick();
 	quickPick.items = [
-		...$config.savedFilters.map(fl => ({
-			label: fl.title,
+		...$config.savedFilters.map(savedFilter => ({
+			label: savedFilter.title,
 		}) as QuickPickItem),
 		...Object.keys(FILTER_CONSTANTS).map(savedFilterKey => ({
 			label: savedFilterKey,
@@ -42,9 +43,18 @@ export function applyFilterToTreeView() {
 		if (!filterStr || !filterStr.length) {
 			return;
 		}
-		tasksView.description = `Filter: ${filterStr}`;
-		setContext(VscodeContext.FilterActive, true);
-		$state.taskTreeViewFilterValue = filterStr;
-		updateTasksTreeView();
+		applyTreeViewFilter(filterStr);
 	});
+}
+
+export function applyTreeViewFilter(filterStr: string | undefined): void {
+	if (filterStr) {
+		tasksView.description = `Filter: ${filterStr}`;
+	} else {
+		tasksView.description = undefined;
+	}
+	setContext(VscodeContext.FilterActive, Boolean(filterStr));
+	$state.taskTreeViewFilterValue = filterStr;
+	setGlobalSate('tasksTreeViewFilterValue', filterStr);
+	updateTasksTreeView();
 }

@@ -2,7 +2,7 @@ import { commands, TextEditor, TextEditorEdit, window } from 'vscode';
 import { addTaskToActiveFile } from './commands/addTaskToActiveFile';
 import { addTaskToActiveFileWebview } from './commands/addTaskToActiveFileWebview';
 import { addTaskToDefaultFile } from './commands/addTaskToDefaultFile';
-import { applyFilterToTreeView } from './commands/applyFilterToTreeView';
+import { applyFilterToTreeViewCommand } from './commands/applyFilterToTreeView';
 import { archiveCompletedTasks } from './commands/archiveCompletedTasks';
 import { clearGlobalState } from './commands/clearGlobalState';
 import { clearTreeViewFilter } from './commands/clearTreeViewFilter';
@@ -143,7 +143,7 @@ export function registerAllCommands() {
 	commands.registerCommand(CommandId.SpecifyDefaultArchiveFile, specifyDefaultArchiveFileCommand);
 	commands.registerCommand(CommandId.SpecifyDefaultSomedayFile, specifyDefaultSomedayFileCommand);
 	commands.registerCommand(CommandId.CompleteTask, completeTask);
-	commands.registerCommand(CommandId.ApplyFilterToTreeView, applyFilterToTreeView);
+	commands.registerCommand(CommandId.ApplyFilterToTreeView, applyFilterToTreeViewCommand);
 	commands.registerCommand(CommandId.ClearTreeViewFilter, clearTreeViewFilter);
 	commands.registerCommand(CommandId.ClearGlobalState, clearGlobalState);
 	commands.registerCommand(CommandId.ShowGlobalState, showGlobalState);

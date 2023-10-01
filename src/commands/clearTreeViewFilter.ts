@@ -1,10 +1,5 @@
-import { $state } from '../extension';
-import { tasksView, updateTasksTreeView } from '../treeViewProviders/treeViews';
-import { VscodeContext, setContext } from '../vscodeContext';
+import { applyTreeViewFilter } from './applyFilterToTreeView';
 
-export function clearTreeViewFilter() {
-	tasksView.description = undefined;
-	setContext(VscodeContext.FilterActive, false);
-	$state.taskTreeViewFilterValue = '';
-	updateTasksTreeView();
+export function clearTreeViewFilter(): void {
+	applyTreeViewFilter(undefined);
 }
