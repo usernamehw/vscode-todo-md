@@ -89,6 +89,8 @@ body {
 	--duration-animation-color1: #ee7f0020;
 	--duration-animation-color2: #028dd820;
 
+	--task-details-background-shadow: rgba(0, 0, 0, 0.05);
+
 	--z-index-checkbox-1: 10;
 	--z-index-checkbox-2: 15;
 	--z-index-filter-input: 999;
@@ -159,6 +161,8 @@ body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 
 	--duration-animation-color1: #ee7f0040;
 	--duration-animation-color2: #028dd840;
+
+	--task-details-background-shadow: rgba(255, 255, 255, 0.05);
 }
 
 a {
@@ -532,7 +536,7 @@ a {
 .details {
 	background-color: var(--vscode-sideBar-background);
 	border-top: 1px solid var(--vscode-sideBar-border, --vscode-input-border);
-	box-shadow: inset 0 0 100vw $taskDetailsHeight rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 0 100vw $taskDetailsHeight var(--task-details-background-shadow);
 	height: $taskDetailsHeight;
 	overflow-x: hidden;
 	padding: 0.3em 0.5em;
