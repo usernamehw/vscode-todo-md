@@ -17,7 +17,6 @@ export default defineComponent({
 		},
 		onTaskTitleChange(event: Event) {
 			this.inputValue = (event.target as HTMLTextAreaElement).value;
-			this.resizeTaskTitleTextarea();
 			this.editSelectedTaskDebounced();
 		},
 		/**
@@ -51,19 +50,17 @@ export default defineComponent({
 		focus() {
 			const textareaElement = this.$refs.detailsTaskTitle as HTMLTextAreaElement;
 			textareaElement.focus();
-			this.resizeTaskTitleTextarea();
 		},
 	},
 	mounted() {
 		this.updateInputValueBasedOnSelectedTask();
-		setTimeout(() => {
-			this.resizeTaskTitleTextarea();
-		}, 100);
 	},
 	watch: {
+		'inputValue'() {
+			this.resizeTaskTitleTextarea();
+		},
 		'storeStore.selectedTaskLineNumber'() {
 			this.updateInputValueBasedOnSelectedTask();
-			this.resizeTaskTitleTextarea();
 		},
 	},
 });

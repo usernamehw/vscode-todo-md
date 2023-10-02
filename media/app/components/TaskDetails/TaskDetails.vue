@@ -3,7 +3,8 @@
     <textarea ref="detailsTaskTitle"
               rows="1"
               class="details__input"
-              @input="onTaskTitleChange">{{ inputValue }}</textarea>
+              :value="inputValue"
+              @input="onTaskTitleChange"></textarea>
 </div>
 </template>
 
