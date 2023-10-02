@@ -223,7 +223,6 @@ a {
 	height: calc(100vh - #{$filterInputHeight});
 	line-height: var(--line-height);
 	overflow-x: hidden;
-	overflow-y: var(--list-scrollbar-value);
 
 	&--details-visible {
 		height: calc(100vh - #{$filterInputHeight} - #{$taskDetailsHeight});

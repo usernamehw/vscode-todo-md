@@ -436,7 +436,6 @@ window.addEventListener('message', event => {
 			bodyStyle.setProperty('--padding', message.value.config.webview.padding);
 			bodyStyle.setProperty('--priority-left-padding', message.value.config.webview.showPriority ? '3px' : '1px');
 			bodyStyle.setProperty('--indent-size', message.value.config.webview.indentSize);
-			bodyStyle.setProperty('--list-scrollbar-value', message.value.config.webview.scrollbarOverflow ? 'overlay' : 'auto');
 			store.updateWebviewTitle();
 			if (store.selectedTaskLineNumber === -1) {
 				store.selectFirstTask();
