@@ -542,6 +542,7 @@ a {
 	z-index: var(--z-index-details);
 
 	&__input {
+		min-height: calc(17px + 3px + 3px) !important;
 		background-color: var(--vscode-input-background);
 		border: 1px solid var(--vscode-input-border);
 		color: var(--vscode-input-foreground);
