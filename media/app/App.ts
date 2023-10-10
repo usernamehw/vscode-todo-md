@@ -197,6 +197,9 @@ export default defineComponent({
 		focusFilterInput() {
 			(this.$refs.suggest as typeof Suggest)?.focus();
 		},
+		selectFilterInputText() {
+			(this.$refs.suggest as typeof Suggest)?.selectInputText();
+		},
 	},
 	created() {
 		const savedState = getState();
@@ -285,6 +288,9 @@ export default defineComponent({
 	watch: {
 		'storeStore.focusFilterInputEvent'() {
 			this.focusFilterInput();
+		},
+		'storeStore.selectFilterInputTextEvent'() {
+			this.selectFilterInputText();
 		},
 		'storeStore.showAddNewTaskModalEvent'() {
 			this.showAddNewTaskModal();

@@ -365,6 +365,10 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 }
 interface WebviewMessageFocusFilterInput {
 	type: 'focusFilterInput';
+	value: {
+		selectInputText?: boolean;
+		fillInputValue?: string;
+	};
 }
 interface WebviewMessageShowAddNewTaskModal {
 	type: 'showAddNewTaskModal';

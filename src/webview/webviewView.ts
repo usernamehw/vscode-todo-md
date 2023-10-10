@@ -105,6 +105,9 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					await updateEverything();
 					this.sendMessageToWebview({
 						type: 'focusFilterInput',
+						value: {
+							selectInputText: false,
+						},
 					});
 					break;
 				}
@@ -196,9 +199,13 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 	/**
 	 * Focus main input in webview.
 	 */
-	focusFilterInput() {
+	focusFilterInput(selectInputText?: boolean, fillInputValue?: string) {
 		this.sendMessageToWebview({
 			type: 'focusFilterInput',
+			value: {
+				selectInputText,
+				fillInputValue,
+			},
 		});
 	}
 	showAddNewTaskModal() {
@@ -254,8 +261,8 @@ export function createWebviewView(context: ExtensionContext) {
 export function updateWebviewView() {
 	tasksWebviewViewProvider.sendEverything();
 }
-export function focusWebviewFilterInput() {
-	tasksWebviewViewProvider.focusFilterInput();
+export function focusWebviewFilterInput({ selectInputText, fillInputValue }: {selectInputText?: boolean; fillInputValue?: string}) {
+	tasksWebviewViewProvider.focusFilterInput(selectInputText, fillInputValue);
 }
 
 export function showAddNewTaskModal() {
