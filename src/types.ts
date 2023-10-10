@@ -254,10 +254,6 @@ export interface ExtensionConfig {
 		 */
 		autoShowSuggest: boolean;
 		/**
-		 * If `true` - show transparent scrollbar on top of items.
-		 */
-		scrollbarOverflow: boolean;
-		/**
 		 * Whether completed tasks are shown or not in the webview.
 		 */
 		showCompleted: boolean;
@@ -349,7 +345,9 @@ export interface ItemWithCount {
 	title: string;
 	count: number;
 }
-// From extension to webview
+// ────────────────────────────────────────────────────────────
+// ──── From extension to webview ─────────────────────────────
+// ────────────────────────────────────────────────────────────
 interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 	type: 'updateEverything';
 	value: {
