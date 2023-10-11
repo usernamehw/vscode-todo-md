@@ -144,7 +144,7 @@ export const useStore = defineStore({
 			}
 			// Filter out hidden tasks unless `$hidden` filter is present
 			if (!state.filterInputValue.includes('$hidden')) {
-				filteredTasks = filteredTasks.filter(task => !task.isHidden);
+				filteredTasks = filteredTasks.filter(task => !(task.isHidden && task.due?.isDue !== IsDue.Due && task.due?.isDue !== IsDue.Overdue));
 				// filteredTasks = filterTasks(filteredTasks, '-$hidden');
 			}
 			return {

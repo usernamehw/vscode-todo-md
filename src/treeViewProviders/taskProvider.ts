@@ -92,7 +92,7 @@ export function tasksToTreeItems(tasks: TheTask[], tryToApplySort = false, isArc
 	}
 	const result = [];
 	for (const task of tasks) {
-		if (task.isHidden) {
+		if (task.isHidden && task.due?.isDue !== IsDue.Due && task.due?.isDue !== IsDue.Overdue) {
 			continue;
 		}
 
