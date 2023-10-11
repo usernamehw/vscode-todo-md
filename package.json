@@ -83,7 +83,7 @@
 				},
 				"todomd.webview.showTaskDetails": {
 					"type": "boolean",
-					"markdownDescription": "EXPERIMENTAL. When true - show box on the bottom of the webview that shows selected task details.",
+					"markdownDescription": "When true - show box on the bottom of the webview that shows selected task details.",
 					"default": false
 				},
 				"todomd.webview.notificationsEnabled": {
@@ -1173,6 +1173,7 @@
 			{
 				"command": "todomd.focusTasksWebviewAndInput",
 				"title": "Focus Tasks Webview and its filter input",
+				"description": "Supports arguments {\"selectInputText\": boolean, \"fillInputValue\": string}",
 				"category": "Todo MD"
 			},
 			{

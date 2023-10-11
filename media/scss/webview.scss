@@ -540,7 +540,7 @@ a {
 	padding: 0.3em 0.5em;
 	z-index: var(--z-index-details);
 
-	background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 20px, rgba(255, 255, 255, 0.05) 20px, rgba(255, 255, 255, 0.05) 21px);
+	background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 20px, rgba(255, 255, 255, 0.1) 20px, rgba(255, 255, 255, 0.1) 21px);
 
 	&__header {
 		padding-top: 0.2em;
