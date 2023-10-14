@@ -57,7 +57,7 @@ tag | description | example
 `overdue`|Oldest overdue date (only for recurring tasks). Added automatically.|`{overdue:2020-05-15}`
 `cm`|Completion date|`{cm:2020-05-15}`
 `cr`|Creation date|`{cr:2020-05-15}`
-`h`|(hidden) Task is not visible in Tree Views|`{h}`
+`h`|(hidden) Task is not visible in Tree Views and webview (unless due)|`{h}`
 `c`|(collapsed) State of folding in Tree View or webview for nested tasks|`{c}`
 `count`|Instead of completing the task increases count by 1. When the number matches the goal - the task is considered completed|`{count:0/3}`
 `start`|Datetime when task was started|`{start:2021-04-08T16:17:15}`
@@ -129,7 +129,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.toggleContextsTreeViewSorting|Todo MD: Toggle Contexts Tree View Sorting|
 |todomd.showWebviewSettings|Todo MD: Show Webview Settings|
 |todomd.webview.toggleShowRecurringUpcoming|Todo MD: Toggle setting to show recurring upcoming tasks in webview.|
-|todomd.focusTasksWebviewAndInput|Todo MD: Focus Tasks Webview and its filter input|
+|todomd.focusTasksWebviewAndInput|Todo MD: Supports arguments {"selectInputText": boolean, "fillInputValue": string}|
 |todomd.collapseAllNestedTasks|Todo MD: Collapse all nested tasks.|
 |todomd.expandAllTasks|Todo MD: Expand all tasks.|
 |todomd.incrementPriority|Todo MD: Increment priority|
@@ -169,21 +169,20 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (62)
+## Settings (61)
 
 > **Todo MD** extension settings start with `todomd.`
 
 |Setting|Default|Description|
 |-|-|-|
 |webview.showCompleted|**true**|Whether completed tasks are shown or not in the webview.|
-|webview.scrollbarOverflow|**false**|If `true` - show transparent scrollbar on top of items.|
 |webview.completedStrikeThrough|**false**|Whether completed tasks should have a line drawn on them in the webview.|
 |webview.showRecurringCompleted|**true**|Whether recurring completed tasks are shown or not in the webview.|
 |webview.showRecurringUpcoming|**true**|Whether recurring upcoming (not due) tasks are shown or not in the webview.|
 |webview.showPriority|**true**|Controls whether priority is shown in the webview.|
 |webview.showCheckbox|**true**|Controls whether checkbox is shown in the webview.|
 |webview.showNestedTaskCount|**false**|Controls whether nested tasks indicator (like `0/10`) is shown in the webview.|
-|webview.showTaskDetails|**false**|EXPERIMENTAL. When true - show box on the bottom of the webview that shows selected task details.|
+|webview.showTaskDetails|**false**|When true - show box on the bottom of the webview that shows selected task details.|
 |webview.notificationsEnabled|**false**|When true - show notification after some actions (like task completion) in a webview.|
 |webview.fontSize|"15px"|Controls font size in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)|
 |webview.fontFamily|"..."|Controls font family in the webview. [CSS Units](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)|
@@ -227,10 +226,10 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |treeView.showBadge|**true**|Whether or not to show due tasks counter badge for tree view container.|
 |treeView.useVscodeCheckboxApi|**true**|When checked - will use vscode api to show checkboxes https://github.com/microsoft/vscode/issues/116141.|
 |labelDueSymbol|"📗&nbsp;"|Prefix for task that is due in labels (tree view, notification, modal, quick pick).|
-|labelNotDueSymbol|"📔&nbsp;"|Prefix for task that that is not due in labels (tree view, notification, modal, quick pick).|
+|labelNotDueSymbol|"📅&nbsp;"|Prefix for task that that is not due in labels (tree view, notification, modal, quick pick).|
 |labelOverdueSymbol|"📕&nbsp;"|Prefix for task that is overdue in labels (tree view, notification, modal, quick pick).|
 |labelInvalidDueSymbol|"🟣&nbsp;"|Prefix for task that has invalid due date in labels (tree view, notification, modal, quick pick).|
-|labelFavorite|"&nbsp;♥&nbsp;"|Label shown when task has favorite `{f}` special tag. (tree view, notification, modal, quick pick)|
+|labelFavorite|"&nbsp;❤️&nbsp;"|Label shown when task has favorite `{f}` special tag. (tree view, notification, modal, quick pick)|
 |labelShowItems|**true**|Show projects/tags/contexts in labels (tree view, notification, modal, quick pick).|
 |useBoldTextInLabels|**true**|Show projects/tags/contexts in labels in **BOLD**.|
 |completedStrikeThrough|**true**|Show strike-through text decoration for completed tasks in editor.|

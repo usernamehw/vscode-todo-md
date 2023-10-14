@@ -95,6 +95,7 @@ export default defineComponent({
 					case 'D': classMap['task--priD'] = true; break;
 					case 'E': classMap['task--priE'] = true; break;
 					case 'F': classMap['task--priF'] = true; break;
+					case 'H': classMap['task--priH'] = true; break;
 				}
 			}
 			if (this.model.due) {

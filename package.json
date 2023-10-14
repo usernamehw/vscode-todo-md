@@ -2,7 +2,7 @@
 	"name": "todo-md",
 	"displayName": "Todo MD",
 	"description": "Todo tracking based on `todo.txt` format.",
-	"version": "2.26.0",
+	"version": "2.27.0",
 	"publisher": "usernamehw",
 	"license": "MIT",
 	"icon": "img/icon.png",
@@ -45,11 +45,6 @@
 					"markdownDescription": "Whether completed tasks are shown or not in the webview.",
 					"default": true
 				},
-				"todomd.webview.scrollbarOverflow": {
-					"type": "boolean",
-					"markdownDescription": "If `true` - show transparent scrollbar on top of items.",
-					"default": false
-				},
 				"todomd.webview.completedStrikeThrough": {
 					"type": "boolean",
 					"markdownDescription": "Whether completed tasks should have a line drawn on them in the webview.",
@@ -88,7 +83,7 @@
 				},
 				"todomd.webview.showTaskDetails": {
 					"type": "boolean",
-					"markdownDescription": "EXPERIMENTAL. When true - show box on the bottom of the webview that shows selected task details.",
+					"markdownDescription": "When true - show box on the bottom of the webview that shows selected task details.",
 					"default": false
 				},
 				"todomd.webview.notificationsEnabled": {
@@ -1178,6 +1173,7 @@
 			{
 				"command": "todomd.focusTasksWebviewAndInput",
 				"title": "Focus Tasks Webview and its filter input",
+				"description": "Supports arguments {\"selectInputText\": boolean, \"fillInputValue\": string}",
 				"category": "Todo MD"
 			},
 			{

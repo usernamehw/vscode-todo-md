@@ -50,6 +50,9 @@ export default defineComponent({
 		focus() {
 			(this.$refs.input as HTMLInputElement)?.focus();
 		},
+		selectInputText() {
+			(this.$refs.input as HTMLInputElement)?.select();
+		},
 		onInput(e: InputEvent) {
 			const inputValue: string | undefined = (e.target as HTMLInputElement)?.value;
 			this.$emit('input', inputValue);

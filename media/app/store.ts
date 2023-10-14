@@ -57,6 +57,11 @@ interface StoreState {
 	focusFilterInputEvent: number;
 	/**
 	 * Send improvised event from store: assign a random number and listen for changes
+	 * inside the app to select text on the main input element.
+	 */
+	selectFilterInputTextEvent: number;
+	/**
+	 * Send improvised event from store: assign a random number and listen for changes
 	 * inside the app to focus the main input element.
 	 */
 	showAddNewTaskModalEvent: number;
@@ -100,6 +105,7 @@ export const useStore = defineStore({
 		} as any,
 		selectedTaskLineNumber: -1,
 		focusFilterInputEvent: 0,
+		selectFilterInputTextEvent: 0,
 		showAddNewTaskModalEvent: 0,
 	}),
 	// ────────────────────────────────────────────────────────────
@@ -138,7 +144,7 @@ export const useStore = defineStore({
 			}
 			// Filter out hidden tasks unless `$hidden` filter is present
 			if (!state.filterInputValue.includes('$hidden')) {
-				filteredTasks = filteredTasks.filter(task => !task.isHidden);
+				filteredTasks = filteredTasks.filter(task => !(task.isHidden && task.due?.isDue !== IsDue.Due && task.due?.isDue !== IsDue.Overdue));
 				// filteredTasks = filterTasks(filteredTasks, '-$hidden');
 			}
 			return {
@@ -436,7 +442,6 @@ window.addEventListener('message', event => {
 			bodyStyle.setProperty('--padding', message.value.config.webview.padding);
 			bodyStyle.setProperty('--priority-left-padding', message.value.config.webview.showPriority ? '3px' : '1px');
 			bodyStyle.setProperty('--indent-size', message.value.config.webview.indentSize);
-			bodyStyle.setProperty('--list-scrollbar-value', message.value.config.webview.scrollbarOverflow ? 'overlay' : 'auto');
 			store.updateWebviewTitle();
 			if (store.selectedTaskLineNumber === -1) {
 				store.selectFirstTask();
@@ -445,7 +450,17 @@ window.addEventListener('message', event => {
 		}
 		case 'focusFilterInput': {
 			const store = useStore();
+			if (message.value?.fillInputValue) {
+				store.updateFilterValue(message.value.fillInputValue);
+			}
+
 			store.focusFilterInput();
+
+			setTimeout(() => {
+				if (message.value?.selectInputText) {
+					store.selectFilterInputTextEvent = Math.random();
+				}
+			});
 			break;
 		}
 		case 'showAddNewTaskModal': {

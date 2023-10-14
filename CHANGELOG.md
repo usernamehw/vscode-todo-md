@@ -1,3 +1,10 @@
+## 2.27.0 `11 Oct 2023`
+
+- ✨ `todomd.focusTasksWebviewAndInput` command now supports "args": { "selectInputText": boolean, "fillInputValue": string}
+- ✨ [Tree View/webview] Hidden task now shows if it's due
+- ✨ [Tree View] Filter value now preserved across reloads
+- ✨ [Tree View] Show closest due date in Tree View Item description
+
 ## 2.26.0 `30 Sep 2023`
 
 - ✨ [Tree View] Add filter constants autocomplete when applying filter via Quick Pick
