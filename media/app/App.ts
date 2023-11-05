@@ -261,6 +261,13 @@ export default defineComponent({
 							value: task.lineNumber,
 						});
 					} else {
+						/** Task will be gone => select next one */
+						const shouldSelectNextTask = this.storeStore.config.webview.showCompleted &&
+							!this.storeStore.config.webview.showRecurringCompleted &&
+							task.due?.isRecurring && !task.done;
+						if (shouldSelectNextTask) {
+							this.storeStore.selectNextTask(task.lineNumber);
+						}
 						this.storeStore.toggleDone(task);
 					}
 				}
