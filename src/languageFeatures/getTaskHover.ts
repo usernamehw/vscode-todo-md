@@ -70,7 +70,7 @@ function getTaskMarkdownAsString(task: TheTask): string {
 		if (dueContent) {
 			dueContent = ` ${dueContent}`;
 		}
-		due = ` <span style="color:${dueColor || 'inherit'};">|${codicon}${dueContent}|</span>&nbsp;`;
+		due = ` <span style="color:${dueColor || 'inherit'};" title="${task.due?.raw}">|${codicon}${dueContent}|</span>&nbsp;`;
 	}
 
 	const words = task.title.split(' ');
