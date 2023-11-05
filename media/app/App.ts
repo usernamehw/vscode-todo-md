@@ -398,7 +398,9 @@ export default defineComponent({
 		},
 		'storeStore.everythingWasUpdatedEvent'() {
 			// Usually done on startup or when typing in the document
+			this.$nextTick(() => {
 			this.highlightFilterMatches();
+			});
 		},
 	},
 });
