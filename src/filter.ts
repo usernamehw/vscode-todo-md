@@ -1,4 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep';
+import uniqBy from 'lodash/uniqBy';
 import { TheTask } from './TheTask';
 import { IsDue } from './types';
 
@@ -31,6 +32,7 @@ const enum FilterType {
 	PriorityEqual,
 	Due,
 	Overdue,
+	InvalidDue,
 	Upcoming,
 	Recurring,
 	Done,
@@ -90,7 +92,6 @@ export function filterTasks(tasks: TheTask[], filterStr = ''): FilterTasksResult
 				if (nestedMatch.tasks.length > 0) {
 					nestedResult = true;
 					matchIds.push(...nestedMatch.matchIds);
-					// task.subtasks = nestedMatch.tasks;
 				}
 			}
 			if (filter.filterType === FilterType.RawContains) {
@@ -151,6 +152,11 @@ export function filterTasks(tasks: TheTask[], filterStr = ''): FilterTasksResult
 			} else if (filter.filterType === FilterType.Overdue) {
 				// $overdue
 				if (task.due?.isDue === IsDue.Overdue) {
+					filterResult = true;
+				}
+			} else if (filter.filterType === FilterType.InvalidDue) {
+				// $invalidDue
+				if (task.due?.isDue === IsDue.Invalid) {
 					filterResult = true;
 				}
 			} else if (filter.filterType === FilterType.Upcoming) {
@@ -277,6 +283,8 @@ function parseFilter(filterStr = '') {
 					filter.filterType = FilterType.Due;
 				} else if (value === 'overdue') {
 					filter.filterType = FilterType.Overdue;
+				} else if (value === 'invalidDue') {
+					filter.filterType = FilterType.InvalidDue;
 				} else if (value === 'upcoming') {
 					filter.filterType = FilterType.Upcoming;
 				} else if (value === 'recurring') {
@@ -307,4 +315,9 @@ function parseFilter(filterStr = '') {
 	}
 	return filters;
 }
-
+/**
+ * Dedup tasks. Leave only first occurrence.
+ */
+export function uniqueTasks(tasks: TheTask[]): TheTask[] {
+	return uniqBy(tasks, e => e.lineNumber);
+}

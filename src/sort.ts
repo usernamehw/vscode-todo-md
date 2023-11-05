@@ -1,128 +1,191 @@
 import dayjs from 'dayjs';
 import intersection from 'lodash/intersection';
 import { TheTask } from './TheTask';
-import { IsDue } from './types';
+import { FILTER_CONSTANTS, filterTasks, uniqueTasks } from './filter';
 import { UnsupportedValueError } from './utils/utils';
 
 // 🛑 Do not import anything from 'vscode' or 'extension' into this file
 
 /**
- * Sorting direction
+ * Sorting direction (never used atm).
  */
 const enum SortDirection {
 	DESC,
 	ASC,
 }
+export type SortProperty = 'completionDate' | 'context' | 'creationDate' | 'Default' | 'dueDate' | 'notDue' | 'overdue' | 'priority' | 'project' | 'tag';
 /**
- * Sorting property
+ * Nested tasks counted; e.g. if nested task has higher priority -
+ * root task will be sorted as if it had the highest priority of its subtasks.
  */
-export const enum SortProperty {
-	Default,
-	Priority,
-	Project,
-	Tag,
-	Context,
-	DueDate,
-	NotDue,
-	Overdue,
-	CreationDate,
-	CompletionDate,
-	Favorite,
+export function sortTasks({
+	tasks,
+	sortProperty,
+}: {
+	tasks: TheTask[];
+	sortProperty: SortProperty;
+	direction?: SortDirection;
+}): TheTask[] {
+	const sortedTasks = doSortTasks({
+		tasks,
+		sortProperty,
+	});
+
+	return uniqueTasks(sortedTasks);
 }
-/**
- * Does not modify the original array.
- */
-export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, direction = SortDirection.DESC): TheTask[] {
+
+function doSortTasks({ tasks, sortProperty }: Parameters<typeof sortTasks>[0]): TheTask[] {
 	const tasksCopy = tasks.slice();
-	let sortedTasks: TheTask[] = [];
 
-	if (sortProperty === SortProperty.Default) {
-		sortedTasks = defaultSortTasks(tasksCopy);
-	} else if (sortProperty === SortProperty.Priority) {
-		sortedTasks = tasksCopy.sort((a, b) => {
-			if (a.priority === b.priority) {
-				return 0;
-			} else {
-				return a.priority > b.priority ? 1 : -1;
-			}
+	if (sortProperty === 'Default') {
+		return defaultSortTasks(tasksCopy);
+	}
+
+	if (sortProperty === 'project') {
+		return sortBySimilarityOfArrays(tasksCopy, 'project');
+	} else if (sortProperty === 'tag') {
+		return sortBySimilarityOfArrays(tasksCopy, 'tag');
+	} else if (sortProperty === 'context') {
+		return sortBySimilarityOfArrays(tasksCopy, 'context');
+	}
+
+	if (sortProperty === 'priority') {
+		return tasksCopy.sort((a, b) => {
+			const aTasks = [
+				a,
+				...getSubtasksRecursive(a.subtasks),
+			];
+			const bTasks = [
+				b,
+				...getSubtasksRecursive(b.subtasks),
+			];
+			const highestPriorityATask = aTasks.sort(innerSortByPriority)[0];
+			const highestPriorityBTask = bTasks.sort(innerSortByPriority)[0];
+			return innerSortByPriority(highestPriorityATask, highestPriorityBTask);
 		});
-	} else if (sortProperty === SortProperty.Project) {
-		sortedTasks = sortBySimilarityOfArrays(tasksCopy, 'project');
-	} else if (sortProperty === SortProperty.Tag) {
-		sortedTasks = sortBySimilarityOfArrays(tasksCopy, 'tag');
-	} else if (sortProperty === SortProperty.Context) {
-		sortedTasks = sortBySimilarityOfArrays(tasksCopy, 'context');
-	} else if (sortProperty === SortProperty.CreationDate) {
-		sortedTasks = tasksCopy.sort((a, b) => {
-			if (a.creationDate === b.creationDate) {
-				return 0;
-			} else {
-				if (a.creationDate === undefined) {
-					return -Infinity;
-				} else if (b.creationDate === undefined) {
-					return Infinity;
-				}
-				return dayjs(a.creationDate).diff(b.creationDate);
-			}
+	} else if (sortProperty === 'creationDate') {
+		return tasksCopy.sort((a, b) => {
+			const aTasks = [
+				a,
+				...getSubtasksRecursive(a.subtasks),
+			];
+			const bTasks = [
+				b,
+				...getSubtasksRecursive(b.subtasks),
+			];
+			const closestCreationDateATask = aTasks.sort(innerSortByCreationDate)[0];
+			const closestCreationDateBTask = bTasks.sort(innerSortByCreationDate)[0];
+			return innerSortByCreationDate(closestCreationDateATask, closestCreationDateBTask);
 		});
-	} else if (sortProperty === SortProperty.CompletionDate) {
-		sortedTasks = tasksCopy.sort((a, b) => {
-			if (a.completionDate === b.completionDate) {
-				// Empty completion date `{cm}`
-				if (a.done && !a.completionDate) {
-					return 1;
-				} else if (b.done && !b.completionDate) {
-					return -1;
-				}
-				return 0;
-			} else {
-				if (a.completionDate === undefined) {
-					return -Infinity;
-				} else if (b.completionDate === undefined) {
-					return Infinity;
-				}
-				return dayjs(a.completionDate).diff(b.completionDate);
-			}
+	} else if (sortProperty === 'completionDate') {
+		return tasksCopy.sort((a, b) => {
+			const aTasks = [
+				a,
+				...getSubtasksRecursive(a.subtasks),
+			];
+			const bTasks = [
+				b,
+				...getSubtasksRecursive(b.subtasks),
+			];
+			const closestCompletionDateATask = aTasks.sort(innerSortByCompletionDate)[0];
+			const closestCompletionDateBTask = bTasks.sort(innerSortByCompletionDate)[0];
+			return innerSortByCompletionDate(closestCompletionDateATask, closestCompletionDateBTask);
 		});
-	} else if (sortProperty === SortProperty.DueDate) {
-		sortedTasks = sortByDueDate(tasksCopy);
-	} else if (sortProperty === SortProperty.Overdue) {
-		sortedTasks = tasksCopy.sort((a, b) => {
-			const overdueA = a.due?.overdueInDays || 0;
-			const overdueB = b.due?.overdueInDays || 0;
-			if (overdueA === overdueB) {
-				return 0;
-			} else {
-				return overdueA < overdueB ? 1 : -1;
-			}
+	} else if (sortProperty === 'dueDate') {
+		return sortByDueDate(tasksCopy);
+	} else if (sortProperty === 'overdue') {
+		return tasksCopy.sort((a, b) => {
+			const aTasks = [
+				a,
+				...getSubtasksRecursive(a.subtasks),
+			];
+			const bTasks = [
+				b,
+				...getSubtasksRecursive(b.subtasks),
+			];
+			const highestOverdueATask = aTasks.sort(innerSortByOverdue)[0];
+			const highestOverdueBTask = bTasks.sort(innerSortByOverdue)[0];
+			return innerSortByOverdue(highestOverdueATask, highestOverdueBTask);
 		});
-	} else if (sortProperty === SortProperty.NotDue) {
-		sortedTasks = tasksCopy.sort((a, b) => {
-			const untilA = a.due?.daysUntilDue || 0;
-			const untilB = b.due?.daysUntilDue || 0;
-			if (untilA === untilB) {
-				return 0;
-			} else {
-				return untilA > untilB ? 1 : -1;
-			}
+	} else if (sortProperty === 'notDue') {
+		return tasksCopy.sort((a, b) => {
+			const aTasks = [
+				a,
+				...getSubtasksRecursive(a.subtasks),
+			];
+			const bTasks = [
+				b,
+				...getSubtasksRecursive(b.subtasks),
+			];
+			const highestUntilDueATask = aTasks.sort(innerSortByNotDue)[0];
+			const highestUntilDueBTask = bTasks.sort(innerSortByNotDue)[0];
+			return innerSortByNotDue(highestUntilDueATask, highestUntilDueBTask);
 		});
-	} else if (sortProperty === SortProperty.Favorite) {
-		sortedTasks = tasksCopy.sort((a, b) => {
-			if (a.favorite === b.favorite) {
-				return 0;
-			} else {
-				return a.favorite < b.favorite ? 1 : -1;
-			}
-		});
+	}
+
+	throw new UnsupportedValueError(sortProperty);
+}
+function innerSortByPriority(a: TheTask, b: TheTask): number {
+	if (a.priority === b.priority) {
+		return 0;
 	} else {
-		throw new UnsupportedValueError(sortProperty);
+		return a.priority > b.priority ? 1 : -1;
+	}
+}
+function innerSortByCompletionDate(a: TheTask, b: TheTask): number {
+	if (a.completionDate === b.completionDate) {
+		// Empty completion date `{cm}`
+		if (a.done && !a.completionDate) {
+			return 1;
+		} else if (b.done && !b.completionDate) {
+			return -1;
+		}
+		return 0;
+	} else {
+		if (a.completionDate === undefined) {
+			return -Infinity;
+		} else if (b.completionDate === undefined) {
+			return Infinity;
+		}
+		return dayjs(a.completionDate).diff(b.completionDate);
+	}
+}
+function innerSortByCreationDate(a: TheTask, b: TheTask): number {
+	if (a.creationDate === b.creationDate) {
+		return 0;
+	} else {
+		if (a.creationDate === undefined) {
+			return -Infinity;
+		} else if (b.creationDate === undefined) {
+			return Infinity;
+		}
+		return dayjs(a.creationDate).diff(b.creationDate);
+	}
+}
+function innerSortByOverdue(a: TheTask, b: TheTask): number {
+	let overdueA = 0;
+	let overdueB = 0;
+	if (!a.done) {
+		overdueA = a.due?.overdueInDays || 0;
+	}
+	if (!b.done) {
+		overdueB = b.due?.overdueInDays || 0;
 	}
 
-	if (direction === SortDirection.ASC) {
-		return sortedTasks.reverse();
+	if (overdueA === overdueB) {
+		return 0;
+	} else {
+		return overdueA < overdueB ? 1 : -1;
 	}
-
-	return sortedTasks;
+}
+function innerSortByNotDue(a: TheTask, b: TheTask): number {
+	const untilA = a.due?.daysUntilDue || 0;
+	const untilB = b.due?.daysUntilDue || 0;
+	if (untilA === untilB) {
+		return 0;
+	} else {
+		return untilA > untilB ? 1 : -1;
+	}
 }
 /**
  * Sort tasks by groups in this order:
@@ -133,27 +196,36 @@ export function sortTasks(tasks: TheTask[], sortProperty: SortProperty, directio
  * - No due specified
  */
 export function sortByDueDate(tasks: TheTask[], mixHasDueNotDueAndDoesntHaveADue = false): TheTask[] {
-	const invalidDue = tasks.filter(t => t.due?.isDue === IsDue.Invalid);
-	const overdueTasks = tasks.filter(t => t.due?.isDue === IsDue.Overdue);
-	const dueTasks = tasks.filter(t => t.due?.isDue === IsDue.Due);
-	const dueSpecifiedButNotDue = tasks.filter(t => t.due?.isDue === IsDue.NotDue);
-	const dueNotSpecified = tasks.filter(t => !t.due);
+	const invalidDue = filterTasks(tasks, FILTER_CONSTANTS.InvalidDue).tasks;
+	const overdueTasks = filterTasks(tasks, FILTER_CONSTANTS.Overdue).tasks;
+	const dueTasks = filterTasks(tasks, `${FILTER_CONSTANTS.Due} -${FILTER_CONSTANTS.Overdue}`).tasks;
+	const dueSpecifiedButNotDue = filterTasks(tasks, `${FILTER_CONSTANTS.HasDue} -${FILTER_CONSTANTS.Due}`).tasks;
+	const dueNotSpecified = filterTasks(tasks, FILTER_CONSTANTS.NoDue).tasks;
 
 	let sortedLast = [
-		...sortTasks(dueSpecifiedButNotDue, SortProperty.NotDue),
+		...sortTasks({
+			tasks: dueSpecifiedButNotDue,
+			sortProperty: 'notDue',
+		}),
 		...dueNotSpecified,
 	];
 
 	if (mixHasDueNotDueAndDoesntHaveADue) {
-		sortedLast = sortTasks(sortedLast, SortProperty.Priority);
+		sortedLast = sortTasks({
+			tasks: sortedLast,
+			sortProperty: 'priority',
+		});
 	}
 
-	return [
+	return uniqueTasks([
 		...invalidDue,
-		...sortTasks(overdueTasks, SortProperty.Overdue),
+		...sortTasks({
+			tasks: overdueTasks,
+			sortProperty: 'overdue',
+		}),
 		...dueTasks,
 		...sortedLast,
-	];
+	]);
 }
 
 /**
@@ -169,13 +241,19 @@ export function sortByDueDate(tasks: TheTask[], mixHasDueNotDueAndDoesntHaveADue
  * With secondary sort by priority.
  */
 export function defaultSortTasks(tasks: TheTask[]): TheTask[] {
-	const favoriteTasks = tasks.filter(task => task.favorite);
-	const notFavoriteTasks = tasks.filter(task => !task.favorite);
+	const favoriteTasks = filterTasks(tasks, FILTER_CONSTANTS.Favorite).tasks;
+	const notFavoriteTasks = filterTasks(tasks, `-${FILTER_CONSTANTS.Favorite}`).tasks;
 
-	return [
-		...sortByDueDate(sortTasks(favoriteTasks, SortProperty.Priority)),
-		...sortByDueDate(sortTasks(notFavoriteTasks, SortProperty.Priority)),
-	];
+	return uniqueTasks([
+		...sortByDueDate(sortTasks({
+			tasks: favoriteTasks,
+			sortProperty: 'priority',
+		})),
+		...sortByDueDate(sortTasks({
+			tasks: notFavoriteTasks,
+			sortProperty: 'priority',
+		})),
+	]);
 }
 /**
  * Sort tasks for commands such as `todomd.getNextTask`,
@@ -183,12 +261,24 @@ export function defaultSortTasks(tasks: TheTask[]): TheTask[] {
  * the highest priority/most due tasks first.
  */
 export function nextSort(tasks: TheTask[]): TheTask[] {
-	const favoriteTasks = tasks.filter(task => task.favorite);
-	const notFavoriteTasks = tasks.filter(task => !task.favorite);
+	const favoriteTasks = filterTasks(tasks, FILTER_CONSTANTS.Favorite).tasks;
+	const notFavoriteTasks = filterTasks(tasks, `-${FILTER_CONSTANTS.Favorite}`).tasks;
 
 	return [
-		...sortByDueDate(sortTasks(favoriteTasks, SortProperty.Priority), true),
-		...sortByDueDate(sortTasks(notFavoriteTasks, SortProperty.Priority), true),
+		...sortByDueDate(
+			sortTasks({
+				tasks: favoriteTasks,
+				sortProperty: 'priority',
+			}),
+			true,
+		),
+		...sortByDueDate(
+			sortTasks({
+				tasks: notFavoriteTasks,
+				sortProperty: 'priority',
+			}),
+			true,
+		),
 	];
 }
 
@@ -230,3 +320,17 @@ function sortBySimilarityOfArrays(tasks: TheTask[], property: 'context' | 'proje
 		.reverse()
 		.map(lineNumber => tasks.find(task => task.lineNumber === lineNumber)!);
 }
+/**
+ * Return all nested tasks.
+ */
+function getSubtasksRecursive(tasks: TheTask[]): TheTask[] {
+	const nestedTasks = [];
+	for (const task of tasks) {
+		nestedTasks.push(task);
+		if (task.subtasks.length) {
+			nestedTasks.push(...getSubtasksRecursive(task.subtasks));
+		}
+	}
+	return nestedTasks;
+}
+

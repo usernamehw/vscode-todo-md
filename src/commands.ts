@@ -164,14 +164,14 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.ResetAllRecurringTasks, resetAllRecurringTasksCommand);
 	commands.registerTextEditorCommand(CommandId.DecrementPriority, decrementPriority);
 	commands.registerTextEditorCommand(CommandId.ToggleComment, toggleComment);
-	commands.registerTextEditorCommand(CommandId.SortByDefault, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Default));
-	commands.registerTextEditorCommand(CommandId.SortByPriority, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Priority));
-	commands.registerTextEditorCommand(CommandId.SortByProject, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Project));
-	commands.registerTextEditorCommand(CommandId.SortByTag, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Tag));
-	commands.registerTextEditorCommand(CommandId.SortByContext, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.Context));
-	commands.registerTextEditorCommand(CommandId.SortByCreationDate, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.CreationDate));
-	commands.registerTextEditorCommand(CommandId.SortByCompletionDate, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.CompletionDate));
-	commands.registerTextEditorCommand(CommandId.SortByDueDate, (editor, edit) => sortTasksInEditor(editor, edit, SortProperty.DueDate));
+	commands.registerTextEditorCommand(CommandId.SortByDefault, (editor, edit) => sortTasksInEditor(editor, edit, 'Default'));
+	commands.registerTextEditorCommand(CommandId.SortByPriority, (editor, edit) => sortTasksInEditor(editor, edit, 'priority'));
+	commands.registerTextEditorCommand(CommandId.SortByProject, (editor, edit) => sortTasksInEditor(editor, edit, 'project'));
+	commands.registerTextEditorCommand(CommandId.SortByTag, (editor, edit) => sortTasksInEditor(editor, edit, 'tag'));
+	commands.registerTextEditorCommand(CommandId.SortByContext, (editor, edit) => sortTasksInEditor(editor, edit, 'context'));
+	commands.registerTextEditorCommand(CommandId.SortByCreationDate, (editor, edit) => sortTasksInEditor(editor, edit, 'creationDate'));
+	commands.registerTextEditorCommand(CommandId.SortByCompletionDate, (editor, edit) => sortTasksInEditor(editor, edit, 'completionDate'));
+	commands.registerTextEditorCommand(CommandId.SortByDueDate, (editor, edit) => sortTasksInEditor(editor, edit, 'dueDate'));
 	commands.registerTextEditorCommand(CommandId.CreateSimilarTask, createSimilarTask);
 	commands.registerTextEditorCommand(CommandId.ArchiveCompletedTasks, archiveCompletedTasks);
 	commands.registerTextEditorCommand(CommandId.MoveToSomeday, moveToSomeday);
@@ -221,7 +221,10 @@ export function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sort
 			tasks.push(task);
 		}
 	}
-	const sortedTasks = sortTasks(tasks, sortProperty);
+	const sortedTasks = sortTasks({
+		tasks,
+		sortProperty,
+	});
 	if (!sortedTasks.length) {
 		return;
 	}
