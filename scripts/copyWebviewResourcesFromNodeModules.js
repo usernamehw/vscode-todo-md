@@ -15,7 +15,7 @@ fs.unlink('./media/vendor/codicon.css', (err) => {
 	console.log('✅ codeicon.css copy success');
 })
 
-fs.copyFile('node_modules/vscode-codicons/dist/codicon.ttf', 'media/vendor/codicon.ttf', (err) => {
+fs.copyFile('node_modules/@vscode/codicons/dist/codicon.ttf', 'media/vendor/codicon.ttf', (err) => {
 	if (err) throw err;
 	console.log('✅ codicon.ttf copy success');
 });
