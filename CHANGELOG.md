@@ -1,3 +1,8 @@
+## 2.28.0 `05 Nov 2023`
+
+- ✨ [webview] Highlight text matches
+- ✨ [Tree View/webview] Default sorting considers subtasks
+
 ## 2.27.0 `11 Oct 2023`
 
 - ✨ `todomd.focusTasksWebviewAndInput` command now supports "args": { "selectInputText": boolean, "fillInputValue": string}
