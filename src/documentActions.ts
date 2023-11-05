@@ -534,10 +534,14 @@ export function toggleFavoriteWorkspaceEdit(edit: WorkspaceEdit, document: TextD
 /**
  * Start time tracking (task duration). Triggered manually by user.
  */
-export function startTaskAtLineWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
+export function startTaskAtLineWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number): void {
 	const line = document.lineAt(lineNumber);
 	const task = getTaskAtLineExtension(lineNumber);
 	if (!task) {
+		return;
+	}
+	if (task.done) {
+		window.showErrorMessage('Task already completed.');
 		return;
 	}
 	const newStartDate = helpCreateSpecialTag(SpecialTagName.Started, getDateInISOFormat(undefined, true));
