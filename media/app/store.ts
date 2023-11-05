@@ -50,6 +50,7 @@ interface StoreState {
 	filterInputValue: string;
 	config: ExtensionConfig;
 	selectedTaskLineNumber: number;
+	// ────────────────────────────────────────────────────────────
 	/**
 	 * Send improvised event from store: assign a random number and listen for changes
 	 * inside the app to focus the main input element.
@@ -65,6 +66,7 @@ interface StoreState {
 	 * inside the app to focus the main input element.
 	 */
 	showAddNewTaskModalEvent: number;
+	everythingWasUpdatedEvent: number;
 }
 
 export const useStore = defineStore({
@@ -107,6 +109,7 @@ export const useStore = defineStore({
 		focusFilterInputEvent: 0,
 		selectFilterInputTextEvent: 0,
 		showAddNewTaskModalEvent: 0,
+		everythingWasUpdatedEvent: 0,
 	}),
 	// ────────────────────────────────────────────────────────────
 	getters: {
@@ -206,6 +209,7 @@ export const useStore = defineStore({
 			this.projectsWithCount = projectsWithCount;
 			this.tagsWithCount = tagsWithCount;
 			this.contextsWithCount = contextsWithCount;
+			this.everythingWasUpdatedEvent = Math.random();
 		},
 		selectTask(lineNumber: number) {
 			this.selectedTaskLineNumber = lineNumber;

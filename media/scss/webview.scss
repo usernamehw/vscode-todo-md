@@ -247,7 +247,7 @@ a {
 	&--done {
 		background-color: var(--done-task-bg);
 
-		&--strike-through > .task__title {
+		&.task--strike-through .task__title {
 			text-decoration: line-through;
 		}
 
@@ -642,4 +642,10 @@ a {
 	&--box-shadow {
 		box-shadow: 0 0 6px 3px var(--vscode-scrollbar-shadow) !important;
 	}
+}
+
+::highlight(search-results) {
+	// var() doesn't work (::highlight doesn't inherit variables?)
+	background-color: #ff006670;
+	color: white;
 }

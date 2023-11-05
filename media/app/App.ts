@@ -176,7 +176,101 @@ export default defineComponent({
 			this.storeStore.updateFilterValue(value);
 			this.$nextTick(() => {
 				this.storeStore.selectFirstTask();
+				this.highlightFilterMatches();
 			});
+		},
+		/**
+		 * Highglight text inside of task title matching filter input value.
+		 */
+		highlightFilterMatches() {
+			// https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_Highlight_API
+			// @ts-ignore
+			if (!CSS.highlights) {
+				// 'CSS Custom Highlight API not supported.';
+				return;
+			}
+
+			const filterValue = this.storeStore.filterInputValue.trim().toLowerCase();
+			if (!filterValue) {
+				// @ts-ignore
+				CSS.highlights.clear();
+				return;
+			}
+
+
+			const allTextNodes = [];
+			for (const taskTitleEl of Array.from(document.querySelectorAll('.task__title') ?? [])) {
+				const treeWalker = document.createTreeWalker(taskTitleEl, NodeFilter.SHOW_TEXT);
+				let currentNode = treeWalker.nextNode();
+				while (currentNode) {
+					allTextNodes.push(currentNode);
+					currentNode = treeWalker.nextNode();
+				}
+			}
+
+			// @ts-ignore
+			CSS.highlights.clear();
+
+			// Highlight only matches that are text, not special entities
+			const filterParts = filterValue.split(' ').filter(filterPart => {
+				if (
+					filterPart.startsWith('#') ||
+					filterPart.startsWith('+') ||
+					filterPart.startsWith('@') ||
+					filterPart.startsWith('$') ||
+					filterPart.startsWith('-') ||
+					filterPart.startsWith('<') ||
+					filterPart.startsWith('>')
+				) {
+					return false;
+				}
+				return true;
+			});
+
+			const ranges: Range[][] = [];
+
+			for (const filterPart of filterParts) {
+				// Iterate over all text nodes and find matches.
+				ranges.push(
+					...allTextNodes
+						.map(el => ({ el, text: el.textContent!.toLowerCase() }))
+						.map(({ text, el }) => {
+							if (
+								el.parentElement?.closest('.task__tag') ||
+								el.parentElement?.closest('.task__project') ||
+								el.parentElement?.closest('.task__context')
+							) {
+								// Don't highlight text inside of tag/project/context
+								return [new Range()];
+							}
+
+							const indices: number[] = [];
+							let startPos = 0;
+							while (startPos < text.length) {
+								const index = text.indexOf(filterPart, startPos);
+								if (index === -1) {
+									break;
+								}
+								indices.push(index);
+								startPos = index + filterPart.length;
+							}
+
+							return indices.map(index => {
+								const range = new Range();
+								range.setStart(el, index);
+								range.setEnd(el, index + filterPart.length);
+								return range;
+							});
+						}),
+				);
+			}
+
+			// @ts-ignore
+			// eslint-disable-next-line no-undef
+			const searchResultsHighlight = new Highlight(...ranges.flat());
+
+			// @ts-ignore
+			CSS.highlights.set('search-results', searchResultsHighlight);
 		},
 		onDown() {
 			const ln = this.storeStore.selectNextTask();
@@ -301,6 +395,10 @@ export default defineComponent({
 		},
 		'storeStore.showAddNewTaskModalEvent'() {
 			this.showAddNewTaskModal();
+		},
+		'storeStore.everythingWasUpdatedEvent'() {
+			// Usually done on startup or when typing in the document
+			this.highlightFilterMatches();
 		},
 	},
 });

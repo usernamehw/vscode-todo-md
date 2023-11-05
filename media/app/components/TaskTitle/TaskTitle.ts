@@ -37,7 +37,9 @@ export default defineComponent({
 		},
 	},
 	render() {
-		const returnEl = h('span', {}, []);
+		const returnEl = h('span', {
+			class: 'task__title',
+		}, []);
 		const words = this.stuff.split(' ');
 		const currentWords = [];
 
