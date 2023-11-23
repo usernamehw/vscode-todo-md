@@ -16,7 +16,7 @@ export default defineComponent({
 			this.inputValue = this.mainStore.getTaskAtLine(this.mainStore.selectedTaskLineNumber)?.rawText || '';
 		},
 		onTaskTitleChange(event: Event) {
-			this.inputValue = (event.target as HTMLTextAreaElement).value;
+			this.inputValue = (event.target as HTMLTextAreaElement).value.replace(/\n|\r/g, ' ');
 			this.editSelectedTaskDebounced();
 		},
 		/**
@@ -49,6 +49,7 @@ export default defineComponent({
 		}, 500),
 		focus() {
 			const textareaElement = this.$refs.detailsTaskTitle as HTMLTextAreaElement;
+			this.resizeTaskTitleTextarea();
 			textareaElement.focus();
 		},
 	},
