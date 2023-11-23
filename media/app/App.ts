@@ -227,7 +227,8 @@ export default defineComponent({
 					filterPart.startsWith('$') ||
 					filterPart.startsWith('-') ||
 					filterPart.startsWith('<') ||
-					filterPart.startsWith('>')
+					filterPart.startsWith('>') ||
+					filterPart === ''
 				) {
 					return false;
 				}
