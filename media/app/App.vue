@@ -38,7 +38,7 @@
                      contentClass="modal-content"
                      :escToClose="true"
                      :focusRetain="false"
-                     @closed="newTaskModalClosed">
+                     @closed="modalClosed">
         <h3>New task {{ newTaskAt === 'subtask' ? 'as a subtask' : 'at root' }}.</h3>
         <div class="new-task__input-container">
             <input ref="newTaskInput"
@@ -52,6 +52,28 @@
         <button class="modal-close"
                 title="Close modal dialog."
                 @click="hideAddNewTaskModal"><span class="icon codicon codicon-close"></span></button>
+    </vue-final-modal>
+
+    <vue-final-modal v-model="isPickSortModalVisible"
+                     classes="modal-container"
+                     contentClass="modal-content"
+                     :escToClose="true"
+                     :focusRetain="false"
+                     @closed="modalClosed">
+        <h3 class="pick-sort__header">Pick sorting for webview:</h3>
+        <div class="pick-sort__item"
+             @click="storeStore.updateSortProperty('Default');hidePickSortModal();">Default</div>
+        <div class="pick-sort__item"
+             @click="storeStore.updateSortProperty('priority');hidePickSortModal();">Priority</div>
+        <div class="pick-sort__item"
+             @click="storeStore.updateSortProperty('project');hidePickSortModal();">Project</div>
+        <div class="pick-sort__item"
+             @click="storeStore.updateSortProperty('tag');hidePickSortModal();">Tag</div>
+        <div class="pick-sort__item"
+             @click="storeStore.updateSortProperty('context');hidePickSortModal();">Context</div>
+        <button class="modal-close"
+                title="Close modal dialog."
+                @click="hidePickSortModal"><span class="icon codicon codicon-close"></span></button>
     </vue-final-modal>
 
     <notifications position="bottom right"

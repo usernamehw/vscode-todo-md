@@ -373,6 +373,9 @@ interface WebviewMessageFocusFilterInput {
 interface WebviewMessageShowAddNewTaskModal {
 	type: 'showAddNewTaskModal';
 }
+interface WebviewMessagePickSort {
+	type: 'pickSort';
+}
 // ────────────────────────────────────────────────────────────
 // ──── From webview to extension ─────────────────────────────
 // ────────────────────────────────────────────────────────────
@@ -464,7 +467,7 @@ export type MessageFromWebview = WebviewAddNewTask | WebviewMessageDecrementCoun
 /**
  * Messages that can only be sent from extension to webview.
  */
-export type MessageToWebview = WebviewMessageFocusFilterInput | WebviewMessageShowAddNewTaskModal | WebviewMessageUpdateEverything;
+export type MessageToWebview = WebviewMessageFocusFilterInput | WebviewMessagePickSort | WebviewMessageShowAddNewTaskModal | WebviewMessageUpdateEverything;
 
 /**
  * Keep autocomplete for the union type with `| string`.

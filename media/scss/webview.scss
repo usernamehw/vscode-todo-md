@@ -2,6 +2,7 @@
 @use 'suggest';
 @use 'modal';
 @use 'new_task_modal';
+@use 'pick_sort_modal';
 @use 'context_menu';
 @use 'misc';
 @use 'mixins';
@@ -89,6 +90,8 @@ body {
 	--duration-animation-color1: #ee7f0020;
 	--duration-animation-color2: #028dd820;
 
+	--modal-background-dimming: rgba(0, 0, 0, 0.1);
+
 	--z-index-checkbox-1: 10;
 	--z-index-checkbox-2: 15;
 	--z-index-filter-input: 999;
@@ -156,6 +159,8 @@ body.vscode-high-contrast:not(.vscode-high-contrast-light) {
 
 	--inline-code-bg: rgba(240, 246, 252, 0.07);
 	--inline-code-border: rgba(240, 246, 252, 0.14);
+
+	--modal-background-dimming: rgba(0, 0, 0, 0.3);
 
 	--duration-animation-color1: #ee7f0040;
 	--duration-animation-color2: #028dd840;

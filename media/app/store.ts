@@ -3,12 +3,13 @@ import { createPinia, defineStore } from 'pinia';
 import { showToastNotification } from '..';
 import type { TheTask } from '../../src/TheTask';
 import { FILTER_CONSTANTS, FilterTasksResult, filterTasks } from '../../src/filter';
-import { defaultSortTasks } from '../../src/sort';
+import { SortProperty, sortTasks } from '../../src/sort';
 import { ExtensionConfig, IsDue, ItemWithCount, MessageFromWebview, MessageToWebview } from '../../src/types';
 import { SuggestItem } from './components/Suggest/Suggest';
 
 interface SavedState {
 	filterInputValue: string;
+	sortProperty: SortProperty;
 }
 interface VscodeWebviewApi {
 	getState(): SavedState;
@@ -47,26 +48,19 @@ interface StoreState {
 	contextsWithCount: ItemWithCount[];
 	defaultFileSpecified: boolean;
 	activeDocumentOpened: boolean;
-	filterInputValue: string;
 	config: ExtensionConfig;
 	selectedTaskLineNumber: number;
 	// ────────────────────────────────────────────────────────────
-	/**
-	 * Send improvised event from store: assign a random number and listen for changes
-	 * inside the app to focus the main input element.
-	 */
+	filterInputValue: string;
+	sortProperty: SortProperty;
+	// ────────────────────────────────────────────────────────────
+	// Send improvised event from store: assign a random number and listen for changes
+	// inside the app to focus the main input element.
 	focusFilterInputEvent: number;
-	/**
-	 * Send improvised event from store: assign a random number and listen for changes
-	 * inside the app to select text on the main input element.
-	 */
 	selectFilterInputTextEvent: number;
-	/**
-	 * Send improvised event from store: assign a random number and listen for changes
-	 * inside the app to focus the main input element.
-	 */
 	showAddNewTaskModalEvent: number;
 	everythingWasUpdatedEvent: number;
+	pickSortEvent: number;
 }
 
 export const useStore = defineStore({
@@ -81,7 +75,11 @@ export const useStore = defineStore({
 		contextsWithCount: [],
 		defaultFileSpecified: true,
 		activeDocumentOpened: false,
+		// ────────────────────────────────────────────────────────────
+		// saved between reloads
 		filterInputValue: '',
+		sortProperty: 'Default',
+		// ────────────────────────────────────────────────────────────
 		config: {
 			webview: {
 				autoShowSuggest: true,
@@ -110,6 +108,7 @@ export const useStore = defineStore({
 		selectFilterInputTextEvent: 0,
 		showAddNewTaskModalEvent: 0,
 		everythingWasUpdatedEvent: 0,
+		pickSortEvent: 0,
 	}),
 	// ────────────────────────────────────────────────────────────
 	getters: {
@@ -151,7 +150,10 @@ export const useStore = defineStore({
 				// filteredTasks = filterTasks(filteredTasks, '-$hidden');
 			}
 			return {
-				tasks: defaultSortTasks(filteredTasks),
+				tasks: sortTasks({
+					tasks: filteredTasks,
+					sortProperty: state.sortProperty,
+				}),
 				matchIds,
 			};
 		},
@@ -234,8 +236,16 @@ export const useStore = defineStore({
 			this.filterInputValue = newValue;
 			vscodeApi.setState({
 				filterInputValue: newValue,
+				sortProperty: this.sortProperty,
 			});
 			this.updateWebviewTitle();
+		},
+		updateSortProperty(sortProperty: SortProperty) {
+			this.sortProperty = sortProperty;
+			vscodeApi.setState({
+				filterInputValue: this.filterInputValue,
+				sortProperty,
+			});
 		},
 		focusFilterInput() {
 			this.focusFilterInputEvent = Math.random();
@@ -418,8 +428,12 @@ export const useStore = defineStore({
 export function getState(): SavedState {
 	const savedStateDefaults: SavedState = {
 		filterInputValue: '',
+		sortProperty: 'Default',
 	};
-	return vscodeApi.getState() ?? savedStateDefaults;
+	return {
+		...vscodeApi.getState(),
+		...savedStateDefaults,
+	};
 }
 
 window.addEventListener('message', event => {
@@ -470,6 +484,11 @@ window.addEventListener('message', event => {
 		case 'showAddNewTaskModal': {
 			const store = useStore();
 			store.addNewTaskModal();
+			break;
+		}
+		case 'pickSort': {
+			const store = useStore();
+			store.pickSortEvent = Math.random();
 			break;
 		}
 	}

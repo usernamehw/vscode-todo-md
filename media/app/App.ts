@@ -53,6 +53,7 @@ export default defineComponent({
 		],
 		// ──── New Task ──────────────────────────────────────────────
 		isNewTaskModalVisible: false,
+		isPickSortModalVisible: false,
 		newTaskAt: 'root' as 'root' | 'subtask',
 		newTaskAsText: '',
 	}),
@@ -154,8 +155,14 @@ export default defineComponent({
 				(this.$refs.newTaskInput as HTMLInputElement).focus();
 			}, 100);
 		},
+		pickSort() {
+			this.isPickSortModalVisible = true;
+		},
 		hideAddNewTaskModal() {
 			this.isNewTaskModalVisible = false;
+		},
+		hidePickSortModal() {
+			this.isPickSortModalVisible = false;
 		},
 		addTask() {
 			sendMessage({
@@ -167,7 +174,7 @@ export default defineComponent({
 			});
 			this.isNewTaskModalVisible = false;
 		},
-		newTaskModalClosed() {
+		modalClosed() {
 			this.focusFilterInput();
 		},
 		// ────────────────────────────────────────────────────────────
@@ -298,6 +305,7 @@ export default defineComponent({
 	created() {
 		const savedState = getState();
 		this.storeStore.updateFilterValue(savedState.filterInputValue);
+		this.storeStore.updateSortProperty(savedState.sortProperty);
 		sendMessage({
 			type: 'webviewLoaded',
 			value: true,
@@ -395,6 +403,9 @@ export default defineComponent({
 		},
 		'storeStore.showAddNewTaskModalEvent'() {
 			this.showAddNewTaskModal();
+		},
+		'storeStore.pickSortEvent'() {
+			this.pickSort();
 		},
 		'storeStore.everythingWasUpdatedEvent'() {
 			// Usually done on startup or when typing in the document

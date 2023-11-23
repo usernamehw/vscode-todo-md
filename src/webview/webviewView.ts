@@ -213,6 +213,11 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 			type: 'showAddNewTaskModal',
 		});
 	}
+	pickSort() {
+		this.sendMessageToWebview({
+			type: 'pickSort',
+		});
+	}
 	/**
 	 * Send message. js objects that will be serialized to json.
 	 */
@@ -264,7 +269,9 @@ export function updateWebviewView() {
 export function focusWebviewFilterInput({ selectInputText, fillInputValue }: {selectInputText?: boolean; fillInputValue?: string}) {
 	tasksWebviewViewProvider.focusFilterInput(selectInputText, fillInputValue);
 }
-
+export function pickSort() {
+	tasksWebviewViewProvider.pickSort();
+}
 export function showAddNewTaskModal() {
 	tasksWebviewViewProvider.showAddNewTaskModal();
 }

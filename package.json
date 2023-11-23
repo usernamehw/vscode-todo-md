@@ -195,7 +195,7 @@
 				},
 				"todomd.activatePattern": {
 					"type": "string",
-					"markdownDescription": "Choose files that extension will operate on. By default activated on 3 files (todo.md, someday.md & todo.archive.md). This format is called `Glob`. Examples:\n\nActivate on any (.txt) file - `**/*.txt`.\n\nActivate only on single file (todo.txt) - `**/todo.txt`\n\nActivate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`",
+					"markdownDescription": "Choose files that extension will operate on. By default activated on 3 files (todo.md, someday.md & todo.archive.md). Uses [Glob](https://code.visualstudio.com/docs/editor/glob-patterns). Examples:\n\nActivate on any (.txt) file - `**/*.txt`.\n\nActivate only on single file (todo.txt) - `**/todo.txt`\n\nActivate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`",
 					"default": "**/{todo,someday,todo.archive}.md"
 				},
 				"todomd.getNextNumberOfTasks": {
@@ -1165,6 +1165,11 @@
 				"icon": "$(settings-gear)"
 			},
 			{
+				"command": "todomd.webview.pickSort",
+				"title": "Sort",
+				"icon": "$(sort-precedence)"
+			},
+			{
 				"command": "todomd.webview.toggleShowRecurringUpcoming",
 				"title": "Toggle setting to show recurring upcoming tasks in webview.",
 				"category": "Todo MD",
@@ -1634,9 +1639,14 @@
 					"group": "navigation@8"
 				},
 				{
-					"command": "todomd.webview.toggleShowRecurringUpcoming",
+					"command": "todomd.webview.pickSort",
 					"when": "view == todomd.webviewTasks",
 					"group": "navigation@7"
+				},
+				{
+					"command": "todomd.webview.toggleShowRecurringUpcoming",
+					"when": "view == todomd.webviewTasks",
+					"group": "navigation@6"
 				},
 				{
 					"command": "todomd.collapseAllNestedTasks",
