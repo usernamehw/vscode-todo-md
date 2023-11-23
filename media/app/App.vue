@@ -19,7 +19,15 @@
                      @keydownDown="onDown"
                      @keydownUp="onUp" />
         </header>
-        <div v-if="mainStore.filteredSortedTasks.tasks && mainStore.filteredSortedTasks.tasks.length"
+        <div v-if="mainStore.tasksAsTree.length === 0 && mainStore.filterInputValue.length === 0"
+             class="non-ideal-state">
+            No tasks
+        </div>
+        <div v-else-if="mainStore.tasksAsTree.length && mainStore.filterInputValue !== '' && !mainStore.filteredSortedTasks.tasks.length"
+             class="non-ideal-state">
+            No matches
+        </div>
+        <div v-else-if="mainStore.filteredSortedTasks.tasks && mainStore.filteredSortedTasks.tasks.length"
              ref="taskList"
              class="task-list"
              :class="{ 'task-list--details-visible': taskDetailsVisible }"
