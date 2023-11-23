@@ -3,7 +3,7 @@ import { defineComponent, PropType } from 'vue';
 import type { TheTask } from '../../../../src/TheTask';
 import { durationTo } from '../../../../src/time/timeUtils';
 import { IsDue } from '../../../../src/types';
-import { sendMessage, useStore } from '../../store';
+import { sendMessage, useMainStore } from '../../store';
 import { VueEvents } from '../../webviewTypes';
 import TaskTitleComponent from '../TaskTitle/TaskTitle';
 
@@ -30,10 +30,10 @@ export default defineComponent({
 			});
 		},
 		selectThisTask() {
-			this.storeStore.selectTask(this.model.lineNumber);
+			this.mainStore.selectTask(this.model.lineNumber);
 		},
 		openTaskContextMenu(e: MouseEvent, task: TheTask) {
-			this.storeStore.selectTask(task.lineNumber);
+			this.mainStore.selectTask(task.lineNumber);
 			// @ts-ignore
 			this.emitter.emit(VueEvents.OpenTaskContextMenu, { event: e, task });
 		},
@@ -50,7 +50,7 @@ export default defineComponent({
 			});
 		},
 		toggleDone() {
-			this.storeStore.toggleDone(this.model);
+			this.mainStore.toggleDone(this.model);
 		},
 		incrementCount() {
 			sendMessage({
@@ -66,10 +66,10 @@ export default defineComponent({
 		},
 	},
 	computed: {
-		...mapStores(useStore),
+		...mapStores(useMainStore),
 		nestedCount() {
 			if (this.model.subtasks.length !== 0 && this.model.parentTaskLineNumber === undefined) {
-				const allNestedTasks = this.storeStore.getAllNestedTasksWebview(this.model);
+				const allNestedTasks = this.mainStore.getAllNestedTasksWebview(this.model);
 				return `<span class="task__nested-count-number" title="Nested tasks count">${allNestedTasks.filter(task => task.done).length}/${allNestedTasks.length}</span>`;
 			} else {
 				return undefined;
@@ -86,8 +86,8 @@ export default defineComponent({
 		classes() {
 			const classMap: Record<string, boolean> = {};
 			classMap['task--done'] = this.model.done;
-			classMap['task--filter-dont-match'] = this.storeStore.tasksThatDontMatchFilter.includes(this.model.lineNumber);
-			if (this.storeStore.config.webview.showPriority) {
+			classMap['task--filter-dont-match'] = this.mainStore.tasksThatDontMatchFilter.includes(this.model.lineNumber);
+			if (this.mainStore.config.webview.showPriority) {
 				switch (this.model.priority) {
 					case 'A': classMap['task--priA'] = true; break;
 					case 'B': classMap['task--priB'] = true; break;
@@ -106,10 +106,10 @@ export default defineComponent({
 					case IsDue.Invalid: classMap.invalid = true;break;
 				}
 			}
-			if (this.storeStore.config.webview.completedStrikeThrough) {
+			if (this.mainStore.config.webview.completedStrikeThrough) {
 				classMap['task--strike-through'] = true;
 			}
-			if (this.storeStore.selectedTaskLineNumber === this.model.lineNumber) {
+			if (this.mainStore.selectedTaskLineNumber === this.model.lineNumber) {
 				classMap['task--selected'] = true;
 			}
 			return classMap;
@@ -152,11 +152,11 @@ export default defineComponent({
 		},
 	},
 	mounted() {
-		this.duration = this.model.duration ? this.model.duration : this.model.start ? durationTo(this.model, false, this.storeStore.config.durationIncludeSeconds) : '';
+		this.duration = this.model.duration ? this.model.duration : this.model.start ? durationTo(this.model, false, this.mainStore.config.durationIncludeSeconds) : '';
 
 		if (!this.model.duration && this.model.start && !this.model.done) {
 			this.durationTimerId = setInterval(() => {
-				this.duration = durationTo(this.model, false, this.storeStore.config.durationIncludeSeconds);
+				this.duration = durationTo(this.model, false, this.mainStore.config.durationIncludeSeconds);
 			}, 1000);
 		}
 	},

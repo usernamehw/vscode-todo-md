@@ -1,9 +1,9 @@
 <template>
 <div>
-    <div v-if="!storeStore.defaultFileSpecified && !storeStore.activeDocumentOpened"
+    <div v-if="!mainStore.defaultFileSpecified && !mainStore.activeDocumentOpened"
          class="welcome">
         <p class="welcome__text">
-            Open a file that matches <b><code>"todomd.activatePattern"</code></b> (<code>{{ storeStore.config.activatePattern }}</code>) or set default file path <b><code>"todomd.defaultFile"</code></b>.
+            Open a file that matches <b><code>"todomd.activatePattern"</code></b> (<code>{{ mainStore.config.activatePattern }}</code>) or set default file path <b><code>"todomd.defaultFile"</code></b>.
         </p>
         <div><a class="btn btn--welcome"
                 href="command:todomd.specifyDefaultFile">Specify Default File Path</a></div>
@@ -12,19 +12,19 @@
     <div v-else>
         <header>
             <Suggest ref="suggest"
-                     :value="storeStore.filterInputValue"
-                     :suggestItems="storeStore.suggestItems"
-                     :autoshow="storeStore.config.webview.autoShowSuggest"
+                     :value="mainStore.filterInputValue"
+                     :suggestItems="mainStore.suggestItems"
+                     :autoshow="mainStore.config.webview.autoShowSuggest"
                      @input="onInput"
                      @keydownDown="onDown"
                      @keydownUp="onUp" />
         </header>
-        <div v-if="storeStore.filteredSortedTasks.tasks && storeStore.filteredSortedTasks.tasks.length"
+        <div v-if="mainStore.filteredSortedTasks.tasks && mainStore.filteredSortedTasks.tasks.length"
              ref="taskList"
              class="task-list"
              :class="{ 'task-list--details-visible': taskDetailsVisible }"
              @scroll.passive="onTaskListScroll">
-            <Task v-for="task of storeStore.filteredSortedTasks.tasks"
+            <Task v-for="task of mainStore.filteredSortedTasks.tasks"
                   :key="task.lineNumber + task.rawText"
                   :model="task" />
         </div>
@@ -62,15 +62,15 @@
                      @closed="modalClosed">
         <h3 class="pick-sort__header">Pick sorting for webview:</h3>
         <div class="pick-sort__item"
-             @click="storeStore.updateSortProperty('Default');hidePickSortModal();">Default</div>
+             @click="mainStore.updateSortProperty('Default');hidePickSortModal();">Default</div>
         <div class="pick-sort__item"
-             @click="storeStore.updateSortProperty('priority');hidePickSortModal();">Priority</div>
+             @click="mainStore.updateSortProperty('priority');hidePickSortModal();">Priority</div>
         <div class="pick-sort__item"
-             @click="storeStore.updateSortProperty('project');hidePickSortModal();">Project</div>
+             @click="mainStore.updateSortProperty('project');hidePickSortModal();">Project</div>
         <div class="pick-sort__item"
-             @click="storeStore.updateSortProperty('tag');hidePickSortModal();">Tag</div>
+             @click="mainStore.updateSortProperty('tag');hidePickSortModal();">Tag</div>
         <div class="pick-sort__item"
-             @click="storeStore.updateSortProperty('context');hidePickSortModal();">Context</div>
+             @click="mainStore.updateSortProperty('context');hidePickSortModal();">Context</div>
         <button class="modal-close"
                 title="Close modal dialog."
                 @click="hidePickSortModal"><span class="icon codicon codicon-close"></span></button>

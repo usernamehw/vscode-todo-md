@@ -30,13 +30,6 @@ window.onerror = function(message, source, lineno, colno, error) {
 };
 
 export const pinia = createPinia();
-// Without prefix TypeScript autocomplete breaks :(
-// setMapStoreSuffix('');
-// declare module 'pinia' {
-// 	export interface MapStoresCustomization {
-// 		suffix: '';
-// 	}
-// }
 
 interface StoreState {
 	tasksAsTree: TheTask[];
@@ -63,8 +56,8 @@ interface StoreState {
 	pickSortEvent: number;
 }
 
-export const useStore = defineStore({
-	id: 'store',
+export const useMainStore = defineStore({
+	id: 'main',
 	state: (): StoreState => ({
 		tasksAsTree: [],
 		tags: [],
@@ -426,13 +419,11 @@ export const useStore = defineStore({
 });
 
 export function getState(): SavedState {
-	const savedStateDefaults: SavedState = {
-		filterInputValue: '',
-		sortProperty: 'Default',
-	};
+	const savedState = vscodeApi.getState();
+
 	return {
-		...vscodeApi.getState(),
-		...savedStateDefaults,
+		filterInputValue: savedState.filterInputValue ?? '',
+		sortProperty: savedState.sortProperty ?? 'Default',
 	};
 }
 
@@ -440,7 +431,7 @@ window.addEventListener('message', event => {
 	const message: MessageToWebview = event.data; // The json data that the extension sent
 	switch (message.type) {
 		case 'updateEverything': {
-			const store = useStore();
+			const store = useMainStore();
 			store.setEverything({
 				tasksAsTree: message.value.tasksAsTree,
 				config: message.value.config,
@@ -467,7 +458,7 @@ window.addEventListener('message', event => {
 			break;
 		}
 		case 'focusFilterInput': {
-			const store = useStore();
+			const store = useMainStore();
 			if (message.value?.fillInputValue) {
 				store.updateFilterValue(message.value.fillInputValue);
 			}
@@ -482,12 +473,12 @@ window.addEventListener('message', event => {
 			break;
 		}
 		case 'showAddNewTaskModal': {
-			const store = useStore();
+			const store = useMainStore();
 			store.addNewTaskModal();
 			break;
 		}
 		case 'pickSort': {
-			const store = useStore();
+			const store = useMainStore();
 			store.pickSortEvent = Math.random();
 			break;
 		}

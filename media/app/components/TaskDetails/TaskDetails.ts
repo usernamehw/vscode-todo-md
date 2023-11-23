@@ -1,19 +1,19 @@
 import debounce from 'lodash/debounce';
 import { mapStores } from 'pinia';
 import { defineComponent } from 'vue';
-import { sendMessage, useStore } from '../../store';
+import { sendMessage, useMainStore } from '../../store';
 
 export default defineComponent({
 	name: 'TaskDetails',
 	computed: {
-		...mapStores(useStore),
+		...mapStores(useMainStore),
 	},
 	data: () => ({
 		inputValue: '',
 	}),
 	methods: {
 		updateInputValueBasedOnSelectedTask() {
-			this.inputValue = this.storeStore.getTaskAtLine(this.storeStore.selectedTaskLineNumber)?.rawText || '';
+			this.inputValue = this.mainStore.getTaskAtLine(this.mainStore.selectedTaskLineNumber)?.rawText || '';
 		},
 		onTaskTitleChange(event: Event) {
 			this.inputValue = (event.target as HTMLTextAreaElement).value;
@@ -37,7 +37,7 @@ export default defineComponent({
 				sendMessage({
 					type: 'editTaskRawText',
 					value: {
-						lineNumber: this.storeStore.selectedTaskLineNumber,
+						lineNumber: this.mainStore.selectedTaskLineNumber,
 						newRawText: this.inputValue,
 					},
 				});
@@ -59,7 +59,7 @@ export default defineComponent({
 		'inputValue'() {
 			this.resizeTaskTitleTextarea();
 		},
-		'storeStore.selectedTaskLineNumber'() {
+		'mainStore.selectedTaskLineNumber'() {
 			this.updateInputValueBasedOnSelectedTask();
 		},
 	},

@@ -6,7 +6,7 @@ import { TheTask } from '../../src/TheTask';
 import Suggest from './components/Suggest/Suggest';
 import SuggestComponent from './components/Suggest/Suggest.vue';
 import TaskDetailsComponent from './components/TaskDetails/TaskDetails.vue';
-import { getState, sendMessage, useStore } from './store';
+import { getState, sendMessage, useMainStore } from './store';
 import { VueEvents } from './webviewTypes';
 
 /**
@@ -58,9 +58,9 @@ export default defineComponent({
 		newTaskAsText: '',
 	}),
 	computed: {
-		...mapStores(useStore),
+		...mapStores(useMainStore),
 		taskDetailsVisible(): boolean {
-			return (this.storeStore.config.webview.showTaskDetails || this.taskDetailsManuallyTriggered) && this.storeStore.selectedTaskLineNumber !== -1;
+			return (this.mainStore.config.webview.showTaskDetails || this.taskDetailsManuallyTriggered) && this.mainStore.selectedTaskLineNumber !== -1;
 		},
 	},
 	methods: {
@@ -169,7 +169,7 @@ export default defineComponent({
 				type: 'addNewTask',
 				value: {
 					rawTaskText: this.newTaskAsText,
-					parentTaskLineNumber: this.newTaskAt === 'root' ? undefined : this.storeStore.selectedTaskLineNumber,
+					parentTaskLineNumber: this.newTaskAt === 'root' ? undefined : this.mainStore.selectedTaskLineNumber,
 				},
 			});
 			this.isNewTaskModalVisible = false;
@@ -179,10 +179,10 @@ export default defineComponent({
 		},
 		// ────────────────────────────────────────────────────────────
 		onInput(value: string) {
-			this.storeStore.selectTask(-1);
-			this.storeStore.updateFilterValue(value);
+			this.mainStore.selectTask(-1);
+			this.mainStore.updateFilterValue(value);
 			this.$nextTick(() => {
-				this.storeStore.selectFirstTask();
+				this.mainStore.selectFirstTask();
 				this.highlightFilterMatches();
 			});
 		},
@@ -197,7 +197,7 @@ export default defineComponent({
 				return;
 			}
 
-			const filterValue = this.storeStore.filterInputValue.trim().toLowerCase();
+			const filterValue = this.mainStore.filterInputValue.trim().toLowerCase();
 			if (!filterValue) {
 				// @ts-ignore
 				CSS.highlights.clear();
@@ -281,13 +281,13 @@ export default defineComponent({
 			CSS.highlights.set('search-results', searchResultsHighlight);
 		},
 		onDown() {
-			const ln = this.storeStore.selectNextTask();
+			const ln = this.mainStore.selectNextTask();
 			if (ln && ln !== -1) {
 				this.scrollIntoView(ln);
 			}
 		},
 		onUp() {
-			const ln = this.storeStore.selectPrevTask();
+			const ln = this.mainStore.selectPrevTask();
 			if (ln && ln !== -1) {
 				this.scrollIntoView(ln);
 			}
@@ -305,8 +305,8 @@ export default defineComponent({
 	},
 	created() {
 		const savedState = getState();
-		this.storeStore.updateFilterValue(savedState.filterInputValue);
-		this.storeStore.updateSortProperty(savedState.sortProperty);
+		this.mainStore.updateFilterValue(savedState.filterInputValue);
+		this.mainStore.updateSortProperty(savedState.sortProperty);
 		sendMessage({
 			type: 'webviewLoaded',
 			value: true,
@@ -342,13 +342,13 @@ export default defineComponent({
 			if (e.key === 'ArrowRight') {
 				sendMessage({
 					type: 'toggleTaskCollapse',
-					value: this.storeStore.selectedTaskLineNumber,
+					value: this.mainStore.selectedTaskLineNumber,
 				});
 			} else if (e.key === 'Delete' && e.shiftKey) {
-				if (this.storeStore.selectedTaskLineNumber !== -1) {
+				if (this.mainStore.selectedTaskLineNumber !== -1) {
 					sendMessage({
 						type: 'deleteTask',
-						value: this.storeStore.selectedTaskLineNumber,
+						value: this.mainStore.selectedTaskLineNumber,
 					});
 				}
 			} else if (e.key === 'Escape') {
@@ -356,7 +356,7 @@ export default defineComponent({
 				this.focusFilterInput();
 				this.hideContextMenu();
 			} else if (e.key === 'd' && e.altKey) {
-				const task = this.storeStore.getTaskAtLine(this.storeStore.selectedTaskLineNumber);
+				const task = this.mainStore.getTaskAtLine(this.mainStore.selectedTaskLineNumber);
 				if (task) {
 					if (task.count) {
 						sendMessage({
@@ -365,13 +365,13 @@ export default defineComponent({
 						});
 					} else {
 						/** Task will be gone => select next one */
-						const shouldSelectNextTask = this.storeStore.config.webview.showCompleted &&
-							!this.storeStore.config.webview.showRecurringCompleted &&
+						const shouldSelectNextTask = this.mainStore.config.webview.showCompleted &&
+							!this.mainStore.config.webview.showRecurringCompleted &&
 							task.due?.isRecurring && !task.done;
 						if (shouldSelectNextTask) {
-							this.storeStore.selectNextTask(task.lineNumber);
+							this.mainStore.selectNextTask(task.lineNumber);
 						}
-						this.storeStore.toggleDone(task);
+						this.mainStore.toggleDone(task);
 					}
 				}
 			} else if (e.key === 'F2') {
@@ -380,11 +380,11 @@ export default defineComponent({
 					(this.$refs.taskDetails as typeof TaskDetailsComponent).focus();
 				}, 100);
 			} else if (e.key === 'Home') {
-				this.storeStore.selectFirstTask();
-				this.scrollIntoView(this.storeStore.selectedTaskLineNumber);
+				this.mainStore.selectFirstTask();
+				this.scrollIntoView(this.mainStore.selectedTaskLineNumber);
 			} else if (e.key === 'End') {
-				this.storeStore.selectLastTask();
-				this.scrollIntoView(this.storeStore.selectedTaskLineNumber);
+				this.mainStore.selectLastTask();
+				this.scrollIntoView(this.mainStore.selectedTaskLineNumber);
 			} else if (e.key === 'Insert') {
 				if (e.ctrlKey) {
 					this.newTaskAt = 'subtask';
@@ -396,19 +396,19 @@ export default defineComponent({
 		});
 	},
 	watch: {
-		'storeStore.focusFilterInputEvent'() {
+		'mainStore.focusFilterInputEvent'() {
 			this.focusFilterInput();
 		},
-		'storeStore.selectFilterInputTextEvent'() {
+		'mainStore.selectFilterInputTextEvent'() {
 			this.selectFilterInputText();
 		},
-		'storeStore.showAddNewTaskModalEvent'() {
+		'mainStore.showAddNewTaskModalEvent'() {
 			this.showAddNewTaskModal();
 		},
-		'storeStore.pickSortEvent'() {
+		'mainStore.pickSortEvent'() {
 			this.pickSort();
 		},
-		'storeStore.everythingWasUpdatedEvent'() {
+		'mainStore.everythingWasUpdatedEvent'() {
 			// Usually done on startup or when typing in the document
 			this.$nextTick(() => {
 				this.highlightFilterMatches();

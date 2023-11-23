@@ -19,15 +19,15 @@
               :class="[model.collapseRange ? 'codicon-chevron-right' : 'codicon-chevron-down']"
               @click.stop.exact="toggleTaskCollapse"
               @click.alt.stop="toggleTaskCollapseRecursive"></span><!--
-    --><input v-if="storeStore.config.webview.showCheckbox"
+    --><input v-if="mainStore.config.webview.showCheckbox"
                type="checkbox"
                :checked="model.done"
                aria-label="Task completion status"
                class="checkbox"
-               :class="[storeStore.config.webview.customCheckboxEnabled ? 'checkbox--custom' : 'checkbox--native']"
+               :class="[mainStore.config.webview.customCheckboxEnabled ? 'checkbox--custom' : 'checkbox--native']"
                @click.stop
                @change="toggleDone"><!--
-        --><template v-if="nestedCount && storeStore.config.webview.showNestedTaskCount">
+        --><template v-if="nestedCount && mainStore.config.webview.showNestedTaskCount">
             <span class="task__nested-count"
                   v-html="nestedCount"></span>
         </template><template v-if="duration">

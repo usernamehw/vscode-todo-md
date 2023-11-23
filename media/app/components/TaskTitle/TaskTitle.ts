@@ -1,7 +1,7 @@
 import { marked } from 'marked';
 import { mapStores } from 'pinia';
 import { defineComponent, h, VNodeArrayChildren } from 'vue';
-import { useStore } from '../../store';
+import { useMainStore } from '../../store';
 
 export default defineComponent({
 	name: 'TaskTitle',
@@ -14,7 +14,7 @@ export default defineComponent({
 	},
 	data: () => ({}),
 	computed: {
-		...mapStores(useStore),
+		...mapStores(useMainStore),
 	},
 	methods: {
 		updateFilterValue(e: MouseEvent) {
@@ -23,15 +23,15 @@ export default defineComponent({
 				return;
 			}
 			if (e.ctrlKey) {
-				this.storeStore.updateFilterValue(newValue, true);
+				this.mainStore.updateFilterValue(newValue, true);
 			} else {
-				this.storeStore.updateFilterValue(newValue);
+				this.mainStore.updateFilterValue(newValue);
 			}
-			this.storeStore.focusFilterInput();
+			this.mainStore.focusFilterInput();
 		},
 		styleForTag(tag: string) {
-			if (tag in this.storeStore.config.webview.tagStyles) {
-				return this.storeStore.config.webview.tagStyles[tag];
+			if (tag in this.mainStore.config.webview.tagStyles) {
+				return this.mainStore.config.webview.tagStyles[tag];
 			}
 			return undefined;
 		},
