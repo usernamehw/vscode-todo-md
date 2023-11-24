@@ -41,6 +41,7 @@ interface StoreState {
 	contextsWithCount: ItemWithCount[];
 	defaultFileSpecified: boolean;
 	activeDocumentOpened: boolean;
+	isWebviewLoaded: boolean;
 	config: ExtensionConfig;
 	selectedTaskLineNumber: number;
 	// ────────────────────────────────────────────────────────────
@@ -68,6 +69,7 @@ export const useMainStore = defineStore({
 		contextsWithCount: [],
 		defaultFileSpecified: true,
 		activeDocumentOpened: false,
+		isWebviewLoaded: false,
 		// ────────────────────────────────────────────────────────────
 		// saved between reloads
 		filterInputValue: '',
@@ -239,6 +241,9 @@ export const useMainStore = defineStore({
 				filterInputValue: this.filterInputValue,
 				sortProperty,
 			});
+		},
+		webviewLoaded() {
+			this.isWebviewLoaded = true;
 		},
 		focusFilterInput() {
 			this.focusFilterInputEvent = Math.random();

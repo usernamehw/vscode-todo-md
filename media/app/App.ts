@@ -311,6 +311,7 @@ export default defineComponent({
 			type: 'webviewLoaded',
 			value: true,
 		});
+		this.mainStore.webviewLoaded();
 	},
 	mounted() {
 		// @ts-ignore
