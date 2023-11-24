@@ -41,6 +41,9 @@ interface StoreState {
 	contextsWithCount: ItemWithCount[];
 	defaultFileSpecified: boolean;
 	activeDocumentOpened: boolean;
+	/**
+	 * False until store state is filled with data from the extension side.
+	 */
 	isWebviewLoaded: boolean;
 	config: ExtensionConfig;
 	selectedTaskLineNumber: number;
@@ -207,6 +210,7 @@ export const useMainStore = defineStore({
 			this.tagsWithCount = tagsWithCount;
 			this.contextsWithCount = contextsWithCount;
 			this.everythingWasUpdatedEvent = Math.random();
+			this.isWebviewLoaded = true;
 		},
 		selectTask(lineNumber: number) {
 			this.selectedTaskLineNumber = lineNumber;
@@ -448,6 +452,7 @@ window.addEventListener('message', event => {
 				projectsWithCount: message.value.projectsWithCount,
 				tagsWithCount: message.value.tagsWithCount,
 				contextsWithCount: message.value.contextsWithCount,
+
 			});
 			const bodyStyle = document.body.style;
 			bodyStyle.setProperty('--font-size', message.value.config.webview.fontSize);
