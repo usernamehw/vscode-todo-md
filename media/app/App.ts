@@ -183,7 +183,7 @@ export default defineComponent({
 			this.mainStore.updateFilterValue(value);
 			this.$nextTick(() => {
 				this.mainStore.selectFirstTask();
-				this.highlightFilterMatches();
+				this.highlightMatchesThrottled();
 			});
 		},
 		/**
@@ -280,6 +280,10 @@ export default defineComponent({
 			// @ts-ignore
 			CSS.highlights.set('search-results', searchResultsHighlight);
 		},
+		highlightMatchesThrottled: throttle(function() {
+			// @ts-ignore
+			this.highlightFilterMatches();
+		}, 100),
 		onDown() {
 			const ln = this.mainStore.selectNextTask();
 			if (ln && ln !== -1) {
@@ -411,7 +415,7 @@ export default defineComponent({
 		'mainStore.everythingWasUpdatedEvent'() {
 			// Usually done on startup or when typing in the document
 			this.$nextTick(() => {
-				this.highlightFilterMatches();
+				this.highlightMatchesThrottled();
 			});
 		},
 	},
