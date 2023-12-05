@@ -47,7 +47,7 @@
                      :escToClose="true"
                      :focusRetain="false"
                      @closed="modalClosed">
-        <h3>New task {{ newTaskAt === 'subtask' ? 'as a subtask' : 'at root' }}.</h3>
+        <h3 class="new-task__header">New task {{ newTaskAt === 'subtask' ? 'as a subtask' : 'at root' }}</h3>
         <div class="new-task__input-container">
             <input ref="newTaskInput"
                    v-model="newTaskAsText"

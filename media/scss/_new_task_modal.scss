@@ -1,8 +1,13 @@
 
 .new-task__input-container {
 	display: flex;
+	padding-bottom: 0.5em;
 }
 
 .new-task__add-codicon {
 	font-size: small !important;
+}
+
+.new-task__header {
+	margin: 0.5em 0.2em;
 }

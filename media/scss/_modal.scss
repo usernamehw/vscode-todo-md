@@ -13,6 +13,13 @@
 	color: var(--vscode-notifications-foreground);
 	box-shadow: var(--vscode-widget-shadow) 0px 0px 8px;
 	top: 3em;
+
+	.suggest__input {
+		border-radius: 2px 0px 0px 2px;
+	}
+	.btn {
+		border-radius: 0px 2px 2px 0px;
+	}
 }
 .modal-close {
 	position: absolute;
