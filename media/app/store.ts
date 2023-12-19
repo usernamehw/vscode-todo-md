@@ -318,7 +318,7 @@ export const useMainStore = defineStore({
 				return undefined;
 			}
 			let targetTask: TheTask;
-			if (selectedLineNumber === -1) {
+			if (selectedLineNumber === -1 || !this.flattenedFilteredSortedTasks.find(task => task.lineNumber === selectedLineNumber)) {
 				// None selected. Select the first visible task
 				targetTask = this.filteredSortedTasks.tasks[0];
 			} else {
@@ -348,7 +348,7 @@ export const useMainStore = defineStore({
 				return undefined;
 			}
 			let targetTask: TheTask;
-			if (selectedLineNumber === -1) {
+			if (selectedLineNumber === -1 || !this.flattenedFilteredSortedTasks.find(task => task.lineNumber === selectedLineNumber)) {
 				// None selected. Select the first visible task
 				targetTask = this.flattenedFilteredSortedTasks[this.flattenedFilteredSortedTasks.length - 1];
 			} else {
@@ -431,8 +431,8 @@ export function getState(): SavedState {
 	const savedState = vscodeApi.getState();
 
 	return {
-		filterInputValue: savedState.filterInputValue ?? '',
-		sortProperty: savedState.sortProperty ?? 'Default',
+		filterInputValue: savedState?.filterInputValue ?? '',
+		sortProperty: savedState?.sortProperty ?? 'Default',
 	};
 }
 
