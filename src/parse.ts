@@ -241,6 +241,7 @@ interface ParsedDocument {
 	tasks: TheTask[];
 	tasksAsTree: TheTask[];
 	commentLines: Range[];
+	startLine: number | undefined;
 }
 /**
  * Some features require knowledge beyond 1 line.
@@ -322,6 +323,7 @@ export async function parseDocument(document: TextDocument): Promise<ParsedDocum
 		tasksAsTree,
 		tasks,
 		commentLines,
+		startLine,
 	};
 }
 

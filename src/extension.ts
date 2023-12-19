@@ -24,8 +24,8 @@ import { updateUserSuggestItems } from './userSuggestItems';
 import { getActiveDocument, getDocumentForDefaultFile } from './utils/extensionUtils';
 import { getEditorLineHeight } from './utils/vscodeUtils';
 import { updateArchivedFilePathNotSetContext, updateIsDevContext } from './vscodeContext';
-import { createWebviewView } from './webview/webviewView';
 import { restoreGlobalState } from './vscodeGlobalState';
+import { createWebviewView } from './webview/webviewView';
 
 dayjs.extend(isBetween);
 dayjs.extend(relativeTime);
@@ -60,6 +60,8 @@ export abstract class $state {
 	static contextsForTreeView: ItemForProvider[] = [];
 	/** Comment line ranges */
 	static commentLines: Range[] = [];
+	/** First line of the document or first line after frontmatter header */
+	static documentStartLine: number | undefined;
 	/** If active text editor matches `activatePattern` config */
 	static activeEditorMatchesActivatePattern = false;
 	/** If active text editor is archive file (matches `todomd.defaultArchiveFile` setting path). */
@@ -165,6 +167,7 @@ export async function updateState() {
 		$state.activeEditorMatchesActivatePattern = false;
 		$state.isActiveFileTheArchiveFile = false;
 		$state.activeDocument = undefined;
+		$state.documentStartLine = undefined;
 		return;
 	}
 	const parsedDocument = await parseDocument(document);
@@ -172,6 +175,7 @@ export async function updateState() {
 	$state.tasks = parsedDocument.tasks;
 	$state.tasksAsTree = parsedDocument.tasksAsTree;
 	$state.commentLines = parsedDocument.commentLines;
+	$state.documentStartLine = parsedDocument.startLine;
 
 	const treeItems = groupAndSortTreeItems($state.tasksAsTree);
 	$state.tagsForTreeView = treeItems.tagsForProvider;

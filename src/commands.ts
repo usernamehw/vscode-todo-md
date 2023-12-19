@@ -1,4 +1,5 @@
-import { commands, TextEditor, TextEditorEdit, window } from 'vscode';
+import { commands, window } from 'vscode';
+import { TheTask } from './TheTask';
 import { addTaskToActiveFile } from './commands/addTaskToActiveFile';
 import { addTaskToActiveFileWebview } from './commands/addTaskToActiveFileWebview';
 import { addTaskToDefaultFile } from './commands/addTaskToDefaultFile';
@@ -35,6 +36,7 @@ import { setDueDateWithArgs } from './commands/setDueDateWithArgs';
 import { setLastVisit } from './commands/setLastVisit';
 import { showGlobalState } from './commands/showGlobalState';
 import { showWebviewSettings } from './commands/showWebviewSettings';
+import { sortTasksInEditorCommand } from './commands/sortTasksCommand';
 import { specifyDefaultArchiveFileCommand } from './commands/specifyDefaultArchiveFile';
 import { specifyDefaultFileCommand } from './commands/specifyDefaultFile';
 import { specifyDefaultSomedayFileCommand } from './commands/specifyDefaultSomedayFile';
@@ -48,11 +50,9 @@ import { toggleTagsTreeViewSorting } from './commands/toggleTagsTreeViewSorting'
 import { webviewToggleShowRecurringUpcoming } from './commands/webviewToggleShowRecurringUpcoming';
 import { appendTaskToFile } from './documentActions';
 import { $config } from './extension';
-import { SortProperty, sortTasks } from './sort';
-import { TheTask } from './TheTask';
 import { getDateInISOFormat } from './time/timeUtils';
-import { formatTask, getTaskAtLineExtension } from './utils/taskUtils';
-import { followLinks, getFullRangeFromLines } from './utils/vscodeUtils';
+import { formatTask } from './utils/taskUtils';
+import { followLinks } from './utils/vscodeUtils';
 
 /**
  * All commands contributed by this extension.
@@ -167,14 +167,14 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.ResetAllRecurringTasks, resetAllRecurringTasksCommand);
 	commands.registerTextEditorCommand(CommandId.DecrementPriority, decrementPriority);
 	commands.registerTextEditorCommand(CommandId.ToggleComment, toggleComment);
-	commands.registerTextEditorCommand(CommandId.SortByDefault, (editor, edit) => sortTasksInEditor(editor, edit, 'Default'));
-	commands.registerTextEditorCommand(CommandId.SortByPriority, (editor, edit) => sortTasksInEditor(editor, edit, 'priority'));
-	commands.registerTextEditorCommand(CommandId.SortByProject, (editor, edit) => sortTasksInEditor(editor, edit, 'project'));
-	commands.registerTextEditorCommand(CommandId.SortByTag, (editor, edit) => sortTasksInEditor(editor, edit, 'tag'));
-	commands.registerTextEditorCommand(CommandId.SortByContext, (editor, edit) => sortTasksInEditor(editor, edit, 'context'));
-	commands.registerTextEditorCommand(CommandId.SortByCreationDate, (editor, edit) => sortTasksInEditor(editor, edit, 'creationDate'));
-	commands.registerTextEditorCommand(CommandId.SortByCompletionDate, (editor, edit) => sortTasksInEditor(editor, edit, 'completionDate'));
-	commands.registerTextEditorCommand(CommandId.SortByDueDate, (editor, edit) => sortTasksInEditor(editor, edit, 'dueDate'));
+	commands.registerTextEditorCommand(CommandId.SortByDefault, (editor, edit) => sortTasksInEditorCommand(editor, edit, 'Default'));
+	commands.registerTextEditorCommand(CommandId.SortByPriority, (editor, edit) => sortTasksInEditorCommand(editor, edit, 'priority'));
+	commands.registerTextEditorCommand(CommandId.SortByProject, (editor, edit) => sortTasksInEditorCommand(editor, edit, 'project'));
+	commands.registerTextEditorCommand(CommandId.SortByTag, (editor, edit) => sortTasksInEditorCommand(editor, edit, 'tag'));
+	commands.registerTextEditorCommand(CommandId.SortByContext, (editor, edit) => sortTasksInEditorCommand(editor, edit, 'context'));
+	commands.registerTextEditorCommand(CommandId.SortByCreationDate, (editor, edit) => sortTasksInEditorCommand(editor, edit, 'creationDate'));
+	commands.registerTextEditorCommand(CommandId.SortByCompletionDate, (editor, edit) => sortTasksInEditorCommand(editor, edit, 'completionDate'));
+	commands.registerTextEditorCommand(CommandId.SortByDueDate, (editor, edit) => sortTasksInEditorCommand(editor, edit, 'dueDate'));
 	commands.registerTextEditorCommand(CommandId.CreateSimilarTask, createSimilarTask);
 	commands.registerTextEditorCommand(CommandId.ArchiveCompletedTasks, archiveCompletedTasks);
 	commands.registerTextEditorCommand(CommandId.MoveToSomeday, moveToSomeday);
@@ -206,31 +206,4 @@ export async function showTaskInNotification(task: TheTask) {
 		window.showInformationMessage(formattedTask);
 	}
 }
-/**
- * Sort tasks in editor. Default sort is by due date. Same due date sorted by priority.
- */
-export function sortTasksInEditor(editor: TextEditor, edit: TextEditorEdit, sortProperty: SortProperty) {
-	const selection = editor.selection;
-	let lineStart = selection.start.line;
-	let lineEnd = selection.end.line;
-	if (selection.isEmpty) {
-		lineStart = 0;
-		lineEnd = editor.document.lineCount - 1;
-	}
-	const tasks: TheTask[] = [];
-	for (let i = lineStart; i <= lineEnd; i++) {
-		const task = getTaskAtLineExtension(i);
-		if (task) {
-			tasks.push(task);
-		}
-	}
-	const sortedTasks = sortTasks({
-		tasks,
-		sortProperty,
-	});
-	if (!sortedTasks.length) {
-		return;
-	}
-	const result = sortedTasks.map(t => t.rawText).join('\n');
-	edit.replace(getFullRangeFromLines(editor.document, lineStart, lineEnd), result);
-}
+
