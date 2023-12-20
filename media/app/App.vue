@@ -70,15 +70,30 @@
                      @closed="modalClosed">
         <h3 class="pick-sort__header">Pick sorting for webview:</h3>
         <div class="pick-sort__item"
-             @click="mainStore.updateSortProperty('Default');hidePickSortModal();">Default</div>
+             @click="mainStore.updateSortProperty('Default');hidePickSortModal();">
+            Default
+            <template v-if="mainStore.sortProperty === 'Default'">☑️</template>
+        </div>
         <div class="pick-sort__item"
-             @click="mainStore.updateSortProperty('priority');hidePickSortModal();">Priority</div>
+             @click="mainStore.updateSortProperty('priority');hidePickSortModal();">
+            Priority
+            <template v-if="mainStore.sortProperty === 'priority'">☑️</template>
+        </div>
         <div class="pick-sort__item"
-             @click="mainStore.updateSortProperty('project');hidePickSortModal();">Project</div>
+             @click="mainStore.updateSortProperty('project');hidePickSortModal();">
+            Project
+            <template v-if="mainStore.sortProperty === 'project'">☑️</template>
+        </div>
         <div class="pick-sort__item"
-             @click="mainStore.updateSortProperty('tag');hidePickSortModal();">Tag</div>
+             @click="mainStore.updateSortProperty('tag');hidePickSortModal();">
+            Tag
+            <template v-if="mainStore.sortProperty === 'tag'">☑️</template>
+        </div>
         <div class="pick-sort__item"
-             @click="mainStore.updateSortProperty('context');hidePickSortModal();">Context</div>
+             @click="mainStore.updateSortProperty('context');hidePickSortModal();">
+            Context
+            <template v-if="mainStore.sortProperty === 'context'">☑️</template>
+        </div>
         <button class="modal-close"
                 title="Close modal dialog."
                 @click="hidePickSortModal"><span class="icon codicon codicon-close"></span></button>

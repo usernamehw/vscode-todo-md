@@ -1,3 +1,10 @@
+## 2.29.0 `20 Dec 2023`
+
+- ✨ [webview] Pick sorting icon
+- 🐛 [editor] Preserve frontmatter header when sorting
+- 🐛 [editor] Preserve comments when sorting
+- 🐛 [webview] Webview crashes on invalid filter
+
 ## 2.28.0 `05 Nov 2023`
 
 - ✨ [webview] Highlight text matches
