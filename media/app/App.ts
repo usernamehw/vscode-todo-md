@@ -184,6 +184,7 @@ export default defineComponent({
 			this.$nextTick(() => {
 				this.mainStore.selectFirstTask();
 				this.highlightMatchesThrottled();
+				this.onTaskListScroll();// hide shadow indicating scroll on header
 			});
 		},
 		/**
