@@ -19,6 +19,8 @@ export const enum Constants {
 	DefaultArchiveFileSetting = 'todomd.defaultArchiveFile',
 	DefaultSomedayFileSetting = 'todomd.defaultSomedayFile',
 
+	WorkspaceFolderVariable = '${workspaceFolder}',
+
 	ExtensionMenuPrefix = 'Todo MD:',
 
 	NestingSymbol = '◦',

@@ -3,6 +3,7 @@ import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import fs from 'fs';
 import { ConfigurationChangeEvent, ExtensionContext, Range, TextDocument, window, workspace } from 'vscode';
 import { TheTask } from './TheTask';
 import { registerAllCommands } from './commands';
@@ -84,9 +85,11 @@ export abstract class $state {
 	static progressStatusBar: ProgressStatusBar;
 }
 
-export let $config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
+export let $config: ExtensionConfig;
 
 export async function activate(context: ExtensionContext) {
+	assignConfig();
+
 	$state.extensionContext = context;
 	const lastVisitByFile = context.globalState.get<typeof $state['lastVisitByFile'] | undefined>(Constants.LastVisitByFileStorageKey);
 	$state.lastVisitByFile = lastVisitByFile ? lastVisitByFile : {};
@@ -129,7 +132,7 @@ export async function activate(context: ExtensionContext) {
 	}
 
 	function updateConfig() {
-		$config = workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig;
+		assignConfig();
 
 		disposeEditorDisposables();
 		updateLanguageFeatures();
@@ -191,6 +194,37 @@ export async function updateState() {
 export async function updateLastVisitGlobalState(stringUri: string, date: Date) {
 	$state.lastVisitByFile[stringUri] = date;
 	await $state.extensionContext.globalState.update(Constants.LastVisitByFileStorageKey, $state.lastVisitByFile);
+}
+/**
+ * Update global variable `$config` and replace variables when needed.
+ */
+function assignConfig(): void {
+	$config = JSON.parse(JSON.stringify(workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig));
+
+	if ($config.defaultFile.includes(Constants.WorkspaceFolderVariable)) {
+		const workspaceFolder = workspace.workspaceFolders?.[0];
+		if (!workspaceFolder) {
+			$config.defaultFile = '';
+		} else {
+			$config.defaultFile = $config.defaultFile.replace(Constants.WorkspaceFolderVariable, workspaceFolder.uri.fsPath);
+			if (!fs.existsSync($config.defaultFile)) {
+				console.warn(`${$config.defaultFile} "todomd.defaultFile" doesn't exist.`);
+				$config.defaultFile = '';
+			}
+		}
+	}
+	if ($config.defaultArchiveFile.includes(Constants.WorkspaceFolderVariable)) {
+		const workspaceFolder = workspace.workspaceFolders?.[0];
+		if (!workspaceFolder) {
+			$config.defaultArchiveFile = '';
+		} else {
+			$config.defaultArchiveFile = $config.defaultArchiveFile.replace(Constants.WorkspaceFolderVariable, workspaceFolder.uri.fsPath);
+			if (!fs.existsSync($config.defaultArchiveFile)) {
+				console.warn(`${$config.defaultArchiveFile} "todomd.defaultArchiveFile" doesn't exist.`);
+				$config.defaultArchiveFile = '';
+			}
+		}
+	}
 }
 
 export function deactivate() {

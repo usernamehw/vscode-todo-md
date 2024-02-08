@@ -107,9 +107,10 @@ export function getWordAtPosition(document: TextDocument, position: Position) {
 /**
  * Updates global setting with new value.
  */
-export async function updateSetting(settingName: string, newValue: unknown) {
+export async function updateSetting(settingName: string, newValue: unknown): Promise<boolean> {
 	const settings = workspace.getConfiguration(undefined, null);
-	return settings.update(settingName, newValue, ConfigurationTarget.Global);
+	await settings.update(settingName, newValue, ConfigurationTarget.Global);
+	return true;
 }
 /**
  * Toggle global setting (cycle through passed values).

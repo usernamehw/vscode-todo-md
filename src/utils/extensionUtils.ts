@@ -6,6 +6,7 @@ import { TheTask } from '../TheTask';
 import { getNestedTasksLineNumbers, getTaskAtLineExtension } from './taskUtils';
 import { guardedBoolean, unique } from './utils';
 import { updateSetting } from './vscodeUtils';
+import { updateEverything } from '../events';
 
 /**
  * vscode `WorkspaceEdit` allowes changing files that are not even opened.
@@ -56,7 +57,7 @@ export async function getDocumentForDefaultFile() {
 	}
 	return await workspace.openTextDocument(Uri.file($config.defaultFile));
 }
-async function specifyFile(whichFile: 'archive' | 'default' | 'someday') {
+async function specifyFile(whichFile: 'Default Archive File' | 'Default File' | 'Default Someday File') {
 	const filePaths = await window.showOpenDialog({
 		title: `Pick ${whichFile} file`,
 	});
@@ -68,90 +69,81 @@ async function specifyFile(whichFile: 'archive' | 'default' | 'someday') {
 		return undefined;
 	}
 
-	const settingName = whichFile === 'default' ? Constants.DefaultFileSetting :
-		whichFile === 'archive' ? Constants.DefaultArchiveFileSetting : Constants.DefaultSomedayFileSetting;
+	const settingName = whichFile === 'Default File' ? Constants.DefaultFileSetting :
+		whichFile === 'Default Archive File' ? Constants.DefaultArchiveFileSetting : Constants.DefaultSomedayFileSetting;
 
-	return updateSetting(settingName, filePath);
+	await updateSetting(settingName, filePath);
+	updateEverything();
 }
 export async function specifyDefaultFile() {
-	return await specifyFile('default');
+	return await specifyFile('Default File');
 }
 export async function specifyDefaultArchiveFile() {
-	return await specifyFile('archive');
+	return await specifyFile('Default Archive File');
 }
 export async function specifyDefaultSomedayFile() {
-	return await specifyFile('someday');
+	return await specifyFile('Default Someday File');
 }
 /**
  * Check if default file path is specified. If not - show notification with button to enter it.
  */
 export async function checkDefaultFileAndNotify(): Promise<boolean> {
-	const specify = 'Specify';
-	if (!$config.defaultFile) {
-		const shouldSpecify = await window.showWarningMessage('Default file is not specified.', specify);
-		if (shouldSpecify === specify) {
-			specifyDefaultFile();
-		}
-		return false;
-	} else {
-		const exists = fs.existsSync($config.defaultFile);
-		if (!exists) {
-			const shouldSpecify = await window.showErrorMessage('Default file does not exist.', specify);
-			if (shouldSpecify === specify) {
-				specifyDefaultFile();
-			}
-			return false;
-		} else {
-			return true;
-		}
-	}
+	return checkFileAndNotify({
+		filePath: $config.defaultFile,
+		specifyFileArg: 'Default File',
+	});
 }
 /**
  * Check if default archive file path is specified. If not - show notification with button to enter it.
  */
 export async function checkArchiveFileAndNotify(): Promise<boolean> {
-	const specify = 'Specify';
-	if (!$config.defaultArchiveFile) {
-		const shouldSpecify = await window.showWarningMessage('Default archive file is not specified.', specify);
-		if (shouldSpecify === specify) {
-			specifyDefaultArchiveFile();
-		}
-		return false;
-	} else {
-		const exists = fs.existsSync($config.defaultArchiveFile);
-		if (!exists) {
-			const shouldSpecify = await window.showErrorMessage('Specified default archive file does not exist.', specify);
-			if (shouldSpecify === specify) {
-				specifyDefaultArchiveFile();
-			}
-			return false;
-		} else {
-			return true;
-		}
-	}
+	return checkFileAndNotify({
+		filePath: $config.defaultArchiveFile,
+		specifyFileArg: 'Default Archive File',
+	});
 }
 /**
  * Check if someday file path is specified. If not - show notification with button to enter it.
  */
 export async function checkSomedayFileAndNotify(): Promise<boolean> {
+	return checkFileAndNotify({
+		filePath: $config.defaultSomedayFile,
+		specifyFileArg: 'Default Someday File',
+	});
+}
+async function checkFileAndNotify({
+	filePath,
+	specifyFileArg,
+}: {
+	filePath: string;
+	specifyFileArg: Parameters<typeof specifyFile>[0];
+}) {
 	const specify = 'Specify';
-	if (!$config.defaultSomedayFile) {
-		const shouldSpecify = await window.showWarningMessage('Someday file path is not specified.', specify);
+	const create = 'Create';
+
+	if (!filePath) {
+		const shouldSpecify = await window.showWarningMessage(`${specifyFileArg} not specified.`, specify);
 		if (shouldSpecify === specify) {
-			specifyFile('someday');
+			specifyFile(specifyFileArg);
+		}
+		return false;
+	}
+
+	const exists = fs.existsSync(filePath);
+	if (!exists) {
+		const pressedButton = await window.showErrorMessage(`${specifyFileArg} does not exist.`, create, specify);
+		if (pressedButton === specify) {
+			specifyFile(specifyFileArg);
+		} else if (pressedButton === create) {
+			fs.writeFile(filePath, '', err => {
+				if (err) {
+					window.showErrorMessage((err as Error).message);
+				}
+			});
 		}
 		return false;
 	} else {
-		const exists = fs.existsSync($config.defaultSomedayFile);
-		if (!exists) {
-			const shouldSpecify = await window.showErrorMessage('Someday file does not exist.', specify);
-			if (shouldSpecify === specify) {
-				specifyFile('someday');
-			}
-			return false;
-		} else {
-			return true;
-		}
+		return true;
 	}
 }
 /**
