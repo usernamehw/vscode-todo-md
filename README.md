@@ -119,7 +119,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 - `-#tag` - (Negation) Task doesn't contain tag `#tag`
 
 <!-- COMMANDS_START -->
-## Commands (43)
+## Commands (44)
 
 |Command|Description|
 |-|-|
@@ -128,6 +128,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |todomd.toggleProjectsTreeViewSorting|Todo MD: Toggle Projects Tree View Sorting|
 |todomd.toggleContextsTreeViewSorting|Todo MD: Toggle Contexts Tree View Sorting|
 |todomd.showWebviewSettings|Todo MD: Show Webview Settings|
+|todomd.webview.pickSort|Sort|
 |todomd.webview.toggleShowRecurringUpcoming|Todo MD: Toggle setting to show recurring upcoming tasks in webview.|
 |todomd.focusTasksWebviewAndInput|Todo MD: Supports arguments {"selectInputText": boolean, "fillInputValue": string}|
 |todomd.collapseAllNestedTasks|Todo MD: Collapse all nested tasks.|
@@ -194,13 +195,13 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |webview.focusFilterInputOnClick|**true**|Focus filter input after clicking(selecting) any task.|
 |webview.customCSSPath|""|Absolute path to custom CSS for the webview.|
 |webview.tagStyles|\{\}|Set different color for any tag in a webview.|
-|defaultFile|""|Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`.<br>[**Pick default file**](command:todomd.specifyDefaultFile)|
-|defaultArchiveFile|""|Absolute path to file that all archived tasks will be moved to.<br>[**Pick archive file**](command:todomd.specifyDefaultArchiveFile)|
+|defaultFile|""|Absolute path to file that Tree Views or commands use when no editor is open that matches `#todomd.activatePattern#`.<br>[**Pick default file**](command:todomd.specifyDefaultFile). Supports using `${workspaceFolder}` variable substitution.|
+|defaultArchiveFile|""|Absolute path to file that all archived tasks will be moved to.<br>[**Pick archive file**](command:todomd.specifyDefaultArchiveFile).  Supports using `${workspaceFolder}` variable substitution.|
 |defaultSomedayFile|""|Absolute path to file that is used as the "someday" file.<br>[**Pick someday file**](command:todomd.specifyDefaultSomedayFile)|
 |durationIncludeSeconds|**false**|When enabled - duration (editor, hover) includes seconds.|
 |autoArchiveTasks|**false**|When enabled - will move tasks to archive file (on completion).|
 |confirmTaskDelete|"always"|Show confirmation when deleting task from Tree View or Webview.|
-|activatePattern|"\*\*/\{todo,someday,todo.archive\}.md"|Choose files that extension will operate on. By default activated on 3 files (todo.md, someday.md & todo.archive.md). This format is called `Glob`. Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
+|activatePattern|"\*\*/\{todo,someday,todo.archive\}.md"|Choose files that extension will operate on. By default activated on 3 files (todo.md, someday.md & todo.archive.md). Uses [Glob](https://code.visualstudio.com/docs/editor/glob-patterns). Examples:<br>Activate on any (.txt) file - `**/*.txt`.<br>Activate only on single file (todo.txt) - `**/todo.txt`<br>Activate on 2 files (todo.txt or task.txt) - `**/{todo,task}.txt`|
 |getNextNumberOfTasks|**5**|Number of tasks returned by `getFewNextTasks` command.|
 |sortTagsView|"alphabetic"|Controls tags Tree View sorting.|
 |sortProjectsView|"alphabetic"|Controls projects Tree View sorting.|
