@@ -170,7 +170,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
-## Settings (61)
+## Settings (62)
 
 > **Todo MD** extension settings start with `todomd.`
 
@@ -236,6 +236,7 @@ Comment is not considered a task. It starts with a sharp sign `#` followed by a 
 |completedStrikeThrough|**true**|Show strike-through text decoration for completed tasks in editor.|
 |setDueDateThisWeekDay|"Friday"|Week day when using set due date command or suggest `SET_DUE_THIS_WEEK`.|
 |setDueDateNextWeekDay|"Friday"|Week day when using set due date command or suggest `SET_DUE_NEXT_WEEK`.|
+|commentFormat|\{"start":"\# ", "end":""\}|Choose comment symbols (only works at the beginning of the line).|
 |decorations|{...}|Advanced text editor decoration tweaking. [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)|
 <!-- SETTINGS_END -->
 

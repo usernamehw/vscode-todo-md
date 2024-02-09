@@ -562,6 +562,26 @@
 					],
 					"default": "Friday"
 				},
+				"todomd.commentFormat": {
+					"type": "object",
+					"properties": {
+						"start": {
+							"type": "string",
+							"minLength": 1,
+							"default": "# "
+						},
+						"end": {
+							"type": "string",
+							"default": ""
+						}
+					},
+					"additionalProperties": false,
+					"markdownDescription": "Choose comment symbols (only works at the beginning of the line).",
+					"default": {
+						"start": "# ",
+						"end": ""
+					}
+				},
 				"todomd.decorations": {
 					"type": "object",
 					"markdownDescription": "Advanced text editor decoration tweaking. [docs](https://github.com/usernamehw/vscode-todo-md/blob/master/docs/docs.md#advanced-editor-decorations)",

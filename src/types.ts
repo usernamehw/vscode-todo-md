@@ -246,6 +246,13 @@ export interface ExtensionConfig {
 	 */
 	completedStrikeThrough: boolean;
 	/**
+	 * Choose comment symbol (at the beginning of the line).
+	 */
+	commentFormat: {
+		start: string;
+		end: string;
+	};
+	/**
 	 * Options only applied to webview
 	 */
 	webview: {

@@ -2,8 +2,9 @@ import { TextEditor, WorkspaceEdit } from 'vscode';
 import { toggleCommentAtLineWorkspaceEdit } from '../documentActions';
 import { applyEdit } from '../utils/extensionUtils';
 
-export function toggleComment(editor: TextEditor) {
+export function toggleComment(editor: TextEditor): void {
 	const edit = new WorkspaceEdit();
+
 	const selections = editor.selections;
 	for (const selection of selections) {
 		const start = selection.start.line;
@@ -12,5 +13,6 @@ export function toggleComment(editor: TextEditor) {
 			toggleCommentAtLineWorkspaceEdit(edit, editor.document, i);
 		}
 	}
+
 	applyEdit(edit, editor.document);
 }

@@ -1,8 +1,8 @@
 import { assert } from 'chai';
 import { describe, it } from 'mocha';
 import { Range, window } from 'vscode';
-import { parseLine } from '../../parse';
 import { TheTask } from '../../TheTask';
+import { parseLine } from '../../parse';
 import { headerDelimiter } from './testUtils';
 
 const editor = window.activeTextEditor!;
@@ -11,7 +11,10 @@ const editor = window.activeTextEditor!;
  */
 function getTaskAt(n: number): TheTask | undefined {
 	const textLine = editor.document.lineAt(n);
-	const task = parseLine(textLine);
+	const task = parseLine(textLine, {
+		start: '# ',
+		end: '',
+	});
 	if (task.lineType === 'empty' || task.lineType === 'comment') {
 		return undefined;
 	}
@@ -21,7 +24,10 @@ function getTaskAt(n: number): TheTask | undefined {
 describe(`${headerDelimiter('parse')}Comment`, () => {
 	it('0 Should not produce a task', () => {
 		const line = editor.document.lineAt(0);
-		const task = parseLine(line);
+		const task = parseLine(line, {
+			start: '# ',
+			end: '',
+		});
 		assert.equal(task?.lineType, 'comment', 'Line type is comment');
 	});
 });

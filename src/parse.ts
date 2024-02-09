@@ -1,8 +1,9 @@
 import { commands, DocumentLink, Range, TextDocument, TextLine } from 'vscode';
 import { DueDate } from './dueDate';
-import { $state } from './extension';
+import { $config, $state } from './extension';
 import { Count, Priority, TheTask } from './TheTask';
 import { SpecialTagName } from './utils/extensionUtils';
+import type { ExtensionConfig } from './types';
 
 interface ParseLineReturn {
 	lineType: string;
@@ -21,7 +22,7 @@ interface EmptyLineReturn extends ParseLineReturn {
 /**
  * Main parsing function. 1 Line - 1 Task.
  */
-export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn | TaskReturn {
+export function parseLine(textLine: TextLine, commentFormat: ExtensionConfig['commentFormat']): CommentReturn | EmptyLineReturn | TaskReturn {
 	const line = textLine.text.trim();
 	if (!line.length) {
 		return {
@@ -30,7 +31,7 @@ export function parseLine(textLine: TextLine): CommentReturn | EmptyLineReturn |
 	}
 
 	const lineNumber = textLine.lineNumber;
-	if (line.startsWith('# ')) {
+	if (line.startsWith(commentFormat.start)) {
 		return {
 			lineType: 'comment',
 		};
@@ -264,7 +265,7 @@ export async function parseDocument(document: TextDocument): Promise<ParsedDocum
 	}
 
 	for (let i = startLine; i < document.lineCount; i++) {
-		const parsedLine = parseLine(document.lineAt(i));
+		const parsedLine = parseLine(document.lineAt(i), $config.commentFormat);
 		switch (parsedLine.lineType) {
 			case 'empty': continue;
 			case 'comment': {

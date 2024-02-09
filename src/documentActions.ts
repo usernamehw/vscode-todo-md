@@ -486,10 +486,21 @@ export function appendTaskToFileWorkspaceEdit(edit: WorkspaceEdit, document: Tex
 }
 export function toggleCommentAtLineWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, lineNumber: number) {
 	const line = document.lineAt(lineNumber);
-	if (line.text.startsWith('# ')) {
-		edit.delete(document.uri, new Range(lineNumber, 0, lineNumber, 2));
+
+	if (line.text.startsWith($config.commentFormat.start)) {
+		edit.delete(document.uri, new Range(lineNumber, 0, lineNumber, $config.commentFormat.start.length));
 	} else {
-		edit.insert(document.uri, new Position(lineNumber, 0), '# ');
+		edit.insert(document.uri, new Position(lineNumber, 0), $config.commentFormat.start);
+	}
+
+	if (!$config.commentFormat.end) {
+		return;
+	}
+
+	if (line.text.endsWith($config.commentFormat.end)) {
+		edit.delete(document.uri, new Range(lineNumber, line.range.end.character - $config.commentFormat.end.length, lineNumber, line.range.end.character));
+	} else {
+		edit.insert(document.uri, new Position(lineNumber, line.range.end.character), $config.commentFormat.end);
 	}
 }
 export function editTaskWorkspaceEdit(edit: WorkspaceEdit, document: TextDocument, task: TheTask) {
