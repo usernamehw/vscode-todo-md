@@ -51,11 +51,20 @@ export async function getActiveDocument() {
 /**
  * Get Text Document for default file (if specified)
  */
-export async function getDocumentForDefaultFile() {
+export async function getDocumentForDefaultFile(): Promise<TextDocument | undefined> {
 	if (!$config.defaultFile) {
 		return undefined;
 	}
-	return await workspace.openTextDocument(Uri.file($config.defaultFile));
+
+	let document: TextDocument | undefined;
+	try {
+		document = await workspace.openTextDocument(Uri.file($config.defaultFile));
+	} catch (e) {
+		window.showErrorMessage((e as Error).message);
+		document = undefined;
+	}
+
+	return document;
 }
 async function specifyFile(whichFile: 'Default Archive File' | 'Default File' | 'Default Someday File') {
 	const filePaths = await window.showOpenDialog({
