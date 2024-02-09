@@ -190,7 +190,7 @@ a {
 	margin: 0 auto;
 
 	&--welcome {
-		font-size: 13px;
+		font-size: 13px !important;
 		align-items: center;
 		cursor: pointer;
 		display: flex;
@@ -198,9 +198,10 @@ a {
 		outline-offset: 2px !important;
 		padding: 4px;
 		text-align: center;
-		width: calc(100% - 24px);
-		margin-left: 12px !important;
-		margin-right: 12px !important;
+		width: clamp(150px, 80%, 500px);
+		// width: calc(100% - 24px);
+		margin-left: auto !important;
+		margin-right: auto !important;
 		margin-bottom: 12px !important;
 	}
 
@@ -589,6 +590,7 @@ a {
 	&__text {
 		display: block;
 		margin: 1em 20px;
+		margin-top: -1rem;
 		line-height: 1.6;
 	}
 }

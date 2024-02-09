@@ -361,6 +361,8 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 		projectsWithCount: ItemWithCount[];
 		tagsWithCount: ItemWithCount[];
 		contextsWithCount: ItemWithCount[];
+		defaultFilePerWorkspace: boolean;
+		noWorkspaceOpened: boolean;
 		defaultFileDoesntExist: boolean;
 		defaultFileReplacedValue: string;
 	};

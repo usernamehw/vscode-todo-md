@@ -1,5 +1,5 @@
 import path from 'path';
-import { CancellationToken, ExtensionContext, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window } from 'vscode';
+import { CancellationToken, ExtensionContext, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window, workspace } from 'vscode';
 import { openSetDueDateInputbox } from '../commands/setDueDate';
 import { addNewTask, decrementCountForTask, editTask, editTaskRawText, revealTask, startTaskAtLine, toggleDoneAtLine, toggleDoneOrIncrementCountAtLines, toggleFavoriteAtLine, toggleHiddenAtLine, toggleTaskCollapse, toggleTaskCollapseRecursive, tryToDeleteTask } from '../documentActions';
 import { updateEverything } from '../events';
@@ -183,6 +183,8 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					defaultFileSpecified: Boolean($config.defaultFile),
 					activeDocumentOpened: Boolean($state.activeDocument),
 					config: $config,
+					defaultFilePerWorkspace: $state.defaultFilePerWorkspace,
+					noWorkspaceOpened: workspace.workspaceFolders?.[0] === undefined,
 					defaultFileDoesntExist: $state.defaultFileDoesntExist,
 					defaultFileReplacedValue: $state.defaultFileReplacedValue,
 				},

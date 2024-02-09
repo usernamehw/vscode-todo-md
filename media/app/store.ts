@@ -41,6 +41,8 @@ interface StoreState {
 	contextsWithCount: ItemWithCount[];
 	defaultFileSpecified: boolean;
 	activeDocumentOpened: boolean;
+	defaultFilePerWorkspace: boolean;
+	noWorkspaceOpened: boolean;
 	defaultFileDoesntExist: boolean;
 	defaultFileReplacedValue: string;
 	/**
@@ -75,6 +77,8 @@ export const useMainStore = defineStore({
 		defaultFileSpecified: true,
 		activeDocumentOpened: false,
 		isWebviewLoaded: false,
+		defaultFilePerWorkspace: false,
+		noWorkspaceOpened: false,
 		defaultFileDoesntExist: false,
 		defaultFileReplacedValue: '',
 		// ────────────────────────────────────────────────────────────
@@ -193,11 +197,15 @@ export const useMainStore = defineStore({
 			contextsWithCount,
 			defaultFileDoesntExist,
 			defaultFileReplacedValue,
+			defaultFilePerWorkspace,
+			noWorkspaceOpened,
 		}: {
 			tasksAsTree: TheTask[];
 			config: ExtensionConfig;
 			defaultFileSpecified: boolean;
 			activeDocumentOpened: boolean;
+			defaultFilePerWorkspace: boolean;
+			noWorkspaceOpened: boolean;
 			defaultFileDoesntExist: boolean;
 			defaultFileReplacedValue: string;
 			tags: string[];
@@ -211,6 +219,8 @@ export const useMainStore = defineStore({
 			this.config = config;
 			this.defaultFileSpecified = defaultFileSpecified;
 			this.activeDocumentOpened = activeDocumentOpened;
+			this.defaultFilePerWorkspace = defaultFilePerWorkspace;
+			this.noWorkspaceOpened = noWorkspaceOpened;
 			this.defaultFileDoesntExist = defaultFileDoesntExist;
 			this.defaultFileReplacedValue = defaultFileReplacedValue;
 			this.tags = tags;
@@ -463,6 +473,8 @@ window.addEventListener('message', event => {
 				projectsWithCount: message.value.projectsWithCount,
 				tagsWithCount: message.value.tagsWithCount,
 				contextsWithCount: message.value.contextsWithCount,
+				defaultFilePerWorkspace: message.value.defaultFilePerWorkspace,
+				noWorkspaceOpened: message.value.noWorkspaceOpened,
 				defaultFileDoesntExist: message.value.defaultFileDoesntExist,
 				defaultFileReplacedValue: message.value.defaultFileReplacedValue,
 			});

@@ -84,6 +84,8 @@ export abstract class $state {
 	static mainStatusBar: MainStatusBar;
 	/** Counter status bar item (in format `1/3 33%`) */
 	static progressStatusBar: ProgressStatusBar;
+	/** Default file uses ${workspaceFolder} variable. */
+	static defaultFilePerWorkspace: boolean;
 	/** Default file specified but non-existent (only assigned when using ${workspaceFolder} variable). */
 	static defaultFileDoesntExist: boolean;
 	/** Replaced value of todomd.defaultFile when ${workspaceFolder} variable used */
@@ -207,9 +209,14 @@ export async function updateLastVisitGlobalState(stringUri: string, date: Date) 
 function assignConfig(): void {
 	$config = JSON.parse(JSON.stringify(workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig));
 
+	$state.defaultFilePerWorkspace = false;
 	$state.defaultFileDoesntExist = false;
+	$state.defaultFileReplacedValue = '';
+	$state.defaultArchiveFileReplacedValue = '';
 
 	if ($config.defaultFile.includes(Constants.WorkspaceFolderVariable)) {
+		$state.defaultFilePerWorkspace = true;
+
 		const workspaceFolder = workspace.workspaceFolders?.[0];
 		if (!workspaceFolder) {
 			$config.defaultFile = '';

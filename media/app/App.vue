@@ -1,6 +1,13 @@
 <template>
 <div>
-    <div v-if="mainStore.defaultFileDoesntExist">
+    <div v-if="mainStore.defaultFilePerWorkspace && mainStore.noWorkspaceOpened">
+        <p class="welcome__text">
+            No workspace.<br>
+            Using <code>${workspaceFolder}</code> variable in <b><code>"todomd.defaultFile"</code></b> setting only works when any folder is opened.
+        </p>
+    </div>
+
+    <div v-else-if="mainStore.defaultFilePerWorkspace && mainStore.defaultFileDoesntExist">
         <p class="welcome__text">
             Default file doesn't exist.
         </p>
