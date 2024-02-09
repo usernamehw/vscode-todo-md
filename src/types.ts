@@ -361,6 +361,8 @@ interface WebviewMessageUpdateEverything extends WebviewMessageBase {
 		projectsWithCount: ItemWithCount[];
 		tagsWithCount: ItemWithCount[];
 		contextsWithCount: ItemWithCount[];
+		defaultFileDoesntExist: boolean;
+		defaultFileReplacedValue: string;
 	};
 }
 interface WebviewMessageFocusFilterInput {

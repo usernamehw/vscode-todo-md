@@ -1,12 +1,12 @@
 import fs from 'fs';
 import { TextDocument, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { Constants } from '../constants';
-import { $config, $state } from '../extension';
+import { updateEverything } from '../events';
+import { $config, $state, updateConfig } from '../extension';
 import { TheTask } from '../TheTask';
 import { getNestedTasksLineNumbers, getTaskAtLineExtension } from './taskUtils';
 import { guardedBoolean, unique } from './utils';
 import { updateSetting } from './vscodeUtils';
-import { updateEverything } from '../events';
 
 /**
  * vscode `WorkspaceEdit` allowes changing files that are not even opened.
@@ -90,6 +90,7 @@ export async function specifyDefaultSomedayFile() {
 export async function checkDefaultFileAndNotify(): Promise<boolean> {
 	return checkFileAndNotify({
 		filePath: $config.defaultFile,
+		replacedFilePath: $state.defaultFileReplacedValue,
 		specifyFileArg: 'Default File',
 	});
 }
@@ -99,6 +100,7 @@ export async function checkDefaultFileAndNotify(): Promise<boolean> {
 export async function checkArchiveFileAndNotify(): Promise<boolean> {
 	return checkFileAndNotify({
 		filePath: $config.defaultArchiveFile,
+		replacedFilePath: $state.defaultArchiveFileReplacedValue,
 		specifyFileArg: 'Default Archive File',
 	});
 }
@@ -108,18 +110,23 @@ export async function checkArchiveFileAndNotify(): Promise<boolean> {
 export async function checkSomedayFileAndNotify(): Promise<boolean> {
 	return checkFileAndNotify({
 		filePath: $config.defaultSomedayFile,
+		replacedFilePath: '',
 		specifyFileArg: 'Default Someday File',
 	});
 }
 async function checkFileAndNotify({
 	filePath,
+	replacedFilePath,
 	specifyFileArg,
 }: {
 	filePath: string;
+	replacedFilePath: string;
 	specifyFileArg: Parameters<typeof specifyFile>[0];
 }) {
 	const specify = 'Specify';
 	const create = 'Create';
+
+	filePath = replacedFilePath || filePath;
 
 	if (!filePath) {
 		const shouldSpecify = await window.showWarningMessage(`${specifyFileArg} not specified.`, specify);
@@ -129,8 +136,7 @@ async function checkFileAndNotify({
 		return false;
 	}
 
-	const exists = fs.existsSync(filePath);
-	if (!exists) {
+	if (!fs.existsSync(filePath)) {
 		const pressedButton = await window.showErrorMessage(`${specifyFileArg} does not exist.`, create, specify);
 		if (pressedButton === specify) {
 			specifyFile(specifyFileArg);
@@ -138,6 +144,9 @@ async function checkFileAndNotify({
 			fs.writeFile(filePath, '', err => {
 				if (err) {
 					window.showErrorMessage((err as Error).message);
+				} else {
+					updateConfig();
+					updateEverything();
 				}
 			});
 		}

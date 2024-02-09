@@ -41,6 +41,8 @@ interface StoreState {
 	contextsWithCount: ItemWithCount[];
 	defaultFileSpecified: boolean;
 	activeDocumentOpened: boolean;
+	defaultFileDoesntExist: boolean;
+	defaultFileReplacedValue: string;
 	/**
 	 * False until store state is filled with data from the extension side.
 	 */
@@ -73,6 +75,8 @@ export const useMainStore = defineStore({
 		defaultFileSpecified: true,
 		activeDocumentOpened: false,
 		isWebviewLoaded: false,
+		defaultFileDoesntExist: false,
+		defaultFileReplacedValue: '',
 		// ────────────────────────────────────────────────────────────
 		// saved between reloads
 		filterInputValue: '',
@@ -187,11 +191,15 @@ export const useMainStore = defineStore({
 			projectsWithCount,
 			tagsWithCount,
 			contextsWithCount,
+			defaultFileDoesntExist,
+			defaultFileReplacedValue,
 		}: {
 			tasksAsTree: TheTask[];
 			config: ExtensionConfig;
 			defaultFileSpecified: boolean;
 			activeDocumentOpened: boolean;
+			defaultFileDoesntExist: boolean;
+			defaultFileReplacedValue: string;
 			tags: string[];
 			projects: string[];
 			contexts: string[];
@@ -203,6 +211,8 @@ export const useMainStore = defineStore({
 			this.config = config;
 			this.defaultFileSpecified = defaultFileSpecified;
 			this.activeDocumentOpened = activeDocumentOpened;
+			this.defaultFileDoesntExist = defaultFileDoesntExist;
+			this.defaultFileReplacedValue = defaultFileReplacedValue;
 			this.tags = tags;
 			this.projects = projects;
 			this.contexts = contexts;
@@ -441,6 +451,7 @@ window.addEventListener('message', event => {
 	switch (message.type) {
 		case 'updateEverything': {
 			const store = useMainStore();
+
 			store.setEverything({
 				tasksAsTree: message.value.tasksAsTree,
 				config: message.value.config,
@@ -452,8 +463,10 @@ window.addEventListener('message', event => {
 				projectsWithCount: message.value.projectsWithCount,
 				tagsWithCount: message.value.tagsWithCount,
 				contextsWithCount: message.value.contextsWithCount,
-
+				defaultFileDoesntExist: message.value.defaultFileDoesntExist,
+				defaultFileReplacedValue: message.value.defaultFileReplacedValue,
 			});
+
 			const bodyStyle = document.body.style;
 			bodyStyle.setProperty('--font-size', message.value.config.webview.fontSize);
 			bodyStyle.setProperty('--font-family', message.value.config.webview.fontFamily);

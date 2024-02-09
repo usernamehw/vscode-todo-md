@@ -53,11 +53,23 @@ import { $config } from './extension';
 import { getDateInISOFormat } from './time/timeUtils';
 import { formatTask } from './utils/taskUtils';
 import { followLinks } from './utils/vscodeUtils';
+import { createFileCommand } from './commands/createFileCommand';
 
 /**
  * All commands contributed by this extension.
  */
 export const enum CommandId {
+	// ──── Sort ──────────────────────────────────────────────────
+	SortByDefault = 'todomd.sortByDefault',
+	SortByPriority = 'todomd.sortByPriority',
+	SortByProject = 'todomd.sortByProject',
+	SortByTag = 'todomd.sortByTag',
+	SortByContext = 'todomd.sortByContext',
+	SortByCreationDate = 'todomd.sortByCreationDate',
+	SortByCompletionDate = 'todomd.sortByCompletionDate',
+	SortByDueDate = 'todomd.sortByDueDate',
+	// ────────────────────────────────────────────────────────────
+	CreateFile = 'todomd.createFile',
 	ToggleDone = 'todomd.toggleDone',
 	ToggleFavorite = 'todomd.toggleFavorite',
 	HideTask = 'todomd.hideTask',
@@ -70,16 +82,6 @@ export const enum CommandId {
 	StartTask = 'todomd.startTask',
 	RemoveOverdue = 'todomd.removeOverdue',
 	MoveToSomeday = 'todomd.moveToSomeday',
-	// ────────────────────────────────────────────────────────────
-	SortByDefault = 'todomd.sortByDefault',
-	SortByPriority = 'todomd.sortByPriority',
-	SortByProject = 'todomd.sortByProject',
-	SortByTag = 'todomd.sortByTag',
-	SortByContext = 'todomd.sortByContext',
-	SortByCreationDate = 'todomd.sortByCreationDate',
-	SortByCompletionDate = 'todomd.sortByCompletionDate',
-	SortByDueDate = 'todomd.sortByDueDate',
-	// ────────────────────────────────────────────────────────────
 	CreateSimilarTask = 'todomd.createSimilarTask',
 	GetNextTask = 'todomd.getNextTask',
 	GetFewNextTasks = 'todomd.getFewNextTasks',
@@ -181,6 +183,7 @@ export function registerAllCommands() {
 	commands.registerTextEditorCommand(CommandId.SetDueDate, setDueDate);
 	// ──── Internal ──────────────────────────────────────────────
 	commands.registerCommand(CommandId.MainStatusBarCommand, mainStatusBarCommand);
+	commands.registerCommand(CommandId.CreateFile, createFileCommand);
 }
 /**
  * Append task to the file.

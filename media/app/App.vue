@@ -1,6 +1,16 @@
 <template>
 <div>
-    <div v-if="!mainStore.defaultFileSpecified && !mainStore.activeDocumentOpened"
+    <div v-if="mainStore.defaultFileDoesntExist">
+        <p class="welcome__text">
+            Default file doesn't exist <b><code>"todomd.defaultFile"</code></b>
+        </p>
+        <div><a class="btn btn--welcome"
+                :href="'command:todomd.createFile?' + encodeURIComponent(JSON.stringify(mainStore.defaultFileReplacedValue || mainStore.config.defaultFile))">Create</a></div>
+        <div><a class="btn btn--welcome"
+                href="command:workbench.action.openSettings?%22todomd.defaultFile%22">Reveal in Settings</a></div>
+    </div>
+
+    <div v-else-if="!mainStore.defaultFileSpecified && !mainStore.activeDocumentOpened"
          class="welcome">
         <p class="welcome__text">
             Open a file that matches <b><code>"todomd.activatePattern"</code></b> (<code>{{ mainStore.config.activatePattern }}</code>) or set default file path <b><code>"todomd.defaultFile"</code></b>.

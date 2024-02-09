@@ -183,6 +183,8 @@ export class TasksWebviewViewProvider implements WebviewViewProvider {
 					defaultFileSpecified: Boolean($config.defaultFile),
 					activeDocumentOpened: Boolean($state.activeDocument),
 					config: $config,
+					defaultFileDoesntExist: $state.defaultFileDoesntExist,
+					defaultFileReplacedValue: $state.defaultFileReplacedValue,
 				},
 			});
 		}

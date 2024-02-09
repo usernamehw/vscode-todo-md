@@ -195,14 +195,13 @@ a {
 		cursor: pointer;
 		display: flex;
 		justify-content: center;
-		margin-left: auto;
-		margin-right: auto;
 		outline-offset: 2px !important;
 		padding: 4px;
 		text-align: center;
 		width: calc(100% - 24px);
 		margin-left: 12px !important;
 		margin-right: 12px !important;
+		margin-bottom: 12px !important;
 	}
 
 	&--link {

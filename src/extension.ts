@@ -4,6 +4,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import fs from 'fs';
+import path from 'path';
 import { ConfigurationChangeEvent, ExtensionContext, Range, TextDocument, window, workspace } from 'vscode';
 import { TheTask } from './TheTask';
 import { registerAllCommands } from './commands';
@@ -83,6 +84,12 @@ export abstract class $state {
 	static mainStatusBar: MainStatusBar;
 	/** Counter status bar item (in format `1/3 33%`) */
 	static progressStatusBar: ProgressStatusBar;
+	/** Default file specified but non-existent (only assigned when using ${workspaceFolder} variable). */
+	static defaultFileDoesntExist: boolean;
+	/** Replaced value of todomd.defaultFile when ${workspaceFolder} variable used */
+	static defaultFileReplacedValue: string;
+	/** Replaced value of todomd.defaultArchiveFile when ${workspaceFolder} variable used */
+	static defaultArchiveFileReplacedValue: string;
 }
 
 export let $config: ExtensionConfig;
@@ -131,23 +138,22 @@ export async function activate(context: ExtensionContext) {
 		updateConfig();
 	}
 
-	function updateConfig() {
-		assignConfig();
-
-		disposeEditorDisposables();
-		updateLanguageFeatures();
-		$state.editorLineHeight = getEditorLineHeight();
-		updateEditorDecorationStyle();
-		updateUserSuggestItems();
-		$state.mainStatusBar.createStatusBarItem();
-		$state.progressStatusBar.createStatusBarItem();
-		onChangeActiveTextEditor(window.activeTextEditor);
-		updateIsDevContext();
-		updateArchivedFilePathNotSetContext();
-		updateArchivedTasks();
-	}
-
 	context.subscriptions.push(workspace.onDidChangeConfiguration(onConfigChange));
+}
+export function updateConfig() {
+	assignConfig();
+
+	disposeEditorDisposables();
+	updateLanguageFeatures();
+	$state.editorLineHeight = getEditorLineHeight();
+	updateEditorDecorationStyle();
+	updateUserSuggestItems();
+	$state.mainStatusBar.createStatusBarItem();
+	$state.progressStatusBar.createStatusBarItem();
+	onChangeActiveTextEditor(window.activeTextEditor);
+	updateIsDevContext();
+	updateArchivedFilePathNotSetContext();
+	updateArchivedTasks();
 }
 /**
  * Update primary `state` properties, such as `tasks` or `tags`, based on provided document or based on default file
@@ -201,24 +207,32 @@ export async function updateLastVisitGlobalState(stringUri: string, date: Date) 
 function assignConfig(): void {
 	$config = JSON.parse(JSON.stringify(workspace.getConfiguration().get(Constants.ExtensionSettingsPrefix) as ExtensionConfig));
 
+	$state.defaultFileDoesntExist = false;
+
 	if ($config.defaultFile.includes(Constants.WorkspaceFolderVariable)) {
 		const workspaceFolder = workspace.workspaceFolders?.[0];
 		if (!workspaceFolder) {
 			$config.defaultFile = '';
 		} else {
-			$config.defaultFile = $config.defaultFile.replace(Constants.WorkspaceFolderVariable, workspaceFolder.uri.fsPath);
+			$config.defaultFile = path.normalize($config.defaultFile.replace(Constants.WorkspaceFolderVariable, workspaceFolder.uri.fsPath));
+			$state.defaultFileReplacedValue = $config.defaultFile;
+
 			if (!fs.existsSync($config.defaultFile)) {
+				$state.defaultFileDoesntExist = true;
 				console.warn(`${$config.defaultFile} "todomd.defaultFile" doesn't exist.`);
 				$config.defaultFile = '';
 			}
 		}
 	}
+
 	if ($config.defaultArchiveFile.includes(Constants.WorkspaceFolderVariable)) {
 		const workspaceFolder = workspace.workspaceFolders?.[0];
 		if (!workspaceFolder) {
 			$config.defaultArchiveFile = '';
 		} else {
-			$config.defaultArchiveFile = $config.defaultArchiveFile.replace(Constants.WorkspaceFolderVariable, workspaceFolder.uri.fsPath);
+			$config.defaultArchiveFile = path.normalize($config.defaultArchiveFile.replace(Constants.WorkspaceFolderVariable, workspaceFolder.uri.fsPath));
+			$state.defaultArchiveFileReplacedValue = $config.defaultArchiveFile;
+
 			if (!fs.existsSync($config.defaultArchiveFile)) {
 				console.warn(`${$config.defaultArchiveFile} "todomd.defaultArchiveFile" doesn't exist.`);
 				$config.defaultArchiveFile = '';
