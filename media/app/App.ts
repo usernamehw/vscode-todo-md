@@ -141,7 +141,7 @@ export default defineComponent({
 			// @ts-ignore
 			const $taskList = (this.$refs.taskList as HTMLElement);
 			const $appHeader = document.getElementById('suggest-container')!;
-			if ($taskList.scrollTop > 0) {
+			if ($taskList?.scrollTop > 0) {
 				$appHeader.classList.add('app-header--box-shadow');
 			} else {
 				$appHeader.classList.remove('app-header--box-shadow');
