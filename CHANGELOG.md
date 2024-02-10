@@ -1,3 +1,8 @@
+## 2.30.0 `10 Feb 2024`
+
+- ✨ Configurable comment symbol (`"todomd.commentFormat"` setting)
+- ✨ Allow per workspace default file & default archive file. Use `${workspaceFolder}` variable inside (`"todomd.defaultFile"` or `"todomd.defaultArchiveFile"`)
+
 ## 2.29.0 `20 Dec 2023`
 
 - ✨ [webview] Pick sorting icon
