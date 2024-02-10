@@ -1,15 +1,16 @@
 <template>
 <div>
-    <div v-if="mainStore.defaultFilePerWorkspace && mainStore.noWorkspaceOpened">
+    <!-- Per workspace ${workspaceFolder} welcome messages -->
+    <div v-if="mainStore.defaultFilePerWorkspace && !mainStore.activeDocumentOpened && mainStore.noWorkspaceOpened">
         <p class="welcome__text">
             No workspace.<br>
             Using <code>${workspaceFolder}</code> variable in <b><code>"todomd.defaultFile"</code></b> setting only works when any folder is opened.
         </p>
     </div>
 
-    <div v-else-if="mainStore.defaultFilePerWorkspace && mainStore.defaultFileDoesntExist">
+    <div v-else-if="mainStore.defaultFilePerWorkspace && !mainStore.activeDocumentOpened && mainStore.defaultFileDoesntExist">
         <p class="welcome__text">
-            Default file doesn't exist.
+            Default file doesn't exist in this workspace.
         </p>
         <div><a class="btn btn--welcome"
                 :href="'command:todomd.createFile?' + encodeURIComponent(JSON.stringify(mainStore.defaultFileReplacedValue || mainStore.config.defaultFile))"
@@ -19,6 +20,7 @@
                 title="Open Settings UI and reveal `todomd.defaultFile` setting.">Reveal in Settings</a></div>
     </div>
 
+    <!-- Other welcome messages -->
     <div v-else-if="!mainStore.defaultFileSpecified && !mainStore.activeDocumentOpened"
          class="welcome">
         <p class="welcome__text">
