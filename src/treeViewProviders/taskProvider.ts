@@ -67,6 +67,9 @@ export class TaskProvider implements TreeDataProvider<TaskTreeItem> {
 	}
 
 	getTreeItem(element: TaskTreeItem): TreeItem {
+		if (this.isArchived) {
+			element.description = element.task.completionDate;
+		}
 		return element;
 	}
 
